@@ -58,8 +58,26 @@ class tmat2x2:
             self.value = [self.col_type(1,0),
                           self.col_type(0,1)]
 
+    def __eq__(self, value):
+        if isinstance(value, tmat2x2):
+            return (self[0] == value[0] and self[1] == value[1])
+        else:
+            try:
+                return (self[0] == value[0] and self[1] == value[1])
+            except:
+                raise TypeError("unsupported operand type(s) for ==: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
+
+    def __ne__(self, value):
+        if isinstance(value, tmat2x2):
+            return (self[0] != value[0] or self[1] != value[1])
+        else:
+            try:
+                return (self[0] != value[0] or self[1] != value[1])
+            except:
+                raise TypeError("unsupported operand type(s) for !=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
+
     def __add__(self, value):
-        if type(value) in (int, float, long):
+        if type(value) in (int, float, long, bool):
             return tmat2x2(self[0] + value,
                          self[1] + value)
         elif isinstance(value, tmat2x2):
@@ -75,7 +93,7 @@ class tmat2x2:
     __radd__ = __add__
 
     def __sub__(self, value):
-        if type(value) in (int, float, long):
+        if type(value) in (int, float, long, bool):
             return tmat2x2(self[0] - value,
                          self[1] - value)
         elif isinstance(value, tmat2x2):
@@ -88,187 +106,131 @@ class tmat2x2:
             except:
                 raise TypeError("unsupported operand type(s) for -: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
 
-    __rsub__ = __sub__
-
-    def __mul__(self, value):
-        if type(value) in (int, float, long):
-            return tmat2x2(self[0] * value,
-                         self[1] * value)
+    def __rsub__(self, value):
+        if type(value) in (int, float, long, bool):
+            return tmat2x2(value - self[0],
+                         value - self[1])
         elif isinstance(value, tmat2x2):
-            return tmat2x2(self[0] * value[0],
-                         self[1] * value[1])
+            return tmat2x2(value[0] - self[0],
+                         value[1] - self[1])
         else:
             try:
-                return tmat2x2(self[0] * value[0],
-                         self[1] * value[1])
+                return tmat2x2(value[0] - self[0],
+                         value[1] - self[1])
+            except:
+                raise TypeError("unsupported operand type(s) for -: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
+
+    def __mul__(self, value):
+        if type(value) in (int, float, long, bool):
+            return tmat2x2(self[0] * value,
+                         self[1] * value)
+        elif isinstance(value, self.col_type):
+            return tvec2(self[0][0] * value.x + self[1][0] * value.y,
+			self[0][1] * value.x + self[1][1] * value.y)
+        elif isinstance(value, tmat2x2):
+            return tmat2x2(self[0][0] * value[0][0] + self[1][0] * value[0][1],
+			self[0][1] * value[0][0] + self[1][1] * value[0][1],
+			self[0][0] * value[1][0] + self[1][0] * value[1][1],
+			self[0][1] * value[1][0] + self[1][1] * value[1][1])
+        elif isinstance(value, tmat3x2):
+            return tmat3x2(self[0][0] * value[0][0] + self[1][0] * value[0][1],
+			self[0][1] * value[0][0] + self[1][1] * value[0][1],
+			self[0][0] * value[1][0] + self[1][0] * value[1][1],
+			self[0][1] * value[1][0] + self[1][1] * value[1][1],
+			self[0][0] * value[2][0] + self[1][0] * value[2][1],
+			self[0][1] * value[2][0] + self[1][1] * value[2][1])
+        elif isinstance(value, tmat4x2):
+            return tmat4x2(self[0][0] * value[0][0] + self[1][0] * value[0][1],
+			self[0][1] * value[0][0] + self[1][1] * value[0][1],
+			self[0][0] * value[1][0] + self[1][0] * value[1][1],
+			self[0][1] * value[1][0] + self[1][1] * value[1][1],
+			self[0][0] * value[2][0] + self[1][0] * value[2][1],
+			self[0][1] * value[2][0] + self[1][1] * value[2][1],
+			self[0][0] * value[3][0] + self[1][0] * value[3][1],
+			self[0][1] * value[3][0] + self[1][1] * value[3][1])
+        else:
+            try:
+                return tmat2x2(self[0][0] * value[0][0] + self[1][0] * value[0][1],
+			self[0][1] * value[0][0] + self[1][1] * value[0][1],
+			self[0][0] * value[1][0] + self[1][0] * value[1][1],
+			self[0][1] * value[1][0] + self[1][1] * value[1][1])
             except:
                 raise TypeError("unsupported operand type(s) for *: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
 
-    __rmul__ = __mul__
+    def __rmul__(self, value):
+        if type(value) in (int, float, long, bool):
+            return tmat2x2(self[0] * value,
+                         self[1] * value)
+        elif isinstance(value, self.row_type):
+            return tvec2(v.x * m[0][0] + v.y * m[0][1],
+			v.x * m[1][0] + v.y * m[1][1])
+        elif isinstance(value, tmat2x2):
+            return tmat2x2(self[0][0] * value[0][0] + self[1][0] * value[0][1],
+			self[0][1] * value[0][0] + self[1][1] * value[0][1],
+			self[0][0] * value[1][0] + self[1][0] * value[1][1],
+			self[0][1] * value[1][0] + self[1][1] * value[1][1])
+        elif isinstance(value, tmat3x2):
+            return tmat3x2(self[0][0] * value[0][0] + self[1][0] * value[0][1],
+			self[0][1] * value[0][0] + self[1][1] * value[0][1],
+			self[0][0] * value[1][0] + self[1][0] * value[1][1],
+			self[0][1] * value[1][0] + self[1][1] * value[1][1],
+			self[0][0] * value[2][0] + self[1][0] * value[2][1],
+			self[0][1] * value[2][0] + self[1][1] * value[2][1])
+        elif isinstance(value, tmat4x2):
+            return tmat4x2(self[0][0] * value[0][0] + self[1][0] * value[0][1],
+			self[0][1] * value[0][0] + self[1][1] * value[0][1],
+			self[0][0] * value[1][0] + self[1][0] * value[1][1],
+			self[0][1] * value[1][0] + self[1][1] * value[1][1],
+			self[0][0] * value[2][0] + self[1][0] * value[2][1],
+			self[0][1] * value[2][0] + self[1][1] * value[2][1],
+			self[0][0] * value[3][0] + self[1][0] * value[3][1],
+			self[0][1] * value[3][0] + self[1][1] * value[3][1])
+        else:
+            try:
+                return tmat2x2(self[0][0] * value[0][0] + self[1][0] * value[0][1],
+			self[0][1] * value[0][0] + self[1][1] * value[0][1],
+			self[0][0] * value[1][0] + self[1][0] * value[1][1],
+			self[0][1] * value[1][0] + self[1][1] * value[1][1])
+            except:
+                raise TypeError("unsupported operand type(s) for *: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
 
     def __truediv__(self, value):
-        if type(value) in (int, float, long):
+        if type(value) in (int, float, long, bool):
+            value = float(value)
             return tmat2x2(self[0] / value,
                          self[1] / value)
+        elif isinstance(value, tvec2):
+            return inverse(self) * value
         elif isinstance(value, tmat2x2):
-            return tmat2x2(self[0] / value[0],
-                         self[1] / value[1])
+            return self * inverse(value)
         else:
             try:
-                return tmat2x2(self[0] / value[0],
-                         self[1] / value[1])
+                return self * inverse(value)
             except:
                 raise TypeError("unsupported operand type(s) for /: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
 
-    __rtruediv__ = __truediv__
-
-    def __div__(self, value):
-        if type(value) in (int, float, long):
-            return tmat2x2(self[0] / float(value),
-                         self[1] / float(value))
+    def __rtruediv__(self, value):
+        if type(value) in (int, float, long, bool):
+            value = float(value)
+            return tmat2x2(value / self[0],
+                         value / self[1])
+        elif isinstance(value, tvec2):
+            return value * inverse(self)
         elif isinstance(value, tmat2x2):
-            return tmat2x2(self[0] / float(value[0]),
-                         self[1] / float(value[1]))
+            return inverse(self) * value
         else:
             try:
-                return tmat2x2(self[0] / float(value[0]),
-                         self[1] / float(value[1]))
+                return value * inverse(self)
             except:
                 raise TypeError("unsupported operand type(s) for /: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
 
-    __rdiv__ = __div__
+    __div__ = __truediv__
 
-    def __floordiv__(self, value):
-        if type(value) in (int, float, long):
-            return tmat2x2(self[0] // value,
-                         self[1] // value)
-        elif isinstance(value, tmat2x2):
-            return tmat2x2(self[0] // value[0],
-                         self[1] // value[1])
-        else:
-            try:
-                return tmat2x2(self[0] // value[0],
-                         self[1] // value[1])
-            except:
-                raise TypeError("unsupported operand type(s) for //: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-
-    __rfloordiv__ = __floordiv__
-
-    def __mod__(self, value):
-        if type(value) in (int, float, long):
-            return tmat2x2(self[0] % value,
-                         self[1] % value)
-        elif isinstance(value, tmat2x2):
-            return tmat2x2(self[0] % value[0],
-                         self[1] % value[1])
-        else:
-            try:
-                return tmat2x2(self[0] % value[0],
-                         self[1] % value[1])
-            except:
-                raise TypeError("unsupported operand type(s) for %: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-
-    __rmod__ = __mod__
-
-    def __pow__(self, value, modulo=None):
-        if type(value) in (int, float, long):
-            return tmat2x2(self[0] ** value,
-                         self[1] ** value)
-        elif isinstance(value, tmat2x2):
-            return tmat2x2(self[0] ** value[0],
-                         self[1] ** value[1])
-        else:
-            try:
-                return tmat2x2(self[0] ** value[0],
-                         self[1] ** value[1])
-            except:
-                raise TypeError("unsupported operand type(s) for pow: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-
-    __rpow__ = __pow__
-
-    def __lshift__(self, value):
-        if type(value) in (int, float, long):
-            return tmat2x2(self[0] << value,
-                         self[1] << value)
-        elif isinstance(value, tmat2x2):
-            return tmat2x2(self[0] << value[0],
-                         self[1] << value[1])
-        else:
-            try:
-                return tmat2x2(self[0] << value[0],
-                         self[1] << value[1])
-            except:
-                raise TypeError("unsupported operand type(s) for <<: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-
-    __rlshift__ = __lshift__
-
-    def __rshift__(self, value):
-        if type(value) in (int, float, long):
-            return tmat2x2(self[0] >> value,
-                         self[1] >> value)
-        elif isinstance(value, tmat2x2):
-            return tmat2x2(self[0] >> value[0],
-                         self[1] >> value[1])
-        else:
-            try:
-                return tmat2x2(self[0] >> value[0],
-                         self[1] >> value[1])
-            except:
-                raise TypeError("unsupported operand type(s) for >>: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-
-    __rrshift__ = __rshift__
-
-    def __and__(self, value):
-        if type(value) in (int, float, long):
-            return tmat2x2(self[0] & value,
-                         self[1] & value)
-        elif isinstance(value, tmat2x2):
-            return tmat2x2(self[0] & value[0],
-                         self[1] & value[1])
-        else:
-            try:
-                return tmat2x2(self[0] & value[0],
-                         self[1] & value[1])
-            except:
-                raise TypeError("unsupported operand type(s) for &: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-
-    __rand__ = __and__
-
-    def __or__(self, value):
-        if type(value) in (int, float, long):
-            return tmat2x2(self[0] | value,
-                         self[1] | value)
-        elif isinstance(value, tmat2x2):
-            return tmat2x2(self[0] | value[0],
-                         self[1] | value[1])
-        else:
-            try:
-                return tmat2x2(self[0] | value[0],
-                         self[1] | value[1])
-            except:
-                raise TypeError("unsupported operand type(s) for |: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-
-    __or__ = __or__
-
-    def __xor__(self, value):
-        if type(value) in (int, float, long):
-            return tmat2x2(self[0] ^ value,
-                         self[1] ^ value)
-        elif isinstance(value, tmat2x2):
-            return tmat2x2(self[0] ^ value[0],
-                         self[1] ^ value[1])
-        else:
-            try:
-                return tmat2x2(self[0] ^ value[0],
-                         self[1] ^ value[1])
-            except:
-                raise TypeError("unsupported operand type(s) for ^: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-
-    __rxor__ = __xor__
+    __rdiv__ = __rtruediv__
 
     # __i*__ functions
     def __iadd__(self, value):
-        if type(value) in (int, float, long):
+        if type(value) in (int, float, long, bool):
             self[0] += value
             self[1] += value
         elif isinstance(value, tmat2x2):
@@ -282,7 +244,7 @@ class tmat2x2:
                 raise TypeError("unsupported operand type(s) for +=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
 
     def __isub__(self, value):
-        if type(value) in (int, float, long):
+        if type(value) in (int, float, long, bool):
             self[0] -= value
             self[1] -= value
         elif isinstance(value, tmat2x2):
@@ -296,131 +258,32 @@ class tmat2x2:
                 raise TypeError("unsupported operand type(s) for -=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
 
     def __imul__(self, value):
-        if type(value) in (int, float, long):
+        if type(value) in (int, float, long, bool):
             self[0] *= value
             self[1] *= value
-        else:
-            self.value = (self * value).value
-##
-    def __itruediv__(self, value):
-        if type(value) in (int, float, long):
-            self[0] /= value
-            self[1] /= value
-        else:
-            self.value = (self / value).value
-##
-    def __idiv__(self, value):
-        if type(value) in (int, float, long):
-            self[0] /= value
-            self[1] /= value
         elif isinstance(value, tmat2x2):
-            self.value = (self / value).value
-
-    def __ifloordiv__(self, value):
-        if type(value) in (int, float, long):
-            self[0] //= value
-            self[1] //= value
+            self.value = (self * value).value
         else:
-            self.value = (self // value).value
-##
-##    def __imod__(self, value):
-##        if type(value) in (int, float, long):
-##            self[0] %= value
-##            self[1] %= value
-##        elif isinstance(value, tmat2x2):
-##            self[0] %= value[0]
-##            self[1] %= value[1]
-##        else:
-##            try:
-##                self[0] %= value[0]
-##                self[1] %= value[1]
-##            except:
-##                raise TypeError("unsupported operand type(s) for %=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-##
-##    def __ipow__(self, value, opt=None):
-##        if type(value) in (int, float, long):
-##            self[0] **= value
-##            self[1] **= value
-##        elif isinstance(value, tmat2x2):
-##            self[0] **= value[0]
-##            self[1] **= value[1]
-##        else:
-##            try:
-##                self[0] **= value[0]
-##                self[1] **= value[1]
-##            except:
-##                raise TypeError("unsupported operand type(s) for **=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-##
-##    def __ilshift__(self, value):
-##        if type(value) in (int, float, long):
-##            self[0] <<= value
-##            self[1] <<= value
-##        elif isinstance(value, tmat2x2):
-##            self[0] <<= value[0]
-##            self[1] <<= value[1]
-##        else:
-##            try:
-##                self[0] <<= value[0]
-##                self[1] <<= value[1]
-##            except:
-##                raise TypeError("unsupported operand type(s) for <<=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-##
-##    def __irshift__(self, value):
-##        if type(value) in (int, float, long):
-##            self[0] >>= value
-##            self[1] >>= value
-##        elif isinstance(value, tmat2x2):
-##            self[0] >>= value[0]
-##            self[1] >>= value[1]
-##        else:
-##            try:
-##                self[0] >>= value[0]
-##                self[1] >>= value[1]
-##            except:
-##                raise TypeError("unsupported operand type(s) for >>=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-##
-##    def __iand__(self, value):
-##        if type(value) in (int, float, long):
-##            self[0] &= value
-##            self[1] &= value
-##        elif isinstance(value, tmat2x2):
-##            self[0] &= value[0]
-##            self[1] &= value[1]
-##        else:
-##            try:
-##                self[0] &= value[0]
-##                self[1] &= value[1]
-##            except:
-##                raise TypeError("unsupported operand type(s) for &=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-##
-##    def __ior__(self, value):
-##        if type(value) in (int, float, long):
-##            self[0] |= value
-##            self[1] |= value
-##        elif isinstance(value, tmat2x2):
-##            self[0] |= value[0]
-##            self[1] |= value[1]
-##        else:
-##            try:
-##                self[0] |= value[0]
-##                self[1] |= value[1]
-##            except:
-##                raise TypeError("unsupported operand type(s) for |=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
-##
-##    def __ixor__(self, value):
-##        if type(value) in (int, float, long):
-##            self[0] ^= value
-##            self[1] ^= value
-##        elif isinstance(value, tmat2x2):
-##            self[0] ^= value[0]
-##            self[1] ^= value[1]
-##        else:
-##            try:
-##                self[0] ^= value[0]
-##                self[1] ^= value[1]
-##            except:
-##                raise TypeError("unsupported operand type(s) for ^=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
+            try:
+                self[0] *= value[0]
+                self[1] *= value[1]
+            except:
+                raise TypeError("unsupported operand type(s) for *=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
 
+    def __itruediv__(self, value):
+        if type(value) in (int, float, long, bool):
+            self[0] /= float(value)
+            self[1] /= float(value)
+        elif isinstance(value, tmat2x2):
+            self *= inverse(value)
+        else:
+            try:
+                self *= inverse(value)
+            except:
+                raise TypeError("unsupported operand type(s) for /=: 'tmat2x2' and '{}'".format(_type_to_str(type(value))))
+
+    __idiv__ = __itruediv__
+    
     def __pos__(self):
         return self
 
@@ -462,4 +325,4 @@ class tmat2x2:
 
     __repr__ = __str__
 
-##from .func_matrix import *
+from .func_matrix import *

@@ -241,12 +241,12 @@ from .type_vec4 import tvec4
 
 from .type_mat2x2 import tmat2x2
 from .type_mat2x3 import tmat2x3
-from .type_mat2x4 import tmat2x4
-
-from .type_mat3x2 import tmat3x2
-from .type_mat3x3 import tmat3x3
-from .type_mat3x4 import tmat3x4
-
-from .type_mat4x2 import tmat4x2
-from .type_mat4x3 import tmat4x3
-from .type_mat4x4 import tmat4x4
+##from .type_mat2x4 import tmat2x4
+##
+##from .type_mat3x2 import tmat3x2
+##from .type_mat3x3 import tmat3x3
+##from .type_mat3x4 import tmat3x4
+##
+##from .type_mat4x2 import tmat4x2
+##from .type_mat4x3 import tmat4x3
+##from .type_mat4x4 import tmat4x4
