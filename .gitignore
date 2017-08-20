@@ -1,0 +1,6 @@
+
+*.pyc
+*.hpp
+*.inl
+*.cpp
+*.h
