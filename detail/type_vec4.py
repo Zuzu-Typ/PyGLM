@@ -12,7 +12,9 @@ class tvec4:
     def __init__(self, *args):
         if len(args) == 1:
             # from tvec
-            if isinstance(args[0], tvec4):
+            if type(args[0]) in (int, long, float, bool):
+                self.x = self.y = self.z = self.w = args[0]
+            elif isinstance(args[0], tvec4):
                 self.x = args[0].x
                 self.y = args[0].y
                 self.z = args[0].z
@@ -587,6 +589,7 @@ class tvec4:
                 self.w += value[3]
             except:
                 raise TypeError("unsupported operand type(s) for +=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __isub__(self, value):
         if type(value) in (int, float, long, bool):
@@ -607,6 +610,7 @@ class tvec4:
                 self.w -= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for -=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __imul__(self, value):
         if type(value) in (int, float, long, bool):
@@ -627,6 +631,7 @@ class tvec4:
                 self.w *= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for *=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __itruediv__(self, value):
         if type(value) in (int, float, long, bool):
@@ -647,6 +652,7 @@ class tvec4:
                 self.w /= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for /=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __idiv__(self, value):
         if type(value) in (int, float, long, bool):
@@ -667,6 +673,7 @@ class tvec4:
                 self.w /= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for /=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __ifloordiv__(self, value):
         if type(value) in (int, float, long, bool):
@@ -687,6 +694,7 @@ class tvec4:
                 self.w //= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for //=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __imod__(self, value):
         if type(value) in (int, float, long, bool):
@@ -707,6 +715,7 @@ class tvec4:
                 self.w %= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for %=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __ipow__(self, value, opt=None):
         if type(value) in (int, float, long, bool):
@@ -727,6 +736,7 @@ class tvec4:
                 self.w **= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for **=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __ilshift__(self, value):
         if type(value) in (int, float, long, bool):
@@ -747,6 +757,7 @@ class tvec4:
                 self.w <<= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for <<=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __irshift__(self, value):
         if type(value) in (int, float, long, bool):
@@ -767,6 +778,7 @@ class tvec4:
                 self.w >>= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for >>=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __iand__(self, value):
         if type(value) in (int, float, long, bool):
@@ -787,6 +799,7 @@ class tvec4:
                 self.w &= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for &=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __ior__(self, value):
         if type(value) in (int, float, long, bool):
@@ -807,6 +820,7 @@ class tvec4:
                 self.w |= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for |=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __ixor__(self, value):
         if type(value) in (int, float, long, bool):
@@ -827,6 +841,7 @@ class tvec4:
                 self.w ^= value[3]
             except:
                 raise TypeError("unsupported operand type(s) for ^=: 'tvec4' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __pos__(self):
         return self
@@ -890,37 +905,37 @@ class tvec4:
 
         if len(name) == 1:
             if name in "xrs":
-                return self.x
+                return self.__dict__["x"]
             if name in "ygt":
-                return self.y
+                return self.__dict__["y"]
             if name in "zbp":
-                return self.z
+                return self.__dict__["z"]
             if name in "waq":
-                return self.w
+                return self.__dict__["w"]
 
         if len(name) == 2:
             for char in name:
                 if not char in "xrsygtzbpwaq":
                     raise AttributeError(name)
-            return tvec2(self.x if name[0] in "xrs" else self.y if name[0] in "ygt" else self.z if name[0] in "zbp" else self.w,
-                         self.x if name[1] in "xrs" else self.y if name[1] in "ygt" else self.z if name[1] in "zbp" else self.w)
+            return tvec2(self.__dict__["x"] if name[0] in "xrs" else self.__dict__["y"] if name[0] in "ygt" else self.__dict__["z"] if name[0] in "zbp" else self.__dict__["w"],
+                         self.__dict__["x"] if name[1] in "xrs" else self.__dict__["y"] if name[1] in "ygt" else self.__dict__["z"] if name[1] in "zbp" else self.__dict__["w"])
 
         if len(name) == 3:
             for char in name:
                 if not char in "xrsygtzbpwaq":
                     raise AttributeError(name)
-            return tvec3(self.x if name[0] in "xrs" else self.y if name[0] in "ygt" else self.z if name[0] in "zbp" else self.w,
-                         self.x if name[1] in "xrs" else self.y if name[1] in "ygt" else self.z if name[1] in "zbp" else self.w,
-                         self.x if name[2] in "xrs" else self.y if name[2] in "ygt" else self.z if name[2] in "zbp" else self.w)
+            return tvec3(self.__dict__["x"] if name[0] in "xrs" else self.__dict__["y"] if name[0] in "ygt" else self.__dict__["z"] if name[0] in "zbp" else self.__dict__["w"],
+                         self.__dict__["x"] if name[1] in "xrs" else self.__dict__["y"] if name[1] in "ygt" else self.__dict__["z"] if name[1] in "zbp" else self.__dict__["w"],
+                         self.__dict__["x"] if name[2] in "xrs" else self.__dict__["y"] if name[2] in "ygt" else self.__dict__["z"] if name[2] in "zbp" else self.__dict__["w"])
 
         if len(name) == 4:
             for char in name:
                 if not char in "xrsygtzbpwaq":
                     raise AttributeError(name)
-            return tvec4(self.x if name[0] in "xrs" else self.y if name[0] in "ygt" else self.z if name[0] in "zbp" else self.w,
-                         self.x if name[1] in "xrs" else self.y if name[1] in "ygt" else self.z if name[1] in "zbp" else self.w,
-                         self.x if name[2] in "xrs" else self.y if name[2] in "ygt" else self.z if name[2] in "zbp" else self.w,
-                         self.x if name[3] in "xrs" else self.y if name[3] in "ygt" else self.z if name[3] in "zbp" else self.w)
+            return tvec4(self.__dict__["x"] if name[0] in "xrs" else self.__dict__["y"] if name[0] in "ygt" else self.__dict__["z"] if name[0] in "zbp" else self.__dict__["w"],
+                         self.__dict__["x"] if name[1] in "xrs" else self.__dict__["y"] if name[1] in "ygt" else self.__dict__["z"] if name[1] in "zbp" else self.__dict__["w"],
+                         self.__dict__["x"] if name[2] in "xrs" else self.__dict__["y"] if name[2] in "ygt" else self.__dict__["z"] if name[2] in "zbp" else self.__dict__["w"],
+                         self.__dict__["x"] if name[3] in "xrs" else self.__dict__["y"] if name[3] in "ygt" else self.__dict__["z"] if name[3] in "zbp" else self.__dict__["w"])
 
         raise AttributeError(name)
 
@@ -931,10 +946,14 @@ class tvec4:
         if len(name) == 1:
             if name in "xrs":
                 self.__dict__["x"] = value
-            if name in "ygt":
+            elif name in "ygt":
                 self.__dict__["y"] = value
-            if name in "zbp":
+            elif name in "zbp":
                 self.__dict__["z"] = value
+            elif name in "waq":
+                self.__dict__["w"] = value
+            else:
+                raise AttributeError(name)
                 
         elif _unswizzle(name) == "xy":
             if (isinstance(value, tvec2) or type(value) in (tuple, list, set)) and len(value) == 2:

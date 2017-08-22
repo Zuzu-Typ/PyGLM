@@ -1,9 +1,5 @@
 from .setup import *
 
-from .type_vec2 import tvec2
-from .type_vec3 import tvec3
-from .type_vec4 import tvec4
-
 def _type_to_str(type_):
     return str(type_).replace("<type '", "").replace("'>", "")
 
@@ -34,21 +30,12 @@ class tmat2x3:
                               self.col_type(args[1])]
 
         elif len(args) == 6:
-            if not type(args[0]) in (int, long, float, bool):
-                raise TypeError("unsupported type {} for tmat2x3()".format(args[0]))
-            if not type(args[1]) in (int, long, float, bool):
-                raise TypeError("unsupported type {} for tmat2x3()".format(args[1]))
-            if not type(args[2]) in (int, long, float, bool):
-                raise TypeError("unsupported type {} for tmat2x3()".format(args[2]))
-            if not type(args[3]) in (int, long, float, bool):
-                raise TypeError("unsupported type {} for tmat2x3()".format(args[3]))
-            if not type(args[4]) in (int, long, float, bool):
-                raise TypeError("unsupported type {} for tmat2x3()".format(args[4]))
-            if not type(args[5]) in (int, long, float, bool):
-                raise TypeError("unsupported type {} for tmat2x3()".format(args[5]))
+            for arg in args:
+                if not type(arg) in (int, long, float, bool):
+                    raise TypeError("unsupported type {} for tmat2x3()".format(arg))
 
-            self.value = [self.col_type(args[0], args[1], args[2]),
-                          self.col_type(args[3], args[4], args[5])]
+            self.value = [self.col_type(*args[:3]),
+                          self.col_type(*args[3:])]
                 
         else:
             self.value = [self.col_type(1,0,0),
@@ -277,6 +264,7 @@ class tmat2x3:
                 self[1] += value[1]
             except:
                 raise TypeError("unsupported operand type(s) for +=: 'tmat2x3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __isub__(self, value):
         if type(value) in (int, float, long, bool):
@@ -291,6 +279,7 @@ class tmat2x3:
                 self[1] -= value[1]
             except:
                 raise TypeError("unsupported operand type(s) for -=: 'tmat2x3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __imul__(self, value):
         if type(value) in (int, float, long, bool):
@@ -298,6 +287,7 @@ class tmat2x3:
             self[1] *= value
         else:
             raise TypeError("unsupported operand type(s) for *=: 'tmat2x3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __itruediv__(self, value):
         if type(value) in (int, float, long, bool):
@@ -305,6 +295,7 @@ class tmat2x3:
             self[1] /= float(value)
         else:
             raise TypeError("unsupported operand type(s) for /=: 'tmat2x3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     __idiv__ = __itruediv__
     
@@ -351,3 +342,17 @@ class tmat2x3:
     __repr__ = __str__
 
 from .func_matrix import *
+from .type_vec2 import tvec2
+from .type_vec3 import tvec3
+from .type_vec4 import tvec4
+
+from .type_mat2x2 import tmat2x2
+from .type_mat2x4 import tmat2x4
+
+from .type_mat3x2 import tmat3x2
+from .type_mat3x3 import tmat3x3
+from .type_mat3x4 import tmat3x4
+
+from .type_mat4x2 import tmat4x2
+from .type_mat4x3 import tmat4x3
+from .type_mat4x4 import tmat4x4

@@ -37,6 +37,20 @@ from .detail.type_vec3 import *
 from .detail.type_vec4 import *
 
 from .detail.func_geometric import *
+
+from .detail.type_mat2x2 import tmat2x2
+from .detail.type_mat2x3 import tmat2x3
+from .detail.type_mat2x4 import tmat2x4
+
+from .detail.type_mat3x2 import tmat3x2
+from .detail.type_mat3x3 import tmat3x3
+from .detail.type_mat3x4 import tmat3x4
+
+from .detail.type_mat4x2 import tmat4x2
+from .detail.type_mat4x3 import tmat4x3
+from .detail.type_mat4x4 import tmat4x4
+
+from .detail.func_matrix import *
 #include "fwd.hpp"
 
 #if GLM_MESSAGES == GLM_MESSAGES_ENABLED && !defined(GLM_MESSAGE_CORE_INCLUDED_DISPLAYED)
@@ -44,18 +58,13 @@ from .detail.func_geometric import *
 #	pragma message("GLM: Core library included")
 #endif//GLM_MESSAGES
 
-#include "vec2.hpp"
-#include "vec3.hpp"
-#include "vec4.hpp"
-#include "mat2x2.hpp"
-#include "mat2x3.hpp"
-#include "mat2x4.hpp"
-#include "mat3x2.hpp"
-#include "mat3x3.hpp"
-#include "mat3x4.hpp"
-#include "mat4x2.hpp"
-#include "mat4x3.hpp"
-#include "mat4x4.hpp"
+vec2 = tvec2
+vec3 = tvec3
+vec4 = tvec4
+
+mat2 = tmat2x2
+mat3 = tmat3x3
+mat4 = tmat4x4
 
 #include "trigonometric.hpp"
 #include "exponential.hpp"

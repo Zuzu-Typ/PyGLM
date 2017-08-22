@@ -12,7 +12,9 @@ class tvec3:
     def __init__(self, *args):
         if len(args) == 1:
             # from tvec
-            if isinstance(args[0], tvec3) or isinstance(args[0], tvec4):
+            if type(args[0]) in (int, long, float, bool):
+                self.x = self.y = self.z = args[0]
+            elif isinstance(args[0], tvec3) or isinstance(args[0], tvec4):
                 self.x = args[0].x
                 self.y = args[0].y
                 self.z = args[0].z
@@ -478,6 +480,7 @@ class tvec3:
                 self.z += value[2]
             except:
                 raise TypeError("unsupported operand type(s) for +=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __isub__(self, value):
         if type(value) in (int, float, long, bool):
@@ -495,6 +498,7 @@ class tvec3:
                 self.z -= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for -=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __imul__(self, value):
         if type(value) in (int, float, long, bool):
@@ -512,6 +516,7 @@ class tvec3:
                 self.z *= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for *=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __itruediv__(self, value):
         if type(value) in (int, float, long, bool):
@@ -529,6 +534,7 @@ class tvec3:
                 self.z /= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for /=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __idiv__(self, value):
         if type(value) in (int, float, long, bool):
@@ -546,6 +552,7 @@ class tvec3:
                 self.z /= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for /=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __ifloordiv__(self, value):
         if type(value) in (int, float, long, bool):
@@ -563,6 +570,7 @@ class tvec3:
                 self.z //= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for //=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __imod__(self, value):
         if type(value) in (int, float, long, bool):
@@ -580,6 +588,7 @@ class tvec3:
                 self.z %= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for %=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __ipow__(self, value, opt=None):
         if type(value) in (int, float, long, bool):
@@ -597,6 +606,7 @@ class tvec3:
                 self.z **= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for **=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __ilshift__(self, value):
         if type(value) in (int, float, long, bool):
@@ -614,6 +624,7 @@ class tvec3:
                 self.z <<= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for <<=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __irshift__(self, value):
         if type(value) in (int, float, long, bool):
@@ -631,6 +642,7 @@ class tvec3:
                 self.z >>= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for >>=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __iand__(self, value):
         if type(value) in (int, float, long, bool):
@@ -648,6 +660,7 @@ class tvec3:
                 self.z &= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for &=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __ior__(self, value):
         if type(value) in (int, float, long, bool):
@@ -665,6 +678,7 @@ class tvec3:
                 self.z |= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for |=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __ixor__(self, value):
         if type(value) in (int, float, long, bool):
@@ -682,6 +696,7 @@ class tvec3:
                 self.z ^= value[2]
             except:
                 raise TypeError("unsupported operand type(s) for ^=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+        return self
 
     def __pos__(self):
         return self
@@ -777,10 +792,12 @@ class tvec3:
         if len(name) == 1:
             if name in "xrs":
                 self.__dict__["x"] = value
-            if name in "ygt":
+            elif name in "ygt":
                 self.__dict__["y"] = value
-            if name in "zbp":
+            elif name in "zbp":
                 self.__dict__["z"] = value
+            else:
+                raise AttributeError(name)
 
         elif _unswizzle(name) == "xy":
             if isinstance(value, tvec2) or (type(value) in (tuple, list, set) and len(value) == 2):
