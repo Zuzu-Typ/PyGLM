@@ -66,11 +66,9 @@ mat2 = tmat2x2
 mat3 = tmat3x3
 mat4 = tmat4x4
 
-#include "trigonometric.hpp"
-#include "exponential.hpp"
-#include "common.hpp"
-#include "packing.hpp"
-#include "geometric.hpp"
-#include "matrix.hpp"
-#include "vector_relational.hpp"
-#include "integer.hpp"
+from .detail.func_trigonometric import *
+from .detail.func_exponential import *
+from .detail.func_common import *
+from .detail.func_geometric import *
+from .detail.func_matrix import *
+from .detail.func_vector_relational import *

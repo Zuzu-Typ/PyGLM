@@ -4,6 +4,8 @@ import sys
 
 import ctypes
 
+from prep import *
+
 try:
     long
 except:

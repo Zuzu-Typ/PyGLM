@@ -58,6 +58,9 @@ def notEqual(x, y):
 
     return Result
 
+any = any
+all = all
+
 def not_(v):
     Result = v.__class__()
 
