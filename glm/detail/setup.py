@@ -1,10 +1,10 @@
-import warnings
-
 import sys
 
 import ctypes
 
-from prep import *
+from ..prep import *
+
+GLM_FORCE_SWIZZLE = True
 
 try:
     long
@@ -25,7 +25,7 @@ def error(msg):
     PyGLMError(msg)
 
 def message(msg):
-    warnings.warn(msg, PyGLMWarning)
+    print(msg)
 
 if (defined("GLM_FORCE_SWIZZLE") or defined("GLM_SWIZZLE")) and defined("GLM_FORCE_UNRESTRICTED_GENTYPE"):
     error("Both GLM_FORCE_SWIZZLE and GLM_FORCE_UNRESTRICTED_GENTYPE can't be defined at the same time")
@@ -173,4 +173,4 @@ if GLM_MESSAGES == GLM_MESSAGES_ENABLED and not defined("GLM_MESSAGE_FORCE_SIZE_
 ##########################################
 # countof
 def GLM_COUNTOF(arr):
-    return arr.size
+    return len(arr)

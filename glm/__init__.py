@@ -1,7 +1,7 @@
 ####################
 # GLM License      #
 ####################
-"""
+__doc__ = license = """
 Copyright (c) 2005 - 2016 G-Truc Creation
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

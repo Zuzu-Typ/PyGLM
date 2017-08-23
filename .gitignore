@@ -1,6 +1,7 @@
-
+pypi/
 *.pyc
 *.hpp
 *.inl
 *.cpp
 *.h
+test.py
