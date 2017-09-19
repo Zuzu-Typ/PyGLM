@@ -4,12 +4,9 @@ import ctypes
 
 from ..prep import *
 
-GLM_FORCE_SWIZZLE = True
+from ..datatypes import *
 
-try:
-    long
-except:
-    long = int
+GLM_FORCE_SWIZZLE = True
 
 class PyGLMError(Exception):
     pass

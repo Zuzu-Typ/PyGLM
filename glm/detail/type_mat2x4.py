@@ -19,11 +19,11 @@ class tmat2x4:
                 self.value = [self.col_type(args[0][0], 0, 0),
                               self.col_type(args[0][1], 0, 0)]
                 
-            elif type(args[0]) in (int, long, float):
+            elif type(args[0]) in dtypes:
                 self.value = [self.col_type(args[0],0, 0, 0),
                               self.col_type(0,args[0], 0, 0)]
 
-            elif type(args[0]) in (tuple, list, set):
+            elif type(args[0]) in ltypes:
                 self.__init__(*args[0])
 
         elif len(args) == 2:
@@ -33,7 +33,7 @@ class tmat2x4:
 
         elif len(args) == 8:
             for arg in args:
-                if not type(arg) in (int, long, float, bool):
+                if not type(arg) in dtypes:
                     raise TypeError("unsupported type {} for tmat2x4()".format(arg))
 
             self.value = [self.col_type(*args[:4]),
@@ -42,6 +42,10 @@ class tmat2x4:
         else:
             self.value = [self.col_type(1,0,0,0),
                           self.col_type(0,1,0,0)]
+
+    def length():
+        return 2
+    __len__ = length
 
     def __eq__(self, value):
         if isinstance(value, tmat2x4):
@@ -62,7 +66,7 @@ class tmat2x4:
                 raise TypeError("unsupported operand type(s) for !=: 'tmat2x4' and '{}'".format(_type_to_str(type(value))))
 
     def __add__(self, value):
-        if type(value) in (int, float, long, bool):
+        if type(value) in dtypes:
             return tmat2x4(self[0] + value,
                          self[1] + value)
         elif isinstance(value, tmat2x4):
@@ -78,7 +82,7 @@ class tmat2x4:
     __radd__ = __add__
 
     def __sub__(self, value):
-        if type(value) in (int, float, long, bool):
+        if type(value) in dtypes:
             return tmat2x4(self[0] - value,
                          self[1] - value)
         elif isinstance(value, tmat2x4):
@@ -92,7 +96,7 @@ class tmat2x4:
                 raise TypeError("unsupported operand type(s) for -: 'tmat2x4' and '{}'".format(_type_to_str(type(value))))
 
     def __rsub__(self, value):
-        if type(value) in (int, float, long, bool):
+        if type(value) in dtypes:
             return tmat2x4(value - self[0],
                          value - self[1])
         elif isinstance(value, tmat2x4):
@@ -106,7 +110,7 @@ class tmat2x4:
                 raise TypeError("unsupported operand type(s) for -: 'tmat2x4' and '{}'".format(_type_to_str(type(value))))
 
     def __mul__(self, value):
-        if type(value) in (int, float, long, bool):
+        if type(value) in dtypes:
             return tmat2x4(self[0] * value,
                          self[1] * value)
         elif isinstance(value, self.col_type):
@@ -197,7 +201,7 @@ class tmat2x4:
                 raise TypeError("unsupported operand type(s) for *: 'tmat2x4' and '{}'".format(_type_to_str(type(value))))
 
     def __rmul__(self, value):
-        if type(value) in (int, float, long, bool):
+        if type(value) in dtypes:
             return tmat2x4(self[0] * value,
                          self[1] * value)
         elif isinstance(value, self.row_type):
@@ -286,7 +290,7 @@ class tmat2x4:
                 raise TypeError("unsupported operand type(s) for *: 'tmat2x4' and '{}'".format(_type_to_str(type(value))))
 
     def __truediv__(self, value):
-        if type(value) in (int, float, long, bool):
+        if type(value) in dtypes:
             value = float(value)
             return tmat2x4(self[0] / value,
                          self[1] / value)
@@ -294,7 +298,7 @@ class tmat2x4:
             raise TypeError("unsupported operand type(s) for /: 'tmat2x4' and '{}'".format(_type_to_str(type(value))))
 
     def __rtruediv__(self, value):
-        if type(value) in (int, float, long, bool):
+        if type(value) in dtypes:
             value = float(value)
             return tmat2x4(value / self[0],
                          value / self[1])
@@ -307,7 +311,7 @@ class tmat2x4:
 
     # __i*__ functions
     def __iadd__(self, value):
-        if type(value) in (int, float, long, bool):
+        if type(value) in dtypes:
             self[0] += value
             self[1] += value
         elif isinstance(value, tmat2x4):
@@ -322,7 +326,7 @@ class tmat2x4:
         return self
 
     def __isub__(self, value):
-        if type(value) in (int, float, long, bool):
+        if type(value) in dtypes:
             self[0] -= value
             self[1] -= value
         elif isinstance(value, tmat2x4):
@@ -337,7 +341,7 @@ class tmat2x4:
         return self
 
     def __imul__(self, value):
-        if type(value) in (int, float, long, bool):
+        if type(value) in dtypes:
             self[0] *= value
             self[1] *= value
         else:
@@ -345,7 +349,7 @@ class tmat2x4:
         return self
 
     def __itruediv__(self, value):
-        if type(value) in (int, float, long, bool):
+        if type(value) in dtypes:
             self[0] /= float(value)
             self[1] /= float(value)
         else:

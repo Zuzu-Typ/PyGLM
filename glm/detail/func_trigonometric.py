@@ -1,52 +1,47 @@
 from .setup import *
 from ._vectorize import *
 import math
+import numpy
 
-def radians(degrees):
-    return degrees * (0.01745329251994329576923690768489)
-
-def degrees(radians):
-    return radians * (57.295779513082320876798154814105)
+radians = math.radians
+degrees = math.degrees
 
 def sin(v):
-    return functor1(math.sin, v)
+    return v.__class__(numpy.sin(v))
 
 def cos(v):
-    return functor1(math.cos, v)
+    return v.__class__(numpy.cos(v))
 
 def tan(v):
-    return functor1(math.tan, v)
+    return v.__class__(numpy.tan(v))
 
 def asin(v):
-    return functor1(math.asin, v)
+    return v.__class__(numpy.arcsin(v))
 
 def acos(v):
-    return functor1(math.acos, v)
+    return v.__class__(numpy.arccos(v))
 
 def atan(*args):
     if len(args) == 2:
-        a,b = args
-        if type(a) in (int, long, float, bool):
-            return math.atan2(a, b)
-        return functor2(math.atan2, a, b)
+        return args[0].__class__(numpy.arctan2(*args))
     else:
-        return functor1(math.tan,args[0])
+        return args[0].__class__(numpy.arctan(*args))
 
 def sinh(v):
-    return functor1(math.sinh, v)
+    return v.__class__(numpy.sinh(v))
 
 def cosh(v):
-    return functor1(math.cosh, v)
+    return v.__class__(numpy.cosh(v))
 
 def tanh(v):
-    return functor1(math.tanh, v)
+    return v.__class__(numpy.tanh(v))
 
 def asinh(v):
-    return functor1(math.asinh, v)
+    return v.__class__(numpy.arcsinh(v))
 
 def acosh(v):
-    return functor1(math.acosh, v)
+    return v.__class__(numpy.arcosh(v))
 
 def atanh(v):
-    return functor1(math.atanh, v)
+    return v.__class__(numpy.arctanh(v))
 

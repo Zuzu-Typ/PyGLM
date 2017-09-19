@@ -4,39 +4,32 @@ from .setup import *
 
 import math
 
+import numpy
 
+##def compute_sqrt(vec):
+##    return functor1(math.sqrt, vec)
 
-def compute_sqrt(vec):
-    return functor1(math.sqrt, vec)
-
-def compute_inversesqrt(vec):
+def inversesqrt(vec):
     return 1. / sqrt(vec)
 
 def exp(vec):
-    return functor1(math.exp, vec)
+    return x.__class__(numpy.exp(vec))
 
 def log(vec):
-    return functor1(math.log, vec)
+    return x.__class__(numpy.log(vec))
 
 def exp2(x):
-    if type(x) in (float, int, long, bool):
-        return math.exp(0.69314718055994530941723212145818*x)
-    else:
-        return functor1(exp2, x)
+    return x.__class__(numpy.exp2(x))
 
 def log2(x):
-    if type(x) in (float, int, long, bool):
-        return math.log(x) * 1.4426950408889634073599246810019
-    else:
-        return functor1(log2, x)
+    return x.__class__(numpy.log2(x))
 
-def compute_log2(vec):
-    return functor1(log2, vec)
+##def compute_log2(vec):
+##    return functor1(log2, vec)
 
 def sqrt(x):
-    if type(x) in (int, long, float, bool):
-        return math.sqrt(x)
-    return compute_sqrt(x)
-        
-inversesqrt = compute_inversesqrt
+    return x.__class__(numpy.sqrt(x))
+
+def pow(base, exponent):
+    return x.__class__(numpy.power(base, exponent))
     
