@@ -22,7 +22,7 @@ class tvec4:
                 self.arr = args[0].arr.copy()
 
             elif isinstance(args[0], numpy.ndarray):
-                self.arr = numpy.array(args[0]).reshape(4)
+                self.arr = numpy.array(args[0]).reshape(args[0].size)[:4]
                 
 
             elif type(args[0]) in ltypes:
@@ -97,6 +97,9 @@ class tvec4:
         return 4
 
     __len__ = length
+
+    glm_type = GLM_VEC
+    shape = GLM_VEC4
 
     def __eq__(self, value):
         if type(value) in dtypes:

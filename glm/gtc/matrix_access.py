@@ -2,7 +2,7 @@ import numpy
 def row(m, index, x=None):
     if not x:
         assert(index >= 0 and index < m[0].length())
-        return m.row_type(numpy.array(m.value[:,index]).reshape(4))
+        return m.row_type(numpy.array(m.value[:,index]).reshape(m[0].length()))
     assert(index >= 0 and index < m[0].length())
     
     Result = m.__class__(m.value.T)

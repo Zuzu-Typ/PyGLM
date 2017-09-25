@@ -22,7 +22,7 @@ class tvec3:
                 self.arr = args[0].arr[:3]
 
             elif isinstance(args[0], numpy.ndarray):
-                self.arr = numpy.array(args[0])[:3]
+                self.arr = numpy.array(args[0]).reshape(args[0].size)[:3]
 
             elif type(args[0]) in ltypes:
                 self.__init__(*args[0])
@@ -68,6 +68,9 @@ class tvec3:
         return 3
 
     __len__ = length
+
+    glm_type = GLM_VEC
+    shape = GLM_VEC3
 
     def __eq__(self, value):
         if type(value) in dtypes:

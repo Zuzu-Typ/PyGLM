@@ -171,3 +171,27 @@ if GLM_MESSAGES == GLM_MESSAGES_ENABLED and not defined("GLM_MESSAGE_FORCE_SIZE_
 # countof
 def GLM_COUNTOF(arr):
     return len(arr)
+
+
+#########################################
+# PyGLM stuff
+GLM_VEC = 0
+GLM_MAT = 1
+GLM_QUAT = 2
+
+GLM_VEC2 = 0
+GLM_VEC3 = 1
+GLM_VEC4 = 2
+
+GLM_MAT2x2 = 0
+GLM_MAT2x3 = 1
+GLM_MAT2x4 = 2
+GLM_MAT3x2 = 3
+GLM_MAT3x3 = 4
+GLM_MAT3x4 = 5
+GLM_MAT4x2 = 6
+GLM_MAT4x3 = 7
+GLM_MAT4x4 = 8
+
+def type_to_str(type_):
+    return str(type_).replace("<type '", "").replace("'>", "")

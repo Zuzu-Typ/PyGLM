@@ -22,7 +22,7 @@ class tvec2:
                 self.arr = args[0].arr[:2]
 
             elif isinstance(args[0], numpy.ndarray):
-                self.arr = numpy.array(args[0])[:2]
+                self.arr = numpy.array(args[0]).reshape(args[0].size)[:2]
 
             elif type(args[0]) in ltypes:
                 self.__init__(*args[0])
@@ -52,6 +52,9 @@ class tvec2:
         return 2
 
     __len__ = length
+
+    glm_type = GLM_VEC
+    shape = GLM_VEC2
     
     def __eq__(self, value):
         if type(value) in dtypes:
