@@ -17,25 +17,27 @@ def translate(m, v):
     return Result
 
 def rotate(m, angle, v):
-    a = angle;
-    c = cos(a);
-    s = sin(a);
+    a = angle
+    c = cos(a)
+    s = sin(a)
 
     axis = normalize(v)
     temp = tvec3(((1) - c) * axis)
     
-    Rotate = tmat4x4(0)
-    Rotate[0,0:3] = (c + temp[0] * axis[0],
-                     temp[0] * axis[1] + s * axis[2],
-                     temp[0] * axis[2] - s * axis[1])
-
-    Rotate[1,0:3] = (temp[1] * axis[0] - s * axis[2],
-                     c + temp[1] * axis[1],
-                     temp[1] * axis[2] + s * axis[0])
-
-    Rotate[2,0:3] = (temp[2] * axis[0] + s * axis[1],
-                     temp[2] * axis[1] - s * axis[0],
-                     c + temp[2] * axis[2])
+    Rotate = tmat3x3(c + temp[0] * axis[0],temp[0] * axis[1] + s * axis[2],temp[0] * axis[2] - s * axis[1],
+                     temp[1] * axis[0] - s * axis[2],c + temp[1] * axis[1],temp[1] * axis[2] + s * axis[0],
+                     temp[2] * axis[0] + s * axis[1],temp[2] * axis[1] - s * axis[0],c + temp[2] * axis[2])
+##    Rotate[0,0:3] = (c + temp[0] * axis[0],
+##                     temp[0] * axis[1] + s * axis[2],
+##                     temp[0] * axis[2] - s * axis[1])
+##
+##    Rotate[1,0:3] = (temp[1] * axis[0] - s * axis[2],
+##                     c + temp[1] * axis[1],
+##                     temp[1] * axis[2] + s * axis[0])
+##
+##    Rotate[2,0:3] = (temp[2] * axis[0] + s * axis[1],
+##                     temp[2] * axis[1] - s * axis[0],
+##                     c + temp[2] * axis[2])
     
     return tmat4x4(m[0] * Rotate[0, 0] + m[1] * Rotate[0, 1] + m[2] * Rotate[0, 2],
                      m[0] * Rotate[1, 0] + m[1] * Rotate[1, 1] + m[2] * Rotate[1, 2],

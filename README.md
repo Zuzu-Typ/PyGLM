@@ -1,14 +1,24 @@
 # PyGLM ( WIP )
-A lazy implementation of OpenGL Mathematics (GLM).
+A semi-complete implementation of OpenGL Mathematics (GLM).
 
-Why "lazy"? - PyGLM is in it's core a translation of GLM (by hand), 
-which is why I lazily left some features out.
-For example, there is no tvec1 in PyGLM, because I didn't see the need for it,
-if you think differently, please tell me by posting an issue here on GitHub.
-Another example would be the lack of different precisions (like highp and lowp).
+Why "semi-complete"? - PyGLM is missing some features because I wasn't able to 
+implement them properly or ignored them, because I thought they weren't going
+to be used by anyone anyway (like glm::tvec1).
+If you want to request features, please create an issue on the issue tracker.
 
-PyGLM is still in active development (hence the WIP), so please let me know if you 
-experience any issues or want to request additional features.
+If you think you've found an issue, please follow these steps:
+1. blame you. Maybe you were the one who caused the error.
+If it wasn't you, please..
+2. check for updates. Maybe I've already fixed the issue.
+If that doesn't help, go ahead and..
+3. blame me. Report it on the issue tracker.
+If we can't find out what's causing the error, we'll have to..
+4. blame GLM. Even though it's very unlikely that's what's causing the error.
+
+PyGLM is still in active development (hence the WIP).
+
+You can get PyGLM using the PyPI:
+```pip install pyglm```
 
 To import PyGLM's functions, simply use ```import glm```.
 
@@ -24,7 +34,8 @@ Example:
 	
 	print(z)
 	
-You can define macros in prep.py (in the glm folder).
+You can define macros in prep.py (in the glm folder), please note though, 
+that only a few are even supported.
 For example:
 	
 	GLM_FORCE_MESSAGES = True

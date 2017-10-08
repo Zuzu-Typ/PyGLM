@@ -9,6 +9,10 @@ from ..detail.func_geometric import *
 from ..detail.func_exponential import *
 from ..detail.setup import *
 
+def _unswizzle(swizzle):
+    return swizzle.replace("r","x").replace("s", "x").replace("g", "y").replace("t", "y").replace("b", "z").replace("p", "z").replace("a", "w").replace("q", "w")
+
+
 def compute_quat_dot(x, y):
     tmp = tvec4(x.x * y.x, x.y * y.y, x.z * y.z, x.w * y.w)
     return (tmp.x + tmp.y) + (tmp.z + tmp.w)
@@ -135,10 +139,10 @@ def mat4_cast(q):
     return tmat4x4(mat3_cast(q))
 
 def quat_cast(m):
-    fourXSquaredMinus1 = m[0][0] - m[1][1] - m[2][2]
-    fourYSquaredMinus1 = m[1][1] - m[0][0] - m[2][2]
-    fourZSquaredMinus1 = m[2][2] - m[0][0] - m[1][1]
-    fourWSquaredMinus1 = m[0][0] + m[1][1] + m[2][2]
+    fourXSquaredMinus1 = m[0,0] - m[1,1] - m[2,2]
+    fourYSquaredMinus1 = m[1,1] - m[0,0] - m[2,2]
+    fourZSquaredMinus1 = m[2,2] - m[0,0] - m[1,1]
+    fourWSquaredMinus1 = m[0,0] + m[1,1] + m[2,2]
 
     biggestIndex = 0
     fourBiggestSquaredMinus1 = fourWSquaredMinus1
@@ -161,26 +165,26 @@ def quat_cast(m):
     Result = tquat()
     if biggestVal == 0:
         Result.w = biggestVal;
-        Result.x = (m[1][2] - m[2][1]) * mult;
-        Result.y = (m[2][0] - m[0][2]) * mult;
-        Result.z = (m[0][1] - m[1][0]) * mult;
+        Result.x = (m[1,2] - m[2,1]) * mult;
+        Result.y = (m[2,0] - m[0,2]) * mult;
+        Result.z = (m[0,1] - m[1,0]) * mult;
         
     elif biggestVal == 1:
-        Result.w = (m[1][2] - m[2][1]) * mult;
+        Result.w = (m[1,2] - m[2,1]) * mult;
         Result.x = biggestVal;
-        Result.y = (m[0][1] + m[1][0]) * mult;
-        Result.z = (m[2][0] + m[0][2]) * mult;
+        Result.y = (m[0,1] + m[1,0]) * mult;
+        Result.z = (m[2,0] + m[0,2]) * mult;
         
     elif biggestVal == 2:
-        Result.w = (m[2][0] - m[0][2]) * mult;
-        Result.x = (m[0][1] + m[1][0]) * mult;
+        Result.w = (m[2,0] - m[0,2]) * mult;
+        Result.x = (m[0,1] + m[1,0]) * mult;
         Result.y = biggestVal;
-        Result.z = (m[1][2] + m[2][1]) * mult;
+        Result.z = (m[1,2] + m[2,1]) * mult;
         
     elif biggestVal == 3:
-        Result.w = (m[0][1] - m[1][0]) * mult;
-        Result.x = (m[2][0] + m[0][2]) * mult;
-        Result.y = (m[1][2] + m[2][1]) * mult;
+        Result.w = (m[0,1] - m[1,0]) * mult;
+        Result.x = (m[2,0] + m[0,2]) * mult;
+        Result.y = (m[1,2] + m[2,1]) * mult;
         Result.z = biggestVal;
         
     else:
@@ -211,15 +215,17 @@ def angleAxis(angle, v):
 
     
 class tquat:
-    def __init__(self, *args):
+    def __init__(self, *args, **kw):
+        self.dtype = kw.get("dtype", default_dtype)
         __tname__ = "tquat"
         if len(args) == 1:
             if isinstance(args[0], tquat):
-                q = args[0]
-                self.x = q.x
-                self.y = q.y
-                self.z = q.z
-                self.w = q.w
+                self.value = args[0].value.copy()
+##                q = args[0]
+##                self.x = q.x
+##                self.y = q.y
+##                self.z = q.z
+##                self.w = q.w
                 
             elif isinstance(args[0], tvec3):
                 eulerAngle = args[0]
@@ -227,10 +233,14 @@ class tquat:
                 c = cos(eulerAngle * 0.5)
                 s = sin(eulerAngle * 0.5)
 
-                self.w = c.x * c.y * c.z + s.x * s.y * s.z
-                self.x = s.x * c.y * c.z - c.x * s.y * s.z
-                self.y = c.x * s.y * c.z + s.x * c.y * s.z
-                self.z = c.x * c.y * s.z - s.x * s.y * c.z
+                self.value = numpy.array((s.x * c.y * c.z - c.x * s.y * s.z,
+                                          c.x * s.y * c.z + s.x * c.y * s.z,
+                                          c.x * c.y * s.z - s.x * s.y * c.z,
+                                          c.x * c.y * c.z + s.x * s.y * s.z), dtype=self.dtype)
+##                self.w = c.x * c.y * c.z + s.x * s.y * s.z
+##                self.x = s.x * c.y * c.z - c.x * s.y * s.z
+##                self.y = c.x * s.y * c.z + s.x * c.y * s.z
+##                self.z = c.x * c.y * s.z - s.x * s.y * c.z
 
             elif type(args[0]) in ltypes:
                 self.__init__(self, *args[0])
@@ -238,57 +248,65 @@ class tquat:
             elif isinstance(args[0], tmat3x3) or isinstance(args[0], tmat4x4):
                     Result = self.quat_cast(m)
 
-                    self.x = Result.x
-                    self.y = Result.y
-                    self.z = Result.z
-                    self.w = Result.w
+                    self.value = Result.value
+
+            else:
+                raise TypeError("unsupported type {} for tquat".format(type(args[0])))
 
         elif len(args) == 2:
             if isinstance(args[1], tvec3) and type(args[0]) in dtypes:
                 s, v = args
-                self.x = v.x
-                self.y = v.y
-                self.z = v.z
-                self.w = s
+                self.value = numpy.array((v.x,v.y,v.z,s), dtype = self.dtype)
+##                self.x = v.x
+##                self.y = v.y
+##                self.z = v.z
+##                self.w = s
 
             elif isinstance(args[0], tvec3) and isinstance(args[1], tvec3):
                 u, v = args
                 LocalW = tvec3(cross(u,v))
-                Dot = compute_dot(u,v)
+                Dot = dot(u,v)
                 q = tquat(1.+ Dot, LocalW.x, LocalW.y, LocalW.z)
 
                 Result = normalize_quat(q)
 
-                self.x = Result.x
-                self.y = Result.y
-                self.z = Result.z
-                self.w = Result.w
-                
-        elif len(args) == 4:
-            for i in args:
-                if not type(i) in dtypes:
-                    raise TypeError("unsupported type {} for tquat".format(type(i)))
-                
-            w, x, y, z = args
-            self.x = x
-            self.y = y
-            self.z = z
-            self.w = w
+                self.value = numpy.array((Result.x, Result.y, Result.z, Result.w), dtype=self.dtype)
 
+##                self.x = Result.x
+##                self.y = Result.y
+##                self.z = Result.z
+##                self.w = Result.w
+
+            else:
+                raise TypeError("unsupported types {}, {} for tquat".format(type(args[0]), type(args[1])))
+                
         elif len(args) == 4:
             for i in args:
                 if not type(i) in dtypes:
                     raise TypeError("unsupported type {} for tquat".format(type(i)))
                 
-            w, x, y, z = args
-            self.x = x
-            self.y = y
-            self.z = z
-            self.w = w
+##            w, x, y, z = args
+            self.value = numpy.array(args[1:] + (args[0],),dtype=self.dtype)
+##            self.x = x
+##            self.y = y
+##            self.z = z
+##            self.w = w
+
+##        elif len(args) == 4:
+##            for i in args:
+##                if not type(i) in dtypes:
+##                    raise TypeError("unsupported type {} for tquat".format(type(i)))
+##                
+##            w, x, y, z = args
+##            self.x = x
+##            self.y = y
+##            self.z = z
+##            self.w = w
             
         else:
-            self.x = self.y = self.z = 0
-            self.w = 1
+            self.value = numpy.array((0,0,0,1),dtype = self.dtype)
+##            self.x = self.y = self.z = 0
+##            self.w = 1
 
     def length(self):
         return 4
@@ -419,13 +437,13 @@ class tquat:
             raise TypeError("tquat doesn't support slices")
         else:
             if key in (0,-4):
-                return self.x
+                return self.__dict__["value"][0]
             elif key in (1,-3):
-                return self.y
+                return self.__dict__["value"][1]
             elif key in (2,-2):
-                return self.z
+                return self.__dict__["value"][2]
             elif key in (3,-1):
-                return self.w
+                return self.__dict__["value"][3]
             else:
                 raise IndexError("tquat index out of range")
 
@@ -434,18 +452,101 @@ class tquat:
             raise TypeError("tquat doesn't support slices")
         else:
             if key in (0,-4):
-                self.x = value
+                self.__dict__["value"][0] = value
             elif key in (1,-3):
-                self.y = value
+                self.__dict__["value"][1] = value
             elif key in (2,-2):
-                self.z = value
+                self.__dict__["value"][2] = value
             elif key in (3,-1):
-                self.w = value
+                self.__dict__["value"][3] = value
             else:
                 raise IndexError("tquat index out of range")
+
+    def __getattr__(self, name):
+        if name.startswith('__') and name.endswith('__'):
+            raise AttributeError(name)
+
+        if name == "value":
+            return self.__dict__["value"]
+
+        if len(name) == 1:
+            if name in "xrs":
+                return self.__dict__["value"][0]
+            if name in "ygt":
+                return self.__dict__["value"][1]
+            if name in "zbp":
+                return self.__dict__["value"][2]
+            if name in "waq":
+                return self.__dict__["value"][3]
+
+        if len(name) == 2:
+            for char in name:
+                if not char in "xrsygtzbpwaq":
+                    raise AttributeError(name)
+            return tvec2(self.__dict__["value"][0] if name[0] in "xrs" else self.__dict__["value"][1] if name[0] in "ygt" else self.__dict__["value"][2] if name[0] in "zbp" else self.__dict__["value"][3],
+                         self.__dict__["value"][0] if name[1] in "xrs" else self.__dict__["value"][1] if name[1] in "ygt" else self.__dict__["value"][2] if name[1] in "zbp" else self.__dict__["value"][3])
+
+        if len(name) == 3:
+            for char in name:
+                if not char in "xrsygtzbpwaq":
+                    raise AttributeError(name)
+            return tvec3(self.__dict__["value"][0] if name[0] in "xrs" else self.__dict__["value"][1] if name[0] in "ygt" else self.__dict__["value"][2] if name[0] in "zbp" else self.__dict__["value"][3],
+                         self.__dict__["value"][0] if name[1] in "xrs" else self.__dict__["value"][1] if name[1] in "ygt" else self.__dict__["value"][2] if name[1] in "zbp" else self.__dict__["value"][3],
+                         self.__dict__["value"][0] if name[2] in "xrs" else self.__dict__["value"][1] if name[2] in "ygt" else self.__dict__["value"][2] if name[2] in "zbp" else self.__dict__["value"][3])
+
+        if len(name) == 4:
+            for char in name:
+                if not char in "xrsygtzbpwaq":
+                    raise AttributeError(name)
+            return tvec4(self.__dict__["value"][0] if name[0] in "xrs" else self.__dict__["value"][1] if name[0] in "ygt" else self.__dict__["value"][2] if name[0] in "zbp" else self.__dict__["value"][3],
+                         self.__dict__["value"][0] if name[1] in "xrs" else self.__dict__["value"][1] if name[1] in "ygt" else self.__dict__["value"][2] if name[1] in "zbp" else self.__dict__["value"][3],
+                         self.__dict__["value"][0] if name[2] in "xrs" else self.__dict__["value"][1] if name[2] in "ygt" else self.__dict__["value"][2] if name[2] in "zbp" else self.__dict__["value"][3],
+                         self.__dict__["value"][0] if name[3] in "xrs" else self.__dict__["value"][1] if name[3] in "ygt" else self.__dict__["value"][2] if name[3] in "zbp" else self.__dict__["value"][3])
+
+        raise AttributeError(name)
+
+    def __setattr__(self, name, value):
+        if len(name) == 1:
+            if name in "xrs":
+                self.__dict__["value"][0] = self.dtype(value)
+            elif name in "ygt":
+                self.__dict__["value"][1] = self.dtype(value)
+            elif name in "zbp":
+                self.__dict__["value"][2] = self.dtype(value)
+            elif name in "waq":
+                self.__dict__["value"][3] = self.dtype(value)
+            else:
+                raise AttributeError(name)
+                
+        elif _unswizzle(name) == "xy":
+            if (isinstance(value, tvec2) or type(value) in ltypes) and len(value) == 2:
+                self.__dict__["value"][0] = self.dtype(value[0])
+                self.__dict__["value"][1] = self.dtype(value[1])
+            else:
+                raise TypeError("expected iterable of length 2 to 4, got {}", type(value))
+            
+        elif _unswizzle(name) == "xyz":
+            if (isinstance(value, tvec3) or type(value) in ltypes) and len(value) == 3:
+                self.__dict__["value"][0] = self.dtype(value[0])
+                self.__dict__["value"][1] = self.dtype(value[1])
+                self.__dict__["value"][2] = self.dtype(value[2])
+            else:
+                raise TypeError("expected iterable of length 2 to 4, got {}", type(value))
+            
+        elif _unswizzle(name) == "xyzw":
+            if (isinstance(value, tvec4) or type(value) in ltypes) and len(value) == 4:
+                self.__dict__["value"][0] = self.dtype(value[0])
+                self.__dict__["value"][1] = self.dtype(value[1])
+                self.__dict__["value"][2] = self.dtype(value[2])
+                self.__dict__["value"][3] = self.dtype(value[3])
+            else:
+                raise TypeError("expected iterable of length 2 to 4, got {}", type(value))
+            
+        else:
+            self.__dict__[name] = value
 
     def __repr__(self):
         return self.__str__()
 
     def __str__(self):
-        return "tquat( {} , {} , {} , {} )".format(self.x, self.y, self.z, self.w)
+        return "tquat( {} , {} , {} , {} )".format(*self.value)
