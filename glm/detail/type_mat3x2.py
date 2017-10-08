@@ -19,8 +19,8 @@ class tmat3x2:
                 self.value = args[0].value[:3,:2]
 
             elif isinstance(args[0], tmat2x2) or isinstance(args[0], tmat2x3) or isinstance(args[0], tmat2x4):
-                self.value = [(args[0][0]),
-                              (args[0][1]),
+                self.value = [tuple(args[0][0]),
+                              tuple(args[0][1]),
                               (0,0)]
                 
             elif type(args[0]) in dtypes:
@@ -56,7 +56,9 @@ class tmat3x2:
 ##                          self.col_type(0,1),
 ##                          self.col_type(0,0)]
 
-        self.__setitem__ = self.value.__setitem__
+
+    def __setitem__(self, *args, **kw):
+        return self.value.__setitem__(*args, **kw)
 
     def length():
         return 3

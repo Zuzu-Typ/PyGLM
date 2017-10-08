@@ -18,32 +18,32 @@ class tmat4x3:
                 self.value = args[0].value[:4,:3]
                 
             elif isinstance(args[0], tmat4x2):
-                self.value = numpy.matrix([(args[0][0], 0),
-                              (args[0][1], 0),
-                              (args[0][2], 1),
-                              (args[0][3], 0)], dtype=self.dtype)
+                self.value = numpy.matrix([tuple(args[0][0])+(0,),
+                              tuple(args[0][1])+(0,),
+                              tuple(args[0][2])+(1,),
+                              tuple(args[0][3])+(0,)], dtype=self.dtype)
 
             elif isinstance(args[0], tmat3x3)  or isinstance(args[0], tmat3x4):
-                self.value = numpy.matrix([(args[0][0]),
-                              (args[0][1]),
-                              (args[0][2]),
+                self.value = numpy.matrix([tuple(args[0][0]),
+                              tuple(args[0][1]),
+                              tuple(args[0][2]),
                               (0,0,0)], dtype=self.dtype)
 
             elif isinstance(args[0], tmat3x2):
-                self.value = numpy.matrix([(args[0][0], 0),
-                              (args[0][1], 0),
-                              (args[0][2], 1),
+                self.value = numpy.matrix([tuple(args[0][0])+(0,),
+                              tuple(args[0][1])+(0,),
+                              tuple(args[0][2])+(1,),
                               (0,0,0)], dtype=self.dtype)
 
             elif isinstance(args[0], tmat2x3) or isinstance(args[0], tmat2x4):
-                self.value = numpy.matrix([(args[0][0]),
-                              (args[0][1]),
+                self.value = numpy.matrix([tuple(args[0][0]),
+                              tuple(args[0][1]),
                               (0,0,1),
                               (0,0,0)], dtype=self.dtype)
 
             elif isinstance(args[0], tmat2x2):
-                self.value = numpy.matrix([(args[0][0], 0),
-                              (args[0][1], 0),
+                self.value = numpy.matrix([tuple(args[0][0])+(0,),
+                              tuple(args[0][1])+(0,),
                               (0,0,1),
                               (0,0,0)], dtype=self.dtype)
                 
@@ -90,7 +90,9 @@ class tmat4x3:
 ##                          self.col_type(0,1,0),
 ##                          self.col_type(0,0,1),
 ##                          self.col_type(0,0,0)]
-        self.__setitem__ = self.value.__setitem__
+
+    def __setitem__(self, *args, **kw):
+        return self.value.__setitem__(*args, **kw)
         
     def length(self):
         return 4

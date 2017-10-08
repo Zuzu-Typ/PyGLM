@@ -51,7 +51,8 @@ class tmat2x2:
             self.value = numpy.matrix([(1,0),
                           (0,1)], dtype=self.dtype)
 
-        self.__setitem__ = self.value.__setitem__
+    def __setitem__(self, *args, **kw):
+        return self.value.__setitem__(*args, **kw)
 
     def length():
         return 2

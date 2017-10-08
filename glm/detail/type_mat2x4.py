@@ -17,11 +17,12 @@ class tmat2x4:
                 self.value = args[0].value[:2,:4]
                 
             elif isinstance(args[0], tmat2x3) or isinstance(args[0], tmat3x3) or isinstance(args[0], tmat4x3):
-                self.value = numpy.matrix([(args[0][0], 0),
-                              (args[0][1], 0)], dtype=self.dtype)
+                self.value = numpy.matrix([tuple(args[0][0])+(0,),
+                              tuple(args[0][1])+(0,)], dtype=self.dtype)
+                
             elif isinstance(args[0], tmat2x2) or isinstance(args[0], tmat3x2) or isinstance(args[0], tmat4x2):
-                self.value = numpy.matrix([(args[0][0], 0, 0),
-                              (args[0][1], 0, 0)], dtype=self.dtype)
+                self.value = numpy.matrix([tuple(args[0][0])+(0, 0),
+                              tuple(args[0][1])+(0, 0)], dtype=self.dtype)
                 
             elif type(args[0]) in dtypes:
                 self.value = numpy.matrix([(args[0],0, 0, 0),
@@ -51,7 +52,9 @@ class tmat2x4:
             self.value = numpy.matrix([(1,0,0,0),
                           (0,1,0,0)], dtype=self.dtype)
 
-        self.__setitem__ = self.value.__setitem__
+
+    def __setitem__(self, *args, **kw):
+        return self.value.__setitem__(*args, **kw)
 
     def length():
         return 2

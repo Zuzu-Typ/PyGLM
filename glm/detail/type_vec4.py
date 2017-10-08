@@ -87,8 +87,11 @@ class tvec4:
         else:
             self.arr = numpy.array((0,0,0,0),dtype=self.dtype)
 
-        self.__getitem__ = self.arr.__getitem__
-        self.__setitem__ = self.arr.__setitem__
+    def __getitem__(self, *args,**kw):
+        return self.arr.__getitem__(*args, **kw)
+
+    def __setitem__(self, *args,**kw):
+        return self.arr.__setitem__(*args, **kw)
 
     def __dtype__(self, dtype):
         pass

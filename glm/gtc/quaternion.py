@@ -102,7 +102,7 @@ def yaw(q):
     return asin(clamp((-2.) * (q.x * q.z - q.w * q.y), (-1.), (1.)))
 
 def mat3_cast(q):
-    Result = tmat3x3((1))
+##    Result = tmat3x3((1))
     qxx = (q.x * q.x)
     qyy = (q.y * q.y)
     qzz = (q.z * q.z)
@@ -113,17 +113,22 @@ def mat3_cast(q):
     qwy = (q.w * q.y)
     qwz = (q.w * q.z)
 
-    Result[0][0] = (1.) - (2) * (qyy +  qzz)
-    Result[0][1] = (2.) * (qxy + qwz)
-    Result[0][2] = (2.) * (qxz - qwy)
+##    Result[0][0] = (1.) - (2) * (qyy +  qzz)
+##    Result[0][1] = (2.) * (qxy + qwz)
+##    Result[0][2] = (2.) * (qxz - qwy)
+##
+##    Result[1][0] = (2.) * (qxy - qwz)
+##    Result[1][1] = (1.) - (2.) * (qxx +  qzz)
+##    Result[1][2] = (2.) * (qyz + qwx)
+##
+##    Result[2][0] = (2.) * (qxz + qwy)
+##    Result[2][1] = (2.) * (qyz - qwx)
+##    Result[2][2] = (1.) - (2) * (qxx +  qyy)
 
-    Result[1][0] = (2.) * (qxy - qwz)
-    Result[1][1] = (1.) - (2.) * (qxx +  qzz)
-    Result[1][2] = (2.) * (qyz + qwx)
-
-    Result[2][0] = (2.) * (qxz + qwy)
-    Result[2][1] = (2.) * (qyz - qwx)
-    Result[2][2] = (1.) - (2) * (qxx +  qyy)
+    Result = tmat3x3((((1.) - (2) * (qyy +  qzz), (2.) * (qxy + qwz), (2.) * (qxz - qwy)),
+                      ((2.) * (qxy - qwz), (1.) - (2.) * (qxx +  qzz), (2.) * (qyz + qwx)),
+                      ((2.) * (qxz + qwy), (2.) * (qyz - qwx), (1.) - (2) * (qxx +  qyy))))
+    
     return Result
 
 def mat4_cast(q):
@@ -230,13 +235,13 @@ class tquat:
             elif type(args[0]) in ltypes:
                 self.__init__(self, *args[0])
 
-        elif isinstance(args[0], tmat3x3) or isinstance(args[0], tmat4x4):
-                Result = self.quat_cast(m)
+            elif isinstance(args[0], tmat3x3) or isinstance(args[0], tmat4x4):
+                    Result = self.quat_cast(m)
 
-                self.x = Result.x
-                self.y = Result.y
-                self.z = Result.z
-                self.w = Result.w
+                    self.x = Result.x
+                    self.y = Result.y
+                    self.z = Result.z
+                    self.w = Result.w
 
         elif len(args) == 2:
             if isinstance(args[1], tvec3) and type(args[0]) in dtypes:
