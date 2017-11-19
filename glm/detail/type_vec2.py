@@ -19,7 +19,7 @@ class tvec2:
             elif pyglmCompareType(args[0], tvec2) or pyglmCompareType(args[0], tvec3) or pyglmCompareType(args[0], tvec4):
                 self.arr = args[0].arr[:2]
 
-            elif pyglmCompareType(args[0], numpy.ndarray):
+            elif type(args[0]) in (numpy.ndarray, numpy.matrix):
                 self.arr = numpy.array(args[0]).reshape(args[0].size)[:2]
 
             elif type(args[0]) in ltypes:
