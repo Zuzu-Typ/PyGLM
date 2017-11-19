@@ -1,9 +1,12 @@
 from .func_vector_relational import *
+from .func_geometric import dot
+from .func_trigonometric import acos, sin
+from ..gtc.constants import epsilon
 from .type_vec2 import tvec2
 from .type_vec3 import tvec3
 from .type_vec4 import tvec4
 from ._vectorize import *
-from .setup import *
+from .setup import dtypes
 
 import math
 
@@ -116,10 +119,10 @@ def mod(x, y):
     return x.__class__(numpy.mod(x, y))
 
 def min(a,b):
-    return x.__class__(numpy.minimum(a,b))
+    return a.__class__(numpy.minimum(a,b))
 
 def max(a,b):
-    return x.__class__(numpy.maximum(a,b))
+    return a.__class__(numpy.maximum(a,b))
 
 def clamp(x, minVal, maxVal):
     return x.__class__(numpy.clip(x, minVal, maxVal))

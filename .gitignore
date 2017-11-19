@@ -1,7 +1,16 @@
 pypi/
+new/
+old/
 *.pyc
 *.hpp
 *.inl
 *.cpp
 *.h
+*.c
 test.py
+*.obj
+glm/.vs/glm/v15/.suo
+*.pyproj
+*.sln
+*.bat
+setup.py

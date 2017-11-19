@@ -26,10 +26,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-from . import detail
+#from . import detail
 ##from fwd import *
 ##from .detail.type_int import *
 ##from .detail.type_float import *
+from .prep import *
+from .datatypes import *
 from .detail.setup import *
 
 from .detail.type_vec2 import *
@@ -72,3 +74,11 @@ from .detail.func_common import *
 from .detail.func_geometric import *
 from .detail.func_matrix import *
 from .detail.func_vector_relational import *
+from .gtc.constants import *
+from .gtc.matrix_access import *
+from .gtc.matrix_transform import *
+from .gtc.quaternion import *
+from .gtc.random import *
+from .gtc.noise import *
+from .gtc.type_ptr import *
+from .gtc.reciprocal import *

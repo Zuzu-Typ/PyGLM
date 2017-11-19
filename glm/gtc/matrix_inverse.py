@@ -1,16 +1,19 @@
-from ..detail.setup import *
+from ..detail.setup import pyglmCompareType
 from ..detail.func_matrix import *
 from ..detail.type_mat2x2 import tmat2x2
 from ..detail.type_mat3x3 import tmat3x3
 from ..detail.type_mat4x4 import tmat4x4
+from ..detail.type_vec2 import tvec2
+from ..detail.type_vec3 import tvec3
+from ..detail.type_vec4 import tvec4
 
 def affineInverse(m):
-    if isinstance(m, tmat3x3):
+    if pyglmCompareType(m, tmat3x3):
         Inv = tmat2x2(inverse(tmat2x2(m)))
         return tmat3x3(tvec3(Inv[0], 0),
                        tvec3(Inv[1], 0),
                        tvec3(-Inv * tvec2(m[2]), 1))
-    elif isinstance(m, tmat4x4):
+    elif pyglmCompareType(m, tmat4x4):
         Inv = tmat3x3(inverse(tmat3x3(m)))
 
         return tmat4x4(
@@ -20,7 +23,7 @@ def affineInverse(m):
             tvec4(-Inv * tvec3(m[3]), (1)))
 
 def inverseTranspose(m):
-    if isinstance(m, tmat2x2):
+    if pyglmCompareType(m, tmat2x2):
         Determinant = m[0][0] * m[1][1] - m[1][0] * m[0][1]
         
         Inverse = tmat2x2(
@@ -31,7 +34,7 @@ def inverseTranspose(m):
 
         return Inverse
 
-    elif isinstance(m, tmat3x3):
+    elif pyglmCompareType(m, tmat3x3):
         Determinant = + m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0])
 
         Inverse = tmat3x3(0)
@@ -48,7 +51,7 @@ def inverseTranspose(m):
 
         return Inverse
 
-    elif isinstance(m, tmat4x4):
+    elif pyglmCompareType(m, tmat4x4):
         SubFactor00 = m[2][2] * m[3][3] - m[3][2] * m[2][3]
         SubFactor01 = m[2][1] * m[3][3] - m[3][1] * m[2][3]
         SubFactor02 = m[2][1] * m[3][2] - m[3][1] * m[2][2]

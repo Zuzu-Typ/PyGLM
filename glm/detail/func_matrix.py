@@ -1,4 +1,4 @@
-from .setup import *
+#from .setup import *
 
 import numpy
 
@@ -7,7 +7,7 @@ def matrixCompMult(x, y):
 
 def transpose(m):
     return m.__class__(m.value.T)
-##    if isinstance(m, tmat2x2):
+##    if pyglmCompareType(m, tmat2x2):
 ##        result = tmat2x2(0)
 ##        result[0][0] = m[0][0]
 ##        result[0][1] = m[1][0]
@@ -15,7 +15,7 @@ def transpose(m):
 ##        result[1][1] = m[1][1]
 ##        return result
 ##    
-##    elif isinstance(m, tmat2x3):
+##    elif pyglmCompareType(m, tmat2x3):
 ##        result = tmat3x2(0)
 ##        result[0][0] = m[0][0]
 ##        result[0][1] = m[1][0]
@@ -25,7 +25,7 @@ def transpose(m):
 ##        result[2][1] = m[1][2]
 ##        return result
 ##
-##    elif isinstance(m, tmat2x4):
+##    elif pyglmCompareType(m, tmat2x4):
 ##        result = tmat4x2(0)
 ##        result[0][0] = m[0][0]
 ##        result[0][1] = m[1][0]
@@ -37,7 +37,7 @@ def transpose(m):
 ##        result[3][1] = m[1][3]
 ##        return result
 ##
-##    elif isinstance(m, tmat3x2):
+##    elif pyglmCompareType(m, tmat3x2):
 ##        result = tmat2x3(0)
 ##        result[0][0] = m[0][0]
 ##        result[0][1] = m[1][0]
@@ -47,7 +47,7 @@ def transpose(m):
 ##        result[1][2] = m[2][1]
 ##        return result
 ##
-##    elif isinstance(m, tmat3x3):
+##    elif pyglmCompareType(m, tmat3x3):
 ##        result = tmat3x3(0)
 ##        result[0][0] = m[0][0]
 ##        result[0][1] = m[1][0]
@@ -62,7 +62,7 @@ def transpose(m):
 ##        result[2][2] = m[2][2]
 ##        return result
 ##
-##    elif isinstance(m, tmat3x4):
+##    elif pyglmCompareType(m, tmat3x4):
 ##        result = tmat4x3(0)
 ##        result[0][0] = m[0][0]
 ##        result[0][1] = m[1][0]
@@ -78,7 +78,7 @@ def transpose(m):
 ##        result[3][2] = m[2][3]
 ##        return result
 ##
-##    elif isinstance(m, tmat4x2):
+##    elif pyglmCompareType(m, tmat4x2):
 ##        result = tmat2x4(0)
 ##        result[0][0] = m[0][0]
 ##        result[0][1] = m[1][0]
@@ -90,7 +90,7 @@ def transpose(m):
 ##        result[1][3] = m[3][1]
 ##        return result
 ##
-##    elif isinstance(m, tmat4x3):
+##    elif pyglmCompareType(m, tmat4x3):
 ##        result = tmat3x4(0)
 ##        result[0][0] = m[0][0]
 ##        result[0][1] = m[1][0]
@@ -106,7 +106,7 @@ def transpose(m):
 ##        result[2][3] = m[3][2]
 ##        return result
 ##
-##    elif isinstance(m, tmat4x4):
+##    elif pyglmCompareType(m, tmat4x4):
 ##        result = tmat4x4(0)
 ##        result[0][0] = m[0][0]
 ##        result[0][1] = m[1][0]
@@ -131,13 +131,13 @@ def transpose(m):
 
 def determinant(m):
     return numpy.linalg.det(m)
-##    if isinstance(m, tmat2x2):
+##    if pyglmCompareType(m, tmat2x2):
 ##        return m[0][0] * m[1][1] - m[1][0] * m[0][1]
 ##    
-##    elif isinstance(m, tmat3x3):
+##    elif pyglmCompareType(m, tmat3x3):
 ##        return + m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2]) - m[1][0] * (m[0][1] * m[2][2] - m[2][1] * m[0][2]) + m[2][0] * (m[0][1] * m[1][2] - m[1][1] * m[0][2])
 ##
-##    elif isinstance(m, tmat4x4):
+##    elif pyglmCompareType(m, tmat4x4):
 ##        SubFactor00 = m[2][2] * m[3][3] - m[3][2] * m[2][3]
 ##        SubFactor01 = m[2][1] * m[3][3] - m[3][1] * m[2][3]
 ##        SubFactor02 = m[2][1] * m[3][2] - m[3][1] * m[2][2]
@@ -154,7 +154,7 @@ def determinant(m):
 
 def inverse(m):
     return m.__class__(numpy.linalg.inv(m))
-##    if isinstance(m, tmat2x2):
+##    if pyglmCompareType(m, tmat2x2):
 ##        OneOverDeterminant = 1. / (+ m[0][0] * m[1][1] - m[1][0] * m[0][1])
 ##
 ##        Inverse = tmat2x2(+ m[1][1] * OneOverDeterminant,
@@ -164,7 +164,7 @@ def inverse(m):
 ##
 ##        return Inverse
 ##
-##    elif isinstance(m, tmat3x3):
+##    elif pyglmCompareType(m, tmat3x3):
 ##        OneOverDeterminant = 1. / (+ m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2]) - m[1][0] * (m[0][1] * m[2][2] - m[2][1] * m[0][2]) + m[2][0] * (m[0][1] * m[1][2] - m[1][1] * m[0][2]))
 ##
 ##        Inverse = tmat3x3(0)
@@ -180,7 +180,7 @@ def inverse(m):
 ##
 ##        return Inverse
 ##
-##    elif isinstance(m, tmat4x4):
+##    elif pyglmCompareType(m, tmat4x4):
 ##        return tmat4x4(numpy.linalg.inv(m.value))
 ##        Coef00 = m[2][2] * m[3][3] - m[3][2] * m[2][3]
 ##        Coef02 = m[1][2] * m[3][3] - m[3][2] * m[1][3]
@@ -236,18 +236,18 @@ def inverse(m):
 ##
 ##        return Inverse * OneOverDeterminant
         
-from .type_vec2 import tvec2
-from .type_vec3 import tvec3
-from .type_vec4 import tvec4
+#from .type_vec2 import tvec2
+#from .type_vec3 import tvec3
+#from .type_vec4 import tvec4
 
-from .type_mat2x2 import tmat2x2
-from .type_mat2x3 import tmat2x3
-from .type_mat2x4 import tmat2x4
+#from .type_mat2x2 import tmat2x2
+#from .type_mat2x3 import tmat2x3
+#from .type_mat2x4 import tmat2x4
 
-from .type_mat3x2 import tmat3x2
-from .type_mat3x3 import tmat3x3
-from .type_mat3x4 import tmat3x4
+#from .type_mat3x2 import tmat3x2
+#from .type_mat3x3 import tmat3x3
+#from .type_mat3x4 import tmat3x4
 
-from .type_mat4x2 import tmat4x2
-from .type_mat4x3 import tmat4x3
-from .type_mat4x4 import tmat4x4
+#from .type_mat4x2 import tmat4x2
+#from .type_mat4x3 import tmat4x3
+#from .type_mat4x4 import tmat4x4

@@ -1,11 +1,11 @@
-from .func_exponential import *
-from .func_common import *
-from .type_vec2 import *
-from .type_vec3 import *
-from .type_vec4 import *
-from .setup import *
+from .func_exponential import sqrt, inversesqrt
+#from .func_common import *
+from .type_vec2 import tvec2
+from .type_vec3 import tvec3
+from .type_vec4 import tvec4
+from .setup import dtypes
 
-import numpy
+import numpy, math
 
 def compute_length(v):
     return sqrt(dot(v,v))
@@ -53,16 +53,15 @@ def length(x):
 def distance(p0, p1):
     return length(p1-p0)
 
-def dot(x,y):
-    return numpy.dot(x,y)
+dot = numpy.dot
 
 def cross(x,y):
     return x.__class__(numpy.cross(x,y))
 
 def normalize(x):
-    if type(x) in dtypes:
-        return -1. if x < 0 else 1.
-    return compute_normalize(x)
+##    if type(x) in dtypes:
+##        return -1. if x < 0 else 1.
+    return x / length(x)
 
 def faceforward(N, I, Nref):
     if type(N) in dtypes:

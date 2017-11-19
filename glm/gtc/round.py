@@ -1,9 +1,5 @@
-from ..detail.setup import *
-from ..detail.precision import *
-from ..detail._vectorize import *
-from ..detail.func_vector_rational import *
-from ..detail.func_common import *
-from ..detail.func_integer import *
+#from ..detail.setup import *
+from ..detail.func_common import abs, sign
 
 def compute_ceilShift(v, Shift=None):
     if Shift:

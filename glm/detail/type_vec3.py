@@ -1,11 +1,9 @@
-from .setup import *
+from ..datatypes import default_dtype, dtypes, ltypes
+from .setup import GLM_C_FLOAT_SIZE, GLM_VEC, GLM_VEC3, pyglmCompareType
 
 import sys
 
 import numpy
-
-def _type_to_str(type_):
-    return str(type_).replace("<type '", "").replace("'>", "")
 
 def _unswizzle(swizzle):
     return swizzle.replace("r","x").replace("s", "x").replace("g", "y").replace("t", "y").replace("b", "z").replace("p", "z").replace("a", "w").replace("q", "w")
@@ -18,10 +16,10 @@ class tvec3:
             if type(args[0]) in dtypes:
                 self.arr = numpy.array(args[0], dtype=self.dtype)
                 
-            elif isinstance(args[0], tvec3) or isinstance(args[0], tvec4):
+            elif pyglmCompareType(args[0], tvec3) or pyglmCompareType(args[0], tvec4):
                 self.arr = args[0].arr[:3]
 
-            elif isinstance(args[0], numpy.ndarray):
+            elif pyglmCompareType(args[0], numpy.ndarray):
                 self.arr = numpy.array(args[0]).reshape(args[0].size)[:3]
 
             elif type(args[0]) in ltypes:
@@ -29,17 +27,17 @@ class tvec3:
 
         elif len(args) == 2:
             # check types
-            if isinstance(args[0], tvec2):
+            if pyglmCompareType(args[0], tvec2):
                 if not type(args[1]) in dtypes:
                     raise TypeError("expected int or float values, got {}".format(type(args[1])))
                 self.arr = numpy.array(tuple(args[0].arr) + (args[1],), dtype=self.dtype)
-            elif isinstance(args[1], tvec2):
+            elif pyglmCompareType(args[1], tvec2):
                 if not type(args[0]) in dtypes:
                     raise TypeError("expected int or float values, got {}".format(type(args[0])))
                 self.arr = numpy.array((args[0],) + tuple(args[1].arr), dtype=self.dtype)
-                self.x = args[0]
-                self.y = self.dtype(args[1].x)
-                self.z = self.dtype(args[1].y)
+                self.arr[0] = args[0]
+                self.arr[1] = self.dtype(args[1].x)
+                self.arr[2] = self.dtype(args[1].y)
             else:
                 raise TypeError("expected tvec2 and int or float values, got {} and {}".format(type(args[0]), type(args[1])))
 
@@ -67,41 +65,46 @@ class tvec3:
     def __dtype__(self, dtype):
         pass
 
-    def length(self):
+    def length(*args):
         return 3
 
+    def __sizeof__(self):
+        return GLM_C_FLOAT_SIZE * 3
+
     __len__ = length
+
+    __size__ = GLM_C_FLOAT_SIZE * 3
 
     glm_type = GLM_VEC
     shape = GLM_VEC3
 
     def __eq__(self, value):
         if type(value) in dtypes:
-            return (self.x == value and self.y == value and self.z == value)
-        elif isinstance(value, tvec3):
-            return (self.x == value.x and self.y == value.y and self.z == value.z)
+            return (self.arr[0] == value and self.arr[1] == value and self.arr[2] == value)
+        elif pyglmCompareType(value, tvec3):
+            return (self.arr[0] == value.x and self.arr[1] == value.y and self.arr[2] == value.z)
         else:
             try:
-                return (self.x == value[0] and self.y == value[1] and self.z == value[2])
+                return (self.arr[0] == value[0] and self.arr[1] == value[1] and self.arr[2] == value[2])
             except:
-                raise TypeError("unsupported operand type(s) for ==: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+                raise TypeError("unsupported operand type(s) for ==: 'tvec3' and '{}'".format(type(value)))
 
     def __ne__(self, value):
         if type(value) in dtypes:
-            return (self.x != value and self.y != value and self.z != value)
-        elif isinstance(value, tvec3):
-            return (self.x != value.x and self.y != value.y and self.z != value.z)
+            return (self.arr[0] != value and self.arr[1] != value and self.arr[2] != value)
+        elif pyglmCompareType(value, tvec3):
+            return (self.arr[0] != value.x and self.arr[1] != value.y and self.arr[2] != value.z)
         else:
             try:
-                return (self.x != value[0] and self.y != value[1] and self.z != value[2])
+                return (self.arr[0] != value[0] and self.arr[1] != value[1] and self.arr[2] != value[2])
             except:
-                raise TypeError("unsupported operand type(s) for !=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+                raise TypeError("unsupported operand type(s) for !=: 'tvec3' and '{}'".format(type(value)))
 
     def __add__(self, value):
         try:
             return tvec3(self.arr + value)
         except:
-            raise TypeError("unsupported operand type(s) for +: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for +: 'tvec3' and '{}'".format(type(value)))
 
     __radd__ = __add__
 
@@ -109,39 +112,39 @@ class tvec3:
         try:
             return tvec3(self.arr - value)
         except:
-            raise TypeError("unsupported operand type(s) for -: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for -: 'tvec3' and '{}'".format(type(value)))
 
     def __rsub__(self, value):
         try:
             return tvec3(value - self.arr)
         except:
-            raise TypeError("unsupported operand type(s) for +: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for +: 'tvec3' and '{}'".format(type(value)))
 
     def __mul__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(self.arr * value.arr)
             return tvec3(self.arr * value)
         except:
-            raise TypeError("unsupported operand type(s) for *: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for *: 'tvec3' and '{}'".format(type(value)))
 
     __rmul__ = __mul__
 
     def __truediv__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(self.arr / value.arr)
             return tvec3(self.arr / value)
         except:
-            raise TypeError("unsupported operand type(s) for /: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for /: 'tvec3' and '{}'".format(type(value)))
 
     def __rtruediv__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(value.arr / self.arr)
             return tvec3(value / self.arr)
         except:
-            raise TypeError("unsupported operand type(s) for /: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for /: 'tvec3' and '{}'".format(type(value)))
 
     __div__ = __truediv__
 
@@ -149,111 +152,111 @@ class tvec3:
 
     def __floordiv__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(self.arr // value.arr)
             return tvec3(self.arr // value)
         except:
-            raise TypeError("unsupported operand type(s) for //: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for //: 'tvec3' and '{}'".format(type(value)))
 
     def __rfloordiv__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(value.arr // self.arr)
             return tvec3(value // self.arr)
         except:
-            raise TypeError("unsupported operand type(s) for //: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for //: 'tvec3' and '{}'".format(type(value)))
 
     def __mod__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(self.arr % value.arr)
             return tvec3(self.arr % value)
         except:
-            raise TypeError("unsupported operand type(s) for %: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for %: 'tvec3' and '{}'".format(type(value)))
 
     def __rmod__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(value.arr % self.arr)
             return tvec3(value % self.arr)
         except:
-            raise TypeError("unsupported operand type(s) for %: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for %: 'tvec3' and '{}'".format(type(value)))
 
     def __pow__(self, value, modulo=None):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(self.arr ** value.arr)
             return tvec3(self.arr ** value)
         except:
-            raise TypeError("unsupported operand type(s) for pow: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for pow: 'tvec3' and '{}'".format(type(value)))
 
     def __rpow__(self, value, modulo=None):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(value.arr ** self.arr)
             return tvec3(value ** self.arr)
         except:
-            raise TypeError("unsupported operand type(s) for pow: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for pow: 'tvec3' and '{}'".format(type(value)))
 
     def __lshift__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(self.arr << value.arr)
             return tvec3(self.arr << value)
         except:
-            raise TypeError("unsupported operand type(s) for <<: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for <<: 'tvec3' and '{}'".format(type(value)))
 
     def __rlshift__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(value.arr << self.arr)
             return tvec3(value << self.arr)
         except:
-            raise TypeError("unsupported operand type(s) for <<: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for <<: 'tvec3' and '{}'".format(type(value)))
 
     def __rshift__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(self.arr >> value.arr)
             return tvec3(self.arr >> value)
         except:
-            raise TypeError("unsupported operand type(s) for >>: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for >>: 'tvec3' and '{}'".format(type(value)))
 
     def __rrshift__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(value.arr >> self.arr)
             return tvec3(value >> self.arr)
         except:
-            raise TypeError("unsupported operand type(s) for >>: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for >>: 'tvec3' and '{}'".format(type(value)))
 
     def __and__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(self.arr & value.arr)
             return tvec3(self.arr & value)
         except:
-            raise TypeError("unsupported operand type(s) for &: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for &: 'tvec3' and '{}'".format(type(value)))
 
     __rand__ = __and__
 
     def __or__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(self.arr | value.arr)
             return tvec3(self.arr | value)
         except:
-            raise TypeError("unsupported operand type(s) for |: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for |: 'tvec3' and '{}'".format(type(value)))
 
     __or__ = __or__
 
     def __xor__(self, value):
         try:
-            if isinstance(value, tvec3):
+            if pyglmCompareType(value, tvec3):
                 return tvec3(self.arr ^ value.arr)
             return tvec3(self.arr ^ value)
         except:
-            raise TypeError("unsupported operand type(s) for ^: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for ^: 'tvec3' and '{}'".format(type(value)))
 
     __rxor__ = __xor__
 
@@ -262,28 +265,28 @@ class tvec3:
         try:
             self.arr += value
         except:
-            raise TypeError("unsupported operand type(s) for +=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for +=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     def __isub__(self, value):
         try:
             self.arr -= value
         except:
-            raise TypeError("unsupported operand type(s) for -=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for -=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     def __imul__(self, value):
         try:
             self.arr *= value
         except:
-            raise TypeError("unsupported operand type(s) for *=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for *=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     def __itruediv__(self, value):
         try:
             self.arr /= value
         except:
-            raise TypeError("unsupported operand type(s) for /=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for /=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     __idiv__ = __itruediv__
@@ -292,56 +295,56 @@ class tvec3:
         try:
             self.arr //= value
         except:
-            raise TypeError("unsupported operand type(s) for //=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for //=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     def __imod__(self, value):
         try:
             self.arr %= value
         except:
-            raise TypeError("unsupported operand type(s) for %=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for %=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     def __ipow__(self, value, opt=None):
         try:
             self.arr **= value
         except:
-            raise TypeError("unsupported operand type(s) for **=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for **=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     def __ilshift__(self, value):
         try:
             self.arr <<= value
         except:
-            raise TypeError("unsupported operand type(s) for <<=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for <<=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     def __irshift__(self, value):
         try:
             self.arr >>= value
         except:
-            raise TypeError("unsupported operand type(s) for >>=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for >>=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     def __iand__(self, value):
         try:
             self.arr &= value
         except:
-            raise TypeError("unsupported operand type(s) for &=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for &=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     def __ior__(self, value):
         try:
             self.arr |= value
         except:
-            raise TypeError("unsupported operand type(s) for |=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for |=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     def __ixor__(self, value):
         try:
             self.arr ^= value
         except:
-            raise TypeError("unsupported operand type(s) for ^=: 'tvec3' and '{}'".format(_type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for ^=: 'tvec3' and '{}'".format(type(value)))
         return self
 
     def __pos__(self):
@@ -357,7 +360,7 @@ class tvec3:
         return tvec3(~self.arr)
 
     def __bool__(self):
-        return (bool(self.x), bool(self.y), bool(self.z))
+        return (bool(self.arr[0]), bool(self.arr[1]), bool(self.arr[2]))
 
     __nonzero__ = __bool__
 
@@ -417,14 +420,14 @@ class tvec3:
                 raise AttributeError(name)
 
         elif _unswizzle(name) == "xy":
-            if isinstance(value, tvec2) or (type(value) in ltypes and len(value) == 2):
+            if pyglmCompareType(value, tvec2) or (type(value) in ltypes and len(value) == 2):
                 self.__dict__["arr"][0] = self.dtype(value[0])
                 self.__dict__["arr"][1] = self.dtype(value[1])
             else:
                 raise TypeError("expected iterable of length 2 to 4, got {}", type(value))
                 
         elif _unswizzle(name) == "xyz":
-            if isinstance(value, tvec3) or isinstance(value, tvec4) or (type(value) in ltypes and len(value) <= 4):
+            if pyglmCompareType(value, tvec3) or pyglmCompareType(value, tvec4) or (type(value) in ltypes and len(value) <= 4):
                 self.__dict__["arr"][0] = self.dtype(value[0])
                 self.__dict__["arr"][1] = self.dtype(value[1])
                 self.__dict__["arr"][2] = self.dtype(value[2])
@@ -437,7 +440,7 @@ class tvec3:
         return self.__str__()
 
     def __str__(self):
-        return "tvec3( {} , {} , {} )".format(self.x, self.y, self.z)
+        return "tvec3( {} , {} , {} )".format(self.arr[0], self.arr[1], self.arr[2])
 
 from .type_vec2 import tvec2
 from .type_vec4 import tvec4

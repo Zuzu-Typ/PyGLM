@@ -1,10 +1,10 @@
-from .setup import *
-from ._vectorize import *
-import math
+#from .setup import *
+#from ._vectorize import *
+from math import radians, degrees
 import numpy
 
-radians = math.radians
-degrees = math.degrees
+#radians = math.radians
+#degrees = math.degrees
 
 def sin(v):
     return v.__class__(numpy.sin(v))

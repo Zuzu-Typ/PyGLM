@@ -1,4 +1,5 @@
-from .setup import *
+from ..datatypes import default_dtype, dtypes, ltypes
+from .setup import GLM_C_FLOAT_SIZE, GLM_MAT, GLM_MAT4x4, pyglmCompareType
 
 import numpy
 
@@ -11,46 +12,46 @@ class tmat4x4:
         if len(args) == 1:
             if type(args[0]) == numpy.matrixlib.defmatrix.matrix and args[0].size == 16 and args[0].shape == (4,4):
                 self.value = args[0].copy()
-            elif isinstance(args[0], tmat4x4):
+            elif pyglmCompareType(args[0], tmat4x4):
                 self.value = args[0].value.copy()
 
-            elif isinstance(args[0], tmat4x3):
+            elif pyglmCompareType(args[0], tmat4x3):
                 self.value = numpy.matrix([tuple(args[0][0])+(0,),
                               tuple(args[0][1])+(0,),
                               tuple(args[0][2])+(0,),
                               tuple(args[0][3])+(1,)], dtype=self.dtype)
                 
-            elif isinstance(args[0], tmat4x2):
+            elif pyglmCompareType(args[0], tmat4x2):
                 self.value = numpy.matrix([tuple(args[0][0])+(0,0),
                               tuple(args[0][1])+(0,0),
                               tuple(args[0][2])+(1,0),
                               tuple(args[0][3])+(0,1)], dtype=self.dtype)
 
-            elif isinstance(args[0], tmat3x3)  or isinstance(args[0], tmat3x4):
+            elif pyglmCompareType(args[0], tmat3x3)  or pyglmCompareType(args[0], tmat3x4):
                 self.value = numpy.matrix([tuple(args[0][0])+(0,),
                               tuple(args[0][1])+(0,),
                               tuple(args[0][2])+(0,),
                               (0,0,0,1)], dtype=self.dtype)
 
-            elif isinstance(args[0], tmat3x2):
+            elif pyglmCompareType(args[0], tmat3x2):
                 self.value = numpy.matrix([tuple(args[0][0])+(0,0),
                               tuple(args[0][1])+(0,0),
                               tuple(args[0][2])+(1,0),
                               (0,0,0,1)], dtype=self.dtype)
 
-            elif isinstance(args[0], tmat2x4):
+            elif pyglmCompareType(args[0], tmat2x4):
                 self.value = numpy.matrix([tuple(args[0][0]),
                               tuple(args[0][1]),
                               (0,0,1,0),
                               (0,0,0,1)], dtype=self.dtype)
                 
-            elif isinstance(args[0], tmat2x3):
+            elif pyglmCompareType(args[0], tmat2x3):
                 self.value = numpy.matrix([tuple(args[0][0])+(0,),
                               tuple(args[0][1])+(0,),
                               (0,0,1,0),
                               (0,0,0,1)], dtype=self.dtype)
 
-            elif isinstance(args[0], tmat2x2):
+            elif pyglmCompareType(args[0], tmat2x2):
                 self.value = numpy.matrix([tuple(args[0][0])+(0,0),
                               tuple(args[0][1])+(0,0),
                               (0,0,1,0),
@@ -94,36 +95,41 @@ class tmat4x4:
     def __setitem__(self, *args, **kw):
         return self.value.__setitem__(*args, **kw)
 
-    def length(self):
+    def length(*args):
         return 4
     __len__ = length
+
+    def __sizeof__(self):
+        return GLM_C_FLOAT_SIZE * 16
+
+    __size__ = GLM_C_FLOAT_SIZE * 16
 
     glm_type = GLM_MAT
     shape = GLM_MAT4x4
 
     def __eq__(self, value):
-        if isinstance(value, tmat4x4):
+        if pyglmCompareType(value, tmat4x4):
             return (self[0] == value[0] and self[1] == value[1] and self[2] == value[2] and self[3] == value[3])
         else:
             try:
                 return (self[0] == value[0] and self[1] == value[1] and self[2] == value[2] and self[3] == value[3])
             except:
-                raise TypeError("unsupported operand type(s) for ==: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+                raise TypeError("unsupported operand type(s) for ==: 'tmat4x4' and '{}'".format(type(value)))
 
     def __ne__(self, value):
-        if isinstance(value, tmat4x4):
+        if pyglmCompareType(value, tmat4x4):
             return (self[0] != value[0] or self[1] != value[1] or self[2] != value[2] or self[3] != value[3])
         else:
             try:
                 return (self[0] != value[0] or self[1] != value[1] or self[2] != value[2] or self[3] != value[3])
             except:
-                raise TypeError("unsupported operand type(s) for !=: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+                raise TypeError("unsupported operand type(s) for !=: 'tmat4x4' and '{}'".format(type(value)))
 
     def __add__(self, value):
         try:
             return tmat4x4(self.value + value)
         except:
-            raise TypeError("unsupported operand type(s) for +: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for +: 'tmat4x4' and '{}'".format(type(value)))
 
     __radd__ = __add__
 
@@ -131,13 +137,13 @@ class tmat4x4:
         try:
             return tmat4x4(self.value - value)
         except:
-            raise TypeError("unsupported operand type(s) for -: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for -: 'tmat4x4' and '{}'".format(type(value)))
 
     def __rsub__(self, value):
         try:
             return tmat4x4(value - self.value)
         except:
-            raise TypeError("unsupported operand type(s) for -: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for -: 'tmat4x4' and '{}'".format(type(value)))
 
     def __mul__(self, value):
         try:
@@ -147,7 +153,7 @@ class tmat4x4:
             if (hasattr(value, "glm_type") and value.glm_type == GLM_MAT):
                 value = value.value
                 
-            if isinstance(value, self.row_type):
+            if pyglmCompareType(value, self.row_type):
                 return self.row_type(value.arr.reshape(4) * self.value)
             if type(value) == numpy.ndarray:
                 return self.row_type(value.reshape(4) * self.value)
@@ -163,13 +169,13 @@ class tmat4x4:
             return rmul(self)
             
         except:
-            raise TypeError("unsupported operand type(s) for *: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for *: 'tmat4x4' and '{}'".format(type(value)))
 ##        if type(value) in dtypes:
 ##            return tmat4x4(self[0] * value,
 ##                         self[1] * value,
 ##                           self[2] * value,
 ##                           self[3] * value)
-##        elif isinstance(value, self.row_type):
+##        elif pyglmCompareType(value, self.row_type):
 ##            m = self
 ##            v = value
 ##            Mov0 = self.col_type(v[0])
@@ -184,7 +190,7 @@ class tmat4x4:
 ##            Add1 = Mul2 + Mul3
 ##            Add2 = Add0 + Add1
 ##            return Add2
-##        elif isinstance(value, tmat4x4):
+##        elif pyglmCompareType(value, tmat4x4):
 ##            m1 = self
 ##            m2 = value
 ##            SrcA0 = m1[0]
@@ -203,7 +209,7 @@ class tmat4x4:
 ##            Result[2] = SrcA0 * SrcB2[0] + SrcA1 * SrcB2[1] + SrcA2 * SrcB2[2] + SrcA3 * SrcB2[3]
 ##            Result[3] = SrcA0 * SrcB3[0] + SrcA1 * SrcB3[1] + SrcA2 * SrcB3[2] + SrcA3 * SrcB3[3]
 ##            return Result
-##        elif isinstance(value, tmat2x4):
+##        elif pyglmCompareType(value, tmat2x4):
 ##            m1 = self
 ##            m2 = value
 ##            return tmat2x4(m1[0][0] * m2[0][0] + m1[1][0] * m2[0][1] + m1[2][0] * m2[0][2] + m1[3][0] * m2[0][3],
@@ -214,7 +220,7 @@ class tmat4x4:
 ##			m1[0][1] * m2[1][0] + m1[1][1] * m2[1][1] + m1[2][1] * m2[1][2] + m1[3][1] * m2[1][3],
 ##			m1[0][2] * m2[1][0] + m1[1][2] * m2[1][1] + m1[2][2] * m2[1][2] + m1[3][2] * m2[1][3],
 ##			m1[0][3] * m2[1][0] + m1[1][3] * m2[1][1] + m1[2][3] * m2[1][2] + m1[3][3] * m2[1][3])
-##        elif isinstance(value, tmat3x4):
+##        elif pyglmCompareType(value, tmat3x4):
 ##            m1 = self
 ##            m2 = value
 ##            return tmat3x4(m1[0][0] * m2[0][0] + m1[1][0] * m2[0][1] + m1[2][0] * m2[0][2] + m1[3][0] * m2[0][3],
@@ -230,14 +236,14 @@ class tmat4x4:
 ##			m1[0][2] * m2[2][0] + m1[1][2] * m2[2][1] + m1[2][2] * m2[2][2] + m1[3][2] * m2[2][3],
 ##			m1[0][3] * m2[2][0] + m1[1][3] * m2[2][1] + m1[2][3] * m2[2][2] + m1[3][3] * m2[2][3])
 ##        else:
-##            raise TypeError("unsupported operand type(s) for *: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+##            raise TypeError("unsupported operand type(s) for *: 'tmat4x4' and '{}'".format(type(value)))
 
     def __rmul__(self, value):
         try:
             if (hasattr(value, "glm_type") and value.glm_type == GLM_MAT):
                 value = value.value
                 
-            if isinstance(value, self.col_type):
+            if pyglmCompareType(value, self.col_type):
                 return self.row_type(self.value * value.arr.reshape(4,1))
             if type(value) == numpy.ndarray:
                 return self.row_type(self.value * value.reshape(4,1))
@@ -252,20 +258,20 @@ class tmat4x4:
             
             return tmat4x4(self.value * value)
         except:
-            raise TypeError("unsupported operand type(s) for *: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for *: 'tmat4x4' and '{}'".format(type(value)))
 ##        if type(value) in dtypes:
 ##            return tmat4x4(self[0] * value,
 ##                         self[1] * value,
 ##                           self[2] * value,
 ##                           self[3] * value)
-##        elif isinstance(value, self.col_type):
+##        elif pyglmCompareType(value, self.col_type):
 ##            m = self
 ##            v = value
 ##            return self.row_type(m[0][0] * v[0] + m[0][1] * v[1] + m[0][2] * v[2] + m[0][3] * v[3],
 ##			m[1][0] * v[0] + m[1][1] * v[1] + m[1][2] * v[2] + m[1][3] * v[3],
 ##			m[2][0] * v[0] + m[2][1] * v[1] + m[2][2] * v[2] + m[2][3] * v[3],
 ##			m[3][0] * v[0] + m[3][1] * v[1] + m[3][2] * v[2] + m[3][3] * v[3])
-##        elif isinstance(value, tmat4x4):
+##        elif pyglmCompareType(value, tmat4x4):
 ##            m1 = self
 ##            m2 = value
 ##            SrcA0 = m1[0]
@@ -284,7 +290,7 @@ class tmat4x4:
 ##            Result[2] = SrcA0 * SrcB2[0] + SrcA1 * SrcB2[1] + SrcA2 * SrcB2[2] + SrcA3 * SrcB2[3]
 ##            Result[3] = SrcA0 * SrcB3[0] + SrcA1 * SrcB3[1] + SrcA2 * SrcB3[2] + SrcA3 * SrcB3[3]
 ##            return Result
-##        elif isinstance(value, tmat2x4):
+##        elif pyglmCompareType(value, tmat2x4):
 ##            m1 = self
 ##            m2 = value
 ##            return tmat2x4(m1[0][0] * m2[0][0] + m1[1][0] * m2[0][1] + m1[2][0] * m2[0][2] + m1[3][0] * m2[0][3],
@@ -295,7 +301,7 @@ class tmat4x4:
 ##			m1[0][1] * m2[1][0] + m1[1][1] * m2[1][1] + m1[2][1] * m2[1][2] + m1[3][1] * m2[1][3],
 ##			m1[0][2] * m2[1][0] + m1[1][2] * m2[1][1] + m1[2][2] * m2[1][2] + m1[3][2] * m2[1][3],
 ##			m1[0][3] * m2[1][0] + m1[1][3] * m2[1][1] + m1[2][3] * m2[1][2] + m1[3][3] * m2[1][3])
-##        elif isinstance(value, tmat3x4):
+##        elif pyglmCompareType(value, tmat3x4):
 ##            m1 = self
 ##            m2 = value
 ##            return tmat3x4(m1[0][0] * m2[0][0] + m1[1][0] * m2[0][1] + m1[2][0] * m2[0][2] + m1[3][0] * m2[0][3],
@@ -311,55 +317,55 @@ class tmat4x4:
 ##			m1[0][2] * m2[2][0] + m1[1][2] * m2[2][1] + m1[2][2] * m2[2][2] + m1[3][2] * m2[2][3],
 ##			m1[0][3] * m2[2][0] + m1[1][3] * m2[2][1] + m1[2][3] * m2[2][2] + m1[3][3] * m2[2][3])
 ##        else:
-##            raise TypeError("unsupported operand type(s) for *: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+##            raise TypeError("unsupported operand type(s) for *: 'tmat4x4' and '{}'".format(type(value)))
 
     def __truediv__(self, value):
         try:
-            if isinstance(value, self.row_type):
+            if pyglmCompareType(value, self.row_type):
                 return self.row_type(inverse(self) * value)
             return self * inverse(value)
         except:
             try:
                 return value.__rdiv__(self)
             except:
-                raise TypeError("unsupported operand type(s) for /: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+                raise TypeError("unsupported operand type(s) for /: 'tmat4x4' and '{}'".format(type(value)))
 ##        if type(value) in dtypes:
 ##            value = float(value)
 ##            return tmat4x4(self[0] / value,
 ##                         self[1] / value,
 ##                           self[2] / value,
 ##                           self[3] / value)
-##        elif isinstance(value, self.row_type):
+##        elif pyglmCompareType(value, self.row_type):
 ##            return inverse(self) * value
-##        elif isinstance(value, tmat4x4):
+##        elif pyglmCompareType(value, tmat4x4):
 ##            return self * inverse(value)
 ##        else:
 ##            try:
 ##                return self * inverse(value)
 ##            except:
-##                raise TypeError("unsupported operand type(s) for /: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+##                raise TypeError("unsupported operand type(s) for /: 'tmat4x4' and '{}'".format(type(value)))
 
     def __rtruediv__(self, value):
         try:
-            if isinstance(value, self.col_type):
+            if pyglmCompareType(value, self.col_type):
                 return self.col_type(value * inverse(self))
             return value * inverse(self)
         except:
-            raise TypeError("unsupported operand type(s) for /: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for /: 'tmat4x4' and '{}'".format(type(value)))
 ##        if type(value) in dtypes:
 ##            value = float(value)
 ##            return tmat4x4(value / self[0],
 ##                         value / self[1],
 ##                           value / self[2])
-##        elif isinstance(value, self.col_type):
+##        elif pyglmCompareType(value, self.col_type):
 ##            return value * inverse(self)
-##        elif isinstance(value, tmat4x4):
+##        elif pyglmCompareType(value, tmat4x4):
 ##            return self * inverse(value)
 ##        else:
 ##            try:
 ##                return value * inverse(self)
 ##            except:
-##                raise TypeError("unsupported operand type(s) for /: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+##                raise TypeError("unsupported operand type(s) for /: 'tmat4x4' and '{}'".format(type(value)))
 
     __div__ = __truediv__
 
@@ -370,13 +376,13 @@ class tmat4x4:
         try:
             self.value += value
         except:
-            raise TypeError("unsupported operand type(s) for +=: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for +=: 'tmat4x4' and '{}'".format(type(value)))
 ##        if type(value) in dtypes:
 ##            self[0] += value
 ##            self[1] += value
 ##            self[2] += value
 ##            self[3] += value
-##        elif isinstance(value, tmat4x4):
+##        elif pyglmCompareType(value, tmat4x4):
 ##            self[0] += value[0]
 ##            self[1] += value[1]
 ##            self[2] += value[2]
@@ -388,20 +394,20 @@ class tmat4x4:
 ##                self[2] += value[2]
 ##                self[3] += value[3]
 ##            except:
-##                raise TypeError("unsupported operand type(s) for +=: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+##                raise TypeError("unsupported operand type(s) for +=: 'tmat4x4' and '{}'".format(type(value)))
         return self
 
     def __isub__(self, value):
         try:
             self.value -= value
         except:
-            raise TypeError("unsupported operand type(s) for -=: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for -=: 'tmat4x4' and '{}'".format(type(value)))
 ##        if type(value) in dtypes:
 ##            self[0] -= value
 ##            self[1] -= value
 ##            self[2] -= value
 ##            self[3] -= value
-##        elif isinstance(value, tmat4x4):
+##        elif pyglmCompareType(value, tmat4x4):
 ##            self[0] -= value[0]
 ##            self[1] -= value[1]
 ##            self[2] -= value[2]
@@ -413,20 +419,20 @@ class tmat4x4:
 ##                self[2] -= value[2]
 ##                self[3] -= value[3]
 ##            except:
-##                raise TypeError("unsupported operand type(s) for -=: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+##                raise TypeError("unsupported operand type(s) for -=: 'tmat4x4' and '{}'".format(type(value)))
         return self
 
     def __imul__(self, value):
         try:
             self.value *= value
         except:
-            raise TypeError("unsupported operand type(s) for *=: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for *=: 'tmat4x4' and '{}'".format(type(value)))
 ##        if type(value) in dtypes:
 ##            self[0] *= value
 ##            self[1] *= value
 ##            self[2] *= value
 ##            self[3] *= value
-##        elif isinstance(value, tmat4x4):
+##        elif pyglmCompareType(value, tmat4x4):
 ##            self.value = (self * value).value
 ##        else:
 ##            try:
@@ -435,26 +441,26 @@ class tmat4x4:
 ##                self[2] *= value[2]
 ##                self[3] *= value[3]
 ##            except:
-##                raise TypeError("unsupported operand type(s) for *=: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+##                raise TypeError("unsupported operand type(s) for *=: 'tmat4x4' and '{}'".format(type(value)))
         return self
 
     def __itruediv__(self, value):
         try:
             self.value *= inverse(value)
         except:
-            raise TypeError("unsupported operand type(s) for /=: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+            raise TypeError("unsupported operand type(s) for /=: 'tmat4x4' and '{}'".format(type(value)))
 ##        if type(value) in dtypes:
 ##            self[0] /= float(value)
 ##            self[1] /= float(value)
 ##            self[2] /= float(value)
 ##            self[3] /= float(value)
-##        elif isinstance(value, tmat4x4):
+##        elif pyglmCompareType(value, tmat4x4):
 ##            self *= inverse(value)
 ##        else:
 ##            try:
 ##                self *= inverse(value)
 ##            except:
-##                raise TypeError("unsupported operand type(s) for /=: 'tmat4x4' and '{}'".format(type_to_str(type(value))))
+##                raise TypeError("unsupported operand type(s) for /=: 'tmat4x4' and '{}'".format(type(value)))
         return self
 
     __idiv__ = __itruediv__
@@ -507,10 +513,10 @@ class tmat4x4:
 ##                raise IndexError("tmat4x4 index out of range")
 
     def __str__(self):
-        return "tmat4x4( {}, {}, {}, {},\n         {}, {}, {}, {},\n         {}, {}, {}, {},\n         {}, {}, {}, {} )".format(self[0][0], self[0][1], self[0][2], self[0][3],
-                                                                             self[1][0], self[1][1], self[1][2], self[1][3],
-                                                                             self[2][0], self[2][1], self[2][2], self[2][3],
-                                                                                                self[3][0], self[3][1], self[3][2], self[3][3])
+        return "tmat4x4( {}, {}, {}, {},\n         {}, {}, {}, {},\n         {}, {}, {}, {},\n         {}, {}, {}, {} )".format(self[0,0], self[0,1], self[0,2], self[0,3],
+                                                                             self[1,0], self[1,1], self[1,2], self[1,3],
+                                                                             self[2,0], self[2,1], self[2,2], self[2,3],
+                                                                                                self[3,0], self[3,1], self[3,2], self[3,3])
 
     __repr__ = __str__
 

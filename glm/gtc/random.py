@@ -2,7 +2,9 @@ from ..detail.type_vec2 import tvec2
 from ..detail.type_vec3 import tvec3
 from ..detail.func_geometric import *
 from ..detail.func_exponential import *
-from ..detail.setup import *
+from ..detail.func_trigonometric import sin, cos
+from ..detail._vectorize import functor2
+from ..detail.setup import GLM_MESSAGES, GLM_MESSAGES_ENABLED, defined, message, dtypes
 
 import random, sys
 
@@ -23,12 +25,12 @@ linearRand = compute_linearRand
 
 def gaussRand(Mean, Deviation):
     if type(Mean) in dtypes:
-        x1 = linearRang(-1, 1)
+        x1 = linearRand(-1, 1)
         x2 = linearRand(-1, 1)
 
         w = x1 * x1 + x2 * x2
         while w > 1:
-            x1 = linearRang(-1, 1)
+            x1 = linearRand(-1, 1)
             x2 = linearRand(-1, 1)
 
             w = x1 * x1 + x2 * x2

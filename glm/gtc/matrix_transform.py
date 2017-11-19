@@ -1,9 +1,10 @@
 from ..detail.type_mat4x4 import tmat4x4
+from ..detail.type_mat3x3 import tmat3x3
 from ..detail.type_vec2 import tvec2
 from ..detail.type_vec3 import tvec3
 from ..detail.type_vec4 import tvec4
 from .constants import *
-from ..detail.setup import *
+from ..detail.setup import GLM_MESSAGES, GLM_MESSAGES_ENABLED, defined, message, GLM_COORDINATE_SYSTEM, GLM_LEFT_HANDED, GLM_DEPTH_CLIP_SPACE, GLM_DEPTH_ZERO_TO_ONE
 from ..detail.func_geometric import *
 from ..detail.func_trigonometric import *
 from ..detail.func_matrix import *
@@ -52,19 +53,19 @@ def rotate_slow(m, angle, v):
 
     axis = normalize(v)
 
-    Result[0,0] = c + ((1) - c)      * axis.x     * axis.x
-    Result[0,1] = ((1) - c) * axis.x * axis.y + s * axis.z
-    Result[0,2] = ((1) - c) * axis.x * axis.z - s * axis.y
+    Result[0,0] = c + ((1) - c)      * axis[0]     * axis[0]
+    Result[0,1] = ((1) - c) * axis[0] * axis[1] + s * axis[2]
+    Result[0,2] = ((1) - c) * axis[0] * axis[2] - s * axis[1]
     Result[0,3] = (0)
 
-    Result[1,0] = ((1) - c) * axis.y * axis.x - s * axis.z
-    Result[1,1] = c + ((1) - c) * axis.y * axis.y
-    Result[1,2] = ((1) - c) * axis.y * axis.z + s * axis.x
+    Result[1,0] = ((1) - c) * axis[1] * axis[0] - s * axis[2]
+    Result[1,1] = c + ((1) - c) * axis[1] * axis[1]
+    Result[1,2] = ((1) - c) * axis[1] * axis[2] + s * axis[0]
     Result[1,3] = (0)
 
-    Result[2,0] = ((1) - c) * axis.z * axis.x + s * axis.y
-    Result[2,1] = ((1) - c) * axis.z * axis.y - s * axis.x
-    Result[2,2] = c + ((1) - c) * axis.z * axis.z
+    Result[2,0] = ((1) - c) * axis[2] * axis[0] + s * axis[1]
+    Result[2,1] = ((1) - c) * axis[2] * axis[1] - s * axis[0]
+    Result[2,2] = c + ((1) - c) * axis[2] * axis[2]
     Result[2,3] = (0)
 
     Result[3] = (0, 0, 0, 1)
@@ -78,9 +79,9 @@ def scale(m, v):
 
 def scale_slow(m, v):
     Result = tmat4x4((1))
-    Result[0,0] = v.x
-    Result[1,1] = v.y
-    Result[2,2] = v.z
+    Result[0,0] = v[0]
+    Result[1,1] = v[1]
+    Result[2,2] = v[2]
     return m * Result
 
 def ortho(left, right, bottom, top, zNear=None, zFar=None):
@@ -325,10 +326,10 @@ def project(obj, model, proj, viewport):
     tmp = model * tmp
     tmp = proj * tmp
 
-    tmp /= tmp.w
+    tmp /= tmp[3]
     if GLM_DEPTH_CLIP_SPACE == GLM_DEPTH_ZERO_TO_ONE:
-        tmp.x = tmp.x * (0.5) + (0.5)
-        tmp.y = tmp.y * (0.5) + (0.5)
+        tmp[0] = tmp[0] * (0.5) + (0.5)
+        tmp[1] = tmp[1] * (0.5) + (0.5)
     else:
         tmp = tmp * (0.5) + (0.5)
     tmp[0] = tmp[0] * (viewport[2]) + (viewport[0])
@@ -340,34 +341,34 @@ def unProject(win, model, proj, viewport):
     Inverse = inverse(proj * model)
 
     tmp = tvec4(win, (1.))
-    tmp.x = (tmp.x - (viewport[0])) / (viewport[2])
-    tmp.y = (tmp.y - (viewport[1])) / (viewport[3])
+    tmp[0] = (tmp[0] - (viewport[0])) / (viewport[2])
+    tmp[1] = (tmp[1] - (viewport[1])) / (viewport[3])
     if GLM_DEPTH_CLIP_SPACE == GLM_DEPTH_ZERO_TO_ONE:
-        tmp.x = tmp.x * (2.) - (1.)
-        tmp.y = tmp.y * (2.) - (1.)
+        tmp[0] = tmp[0] * (2.) - (1.)
+        tmp[1] = tmp[1] * (2.) - (1.)
     else:
         tmp = tmp * (2.) - (1.)
 
     obj = Inverse * tmp
-    obj /= obj.w
+    obj /= obj[3]
 
     return tvec3(obj)
 
 def pickMatrix(center, delta, viewport):
-    assert(delta.x > (0) and delta.y > (0))
+    assert(delta[0] > (0) and delta[1] > (0))
     Result = tmat4x4((1))
 
-    if(not (delta.x > (0) and delta.y > (0))):
+    if(not (delta[0] > (0) and delta[1] > (0))):
         return Result # Error
 
     Temp = tvec3(
-        ((viewport[2]) - (2.) * (center.x - (viewport[0]))) / delta.x,
-        ((viewport[3]) - (2.) * (center.y - (viewport[1]))) / delta.y,
+        ((viewport[2]) - (2.) * (center[0] - (viewport[0]))) / delta[0],
+        ((viewport[3]) - (2.) * (center[1] - (viewport[1]))) / delta[1],
         (0))
 
     # Translate and scale the picked region to the entire window
     Result = translate(Result, Temp)
-    return scale(Result, tvec3((viewport[2]) / delta.x, (viewport[3]) / delta.y, (1.)))
+    return scale(Result, tvec3((viewport[2]) / delta[0], (viewport[3]) / delta[1], (1.)))
 
 def lookAt(eye, center, up):
     if GLM_COORDINATE_SYSTEM == GLM_LEFT_HANDED:
@@ -381,15 +382,15 @@ def lookAtRH(eye, center, up):
     u = tvec3(cross(s, f))
 
     Result = tmat4x4(1)
-    Result[0, 0] = s.x
-    Result[1, 0] = s.y
-    Result[2, 0] = s.z
-    Result[0, 1] = u.x
-    Result[1, 1] = u.y
-    Result[2, 1] = u.z
-    Result[0, 2] =-f.x
-    Result[1, 2] =-f.y
-    Result[2, 2] =-f.z
+    Result[0, 0] = s[0]
+    Result[1, 0] = s[1]
+    Result[2, 0] = s[2]
+    Result[0, 1] = u[0]
+    Result[1, 1] = u[1]
+    Result[2, 1] = u[2]
+    Result[0, 2] =-f[0]
+    Result[1, 2] =-f[1]
+    Result[2, 2] =-f[2]
     Result[3, 0] =-dot(s, eye)
     Result[3, 1] =-dot(u, eye)
     Result[3, 2] = dot(f, eye)
@@ -401,15 +402,15 @@ def lookAtLH(eye, center, up):
     u = tvec3(cross(f, s))
 
     Result = tmat4x4(1)
-    Result[0, 0] = s.x
-    Result[1, 0] = s.y
-    Result[2, 0] = s.z
-    Result[0, 1] = u.x
-    Result[1, 1] = u.y
-    Result[2, 1] = u.z
-    Result[0, 2] = f.x
-    Result[1, 2] = f.y
-    Result[2, 2] = f.z
+    Result[0, 0] = s[0]
+    Result[1, 0] = s[1]
+    Result[2, 0] = s[2]
+    Result[0, 1] = u[0]
+    Result[1, 1] = u[1]
+    Result[2, 1] = u[2]
+    Result[0, 2] = f[0]
+    Result[1, 2] = f[1]
+    Result[2, 2] = f[2]
     Result[3, 0] = -dot(s, eye)
     Result[3, 1] = -dot(u, eye)
     Result[3, 2] = -dot(f, eye)

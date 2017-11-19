@@ -6,18 +6,13 @@ implement them properly or ignored them, because I thought they weren't going
 to be used by anyone anyway (like glm::tvec1).
 If you want to request features, please create an issue on the issue tracker.
 
-If you think you've found an issue, please follow these steps:
-1. blame you. Maybe you were the one who caused the error.
-If it wasn't you, please..
-2. check for updates. Maybe I've already fixed the issue.
-If that doesn't help, go ahead and..
-3. blame me. Report it on the issue tracker.
-If we can't find out what's causing the error, we'll have to..
-4. blame GLM. Even though it's very unlikely that's what's causing the error.
+PyGLM currently uses numpy under the hood, to improve performance. I'm currently
+looking for some way to improve performance.
+If you have any ideas, please leave a message on the issue tracker.
 
-PyGLM is still in active development (hence the WIP).
+PyGLM is still in development (hence the WIP).
 
-You can get PyGLM using the PyPI:
+To install PyGLM, just use the default PyPI procedure.
 ```pip install pyglm```
 
 To import PyGLM's functions, simply use ```import glm```.
