@@ -14,7 +14,7 @@ class tvec3:
         if len(args) == 1:
             # from tvec
             if type(args[0]) in dtypes:
-                self.arr = numpy.array(args[0], dtype=self.dtype)
+                self.arr = numpy.array([args[0]]*3, dtype=self.dtype)
                 
             elif pyglmCompareType(args[0], tvec3) or pyglmCompareType(args[0], tvec4):
                 self.arr = args[0].arr[:3]
@@ -24,6 +24,9 @@ class tvec3:
 
             elif type(args[0]) in ltypes:
                 self.__init__(*args[0])
+
+            else:
+                raise TypeError("expected float or tvec3, got {}".format(type(args[0])))
 
         elif len(args) == 2:
             # check types
