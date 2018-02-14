@@ -94,12 +94,12 @@ class tvec3:
 
     def __ne__(self, value):
         if type(value) in dtypes:
-            return (self.arr[0] != value and self.arr[1] != value and self.arr[2] != value)
+            return (self.arr[0] != value or self.arr[1] != value or self.arr[2] != value)
         elif pyglmCompareType(value, tvec3):
-            return (self.arr[0] != value.x and self.arr[1] != value.y and self.arr[2] != value.z)
+            return (self.arr[0] != value.x or self.arr[1] != value.y or self.arr[2] != value.z)
         else:
             try:
-                return (self.arr[0] != value[0] and self.arr[1] != value[1] and self.arr[2] != value[2])
+                return (self.arr[0] != value[0] or self.arr[1] != value[1] or self.arr[2] != value[2])
             except:
                 raise TypeError("unsupported operand type(s) for !=: 'tvec3' and '{}'".format(type(value)))
 
