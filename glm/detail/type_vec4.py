@@ -14,7 +14,7 @@ class tvec4:
         if len(args) == 1:
             # from tvec
             if type(args[0]) in dtypes:
-                self.arr = numpy.array(args[0], dtype=self.dtype)
+                self.arr = numpy.array([args[0]]*4, dtype=self.dtype)
                 
             elif pyglmCompareType(args[0], tvec4):
                 self.arr = args[0].arr.copy()
@@ -25,6 +25,9 @@ class tvec4:
 
             elif type(args[0]) in ltypes:
                 self.__init__(*args[0])
+
+            else:
+                raise TypeError("expected float or tvec4, got {}".format(type(args[0])))
 
         elif len(args) == 2:
             # check types
@@ -76,7 +79,7 @@ class tvec4:
             if not type(args[2]) in dtypes:
                 raise TypeError("expected int or float values, got {}".format(type(args[2])))
             if not type(args[3]) in dtypes:
-                raise TypeError("expected int or float values, got {}".format(type(args[2])))
+                raise TypeError("expected int or float values, got {}".format(type(args[3])))
             self.arr = numpy.array(args,dtype=self.dtype)
 
         elif len(args) > 4:
