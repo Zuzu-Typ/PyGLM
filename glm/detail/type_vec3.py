@@ -14,7 +14,7 @@ class tvec3:
         if len(args) == 1:
             # from tvec
             if type(args[0]) in dtypes:
-                self.arr = numpy.array(args[0], dtype=self.dtype)
+                self.arr = numpy.array([args[0]]*3, dtype=self.dtype)
                 
             elif pyglmCompareType(args[0], tvec3) or pyglmCompareType(args[0], tvec4):
                 self.arr = args[0].arr[:3]
@@ -24,6 +24,9 @@ class tvec3:
 
             elif type(args[0]) in ltypes:
                 self.__init__(*args[0])
+
+            else:
+                raise TypeError("expected float or tvec3, got {}".format(type(args[0])))
 
         elif len(args) == 2:
             # check types
@@ -91,12 +94,12 @@ class tvec3:
 
     def __ne__(self, value):
         if type(value) in dtypes:
-            return (self.arr[0] != value and self.arr[1] != value and self.arr[2] != value)
+            return (self.arr[0] != value or self.arr[1] != value or self.arr[2] != value)
         elif pyglmCompareType(value, tvec3):
-            return (self.arr[0] != value.x and self.arr[1] != value.y and self.arr[2] != value.z)
+            return (self.arr[0] != value.x or self.arr[1] != value.y or self.arr[2] != value.z)
         else:
             try:
-                return (self.arr[0] != value[0] and self.arr[1] != value[1] and self.arr[2] != value[2])
+                return (self.arr[0] != value[0] or self.arr[1] != value[1] or self.arr[2] != value[2])
             except:
                 raise TypeError("unsupported operand type(s) for !=: 'tvec3' and '{}'".format(type(value)))
 

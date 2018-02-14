@@ -14,7 +14,7 @@ class tvec4:
         if len(args) == 1:
             # from tvec
             if type(args[0]) in dtypes:
-                self.arr = numpy.array(args[0], dtype=self.dtype)
+                self.arr = numpy.array([args[0]]*4, dtype=self.dtype)
                 
             elif pyglmCompareType(args[0], tvec4):
                 self.arr = args[0].arr.copy()
@@ -25,6 +25,9 @@ class tvec4:
 
             elif type(args[0]) in ltypes:
                 self.__init__(*args[0])
+
+            else:
+                raise TypeError("expected float or tvec4, got {}".format(type(args[0])))
 
         elif len(args) == 2:
             # check types
@@ -76,7 +79,7 @@ class tvec4:
             if not type(args[2]) in dtypes:
                 raise TypeError("expected int or float values, got {}".format(type(args[2])))
             if not type(args[3]) in dtypes:
-                raise TypeError("expected int or float values, got {}".format(type(args[2])))
+                raise TypeError("expected int or float values, got {}".format(type(args[3])))
             self.arr = numpy.array(args,dtype=self.dtype)
 
         elif len(args) > 4:
@@ -120,12 +123,12 @@ class tvec4:
 
     def __ne__(self, value):
         if type(value) in dtypes:
-            return (self.arr[0] != value and self.arr[1] != value and self.arr[2] != value and self.arr[3] != value)
+            return (self.arr[0] != value or self.arr[1] != value or self.arr[2] != value or self.arr[3] != value)
         elif pyglmCompareType(value, tvec4):
-            return (self.arr[0] != value.x and self.arr[1] != value.y and self.arr[2] != value.z and self.arr[3] != value.w)
+            return (self.arr[0] != value.x or self.arr[1] != value.y or self.arr[2] != value.z or self.arr[3] != value.w)
         else:
             try:
-                return (self.arr[0] != value[0] and self.arr[1] != value[1] and self.arr[2] != value[2] and self.arr[3] != value[2])
+                return (self.arr[0] != value[0] or self.arr[1] != value[1] or self.arr[2] != value[2] or self.arr[3] != value[2])
             except:
                 raise TypeError("unsupported operand type(s) for !=: 'tvec4' and '{}'".format(type(value)))
 
