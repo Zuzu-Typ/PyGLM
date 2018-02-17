@@ -43,9 +43,9 @@ class tmat3x4:
                               (0, 0, 1, 0)]
                 
             elif type(args[0]) in dtypes:
-                self.value = [(args[0],0, 0),
-                              (0,args[0], 0),
-                              (0,0, args[0])]
+                self.value = numpy.matrix([(args[0],0, 0, 0),
+                              (0,args[0], 0, 0),
+                              (0,0, args[0], 0)], dtype=self.dtype)
 
             elif type(args[0]) in ltypes:
                 self.__init__(*args[0])

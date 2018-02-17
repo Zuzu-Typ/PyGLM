@@ -9,7 +9,9 @@ class tmat2x2:
         self.col_type = self.row_type = tvec2
 
         if len(args) == 1:
-            if pyglmTypeIn(args[0], (tmat2x2, tmat2x3, tmat2x4, tmat3x2, tmat3x3, tmat3x4, tmat4x2, tmat4x3, tmat4x4)):
+            if type(args[0]) == numpy.matrixlib.defmatrix.matrix and args[0].size == 4 and args[0].shape == (2,2):
+                self.value = args[0].copy()
+            elif pyglmTypeIn(args[0], (tmat2x2, tmat2x3, tmat2x4, tmat3x2, tmat3x3, tmat3x4, tmat4x2, tmat4x3, tmat4x4)):
                 self.value = args[0].value[:2,:2]
 
             elif pyglmCompareType(args[0], tvec4):
@@ -158,6 +160,9 @@ class tmat2x2:
                     return tmat3x2(value * self.value)
                 if value.shape == (4,2):
                     return tmat4x2(value * self.value)
+
+            if type(value) in dtypes:
+                return tmat2x2(self.value * value)
             
             return rmul(self)
             
@@ -217,6 +222,7 @@ class tmat2x2:
                 if value.shape == (4,2):
                     return tmat4x2(self.value * value)
             
+            return tmat2x2(self.value * value)
         except:
             raise TypeError("unsupported operand type(s) for *: 'tmat2x2' and '{}'".format(type(value)))
 ##        if type(value) in dtypes:

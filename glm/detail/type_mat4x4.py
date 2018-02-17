@@ -166,6 +166,9 @@ class tmat4x4:
                 if value.shape == (4,4):
                     return tmat4x4(value * self.value)
             
+            if type(value) in dtypes:
+                return tmat4x4(self.value * value)
+
             return rmul(self)
             
         except:

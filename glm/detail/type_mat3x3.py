@@ -11,7 +11,7 @@ class tmat3x3:
         self.row_type = tvec3
 
         if len(args) == 1:
-            if type(args[0]) == numpy.matrixlib.defmatrix.matrix and args[0].size == 4 and args[0].shape == (2,2):
+            if type(args[0]) == numpy.matrixlib.defmatrix.matrix and args[0].size == 9 and args[0].shape == (3,3):
                 self.value = args[0].copy()
                 
             if pyglmTypeIn(args[0], (tmat3x3, tmat4x3, tmat3x4, tmat4x4)):
@@ -184,7 +184,9 @@ class tmat3x3:
                     return tmat3x3(value * self.value)
                 if value.shape == (4,3):
                     return tmat4x3(value * self.value)
-            
+            if type(value) in dtypes:
+                return tmat3x3(self.value * value)
+
             return rmul(self)
             
         except:
