@@ -1,4 +1,7 @@
-# PyGLM ( WIP )
+
+PyGLM ( WIP )
+=============
+
 A semi-complete implementation of OpenGL Mathematics (GLM).
 
 Why "semi-complete"? - PyGLM is missing some features because I wasn't able to 
@@ -8,19 +11,21 @@ If you want to request features, please create an issue on the issue tracker.
 
 PyGLM is still in development (hence the WIP).
 
-You can get PyGLM using the PyPI:
-```pip install pyglm```
+To install PyGLM, just use the default PyPI procedure.
+	
+    pip install PyGLM
 
-To import PyGLM's functions, simply use ```import glm```.
+
+To import PyGLM's functions, simply use 'import glm'.
 
 Example:
 
-	import glm
-	
-	v = glm.vec3()
-	
-	v.x = 7
-	
-	z = v.xxx
-	
-	print(z)
+    import glm
+    	
+    v = glm.vec3()
+    	
+    v.x = 7
+    	
+    z = v.xxx
+    	
+    print(z)

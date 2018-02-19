@@ -1,30 +1,19 @@
-pypi/
-new/
-old/
-src/pyvers/
-src/.vs/
-src/build/temp.win-amd64-3.3/
-src/build/temp.win-amd64-3.4/
-src/build/temp.win-amd64-3.5/
-src/build/temp.win-amd64-3.6/
-src/build/temp.win32-3.3/
-src/build/temp.win32-3.4/
-src/build/temp.win32-3.5/
-src/build/temp.win32-3.6/
-src/x64/
-*.pyc
-*.hpp
-*.inl
-*.cpp
-test.py
-*.obj
-glm/.vs/glm/v15/.suo
-*.pyproj
-*.sln
-*.bat
+.vs/
+build/
+dist/
+PyGLM.egg-info/
+pyvers/
+tests/
+x64/
+.pypirc
+build.bat
+build 32.bat
+buildcp36.bat
+DevToolsx64.lnk
+pydll test.sln
+pydll test.vcxproj
+pydll test.vcxproj.filters
+upload.bat
+setup_no_wheel.py
 setup.py
-src/DevToolsx64.lnk
-src/pydll test.vcxproj
-src/pydll test.vcxproj.filters
-src/Python.h
-src/build/lib.win-amd64-3.6/_try_out.py
+setup.cfg
