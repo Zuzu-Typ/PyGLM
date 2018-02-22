@@ -800,12 +800,8 @@ static bool unswizzle_tvec2(tvec2 * self, char c, double * out) {
 }
 
 static PyObject * tvec2_getattr(PyObject * obj, PyObject * name) {
-	char * name_as_ccp;
-#if PY3K
-	name_as_ccp = PyBytes_AsString(PyUnicode_AsASCIIString(name));
-#else
-	name_as_ccp = PyString_AsString(PyUnicode_AsASCIIString(name));
-#endif
+	char * name_as_ccp = attr_name_to_cstr(name);
+
 	if ((strlen(name_as_ccp) >= 4 && name_as_ccp[0] == '_' && name_as_ccp[1] == '_' && name_as_ccp[strlen(name_as_ccp) - 1] == '_' && name_as_ccp[strlen(name_as_ccp) - 2] == '_')
 		|| strcmp(name_as_ccp, "x") == 0 || strcmp(name_as_ccp, "y") == 0) {
 		return PyObject_GenericGetAttr(obj, name);

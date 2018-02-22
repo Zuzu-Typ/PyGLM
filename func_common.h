@@ -711,3 +711,11 @@ static PyObject* ldexp_(PyObject* self, PyObject* args) {
 	}
 	return out;
 }
+
+static char * attr_name_to_cstr(PyObject * name) {
+#if PY3K
+	return PyBytes_AsString(PyUnicode_AsASCIIString(name));
+#else
+	return PyString_AsString(name);
+#endif
+}

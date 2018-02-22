@@ -784,12 +784,8 @@ static PyObject * tmat2x4_richcompare(tmat2x4 * self, PyObject * other, int comp
 }
 
 static int tmat2x4_setattr(PyObject * obj, PyObject * name, PyObject * value) {
-	char * name_as_ccp;
-#if PY3K
-	name_as_ccp = PyBytes_AsString(PyUnicode_AsASCIIString(name));
-#else
-	name_as_ccp = PyString_AsString(PyUnicode_AsASCIIString(name));
-#endif
+	char * name_as_ccp = attr_name_to_cstr(name);
+
 	if ((strlen(name_as_ccp) >= 4 && name_as_ccp[0] == '_' && name_as_ccp[1] == '_' && name_as_ccp[strlen(name_as_ccp) - 1] == '_' && name_as_ccp[strlen(name_as_ccp) - 2] == '_')) {
 		return PyObject_GenericSetAttr(obj, name, value);
 	}
