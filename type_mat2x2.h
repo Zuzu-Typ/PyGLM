@@ -232,12 +232,13 @@ tmat2x2_add(PyObject *obj1, PyObject *obj2)
 		imat2x2 o2;
 
 		if (!unpack_imat2x2p(obj2, &o2)) { // obj2 can't be interpreted as tmat2x2
-			PyObject * out = PyObject_CallMethod(obj2, "__radd__", "O", obj1);
+			Py_RETURN_NOTIMPLEMENTED;
+			/*PyObject * out = PyObject_CallMethod(obj2, "__radd__", "O", obj1);
 			if (out == NULL) {
 				PY_TYPEERROR("unsupported operand type(s) for +: 'glm::detail::tmat2x2' and ", obj2);
 				return NULL;
 			}
-			return out;
+			return out;*/
 		}
 
 		o.x.x += o2.x.x;
@@ -274,12 +275,13 @@ tmat2x2_sub(PyObject *obj1, PyObject *obj2)
 		imat2x2 o2;
 
 		if (!unpack_imat2x2p(obj2, &o2)) { // obj2 can't be interpreted as tmat2x2
-			PyObject * out = PyObject_CallMethod(obj2, "__rsub__", "O", obj1);
+			Py_RETURN_NOTIMPLEMENTED;
+			/*PyObject * out = PyObject_CallMethod(obj2, "__rsub__", "O", obj1);
 			if (out == NULL) {
 				PY_TYPEERROR("unsupported operand type(s) for -: 'glm::detail::tmat2x2' and ", obj2);
 				return NULL;
 			}
-			return out;
+			return out;*/
 		}
 
 		o.x.x -= o2.x.x;
@@ -401,14 +403,19 @@ tmat2x2_mul(PyObject *obj1, PyObject *obj2)
 		return out;
 	}
 
-	PyObject * out = PyObject_CallMethod(obj2, "__rmul__", "O", obj1);
+	free(o);
+	free(o2);
+
+	Py_RETURN_NOTIMPLEMENTED;
+
+	/*PyObject * out = PyObject_CallMethod(obj2, "__rmul__", "O", obj1);
 	if (out == NULL) {
 		free(o);
 		free(o2);
 		PY_TYPEERROR("unsupported operand type(s) for *: 'glm::detail::tmat2x2' and ", obj2);
 		return NULL;
 	}
-	return out;
+	return out;*/
 }
 
 static PyObject *
@@ -494,14 +501,14 @@ tmat2x2_div(PyObject *obj1, PyObject *obj2)
 		free(o2);
 		return out;
 	}
-
-	PyObject * out = PyObject_CallMethod(obj2, "__rtruediv__", "O", obj1);
-	if (out == NULL) out = PyObject_CallMethod(obj2, "__rdiv__", "O", obj1);
+	Py_RETURN_NOTIMPLEMENTED;
+	/*PyObject * out = PyObject_CallMethod(obj2, "__rtruediv__", "O", obj1);
+	if (out == NULL || out ==) out = PyObject_CallMethod(obj2, "__rdiv__", "O", obj1);
 	if (out == NULL) {
 		PY_TYPEERROR("unsupported operand type(s) for /: 'glm::detail::tmat2x2' and ", obj2);
 		return NULL;
 	}
-	return out;
+	return out;*/
 }
 
 // inplace
@@ -511,9 +518,10 @@ tmat2x2_iadd(tmat2x2 *self, PyObject *obj)
 {
 	tmat2x2 * temp = (tmat2x2*)tmat2x2_add((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	/*PY_TYPEERROR(PyString_AsString(PyObject_Str(temp)), ((PyObject*)temp));
+	return NULL;*/
+
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x->x = temp->x->x;
 	self->x->y = temp->x->y;
@@ -530,9 +538,7 @@ tmat2x2_isub(tmat2x2 *self, PyObject *obj)
 {
 	tmat2x2 * temp = (tmat2x2*)tmat2x2_sub((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x->x = temp->x->x;
 	self->x->y = temp->x->y;
@@ -549,9 +555,7 @@ tmat2x2_imul(tmat2x2 *self, PyObject *obj)
 {
 	tmat2x2* temp = (tmat2x2*)tmat2x2_mul((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	if (!PyObject_TypeCheck(temp, &tmat2x2Type)) {
 		PY_TYPEERROR("unsupported operand type for *=: ", obj);
@@ -573,9 +577,7 @@ tmat2x2_idiv(tmat2x2 *self, PyObject *obj)
 {
 	tmat2x2 * temp = (tmat2x2*)tmat2x2_div((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	if (!PyObject_TypeCheck(temp, &tmat2x2Type)) {
 		PY_TYPEERROR("unsupported operand type for /=: ", obj);
@@ -934,7 +936,8 @@ static PyTypeObject tmat2x2Type = {
 	(setattrofunc)tmat2x2_setattr,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE |
+	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
 	"tmat2x2( <tmat2x2 compatible type(s)> )\n2 columns of 2 components matrix of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */

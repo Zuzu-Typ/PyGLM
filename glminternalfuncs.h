@@ -14,7 +14,22 @@ PyObject* C_VOID_P(void* p) {
 }
 #endif
 
+#if !PY3K
+#define Py_RETURN_NOTIMPLEMENTED return Py_INCREF(Py_NotImplemented), Py_NotImplemented
+#endif
+
+#if PY3K
+#define PY_IS_NOTIMPLEMENTED(op) (op == NULL || (PyObject*)op == Py_NotImplemented) // find out if op is NULL or NotImplemented
+#else
+#define PY_IS_NOTIMPLEMENTED(op) (op == NULL) // find out if op is NULL or NotImplemented
+#endif
+
+#if PY3K
 #define IS_NUMERIC(op) (PyLong_Check(op) || PyFloat_Check(op) || PyBool_Check(op))
+#else 
+#define IS_NUMERIC(op) (PyLong_Check(op) || PyInt_Check(op) || PyFloat_Check(op) || PyBool_Check(op))
+#endif
+
 
 #define IS_TQUAT(op) PyObject_TypeCheck(op, &tquatType)
 
@@ -44,6 +59,12 @@ static double pyvalue_as_double(PyObject * value) {
 		out = (double)PyLong_AS_LONG(value);
 		return out;
 	}
+#if !PY3K
+	else if (PyInt_Check(value)) {
+		out = (double)PyInt_AS_LONG(value);
+		return out;
+	}
+#endif
 	else {
 		out = (PyObject_IsTrue(value)) ? 1 : 0;
 		return out;

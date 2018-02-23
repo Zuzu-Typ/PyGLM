@@ -15,7 +15,5 @@ pydll test.vcxproj
 pydll test.vcxproj.filters
 upload.bat
 setup_no_wheel.py
-setup.py
-setup.cfg
 Python.h
 buildcp27.bat

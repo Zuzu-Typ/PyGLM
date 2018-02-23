@@ -207,12 +207,13 @@ tquat_add(PyObject *obj1, PyObject *obj2)
 
 	iquat o2;
 	if (!unpack_iquatp(obj2, &o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		PyObject * out = PyObject_CallMethod(obj2, "__radd__", "O", obj1);
+		Py_RETURN_NOTIMPLEMENTED;
+		/*PyObject * out = PyObject_CallMethod(obj2, "__radd__", "O", obj1);
 		if (out == NULL) {
 			PY_TYPEERROR("unsupported operand type(s) for +: 'glm::detail::tquat' and ", obj2);
 			return NULL;
 		}
-		return out;
+		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tquat
@@ -235,12 +236,13 @@ tquat_sub(PyObject *obj1, PyObject *obj2)
 
 	iquat o2;
 	if (!unpack_iquatp(obj2, &o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		PyObject * out = PyObject_CallMethod(obj2, "__rsub__", "O", obj1);
+		Py_RETURN_NOTIMPLEMENTED;
+		/*PyObject * out = PyObject_CallMethod(obj2, "__rsub__", "O", obj1);
 		if (out == NULL) {
 			PY_TYPEERROR("unsupported operand type(s) for -: 'glm::detail::tquat' and ", obj2);
 			return NULL;
 		}
-		return out;
+		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tquat
@@ -316,12 +318,13 @@ tquat_mul(PyObject *obj1, PyObject *obj2)
 		return out;
 	}
 	else { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		PyObject * out = PyObject_CallMethod(obj2, "__rmul__", "O", obj1);
+		Py_RETURN_NOTIMPLEMENTED;
+		/*PyObject * out = PyObject_CallMethod(obj2, "__rmul__", "O", obj1);
 		if (out == NULL) {
 			PY_TYPEERROR("unsupported operand type(s) for *: 'glm::detail::tquat' and ", obj2);
 			return NULL;
 		}
-		return out;
+		return out;*/
 	}
 }
 
@@ -354,9 +357,7 @@ tquat_iadd(tquat *self, PyObject *obj)
 {
 	tquat * temp = (tquat*)tquat_add((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x = temp->x;
 	self->y = temp->y;
@@ -373,9 +374,7 @@ tquat_isub(tquat *self, PyObject *obj)
 {
 	tquat * temp = (tquat*)tquat_sub((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x = temp->x;
 	self->y = temp->y;
@@ -392,9 +391,7 @@ tquat_imul(tquat *self, PyObject *obj)
 {
 	tquat * temp = (tquat*)tquat_mul((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	if (!PyObject_TypeCheck(temp, &tquatType)) {
 		PY_TYPEERROR("unsupported operand type for *=: ", obj);
@@ -416,9 +413,7 @@ tquat_idiv(tquat *self, PyObject *obj)
 {
 	tquat * temp = (tquat*)tquat_div((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x = temp->x;
 	self->y = temp->y;

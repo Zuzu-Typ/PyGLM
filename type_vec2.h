@@ -123,12 +123,13 @@ tvec2_add(PyObject *obj1, PyObject *obj2)
 
 	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		//free(o);
-		PyObject * out = PyObject_CallMethod(obj2, "__radd__", "O", obj1);
+		Py_RETURN_NOTIMPLEMENTED;
+		/*PyObject * out = PyObject_CallMethod(obj2, "__radd__", "O", obj1);
 		if (out == NULL) {
 			PY_TYPEERROR("unsupported operand type(s) for +: 'glm::detail::tvec2' and ", obj2);
 			return NULL;
 		}
-		return out;
+		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
@@ -174,12 +175,13 @@ tvec2_sub(PyObject *obj1, PyObject *obj2)
 
 	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		free(o);
-		PyObject * out = PyObject_CallMethod(obj2, "__rsub__", "O", obj1);
+		Py_RETURN_NOTIMPLEMENTED;
+		/*PyObject * out = PyObject_CallMethod(obj2, "__rsub__", "O", obj1);
 		if (out == NULL) {
 			PY_TYPEERROR("unsupported operand type(s) for -: 'glm::detail::tvec2' and ", obj2);
 			return NULL;
 		}
-		return out;
+		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
@@ -225,12 +227,13 @@ tvec2_mul(PyObject *obj1, PyObject *obj2)
 
 	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		free(o);
-		PyObject * out = PyObject_CallMethod(obj2, "__rmul__", "O", obj1);
+		Py_RETURN_NOTIMPLEMENTED;
+		/*PyObject * out = PyObject_CallMethod(obj2, "__rmul__", "O", obj1);
 		if (out == NULL) {
 			PY_TYPEERROR("unsupported operand type(s) for *: 'glm::detail::tvec2' and ", obj2);
 			return NULL;
 		}
-		return out;
+		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
@@ -276,14 +279,15 @@ tvec2_div(PyObject *obj1, PyObject *obj2)
 
 	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		free(o);
-		PyObject * out = PyObject_CallMethod(obj2, "__rdiv__", "O", obj1);
+		Py_RETURN_NOTIMPLEMENTED;
+		/*PyObject * out = PyObject_CallMethod(obj2, "__rdiv__", "O", obj1);
 		if (out == NULL) out = PyObject_CallMethod(obj2, "__rtruediv__", "O", obj1);
 
 		if (out == NULL) {
 			PY_TYPEERROR("unsupported operand type(s) for /: 'glm::detail::tvec2' and ", obj2);
 			return NULL;
 		}
-		return out;
+		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
@@ -329,12 +333,13 @@ tvec2_mod(PyObject *obj1, PyObject *obj2)
 
 	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		free(o);
-		PyObject * out = PyObject_CallMethod(obj2, "__rmod__", "O", obj1);
+		Py_RETURN_NOTIMPLEMENTED;
+		/*PyObject * out = PyObject_CallMethod(obj2, "__rmod__", "O", obj1);
 		if (out == NULL) {
 			PY_TYPEERROR("unsupported operand type(s) for %: 'glm::detail::tvec2' and ", obj2);
 			return NULL;
 		}
-		return out;
+		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
@@ -380,15 +385,16 @@ tvec2_floordiv(PyObject *obj1, PyObject *obj2)
 
 	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		free(o);
-		PyObject * out = PyObject_CallMethod(obj2, "__rfloordiv__", "O", obj1);
+		Py_RETURN_NOTIMPLEMENTED;
+		//PyObject * out = PyObject_CallMethod(obj2, "__rfloordiv__", "O", obj1);
 
-		//if (out == NULL) out = PyObject_CallMethod(obj2, "__rdiv__", "O", obj1); // maybe?
+		////if (out == NULL) out = PyObject_CallMethod(obj2, "__rdiv__", "O", obj1); // maybe?
 
-		if (out == NULL) {
-			PY_TYPEERROR("unsupported operand type(s) for //: 'glm::detail::tvec2' and ", obj2);
-			return NULL;
-		}
-		return out;
+		//if (out == NULL) {
+		//	PY_TYPEERROR("unsupported operand type(s) for //: 'glm::detail::tvec2' and ", obj2);
+		//	return NULL;
+		//}
+		//return out;
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
@@ -491,12 +497,13 @@ tvec2_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 
 	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		free(o);
-		PyObject * out = PyObject_CallMethod(obj2, "__rpow__", "O", obj1, obj3);
+		Py_RETURN_NOTIMPLEMENTED;
+		/*PyObject * out = PyObject_CallMethod(obj2, "__rpow__", "O", obj1, obj3);
 		if (out == NULL) {
 			PY_TYPEERROR("unsupported operand type(s) for **: 'glm::detail::tvec2' and ", obj2);
 			return NULL;
 		}
-		return out;
+		return out;*/
 	}
 
 
@@ -549,9 +556,7 @@ tvec2_iadd(tvec2 *self, PyObject *obj)
 {
 	tvec2 * temp = (tvec2*)tvec2_add((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x = temp->x;
 	self->y = temp->y;
@@ -566,9 +571,7 @@ tvec2_isub(tvec2 *self, PyObject *obj)
 {
 	tvec2 * temp = (tvec2*)tvec2_sub((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x = temp->x;
 	self->y = temp->y;
@@ -583,9 +586,7 @@ tvec2_imul(tvec2 *self, PyObject *obj)
 {
 	tvec2 * temp = (tvec2*)tvec2_mul((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x = temp->x;
 	self->y = temp->y;
@@ -600,9 +601,7 @@ tvec2_idiv(tvec2 *self, PyObject *obj)
 {
 	tvec2 * temp = (tvec2*)tvec2_div((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x = temp->x;
 	self->y = temp->y;
@@ -617,9 +616,7 @@ tvec2_imod(tvec2 *self, PyObject *obj)
 {
 	tvec2 * temp = (tvec2*)tvec2_mod((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x = temp->x;
 	self->y = temp->y;
@@ -634,9 +631,7 @@ tvec2_ifloordiv(tvec2 *self, PyObject *obj)
 {
 	tvec2 * temp = (tvec2*)tvec2_floordiv((PyObject*)self, obj);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x = temp->x;
 	self->y = temp->y;
@@ -652,9 +647,7 @@ tvec2_ipow(tvec2 *self, PyObject *obj1, PyObject * obj2) // obj2 is unused. It p
 {
 	tvec2 * temp = (tvec2*)tvec2_pow((PyObject*)self, obj1, Py_None);
 
-	if (temp == NULL) {
-		return NULL;
-	}
+	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	self->x = temp->x;
 	self->y = temp->y;
@@ -1014,7 +1007,8 @@ static PyTypeObject tvec2Type = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE |
+	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
 	"tvec2( <tvec2 compatible type(s)> )\n2 components vector of medium double-qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
