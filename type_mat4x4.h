@@ -1360,7 +1360,8 @@ static PyTypeObject tmat4x4Type = {
 	(setattrofunc)tmat4x4_setattr,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE |
+	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
 	"tmat4x4( <tmat4x4 compatible type(s)> )\n4 columns of 4 components matrix of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
