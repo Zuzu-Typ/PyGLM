@@ -4575,103 +4575,184 @@ static PyObject * pack_tvec4(double x, double y, double z, double w) {
 }
 
 static PyObject * pack_tmat2x2(double x0, double x1, double y0, double y1) {
-	PyObject* argList = Py_BuildValue("OO", pack_tvec2(x0,x1), pack_tvec2(y0,y1));
+	PyObject* v0, *v1;
+
+	v0 = pack_tvec2(x0, x1);
+	v1 = pack_tvec2(y0, y1);
+
+	PyObject* argList = Py_BuildValue("OO", v0, v1);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x2Type, argList);
 
 	/* Release the argument list. */
 	Py_DECREF(argList);
+	Py_DECREF(v0);
+	Py_DECREF(v1);
 
 	return obj_out;
 }
 static PyObject * pack_tmat2x3(double x0, double x1, double x2, double y0, double y1, double y2) {
-	PyObject* argList = Py_BuildValue("OO", pack_tvec3(x0, x1, x2), pack_tvec3(y0, y1, y2));
+	PyObject* v0, *v1;
+
+	v0 = pack_tvec3(x0, x1, x2);
+	v1 = pack_tvec3(y0, y1, y2);
+
+	PyObject* argList = Py_BuildValue("OO", v0, v1);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x3Type, argList);
 
 	/* Release the argument list. */
 	Py_DECREF(argList);
+	Py_DECREF(v0);
+	Py_DECREF(v1);
 
 	return obj_out;
 }
 static PyObject * pack_tmat2x4(double x0, double x1, double x2, double x3, double y0, double y1, double y2, double y3) {
-	PyObject* argList = Py_BuildValue("OO", pack_tvec4(x0, x1, x2, x3), pack_tvec4(y0, y1, y2, y3));
+	PyObject* v0, *v1;
+
+	v0 = pack_tvec4(x0, x1, x2, x3);
+	v1 = pack_tvec4(y0, y1, y2, y3);
+
+	PyObject* argList = Py_BuildValue("OO", v0, v1);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x4Type, argList);
 
 	/* Release the argument list. */
 	Py_DECREF(argList);
+	Py_DECREF(v0);
+	Py_DECREF(v1);
 
 	return obj_out;
 }
 
 static PyObject * pack_tmat3x2(double x0, double x1, double y0, double y1, double z0, double z1) {
-	PyObject* argList = Py_BuildValue("OOO", pack_tvec2(x0, x1), pack_tvec2(y0, y1), pack_tvec2(z0, z1));
+	PyObject* v0, *v1, *v2;
+
+	v0 = pack_tvec2(x0, x1);
+	v1 = pack_tvec2(y0, y1);
+	v2 = pack_tvec2(z0, z1);
+
+	PyObject* argList = Py_BuildValue("OOO", v0, v1, v2);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat3x2Type, argList);
 
 	/* Release the argument list. */
 	Py_DECREF(argList);
+	Py_DECREF(v0);
+	Py_DECREF(v1);
+	Py_DECREF(v2);
 
 	return obj_out;
 }
 static PyObject * pack_tmat3x3(double x0, double x1, double x2, double y0, double y1, double y2, double z0, double z1, double z2) {
-	PyObject* argList = Py_BuildValue("OOO", pack_tvec3(x0, x1, x2), pack_tvec3(y0, y1, y2), pack_tvec3(z0, z1, z2));
+	PyObject* v0, *v1, *v2;
+
+	v0 = pack_tvec3(x0, x1, x2);
+	v1 = pack_tvec3(y0, y1, y2);
+	v2 = pack_tvec3(z0, z1, z2);
+
+	PyObject* argList = Py_BuildValue("OOO", v0, v1, v2);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat3x3Type, argList);
 
 	/* Release the argument list. */
 	Py_DECREF(argList);
+	Py_DECREF(v0);
+	Py_DECREF(v1);
+	Py_DECREF(v2);
 
 	return obj_out;
 }
 static PyObject * pack_tmat3x4(double x0, double x1, double x2, double x3, double y0, double y1, double y2, double y3, double z0, double z1, double z2, double z3) {
-	PyObject* argList = Py_BuildValue("OOO", pack_tvec4(x0, x1, x2, x3), pack_tvec4(y0, y1, y2, y3), pack_tvec4(z0, z1, z2, z3));
+	PyObject* v0, *v1, *v2;
+
+	v0 = pack_tvec4(x0, x1, x2, x3);
+	v1 = pack_tvec4(y0, y1, y2, y3);
+	v2 = pack_tvec4(z0, z1, z2, z3);
+
+	PyObject* argList = Py_BuildValue("OOO", v0, v1, v2);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat3x4Type, argList);
 
 	/* Release the argument list. */
 	Py_DECREF(argList);
+	Py_DECREF(v0);
+	Py_DECREF(v1);
+	Py_DECREF(v2);
 
 	return obj_out;
 }
 
 static PyObject * pack_tmat4x2(double x0, double x1, double y0, double y1, double z0, double z1, double w0, double w1) {
-	PyObject* argList = Py_BuildValue("OOOO", pack_tvec2(x0, x1), pack_tvec2(y0, y1), pack_tvec2(z0, z1), pack_tvec2(w0, w1));
+	PyObject* v0, *v1, *v2, *v3;
+
+	v0 = pack_tvec2(x0, x1);
+	v1 = pack_tvec2(y0, y1);
+	v2 = pack_tvec2(z0, z1);
+	v3 = pack_tvec2(w0, w1);
+
+	PyObject* argList = Py_BuildValue("OOOO", v0, v1, v2, v3);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat4x2Type, argList);
 
 	/* Release the argument list. */
 	Py_DECREF(argList);
+	Py_DECREF(v0);
+	Py_DECREF(v1);
+	Py_DECREF(v2);
+	Py_DECREF(v3);
 
 	return obj_out;
 }
 static PyObject * pack_tmat4x3(double x0, double x1, double x2, double y0, double y1, double y2, double z0, double z1, double z2, double w0, double w1, double w2) {
-	PyObject* argList = Py_BuildValue("OOOO", pack_tvec3(x0, x1, x2), pack_tvec3(y0, y1, y2), pack_tvec3(z0, z1, z2), pack_tvec3(w0, w1, w2));
+	PyObject* v0, *v1, *v2, *v3;
+
+	v0 = pack_tvec3(x0, x1, x2);
+	v1 = pack_tvec3(y0, y1, y2);
+	v2 = pack_tvec3(z0, z1, z2);
+	v3 = pack_tvec3(w0, w1, w2);
+
+	PyObject* argList = Py_BuildValue("OOOO", v0, v1, v2, v3);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat4x3Type, argList);
 
 	/* Release the argument list. */
 	Py_DECREF(argList);
+	Py_DECREF(v0);
+	Py_DECREF(v1);
+	Py_DECREF(v2);
+	Py_DECREF(v3);
 
 	return obj_out;
 }
 static PyObject * pack_tmat4x4(double x0, double x1, double x2, double x3, double y0, double y1, double y2, double y3, double z0, double z1, double z2, double z3, double w0, double w1, double w2, double w3) {
-	PyObject* argList = Py_BuildValue("OOOO", pack_tvec4(x0, x1, x2, x3), pack_tvec4(y0, y1, y2, y3), pack_tvec4(z0, z1, z2, z3), pack_tvec4(w0, w1, w2, w3));
+	PyObject* v0, *v1, *v2, *v3;
+
+	v0 = pack_tvec4(x0, x1, x2, x3);
+	v1 = pack_tvec4(y0, y1, y2, y3);
+	v2 = pack_tvec4(z0, z1, z2, z3);
+	v3 = pack_tvec4(w0, w1, w2, w3);
+
+	PyObject* argList = Py_BuildValue("OOOO", v0, v1, v2, v3);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat4x4Type, argList);
 
 	/* Release the argument list. */
 	Py_DECREF(argList);
+	Py_DECREF(v0);
+	Py_DECREF(v1);
+	Py_DECREF(v2);
+	Py_DECREF(v3);
 
 	return obj_out;
 }
