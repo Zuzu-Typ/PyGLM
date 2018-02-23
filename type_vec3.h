@@ -734,7 +734,7 @@ tvec3_ifloordiv(tvec3 *self, PyObject *obj)
 static PyObject *
 tvec3_ipow(tvec3 *self, PyObject *obj1, PyObject * obj2)
 {
-	tvec3 * temp = (tvec3*)tvec3_pow((PyObject*)self, obj1, obj2);
+	tvec3 * temp = (tvec3*)tvec3_pow((PyObject*)self, obj1, Py_None);
 
 	if (temp == NULL) {
 		return NULL;

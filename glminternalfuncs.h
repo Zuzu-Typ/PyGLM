@@ -1,7 +1,17 @@
 #if defined(_M_IX86) || defined(__i386__)
-#define C_VOID_P(p) PyObject_Call(c_void_p, Py_BuildValue("(K)", (unsigned long)p), Py_BuildValue("{}"))
+PyObject* C_VOID_P(void* p) {
+	PyObject* argList = Py_BuildValue("(K)", (unsigned long)p);
+	PyObject* out = PyObject_CallObject(c_void_p, argList);
+	Py_DECREF(argList);
+	return out;
+}
 #else
-#define C_VOID_P(p) PyObject_Call(c_void_p, Py_BuildValue("(K)", (unsigned long long)p), Py_BuildValue("{}"))
+PyObject* C_VOID_P(void* p) {
+	PyObject* argList = Py_BuildValue("(K)", (unsigned long long)p);
+	PyObject* out = PyObject_CallObject(c_void_p, argList);
+	Py_DECREF(argList);
+	return out;
+}
 #endif
 
 #define IS_NUMERIC(op) (PyLong_Check(op) || PyFloat_Check(op) || PyBool_Check(op))
@@ -4575,7 +4585,7 @@ static PyObject * pack_tvec4(double x, double y, double z, double w) {
 }
 
 static PyObject * pack_tmat2x2(double x0, double x1, double y0, double y1) {
-	PyObject* argList = Py_BuildValue("OO", pack_tvec2(x0,x1), pack_tvec2(y0,y1));
+	PyObject* argList = Py_BuildValue("dddd", x0, x1, y0, y1);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x2Type, argList);
@@ -4586,7 +4596,7 @@ static PyObject * pack_tmat2x2(double x0, double x1, double y0, double y1) {
 	return obj_out;
 }
 static PyObject * pack_tmat2x3(double x0, double x1, double x2, double y0, double y1, double y2) {
-	PyObject* argList = Py_BuildValue("OO", pack_tvec3(x0, x1, x2), pack_tvec3(y0, y1, y2));
+	PyObject* argList = Py_BuildValue("dddddd", x0, x1, x2, y0, y1, y2);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x3Type, argList);
@@ -4597,7 +4607,7 @@ static PyObject * pack_tmat2x3(double x0, double x1, double x2, double y0, doubl
 	return obj_out;
 }
 static PyObject * pack_tmat2x4(double x0, double x1, double x2, double x3, double y0, double y1, double y2, double y3) {
-	PyObject* argList = Py_BuildValue("OO", pack_tvec4(x0, x1, x2, x3), pack_tvec4(y0, y1, y2, y3));
+	PyObject* argList = Py_BuildValue("dddddddd", x0, x1, x2, x3, y0, y1, y2, y3);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x4Type, argList);
@@ -4609,7 +4619,7 @@ static PyObject * pack_tmat2x4(double x0, double x1, double x2, double x3, doubl
 }
 
 static PyObject * pack_tmat3x2(double x0, double x1, double y0, double y1, double z0, double z1) {
-	PyObject* argList = Py_BuildValue("OOO", pack_tvec2(x0, x1), pack_tvec2(y0, y1), pack_tvec2(z0, z1));
+	PyObject* argList = Py_BuildValue("dddddd", x0, x1, y0, y1, z0, z1);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat3x2Type, argList);
@@ -4620,7 +4630,7 @@ static PyObject * pack_tmat3x2(double x0, double x1, double y0, double y1, doubl
 	return obj_out;
 }
 static PyObject * pack_tmat3x3(double x0, double x1, double x2, double y0, double y1, double y2, double z0, double z1, double z2) {
-	PyObject* argList = Py_BuildValue("OOO", pack_tvec3(x0, x1, x2), pack_tvec3(y0, y1, y2), pack_tvec3(z0, z1, z2));
+	PyObject* argList = Py_BuildValue("ddddddddd", x0, x1, x2, y0, y1, y2, z0, z1, z2);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat3x3Type, argList);
@@ -4631,7 +4641,7 @@ static PyObject * pack_tmat3x3(double x0, double x1, double x2, double y0, doubl
 	return obj_out;
 }
 static PyObject * pack_tmat3x4(double x0, double x1, double x2, double x3, double y0, double y1, double y2, double y3, double z0, double z1, double z2, double z3) {
-	PyObject* argList = Py_BuildValue("OOO", pack_tvec4(x0, x1, x2, x3), pack_tvec4(y0, y1, y2, y3), pack_tvec4(z0, z1, z2, z3));
+	PyObject* argList = Py_BuildValue("dddddddddddd", x0, x1, x2, x3, y0, y1, y2, y3, z0, z1, z2, z3);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat3x4Type, argList);
@@ -4643,7 +4653,7 @@ static PyObject * pack_tmat3x4(double x0, double x1, double x2, double x3, doubl
 }
 
 static PyObject * pack_tmat4x2(double x0, double x1, double y0, double y1, double z0, double z1, double w0, double w1) {
-	PyObject* argList = Py_BuildValue("OOOO", pack_tvec2(x0, x1), pack_tvec2(y0, y1), pack_tvec2(z0, z1), pack_tvec2(w0, w1));
+	PyObject* argList = Py_BuildValue("dddddddd", x0, x1, y0, y1, z0, z1, w0, w1);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat4x2Type, argList);
@@ -4654,7 +4664,7 @@ static PyObject * pack_tmat4x2(double x0, double x1, double y0, double y1, doubl
 	return obj_out;
 }
 static PyObject * pack_tmat4x3(double x0, double x1, double x2, double y0, double y1, double y2, double z0, double z1, double z2, double w0, double w1, double w2) {
-	PyObject* argList = Py_BuildValue("OOOO", pack_tvec3(x0, x1, x2), pack_tvec3(y0, y1, y2), pack_tvec3(z0, z1, z2), pack_tvec3(w0, w1, w2));
+	PyObject* argList = Py_BuildValue("dddddddddddd", x0, x1, x2, y0, y1, y2, z0, z1, z2, w0, w1, w2);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat4x3Type, argList);
@@ -4665,7 +4675,7 @@ static PyObject * pack_tmat4x3(double x0, double x1, double x2, double y0, doubl
 	return obj_out;
 }
 static PyObject * pack_tmat4x4(double x0, double x1, double x2, double x3, double y0, double y1, double y2, double y3, double z0, double z1, double z2, double z3, double w0, double w1, double w2, double w3) {
-	PyObject* argList = Py_BuildValue("OOOO", pack_tvec4(x0, x1, x2, x3), pack_tvec4(y0, y1, y2, y3), pack_tvec4(z0, z1, z2, z3), pack_tvec4(w0, w1, w2, w3));
+	PyObject* argList = Py_BuildValue("dddddddddddddddd", x0, x1, x2, x3, y0, y1, y2, y3, z0, z1, z2, z3, w0, w1, w2, w3);
 
 	/* Call the class object. */
 	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat4x4Type, argList);

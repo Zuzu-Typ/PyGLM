@@ -85,6 +85,9 @@ PyObject* c_void_p = NULL;
 #include "type_mat4x4.h"
 
 //static PyObject* test(PyObject* self, PyObject* arg) {
+//	imat2x2 o;
+//	unpack_imat2x2p(arg, &o);
+//	return build_imat2x2(o);
 //	//return PyObject_GetAttr(PyObject_GetAttr(ctypes, PyUnicode_FromString("c_void_p")), PyUnicode_FromString("from_address"));
 //}
 
@@ -335,7 +338,7 @@ static PyModuleDef gtcmodule = {
 #endif
 
 static PyMethodDef glmmethods[] = {
-	//{ "test", (PyCFunction)test, METH_NOARGS, "test() - a test function" },
+	//{"test", (PyCFunction)test, METH_O, ""},
 	// detail
 	// func_vector_relational
 	{ "equal", (PyCFunction)equal, METH_VARARGS, "equal(x, y) -> (x == y)\nReturns the component-wise comparison of result x == y." },

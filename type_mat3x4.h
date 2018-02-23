@@ -721,6 +721,11 @@ tmat3x4_imul(tmat3x4 *self, PyObject *obj)
 		return NULL;
 	}
 
+	if (!PyObject_TypeCheck(temp, &tmat3x4Type)) {
+		PY_TYPEERROR("unsupported operand type for *=: ", obj);
+		return NULL;
+	}
+
 	self->x->x = temp->x->x;
 	self->x->y = temp->x->y;
 	self->x->z = temp->x->z;
@@ -745,6 +750,11 @@ tmat3x4_idiv(tmat3x4 *self, PyObject *obj)
 	tmat3x4 * temp = (tmat3x4*)tmat3x4_div((PyObject*)self, obj);
 
 	if (temp == NULL) {
+		return NULL;
+	}
+
+	if (!PyObject_TypeCheck(temp, &tmat3x4Type)) {
+		PY_TYPEERROR("unsupported operand type for *=: ", obj);
 		return NULL;
 	}
 
