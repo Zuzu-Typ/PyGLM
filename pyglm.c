@@ -5,6 +5,10 @@
 
 #define PY3K (PY_VERSION_HEX >= 0x03000000)
 
+#if PY3K
+#define Py_TPFLAGS_CHECKTYPES 0
+#endif
+
 PyObject* c_void_p = NULL;
 
 #include "glmtypes.h"
