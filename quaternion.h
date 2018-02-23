@@ -396,6 +396,11 @@ tquat_imul(tquat *self, PyObject *obj)
 		return NULL;
 	}
 
+	if (!PyObject_TypeCheck(temp, &tquatType)) {
+		PY_TYPEERROR("unsupported operand type for *=: ", obj);
+		return NULL;
+	}
+
 	self->x = temp->x;
 	self->y = temp->y;
 	self->z = temp->z;

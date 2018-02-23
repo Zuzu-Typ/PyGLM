@@ -547,9 +547,14 @@ tmat2x2_isub(tmat2x2 *self, PyObject *obj)
 static PyObject *
 tmat2x2_imul(tmat2x2 *self, PyObject *obj)
 {
-	tmat2x2 * temp = (tmat2x2*)tmat2x2_mul((PyObject*)self, obj);
+	tmat2x2* temp = (tmat2x2*)tmat2x2_mul((PyObject*)self, obj);
 
 	if (temp == NULL) {
+		return NULL;
+	}
+
+	if (!PyObject_TypeCheck(temp, &tmat2x2Type)) {
+		PY_TYPEERROR("unsupported operand type for *=: ", obj);
 		return NULL;
 	}
 
@@ -569,6 +574,11 @@ tmat2x2_idiv(tmat2x2 *self, PyObject *obj)
 	tmat2x2 * temp = (tmat2x2*)tmat2x2_div((PyObject*)self, obj);
 
 	if (temp == NULL) {
+		return NULL;
+	}
+
+	if (!PyObject_TypeCheck(temp, &tmat2x2Type)) {
+		PY_TYPEERROR("unsupported operand type for /=: ", obj);
 		return NULL;
 	}
 

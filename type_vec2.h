@@ -102,9 +102,9 @@ tvec2_add(PyObject *obj1, PyObject *obj2)
 		);
 	}
 
-	ivec2 * o = unpack_ivec2(obj1);
+	ivec2 o;// = unpack_ivec2(obj1);
 
-	if (o == NULL) { // obj1 is not supported.
+	if (!unpack_ivec2p(obj1, &o)) { // obj1 is not supported.
 		PY_TYPEERROR("unsupported operand type(s) for +: 'glm::detail::tvec2' and ", obj1);
 		return NULL;
 	}
@@ -112,17 +112,17 @@ tvec2_add(PyObject *obj1, PyObject *obj2)
 	if (IS_NUMERIC(obj2)) { // obj1 is self, obj2 is a scalar
 		double d = pyvalue_as_double(obj2);
 		PyObject* out = pack_tvec2(
-			o->x + d,
-			o->y + d
+			o.x + d,
+			o.y + d
 		);
-		free(o);
+		//free(o);
 		return out;
 	}
 
 	ivec2 * o2 = unpack_ivec2(obj2);
 
 	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		free(o);
+		//free(o);
 		PyObject * out = PyObject_CallMethod(obj2, "__radd__", "O", obj1);
 		if (out == NULL) {
 			PY_TYPEERROR("unsupported operand type(s) for +: 'glm::detail::tvec2' and ", obj2);
@@ -133,10 +133,10 @@ tvec2_add(PyObject *obj1, PyObject *obj2)
 
 	// obj1 and obj2 can be interpreted as a tvec2
 	PyObject* out = pack_tvec2(
-		o->x + o2->x,
-		o->y + o2->y
+		o.x + o2->x,
+		o.y + o2->y
 	);
-	free(o);
+	//free(o);
 	free(o2);
 	return out;
 }
@@ -648,9 +648,9 @@ tvec2_ifloordiv(tvec2 *self, PyObject *obj)
 
 // ternaryfunc
 static PyObject *
-tvec2_ipow(tvec2 *self, PyObject *obj1, PyObject * obj2)
+tvec2_ipow(tvec2 *self, PyObject *obj1, PyObject * obj2) // obj2 is unused. It points to an invalid address!
 {
-	tvec2 * temp = (tvec2*)tvec2_pow((PyObject*)self, obj1, obj2);
+	tvec2 * temp = (tvec2*)tvec2_pow((PyObject*)self, obj1, Py_None);
 
 	if (temp == NULL) {
 		return NULL;
