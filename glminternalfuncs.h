@@ -18,11 +18,8 @@ PyObject* C_VOID_P(void* p) {
 #define Py_RETURN_NOTIMPLEMENTED return Py_INCREF(Py_NotImplemented), Py_NotImplemented
 #endif
 
-#if PY3K
+
 #define PY_IS_NOTIMPLEMENTED(op) (op == NULL || (PyObject*)op == Py_NotImplemented) // find out if op is NULL or NotImplemented
-#else
-#define PY_IS_NOTIMPLEMENTED(op) (op == NULL) // find out if op is NULL or NotImplemented
-#endif
 
 #if PY3K
 #define IS_NUMERIC(op) (PyLong_Check(op) || PyFloat_Check(op) || PyBool_Check(op))
