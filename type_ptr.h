@@ -65,3 +65,45 @@ static PyObject* value_ptr(PyObject* self, PyObject* arg) {
 	PY_TYPEERROR("invalid operand type for value_ptr(): ", arg);
 	return NULL;
 }
+
+static PyObject*
+sizeof_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, &tvec2Type) || arg == (PyObject*)&tvec2Type) {
+		return PyLong_FromLong(sizeof(fvec2));
+	}
+	if (PyObject_TypeCheck(arg, &tvec3Type) || arg == (PyObject*)&tvec3Type) {
+		return PyLong_FromLong(sizeof(fvec3));
+	}
+	if (PyObject_TypeCheck(arg, &tvec4Type) || arg == (PyObject*)&tvec4Type) {
+		return PyLong_FromLong(sizeof(fvec4));
+	}
+	if (PyObject_TypeCheck(arg, &tmat2x2Type) || arg == (PyObject*)&tmat2x2Type) {
+		return PyLong_FromLong(sizeof(fmat2x2));
+	}
+	if (PyObject_TypeCheck(arg, &tmat2x3Type) || arg == (PyObject*)&tmat2x3Type) {
+		return PyLong_FromLong(sizeof(fmat2x3));
+	}
+	if (PyObject_TypeCheck(arg, &tmat2x4Type) || arg == (PyObject*)&tmat2x4Type) {
+		return PyLong_FromLong(sizeof(fmat2x4));
+	}
+	if (PyObject_TypeCheck(arg, &tmat3x2Type) || arg == (PyObject*)&tmat3x2Type) {
+		return PyLong_FromLong(sizeof(fmat3x2));
+	}
+	if (PyObject_TypeCheck(arg, &tmat3x3Type) || arg == (PyObject*)&tmat3x3Type) {
+		return PyLong_FromLong(sizeof(fmat3x3));
+	}
+	if (PyObject_TypeCheck(arg, &tmat3x4Type) || arg == (PyObject*)&tmat3x4Type) {
+		return PyLong_FromLong(sizeof(fmat3x4));
+	}
+	if (PyObject_TypeCheck(arg, &tmat4x2Type) || arg == (PyObject*)&tmat4x2Type) {
+		return PyLong_FromLong(sizeof(fmat4x2));
+	}
+	if (PyObject_TypeCheck(arg, &tmat4x3Type) || arg == (PyObject*)&tmat4x3Type) {
+		return PyLong_FromLong(sizeof(fmat4x3));
+	}
+	if (PyObject_TypeCheck(arg, &tmat4x4Type) || arg == (PyObject*)&tmat4x4Type) {
+		return PyLong_FromLong(sizeof(fmat4x4));
+	}
+	PY_TYPEERROR("invalid operand type for sizeof(): ", arg);
+	return NULL;
+}

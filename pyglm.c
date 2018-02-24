@@ -89,9 +89,11 @@ PyObject* c_void_p = NULL;
 #include "type_mat4x4.h"
 
 //static PyObject* test(PyObject* self, PyObject* arg) {
-//	imat2x2 o;
-//	unpack_imat2x2p(arg, &o);
-//	return build_imat2x2(o);
+//	tmat2x2* o;
+//	o = (tmat2x2*)(&tmat2x2Type)->tp_alloc(&tmat2x2Type, 0);
+//	o->x = (tvec2*)pack_tvec2(0, 0);
+//	o->y = (tvec2*)pack_tvec2(0, 0);
+//	return (PyObject*)o;
 //	//return PyObject_GetAttr(PyObject_GetAttr(ctypes, PyUnicode_FromString("c_void_p")), PyUnicode_FromString("from_address"));
 //}
 
@@ -565,6 +567,7 @@ static PyMethodDef glmmethods[] = {
 
 	// type_ptr
 	{ "value_ptr", (PyCFunction)value_ptr, METH_O, "value_ptr(x) -> void* as int\nReturn the constant address to the data of the input parameter." },
+	{ "sizeof", (PyCFunction)sizeof_, METH_O, "sizeof(x) -> int\nReturn the size of x in bytes." },
 	{ NULL, NULL, 0, NULL }
 };
 

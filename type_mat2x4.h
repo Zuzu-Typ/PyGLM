@@ -22,7 +22,7 @@ tmat2x4_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 		self->x = (tvec4*)v1;
 		self->y = (tvec4*)v2;
 		self->col_type = (PyObject*)&tvec4Type;
-		self->row_type = (PyObject*)&tvec4Type;
+		self->row_type = (PyObject*)&tvec2Type;
 	}
 
 	return (PyObject *)self;

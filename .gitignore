@@ -17,3 +17,5 @@ upload.bat
 setup_no_wheel.py
 Python.h
 buildcp27.bat
+readmelang.py
+README.rml

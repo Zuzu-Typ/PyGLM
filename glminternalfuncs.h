@@ -4572,163 +4572,220 @@ static bool unpack_iquatp(PyObject * value, iquat* out) {
 
 // glm types from double values
 static PyObject * pack_tvec2(double x, double y) {
-	PyObject* argList = Py_BuildValue("dd", x, y);
+	tvec2* out = (tvec2*)tvec2Type.tp_alloc(&tvec2Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tvec2Type, argList);
+	if (out != NULL) {
+		out->x = x;
+		out->y = y;
+	}
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
-
-	return obj_out;
+	return (PyObject*)out;
 }
 static PyObject * pack_tvec3(double x, double y, double z) {
-	PyObject* argList = Py_BuildValue("ddd", x, y, z);
+	tvec3* out = (tvec3*)tvec3Type.tp_alloc(&tvec3Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tvec3Type, argList);
+	if (out != NULL) {
+		out->x = x;
+		out->y = y;
+		out->z = z;
+	}
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
-
-	return obj_out;
+	return (PyObject*)out;
 }
 static PyObject * pack_tvec4(double x, double y, double z, double w) {
-	PyObject* argList = Py_BuildValue("dddd", x, y, z, w);
+	tvec4* out = (tvec4*)tvec4Type.tp_alloc(&tvec4Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tvec4Type, argList);
+	if (out != NULL) {
+		out->x = x;
+		out->y = y;
+		out->z = z;
+		out->w = w;
+	}
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
-
-	return obj_out;
+	return (PyObject*)out;
 }
 
 static PyObject * pack_tmat2x2(double x0, double x1, double y0, double y1) {
-	PyObject* argList = Py_BuildValue("dddd", x0, x1, y0, y1);
+	tmat2x2* out = (tmat2x2*)tmat2x2Type.tp_alloc(&tmat2x2Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x2Type, argList);
+	PyObject *v1 = pack_tvec2(x0, x1);
+	PyObject *v2 = pack_tvec2(y0, y1);
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
+	if (out != NULL && v1 != NULL && v2 != NULL) {
+		out->x = (tvec2*)v1;
+		out->y = (tvec2*)v2;
+		out->col_type = (PyObject*)&tvec2Type;
+		out->row_type = (PyObject*)&tvec2Type;
+	}
 
-	return obj_out;
+	return (PyObject*)out;
 }
+
 static PyObject * pack_tmat2x3(double x0, double x1, double x2, double y0, double y1, double y2) {
-	PyObject* argList = Py_BuildValue("dddddd", x0, x1, x2, y0, y1, y2);
+	tmat2x3* out = (tmat2x3*)tmat2x3Type.tp_alloc(&tmat2x3Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x3Type, argList);
+	PyObject *v1 = pack_tvec3(x0, x1, x2);
+	PyObject *v2 = pack_tvec3(y0, y1, y2);
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
+	if (out != NULL && v1 != NULL && v2 != NULL) {
+		out->x = (tvec3*)v1;
+		out->y = (tvec3*)v2;
+		out->col_type = (PyObject*)&tvec3Type;
+		out->row_type = (PyObject*)&tvec2Type;
+	}
 
-	return obj_out;
+	return (PyObject*)out;
 }
 static PyObject * pack_tmat2x4(double x0, double x1, double x2, double x3, double y0, double y1, double y2, double y3) {
-	PyObject* argList = Py_BuildValue("dddddddd", x0, x1, x2, x3, y0, y1, y2, y3);
+	tmat2x4* out = (tmat2x4*)tmat2x4Type.tp_alloc(&tmat2x4Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x4Type, argList);
+	PyObject *v1 = pack_tvec4(x0, x1, x2, x3);
+	PyObject *v2 = pack_tvec4(y0, y1, y2, y3);
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
+	if (out != NULL && v1 != NULL && v2 != NULL) {
+		out->x = (tvec4*)v1;
+		out->y = (tvec4*)v2;
+		out->col_type = (PyObject*)&tvec4Type;
+		out->row_type = (PyObject*)&tvec2Type;
+	}
 
-	return obj_out;
+	return (PyObject*)out;
 }
 
 static PyObject * pack_tmat3x2(double x0, double x1, double y0, double y1, double z0, double z1) {
-	PyObject* argList = Py_BuildValue("dddddd", x0, x1, y0, y1, z0, z1);
+	tmat3x2* out = (tmat3x2*)tmat3x2Type.tp_alloc(&tmat3x2Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat3x2Type, argList);
+	PyObject *v1 = pack_tvec2(x0, x1);
+	PyObject *v2 = pack_tvec2(y0, y1);
+	PyObject *v3 = pack_tvec2(z0, z1);
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
+	if (out != NULL && v1 != NULL && v2 != NULL && v3 != NULL) {
+		out->x = (tvec2*)v1;
+		out->y = (tvec2*)v2;
+		out->z = (tvec2*)v3;
+		out->col_type = (PyObject*)&tvec2Type;
+		out->row_type = (PyObject*)&tvec3Type;
+	}
 
-	return obj_out;
+	return (PyObject*)out;
 }
 static PyObject * pack_tmat3x3(double x0, double x1, double x2, double y0, double y1, double y2, double z0, double z1, double z2) {
-	PyObject* argList = Py_BuildValue("ddddddddd", x0, x1, x2, y0, y1, y2, z0, z1, z2);
+	tmat3x3* out = (tmat3x3*)tmat3x3Type.tp_alloc(&tmat3x3Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat3x3Type, argList);
+	PyObject *v1 = pack_tvec3(x0, x1, x2);
+	PyObject *v2 = pack_tvec3(y0, y1, y2);
+	PyObject *v3 = pack_tvec3(z0, z1, z2);
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
+	if (out != NULL && v1 != NULL && v2 != NULL && v3 != NULL) {
+		out->x = (tvec3*)v1;
+		out->y = (tvec3*)v2;
+		out->z = (tvec3*)v3;
+		out->col_type = (PyObject*)&tvec3Type;
+		out->row_type = (PyObject*)&tvec3Type;
+	}
 
-	return obj_out;
+	return (PyObject*)out;
 }
 static PyObject * pack_tmat3x4(double x0, double x1, double x2, double x3, double y0, double y1, double y2, double y3, double z0, double z1, double z2, double z3) {
-	PyObject* argList = Py_BuildValue("dddddddddddd", x0, x1, x2, x3, y0, y1, y2, y3, z0, z1, z2, z3);
+	tmat3x4* out = (tmat3x4*)tmat3x4Type.tp_alloc(&tmat3x4Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat3x4Type, argList);
+	PyObject *v1 = pack_tvec4(x0, x1, x2, x3);
+	PyObject *v2 = pack_tvec4(y0, y1, y2, y3);
+	PyObject *v3 = pack_tvec4(z0, z1, z2, z3);
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
+	if (out != NULL && v1 != NULL && v2 != NULL && v3 != NULL) {
+		out->x = (tvec4*)v1;
+		out->y = (tvec4*)v2;
+		out->z = (tvec4*)v3;
+		out->col_type = (PyObject*)&tvec4Type;
+		out->row_type = (PyObject*)&tvec3Type;
+	}
 
-	return obj_out;
+	return (PyObject*)out;
 }
 
 static PyObject * pack_tmat4x2(double x0, double x1, double y0, double y1, double z0, double z1, double w0, double w1) {
-	PyObject* argList = Py_BuildValue("dddddddd", x0, x1, y0, y1, z0, z1, w0, w1);
+	tmat4x2* out = (tmat4x2*)tmat4x2Type.tp_alloc(&tmat4x2Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat4x2Type, argList);
+	PyObject *v1 = pack_tvec2(x0, x1);
+	PyObject *v2 = pack_tvec2(y0, y1);
+	PyObject *v3 = pack_tvec2(z0, z1);
+	PyObject *v4 = pack_tvec2(w0, w1);
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
+	if (out != NULL && v1 != NULL && v2 != NULL && v3 != NULL && v4 != NULL) {
+		out->x = (tvec2*)v1;
+		out->y = (tvec2*)v2;
+		out->z = (tvec2*)v3;
+		out->w = (tvec2*)v4;
+		out->col_type = (PyObject*)&tvec2Type;
+		out->row_type = (PyObject*)&tvec4Type;
+	}
 
-	return obj_out;
+	return (PyObject*)out;
 }
 static PyObject * pack_tmat4x3(double x0, double x1, double x2, double y0, double y1, double y2, double z0, double z1, double z2, double w0, double w1, double w2) {
-	PyObject* argList = Py_BuildValue("dddddddddddd", x0, x1, x2, y0, y1, y2, z0, z1, z2, w0, w1, w2);
+	tmat4x3* out = (tmat4x3*)tmat4x3Type.tp_alloc(&tmat4x3Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat4x3Type, argList);
+	PyObject *v1 = pack_tvec3(x0, x1, x2);
+	PyObject *v2 = pack_tvec3(y0, y1, y2);
+	PyObject *v3 = pack_tvec3(z0, z1, z2);
+	PyObject *v4 = pack_tvec3(w0, w1, w2);
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
+	if (out != NULL && v1 != NULL && v2 != NULL && v3 != NULL && v4 != NULL) {
+		out->x = (tvec3*)v1;
+		out->y = (tvec3*)v2;
+		out->z = (tvec3*)v3;
+		out->w = (tvec3*)v4;
+		out->col_type = (PyObject*)&tvec3Type;
+		out->row_type = (PyObject*)&tvec4Type;
+	}
 
-	return obj_out;
+	return (PyObject*)out;
 }
 static PyObject * pack_tmat4x4(double x0, double x1, double x2, double x3, double y0, double y1, double y2, double y3, double z0, double z1, double z2, double z3, double w0, double w1, double w2, double w3) {
-	PyObject* argList = Py_BuildValue("dddddddddddddddd", x0, x1, x2, x3, y0, y1, y2, y3, z0, z1, z2, z3, w0, w1, w2, w3);
+	tmat4x4* out = (tmat4x4*)tmat4x4Type.tp_alloc(&tmat4x4Type, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat4x4Type, argList);
+	PyObject *v1 = pack_tvec4(x0, x1, x2, x3);
+	PyObject *v2 = pack_tvec4(y0, y1, y2, y3);
+	PyObject *v3 = pack_tvec4(z0, z1, z2, z3);
+	PyObject *v4 = pack_tvec4(w0, w1, w2, w3);
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
+	if (out != NULL && v1 != NULL && v2 != NULL && v3 != NULL && v4 != NULL) {
+		out->x = (tvec4*)v1;
+		out->y = (tvec4*)v2;
+		out->z = (tvec4*)v3;
+		out->w = (tvec4*)v4;
+		out->col_type = (PyObject*)&tvec4Type;
+		out->row_type = (PyObject*)&tvec4Type;
+	}
 
-	return obj_out;
+	return (PyObject*)out;
 }
 
 static PyObject * pack_tquatq(double x, double y, double z, double w) {
-	PyObject* argList = Py_BuildValue("dddd", w, x, y, z);
+	tquat* out = (tquat *)tquatType.tp_alloc(&tquatType, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tquatType, argList);
+	if (out != NULL) {
+		out->x = x;
+		out->y = y;
+		out->z = z;
+		out->w = w;
+	}
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
-
-	return obj_out;
+	return (PyObject*)out;
 }
 
 static PyObject * pack_tquat(double x, double y, double z, double w) {
-	PyObject* argList = Py_BuildValue("dddd", x, y, z, w);
+	tquat* out = (tquat *)tquatType.tp_alloc(&tquatType, 0);
 
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tquatType, argList);
+	if (out != NULL) {
+		out->x = y;
+		out->y = z;
+		out->z = w;
+		out->w = x;
+	}
 
-	/* Release the argument list. */
-	Py_DECREF(argList);
-
-	return obj_out;
+	return (PyObject*)out;
 }
 
 //#define build_tmat2x2(o) pack_tmat2x2(((tmat2x2*)o)->x->x, ((tmat2x2*)o)->x->y, ((tmat2x2*)o)->y->x, ((tmat2x2*)o)->y->y)
