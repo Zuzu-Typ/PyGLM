@@ -741,7 +741,7 @@ tmat3x3_idiv(tmat3x3 *self, PyObject *obj)
 }
 
 static PyObject *
-tmat3x3_str(tmat3x3* self)
+tmat3x3_repr(tmat3x3* self)
 {
 	char * out = (char*)malloc((148) * sizeof(char));
 	snprintf(out, 148, "tmat3x3( ( %12.6g, %12.6g, %12.6g ), ( %12.6g, %12.6g, %12.6g ), ( %12.6g, %12.6g, %12.6g ) )", self->x->x, self->x->y, self->x->z, self->y->x, self->y->y, self->y->z, self->z->x, self->z->y, self->z->z);
@@ -751,7 +751,7 @@ tmat3x3_str(tmat3x3* self)
 }
 
 static PyObject *
-tmat3x3_repr(tmat3x3* self)
+tmat3x3_str(tmat3x3* self)
 {
 	char * out = (char*)malloc((149) * sizeof(char));
 	snprintf(out, 149, "tmat3x3\n[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]", self->x->x, self->x->y, self->x->z, self->y->x, self->y->y, self->y->z, self->z->x, self->z->y, self->z->z);

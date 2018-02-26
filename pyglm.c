@@ -330,6 +330,7 @@ static PyMethodDef gtcmethods[] = {
 
 	// type_ptr
 	{ "value_ptr", (PyCFunction)value_ptr, METH_O, "value_ptr(x) -> void* as int\nReturn the constant address to the data of the input parameter." },
+	{ "sizeof", (PyCFunction)sizeof_, METH_O, "sizeof(x) -> int\nReturn the size of x in bytes." },
 	{ NULL, NULL, 0, NULL }
 };
 

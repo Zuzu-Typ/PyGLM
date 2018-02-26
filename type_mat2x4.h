@@ -664,7 +664,7 @@ tmat2x4_idiv(tmat2x4 *self, PyObject *obj)
 }
 
 static PyObject *
-tmat2x4_str(tmat2x4* self)
+tmat2x4_repr(tmat2x4* self)
 {
 	char * out = (char*)malloc((130) * sizeof(char));
 	snprintf(out, 130, "tmat2x4( ( %12.6g, %12.6g, %12.6g, %12.6g ), ( %12.6g, %12.6g, %12.6g, %12.6g ) )", self->x->x, self->x->y, self->x->z, self->x->w, self->y->x, self->y->y, self->y->z, self->y->w);
@@ -672,7 +672,7 @@ tmat2x4_str(tmat2x4* self)
 }
 
 static PyObject *
-tmat2x4_repr(tmat2x4* self)
+tmat2x4_str(tmat2x4* self)
 {
 	char * out = (char*)malloc((132) * sizeof(char));
 	snprintf(out, 132, "tmat2x4\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", self->x->x, self->x->y, self->x->z, self->x->w, self->y->x, self->y->y, self->y->z, self->y->w);

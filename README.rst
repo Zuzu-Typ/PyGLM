@@ -16,9 +16,19 @@ OpenGL Mathematics \(GLM\) library for Python
 | or were deemed to be of too low priority \(like glm\:\:detail\:\:**tvec1**\)\.
 | If you encounter any issues or want to request a feature\, please create an issue on the `issue tracker <https://github.com/Zuzu-Typ/PyGLM/issues>`_\.
 | 
+| It is between 2 and 10 times as fast as numpy
+| 
 
 Tiny Documentation
 ==================
+
+Why PyGLM\?
+-----------
+| Besides the obvious \- being compatible with **GLM** \- PyGLM offers a variety of features for **vector** and **matrix manipulation**\.
+| It has a lot of possible use cases\, including **3D\-Graphics** \(OpenGL\, DirectX\, \.\.\.\)\, **Physics** and more\.
+| 
+| At the same time\, it has **great performance**\, being between **2x and 10x as fast as numpy\!**
+| \(*depending on the individual function*\)
 
 Installation
 ------------
@@ -41,7 +51,6 @@ Installation
     import glm
 
  
-| 
 
 Using PyGLM
 -----------
@@ -69,6 +78,24 @@ Using PyGLM
 ::
 
     glm.tvec2
+
+ 
+| 
+| There is no way to set preprocessor definitions \(macros\)\.
+| If \- for example \- you need to use the left handed coordinate system\, you have to use **\*LH**\, so
+
+
+::
+
+    glm.perspective
+
+ 
+| becomes
+
+
+::
+
+    glm.perspectiveLH
 
  
 | 

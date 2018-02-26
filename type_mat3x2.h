@@ -609,7 +609,7 @@ tmat3x2_idiv(tmat3x2 *self, PyObject *obj)
 }
 
 static PyObject *
-tmat3x2_str(tmat3x2* self)
+tmat3x2_repr(tmat3x2* self)
 {
 	char * out = (char*)malloc((106) * sizeof(char));
 	snprintf(out, 106, "tmat3x2( ( %12.6g, %12.6g ), ( %12.6g, %12.6g ), ( %12.6g, %12.6g ) )", self->x->x, self->x->y, self->y->x, self->y->y, self->z->x, self->z->y);
@@ -619,7 +619,7 @@ tmat3x2_str(tmat3x2* self)
 }
 
 static PyObject *
-tmat3x2_repr(tmat3x2* self)
+tmat3x2_str(tmat3x2* self)
 {
 	char * out = (char*)malloc((104) * sizeof(char));
 	snprintf(out, 104, "tmat3x2\n[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]", self->x->x, self->x->y, self->y->x, self->y->y, self->z->x, self->z->y);
