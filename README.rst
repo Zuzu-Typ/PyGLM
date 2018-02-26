@@ -16,8 +16,6 @@ OpenGL Mathematics \(GLM\) library for Python
 | or were deemed to be of too low priority \(like glm\:\:detail\:\:**tvec1**\)\.
 | If you encounter any issues or want to request a feature\, please create an issue on the `issue tracker <https://github.com/Zuzu-Typ/PyGLM/issues>`_\.
 | 
-| It is between 2 and 10 times as fast as numpy
-| 
 
 Tiny Documentation
 ==================

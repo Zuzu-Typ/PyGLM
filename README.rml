@@ -10,8 +10,6 @@ PyGLM is missing some features, either because they couldn't be implemented prop
 or were deemed to be of too low priority (like glm::detail::[b]tvec1[/]).
 If you encounter any issues or want to request a feature, please create an issue on the [url="https://github.com/Zuzu-Typ/PyGLM/issues"]issue tracker[/].
 
-It is between 2 and 10 times as fast as numpy
-
 [s1]Tiny Documentation[/]
 [s2]Why PyGLM?[/]
 Besides the obvious - being compatible with [b]GLM[/] - PyGLM offers a variety of features for [b]vector[/] and [b]matrix manipulation[/].
