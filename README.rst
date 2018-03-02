@@ -11,7 +11,7 @@ OpenGL Mathematics \(GLM\) library for Python
 | 
 | *Work in progress\.*
 | 
-| **PyGLM** is based on `GLM by G\-Trunc <https://glm.g-truc.net>`_ offering a lot of the original features\.  
+| **PyGLM** is based on `GLM by G\-Truc <https://glm.g-truc.net>`_ offering a lot of the original features\.  
 | PyGLM is missing some features\, either because they couldn\'t be implemented properly 
 | or were deemed to be of too low priority \(like glm\:\:detail\:\:**tvec1**\)\.
 | If you encounter any issues or want to request a feature\, please create an issue on the `issue tracker <https://github.com/Zuzu-Typ/PyGLM/issues>`_\.

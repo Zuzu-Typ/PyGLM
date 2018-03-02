@@ -5,7 +5,7 @@
 
 [i]Work in progress.[/]
 
-[b]PyGLM[/] is based on [url="https://glm.g-truc.net"]GLM by G-Trunc[/] offering a lot of the original features.  
+[b]PyGLM[/] is based on [url="https://glm.g-truc.net"]GLM by G-Truc[/] offering a lot of the original features.  
 PyGLM is missing some features, either because they couldn't be implemented properly 
 or were deemed to be of too low priority (like glm::detail::[b]tvec1[/]).
 If you encounter any issues or want to request a feature, please create an issue on the [url="https://github.com/Zuzu-Typ/PyGLM/issues"]issue tracker[/].

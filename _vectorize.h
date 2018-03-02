@@ -25,33 +25,30 @@ static PyObject* functor2(double(*Func)(double x, double y), PyObject * arg1, Py
 	char vecType = unpack_ivec(arg1, &o);
 
 	if (vecType == GLM_TVEC2) {
-		ivec2* o2 = unpack_ivec2(arg2);
-		if (o2 == NULL) {
+		ivec2 o2;
+		if (!unpack_ivec2p(arg2, &o2)) {
 			return NULL;
 		}
-		PyObject* out = pack_tvec2(Func(((ivec2*)o)->x, ((ivec2*)o2)->x), Func(((ivec2*)o)->y, ((ivec2*)o2)->y));
+		PyObject* out = pack_tvec2(Func(((ivec2*)o)->x, o2.x), Func(((ivec2*)o)->y, o2.y));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC3) {
-		ivec3* o2 = unpack_ivec3(arg2);
-		if (o2 == NULL) {
+		ivec3 o2;
+		if (!unpack_ivec3p(arg2, &o2)) {
 			return NULL;
 		}
-		PyObject* out = pack_tvec3(Func(((ivec3*)o)->x, ((ivec3*)o2)->x), Func(((ivec3*)o)->y, ((ivec3*)o2)->y), Func(((ivec3*)o)->z, ((ivec3*)o2)->z));
+		PyObject* out = pack_tvec3(Func(((ivec3*)o)->x, o2.x), Func(((ivec3*)o)->y, o2.y), Func(((ivec3*)o)->z, o2.z));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC4) {
-		ivec4* o2 = unpack_ivec4(arg2);
-		if (o2 == NULL) {
+		ivec4 o2;
+		if (!unpack_ivec4p(arg2, &o2)) {
 			return NULL;
 		}
-		PyObject* out = pack_tvec4(Func(((ivec4*)o)->x, ((ivec4*)o2)->x), Func(((ivec4*)o)->y, ((ivec4*)o2)->y), Func(((ivec4*)o)->z, ((ivec4*)o2)->z), Func(((ivec4*)o)->w, ((ivec4*)o2)->w));
+		PyObject* out = pack_tvec4(Func(((ivec4*)o)->x, o2.x), Func(((ivec4*)o)->y, o2.y), Func(((ivec4*)o)->z, o2.z), Func(((ivec4*)o)->w, o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	return NULL;

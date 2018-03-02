@@ -156,43 +156,19 @@ tquat_init(tquat *self, PyObject *args, PyObject *kwds)
 static PyObject *
 tquat_neg(tquat *obj)
 {
-	PyObject* argList = Py_BuildValue("dddd", -obj->w, -obj->x, -obj->y, -obj->z);
-
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tquatType, argList);
-
-	/* Release the argument list. */
-	Py_DECREF(argList);
-
-	return obj_out;
+	return pack_tquatq(-obj->x, -obj->y, -obj->z, -obj->w);
 }
 
 static PyObject *
 tquat_pos(tquat *obj)
 {
-	PyObject* argList = Py_BuildValue("dddd", obj->w, obj->x, obj->y, obj->z);
-
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tquatType, argList);
-
-	/* Release the argument list. */
-	Py_DECREF(argList);
-
-	return obj_out;
+	return pack_tquatq(obj->x, obj->y, obj->z, obj->w);
 }
 
 static PyObject *
 tquat_abs(tquat *obj)
 {
-	PyObject* argList = Py_BuildValue("dddd", fabs(obj->w), fabs(obj->x), fabs(obj->y), fabs(obj->z));
-
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tquatType, argList);
-
-	/* Release the argument list. */
-	Py_DECREF(argList);
-
-	return obj_out;
+	return pack_tquatq(fabs(obj->x), fabs(obj->y), fabs(obj->z), fabs(obj->w));
 }
 
 // binaryfunc
@@ -208,12 +184,6 @@ tquat_add(PyObject *obj1, PyObject *obj2)
 	iquat o2;
 	if (!unpack_iquatp(obj2, &o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
-		/*PyObject * out = PyObject_CallMethod(obj2, "__radd__", "O", obj1);
-		if (out == NULL) {
-			PY_TYPEERROR("unsupported operand type(s) for +: 'glm::detail::tquat' and ", obj2);
-			return NULL;
-		}
-		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tquat
@@ -237,12 +207,6 @@ tquat_sub(PyObject *obj1, PyObject *obj2)
 	iquat o2;
 	if (!unpack_iquatp(obj2, &o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
-		/*PyObject * out = PyObject_CallMethod(obj2, "__rsub__", "O", obj1);
-		if (out == NULL) {
-			PY_TYPEERROR("unsupported operand type(s) for -: 'glm::detail::tquat' and ", obj2);
-			return NULL;
-		}
-		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tquat
@@ -319,12 +283,6 @@ tquat_mul(PyObject *obj1, PyObject *obj2)
 	}
 	else { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
-		/*PyObject * out = PyObject_CallMethod(obj2, "__rmul__", "O", obj1);
-		if (out == NULL) {
-			PY_TYPEERROR("unsupported operand type(s) for *: 'glm::detail::tquat' and ", obj2);
-			return NULL;
-		}
-		return out;*/
 	}
 }
 
@@ -394,8 +352,8 @@ tquat_imul(tquat *self, PyObject *obj)
 	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	if (!PyObject_TypeCheck(temp, &tquatType)) {
-		PY_TYPEERROR("unsupported operand type for *=: ", obj);
-		return NULL;
+		Py_DECREF(temp);
+		Py_RETURN_NOTIMPLEMENTED;
 	}
 
 	self->x = temp->x;
@@ -414,6 +372,11 @@ tquat_idiv(tquat *self, PyObject *obj)
 	tquat * temp = (tquat*)tquat_div((PyObject*)self, obj);
 
 	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
+
+	if (!PyObject_TypeCheck(temp, &tquatType)) {
+		Py_DECREF(temp);
+		Py_RETURN_NOTIMPLEMENTED;
+	}
 
 	self->x = temp->x;
 	self->y = temp->y;
@@ -567,8 +530,7 @@ static PyObject * tquat_richcompare(tquat * self, PyObject * other, int comp_typ
 		return pack_tquat((double)(self->x >= ((tquat*)other)->x), (double)(self->y >= ((tquat*)other)->y), (double)(self->z >= ((tquat*)other)->z), (double)(self->w >= ((tquat*)other)->w));
 	}
 	else {
-		PY_TYPEERROR("this operator is not supported between instances of 'function' and ", other);
-		return NULL;
+		Py_RETURN_NOTIMPLEMENTED;
 	}
 }
 
@@ -594,12 +556,12 @@ static bool unswizzle_tquat(tquat * self, char c, double * out) {
 
 static PyObject * tquat_getattr(PyObject * obj, PyObject * name) {
 	char * name_as_ccp = attr_name_to_cstr(name);
+	size_t len = strlen(name_as_ccp);
 
-	if ((strlen(name_as_ccp) >= 4 && name_as_ccp[0] == '_' && name_as_ccp[1] == '_' && name_as_ccp[strlen(name_as_ccp) - 1] == '_' && name_as_ccp[strlen(name_as_ccp) - 2] == '_')
+	if ((len >= 4 && name_as_ccp[0] == '_' && name_as_ccp[1] == '_' && name_as_ccp[len - 1] == '_' && name_as_ccp[len - 2] == '_')
 		|| strcmp(name_as_ccp, "x") == 0 || strcmp(name_as_ccp, "y") == 0 || strcmp(name_as_ccp, "z") == 0 || strcmp(name_as_ccp, "w") == 0) {
 		return PyObject_GenericGetAttr(obj, name);
 	}
-	size_t len = strlen(name_as_ccp);
 	if (len == 1) {
 		double x;
 		if (unswizzle_tquat((tquat *)obj, name_as_ccp[0], &x)) {

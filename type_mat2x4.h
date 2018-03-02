@@ -1,10 +1,10 @@
 static void
 tmat2x4_dealloc(tmat2x4* self)
 {
-	Py_DECREF(self->x);
-	Py_DECREF(self->y);
-	//Py_DECREF(self->col_type);
-	//Py_DECREF(self->row_type);
+	Py_XDECREF(self->x);
+	Py_XDECREF(self->y);
+	Py_DECREF(self->col_type);
+	Py_DECREF(self->row_type);
 	Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
@@ -18,11 +18,13 @@ tmat2x4_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 	PyObject *v1 = pack_tvec4(0, 0, 0, 0);
 	PyObject *v2 = pack_tvec4(0, 0, 0, 0);
 
-	if (self != NULL) {
+	if (self != NULL && v1 != NULL && v2 != NULL) {
 		self->x = (tvec4*)v1;
 		self->y = (tvec4*)v2;
 		self->col_type = (PyObject*)&tvec4Type;
 		self->row_type = (PyObject*)&tvec2Type;
+		Py_INCREF(self->col_type);
+		Py_INCREF(self->row_type);
 	}
 
 	return (PyObject *)self;
@@ -167,27 +169,24 @@ tmat2x4_init(tmat2x4 *self, PyObject *args, PyObject *kwds)
 	}
 
 	if (arg3 == NULL) {
-		ivec4* o = unpack_ivec4(arg1);
-		if (o == NULL) {
+		ivec4 o;
+		if (!unpack_ivec4p(arg1, &o)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for tmat2x4()");
 			return -1;
 		}
-		ivec4* o2 = unpack_ivec4(arg2);
-		if (o2 == NULL) {
-			free(o);
+		ivec4 o2;
+		if (!unpack_ivec4p(arg2, &o2)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for tmat2x4()");
 			return -1;
 		}
-		self->x->x = o->x;
-		self->x->y = o->y;
-		self->x->z = o->z;
-		self->x->w = o->w;
-		self->y->x = o2->x;
-		self->y->y = o2->y;
-		self->y->z = o2->z;
-		self->y->w = o2->w;
-		free(o);
-		free(o2);
+		self->x->x = o.x;
+		self->x->y = o.y;
+		self->x->z = o.z;
+		self->x->w = o.w;
+		self->y->x = o2.x;
+		self->y->y = o2.y;
+		self->y->z = o2.z;
+		self->y->w = o2.w;
 		return 0;
 	}
 
@@ -215,43 +214,28 @@ tmat2x4_init(tmat2x4 *self, PyObject *args, PyObject *kwds)
 static PyObject *
 tmat2x4_neg(tmat2x4 *obj)
 {
-	PyObject* argList = Py_BuildValue("OO", PyObject_CallMethod((PyObject*)obj->x, "__neg__", "()"), PyObject_CallMethod((PyObject*)obj->y, "__neg__", "()"));
-
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x4Type, argList);
-
-	/* Release the argument list. */
-	Py_DECREF(argList);
-
-	return obj_out;
+	return pack_tmat2x4(
+		-obj->x->x, -obj->x->y, -obj->x->z, -obj->x->w,
+		-obj->y->x, -obj->y->y, -obj->y->z, -obj->y->w
+	);
 }
 
 static PyObject *
 tmat2x4_pos(tmat2x4 *obj)
 {
-	PyObject* argList = Py_BuildValue("OO", obj->x, obj->y);
-
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x4Type, argList);
-
-	/* Release the argument list. */
-	Py_DECREF(argList);
-
-	return obj_out;
+	return pack_tmat2x4(
+		obj->x->x, obj->x->y, obj->x->z, obj->x->w,
+		obj->y->x, obj->y->y, obj->y->z, obj->y->w
+	);
 }
 
 static PyObject *
 tmat2x4_abs(tmat2x4 *obj)
 {
-	PyObject* argList = Py_BuildValue("OO", PyObject_CallMethod((PyObject*)obj->x, "__abs__", "()"), PyObject_CallMethod((PyObject*)obj->y, "__abs__", "()"));
-
-	/* Call the class object. */
-	PyObject *obj_out = PyObject_CallObject((PyObject *)&tmat2x4Type, argList);
-
-	/* Release the argument list. */
-	Py_DECREF(argList);
-
-	return obj_out;
+	return pack_tmat2x4(
+		fabs(obj->x->x), fabs(obj->x->y), fabs(obj->x->z), fabs(obj->x->w),
+		fabs(obj->y->x), fabs(obj->y->y), fabs(obj->y->z), fabs(obj->y->w)
+	);
 }
 
 // binaryfunc
@@ -286,12 +270,6 @@ tmat2x4_add(PyObject *obj1, PyObject *obj2)
 
 		if (!unpack_imat2x4p(obj2, &o2)) { // obj2 can't be interpreted as tmat2x4
 			Py_RETURN_NOTIMPLEMENTED;
-			/*PyObject * out = PyObject_CallMethod(obj2, "__radd__", "O", obj1);
-			if (out == NULL) {
-				PY_TYPEERROR("unsupported operand type(s) for +: 'glm::detail::tmat2x4' and ", obj2);
-				return NULL;
-			}
-			return out;*/
 		}
 
 		o.x.x += o2.x.x;
@@ -338,12 +316,6 @@ tmat2x4_sub(PyObject *obj1, PyObject *obj2)
 
 		if (!unpack_imat2x4p(obj2, &o2)) { // obj2 can't be interpreted as tmat2x4
 			Py_RETURN_NOTIMPLEMENTED;
-			/*PyObject * out = PyObject_CallMethod(obj2, "__rsub__", "O", obj1);
-			if (out == NULL) {
-				PY_TYPEERROR("unsupported operand type(s) for -: 'glm::detail::tmat2x4' and ", obj2);
-				return NULL;
-			}
-			return out;*/
 		}
 
 		o.x.x -= o2.x.x;
@@ -365,43 +337,40 @@ tmat2x4_mul(PyObject *obj1, PyObject *obj2)
 	if (IS_NUMERIC(obj1)) { // obj1 is a scalar
 		double d = pyvalue_as_double(obj1);
 
-		imat2x4* o2 = unpack_imat2x4(obj2);
+		imat2x4 o2;
 
-		if (o2 == NULL) { // obj2 can't be interpreted as tmat2x4
+		if (!unpack_imat2x4p(obj2, &o2)) { // obj2 can't be interpreted as tmat2x4
 			PY_TYPEERROR("unsupported operand type(s) for *: 'glm::detail::tmat2x4' and ", obj2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tmat2x4(
-			d * o2->x.x,
-			d * o2->x.y,
-			d * o2->x.z,
-			d * o2->x.w,
-			d * o2->y.x,
-			d * o2->y.y,
-			d * o2->y.z,
-			d * o2->y.w);
-		free(o2);
-		return out;
+		return pack_tmat2x4(
+			d * o2.x.x,
+			d * o2.x.y,
+			d * o2.x.z,
+			d * o2.x.w,
+			d * o2.y.x,
+			d * o2.y.y,
+			d * o2.y.z,
+			d * o2.y.w);
 	}
 
 	void* o = NULL;
 	char glmType = unpack_pyobject(obj1, &o, GLM_HAS_TVEC4 | GLM_HAS_TMAT2x4);
 
 	if (glmType == GLM_TVEC4) { // obj1 is a col_type
-		imat2x4* o2 = unpack_imat2x4(obj2);
+		imat2x4 o2;
 
-		if (o2 == NULL) { // obj2 can't be interpreted as tmat2x4
+		if (!unpack_imat2x4p(obj2, &o2)) { // obj2 can't be interpreted as tmat2x4
 			free(o);
 			PY_TYPEERROR("unsupported operand type(s) for *: 'glm::detail::tmat2x4' and ", obj2);
 			return NULL;
 		}
 
 		PyObject* out = pack_tvec2(
-			((ivec4*)o)->x * o2->x.x + ((ivec4*)o)->y * o2->x.y + ((ivec4*)o)->z * o2->x.z + ((ivec4*)o)->w * o2->x.w,
-			((ivec4*)o)->x * o2->y.x + ((ivec4*)o)->y * o2->y.y + ((ivec4*)o)->z * o2->y.z + ((ivec4*)o)->w * o2->y.w);
+			((ivec4*)o)->x * o2.x.x + ((ivec4*)o)->y * o2.x.y + ((ivec4*)o)->z * o2.x.z + ((ivec4*)o)->w * o2.x.w,
+			((ivec4*)o)->x * o2.y.x + ((ivec4*)o)->y * o2.y.y + ((ivec4*)o)->z * o2.y.z + ((ivec4*)o)->w * o2.y.w);
 		free(o);
-		free(o2);
 		return out;
 	}
 
@@ -499,14 +468,6 @@ tmat2x4_mul(PyObject *obj1, PyObject *obj2)
 	free(o);
 	free(o2);
 	Py_RETURN_NOTIMPLEMENTED;
-	/*PyObject * out = PyObject_CallMethod(obj2, "__rmul__", "O", obj1);
-	if (out == NULL) {
-		free(o);
-		free(o2);
-		PY_TYPEERROR("unsupported operand type(s) for *: 'glm::detail::tmat2x4' and ", obj2);
-		return NULL;
-	}
-	return out;*/
 }
 
 static PyObject *
@@ -515,56 +476,44 @@ tmat2x4_div(PyObject *obj1, PyObject *obj2)
 	if (IS_NUMERIC(obj1)) { // obj1 is a scalar
 		double d = pyvalue_as_double(obj1);
 
-		imat2x4* o2 = unpack_imat2x4(obj2);
+		imat2x4 o2;
 
-		if (o2 == NULL) { // obj2 can't be interpreted as tmat2x4
+		if (!unpack_imat2x4p(obj2, &o2)) { // obj2 can't be interpreted as tmat2x4
 			PY_TYPEERROR("unsupported operand type(s) for /: 'glm::detail::tmat2x4' and ", obj2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tmat2x4(
-			d / o2->x.x,
-			d / o2->x.y,
-			d / o2->x.z,
-			d / o2->x.w,
-			d / o2->y.x,
-			d / o2->y.y,
-			d / o2->y.z,
-			d / o2->y.w);
-		free(o2);
-		return out;
+		return pack_tmat2x4(
+			d / o2.x.x,
+			d / o2.x.y,
+			d / o2.x.z,
+			d / o2.x.w,
+			d / o2.y.x,
+			d / o2.y.y,
+			d / o2.y.z,
+			d / o2.y.w);
 	}
 
-	imat2x4* o = unpack_imat2x4(obj1);
+	imat2x4 o;
 
-	if (o == NULL) { // obj1 can't be interpreted as tmat2x4
+	if (!unpack_imat2x4p(obj1, &o)) { // obj1 can't be interpreted as tmat2x4
 		PY_TYPEERROR_2O("unsupported operand type(s) for /: ", obj1, obj2);
 		return NULL;
 	}
 
 	if (IS_NUMERIC(obj2)) { // obj2 is a scalar
 		double d = pyvalue_as_double(obj2);
-		((imat2x4*)o)->x.x /= d;
-		((imat2x4*)o)->x.y /= d;
-		((imat2x4*)o)->x.z /= d;
-		((imat2x4*)o)->x.w /= d;
-		((imat2x4*)o)->y.x /= d;
-		((imat2x4*)o)->y.y /= d;
-		((imat2x4*)o)->y.z /= d;
-		((imat2x4*)o)->y.w /= d;
-		PyObject* out = build_imat2x4p(o);
-		free(o);
-		return out;
+		o.x.x /= d;
+		o.x.y /= d;
+		o.x.z /= d;
+		o.x.w /= d;
+		o.y.x /= d;
+		o.y.y /= d;
+		o.y.z /= d;
+		o.y.w /= d;
+		return build_imat2x4(o);
 	}
-	free(o);
 	Py_RETURN_NOTIMPLEMENTED;
-	/*PyObject * out = PyObject_CallMethod(obj2, "__rtruediv__", "O", obj1);
-	if (out == NULL) out = PyObject_CallMethod(obj2, "__rdiv__", "O", obj1);
-	if (out == NULL) {
-		PY_TYPEERROR("unsupported operand type(s) for /: 'glm::detail::tmat2x4' and ", obj2);
-		return NULL;
-	}
-	return out;*/
 }
 
 // inplace
@@ -619,8 +568,8 @@ tmat2x4_imul(tmat2x4 *self, PyObject *obj)
 	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	if (!PyObject_TypeCheck(temp, &tmat2x4Type)) {
-		PY_TYPEERROR("unsupported operand type for *=: ", obj);
-		return NULL;
+		Py_DECREF(temp);
+		Py_RETURN_NOTIMPLEMENTED;
 	}
 
 	self->x->x = temp->x->x;
@@ -645,8 +594,8 @@ tmat2x4_idiv(tmat2x4 *self, PyObject *obj)
 	if (PY_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	if (!PyObject_TypeCheck(temp, &tmat2x4Type)) {
-		PY_TYPEERROR("unsupported operand type for /=: ", obj);
-		return NULL;
+		Py_DECREF(temp);
+		Py_RETURN_NOTIMPLEMENTED;
 	}
 
 	self->x->x = temp->x->x;
@@ -666,16 +615,16 @@ tmat2x4_idiv(tmat2x4 *self, PyObject *obj)
 static PyObject *
 tmat2x4_repr(tmat2x4* self)
 {
-	char * out = (char*)malloc((130) * sizeof(char));
-	snprintf(out, 130, "tmat2x4( ( %12.6g, %12.6g, %12.6g, %12.6g ), ( %12.6g, %12.6g, %12.6g, %12.6g ) )", self->x->x, self->x->y, self->x->z, self->x->w, self->y->x, self->y->y, self->y->z, self->y->w);
+	char * out = (char*)malloc((132) * sizeof(char));
+	snprintf(out, 132, "tmat2x4\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", self->x->x, self->x->y, self->x->z, self->x->w, self->y->x, self->y->y, self->y->z, self->y->w);
 	return PyUnicode_FromString(out);
 }
 
 static PyObject *
 tmat2x4_str(tmat2x4* self)
 {
-	char * out = (char*)malloc((132) * sizeof(char));
-	snprintf(out, 132, "tmat2x4\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", self->x->x, self->x->y, self->x->z, self->x->w, self->y->x, self->y->y, self->y->z, self->y->w);
+	char * out = (char*)malloc((124) * sizeof(char));
+	snprintf(out, 124, "[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", self->x->x, self->x->y, self->x->z, self->x->w, self->y->x, self->y->y, self->y->z, self->y->w);
 	return PyUnicode_FromString(out);
 }
 
@@ -704,42 +653,37 @@ static PyObject* tmat2x4_sq_item(tmat2x4 * self, Py_ssize_t index) {
 }
 
 static int tmat2x4_sq_setitem(tmat2x4 * self, Py_ssize_t index, PyObject * value) {
-	ivec4*o = unpack_ivec4(value);
-	if (o == NULL) {
+	ivec4 o;
+	if (!unpack_ivec4p(value, &o)) {
 		PY_TYPEERROR("expected tvec4, got ", value);
 		return -1;
 	}
 	switch (index) {
 	case 0:
-		self->x->x = o->x;
-		self->x->y = o->y;
-		self->x->z = o->z;
-		self->x->w = o->w;
-		free(o);
+		self->x->x = o.x;
+		self->x->y = o.y;
+		self->x->z = o.z;
+		self->x->w = o.w;
 		return 0;
 	case 1:
-		self->y->x = o->x;
-		self->y->y = o->y;
-		self->y->z = o->z;
-		self->y->w = o->w;
-		free(o);
+		self->y->x = o.x;
+		self->y->y = o.y;
+		self->y->z = o.z;
+		self->y->w = o.w;
 		return 0;
 	case -1:
-		self->y->x = o->x;
-		self->y->y = o->y;
-		self->y->z = o->z;
-		self->y->w = o->w;
-		free(o);
+		self->y->x = o.x;
+		self->y->y = o.y;
+		self->y->z = o.z;
+		self->y->w = o.w;
 		return 0;
 	case -2:
-		self->x->x = o->x;
-		self->x->y = o->y;
-		self->x->z = o->z;
-		self->x->w = o->w;
-		free(o);
+		self->x->x = o.x;
+		self->x->y = o.y;
+		self->x->z = o.z;
+		self->x->w = o.w;
 		return 0;
 	default:
-		free(o);
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return -1;
 	}
@@ -750,76 +694,66 @@ static int tmat2x4_contains(tmat2x4 * self, PyObject * value) {
 		double d = pyvalue_as_double(value);
 		return (int)(d == self->x->x || d == self->x->y || d == self->x->z || d == self->x->w || d == self->y->x || d == self->y->y || d == self->y->z || d == self->y->w);
 	}
-	ivec4* o = unpack_ivec4(value);
-	if (o == NULL) {
+	ivec4 o;
+	if (!unpack_ivec4p(value, &o)) {
 		return 0;
 	}
 
-	int out = (int)((self->x->x == o->x && self->x->y == o->y && self->x->z == o->z && self->x->w == o->w) || (self->y->x == o->x && self->y->y == o->y && self->y->z == o->z && self->y->w == o->w));
-	free(o);
+	int out = (int)((self->x->x == o.x && self->x->y == o.y && self->x->z == o.z && self->x->w == o.w) || (self->y->x == o.x && self->y->y == o.y && self->y->z == o.z && self->y->w == o.w));
 	return out;
 }
 
 static PyObject * tmat2x4_richcompare(tmat2x4 * self, PyObject * other, int comp_type) {
-	tmat2x4 * other_as_tmat2x4;
 	if (comp_type == Py_EQ) {
 		if (!PyObject_TypeCheck(other, &tmat2x4Type)) { // incopatible type
 			Py_RETURN_FALSE;
 		}
-		else {
-			other_as_tmat2x4 = (tmat2x4*)other;
-		}
 		return PyBool_FromLong(
-			(self->x->x == other_as_tmat2x4->x->x) && (self->x->y == other_as_tmat2x4->x->y) && (self->x->z == other_as_tmat2x4->x->z) && (self->x->w == other_as_tmat2x4->x->w) &&
-			(self->y->x == other_as_tmat2x4->y->x) && (self->y->y == other_as_tmat2x4->y->y) && (self->y->z == other_as_tmat2x4->y->z) && (self->y->w == other_as_tmat2x4->y->w));
+			(self->x->x == ((tmat2x4*)other)->x->x) && (self->x->y == ((tmat2x4*)other)->x->y) && (self->x->z == ((tmat2x4*)other)->x->z) && (self->x->w == ((tmat2x4*)other)->x->w) &&
+			(self->y->x == ((tmat2x4*)other)->y->x) && (self->y->y == ((tmat2x4*)other)->y->y) && (self->y->z == ((tmat2x4*)other)->y->z) && (self->y->w == ((tmat2x4*)other)->y->w));
 	}
 	else if (comp_type == Py_NE) {
 		if (!PyObject_TypeCheck(other, &tmat2x4Type)) { // incopatible type
 			Py_RETURN_TRUE;
 		}
-		else {
-			other_as_tmat2x4 = (tmat2x4*)other;
-		}
 		return PyBool_FromLong(
-			(self->x->x != other_as_tmat2x4->x->x) || (self->x->y != other_as_tmat2x4->x->y) || (self->x->z != other_as_tmat2x4->x->z) || (self->x->w != other_as_tmat2x4->x->w) ||
-			(self->y->x != other_as_tmat2x4->y->x) || (self->y->y != other_as_tmat2x4->y->y) || (self->y->z != other_as_tmat2x4->y->z) || (self->y->w != other_as_tmat2x4->y->w));
+			(self->x->x != ((tmat2x4*)other)->x->x) || (self->x->y != ((tmat2x4*)other)->x->y) || (self->x->z != ((tmat2x4*)other)->x->z) || (self->x->w != ((tmat2x4*)other)->x->w) ||
+			(self->y->x != ((tmat2x4*)other)->y->x) || (self->y->y != ((tmat2x4*)other)->y->y) || (self->y->z != ((tmat2x4*)other)->y->z) || (self->y->w != ((tmat2x4*)other)->y->w));
 	}
 	else {
-		PY_TYPEERROR("unsupported operand type(s) for ==: 'glm::detail::tmat2x4 and ", other);
-		return NULL;
+		Py_RETURN_NOTIMPLEMENTED;
 	}
 }
 
 static int tmat2x4_setattr(PyObject * obj, PyObject * name, PyObject * value) {
 	char * name_as_ccp = attr_name_to_cstr(name);
+	size_t name_len = strlen(name_as_ccp);
 
-	if ((strlen(name_as_ccp) >= 4 && name_as_ccp[0] == '_' && name_as_ccp[1] == '_' && name_as_ccp[strlen(name_as_ccp) - 1] == '_' && name_as_ccp[strlen(name_as_ccp) - 2] == '_')) {
+	if ((name_len >= 4 && name_as_ccp[0] == '_' && name_as_ccp[1] == '_' && name_as_ccp[name_len - 1] == '_' && name_as_ccp[name_len - 2] == '_')) {
 		return PyObject_GenericSetAttr(obj, name, value);
 	}
 	if (strcmp(name_as_ccp, "x") == 0) {
-		ivec4* o = unpack_ivec4(value);
-		if (o == NULL) {
+		ivec4 o;
+		if (!unpack_ivec4p(value, &o)) {
 			PY_TYPEERROR("unsupported operand type for =: ", value);
 			return -1;
 		}
-		((tmat2x4*)obj)->x->x = o->x;
-		((tmat2x4*)obj)->x->y = o->y;
-		((tmat2x4*)obj)->x->z = o->z;
-		((tmat2x4*)obj)->x->w = o->w;
-		free(o);
+		((tmat2x4*)obj)->x->x = o.x;
+		((tmat2x4*)obj)->x->y = o.y;
+		((tmat2x4*)obj)->x->z = o.z;
+		((tmat2x4*)obj)->x->w = o.w;
 		return 0;
 	}
 	if (strcmp(name_as_ccp, "y") == 0) {
-		ivec4* o = unpack_ivec4(value);
-		if (o == NULL) {
+		ivec4 o;
+		if (!unpack_ivec4p(value, &o)) {
 			PY_TYPEERROR("unsupported operand type for =: ", value);
 			return -1;
 		}
-		((tmat2x4*)obj)->y->x = o->x;
-		((tmat2x4*)obj)->y->y = o->y;
-		((tmat2x4*)obj)->y->z = o->z;
-		((tmat2x4*)obj)->y->w = o->w;
-		free(o);
+		((tmat2x4*)obj)->y->x = o.x;
+		((tmat2x4*)obj)->y->y = o.y;
+		((tmat2x4*)obj)->y->z = o.z;
+		((tmat2x4*)obj)->y->w = o.w;
 		return 0;
 	}
 	return PyObject_GenericSetAttr(obj, name, value);

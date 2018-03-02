@@ -119,26 +119,17 @@ tvec2_add(PyObject *obj1, PyObject *obj2)
 		return out;
 	}
 
-	ivec2 * o2 = unpack_ivec2(obj2);
+	ivec2 o2;
 
-	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		//free(o);
+	if (!unpack_ivec2p(obj2, &o2)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
-		/*PyObject * out = PyObject_CallMethod(obj2, "__radd__", "O", obj1);
-		if (out == NULL) {
-			PY_TYPEERROR("unsupported operand type(s) for +: 'glm::detail::tvec2' and ", obj2);
-			return NULL;
-		}
-		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
 	PyObject* out = pack_tvec2(
-		o.x + o2->x,
-		o.y + o2->y
+		o.x + o2.x,
+		o.y + o2.y
 	);
-	//free(o);
-	free(o2);
 	return out;
 }
 
@@ -154,9 +145,9 @@ tvec2_sub(PyObject *obj1, PyObject *obj2)
 		);
 	}
 
-	ivec2 * o = unpack_ivec2(obj1);
+	ivec2 o;
 
-	if (o == NULL) { // obj1 is not supported.
+	if (!unpack_ivec2p(obj1, &o)) { // obj1 is not supported.
 		PY_TYPEERROR("unsupported operand type(s) for -: 'glm::detail::tvec2' and ", obj1);
 		return NULL;
 	}
@@ -164,34 +155,23 @@ tvec2_sub(PyObject *obj1, PyObject *obj2)
 	if (IS_NUMERIC(obj2)) { // obj1 is self, obj2 is a scalar
 		double d = pyvalue_as_double(obj2);
 		PyObject* out = pack_tvec2(
-			o->x - d,
-			o->y - d
+			o.x - d,
+			o.y - d
 		);
-		free(o);
 		return out;
 	}
 
-	ivec2 * o2 = unpack_ivec2(obj2);
+	ivec2 o2;
 
-	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		free(o);
+	if (!unpack_ivec2p(obj2,&o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
-		/*PyObject * out = PyObject_CallMethod(obj2, "__rsub__", "O", obj1);
-		if (out == NULL) {
-			PY_TYPEERROR("unsupported operand type(s) for -: 'glm::detail::tvec2' and ", obj2);
-			return NULL;
-		}
-		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
-	PyObject* out = pack_tvec2(
-		o->x - o2->x,
-		o->y - o2->y
+	return pack_tvec2(
+		o.x - o2.x,
+		o.y - o2.y
 	);
-	free(o);
-	free(o2);
-	return out;
 }
 
 static PyObject *
@@ -206,44 +186,32 @@ tvec2_mul(PyObject *obj1, PyObject *obj2)
 		);
 	}
 
-	ivec2 * o = unpack_ivec2(obj1);
+	ivec2 o;
 
-	if (o == NULL) { // obj1 is not supported.
+	if (!unpack_ivec2p(obj1, &o)) { // obj1 is not supported.
 		PY_TYPEERROR("unsupported operand type(s) for *: 'glm::detail::tvec2' and ", obj1);
 		return NULL;
 	}
 
 	if (IS_NUMERIC(obj2)) { // obj1 is self, obj2 is a scalar
 		double d = pyvalue_as_double(obj2);
-		PyObject* out = pack_tvec2(
-			o->x * d,
-			o->y * d
+		return pack_tvec2(
+			o.x * d,
+			o.y * d
 		);
-		free(o);
-		return out;
 	}
 
-	ivec2 * o2 = unpack_ivec2(obj2);
+	ivec2 o2;
 
-	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		free(o);
+	if (!unpack_ivec2p(obj2, &o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
-		/*PyObject * out = PyObject_CallMethod(obj2, "__rmul__", "O", obj1);
-		if (out == NULL) {
-			PY_TYPEERROR("unsupported operand type(s) for *: 'glm::detail::tvec2' and ", obj2);
-			return NULL;
-		}
-		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
-	PyObject* out = pack_tvec2(
-		o->x * o2->x,
-		o->y * o2->y
+	return pack_tvec2(
+		o.x * o2.x,
+		o.y * o2.y
 	);
-	free(o);
-	free(o2);
-	return out;
 }
 
 static PyObject *
@@ -258,9 +226,9 @@ tvec2_div(PyObject *obj1, PyObject *obj2)
 		);
 	}
 
-	ivec2 * o = unpack_ivec2(obj1);
+	ivec2 o;
 
-	if (o == NULL) { // obj1 is not supported.
+	if (!unpack_ivec2p(obj1, &o)) { // obj1 is not supported.
 		PY_TYPEERROR("unsupported operand type(s) for /: 'glm::detail::tvec2' and ", obj1);
 		return NULL;
 	}
@@ -268,35 +236,23 @@ tvec2_div(PyObject *obj1, PyObject *obj2)
 	if (IS_NUMERIC(obj2)) { // obj1 is self, obj2 is a scalar
 		double d = pyvalue_as_double(obj2);
 		PyObject* out = pack_tvec2(
-			o->x / d,
-			o->y / d
+			o.x / d,
+			o.y / d
 		);
-		free(o);
 		return out;
 	}
 
-	ivec2 * o2 = unpack_ivec2(obj2);
+	ivec2 o2;
 
-	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		free(o);
+	if (!unpack_ivec2p(obj2, &o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
-		/*PyObject * out = PyObject_CallMethod(obj2, "__rdiv__", "O", obj1);
-		if (out == NULL) out = PyObject_CallMethod(obj2, "__rtruediv__", "O", obj1);
-
-		if (out == NULL) {
-			PY_TYPEERROR("unsupported operand type(s) for /: 'glm::detail::tvec2' and ", obj2);
-			return NULL;
-		}
-		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
 	PyObject* out = pack_tvec2(
-		o->x / o2->x,
-		o->y / o2->y
+		o.x / o2.x,
+		o.y / o2.y
 	);
-	free(o);
-	free(o2);
 	return out;
 }
 
@@ -312,9 +268,9 @@ tvec2_mod(PyObject *obj1, PyObject *obj2)
 		);
 	}
 
-	ivec2 * o = unpack_ivec2(obj1);
+	ivec2 o;
 
-	if (o == NULL) { // obj1 is not supported.
+	if (!unpack_ivec2p(obj1, &o)) { // obj1 is not supported.
 		PY_TYPEERROR("unsupported operand type(s) for %: 'glm::detail::tvec2' and ", obj1);
 		return NULL;
 	}
@@ -322,34 +278,23 @@ tvec2_mod(PyObject *obj1, PyObject *obj2)
 	if (IS_NUMERIC(obj2)) { // obj1 is self, obj2 is a scalar
 		double d = pyvalue_as_double(obj2);
 		PyObject* out = pack_tvec2(
-			fmod(o->x, d),
-			fmod(o->y, d)
+			fmod(o.x, d),
+			fmod(o.y, d)
 		);
-		free(o);
 		return out;
 	}
 
-	ivec2 * o2 = unpack_ivec2(obj2);
+	ivec2 o2;
 
-	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		free(o);
+	if (!unpack_ivec2p(obj2, &o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
-		/*PyObject * out = PyObject_CallMethod(obj2, "__rmod__", "O", obj1);
-		if (out == NULL) {
-			PY_TYPEERROR("unsupported operand type(s) for %: 'glm::detail::tvec2' and ", obj2);
-			return NULL;
-		}
-		return out;*/
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
-	PyObject* out = pack_tvec2(
-		fmod(o->x, o2->x),
-		fmod(o->y, o2->y)
+	return pack_tvec2(
+		fmod(o.x, o2.x),
+		fmod(o.y, o2.y)
 	);
-	free(o);
-	free(o2);
-	return out;
 }
 
 static PyObject *
@@ -364,47 +309,32 @@ tvec2_floordiv(PyObject *obj1, PyObject *obj2)
 		);
 	}
 
-	ivec2 * o = unpack_ivec2(obj1);
+	ivec2 o;
 
-	if (o == NULL) { // obj1 is not supported.
+	if (!unpack_ivec2p(obj1, &o)) { // obj1 is not supported.
 		PY_TYPEERROR("unsupported operand type(s) for //: 'glm::detail::tvec2' and ", obj1);
 		return NULL;
 	}
 
 	if (IS_NUMERIC(obj2)) { // obj1 is self, obj2 is a scalar
 		double d = pyvalue_as_double(obj2);
-		PyObject* out = pack_tvec2(
-			floor(o->x / d),
-			floor(o->y / d)
+		return  pack_tvec2(
+			floor(o.x / d),
+			floor(o.y / d)
 		);
-		free(o);
-		return out;
 	}
 
-	ivec2 * o2 = unpack_ivec2(obj2);
+	ivec2 o2;
 
-	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		free(o);
+	if (!unpack_ivec2p(obj2, &o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
-		//PyObject * out = PyObject_CallMethod(obj2, "__rfloordiv__", "O", obj1);
-
-		////if (out == NULL) out = PyObject_CallMethod(obj2, "__rdiv__", "O", obj1); // maybe?
-
-		//if (out == NULL) {
-		//	PY_TYPEERROR("unsupported operand type(s) for //: 'glm::detail::tvec2' and ", obj2);
-		//	return NULL;
-		//}
-		//return out;
 	}
 
 	// obj1 and obj2 can be interpreted as a tvec2
-	PyObject* out = pack_tvec2(
-		floor(o->x / o2->x),
-		floor(o->y / o2->y)
+	return pack_tvec2(
+		floor(o.x / o2.x),
+		floor(o.y / o2.y)
 	);
-	free(o);
-	free(o2);
-	return out;
 }
 
 static PyObject *
@@ -433,24 +363,22 @@ tvec2_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 			);
 		}
 
-		ivec2 * o3 = unpack_ivec2(obj3);
+		ivec2 o3;
 
-		if (o3 == NULL) {
+		if (!unpack_ivec2p(obj3, &o3)) {
 			PY_TYPEERROR("unsupported operand type(s) for **: ", obj3);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec2(
-			fmod(pow(d, ((tvec2*)obj2)->x), o3->x),
-			fmod(pow(d, ((tvec2*)obj2)->y), o3->y)
+		return pack_tvec2(
+			fmod(pow(d, ((tvec2*)obj2)->x), o3.x),
+			fmod(pow(d, ((tvec2*)obj2)->y), o3.y)
 		);
-		free(o3);
-		return out;
 	}
 
-	ivec2 * o = unpack_ivec2(obj1);
+	ivec2 o;
 
-	if (o == NULL) { // obj1 is not supported.
+	if (!unpack_ivec2p(obj1, &o)) { // obj1 is not supported.
 		PY_TYPEERROR("unsupported operand type(s) for **: 'glm::detail::tvec2' and ", obj1);
 		return NULL;
 	}
@@ -459,94 +387,68 @@ tvec2_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 		double d = pyvalue_as_double(obj2);
 
 		if (obj3 == Py_None) {
-			PyObject* out = pack_tvec2(
-				pow(o->x, d),
-				pow(o->y, d)
+			return pack_tvec2(
+				pow(o.x, d),
+				pow(o.y, d)
 			);
-			free(o);
-			return out;
 		}
 
 		if (IS_NUMERIC(obj3)) {
 			double d2 = pyvalue_as_double(obj3);
-			PyObject* out = pack_tvec2(
-				fmod(pow(o->x, d), d2),
-				fmod(pow(o->y, d), d2)
+			return pack_tvec2(
+				fmod(pow(o.x, d), d2),
+				fmod(pow(o.y, d), d2)
 			);
-			free(o);
-			return out;
 		}
 
-		ivec2 * o3 = unpack_ivec2(obj3);
+		ivec2 o3;
 
-		if (o3 == NULL) {
+		if (!unpack_ivec2p(obj3, &o3)) {
 			PY_TYPEERROR("unsupported operand type(s) for **: ", obj3);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec2(
-			fmod(pow(o->x, d), o3->x),
-			fmod(pow(o->y, d), o3->y)
+		return pack_tvec2(
+			fmod(pow(o.x, d), o3.x),
+			fmod(pow(o.y, d), o3.y)
 		);
-		free(o);
-		free(o3);
-		return out;
 	}
 
-	ivec2 * o2 = unpack_ivec2(obj2);
+	ivec2 o2;
 
-	if (o2 == NULL) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		free(o);
+	if (!unpack_ivec2p(obj2, &o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
-		/*PyObject * out = PyObject_CallMethod(obj2, "__rpow__", "O", obj1, obj3);
-		if (out == NULL) {
-			PY_TYPEERROR("unsupported operand type(s) for **: 'glm::detail::tvec2' and ", obj2);
-			return NULL;
-		}
-		return out;*/
 	}
 
 
 
 	// obj1 and obj2 can be interpreted as a tvec2
 	if (obj3 == Py_None) {
-		PyObject* out = pack_tvec2(
-			pow(o->x, o2->x),
-			pow(o->y, o2->y)
+		return pack_tvec2(
+			pow(o.x, o2.x),
+			pow(o.y, o2.y)
 		);
-		free(o);
-		free(o2);
-		return out;
 	}
 
 	if (IS_NUMERIC(obj3)) {
 		double d2 = pyvalue_as_double(obj3);
-		PyObject* out = pack_tvec2(
-			fmod(pow(o->x, o2->x), d2),
-			fmod(pow(o->y, o2->y), d2)
+		return pack_tvec2(
+			fmod(pow(o.x, o2.x), d2),
+			fmod(pow(o.y, o2.y), d2)
 		);
-		free(o);
-		free(o2);
-		return out;
 	}
 
-	ivec2 * o3 = unpack_ivec2(obj3);
+	ivec2 o3;
 
-	if (o3 == NULL) {
-		free(o);
-		free(o2);
+	if (!unpack_ivec2p(obj3, &o3)) {
 		PY_TYPEERROR("unsupported operand type(s) for **: ", obj3);
 		return NULL;
 	}
 
-	PyObject* out = pack_tvec2(
-		fmod(pow(o->x, o2->x), o3->x),
-		fmod(pow(o->y, o2->y), o3->y)
+	return pack_tvec2(
+		fmod(pow(o.x, o2.x), o3.x),
+		fmod(pow(o.y, o2.y), o3.y)
 	);
-	free(o);
-	free(o2);
-	free(o3);
-	return out;
 }
 
 // inplace
@@ -775,8 +677,7 @@ static PyObject * tvec2_richcompare(tvec2 * self, PyObject * other, int comp_typ
 		return pack_tvec2((double)(self->x >= ((tvec2*)other)->x), (double)(self->y >= ((tvec2*)other)->y));
 	}
 	else {
-		PY_TYPEERROR("this operator is not supported between instances of 'function' and ", other);
-		return NULL;
+		Py_RETURN_NOTIMPLEMENTED;
 	}
 }
 
@@ -794,12 +695,12 @@ static bool unswizzle_tvec2(tvec2 * self, char c, double * out) {
 
 static PyObject * tvec2_getattr(PyObject * obj, PyObject * name) {
 	char * name_as_ccp = attr_name_to_cstr(name);
+	size_t len = strlen(name_as_ccp);
 
-	if ((strlen(name_as_ccp) >= 4 && name_as_ccp[0] == '_' && name_as_ccp[1] == '_' && name_as_ccp[strlen(name_as_ccp) - 1] == '_' && name_as_ccp[strlen(name_as_ccp) - 2] == '_')
+	if ((len >= 4 && name_as_ccp[0] == '_' && name_as_ccp[1] == '_' && name_as_ccp[len - 1] == '_' && name_as_ccp[len - 2] == '_')
 		|| strcmp(name_as_ccp, "x") == 0 || strcmp(name_as_ccp, "y") == 0) {
 		return PyObject_GenericGetAttr(obj, name);
 	}
-	size_t len = strlen(name_as_ccp);
 	if (len == 1) {
 		double x;
 		if (unswizzle_tvec2((tvec2 *)obj, name_as_ccp[0], &x)) {

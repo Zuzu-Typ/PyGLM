@@ -128,7 +128,9 @@ static PyObject* perlin(PyObject* self, PyObject* args) {
 				mixf(n00, n10, fade_xy.x),
 				mixf(n01, n11, fade_xy.x));
 			double n_xy = mixf(n_x.x, n_x.y, fade_xy.y);
-			return PyFloat_FromDouble((2.3) * n_xy);
+			PyObject* out = PyFloat_FromDouble((2.3) * n_xy);
+			free(o);
+			return out;
 		}
 		if (vecType == GLM_TVEC3) {
 			ivec3 o2;
@@ -299,7 +301,9 @@ static PyObject* perlin(PyObject* self, PyObject* args) {
 				mixf(n_z.x, n_z.z, fade_xyz.y),
 				mixf(n_z.y, n_z.w, fade_xyz.y));
 			double n_xyz = mixf(n_yz.x, n_yz.y, fade_xyz.x);
-			return PyFloat_FromDouble((2.2) * n_xyz);
+			PyObject* out = PyFloat_FromDouble((2.2) * n_xyz);
+			free(o);
+			return out;
 		}
 		if (vecType == GLM_TVEC4) {
 			ivec4 o2;
@@ -655,7 +659,9 @@ static PyObject* perlin(PyObject* self, PyObject* args) {
 				mixf(n_zw.y, n_zw.w, fade_xyzw.y));
 			double n_xyzw = mixf(n_yzw.x, n_yzw.y, fade_xyzw.x);
 
-			return PyFloat_FromDouble((2.2) * n_xyzw);
+			PyObject* out = PyFloat_FromDouble((2.2) * n_xyzw);
+			free(o);
+			return out;
 		}
 	}
 	PyObject* arg;
@@ -737,7 +743,9 @@ static PyObject* perlin(PyObject* self, PyObject* args) {
 			mixf(n00, n10, fade_xy.x),
 			mixf(n01, n11, fade_xy.x));
 		double n_xy = mixf(n_x.x, n_x.y, fade_xy.y);
-		return PyFloat_FromDouble((2.3) * n_xy);
+		PyObject* out = PyFloat_FromDouble((2.3) * n_xy);
+		free(o);
+		return out;
 	}
 	if (vecType == GLM_TVEC3) {
 		ivec3 Position = *((ivec3*)o);
@@ -897,7 +905,9 @@ static PyObject* perlin(PyObject* self, PyObject* args) {
 			mixf(n_z.x, n_z.z, fade_xyz.y),
 			mixf(n_z.y, n_z.w, fade_xyz.y));
 		double n_xyz = mixf(n_yz.x, n_yz.y, fade_xyz.x);
-		return PyFloat_FromDouble((2.2) * n_xyz);
+		PyObject* out = PyFloat_FromDouble((2.2) * n_xyz);
+		free(o);
+		return out;
 	}
 	if (vecType == GLM_TVEC4) {
 		ivec4 Position = *((ivec4*)o);
@@ -1253,7 +1263,9 @@ static PyObject* perlin(PyObject* self, PyObject* args) {
 			mixf(n_zw.y, n_zw.w, fade_xyzw.y));
 		double n_xyzw = mixf(n_yzw.x, n_yzw.y, fade_xyzw.x);
 		
-		return PyFloat_FromDouble((2.2) * n_xyzw);
+		PyObject* out = PyFloat_FromDouble((2.2) * n_xyzw);
+		free(o);
+		return out;
 	}
 	PY_TYPEERROR("unsupported operand type for perlin(): ", arg);
 	return NULL;
@@ -1329,7 +1341,9 @@ static PyObject* simplex(PyObject* self, PyObject* arg) {
 		//g.yz = a0.yz * x12.xz + h.yz * x12.yw;
 		g.y = a0.y * x12.x + h.y * x12.y;
 		g.z = a0.z * x12.z + h.z * x12.w;
-		return PyFloat_FromDouble((130.) * idot3(m, g));
+		PyObject* out = PyFloat_FromDouble((130.) * idot3(m, g));
+		free(o);
+		return out;
 	}
 	if (vecType == GLM_TVEC3) {
 		ivec3 v = *((ivec3*)o);
@@ -1468,7 +1482,9 @@ static PyObject* simplex(PyObject* self, PyObject* arg) {
 			max(0.6 - idot3(x2, x2), 0.0),
 			max(0.6 - idot3(x3, x3), 0.0));
 		m = mulv4v(m, m);
-		return PyFloat_FromDouble((42.) * idot4(mulv4v(m, m), to_ivec4(idot3(p0, x0), idot3(p1, x1), idot3(p2, x2), idot3(p3, x3))));
+		PyObject* out = PyFloat_FromDouble((42.) * idot4(mulv4v(m, m), to_ivec4(idot3(p0, x0), idot3(p1, x1), idot3(p2, x2), idot3(p3, x3))));
+		free(o);
+		return out;
 	}
 	if (vecType == GLM_TVEC4) {
 		ivec4 v = *((ivec4*)o);
@@ -1585,9 +1601,11 @@ static PyObject* simplex(PyObject* self, PyObject* arg) {
 			max(0.6 - idot4(x4, x4), 0.0));
 		m0 = mulv3v(m0, m0);
 		m1 = mulv2v(m1, m1);
-		return PyFloat_FromDouble((49.) *
+		PyObject* out = PyFloat_FromDouble((49.) *
 			(idot3(mulv3v(m0, m0), to_ivec3(idot4(p0, x0), idot4(p1, x1), idot4(p2, x2))) +
 				idot2(mulv2v(m1, m1), to_ivec2(idot4(p3, x3), idot4(p4, x4)))));
+		free(o);
+		return out;
 	}
 	PY_TYPEERROR("unsupported operand type for simplex(): ", arg);
 	return NULL;
