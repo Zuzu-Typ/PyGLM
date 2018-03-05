@@ -112,15 +112,15 @@ static PyObject* rotate_slow(PyObject* self, PyObject* args) {//////////////////
 
 static PyObject* scale(PyObject* self, PyObject* args) {
 	PyObject* arg1, *arg2;
-	UNPACK_2_VARARGS(args, "translate", arg1, arg2);
+	UNPACK_2_VARARGS(args, "scale", arg1, arg2);
 	imat4x4 m;
 	if (!unpack_imat4x4p(arg1, &m)) {
-		PY_TYPEERROR_2O("unsupported operand type(s) for translate(): ", arg1, arg2);
+		PY_TYPEERROR_2O("unsupported operand type(s) for scale(): ", arg1, arg2);
 		return NULL;
 	}
 	ivec3 v;
 	if (!unpack_ivec3p(arg2, &v)) {
-		PY_TYPEERROR_2O("unsupported operand type(s) for translate(): ", arg1, arg2);
+		PY_TYPEERROR_2O("unsupported operand type(s) for scale(): ", arg1, arg2);
 		return NULL;
 	}
 	return build_imat4x4(to_imat4x4v(
@@ -132,15 +132,15 @@ static PyObject* scale(PyObject* self, PyObject* args) {
 
 static PyObject* scale_slow(PyObject* self, PyObject* args) {
 	PyObject* arg1, *arg2;
-	UNPACK_2_VARARGS(args, "translate", arg1, arg2);
+	UNPACK_2_VARARGS(args, "scale_slow", arg1, arg2);
 	imat4x4 m;
 	if (!unpack_imat4x4p(arg1, &m)) {
-		PY_TYPEERROR_2O("unsupported operand type(s) for translate(): ", arg1, arg2);
+		PY_TYPEERROR_2O("unsupported operand type(s) for scale_slow(): ", arg1, arg2);
 		return NULL;
 	}
 	ivec3 v;
 	if (!unpack_ivec3p(arg2, &v)) {
-		PY_TYPEERROR_2O("unsupported operand type(s) for translate(): ", arg1, arg2);
+		PY_TYPEERROR_2O("unsupported operand type(s) for scale_slow(): ", arg1, arg2);
 		return NULL;
 	}
 	imat4x4 Result = to_imat4x4d(1.0);
