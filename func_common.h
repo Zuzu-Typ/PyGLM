@@ -296,51 +296,36 @@ static PyObject* clamp_(PyObject* self, PyObject* args) {
 	void* o = NULL;
 	char vecType = unpack_ivec(arg1, &o);
 	if (vecType == GLM_TVEC2) {
-		ivec2 * o2 = unpack_ivec2(arg2);
-		ivec2 * o3 = unpack_ivec2(arg3);
-		if (o2 == NULL || o3 == NULL) {
+		ivec2 o2, o3;
+		if (!unpack_ivec2p(arg2, &o2) || !unpack_ivec2p(arg2, &o3)) {
 			free(o);
-			free(o2);
-			free(o3);
 			PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for clamp()");
 			return NULL;
 		}
-		PyObject* out = pack_tvec2(clamp(((ivec2*)o)->x, o2->x, o3->x), clamp(((ivec2*)o)->y, o2->y, o3->y));
+		PyObject* out = pack_tvec2(clamp(((ivec2*)o)->x, o2.x, o3.x), clamp(((ivec2*)o)->y, o2.y, o3.y));
 		free(o);
-		free(o2);
-		free(o3);
 		return out;
 	}
 	if (vecType == GLM_TVEC3) {
-		ivec3 * o2 = unpack_ivec3(arg2);
-		ivec3 * o3 = unpack_ivec3(arg3);
-		if (o2 == NULL || o3 == NULL) {
+		ivec3 o2, o3;
+		if (!unpack_ivec3p(arg2, &o2) || !unpack_ivec3p(arg2, &o3)) {
 			free(o);
-			free(o2);
-			free(o3);
 			PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for clamp()");
 			return NULL;
 		}
-		PyObject* out = pack_tvec3(clamp(((ivec3*)o)->x, o2->x, o3->x), clamp(((ivec3*)o)->y, o2->y, o3->y), clamp(((ivec3*)o)->z, o2->z, o3->z));
+		PyObject* out = pack_tvec3(clamp(((ivec3*)o)->x, o2.x, o3.x), clamp(((ivec3*)o)->y, o2.y, o3.y), clamp(((ivec3*)o)->z, o2.z, o3.z));
 		free(o);
-		free(o2);
-		free(o3);
 		return out;
 	}
 	if (vecType == GLM_TVEC4) {
-		ivec4 * o2 = unpack_ivec4(arg2);
-		ivec4 * o3 = unpack_ivec4(arg3);
-		if (o2 == NULL || o3 == NULL) {
+		ivec4 o2, o3;
+		if (!unpack_ivec4p(arg2, &o2) || !unpack_ivec4p(arg2, &o3)) {
 			free(o);
-			free(o2);
-			free(o3);
 			PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for clamp()");
 			return NULL;
 		}
-		PyObject* out = pack_tvec4(clamp(((ivec4*)o)->x, o2->x, o3->x), clamp(((ivec4*)o)->y, o2->y, o3->y), clamp(((ivec4*)o)->z, o2->z, o3->z), clamp(((ivec4*)o)->w, o2->w, o3->w));
+		PyObject* out = pack_tvec4(clamp(((ivec4*)o)->x, o2.x, o3.x), clamp(((ivec4*)o)->y, o2.y, o3.y), clamp(((ivec4*)o)->z, o2.z, o3.z), clamp(((ivec4*)o)->w, o2.w, o3.w));
 		free(o);
-		free(o2);
-		free(o3);
 		return out;
 	}
 
@@ -370,66 +355,63 @@ static PyObject* mix_(PyObject* self, PyObject* args) {
 		void* o = NULL;
 		char vecType = unpack_ivecq(arg1, &o);
 		if (vecType == GLM_TVEC2) {
-			ivec2* o2 = unpack_ivec2(arg2);
-			if (o2 == NULL) {
+			ivec2 o2;
+			if (!unpack_ivec2p(arg2, &o2)) {
 				free(o);
 				PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for mix()");
 				return NULL;
 			}
-			PyObject* out = pack_tvec2(mixf(((ivec2*)o)->x, o2->x, d), mixf(((ivec2*)o)->y, o2->y, d));
+			PyObject* out = pack_tvec2(mixf(((ivec2*)o)->x, o2.x, d), mixf(((ivec2*)o)->y, o2.y, d));
 			free(o);
-			free(o2);
 			return out;
 		}
 		if (vecType == GLM_TVEC3) {
-			ivec3* o2 = unpack_ivec3(arg2);
-			if (o2 == NULL) {
+			ivec3 o2;
+			if (!unpack_ivec3p(arg2, &o2)) {
 				free(o);
 				PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for mix()");
 				return NULL;
 			}
-			PyObject* out = pack_tvec3(mixf(((ivec3*)o)->x, o2->x, d), mixf(((ivec3*)o)->y, o2->y, d), mixf(((ivec3*)o)->z, o2->z, d));
+			PyObject* out = pack_tvec3(mixf(((ivec3*)o)->x, o2.x, d), mixf(((ivec3*)o)->y, o2.y, d), mixf(((ivec3*)o)->z, o2.z, d));
 			free(o);
-			free(o2);
 			return out;
 		}
 		if (vecType == GLM_TVEC4) {
-			ivec4* o2 = unpack_ivec4(arg2);
-			if (o2 == NULL) {
+			ivec4 o2;
+			if (!unpack_ivec4p(arg2, &o2)) {
 				free(o);
 				PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for mix()");
 				return NULL;
 			}
-			PyObject* out = pack_tvec4(mixf(((ivec4*)o)->x, o2->x, d), mixf(((ivec4*)o)->y, o2->y, d), mixf(((ivec4*)o)->z, o2->z, d), mixf(((ivec4*)o)->w, o2->w, d));
+			PyObject* out = pack_tvec4(mixf(((ivec4*)o)->x, o2.x, d), mixf(((ivec4*)o)->y, o2.y, d), mixf(((ivec4*)o)->z, o2.z, d), mixf(((ivec4*)o)->w, o2.w, d));
 			free(o);
-			free(o2);
 			return out;
 		}
 		if (vecType == GLM_TQUAT) {
-			iquat* o2 = unpack_iquat(arg2);
-			if (o2 == NULL) {
+			iquat o2;
+			if (!unpack_iquatp(arg2, &o2)) {
 				free(o);
 				PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for mix()");
 				return NULL;
 			}
 
-			double cosTheta = idotqp(o, o2);
+			double cosTheta = idotq(*((iquat*)o), o2);
 
 			// Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
 			if (cosTheta > (1.0) - DBL_EPSILON)
 			{
 				// Linear interpolation
 				return build_iquat(to_iquatv(
-					mixf(((iquat*)o)->w, o2->w, d),
-					mixf(((iquat*)o)->x, o2->x, d),
-					mixf(((iquat*)o)->y, o2->y, d),
-					mixf(((iquat*)o)->z, o2->z, d)));
+					mixf(((iquat*)o)->w, o2.w, d),
+					mixf(((iquat*)o)->x, o2.x, d),
+					mixf(((iquat*)o)->y, o2.y, d),
+					mixf(((iquat*)o)->z, o2.z, d)));
 			}
 			else
 			{
 				// Essential Mathematics, page 467
 				double angle = acos(cosTheta);
-				return build_iquat(divqd(addqq(mulqd(*((iquat*)o), sin((1.0 - d) * angle)), mulqd(*o2, sin(d * angle))), sin(angle)));
+				return build_iquat(divqd(addqq(mulqd(*((iquat*)o), sin((1.0 - d) * angle)), mulqd(o2, sin(d * angle))), sin(angle)));
 			}
 		}
 		PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for mix()");
@@ -439,51 +421,36 @@ static PyObject* mix_(PyObject* self, PyObject* args) {
 	void* o = NULL;
 	char vecType = unpack_ivec(arg1, &o);
 	if (vecType == GLM_TVEC2) {
-		ivec2 * o2 = unpack_ivec2(arg2);
-		ivec2 * o3 = unpack_ivec2(arg3);
-		if (o2 == NULL || o3 == NULL) {
+		ivec2 o2, o3;
+		if (!unpack_ivec2p(arg2, &o2) || !unpack_ivec2p(arg3, &o3)) {
 			free(o);
-			free(o2);
-			free(o3);
 			PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for mix()");
 			return NULL;
 		}
-		PyObject* out = pack_tvec2(mixf(((ivec2*)o)->x, o2->x, o3->x), mixf(((ivec2*)o)->y, o2->y, o3->y));
+		PyObject* out = pack_tvec2(mixf(((ivec2*)o)->x, o2.x, o3.x), mixf(((ivec2*)o)->y, o2.y, o3.y));
 		free(o);
-		free(o2);
-		free(o3);
 		return out;
 	}
 	if (vecType == GLM_TVEC3) {
-		ivec3 * o2 = unpack_ivec3(arg2);
-		ivec3 * o3 = unpack_ivec3(arg3);
-		if (o2 == NULL || o3 == NULL) {
+		ivec3 o2, o3;
+		if (!unpack_ivec3p(arg2, &o2) || !unpack_ivec3p(arg3, &o3)) {
 			free(o);
-			free(o2);
-			free(o3);
 			PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for mix()");
 			return NULL;
 		}
-		PyObject* out = pack_tvec3(mixf(((ivec3*)o)->x, o2->x, o3->x), mixf(((ivec3*)o)->y, o2->y, o3->y), mixf(((ivec3*)o)->z, o2->z, o3->z));
+		PyObject* out = pack_tvec3(mixf(((ivec3*)o)->x, o2.x, o3.x), mixf(((ivec3*)o)->y, o2.y, o3.y), mixf(((ivec3*)o)->z, o2.z, o3.z));
 		free(o);
-		free(o2);
-		free(o3);
 		return out;
 	}
 	if (vecType == GLM_TVEC4) {
-		ivec4 * o2 = unpack_ivec4(arg2);
-		ivec4 * o3 = unpack_ivec4(arg3);
-		if (o2 == NULL || o3 == NULL) {
+		ivec4 o2, o3;
+		if (!unpack_ivec4p(arg2, &o2) || unpack_ivec4p(arg3, &o3)) {
 			free(o);
-			free(o2);
-			free(o3);
 			PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for mix()");
 			return NULL;
 		}
-		PyObject* out = pack_tvec4(mixf(((ivec4*)o)->x, o2->x, o3->x), mixf(((ivec4*)o)->y, o2->y, o3->y), mixf(((ivec4*)o)->z, o2->z, o3->z), mixf(((ivec4*)o)->w, o2->w, o3->w));
+		PyObject* out = pack_tvec4(mixf(((ivec4*)o)->x, o2.x, o3.x), mixf(((ivec4*)o)->y, o2.y, o3.y), mixf(((ivec4*)o)->z, o2.z, o3.z), mixf(((ivec4*)o)->w, o2.w, o3.w));
 		free(o);
-		free(o2);
-		free(o3);
 		return out;
 	}
 
@@ -568,6 +535,7 @@ static PyObject* smoothstep_(PyObject* self, PyObject* args) {
 			free(o);
 			return out;
 		}
+		free(o);
 		PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for smoothstep()");
 		return NULL;
 	}
@@ -575,33 +543,31 @@ static PyObject* smoothstep_(PyObject* self, PyObject* args) {
 	void* o = NULL;
 	char vecType = unpack_ivec(arg1, &o);
 	if (vecType == GLM_TVEC2) {
-		ivec2 * o2 = unpack_ivec2(arg2);
-		ivec2 * o3 = unpack_ivec2(arg3);
-		if (o2 == NULL || o3 == NULL) {
+		ivec2 o2, o3;
+		if (!unpack_ivec2p(arg2, &o2) || !unpack_ivec2p(arg3, &o3)) {
 			PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for smoothstep()");
 			return NULL;
 		}
-		return pack_tvec2(mixf(((ivec2*)o)->x, o2->x, o3->x), mixf(((ivec2*)o)->y, o2->y, o3->y));
+		return pack_tvec2(mixf(((ivec2*)o)->x, o2.x, o3.x), mixf(((ivec2*)o)->y, o2.y, o3.y));
 	}
 	if (vecType == GLM_TVEC3) {
-		ivec3 * o2 = unpack_ivec3(arg2);
-		ivec3 * o3 = unpack_ivec3(arg3);
-		if (o2 == NULL || o3 == NULL) {
+		ivec3 o2, o3;
+		if (!unpack_ivec3p(arg2, &o2) || !unpack_ivec3p(arg3, &o3)) {
 			PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for smoothstep()");
 			return NULL;
 		}
-		return pack_tvec3(mixf(((ivec3*)o)->x, o2->x, o3->x), mixf(((ivec3*)o)->y, o2->y, o3->y), mixf(((ivec3*)o)->z, o2->z, o3->z));
+		return pack_tvec3(mixf(((ivec3*)o)->x, o2.x, o3.x), mixf(((ivec3*)o)->y, o2.y, o3.y), mixf(((ivec3*)o)->z, o2.z, o3.z));
 	}
 	if (vecType == GLM_TVEC4) {
-		ivec4 * o2 = unpack_ivec4(arg2);
-		ivec4 * o3 = unpack_ivec4(arg3);
-		if (o2 == NULL || o3 == NULL) {
+		ivec4 o2, o3;
+		if (!unpack_ivec4p(arg2, &o2) || !unpack_ivec4p(arg3, &o3)) {
 			PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for smoothstep()");
 			return NULL;
 		}
-		return pack_tvec4(mixf(((ivec4*)o)->x, o2->x, o3->x), mixf(((ivec4*)o)->y, o2->y, o3->y), mixf(((ivec4*)o)->z, o2->z, o3->z), mixf(((ivec4*)o)->w, o2->w, o3->w));
+		return pack_tvec4(mixf(((ivec4*)o)->x, o2.x, o3.x), mixf(((ivec4*)o)->y, o2.y, o3.y), mixf(((ivec4*)o)->z, o2.z, o3.z), mixf(((ivec4*)o)->w, o2.w, o3.w));
 	}
 
+	free(o);
 	PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for smoothstep()");
 	return NULL;
 }
@@ -619,10 +585,12 @@ static PyObject* isnan_(PyObject* self, PyObject* arg) {
 		Py_RETURN_FALSE;
 	}
 	if (IS_TQUAT(arg)) {
-		iquat* q = unpack_iquat(arg);
-		PyObject* out = pack_tvec4(isnan(q->x), isnan(q->y), isnan(q->z), isnan(q->w));
-		free(q);
-		return out;
+		iquat q;
+		if (!unpack_iquatp(arg, &q)) {
+			PY_TYPEERROR("unsupported operand type for isnan(): ", arg);
+			return NULL;
+		}
+		return pack_tvec4(isnan(q.x), isnan(q.y), isnan(q.z), isnan(q.w));
 	}
 	PyObject * out = functor1(isnanf_, arg);
 
@@ -645,8 +613,12 @@ static PyObject* isinf_(PyObject* self, PyObject* arg) {
 		Py_RETURN_FALSE;
 	}
 	if (IS_TQUAT(arg)) {
-		iquat* q = unpack_iquat(arg);
-		return pack_tvec4(isinf(q->x), isinf(q->y), isinf(q->z), isinf(q->w));
+		iquat q;
+		if (!unpack_iquatp(arg, &q)) {
+			PY_TYPEERROR("unsupported operand type for isnan(): ", arg);
+			return NULL;
+		}
+		return pack_tvec4(isinf(q.x), isinf(q.y), isinf(q.z), isinf(q.w));
 	}
 	PyObject * out = functor1(isinff_, arg);
 

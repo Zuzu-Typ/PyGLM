@@ -1115,9 +1115,9 @@ static double idotq(iquat a, iquat b) {
 	return (a.x * b.x + a.y * b.y) + (a.z * b.z + a.w * b.w);
 }
 
-static double idotqp(iquat* a, iquat* b) {
-	return (a->x * b->x + a->y * b->y) + (a->z * b->z + a->w * b->w);
-}
+//static double idotqp(iquat* a, iquat* b) {
+//	return (a->x * b->x + a->y * b->y) + (a->z * b->z + a->w * b->w);
+//}
 
 static ivec3 icross(ivec3 o, ivec3 o2) {
 	return to_ivec3(
@@ -1373,15 +1373,15 @@ static double idot4(ivec4 o, ivec4 o2) {
 	return (o.x * o2.x + o.y * o2.y + o.z * o2.z + o.w * o2.w);
 }
 
-static double idot2p(void* o, void* o2) {
-	return (((ivec2*)o)->x * ((ivec2*)o2)->x + ((ivec2*)o)->y * ((ivec2*)o2)->y);
-}
-static double idot3p(void* o, void* o2) {
-	return (((ivec3*)o)->x * ((ivec3*)o2)->x + ((ivec3*)o)->y * ((ivec3*)o2)->y + ((ivec3*)o)->z * ((ivec3*)o2)->z);
-}
-static double idot4p(void* o, void* o2) {
-	return (((ivec4*)o)->x * ((ivec4*)o2)->x + ((ivec4*)o)->y * ((ivec4*)o2)->y + ((ivec4*)o)->z * ((ivec4*)o2)->z + ((ivec4*)o)->w * ((ivec4*)o2)->w);
-}
+//static double idot2p(void* o, void* o2) {
+//	return (((ivec2*)o)->x * ((ivec2*)o2)->x + ((ivec2*)o)->y * ((ivec2*)o2)->y);
+//}
+//static double idot3p(void* o, void* o2) {
+//	return (((ivec3*)o)->x * ((ivec3*)o2)->x + ((ivec3*)o)->y * ((ivec3*)o2)->y + ((ivec3*)o)->z * ((ivec3*)o2)->z);
+//}
+//static double idot4p(void* o, void* o2) {
+//	return (((ivec4*)o)->x * ((ivec4*)o2)->x + ((ivec4*)o)->y * ((ivec4*)o2)->y + ((ivec4*)o)->z * ((ivec4*)o2)->z + ((ivec4*)o)->w * ((ivec4*)o2)->w);
+//}
 
 // conversion from PyObject * to glm internal types
 static char unpack_ivec(PyObject * arg, void** o) {
@@ -2810,907 +2810,907 @@ static char unpack_pyobject(PyObject * arg, void** o, short has) {
 #define PY_TYPEERROR_2O(str, obj1, obj2) PyErr_Format(PyExc_TypeError, "%s'%s' and '%s'", str, PYTYPE_AS_CSTRING(obj1), PYTYPE_AS_CSTRING(obj2));
 
 // internal glm type from PyObject
-static ivec2 * unpack_ivec2(PyObject * value) {
-	if (PyObject_TypeCheck(value, &tvec2Type)) {
-		ivec2 * out = (ivec2*)malloc(sizeof(ivec2));
-		*out = to_ivec2(((tvec2 *)value)->x, ((tvec2 *)value)->y);
-		return out;
-	}
-	if (PyTuple_Check(value) && PyTuple_GET_SIZE(value) == 2) {
-		PyObject * x = PyTuple_GET_ITEM(value, 0);
-		PyObject * y = PyTuple_GET_ITEM(value, 1);
-
-		if (IS_NUMERIC(x) && IS_NUMERIC(y)) {
-			ivec2 * out = (ivec2*)malloc(sizeof(ivec2));
-			*out = to_ivec2(pyvalue_as_double(x), pyvalue_as_double(y));
-			return out;
-		}
-		return NULL;
-	}
-	if (PyList_Check(value) && PyList_GET_SIZE(value) == 2) {
-		PyObject * x = PyList_GET_ITEM(value, 0);
-		PyObject * y = PyList_GET_ITEM(value, 1);
-
-		if (IS_NUMERIC(x) && IS_NUMERIC(y)) {
-			ivec2 * out = (ivec2*)malloc(sizeof(ivec2));
-			*out = to_ivec2(pyvalue_as_double(x), pyvalue_as_double(y));
-			return out;
-		}
-		return NULL;
-	}
-	return NULL;
-
-}
-static ivec3 * unpack_ivec3(PyObject * value) {
-	if (PyObject_TypeCheck(value, &tvec3Type)) {
-		ivec3 * out = (ivec3*)malloc(sizeof(ivec3));
-		*out = to_ivec3(((tvec3 *)value)->x, ((tvec3 *)value)->y, ((tvec3 *)value)->z);
-		return out;
-	}
-	if (PyTuple_Check(value) && PyTuple_GET_SIZE(value) == 3) {
-		PyObject * x = PyTuple_GET_ITEM(value, 0);
-		PyObject * y = PyTuple_GET_ITEM(value, 1);
-		PyObject * z = PyTuple_GET_ITEM(value, 2);
-
-		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z)) {
-			ivec3 * out = (ivec3*)malloc(sizeof(ivec3));
-			*out = to_ivec3(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z));
-			return out;
-		}
-		return NULL;
-	}
-	if (PyList_Check(value) && PyList_GET_SIZE(value) == 3) {
-		PyObject * x = PyList_GET_ITEM(value, 0);
-		PyObject * y = PyList_GET_ITEM(value, 1);
-		PyObject * z = PyList_GET_ITEM(value, 2);
-
-		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z)) {
-			ivec3 * out = (ivec3*)malloc(sizeof(ivec3));
-			*out = to_ivec3(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z));
-			return out;
-		}
-		return NULL;
-	}
-	return NULL;
-}
-static ivec4 * unpack_ivec4(PyObject * value) {
-	if (PyObject_TypeCheck(value, &tvec4Type)) {
-		ivec4 * out = (ivec4*)malloc(sizeof(ivec4));
-		*out = to_ivec4(((tvec4 *)value)->x, ((tvec4 *)value)->y, ((tvec4 *)value)->z, ((tvec4 *)value)->w);
-		return out;
-	}
-	if (PyTuple_Check(value) && PyTuple_GET_SIZE(value) == 4) {
-		PyObject * x = PyTuple_GET_ITEM(value, 0);
-		PyObject * y = PyTuple_GET_ITEM(value, 1);
-		PyObject * z = PyTuple_GET_ITEM(value, 2);
-		PyObject * w = PyTuple_GET_ITEM(value, 3);
-
-		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z) && IS_NUMERIC(w)) {
-			ivec4 * out = (ivec4*)malloc(sizeof(ivec4));
-			*out = to_ivec4(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z), pyvalue_as_double(w));
-			return out;
-		}
-		return NULL;
-	}
-	if (PyList_Check(value) && PyList_GET_SIZE(value) == 4) {
-		PyObject * x = PyList_GET_ITEM(value, 0);
-		PyObject * y = PyList_GET_ITEM(value, 1);
-		PyObject * z = PyList_GET_ITEM(value, 2);
-		PyObject * w = PyList_GET_ITEM(value, 3);
-
-		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z) && IS_NUMERIC(w)) {
-			ivec4 * out = (ivec4*)malloc(sizeof(ivec4));
-			*out = to_ivec4(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z), pyvalue_as_double(w));
-			return out;
-		}
-		return NULL;
-	}
-	return NULL;
-}
-
-//static imat2x2 * unpack_imat2x2(PyObject * value) {
-//	if (PyObject_TypeCheck(value, &tmat2x2Type)) {
-//		imat2x2 * out = to_imat2x2p(((tmat2x2 *)value)->x->x, ((tmat2x2 *)value)->x->y, ((tmat2x2 *)value)->y->x, ((tmat2x2 *)value)->y->y);
+//static ivec2 * unpack_ivec2(PyObject * value) {
+//	if (PyObject_TypeCheck(value, &tvec2Type)) {
+//		ivec2 * out = (ivec2*)malloc(sizeof(ivec2));
+//		*out = to_ivec2(((tvec2 *)value)->x, ((tvec2 *)value)->y);
 //		return out;
 //	}
-//	if (PyTuple_Check(value)) {
-//		Py_ssize_t len = PyTuple_GET_SIZE(value);
-//		if (len == 2) {
-//			PyObject *arg1, *arg2;
-//			arg1 = PyTuple_GET_ITEM(value, 0);
-//			arg2 = PyTuple_GET_ITEM(value, 1);
-//			ivec2 *x = unpack_ivec2(arg1);
-//			ivec2 *y = unpack_ivec2(arg2);
-//			if (x != NULL && y != NULL) {
-//				imat2x2* out = to_imat2x2vp(x,y);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 4) {
-//			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
-//			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
-//			PyObject * y0 = PyTuple_GET_ITEM(value, 2);
-//			PyObject * y1 = PyTuple_GET_ITEM(value, 3);
+//	if (PyTuple_Check(value) && PyTuple_GET_SIZE(value) == 2) {
+//		PyObject * x = PyTuple_GET_ITEM(value, 0);
+//		PyObject * y = PyTuple_GET_ITEM(value, 1);
 //
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(y0) && IS_NUMERIC(y1)) {
-//				imat2x2 * out = to_imat2x2p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(y0), pyvalue_as_double(y1));
-//				return out;
-//			}
-//			return NULL;
+//		if (IS_NUMERIC(x) && IS_NUMERIC(y)) {
+//			ivec2 * out = (ivec2*)malloc(sizeof(ivec2));
+//			*out = to_ivec2(pyvalue_as_double(x), pyvalue_as_double(y));
+//			return out;
 //		}
 //		return NULL;
 //	}
-//	if (PyList_Check(value)) {
-//		Py_ssize_t len = PyList_GET_SIZE(value);
-//		if (len == 2) {
-//			PyObject *arg1, *arg2;
-//			arg1 = PyList_GET_ITEM(value, 0);
-//			arg2 = PyList_GET_ITEM(value, 1);
-//			ivec2 *x = unpack_ivec2(arg1);
-//			ivec2 *y = unpack_ivec2(arg2);
-//			if (x != NULL && y != NULL) {
-//				imat2x2* out = to_imat2x2vp(x, y);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 4) {
-//			PyObject * x0 = PyList_GET_ITEM(value, 0);
-//			PyObject * x1 = PyList_GET_ITEM(value, 1);
-//			PyObject * y0 = PyList_GET_ITEM(value, 2);
-//			PyObject * y1 = PyList_GET_ITEM(value, 3);
+//	if (PyList_Check(value) && PyList_GET_SIZE(value) == 2) {
+//		PyObject * x = PyList_GET_ITEM(value, 0);
+//		PyObject * y = PyList_GET_ITEM(value, 1);
 //
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(y0) && IS_NUMERIC(y1)) {
-//				imat2x2 * out = to_imat2x2p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(y0), pyvalue_as_double(y1));
-//				return out;
-//			}
-//			return NULL;
+//		if (IS_NUMERIC(x) && IS_NUMERIC(y)) {
+//			ivec2 * out = (ivec2*)malloc(sizeof(ivec2));
+//			*out = to_ivec2(pyvalue_as_double(x), pyvalue_as_double(y));
+//			return out;
+//		}
+//		return NULL;
+//	}
+//	return NULL;
+//
+//}
+//static ivec3 * unpack_ivec3(PyObject * value) {
+//	if (PyObject_TypeCheck(value, &tvec3Type)) {
+//		ivec3 * out = (ivec3*)malloc(sizeof(ivec3));
+//		*out = to_ivec3(((tvec3 *)value)->x, ((tvec3 *)value)->y, ((tvec3 *)value)->z);
+//		return out;
+//	}
+//	if (PyTuple_Check(value) && PyTuple_GET_SIZE(value) == 3) {
+//		PyObject * x = PyTuple_GET_ITEM(value, 0);
+//		PyObject * y = PyTuple_GET_ITEM(value, 1);
+//		PyObject * z = PyTuple_GET_ITEM(value, 2);
+//
+//		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z)) {
+//			ivec3 * out = (ivec3*)malloc(sizeof(ivec3));
+//			*out = to_ivec3(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z));
+//			return out;
+//		}
+//		return NULL;
+//	}
+//	if (PyList_Check(value) && PyList_GET_SIZE(value) == 3) {
+//		PyObject * x = PyList_GET_ITEM(value, 0);
+//		PyObject * y = PyList_GET_ITEM(value, 1);
+//		PyObject * z = PyList_GET_ITEM(value, 2);
+//
+//		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z)) {
+//			ivec3 * out = (ivec3*)malloc(sizeof(ivec3));
+//			*out = to_ivec3(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z));
+//			return out;
 //		}
 //		return NULL;
 //	}
 //	return NULL;
 //}
-//static imat2x3 * unpack_imat2x3(PyObject * value) {
-//	if (PyObject_TypeCheck(value, &tmat2x3Type)) {
-//		imat2x3 * out = to_imat2x3p(((tmat2x3 *)value)->x->x, ((tmat2x3 *)value)->x->y, ((tmat2x3 *)value)->x->z, ((tmat2x3 *)value)->y->x, ((tmat2x3 *)value)->y->y, ((tmat2x3 *)value)->y->z);
+//static ivec4 * unpack_ivec4(PyObject * value) {
+//	if (PyObject_TypeCheck(value, &tvec4Type)) {
+//		ivec4 * out = (ivec4*)malloc(sizeof(ivec4));
+//		*out = to_ivec4(((tvec4 *)value)->x, ((tvec4 *)value)->y, ((tvec4 *)value)->z, ((tvec4 *)value)->w);
 //		return out;
 //	}
-//	if (PyTuple_Check(value)) {
-//		Py_ssize_t len = PyTuple_GET_SIZE(value);
-//		if (len == 2) {
-//			PyObject *arg1, *arg2;
-//			arg1 = PyTuple_GET_ITEM(value, 0);
-//			arg2 = PyTuple_GET_ITEM(value, 1);
-//			ivec3 *x = unpack_ivec3(arg1);
-//			ivec3 *y = unpack_ivec3(arg2);
-//			if (x != NULL && y != NULL) {
-//				imat2x3* out = to_imat2x3vp(x, y);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 6) {
-//			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
-//			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
-//			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
-//			PyObject * y0 = PyTuple_GET_ITEM(value, 3);
-//			PyObject * y1 = PyTuple_GET_ITEM(value, 4);
-//			PyObject * y2 = PyTuple_GET_ITEM(value, 5);
+//	if (PyTuple_Check(value) && PyTuple_GET_SIZE(value) == 4) {
+//		PyObject * x = PyTuple_GET_ITEM(value, 0);
+//		PyObject * y = PyTuple_GET_ITEM(value, 1);
+//		PyObject * z = PyTuple_GET_ITEM(value, 2);
+//		PyObject * w = PyTuple_GET_ITEM(value, 3);
 //
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2)) {
-//				imat2x3 * out = to_imat2x3p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2));
-//				return out;
-//			}
-//			return NULL;
+//		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z) && IS_NUMERIC(w)) {
+//			ivec4 * out = (ivec4*)malloc(sizeof(ivec4));
+//			*out = to_ivec4(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z), pyvalue_as_double(w));
+//			return out;
 //		}
 //		return NULL;
 //	}
-//	if (PyList_Check(value)) {
-//		Py_ssize_t len = PyList_GET_SIZE(value);
-//		if (len == 2) {
-//			PyObject *arg1, *arg2;
-//			arg1 = PyList_GET_ITEM(value, 0);
-//			arg2 = PyList_GET_ITEM(value, 1);
-//			ivec3 *x = unpack_ivec3(arg1);
-//			ivec3 *y = unpack_ivec3(arg2);
-//			if (x != NULL && y != NULL) {
-//				imat2x3* out = to_imat2x3vp(x, y);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 6) {
-//			PyObject * x0 = PyList_GET_ITEM(value, 0);
-//			PyObject * x1 = PyList_GET_ITEM(value, 1);
-//			PyObject * x2 = PyList_GET_ITEM(value, 2);
-//			PyObject * y0 = PyList_GET_ITEM(value, 3);
-//			PyObject * y1 = PyList_GET_ITEM(value, 4);
-//			PyObject * y2 = PyList_GET_ITEM(value, 5);
+//	if (PyList_Check(value) && PyList_GET_SIZE(value) == 4) {
+//		PyObject * x = PyList_GET_ITEM(value, 0);
+//		PyObject * y = PyList_GET_ITEM(value, 1);
+//		PyObject * z = PyList_GET_ITEM(value, 2);
+//		PyObject * w = PyList_GET_ITEM(value, 3);
 //
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2)) {
-//				imat2x3 * out = to_imat2x3p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	return NULL;
-//}
-//static imat2x4 * unpack_imat2x4(PyObject * value) {
-//	if (PyObject_TypeCheck(value, &tmat2x4Type)) {
-//		imat2x4 * out = to_imat2x4p(((tmat2x4 *)value)->x->x, ((tmat2x4 *)value)->x->y, ((tmat2x4 *)value)->x->z, ((tmat2x4 *)value)->x->w, ((tmat2x4 *)value)->y->x, ((tmat2x4 *)value)->y->y, ((tmat2x4 *)value)->y->z, ((tmat2x4 *)value)->y->w);
-//		return out;
-//	}
-//	if (PyTuple_Check(value)) {
-//		Py_ssize_t len = PyTuple_GET_SIZE(value);
-//		if (len == 2) {
-//			PyObject *arg1, *arg2;
-//			arg1 = PyTuple_GET_ITEM(value, 0);
-//			arg2 = PyTuple_GET_ITEM(value, 1);
-//			ivec4 *x = unpack_ivec4(arg1);
-//			ivec4 *y = unpack_ivec4(arg2);
-//			if (x != NULL && y != NULL) {
-//				imat2x4* out = to_imat2x4vp(x, y);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 8) {
-//			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
-//			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
-//			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
-//			PyObject * x3 = PyTuple_GET_ITEM(value, 3);
-//			PyObject * y0 = PyTuple_GET_ITEM(value, 4);
-//			PyObject * y1 = PyTuple_GET_ITEM(value, 5);
-//			PyObject * y2 = PyTuple_GET_ITEM(value, 6);
-//			PyObject * y3 = PyTuple_GET_ITEM(value, 7);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3)) {
-//				imat2x4 * out = to_imat2x4p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	if (PyList_Check(value)) {
-//		Py_ssize_t len = PyList_GET_SIZE(value);
-//		if (len == 2) {
-//			PyObject *arg1, *arg2;
-//			arg1 = PyList_GET_ITEM(value, 0);
-//			arg2 = PyList_GET_ITEM(value, 1);
-//			ivec4 *x = unpack_ivec4(arg1);
-//			ivec4 *y = unpack_ivec4(arg2);
-//			if (x != NULL && y != NULL) {
-//				imat2x4* out = to_imat2x4vp(x, y);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 8) {
-//			PyObject * x0 = PyList_GET_ITEM(value, 0);
-//			PyObject * x1 = PyList_GET_ITEM(value, 1);
-//			PyObject * x2 = PyList_GET_ITEM(value, 2);
-//			PyObject * x3 = PyList_GET_ITEM(value, 3);
-//			PyObject * y0 = PyList_GET_ITEM(value, 4);
-//			PyObject * y1 = PyList_GET_ITEM(value, 5);
-//			PyObject * y2 = PyList_GET_ITEM(value, 6);
-//			PyObject * y3 = PyList_GET_ITEM(value, 7);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3)) {
-//				imat2x4 * out = to_imat2x4p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3));
-//				return out;
-//			}
-//			return NULL;
+//		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z) && IS_NUMERIC(w)) {
+//			ivec4 * out = (ivec4*)malloc(sizeof(ivec4));
+//			*out = to_ivec4(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z), pyvalue_as_double(w));
+//			return out;
 //		}
 //		return NULL;
 //	}
 //	return NULL;
 //}
 //
-//static imat3x2 * unpack_imat3x2(PyObject * value) {
-//	if (PyObject_TypeCheck(value, &tmat3x2Type)) {
-//		imat3x2 * out = to_imat3x2p(((tmat3x2 *)value)->x->x, ((tmat3x2 *)value)->x->y, ((tmat3x2 *)value)->y->x, ((tmat3x2 *)value)->y->y, ((tmat3x2 *)value)->z->x, ((tmat3x2 *)value)->z->y);
+////static imat2x2 * unpack_imat2x2(PyObject * value) {
+////	if (PyObject_TypeCheck(value, &tmat2x2Type)) {
+////		imat2x2 * out = to_imat2x2p(((tmat2x2 *)value)->x->x, ((tmat2x2 *)value)->x->y, ((tmat2x2 *)value)->y->x, ((tmat2x2 *)value)->y->y);
+////		return out;
+////	}
+////	if (PyTuple_Check(value)) {
+////		Py_ssize_t len = PyTuple_GET_SIZE(value);
+////		if (len == 2) {
+////			PyObject *arg1, *arg2;
+////			arg1 = PyTuple_GET_ITEM(value, 0);
+////			arg2 = PyTuple_GET_ITEM(value, 1);
+////			ivec2 *x = unpack_ivec2(arg1);
+////			ivec2 *y = unpack_ivec2(arg2);
+////			if (x != NULL && y != NULL) {
+////				imat2x2* out = to_imat2x2vp(x,y);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 4) {
+////			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
+////			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
+////			PyObject * y0 = PyTuple_GET_ITEM(value, 2);
+////			PyObject * y1 = PyTuple_GET_ITEM(value, 3);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(y0) && IS_NUMERIC(y1)) {
+////				imat2x2 * out = to_imat2x2p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(y0), pyvalue_as_double(y1));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	if (PyList_Check(value)) {
+////		Py_ssize_t len = PyList_GET_SIZE(value);
+////		if (len == 2) {
+////			PyObject *arg1, *arg2;
+////			arg1 = PyList_GET_ITEM(value, 0);
+////			arg2 = PyList_GET_ITEM(value, 1);
+////			ivec2 *x = unpack_ivec2(arg1);
+////			ivec2 *y = unpack_ivec2(arg2);
+////			if (x != NULL && y != NULL) {
+////				imat2x2* out = to_imat2x2vp(x, y);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 4) {
+////			PyObject * x0 = PyList_GET_ITEM(value, 0);
+////			PyObject * x1 = PyList_GET_ITEM(value, 1);
+////			PyObject * y0 = PyList_GET_ITEM(value, 2);
+////			PyObject * y1 = PyList_GET_ITEM(value, 3);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(y0) && IS_NUMERIC(y1)) {
+////				imat2x2 * out = to_imat2x2p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(y0), pyvalue_as_double(y1));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	return NULL;
+////}
+////static imat2x3 * unpack_imat2x3(PyObject * value) {
+////	if (PyObject_TypeCheck(value, &tmat2x3Type)) {
+////		imat2x3 * out = to_imat2x3p(((tmat2x3 *)value)->x->x, ((tmat2x3 *)value)->x->y, ((tmat2x3 *)value)->x->z, ((tmat2x3 *)value)->y->x, ((tmat2x3 *)value)->y->y, ((tmat2x3 *)value)->y->z);
+////		return out;
+////	}
+////	if (PyTuple_Check(value)) {
+////		Py_ssize_t len = PyTuple_GET_SIZE(value);
+////		if (len == 2) {
+////			PyObject *arg1, *arg2;
+////			arg1 = PyTuple_GET_ITEM(value, 0);
+////			arg2 = PyTuple_GET_ITEM(value, 1);
+////			ivec3 *x = unpack_ivec3(arg1);
+////			ivec3 *y = unpack_ivec3(arg2);
+////			if (x != NULL && y != NULL) {
+////				imat2x3* out = to_imat2x3vp(x, y);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 6) {
+////			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
+////			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
+////			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
+////			PyObject * y0 = PyTuple_GET_ITEM(value, 3);
+////			PyObject * y1 = PyTuple_GET_ITEM(value, 4);
+////			PyObject * y2 = PyTuple_GET_ITEM(value, 5);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2)) {
+////				imat2x3 * out = to_imat2x3p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	if (PyList_Check(value)) {
+////		Py_ssize_t len = PyList_GET_SIZE(value);
+////		if (len == 2) {
+////			PyObject *arg1, *arg2;
+////			arg1 = PyList_GET_ITEM(value, 0);
+////			arg2 = PyList_GET_ITEM(value, 1);
+////			ivec3 *x = unpack_ivec3(arg1);
+////			ivec3 *y = unpack_ivec3(arg2);
+////			if (x != NULL && y != NULL) {
+////				imat2x3* out = to_imat2x3vp(x, y);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 6) {
+////			PyObject * x0 = PyList_GET_ITEM(value, 0);
+////			PyObject * x1 = PyList_GET_ITEM(value, 1);
+////			PyObject * x2 = PyList_GET_ITEM(value, 2);
+////			PyObject * y0 = PyList_GET_ITEM(value, 3);
+////			PyObject * y1 = PyList_GET_ITEM(value, 4);
+////			PyObject * y2 = PyList_GET_ITEM(value, 5);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2)) {
+////				imat2x3 * out = to_imat2x3p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	return NULL;
+////}
+////static imat2x4 * unpack_imat2x4(PyObject * value) {
+////	if (PyObject_TypeCheck(value, &tmat2x4Type)) {
+////		imat2x4 * out = to_imat2x4p(((tmat2x4 *)value)->x->x, ((tmat2x4 *)value)->x->y, ((tmat2x4 *)value)->x->z, ((tmat2x4 *)value)->x->w, ((tmat2x4 *)value)->y->x, ((tmat2x4 *)value)->y->y, ((tmat2x4 *)value)->y->z, ((tmat2x4 *)value)->y->w);
+////		return out;
+////	}
+////	if (PyTuple_Check(value)) {
+////		Py_ssize_t len = PyTuple_GET_SIZE(value);
+////		if (len == 2) {
+////			PyObject *arg1, *arg2;
+////			arg1 = PyTuple_GET_ITEM(value, 0);
+////			arg2 = PyTuple_GET_ITEM(value, 1);
+////			ivec4 *x = unpack_ivec4(arg1);
+////			ivec4 *y = unpack_ivec4(arg2);
+////			if (x != NULL && y != NULL) {
+////				imat2x4* out = to_imat2x4vp(x, y);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 8) {
+////			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
+////			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
+////			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
+////			PyObject * x3 = PyTuple_GET_ITEM(value, 3);
+////			PyObject * y0 = PyTuple_GET_ITEM(value, 4);
+////			PyObject * y1 = PyTuple_GET_ITEM(value, 5);
+////			PyObject * y2 = PyTuple_GET_ITEM(value, 6);
+////			PyObject * y3 = PyTuple_GET_ITEM(value, 7);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3)) {
+////				imat2x4 * out = to_imat2x4p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	if (PyList_Check(value)) {
+////		Py_ssize_t len = PyList_GET_SIZE(value);
+////		if (len == 2) {
+////			PyObject *arg1, *arg2;
+////			arg1 = PyList_GET_ITEM(value, 0);
+////			arg2 = PyList_GET_ITEM(value, 1);
+////			ivec4 *x = unpack_ivec4(arg1);
+////			ivec4 *y = unpack_ivec4(arg2);
+////			if (x != NULL && y != NULL) {
+////				imat2x4* out = to_imat2x4vp(x, y);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 8) {
+////			PyObject * x0 = PyList_GET_ITEM(value, 0);
+////			PyObject * x1 = PyList_GET_ITEM(value, 1);
+////			PyObject * x2 = PyList_GET_ITEM(value, 2);
+////			PyObject * x3 = PyList_GET_ITEM(value, 3);
+////			PyObject * y0 = PyList_GET_ITEM(value, 4);
+////			PyObject * y1 = PyList_GET_ITEM(value, 5);
+////			PyObject * y2 = PyList_GET_ITEM(value, 6);
+////			PyObject * y3 = PyList_GET_ITEM(value, 7);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3)) {
+////				imat2x4 * out = to_imat2x4p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	return NULL;
+////}
+////
+////static imat3x2 * unpack_imat3x2(PyObject * value) {
+////	if (PyObject_TypeCheck(value, &tmat3x2Type)) {
+////		imat3x2 * out = to_imat3x2p(((tmat3x2 *)value)->x->x, ((tmat3x2 *)value)->x->y, ((tmat3x2 *)value)->y->x, ((tmat3x2 *)value)->y->y, ((tmat3x2 *)value)->z->x, ((tmat3x2 *)value)->z->y);
+////		return out;
+////	}
+////	if (PyTuple_Check(value)) {
+////		Py_ssize_t len = PyTuple_GET_SIZE(value);
+////		if (len == 3) {
+////			PyObject *arg1, *arg2, *arg3;
+////			arg1 = PyTuple_GET_ITEM(value, 0);
+////			arg2 = PyTuple_GET_ITEM(value, 1);
+////			arg3 = PyTuple_GET_ITEM(value, 2);
+////			ivec2 *x = unpack_ivec2(arg1);
+////			ivec2 *y = unpack_ivec2(arg2);
+////			ivec2 *z = unpack_ivec2(arg3);
+////			if (x != NULL && y != NULL && z != NULL) {
+////				imat3x2* out = to_imat3x2vp(x, y, z);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 6) {
+////			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
+////			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
+////			PyObject * y0 = PyTuple_GET_ITEM(value, 2);
+////			PyObject * y1 = PyTuple_GET_ITEM(value, 3);
+////			PyObject * z0 = PyTuple_GET_ITEM(value, 4);
+////			PyObject * z1 = PyTuple_GET_ITEM(value, 5);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(z0) && IS_NUMERIC(z1)) {
+////				imat3x2 * out = to_imat3x2p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(z0), pyvalue_as_double(z1));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	if (PyList_Check(value)) {
+////		Py_ssize_t len = PyList_GET_SIZE(value);
+////		if (len == 3) {
+////			PyObject *arg1, *arg2, *arg3;
+////			arg1 = PyList_GET_ITEM(value, 0);
+////			arg2 = PyList_GET_ITEM(value, 1);
+////			arg3 = PyList_GET_ITEM(value, 2);
+////			ivec2 *x = unpack_ivec2(arg1);
+////			ivec2 *y = unpack_ivec2(arg2);
+////			ivec2 *z = unpack_ivec2(arg3);
+////			if (x != NULL && y != NULL && z != NULL) {
+////				imat3x2* out = to_imat3x2vp(x, y, z);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 6) {
+////			PyObject * x0 = PyList_GET_ITEM(value, 0);
+////			PyObject * x1 = PyList_GET_ITEM(value, 1);
+////			PyObject * y0 = PyList_GET_ITEM(value, 2);
+////			PyObject * y1 = PyList_GET_ITEM(value, 3);
+////			PyObject * z0 = PyList_GET_ITEM(value, 4);
+////			PyObject * z1 = PyList_GET_ITEM(value, 5);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(z0) && IS_NUMERIC(z1)) {
+////				imat3x2 * out = to_imat3x2p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(z0), pyvalue_as_double(z1));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	return NULL;
+////}
+////static imat3x3 * unpack_imat3x3(PyObject * value) {
+////	if (PyObject_TypeCheck(value, &tmat3x3Type)) {
+////		imat3x3 * out = to_imat3x3p(((tmat3x3 *)value)->x->x, ((tmat3x3 *)value)->x->y, ((tmat3x3 *)value)->x->z, ((tmat3x3 *)value)->y->x, ((tmat3x3 *)value)->y->y, ((tmat3x3 *)value)->y->z, ((tmat3x3 *)value)->z->x, ((tmat3x3 *)value)->z->y, ((tmat3x3 *)value)->z->z);
+////		return out;
+////	}
+////	if (PyTuple_Check(value)) {
+////		Py_ssize_t len = PyTuple_GET_SIZE(value);
+////		if (len == 3) {
+////			PyObject *arg1, *arg2, *arg3;
+////			arg1 = PyTuple_GET_ITEM(value, 0);
+////			arg2 = PyTuple_GET_ITEM(value, 1);
+////			arg3 = PyTuple_GET_ITEM(value, 2);
+////			ivec3 *x = unpack_ivec3(arg1);
+////			ivec3 *y = unpack_ivec3(arg2);
+////			ivec3 *z = unpack_ivec3(arg3);
+////			if (x != NULL && y != NULL && z != NULL) {
+////				imat3x3* out = to_imat3x3vp(x, y, z);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 9) {
+////			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
+////			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
+////			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
+////			PyObject * y0 = PyTuple_GET_ITEM(value, 3);
+////			PyObject * y1 = PyTuple_GET_ITEM(value, 4);
+////			PyObject * y2 = PyTuple_GET_ITEM(value, 5);
+////			PyObject * z0 = PyTuple_GET_ITEM(value, 6);
+////			PyObject * z1 = PyTuple_GET_ITEM(value, 7);
+////			PyObject * z2 = PyTuple_GET_ITEM(value, 8);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2)) {
+////				imat3x3 * out = to_imat3x3p(
+////					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), 
+////					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), 
+////					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	if (PyList_Check(value)) {
+////		Py_ssize_t len = PyList_GET_SIZE(value);
+////		if (len == 3) {
+////			PyObject *arg1, *arg2, *arg3;
+////			arg1 = PyList_GET_ITEM(value, 0);
+////			arg2 = PyList_GET_ITEM(value, 1);
+////			arg3 = PyList_GET_ITEM(value, 2);
+////			ivec3 *x = unpack_ivec3(arg1);
+////			ivec3 *y = unpack_ivec3(arg2);
+////			ivec3 *z = unpack_ivec3(arg3);
+////			if (x != NULL && y != NULL && z != NULL) {
+////				imat3x3* out = to_imat3x3vp(x, y, z);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 9) {
+////			PyObject * x0 = PyList_GET_ITEM(value, 0);
+////			PyObject * x1 = PyList_GET_ITEM(value, 1);
+////			PyObject * x2 = PyList_GET_ITEM(value, 2);
+////			PyObject * y0 = PyList_GET_ITEM(value, 3);
+////			PyObject * y1 = PyList_GET_ITEM(value, 4);
+////			PyObject * y2 = PyList_GET_ITEM(value, 5);
+////			PyObject * z0 = PyList_GET_ITEM(value, 6);
+////			PyObject * z1 = PyList_GET_ITEM(value, 7);
+////			PyObject * z2 = PyList_GET_ITEM(value, 8);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2)) {
+////				imat3x3 * out = to_imat3x3p(
+////					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2),
+////					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2),
+////					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	return NULL;
+////}
+////static imat3x4 * unpack_imat3x4(PyObject * value) {
+////	if (PyObject_TypeCheck(value, &tmat3x4Type)) {
+////		imat3x4 * out = to_imat3x4p(
+////			((tmat3x4 *)value)->x->x, ((tmat3x4 *)value)->x->y, ((tmat3x4 *)value)->x->z, ((tmat3x4 *)value)->x->w,
+////			((tmat3x4 *)value)->y->x, ((tmat3x4 *)value)->y->y, ((tmat3x4 *)value)->y->z, ((tmat3x4 *)value)->y->w,
+////			((tmat3x4 *)value)->z->x, ((tmat3x4 *)value)->z->y, ((tmat3x4 *)value)->z->z, ((tmat3x4 *)value)->z->w);
+////		return out;
+////	}
+////	if (PyTuple_Check(value)) {
+////		Py_ssize_t len = PyTuple_GET_SIZE(value);
+////		if (len == 3) {
+////			PyObject *arg1, *arg2, *arg3;
+////			arg1 = PyTuple_GET_ITEM(value, 0);
+////			arg2 = PyTuple_GET_ITEM(value, 1);
+////			arg3 = PyTuple_GET_ITEM(value, 2);
+////			ivec4 *x = unpack_ivec4(arg1);
+////			ivec4 *y = unpack_ivec4(arg2);
+////			ivec4 *z = unpack_ivec4(arg3);
+////			if (x != NULL && y != NULL && z != NULL) {
+////				imat3x4* out = to_imat3x4vp(x, y, z);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 12) {
+////			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
+////			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
+////			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
+////			PyObject * x3 = PyTuple_GET_ITEM(value, 3);
+////			PyObject * y0 = PyTuple_GET_ITEM(value, 4);
+////			PyObject * y1 = PyTuple_GET_ITEM(value, 5);
+////			PyObject * y2 = PyTuple_GET_ITEM(value, 6);
+////			PyObject * y3 = PyTuple_GET_ITEM(value, 7);
+////			PyObject * z0 = PyTuple_GET_ITEM(value, 8);
+////			PyObject * z1 = PyTuple_GET_ITEM(value, 9);
+////			PyObject * z2 = PyTuple_GET_ITEM(value, 10);
+////			PyObject * z3 = PyTuple_GET_ITEM(value, 11);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) &&
+////				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3) &&
+////				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) && IS_NUMERIC(z3)) {
+////				imat3x4 * out = to_imat3x4p(
+////					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3),
+////					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3),
+////					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2), pyvalue_as_double(z3));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	if (PyList_Check(value)) {
+////		Py_ssize_t len = PyList_GET_SIZE(value);
+////		if (len == 3) {
+////			PyObject *arg1, *arg2, *arg3;
+////			arg1 = PyList_GET_ITEM(value, 0);
+////			arg2 = PyList_GET_ITEM(value, 1);
+////			arg3 = PyList_GET_ITEM(value, 2);
+////			ivec4 *x = unpack_ivec4(arg1);
+////			ivec4 *y = unpack_ivec4(arg2);
+////			ivec4 *z = unpack_ivec4(arg3);
+////			if (x != NULL && y != NULL && z != NULL) {
+////				imat3x4* out = to_imat3x4vp(x, y, z);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 12) {
+////			PyObject * x0 = PyList_GET_ITEM(value, 0);
+////			PyObject * x1 = PyList_GET_ITEM(value, 1);
+////			PyObject * x2 = PyList_GET_ITEM(value, 2);
+////			PyObject * x3 = PyList_GET_ITEM(value, 3);
+////			PyObject * y0 = PyList_GET_ITEM(value, 4);
+////			PyObject * y1 = PyList_GET_ITEM(value, 5);
+////			PyObject * y2 = PyList_GET_ITEM(value, 6);
+////			PyObject * y3 = PyList_GET_ITEM(value, 7);
+////			PyObject * z0 = PyList_GET_ITEM(value, 8);
+////			PyObject * z1 = PyList_GET_ITEM(value, 9);
+////			PyObject * z2 = PyList_GET_ITEM(value, 10);
+////			PyObject * z3 = PyList_GET_ITEM(value, 11);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) &&
+////				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3) &&
+////				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) && IS_NUMERIC(z3)) {
+////				imat3x4 * out = to_imat3x4p(
+////					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3),
+////					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3),
+////					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2), pyvalue_as_double(z3));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	return NULL;
+////}
+////
+////static imat4x2 * unpack_imat4x2(PyObject * value) {
+////	if (PyObject_TypeCheck(value, &tmat4x2Type)) {
+////		imat4x2 * out = to_imat4x2p(
+////			((tmat4x2 *)value)->x->x, ((tmat4x2 *)value)->x->y, 
+////			((tmat4x2 *)value)->y->x, ((tmat4x2 *)value)->y->y, 
+////			((tmat4x2 *)value)->z->x, ((tmat4x2 *)value)->z->y,
+////			((tmat4x2 *)value)->w->x, ((tmat4x2 *)value)->w->y);
+////		return out;
+////	}
+////	if (PyTuple_Check(value)) {
+////		Py_ssize_t len = PyTuple_GET_SIZE(value);
+////		if (len == 4) {
+////			PyObject *arg1, *arg2, *arg3, * arg4;
+////			arg1 = PyTuple_GET_ITEM(value, 0);
+////			arg2 = PyTuple_GET_ITEM(value, 1);
+////			arg3 = PyTuple_GET_ITEM(value, 2);
+////			arg4 = PyTuple_GET_ITEM(value, 3);
+////			ivec2 *x = unpack_ivec2(arg1);
+////			ivec2 *y = unpack_ivec2(arg2);
+////			ivec2 *z = unpack_ivec2(arg3);
+////			ivec2 *w = unpack_ivec2(arg4);
+////			if (x != NULL && y != NULL && z != NULL && w != NULL) {
+////				imat4x2* out = to_imat4x2vp(x, y, z, w);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 8) {
+////			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
+////			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
+////			PyObject * y0 = PyTuple_GET_ITEM(value, 2);
+////			PyObject * y1 = PyTuple_GET_ITEM(value, 3);
+////			PyObject * z0 = PyTuple_GET_ITEM(value, 4);
+////			PyObject * z1 = PyTuple_GET_ITEM(value, 5);
+////			PyObject * w0 = PyTuple_GET_ITEM(value, 6);
+////			PyObject * w1 = PyTuple_GET_ITEM(value, 7);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && 
+////				IS_NUMERIC(y0) && IS_NUMERIC(y1) && 
+////				IS_NUMERIC(z0) && IS_NUMERIC(z1) &&
+////				IS_NUMERIC(w0) && IS_NUMERIC(w1)) {
+////				imat4x2 * out = to_imat4x2p(
+////					pyvalue_as_double(x0), pyvalue_as_double(x1), 
+////					pyvalue_as_double(y0), pyvalue_as_double(y1), 
+////					pyvalue_as_double(z0), pyvalue_as_double(z1),
+////					pyvalue_as_double(w0), pyvalue_as_double(w1));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	if (PyList_Check(value)) {
+////		Py_ssize_t len = PyList_GET_SIZE(value);
+////		if (len == 4) {
+////			PyObject *arg1, *arg2, *arg3, *arg4;
+////			arg1 = PyList_GET_ITEM(value, 0);
+////			arg2 = PyList_GET_ITEM(value, 1);
+////			arg3 = PyList_GET_ITEM(value, 2);
+////			arg4 = PyList_GET_ITEM(value, 3);
+////			ivec2 *x = unpack_ivec2(arg1);
+////			ivec2 *y = unpack_ivec2(arg2);
+////			ivec2 *z = unpack_ivec2(arg3);
+////			ivec2 *w = unpack_ivec2(arg4);
+////			if (x != NULL && y != NULL && z != NULL && w != NULL) {
+////				imat4x2* out = to_imat4x2vp(x, y, z, w);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 8) {
+////			PyObject * x0 = PyList_GET_ITEM(value, 0);
+////			PyObject * x1 = PyList_GET_ITEM(value, 1);
+////			PyObject * y0 = PyList_GET_ITEM(value, 2);
+////			PyObject * y1 = PyList_GET_ITEM(value, 3);
+////			PyObject * z0 = PyList_GET_ITEM(value, 4);
+////			PyObject * z1 = PyList_GET_ITEM(value, 5);
+////			PyObject * w0 = PyList_GET_ITEM(value, 6);
+////			PyObject * w1 = PyList_GET_ITEM(value, 7);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) &&
+////				IS_NUMERIC(y0) && IS_NUMERIC(y1) &&
+////				IS_NUMERIC(z0) && IS_NUMERIC(z1) &&
+////				IS_NUMERIC(w0) && IS_NUMERIC(w1)) {
+////				imat4x2 * out = to_imat4x2p(
+////					pyvalue_as_double(x0), pyvalue_as_double(x1),
+////					pyvalue_as_double(y0), pyvalue_as_double(y1),
+////					pyvalue_as_double(z0), pyvalue_as_double(z1),
+////					pyvalue_as_double(w0), pyvalue_as_double(w1));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	return NULL;
+////}
+////static imat4x3 * unpack_imat4x3(PyObject * value) {
+////	if (PyObject_TypeCheck(value, &tmat4x3Type)) {
+////		imat4x3 * out = to_imat4x3p(
+////			((tmat4x3 *)value)->x->x, ((tmat4x3 *)value)->x->y, ((tmat4x3 *)value)->x->z,
+////			((tmat4x3 *)value)->y->x, ((tmat4x3 *)value)->y->y, ((tmat4x3 *)value)->y->z,
+////			((tmat4x3 *)value)->z->x, ((tmat4x3 *)value)->z->y, ((tmat4x3 *)value)->z->z,
+////			((tmat4x3 *)value)->w->x, ((tmat4x3 *)value)->w->y, ((tmat4x3 *)value)->w->z);
+////		return out;
+////	}
+////	if (PyTuple_Check(value)) {
+////		Py_ssize_t len = PyTuple_GET_SIZE(value);
+////		if (len == 4) {
+////			PyObject *arg1, *arg2, *arg3, *arg4;
+////			arg1 = PyTuple_GET_ITEM(value, 0);
+////			arg2 = PyTuple_GET_ITEM(value, 1);
+////			arg3 = PyTuple_GET_ITEM(value, 2);
+////			arg4 = PyTuple_GET_ITEM(value, 3);
+////			ivec3 *x = unpack_ivec3(arg1);
+////			ivec3 *y = unpack_ivec3(arg2);
+////			ivec3 *z = unpack_ivec3(arg3);
+////			ivec3 *w = unpack_ivec3(arg4);
+////			if (x != NULL && y != NULL && z != NULL && w != NULL) {
+////				imat4x3* out = to_imat4x3vp(x, y, z, w);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 12) {
+////			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
+////			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
+////			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
+////			PyObject * y0 = PyTuple_GET_ITEM(value, 3);
+////			PyObject * y1 = PyTuple_GET_ITEM(value, 4);
+////			PyObject * y2 = PyTuple_GET_ITEM(value, 5);
+////			PyObject * z0 = PyTuple_GET_ITEM(value, 6);
+////			PyObject * z1 = PyTuple_GET_ITEM(value, 7);
+////			PyObject * z2 = PyTuple_GET_ITEM(value, 8);
+////			PyObject * w0 = PyTuple_GET_ITEM(value, 9);
+////			PyObject * w1 = PyTuple_GET_ITEM(value, 10);
+////			PyObject * w2 = PyTuple_GET_ITEM(value, 11);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) &&
+////				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) &&
+////				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) &&
+////				IS_NUMERIC(w0) && IS_NUMERIC(w1) && IS_NUMERIC(w2)) {
+////				imat4x3 * out = to_imat4x3p(
+////					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2),
+////					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2),
+////					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2),
+////					pyvalue_as_double(w0), pyvalue_as_double(w1), pyvalue_as_double(w2));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	if (PyList_Check(value)) {
+////		Py_ssize_t len = PyList_GET_SIZE(value);
+////		if (len == 4) {
+////			PyObject *arg1, *arg2, *arg3, *arg4;
+////			arg1 = PyList_GET_ITEM(value, 0);
+////			arg2 = PyList_GET_ITEM(value, 1);
+////			arg3 = PyList_GET_ITEM(value, 2);
+////			arg4 = PyList_GET_ITEM(value, 3);
+////			ivec3 *x = unpack_ivec3(arg1);
+////			ivec3 *y = unpack_ivec3(arg2);
+////			ivec3 *z = unpack_ivec3(arg3);
+////			ivec3 *w = unpack_ivec3(arg4);
+////			if (x != NULL && y != NULL && z != NULL && w != NULL) {
+////				imat4x3* out = to_imat4x3vp(x, y, z, w);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 12) {
+////			PyObject * x0 = PyList_GET_ITEM(value, 0);
+////			PyObject * x1 = PyList_GET_ITEM(value, 1);
+////			PyObject * x2 = PyList_GET_ITEM(value, 2);
+////			PyObject * y0 = PyList_GET_ITEM(value, 3);
+////			PyObject * y1 = PyList_GET_ITEM(value, 4);
+////			PyObject * y2 = PyList_GET_ITEM(value, 5);
+////			PyObject * z0 = PyList_GET_ITEM(value, 6);
+////			PyObject * z1 = PyList_GET_ITEM(value, 7);
+////			PyObject * z2 = PyList_GET_ITEM(value, 8);
+////			PyObject * w0 = PyList_GET_ITEM(value, 9);
+////			PyObject * w1 = PyList_GET_ITEM(value, 10);
+////			PyObject * w2 = PyList_GET_ITEM(value, 11);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) &&
+////				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) &&
+////				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) &&
+////				IS_NUMERIC(w0) && IS_NUMERIC(w1) && IS_NUMERIC(w2)) {
+////				imat4x3 * out = to_imat4x3p(
+////					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2),
+////					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2),
+////					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2),
+////					pyvalue_as_double(w0), pyvalue_as_double(w1), pyvalue_as_double(w2));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	return NULL;
+////}
+////static imat4x4 * unpack_imat4x4(PyObject * value) {
+////	if (PyObject_TypeCheck(value, &tmat4x4Type)) {
+////		imat4x4 * out = to_imat4x4p(
+////			((tmat4x4 *)value)->x->x, ((tmat4x4 *)value)->x->y, ((tmat4x4 *)value)->x->z, ((tmat4x4 *)value)->x->w,
+////			((tmat4x4 *)value)->y->x, ((tmat4x4 *)value)->y->y, ((tmat4x4 *)value)->y->z, ((tmat4x4 *)value)->y->w,
+////			((tmat4x4 *)value)->z->x, ((tmat4x4 *)value)->z->y, ((tmat4x4 *)value)->z->z, ((tmat4x4 *)value)->z->w,
+////			((tmat4x4 *)value)->w->x, ((tmat4x4 *)value)->w->y, ((tmat4x4 *)value)->w->z, ((tmat4x4 *)value)->w->w);
+////		return out;
+////	}
+////	if (PyTuple_Check(value)) {
+////		Py_ssize_t len = PyTuple_GET_SIZE(value);
+////		if (len == 4) {
+////			PyObject *arg1, *arg2, *arg3, *arg4;
+////			arg1 = PyTuple_GET_ITEM(value, 0);
+////			arg2 = PyTuple_GET_ITEM(value, 1);
+////			arg3 = PyTuple_GET_ITEM(value, 2);
+////			arg4 = PyTuple_GET_ITEM(value, 3);
+////			ivec4 *x = unpack_ivec4(arg1);
+////			ivec4 *y = unpack_ivec4(arg2);
+////			ivec4 *z = unpack_ivec4(arg3);
+////			ivec4 *w = unpack_ivec4(arg4);
+////			if (x != NULL && y != NULL && z != NULL && w != NULL) {
+////				imat4x4* out = to_imat4x4vp(x, y, z, w);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 16) {
+////			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
+////			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
+////			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
+////			PyObject * x3 = PyTuple_GET_ITEM(value, 3);
+////			PyObject * y0 = PyTuple_GET_ITEM(value, 4);
+////			PyObject * y1 = PyTuple_GET_ITEM(value, 5);
+////			PyObject * y2 = PyTuple_GET_ITEM(value, 6);
+////			PyObject * y3 = PyTuple_GET_ITEM(value, 7);
+////			PyObject * z0 = PyTuple_GET_ITEM(value, 8);
+////			PyObject * z1 = PyTuple_GET_ITEM(value, 9);
+////			PyObject * z2 = PyTuple_GET_ITEM(value, 10);
+////			PyObject * z3 = PyTuple_GET_ITEM(value, 11);
+////			PyObject * w0 = PyTuple_GET_ITEM(value, 12);
+////			PyObject * w1 = PyTuple_GET_ITEM(value, 13);
+////			PyObject * w2 = PyTuple_GET_ITEM(value, 14);
+////			PyObject * w3 = PyTuple_GET_ITEM(value, 15);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) &&
+////				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3) &&
+////				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) && IS_NUMERIC(z3) &&
+////				IS_NUMERIC(w0) && IS_NUMERIC(w1) && IS_NUMERIC(w2) && IS_NUMERIC(w3)) {
+////				imat4x4 * out = to_imat4x4p(
+////					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3),
+////					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3),
+////					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2), pyvalue_as_double(z3),
+////					pyvalue_as_double(w0), pyvalue_as_double(w1), pyvalue_as_double(w2), pyvalue_as_double(w3));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	if (PyList_Check(value)) {
+////		Py_ssize_t len = PyList_GET_SIZE(value);
+////		if (len == 4) {
+////			PyObject *arg1, *arg2, *arg3, *arg4;
+////			arg1 = PyList_GET_ITEM(value, 0);
+////			arg2 = PyList_GET_ITEM(value, 1);
+////			arg3 = PyList_GET_ITEM(value, 2);
+////			arg4 = PyList_GET_ITEM(value, 3);
+////			ivec4 *x = unpack_ivec4(arg1);
+////			ivec4 *y = unpack_ivec4(arg2);
+////			ivec4 *z = unpack_ivec4(arg3);
+////			ivec4 *w = unpack_ivec4(arg4);
+////			if (x != NULL && y != NULL && z != NULL && w != NULL) {
+////				imat4x4* out = to_imat4x4vp(x, y, z, w);
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		if (len == 16) {
+////			PyObject * x0 = PyList_GET_ITEM(value, 0);
+////			PyObject * x1 = PyList_GET_ITEM(value, 1);
+////			PyObject * x2 = PyList_GET_ITEM(value, 2);
+////			PyObject * x3 = PyList_GET_ITEM(value, 3);
+////			PyObject * y0 = PyList_GET_ITEM(value, 4);
+////			PyObject * y1 = PyList_GET_ITEM(value, 5);
+////			PyObject * y2 = PyList_GET_ITEM(value, 6);
+////			PyObject * y3 = PyList_GET_ITEM(value, 7);
+////			PyObject * z0 = PyList_GET_ITEM(value, 8);
+////			PyObject * z1 = PyList_GET_ITEM(value, 9);
+////			PyObject * z2 = PyList_GET_ITEM(value, 10);
+////			PyObject * z3 = PyList_GET_ITEM(value, 11);
+////			PyObject * w0 = PyList_GET_ITEM(value, 12);
+////			PyObject * w1 = PyList_GET_ITEM(value, 13);
+////			PyObject * w2 = PyList_GET_ITEM(value, 14);
+////			PyObject * w3 = PyList_GET_ITEM(value, 15);
+////
+////			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) &&
+////				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3) &&
+////				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) && IS_NUMERIC(z3) &&
+////				IS_NUMERIC(w0) && IS_NUMERIC(w1) && IS_NUMERIC(w2) && IS_NUMERIC(w3)) {
+////				imat4x4 * out = to_imat4x4p(
+////					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3),
+////					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3),
+////					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2), pyvalue_as_double(z3),
+////					pyvalue_as_double(w0), pyvalue_as_double(w1), pyvalue_as_double(w2), pyvalue_as_double(w3));
+////				return out;
+////			}
+////			return NULL;
+////		}
+////		return NULL;
+////	}
+////	return NULL;
+////}
+//
+//static iquat * unpack_iquat(PyObject * value) {
+//	if (PyObject_TypeCheck(value, &tquatType)) {
+//		iquat * out = (iquat*)malloc(sizeof(iquat));
+//		*out = to_iquatq(((tquat *)value)->x, ((tquat *)value)->y, ((tquat *)value)->z, ((tquat *)value)->w);
 //		return out;
 //	}
-//	if (PyTuple_Check(value)) {
-//		Py_ssize_t len = PyTuple_GET_SIZE(value);
-//		if (len == 3) {
-//			PyObject *arg1, *arg2, *arg3;
-//			arg1 = PyTuple_GET_ITEM(value, 0);
-//			arg2 = PyTuple_GET_ITEM(value, 1);
-//			arg3 = PyTuple_GET_ITEM(value, 2);
-//			ivec2 *x = unpack_ivec2(arg1);
-//			ivec2 *y = unpack_ivec2(arg2);
-//			ivec2 *z = unpack_ivec2(arg3);
-//			if (x != NULL && y != NULL && z != NULL) {
-//				imat3x2* out = to_imat3x2vp(x, y, z);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 6) {
-//			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
-//			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
-//			PyObject * y0 = PyTuple_GET_ITEM(value, 2);
-//			PyObject * y1 = PyTuple_GET_ITEM(value, 3);
-//			PyObject * z0 = PyTuple_GET_ITEM(value, 4);
-//			PyObject * z1 = PyTuple_GET_ITEM(value, 5);
+//	if (PyTuple_Check(value) && PyTuple_GET_SIZE(value) == 4) {
+//		PyObject * x = PyTuple_GET_ITEM(value, 0);
+//		PyObject * y = PyTuple_GET_ITEM(value, 1);
+//		PyObject * z = PyTuple_GET_ITEM(value, 2);
+//		PyObject * w = PyTuple_GET_ITEM(value, 3);
 //
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(z0) && IS_NUMERIC(z1)) {
-//				imat3x2 * out = to_imat3x2p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(z0), pyvalue_as_double(z1));
-//				return out;
-//			}
-//			return NULL;
+//		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z) && IS_NUMERIC(w)) {
+//			iquat * out = (iquat*)malloc(sizeof(iquat));
+//			*out = to_iquatq(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z), pyvalue_as_double(w));
+//			return out;
 //		}
 //		return NULL;
 //	}
-//	if (PyList_Check(value)) {
-//		Py_ssize_t len = PyList_GET_SIZE(value);
-//		if (len == 3) {
-//			PyObject *arg1, *arg2, *arg3;
-//			arg1 = PyList_GET_ITEM(value, 0);
-//			arg2 = PyList_GET_ITEM(value, 1);
-//			arg3 = PyList_GET_ITEM(value, 2);
-//			ivec2 *x = unpack_ivec2(arg1);
-//			ivec2 *y = unpack_ivec2(arg2);
-//			ivec2 *z = unpack_ivec2(arg3);
-//			if (x != NULL && y != NULL && z != NULL) {
-//				imat3x2* out = to_imat3x2vp(x, y, z);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 6) {
-//			PyObject * x0 = PyList_GET_ITEM(value, 0);
-//			PyObject * x1 = PyList_GET_ITEM(value, 1);
-//			PyObject * y0 = PyList_GET_ITEM(value, 2);
-//			PyObject * y1 = PyList_GET_ITEM(value, 3);
-//			PyObject * z0 = PyList_GET_ITEM(value, 4);
-//			PyObject * z1 = PyList_GET_ITEM(value, 5);
+//	if (PyList_Check(value) && PyList_GET_SIZE(value) == 4) {
+//		PyObject * x = PyList_GET_ITEM(value, 0);
+//		PyObject * y = PyList_GET_ITEM(value, 1);
+//		PyObject * z = PyList_GET_ITEM(value, 2);
+//		PyObject * w = PyList_GET_ITEM(value, 3);
 //
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(z0) && IS_NUMERIC(z1)) {
-//				imat3x2 * out = to_imat3x2p(pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(z0), pyvalue_as_double(z1));
-//				return out;
-//			}
-//			return NULL;
+//		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z) && IS_NUMERIC(w)) {
+//			iquat * out = (iquat*)malloc(sizeof(iquat));
+//			*out = to_iquatq(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z), pyvalue_as_double(w));
+//			return out;
 //		}
 //		return NULL;
 //	}
 //	return NULL;
 //}
-//static imat3x3 * unpack_imat3x3(PyObject * value) {
-//	if (PyObject_TypeCheck(value, &tmat3x3Type)) {
-//		imat3x3 * out = to_imat3x3p(((tmat3x3 *)value)->x->x, ((tmat3x3 *)value)->x->y, ((tmat3x3 *)value)->x->z, ((tmat3x3 *)value)->y->x, ((tmat3x3 *)value)->y->y, ((tmat3x3 *)value)->y->z, ((tmat3x3 *)value)->z->x, ((tmat3x3 *)value)->z->y, ((tmat3x3 *)value)->z->z);
-//		return out;
-//	}
-//	if (PyTuple_Check(value)) {
-//		Py_ssize_t len = PyTuple_GET_SIZE(value);
-//		if (len == 3) {
-//			PyObject *arg1, *arg2, *arg3;
-//			arg1 = PyTuple_GET_ITEM(value, 0);
-//			arg2 = PyTuple_GET_ITEM(value, 1);
-//			arg3 = PyTuple_GET_ITEM(value, 2);
-//			ivec3 *x = unpack_ivec3(arg1);
-//			ivec3 *y = unpack_ivec3(arg2);
-//			ivec3 *z = unpack_ivec3(arg3);
-//			if (x != NULL && y != NULL && z != NULL) {
-//				imat3x3* out = to_imat3x3vp(x, y, z);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 9) {
-//			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
-//			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
-//			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
-//			PyObject * y0 = PyTuple_GET_ITEM(value, 3);
-//			PyObject * y1 = PyTuple_GET_ITEM(value, 4);
-//			PyObject * y2 = PyTuple_GET_ITEM(value, 5);
-//			PyObject * z0 = PyTuple_GET_ITEM(value, 6);
-//			PyObject * z1 = PyTuple_GET_ITEM(value, 7);
-//			PyObject * z2 = PyTuple_GET_ITEM(value, 8);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2)) {
-//				imat3x3 * out = to_imat3x3p(
-//					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), 
-//					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), 
-//					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	if (PyList_Check(value)) {
-//		Py_ssize_t len = PyList_GET_SIZE(value);
-//		if (len == 3) {
-//			PyObject *arg1, *arg2, *arg3;
-//			arg1 = PyList_GET_ITEM(value, 0);
-//			arg2 = PyList_GET_ITEM(value, 1);
-//			arg3 = PyList_GET_ITEM(value, 2);
-//			ivec3 *x = unpack_ivec3(arg1);
-//			ivec3 *y = unpack_ivec3(arg2);
-//			ivec3 *z = unpack_ivec3(arg3);
-//			if (x != NULL && y != NULL && z != NULL) {
-//				imat3x3* out = to_imat3x3vp(x, y, z);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 9) {
-//			PyObject * x0 = PyList_GET_ITEM(value, 0);
-//			PyObject * x1 = PyList_GET_ITEM(value, 1);
-//			PyObject * x2 = PyList_GET_ITEM(value, 2);
-//			PyObject * y0 = PyList_GET_ITEM(value, 3);
-//			PyObject * y1 = PyList_GET_ITEM(value, 4);
-//			PyObject * y2 = PyList_GET_ITEM(value, 5);
-//			PyObject * z0 = PyList_GET_ITEM(value, 6);
-//			PyObject * z1 = PyList_GET_ITEM(value, 7);
-//			PyObject * z2 = PyList_GET_ITEM(value, 8);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2)) {
-//				imat3x3 * out = to_imat3x3p(
-//					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2),
-//					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2),
-//					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	return NULL;
-//}
-//static imat3x4 * unpack_imat3x4(PyObject * value) {
-//	if (PyObject_TypeCheck(value, &tmat3x4Type)) {
-//		imat3x4 * out = to_imat3x4p(
-//			((tmat3x4 *)value)->x->x, ((tmat3x4 *)value)->x->y, ((tmat3x4 *)value)->x->z, ((tmat3x4 *)value)->x->w,
-//			((tmat3x4 *)value)->y->x, ((tmat3x4 *)value)->y->y, ((tmat3x4 *)value)->y->z, ((tmat3x4 *)value)->y->w,
-//			((tmat3x4 *)value)->z->x, ((tmat3x4 *)value)->z->y, ((tmat3x4 *)value)->z->z, ((tmat3x4 *)value)->z->w);
-//		return out;
-//	}
-//	if (PyTuple_Check(value)) {
-//		Py_ssize_t len = PyTuple_GET_SIZE(value);
-//		if (len == 3) {
-//			PyObject *arg1, *arg2, *arg3;
-//			arg1 = PyTuple_GET_ITEM(value, 0);
-//			arg2 = PyTuple_GET_ITEM(value, 1);
-//			arg3 = PyTuple_GET_ITEM(value, 2);
-//			ivec4 *x = unpack_ivec4(arg1);
-//			ivec4 *y = unpack_ivec4(arg2);
-//			ivec4 *z = unpack_ivec4(arg3);
-//			if (x != NULL && y != NULL && z != NULL) {
-//				imat3x4* out = to_imat3x4vp(x, y, z);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 12) {
-//			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
-//			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
-//			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
-//			PyObject * x3 = PyTuple_GET_ITEM(value, 3);
-//			PyObject * y0 = PyTuple_GET_ITEM(value, 4);
-//			PyObject * y1 = PyTuple_GET_ITEM(value, 5);
-//			PyObject * y2 = PyTuple_GET_ITEM(value, 6);
-//			PyObject * y3 = PyTuple_GET_ITEM(value, 7);
-//			PyObject * z0 = PyTuple_GET_ITEM(value, 8);
-//			PyObject * z1 = PyTuple_GET_ITEM(value, 9);
-//			PyObject * z2 = PyTuple_GET_ITEM(value, 10);
-//			PyObject * z3 = PyTuple_GET_ITEM(value, 11);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) &&
-//				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3) &&
-//				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) && IS_NUMERIC(z3)) {
-//				imat3x4 * out = to_imat3x4p(
-//					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3),
-//					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3),
-//					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2), pyvalue_as_double(z3));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	if (PyList_Check(value)) {
-//		Py_ssize_t len = PyList_GET_SIZE(value);
-//		if (len == 3) {
-//			PyObject *arg1, *arg2, *arg3;
-//			arg1 = PyList_GET_ITEM(value, 0);
-//			arg2 = PyList_GET_ITEM(value, 1);
-//			arg3 = PyList_GET_ITEM(value, 2);
-//			ivec4 *x = unpack_ivec4(arg1);
-//			ivec4 *y = unpack_ivec4(arg2);
-//			ivec4 *z = unpack_ivec4(arg3);
-//			if (x != NULL && y != NULL && z != NULL) {
-//				imat3x4* out = to_imat3x4vp(x, y, z);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 12) {
-//			PyObject * x0 = PyList_GET_ITEM(value, 0);
-//			PyObject * x1 = PyList_GET_ITEM(value, 1);
-//			PyObject * x2 = PyList_GET_ITEM(value, 2);
-//			PyObject * x3 = PyList_GET_ITEM(value, 3);
-//			PyObject * y0 = PyList_GET_ITEM(value, 4);
-//			PyObject * y1 = PyList_GET_ITEM(value, 5);
-//			PyObject * y2 = PyList_GET_ITEM(value, 6);
-//			PyObject * y3 = PyList_GET_ITEM(value, 7);
-//			PyObject * z0 = PyList_GET_ITEM(value, 8);
-//			PyObject * z1 = PyList_GET_ITEM(value, 9);
-//			PyObject * z2 = PyList_GET_ITEM(value, 10);
-//			PyObject * z3 = PyList_GET_ITEM(value, 11);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) &&
-//				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3) &&
-//				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) && IS_NUMERIC(z3)) {
-//				imat3x4 * out = to_imat3x4p(
-//					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3),
-//					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3),
-//					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2), pyvalue_as_double(z3));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	return NULL;
-//}
-//
-//static imat4x2 * unpack_imat4x2(PyObject * value) {
-//	if (PyObject_TypeCheck(value, &tmat4x2Type)) {
-//		imat4x2 * out = to_imat4x2p(
-//			((tmat4x2 *)value)->x->x, ((tmat4x2 *)value)->x->y, 
-//			((tmat4x2 *)value)->y->x, ((tmat4x2 *)value)->y->y, 
-//			((tmat4x2 *)value)->z->x, ((tmat4x2 *)value)->z->y,
-//			((tmat4x2 *)value)->w->x, ((tmat4x2 *)value)->w->y);
-//		return out;
-//	}
-//	if (PyTuple_Check(value)) {
-//		Py_ssize_t len = PyTuple_GET_SIZE(value);
-//		if (len == 4) {
-//			PyObject *arg1, *arg2, *arg3, * arg4;
-//			arg1 = PyTuple_GET_ITEM(value, 0);
-//			arg2 = PyTuple_GET_ITEM(value, 1);
-//			arg3 = PyTuple_GET_ITEM(value, 2);
-//			arg4 = PyTuple_GET_ITEM(value, 3);
-//			ivec2 *x = unpack_ivec2(arg1);
-//			ivec2 *y = unpack_ivec2(arg2);
-//			ivec2 *z = unpack_ivec2(arg3);
-//			ivec2 *w = unpack_ivec2(arg4);
-//			if (x != NULL && y != NULL && z != NULL && w != NULL) {
-//				imat4x2* out = to_imat4x2vp(x, y, z, w);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 8) {
-//			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
-//			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
-//			PyObject * y0 = PyTuple_GET_ITEM(value, 2);
-//			PyObject * y1 = PyTuple_GET_ITEM(value, 3);
-//			PyObject * z0 = PyTuple_GET_ITEM(value, 4);
-//			PyObject * z1 = PyTuple_GET_ITEM(value, 5);
-//			PyObject * w0 = PyTuple_GET_ITEM(value, 6);
-//			PyObject * w1 = PyTuple_GET_ITEM(value, 7);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && 
-//				IS_NUMERIC(y0) && IS_NUMERIC(y1) && 
-//				IS_NUMERIC(z0) && IS_NUMERIC(z1) &&
-//				IS_NUMERIC(w0) && IS_NUMERIC(w1)) {
-//				imat4x2 * out = to_imat4x2p(
-//					pyvalue_as_double(x0), pyvalue_as_double(x1), 
-//					pyvalue_as_double(y0), pyvalue_as_double(y1), 
-//					pyvalue_as_double(z0), pyvalue_as_double(z1),
-//					pyvalue_as_double(w0), pyvalue_as_double(w1));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	if (PyList_Check(value)) {
-//		Py_ssize_t len = PyList_GET_SIZE(value);
-//		if (len == 4) {
-//			PyObject *arg1, *arg2, *arg3, *arg4;
-//			arg1 = PyList_GET_ITEM(value, 0);
-//			arg2 = PyList_GET_ITEM(value, 1);
-//			arg3 = PyList_GET_ITEM(value, 2);
-//			arg4 = PyList_GET_ITEM(value, 3);
-//			ivec2 *x = unpack_ivec2(arg1);
-//			ivec2 *y = unpack_ivec2(arg2);
-//			ivec2 *z = unpack_ivec2(arg3);
-//			ivec2 *w = unpack_ivec2(arg4);
-//			if (x != NULL && y != NULL && z != NULL && w != NULL) {
-//				imat4x2* out = to_imat4x2vp(x, y, z, w);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 8) {
-//			PyObject * x0 = PyList_GET_ITEM(value, 0);
-//			PyObject * x1 = PyList_GET_ITEM(value, 1);
-//			PyObject * y0 = PyList_GET_ITEM(value, 2);
-//			PyObject * y1 = PyList_GET_ITEM(value, 3);
-//			PyObject * z0 = PyList_GET_ITEM(value, 4);
-//			PyObject * z1 = PyList_GET_ITEM(value, 5);
-//			PyObject * w0 = PyList_GET_ITEM(value, 6);
-//			PyObject * w1 = PyList_GET_ITEM(value, 7);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) &&
-//				IS_NUMERIC(y0) && IS_NUMERIC(y1) &&
-//				IS_NUMERIC(z0) && IS_NUMERIC(z1) &&
-//				IS_NUMERIC(w0) && IS_NUMERIC(w1)) {
-//				imat4x2 * out = to_imat4x2p(
-//					pyvalue_as_double(x0), pyvalue_as_double(x1),
-//					pyvalue_as_double(y0), pyvalue_as_double(y1),
-//					pyvalue_as_double(z0), pyvalue_as_double(z1),
-//					pyvalue_as_double(w0), pyvalue_as_double(w1));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	return NULL;
-//}
-//static imat4x3 * unpack_imat4x3(PyObject * value) {
-//	if (PyObject_TypeCheck(value, &tmat4x3Type)) {
-//		imat4x3 * out = to_imat4x3p(
-//			((tmat4x3 *)value)->x->x, ((tmat4x3 *)value)->x->y, ((tmat4x3 *)value)->x->z,
-//			((tmat4x3 *)value)->y->x, ((tmat4x3 *)value)->y->y, ((tmat4x3 *)value)->y->z,
-//			((tmat4x3 *)value)->z->x, ((tmat4x3 *)value)->z->y, ((tmat4x3 *)value)->z->z,
-//			((tmat4x3 *)value)->w->x, ((tmat4x3 *)value)->w->y, ((tmat4x3 *)value)->w->z);
-//		return out;
-//	}
-//	if (PyTuple_Check(value)) {
-//		Py_ssize_t len = PyTuple_GET_SIZE(value);
-//		if (len == 4) {
-//			PyObject *arg1, *arg2, *arg3, *arg4;
-//			arg1 = PyTuple_GET_ITEM(value, 0);
-//			arg2 = PyTuple_GET_ITEM(value, 1);
-//			arg3 = PyTuple_GET_ITEM(value, 2);
-//			arg4 = PyTuple_GET_ITEM(value, 3);
-//			ivec3 *x = unpack_ivec3(arg1);
-//			ivec3 *y = unpack_ivec3(arg2);
-//			ivec3 *z = unpack_ivec3(arg3);
-//			ivec3 *w = unpack_ivec3(arg4);
-//			if (x != NULL && y != NULL && z != NULL && w != NULL) {
-//				imat4x3* out = to_imat4x3vp(x, y, z, w);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 12) {
-//			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
-//			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
-//			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
-//			PyObject * y0 = PyTuple_GET_ITEM(value, 3);
-//			PyObject * y1 = PyTuple_GET_ITEM(value, 4);
-//			PyObject * y2 = PyTuple_GET_ITEM(value, 5);
-//			PyObject * z0 = PyTuple_GET_ITEM(value, 6);
-//			PyObject * z1 = PyTuple_GET_ITEM(value, 7);
-//			PyObject * z2 = PyTuple_GET_ITEM(value, 8);
-//			PyObject * w0 = PyTuple_GET_ITEM(value, 9);
-//			PyObject * w1 = PyTuple_GET_ITEM(value, 10);
-//			PyObject * w2 = PyTuple_GET_ITEM(value, 11);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) &&
-//				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) &&
-//				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) &&
-//				IS_NUMERIC(w0) && IS_NUMERIC(w1) && IS_NUMERIC(w2)) {
-//				imat4x3 * out = to_imat4x3p(
-//					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2),
-//					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2),
-//					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2),
-//					pyvalue_as_double(w0), pyvalue_as_double(w1), pyvalue_as_double(w2));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	if (PyList_Check(value)) {
-//		Py_ssize_t len = PyList_GET_SIZE(value);
-//		if (len == 4) {
-//			PyObject *arg1, *arg2, *arg3, *arg4;
-//			arg1 = PyList_GET_ITEM(value, 0);
-//			arg2 = PyList_GET_ITEM(value, 1);
-//			arg3 = PyList_GET_ITEM(value, 2);
-//			arg4 = PyList_GET_ITEM(value, 3);
-//			ivec3 *x = unpack_ivec3(arg1);
-//			ivec3 *y = unpack_ivec3(arg2);
-//			ivec3 *z = unpack_ivec3(arg3);
-//			ivec3 *w = unpack_ivec3(arg4);
-//			if (x != NULL && y != NULL && z != NULL && w != NULL) {
-//				imat4x3* out = to_imat4x3vp(x, y, z, w);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 12) {
-//			PyObject * x0 = PyList_GET_ITEM(value, 0);
-//			PyObject * x1 = PyList_GET_ITEM(value, 1);
-//			PyObject * x2 = PyList_GET_ITEM(value, 2);
-//			PyObject * y0 = PyList_GET_ITEM(value, 3);
-//			PyObject * y1 = PyList_GET_ITEM(value, 4);
-//			PyObject * y2 = PyList_GET_ITEM(value, 5);
-//			PyObject * z0 = PyList_GET_ITEM(value, 6);
-//			PyObject * z1 = PyList_GET_ITEM(value, 7);
-//			PyObject * z2 = PyList_GET_ITEM(value, 8);
-//			PyObject * w0 = PyList_GET_ITEM(value, 9);
-//			PyObject * w1 = PyList_GET_ITEM(value, 10);
-//			PyObject * w2 = PyList_GET_ITEM(value, 11);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) &&
-//				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) &&
-//				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) &&
-//				IS_NUMERIC(w0) && IS_NUMERIC(w1) && IS_NUMERIC(w2)) {
-//				imat4x3 * out = to_imat4x3p(
-//					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2),
-//					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2),
-//					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2),
-//					pyvalue_as_double(w0), pyvalue_as_double(w1), pyvalue_as_double(w2));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	return NULL;
-//}
-//static imat4x4 * unpack_imat4x4(PyObject * value) {
-//	if (PyObject_TypeCheck(value, &tmat4x4Type)) {
-//		imat4x4 * out = to_imat4x4p(
-//			((tmat4x4 *)value)->x->x, ((tmat4x4 *)value)->x->y, ((tmat4x4 *)value)->x->z, ((tmat4x4 *)value)->x->w,
-//			((tmat4x4 *)value)->y->x, ((tmat4x4 *)value)->y->y, ((tmat4x4 *)value)->y->z, ((tmat4x4 *)value)->y->w,
-//			((tmat4x4 *)value)->z->x, ((tmat4x4 *)value)->z->y, ((tmat4x4 *)value)->z->z, ((tmat4x4 *)value)->z->w,
-//			((tmat4x4 *)value)->w->x, ((tmat4x4 *)value)->w->y, ((tmat4x4 *)value)->w->z, ((tmat4x4 *)value)->w->w);
-//		return out;
-//	}
-//	if (PyTuple_Check(value)) {
-//		Py_ssize_t len = PyTuple_GET_SIZE(value);
-//		if (len == 4) {
-//			PyObject *arg1, *arg2, *arg3, *arg4;
-//			arg1 = PyTuple_GET_ITEM(value, 0);
-//			arg2 = PyTuple_GET_ITEM(value, 1);
-//			arg3 = PyTuple_GET_ITEM(value, 2);
-//			arg4 = PyTuple_GET_ITEM(value, 3);
-//			ivec4 *x = unpack_ivec4(arg1);
-//			ivec4 *y = unpack_ivec4(arg2);
-//			ivec4 *z = unpack_ivec4(arg3);
-//			ivec4 *w = unpack_ivec4(arg4);
-//			if (x != NULL && y != NULL && z != NULL && w != NULL) {
-//				imat4x4* out = to_imat4x4vp(x, y, z, w);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 16) {
-//			PyObject * x0 = PyTuple_GET_ITEM(value, 0);
-//			PyObject * x1 = PyTuple_GET_ITEM(value, 1);
-//			PyObject * x2 = PyTuple_GET_ITEM(value, 2);
-//			PyObject * x3 = PyTuple_GET_ITEM(value, 3);
-//			PyObject * y0 = PyTuple_GET_ITEM(value, 4);
-//			PyObject * y1 = PyTuple_GET_ITEM(value, 5);
-//			PyObject * y2 = PyTuple_GET_ITEM(value, 6);
-//			PyObject * y3 = PyTuple_GET_ITEM(value, 7);
-//			PyObject * z0 = PyTuple_GET_ITEM(value, 8);
-//			PyObject * z1 = PyTuple_GET_ITEM(value, 9);
-//			PyObject * z2 = PyTuple_GET_ITEM(value, 10);
-//			PyObject * z3 = PyTuple_GET_ITEM(value, 11);
-//			PyObject * w0 = PyTuple_GET_ITEM(value, 12);
-//			PyObject * w1 = PyTuple_GET_ITEM(value, 13);
-//			PyObject * w2 = PyTuple_GET_ITEM(value, 14);
-//			PyObject * w3 = PyTuple_GET_ITEM(value, 15);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) &&
-//				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3) &&
-//				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) && IS_NUMERIC(z3) &&
-//				IS_NUMERIC(w0) && IS_NUMERIC(w1) && IS_NUMERIC(w2) && IS_NUMERIC(w3)) {
-//				imat4x4 * out = to_imat4x4p(
-//					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3),
-//					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3),
-//					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2), pyvalue_as_double(z3),
-//					pyvalue_as_double(w0), pyvalue_as_double(w1), pyvalue_as_double(w2), pyvalue_as_double(w3));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	if (PyList_Check(value)) {
-//		Py_ssize_t len = PyList_GET_SIZE(value);
-//		if (len == 4) {
-//			PyObject *arg1, *arg2, *arg3, *arg4;
-//			arg1 = PyList_GET_ITEM(value, 0);
-//			arg2 = PyList_GET_ITEM(value, 1);
-//			arg3 = PyList_GET_ITEM(value, 2);
-//			arg4 = PyList_GET_ITEM(value, 3);
-//			ivec4 *x = unpack_ivec4(arg1);
-//			ivec4 *y = unpack_ivec4(arg2);
-//			ivec4 *z = unpack_ivec4(arg3);
-//			ivec4 *w = unpack_ivec4(arg4);
-//			if (x != NULL && y != NULL && z != NULL && w != NULL) {
-//				imat4x4* out = to_imat4x4vp(x, y, z, w);
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		if (len == 16) {
-//			PyObject * x0 = PyList_GET_ITEM(value, 0);
-//			PyObject * x1 = PyList_GET_ITEM(value, 1);
-//			PyObject * x2 = PyList_GET_ITEM(value, 2);
-//			PyObject * x3 = PyList_GET_ITEM(value, 3);
-//			PyObject * y0 = PyList_GET_ITEM(value, 4);
-//			PyObject * y1 = PyList_GET_ITEM(value, 5);
-//			PyObject * y2 = PyList_GET_ITEM(value, 6);
-//			PyObject * y3 = PyList_GET_ITEM(value, 7);
-//			PyObject * z0 = PyList_GET_ITEM(value, 8);
-//			PyObject * z1 = PyList_GET_ITEM(value, 9);
-//			PyObject * z2 = PyList_GET_ITEM(value, 10);
-//			PyObject * z3 = PyList_GET_ITEM(value, 11);
-//			PyObject * w0 = PyList_GET_ITEM(value, 12);
-//			PyObject * w1 = PyList_GET_ITEM(value, 13);
-//			PyObject * w2 = PyList_GET_ITEM(value, 14);
-//			PyObject * w3 = PyList_GET_ITEM(value, 15);
-//
-//			if (IS_NUMERIC(x0) && IS_NUMERIC(x1) && IS_NUMERIC(x2) && IS_NUMERIC(x3) &&
-//				IS_NUMERIC(y0) && IS_NUMERIC(y1) && IS_NUMERIC(y2) && IS_NUMERIC(y3) &&
-//				IS_NUMERIC(z0) && IS_NUMERIC(z1) && IS_NUMERIC(z2) && IS_NUMERIC(z3) &&
-//				IS_NUMERIC(w0) && IS_NUMERIC(w1) && IS_NUMERIC(w2) && IS_NUMERIC(w3)) {
-//				imat4x4 * out = to_imat4x4p(
-//					pyvalue_as_double(x0), pyvalue_as_double(x1), pyvalue_as_double(x2), pyvalue_as_double(x3),
-//					pyvalue_as_double(y0), pyvalue_as_double(y1), pyvalue_as_double(y2), pyvalue_as_double(y3),
-//					pyvalue_as_double(z0), pyvalue_as_double(z1), pyvalue_as_double(z2), pyvalue_as_double(z3),
-//					pyvalue_as_double(w0), pyvalue_as_double(w1), pyvalue_as_double(w2), pyvalue_as_double(w3));
-//				return out;
-//			}
-//			return NULL;
-//		}
-//		return NULL;
-//	}
-//	return NULL;
-//}
-
-static iquat * unpack_iquat(PyObject * value) {
-	if (PyObject_TypeCheck(value, &tquatType)) {
-		iquat * out = (iquat*)malloc(sizeof(iquat));
-		*out = to_iquatq(((tquat *)value)->x, ((tquat *)value)->y, ((tquat *)value)->z, ((tquat *)value)->w);
-		return out;
-	}
-	if (PyTuple_Check(value) && PyTuple_GET_SIZE(value) == 4) {
-		PyObject * x = PyTuple_GET_ITEM(value, 0);
-		PyObject * y = PyTuple_GET_ITEM(value, 1);
-		PyObject * z = PyTuple_GET_ITEM(value, 2);
-		PyObject * w = PyTuple_GET_ITEM(value, 3);
-
-		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z) && IS_NUMERIC(w)) {
-			iquat * out = (iquat*)malloc(sizeof(iquat));
-			*out = to_iquatq(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z), pyvalue_as_double(w));
-			return out;
-		}
-		return NULL;
-	}
-	if (PyList_Check(value) && PyList_GET_SIZE(value) == 4) {
-		PyObject * x = PyList_GET_ITEM(value, 0);
-		PyObject * y = PyList_GET_ITEM(value, 1);
-		PyObject * z = PyList_GET_ITEM(value, 2);
-		PyObject * w = PyList_GET_ITEM(value, 3);
-
-		if (IS_NUMERIC(x) && IS_NUMERIC(y) && IS_NUMERIC(z) && IS_NUMERIC(w)) {
-			iquat * out = (iquat*)malloc(sizeof(iquat));
-			*out = to_iquatq(pyvalue_as_double(x), pyvalue_as_double(y), pyvalue_as_double(z), pyvalue_as_double(w));
-			return out;
-		}
-		return NULL;
-	}
-	return NULL;
-}
 
 // without pointers
 static bool unpack_ivec2p(PyObject * value, ivec2* out) {
@@ -4619,7 +4619,6 @@ static PyObject * pack_tmat2x2(double x0, double x1, double y0, double y1) {
 
 	return (PyObject*)out;
 }
-
 static PyObject * pack_tmat2x3(double x0, double x1, double x2, double y0, double y1, double y2) {
 	tmat2x3* out = (tmat2x3*)tmat2x3Type.tp_alloc(&tmat2x3Type, 0);
 

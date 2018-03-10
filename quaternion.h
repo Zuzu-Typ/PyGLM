@@ -613,6 +613,7 @@ tquatIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs)
 		return NULL;
 
 	rgstate->sequence = sequence;
+	Py_INCREF(sequence);
 	rgstate->seq_index = 0;
 
 	return (PyObject *)rgstate;
@@ -650,8 +651,15 @@ tquatIter_next(tquatIter *rgstate)
 }
 
 static PyObject * tquat_geniter(tquat * self) {
-	PyObject * obj = tquatIter_new(&tquatIterType, Py_BuildValue("(O)", (PyObject *)self), Py_BuildValue("{}"));
-	return obj;
+	tquatIter *rgstate = (tquatIter *)((&tquatIterType)->tp_alloc(&tquatIterType, 0));
+	if (!rgstate)
+		return NULL;
+
+	rgstate->sequence = self;
+	Py_INCREF(self);
+	rgstate->seq_index = 0;
+
+	return (PyObject *)rgstate;
 }
 
 static PySequenceMethods tquatSeqMethods = {

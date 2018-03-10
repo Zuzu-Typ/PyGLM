@@ -798,6 +798,22 @@ static PyObject* infinitePerspective(PyObject* self, PyObject * args) {
 	return out;
 }
 
+static PyObject* tweakedInfinitePerspective_(double fovy, double aspect, double zNear, double ep) {
+	double range = tan(fovy / 2.0) * zNear;
+	double left = -range * aspect;
+	double right = range * aspect;
+	double bottom = -range;
+	double top = range;
+
+	imat4x4 Result = to_imat4x4d(0.0);
+	Result.x.x = (2.0 * zNear) / (right - left);
+	Result.y.y = (2.0 * zNear) / (top - bottom);
+	Result.z.z = ep - 1.0;
+	Result.z.w = (-1.0);
+	Result.w.z = (ep - (2.0)) * zNear;
+	return build_imat4x4(Result);
+}
+
 // Infinite projection matrix: http://www.terathon.com/gdc07_lengyel.pdf
 static PyObject* tweakedInfinitePerspective(PyObject* self, PyObject* args) {
 	if (PyTuple_GET_SIZE(args) == 4) {
@@ -809,26 +825,22 @@ static PyObject* tweakedInfinitePerspective(PyObject* self, PyObject* args) {
 			double zNear = pyvalue_as_double(arg3);
 			double ep = pyvalue_as_double(arg4);
 
-			double range = tan(fovy / 2.0) * zNear;
-			double left = -range * aspect;
-			double right = range * aspect;
-			double bottom = -range;
-			double top = range;
-
-			imat4x4 Result = to_imat4x4d(0.0);
-			Result.x.x = (2.0 * zNear) / (right - left);
-			Result.y.y = (2.0 * zNear) / (top - bottom);
-			Result.z.z = ep - 1.0;
-			Result.z.w = (-1.0);
-			Result.w.z = (ep - (2.0)) * zNear;
-			return build_imat4x4(Result);
+			return tweakedInfinitePerspective_(fovy, aspect, zNear, ep);
 		}
 		PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for tweakedInfinitePerspective()");
 		return NULL;
 	}
 	PyObject* arg1, *arg2, *arg3;
 	UNPACK_3_VARARGS(args, "tweakedInfinitePerspective", arg1, arg2, arg3);
-	return tweakedInfinitePerspective(self, Py_BuildValue("(OOOO)", arg1, arg2, arg3, PyFloat_FromDouble(DBL_EPSILON)));
+	if (IS_NUMERIC(arg1) && IS_NUMERIC(arg2) && IS_NUMERIC(arg3)) {
+		double fovy = pyvalue_as_double(arg1);
+		double aspect = pyvalue_as_double(arg2);
+		double zNear = pyvalue_as_double(arg3);
+
+		return tweakedInfinitePerspective_(fovy, aspect, zNear, DBL_EPSILON);
+	}
+	PyErr_SetString(PyExc_TypeError, "unsupported operand type(s) for tweakedInfinitePerspective()");
+	return NULL;
 }
 
 static PyObject* projectZO(PyObject* self, PyObject* args) {

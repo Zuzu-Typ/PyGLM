@@ -5,59 +5,55 @@ static PyObject* equal(PyObject * self, PyObject* args) {
 	void* o = NULL;
 	char vecType = unpack_ivecq(arg1, &o);
 	if (vecType == GLM_TVEC2) {
-		ivec2* o2 = unpack_ivec2(arg2);
+		ivec2 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec2p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for equal(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x == o2->x), (double)(((ivec2*)o)->y == o2->y));
+		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x == o2.x), (double)(((ivec2*)o)->y == o2.y));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC3) {
-		ivec3* o2 = unpack_ivec3(arg2);
+		ivec3 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec3p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for equal(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x == o2->x), (double)(((ivec3*)o)->y == o2->y), (double)(((ivec3*)o)->z == o2->z));
+		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x == o2.x), (double)(((ivec3*)o)->y == o2.y), (double)(((ivec3*)o)->z == o2.z));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC4) {
-		ivec4* o2 = unpack_ivec4(arg2);
+		ivec4 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec4p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for equal(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x == o2->x), (double)(((ivec4*)o)->y == o2->y), (double)(((ivec4*)o)->z == o2->z), (double)(((ivec4*)o)->w == o2->w));
+		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x == o2.x), (double)(((ivec4*)o)->y == o2.y), (double)(((ivec4*)o)->z == o2.z), (double)(((ivec4*)o)->w == o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TQUAT) {
-		iquat* o2 = unpack_iquat(arg2);
+		iquat o2;
 
-		if (o2 == NULL) {
+		if (!unpack_iquatp(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for equal(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tquat((double)(((iquat*)o)->x == o2->x), (double)(((iquat*)o)->y == o2->y), (double)(((iquat*)o)->z == o2->z), (double)(((iquat*)o)->w == o2->w));
+		PyObject* out = pack_tquat((double)(((iquat*)o)->x == o2.x), (double)(((iquat*)o)->y == o2.y), (double)(((iquat*)o)->z == o2.z), (double)(((iquat*)o)->w == o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	PY_TYPEERROR_2O("unsupported operand type(s) for equal(): ", arg1, arg2);
@@ -71,59 +67,55 @@ static PyObject* notEqual(PyObject * self, PyObject* args) {
 	void* o = NULL;
 	char vecType = unpack_ivecq(arg1, &o);
 	if (vecType == GLM_TVEC2) {
-		ivec2* o2 = unpack_ivec2(arg2);
+		ivec2 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec2p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for notEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x != o2->x), (double)(((ivec2*)o)->y != o2->y));
+		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x != o2.x), (double)(((ivec2*)o)->y != o2.y));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC3) {
-		ivec3* o2 = unpack_ivec3(arg2);
+		ivec3 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec3p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for notEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x != o2->x), (double)(((ivec3*)o)->y != o2->y), (double)(((ivec3*)o)->z != o2->z));
+		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x != o2.x), (double)(((ivec3*)o)->y != o2.y), (double)(((ivec3*)o)->z != o2.z));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC4) {
-		ivec4* o2 = unpack_ivec4(arg2);
+		ivec4 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec4p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for notEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x != o2->x), (double)(((ivec4*)o)->y != o2->y), (double)(((ivec4*)o)->z != o2->z), (double)(((ivec4*)o)->w != o2->w));
+		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x != o2.x), (double)(((ivec4*)o)->y != o2.y), (double)(((ivec4*)o)->z != o2.z), (double)(((ivec4*)o)->w != o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TQUAT) {
-		iquat* o2 = unpack_iquat(arg2);
+		iquat o2;
 
-		if (o2 == NULL) {
+		if (!unpack_iquatp(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for notEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tquat((double)(((iquat*)o)->x != o2->x), (double)(((iquat*)o)->y != o2->y), (double)(((iquat*)o)->z != o2->z), (double)(((iquat*)o)->w != o2->w));
+		PyObject* out = pack_tquat((double)(((iquat*)o)->x != o2.x), (double)(((iquat*)o)->y != o2.y), (double)(((iquat*)o)->z != o2.z), (double)(((iquat*)o)->w != o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	PY_TYPEERROR_2O("unsupported operand type(s) for notEqual(): ", arg1, arg2);
@@ -137,59 +129,55 @@ static PyObject* lessThan(PyObject * self, PyObject* args) {
 	void* o = NULL;
 	char vecType = unpack_ivecq(arg1, &o);
 	if (vecType == GLM_TVEC2) {
-		ivec2* o2 = unpack_ivec2(arg2);
+		ivec2 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec2p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for lessThan(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x < o2->x), (double)(((ivec2*)o)->y < o2->y));
+		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x < o2.x), (double)(((ivec2*)o)->y < o2.y));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC3) {
-		ivec3* o2 = unpack_ivec3(arg2);
+		ivec3 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec3p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for lessThan(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x < o2->x), (double)(((ivec3*)o)->y < o2->y), (double)(((ivec3*)o)->z < o2->z));
+		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x < o2.x), (double)(((ivec3*)o)->y < o2.y), (double)(((ivec3*)o)->z < o2.z));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC4) {
-		ivec4* o2 = unpack_ivec4(arg2);
+		ivec4 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec4p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for lessThan(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x < o2->x), (double)(((ivec4*)o)->y < o2->y), (double)(((ivec4*)o)->z < o2->z), (double)(((ivec4*)o)->w < o2->w));
+		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x < o2.x), (double)(((ivec4*)o)->y < o2.y), (double)(((ivec4*)o)->z < o2.z), (double)(((ivec4*)o)->w < o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TQUAT) {
-		iquat* o2 = unpack_iquat(arg2);
+		iquat o2;
 
-		if (o2 == NULL) {
+		if (!unpack_iquatp(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for lessThan(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tquat((double)(((iquat*)o)->x < o2->x), (double)(((iquat*)o)->y < o2->y), (double)(((iquat*)o)->z < o2->z), (double)(((iquat*)o)->w < o2->w));
+		PyObject* out = pack_tquat((double)(((iquat*)o)->x < o2.x), (double)(((iquat*)o)->y < o2.y), (double)(((iquat*)o)->z < o2.z), (double)(((iquat*)o)->w < o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	PY_TYPEERROR_2O("unsupported operand type(s) for lessThan(): ", arg1, arg2);
@@ -203,59 +191,55 @@ static PyObject* lessThanEqual(PyObject * self, PyObject* args) {
 	void* o = NULL;
 	char vecType = unpack_ivecq(arg1, &o);
 	if (vecType == GLM_TVEC2) {
-		ivec2* o2 = unpack_ivec2(arg2);
+		ivec2 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec2p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for lessThanEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x <= o2->x), (double)(((ivec2*)o)->y <= o2->y));
+		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x <= o2.x), (double)(((ivec2*)o)->y <= o2.y));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC3) {
-		ivec3* o2 = unpack_ivec3(arg2);
+		ivec3 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec3p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for lessThanEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x <= o2->x), (double)(((ivec3*)o)->y <= o2->y), (double)(((ivec3*)o)->z <= o2->z));
+		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x <= o2.x), (double)(((ivec3*)o)->y <= o2.y), (double)(((ivec3*)o)->z <= o2.z));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC4) {
-		ivec4* o2 = unpack_ivec4(arg2);
+		ivec4 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec4p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for lessThanEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x <= o2->x), (double)(((ivec4*)o)->y <= o2->y), (double)(((ivec4*)o)->z <= o2->z), (double)(((ivec4*)o)->w <= o2->w));
+		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x <= o2.x), (double)(((ivec4*)o)->y <= o2.y), (double)(((ivec4*)o)->z <= o2.z), (double)(((ivec4*)o)->w <= o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TQUAT) {
-		iquat* o2 = unpack_iquat(arg2);
+		iquat o2;
 
-		if (o2 == NULL) {
+		if (!unpack_iquatp(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for lessThanEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tquat((double)(((iquat*)o)->x <= o2->x), (double)(((iquat*)o)->y <= o2->y), (double)(((iquat*)o)->z <= o2->z), (double)(((iquat*)o)->w <= o2->w));
+		PyObject* out = pack_tquat((double)(((iquat*)o)->x <= o2.x), (double)(((iquat*)o)->y <= o2.y), (double)(((iquat*)o)->z <= o2.z), (double)(((iquat*)o)->w <= o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	PY_TYPEERROR_2O("unsupported operand type(s) for lessThanEqual(): ", arg1, arg2);
@@ -269,59 +253,55 @@ static PyObject* greaterThan(PyObject * self, PyObject* args) {
 	void* o = NULL;
 	char vecType = unpack_ivecq(arg1, &o);
 	if (vecType == GLM_TVEC2) {
-		ivec2* o2 = unpack_ivec2(arg2);
+		ivec2 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec2p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for greaterThan(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x > o2->x), (double)(((ivec2*)o)->y > o2->y));
+		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x > o2.x), (double)(((ivec2*)o)->y > o2.y));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC3) {
-		ivec3* o2 = unpack_ivec3(arg2);
+		ivec3 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec3p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for greaterThan(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x > o2->x), (double)(((ivec3*)o)->y > o2->y), (double)(((ivec3*)o)->z > o2->z));
+		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x > o2.x), (double)(((ivec3*)o)->y > o2.y), (double)(((ivec3*)o)->z > o2.z));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC4) {
-		ivec4* o2 = unpack_ivec4(arg2);
+		ivec4 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec4p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for greaterThan(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x > o2->x), (double)(((ivec4*)o)->y > o2->y), (double)(((ivec4*)o)->z > o2->z), (double)(((ivec4*)o)->w > o2->w));
+		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x > o2.x), (double)(((ivec4*)o)->y > o2.y), (double)(((ivec4*)o)->z > o2.z), (double)(((ivec4*)o)->w > o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TQUAT) {
-		iquat* o2 = unpack_iquat(arg2);
+		iquat o2;
 
-		if (o2 == NULL) {
+		if (!unpack_iquatp(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for greaterThan(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tquat((double)(((iquat*)o)->x > o2->x), (double)(((iquat*)o)->y > o2->y), (double)(((iquat*)o)->z > o2->z), (double)(((iquat*)o)->w > o2->w));
+		PyObject* out = pack_tquat((double)(((iquat*)o)->x > o2.x), (double)(((iquat*)o)->y > o2.y), (double)(((iquat*)o)->z > o2.z), (double)(((iquat*)o)->w > o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	PY_TYPEERROR_2O("unsupported operand type(s) for greaterThan(): ", arg1, arg2);
@@ -335,59 +315,55 @@ static PyObject* greaterThanEqual(PyObject * self, PyObject* args) {
 	void* o = NULL;
 	char vecType = unpack_ivecq(arg1, &o);
 	if (vecType == GLM_TVEC2) {
-		ivec2* o2 = unpack_ivec2(arg2);
+		ivec2 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec2p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for greaterThanEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x >= o2->x), (double)(((ivec2*)o)->y >= o2->y));
+		PyObject* out = pack_tvec2((double)(((ivec2*)o)->x >= o2.x), (double)(((ivec2*)o)->y >= o2.y));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC3) {
-		ivec3* o2 = unpack_ivec3(arg2);
+		ivec3 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec3p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for greaterThanEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x >= o2->x), (double)(((ivec3*)o)->y >= o2->y), (double)(((ivec3*)o)->z >= o2->z));
+		PyObject* out = pack_tvec3((double)(((ivec3*)o)->x >= o2.x), (double)(((ivec3*)o)->y >= o2.y), (double)(((ivec3*)o)->z >= o2.z));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TVEC4) {
-		ivec4* o2 = unpack_ivec4(arg2);
+		ivec4 o2;
 
-		if (o2 == NULL) {
+		if (!unpack_ivec4p(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for greaterThanEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x >= o2->x), (double)(((ivec4*)o)->y >= o2->y), (double)(((ivec4*)o)->z >= o2->z), (double)(((ivec4*)o)->w >= o2->w));
+		PyObject* out = pack_tvec4((double)(((ivec4*)o)->x >= o2.x), (double)(((ivec4*)o)->y >= o2.y), (double)(((ivec4*)o)->z >= o2.z), (double)(((ivec4*)o)->w >= o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	if (vecType == GLM_TQUAT) {
-		iquat* o2 = unpack_iquat(arg2);
+		iquat o2;
 
-		if (o2 == NULL) {
+		if (!unpack_iquatp(arg2, &o2)) {
 			free(o);
 			PY_TYPEERROR_2O("unsupported operand type(s) for greaterThanEqual(): ", arg1, arg2);
 			return NULL;
 		}
 
-		PyObject* out = pack_tquat((double)(((iquat*)o)->x >= o2->x), (double)(((iquat*)o)->y >= o2->y), (double)(((iquat*)o)->z >= o2->z), (double)(((iquat*)o)->w >= o2->w));
+		PyObject* out = pack_tquat((double)(((iquat*)o)->x >= o2.x), (double)(((iquat*)o)->y >= o2.y), (double)(((iquat*)o)->z >= o2.z), (double)(((iquat*)o)->w >= o2.w));
 		free(o);
-		free(o2);
 		return out;
 	}
 	PY_TYPEERROR_2O("unsupported operand type(s) for greaterThanEqual(): ", arg1, arg2);

@@ -777,6 +777,7 @@ tmat2x4Iter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs)
 		return NULL;
 
 	rgstate->sequence = sequence;
+	Py_INCREF(sequence);
 	rgstate->seq_index = 0;
 
 	return (PyObject *)rgstate;
@@ -810,8 +811,15 @@ tmat2x4Iter_next(tmat2x4Iter *rgstate)
 }
 
 static PyObject * tmat2x4_geniter(tmat2x4 * self) {
-	PyObject * obj = tmat2x4Iter_new(&tmat2x4IterType, Py_BuildValue("(O)", (PyObject *)self), Py_BuildValue("{}"));
-	return obj;
+	tmat2x4Iter *rgstate = (tmat2x4Iter *)((&tmat2x4IterType)->tp_alloc(&tmat2x4IterType, 0));
+	if (!rgstate)
+		return NULL;
+
+	rgstate->sequence = self;
+	Py_INCREF(self);
+	rgstate->seq_index = 0;
+
+	return (PyObject *)rgstate;
 }
 
 static PySequenceMethods tmat2x4SeqMethods = {

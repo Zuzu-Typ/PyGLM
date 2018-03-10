@@ -946,6 +946,7 @@ tvec4Iter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs)
 		return NULL;
 
 	rgstate->sequence = sequence;
+	Py_INCREF(sequence);
 	rgstate->seq_index = 0;
 
 	return (PyObject *)rgstate;
@@ -983,8 +984,18 @@ tvec4Iter_next(tvec4Iter *rgstate)
 }
 
 static PyObject * tvec4_geniter(tvec4 * self) {
-	PyObject * obj = tvec4Iter_new(&tvec4IterType, Py_BuildValue("(O)", (PyObject *)self), Py_BuildValue("{}"));
-	return obj;
+	/* Create a new tvec4Iter and initialize its state - pointing to the last
+	* index in the sequence.
+	*/
+	tvec4Iter *rgstate = (tvec4Iter *)((&tvec4IterType)->tp_alloc(&tvec4IterType, 0));
+	if (!rgstate)
+		return NULL;
+
+	rgstate->sequence = self;
+	Py_INCREF(self);
+	rgstate->seq_index = 0;
+
+	return (PyObject *)rgstate;
 }
 
 static PySequenceMethods tvec4SeqMethods = {
