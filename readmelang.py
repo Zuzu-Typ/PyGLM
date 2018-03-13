@@ -21,7 +21,7 @@ SECTION2 = 2**12
 SECTION3 = 2**13
 
 def format_md(text):
-    for char in "\\`*_{}[]()#+-.!":
+    for char in "\\`*{}[]()#+-.!":
         if not char in text: continue
         text = text.replace(char, "\\"+char)
     return text
@@ -139,6 +139,8 @@ class Object:
             for line in text.split("\n"):
                 out += "    {}\n".format(line)
             return out
+        if self.mode == SEPARATOR:
+            return "***"
         return "NOTIMPLEMENTED"
         
 class Main:
@@ -217,7 +219,7 @@ class Main:
             else:
                 self.understood_content[-1].options["link"] = None
             return
-        
+        self.understood_content[-1].text += "[{}]".format(text)
 
     def understand(self):
         index = 0
@@ -229,6 +231,13 @@ class Main:
             for char in line:
                 char_index += 1
                 if char == "\\":
+                    if ignore:
+                        if interpret_mode:
+                            to_be_interpreted += char
+                        else:
+                            self.understood_content[-1].text += char
+                        ignore = False
+                        continue
                     ignore = True
                     continue
                 if ignore:

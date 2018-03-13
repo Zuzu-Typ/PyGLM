@@ -14,8 +14,8 @@ static PyObject* translate(PyObject* self, PyObject* args) {
 	return build_imat4x4(to_imat4x4v(
 		m.x,
 		m.y,
-		addv4v(addv4v(addv4v(mulv4d(m.x, v.x), mulv4d(m.y, v.y)), mulv4d(m.z, v.z)), m.w),
-		m.w));
+		m.z,
+		addv4v(addv4v(addv4v(mulv4d(m.x, v.x), mulv4d(m.y, v.y)), mulv4d(m.z, v.z)), m.w)));
 }
 
 static PyObject* rotate(PyObject* self, PyObject* args) {
@@ -77,7 +77,7 @@ static PyObject* rotate(PyObject* self, PyObject* args) {
 	return NULL;
 }
 
-static PyObject* rotate_slow(PyObject* self, PyObject* args) {///////////////////////// CONTINUE /////////////////////////////
+static PyObject* rotate_slow(PyObject* self, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3;
 	UNPACK_3_VARARGS(args, "rotate_slow", arg1, arg2, arg3);
 	if (!IS_NUMERIC(arg2)) {

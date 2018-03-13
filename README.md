@@ -56,7 +56,7 @@ becomes
   
   
 There is currently no documentation for PyGLM\.  
-Please refer to the source \(in Python: **\*\.\_\_doc\_\_**\) and GLM manuals, references and tutorials\.  
+Please refer to the source \(in Python: **\*\.__doc__**\) and GLM manuals, references and tutorials\.  
   
 ### Example  
 
@@ -69,7 +69,6 @@ Please refer to the source \(in Python: **\*\.\_\_doc\_\_**\) and GLM manuals, r
     
     >>> m = glm.mat4()
     >>> print(m)
-    tmat4x4
     [            0 |            0 |            0 |            0 ]
     [            0 |            0 |            0 |            0 ]
     [            0 |            0 |            0 |            0 ]
