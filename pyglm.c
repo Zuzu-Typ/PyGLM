@@ -592,7 +592,11 @@ initglm(void)
 	PyObject* mainmod = PyImport_AddModule("__main__");
 	PyObject* maindict = PyModule_GetDict(mainmod);
 
-	c_void_p = PyObject_GetAttr(PyImport_ImportModuleEx("ctypes", maindict, maindict, Py_BuildValue("(s)", "c_void_p")), PyUnicode_FromString("c_void_p"));
+	PyObject* c_void_p_str = Py_BuildValue("(s)", "c_void_p");
+
+	c_void_p = PyObject_GetAttr(PyImport_ImportModuleEx("ctypes", maindict, maindict, c_void_p_str), PyUnicode_FromString("c_void_p"));
+
+	Py_DECREF(c_void_p_str);
 	
     PyObject* m, *detail, *gtc;
 
@@ -757,6 +761,9 @@ initglm(void)
 
 	Py_INCREF(&tquatType);
 	PyModule_AddObject(m, "quat", (PyObject *)&tquatType);
+	
+	Py_DECREF(gtc);
+	Py_DECREF(detail);
 
 #if PY3K
     return m;

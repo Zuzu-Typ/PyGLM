@@ -657,29 +657,17 @@ static PyObject* tvec3_sq_item(tvec3 * self, Py_ssize_t index) {
 	switch (index) {
 	case 0:
 		return PyFloat_FromDouble(self->x);
-		break;
 	case 1:
 		return PyFloat_FromDouble(self->y);
-		break;
 	case 2:
 		return PyFloat_FromDouble(self->z);
-		break;
-	case -1:
-		return PyFloat_FromDouble(self->z);
-		break;
-	case -2:
-		return PyFloat_FromDouble(self->y);
-		break;
-	case -3:
-		return PyFloat_FromDouble(self->x);
-		break;
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return NULL;
 	}
 }
 
-static int tvec3_sq_setitem(tvec3 * self, Py_ssize_t index, PyObject * value) {
+static int tvec3_sq_ass_item(tvec3 * self, Py_ssize_t index, PyObject * value) {
 	double d;
 	if (IS_NUMERIC(value)) {
 		d = pyvalue_as_double(value);
@@ -692,27 +680,12 @@ static int tvec3_sq_setitem(tvec3 * self, Py_ssize_t index, PyObject * value) {
 	case 0:
 		self->x = d;
 		return 0;
-		break;
 	case 1:
 		self->y = d;
 		return 0;
-		break;
 	case 2:
 		self->z = d;
 		return 0;
-		break;
-	case -1:
-		self->z = d;
-		return 0;
-		break;
-	case -2:
-		self->y = d;
-		return 0;
-		break;
-	case -3:
-		self->x = d;
-		return 0;
-		break;
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return -1;
@@ -730,49 +703,38 @@ static int tvec3_contains(tvec3 * self, PyObject * value) {
 }
 
 static PyObject * tvec3_richcompare(tvec3 * self, PyObject * other, int comp_type) {
-	if (comp_type == Py_EQ) {
-		if (!PyObject_TypeCheck(other, &tvec3Type)) { // incopatible type
+	ivec3 o2;
+
+	if (!unpack_ivec3p(other, &o2)) {
+		if (comp_type == Py_EQ || comp_type == Py_NE) {
 			Py_RETURN_FALSE;
 		}
-		return PyBool_FromLong((self->x == ((tvec3*)other)->x) && (self->y == ((tvec3*)other)->y) && (self->z == ((tvec3*)other)->z));
+		Py_RETURN_NOTIMPLEMENTED;
 	}
-	else if (comp_type == Py_NE) {
-		if (!PyObject_TypeCheck(other, &tvec3Type)) { // incopatible type
-			Py_RETURN_TRUE;
-		}
-		return PyBool_FromLong((self->x != ((tvec3*)other)->x) || (self->y != ((tvec3*)other)->y) || (self->z != ((tvec3*)other)->z));
-	}
-	else if (comp_type == Py_LT) {
-		if (!PyObject_TypeCheck(other, &tvec3Type)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for <: 'glm::detail::tvec3' and ", other);
-			return NULL;
-		}
-		return pack_tvec3((double)(self->x < ((tvec3*)other)->x), (double)(self->y < ((tvec3*)other)->y), (double)(self->z < ((tvec3*)other)->z));
-	}
-	else if (comp_type == Py_LE) {
-		if (!PyObject_TypeCheck(other, &tvec3Type)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for <=: 'glm::detail::tvec3' and ", other);
-			return NULL;
-		}
-		return pack_tvec3((double)(self->x <= ((tvec3*)other)->x), (double)(self->y <= ((tvec3*)other)->y), (double)(self->z <= ((tvec3*)other)->z));
-	}
-	else if (comp_type == Py_GT) {
-		if (!PyObject_TypeCheck(other, &tvec3Type)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for >: 'glm::detail::tvec3' and ", other);
-			return NULL;
-		}
-		return pack_tvec3((double)(self->x > ((tvec3*)other)->x), (double)(self->y > ((tvec3*)other)->y), (double)(self->z > ((tvec3*)other)->z));
-	}
-	else if (comp_type == Py_GE) {
-		if (!PyObject_TypeCheck(other, &tvec3Type)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for >=: 'glm::detail::tvec3' and ", other);
-			return NULL;
-		}
-		return pack_tvec3((double)(self->x >= ((tvec3*)other)->x), (double)(self->y >= ((tvec3*)other)->y), (double)(self->z >= ((tvec3*)other)->z));
-	}
-	else {
-		PY_TYPEERROR("this operator is not supported between instances of 'function' and ", other);
-		return NULL;
+
+	switch (comp_type) {
+	case Py_EQ:
+		if ((self->x == o2.x) && (self->y == o2.y) && (self->z == o2.z)) Py_RETURN_TRUE;
+		else Py_RETURN_FALSE;
+		break;
+	case Py_NE:
+		if ((self->x != o2.x) || (self->y != o2.y) || (self->z != o2.z)) Py_RETURN_TRUE;
+		else Py_RETURN_FALSE;
+		break;
+	case Py_LT:
+		return pack_tvec3((double)(self->x < o2.x), (double)(self->y < o2.y), (double)(self->z < o2.z));
+		break;
+	case Py_LE:
+		return pack_tvec3((double)(self->x <= o2.x), (double)(self->y <= o2.y), (double)(self->z <= o2.z));
+		break;
+	case Py_GT:
+		return pack_tvec3((double)(self->x > o2.x), (double)(self->y > o2.y), (double)(self->z > o2.z));
+		break;
+	case Py_GE:
+		return pack_tvec3((double)(self->x >= o2.x), (double)(self->y >= o2.y), (double)(self->z >= o2.z));
+		break;
+	default:
+		Py_RETURN_NOTIMPLEMENTED;
 	}
 }
 
@@ -904,7 +866,7 @@ static PySequenceMethods tvec3SeqMethods = {
 	0, // sq_repeat
 	(ssizeargfunc)tvec3_sq_item, // sq_item
 	0,
-	(ssizeobjargproc)tvec3_sq_setitem, // sq_ass_item
+	(ssizeobjargproc)tvec3_sq_ass_item, // sq_ass_item
 	0,
 	(objobjproc)tvec3_contains, // sq_contains
 	0, // sq_inplace_concat

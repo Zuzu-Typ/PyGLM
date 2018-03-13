@@ -766,25 +766,13 @@ static PyObject* tmat4x3_sq_item(tmat4x3 * self, Py_ssize_t index) {
 	case 3:
 		Py_INCREF((PyObject*)self->w);
 		return (PyObject*)self->w;
-	case -1:
-		Py_INCREF((PyObject*)self->w);
-		return (PyObject*)self->w;
-	case -2:
-		Py_INCREF((PyObject*)self->z);
-		return (PyObject*)self->z;
-	case -3:
-		Py_INCREF((PyObject*)self->y);
-		return (PyObject*)self->y;
-	case -4:
-		Py_INCREF((PyObject*)self->x);
-		return (PyObject*)self->x;
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return NULL;
 	}
 }
 
-static int tmat4x3_sq_setitem(tmat4x3 * self, Py_ssize_t index, PyObject * value) {
+static int tmat4x3_sq_ass_item(tmat4x3 * self, Py_ssize_t index, PyObject * value) {
 	ivec3 o;
 	if (!unpack_ivec3p(value, &o)) {
 		PY_TYPEERROR("expected tvec3, got ", value);
@@ -811,26 +799,6 @@ static int tmat4x3_sq_setitem(tmat4x3 * self, Py_ssize_t index, PyObject * value
 		self->w->y = o.y;
 		self->w->z = o.z;
 		return 0;
-	case -1:
-		self->w->x = o.x;
-		self->w->y = o.y;
-		self->w->z = o.z;
-		return 0;
-	case -2:
-		self->z->x = o.x;
-		self->z->y = o.y;
-		self->z->z = o.z;
-		return 0;
-	case -3:
-		self->y->x = o.x;
-		self->y->y = o.y;
-		self->y->z = o.z;
-		return 0;
-	case -4:
-		self->x->x = o.x;
-		self->x->y = o.y;
-		self->x->z = o.z;
-		return 0;
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return -1;
@@ -852,27 +820,31 @@ static int tmat4x3_contains(tmat4x3 * self, PyObject * value) {
 }
 
 static PyObject * tmat4x3_richcompare(tmat4x3 * self, PyObject * other, int comp_type) {
-	if (comp_type == Py_EQ) {
-		if (!PyObject_TypeCheck(other, &tmat4x3Type)) { // incopatible type
+	imat4x3 o2;
+
+	if (!unpack_imat4x3p(other, &o2)) {
+		if (comp_type == Py_EQ || comp_type == Py_NE) {
 			Py_RETURN_FALSE;
 		}
-		return PyBool_FromLong(
-			(self->x->x == ((tmat4x3*)other)->x->x) && (self->x->y == ((tmat4x3*)other)->x->y) && (self->x->z == ((tmat4x3*)other)->x->z) &&
-			(self->y->x == ((tmat4x3*)other)->y->x) && (self->y->y == ((tmat4x3*)other)->y->y) && (self->y->z == ((tmat4x3*)other)->y->z) &&
-			(self->z->x == ((tmat4x3*)other)->z->x) && (self->z->y == ((tmat4x3*)other)->z->y) && (self->z->z == ((tmat4x3*)other)->z->z) &&
-			(self->w->x == ((tmat4x3*)other)->w->x) && (self->w->y == ((tmat4x3*)other)->w->y) && (self->w->z == ((tmat4x3*)other)->w->z));
+		Py_RETURN_NOTIMPLEMENTED;
 	}
-	else if (comp_type == Py_NE) {
-		if (!PyObject_TypeCheck(other, &tmat4x3Type)) { // incopatible type
-			Py_RETURN_TRUE;
-		}
-		return PyBool_FromLong(
-			(self->x->x != ((tmat4x3*)other)->x->x) || (self->x->y != ((tmat4x3*)other)->x->y) || (self->x->z != ((tmat4x3*)other)->x->z) ||
-			(self->y->x != ((tmat4x3*)other)->y->x) || (self->y->y != ((tmat4x3*)other)->y->y) || (self->y->z != ((tmat4x3*)other)->y->z) ||
-			(self->z->x != ((tmat4x3*)other)->z->x) || (self->z->y != ((tmat4x3*)other)->z->y) || (self->z->z != ((tmat4x3*)other)->z->z) ||
-			(self->w->x != ((tmat4x3*)other)->w->x) || (self->w->y != ((tmat4x3*)other)->w->y) || (self->w->z != ((tmat4x3*)other)->w->z));
-	}
-	else {
+
+	switch (comp_type) {
+	case Py_EQ:
+		if ((self->x->x == o2.x.x) && (self->x->y == o2.x.y) && (self->x->z == o2.x.z) &&
+			(self->y->x == o2.y.x) && (self->y->y == o2.y.y) && (self->y->z == o2.y.z) &&
+			(self->z->x == o2.z.x) && (self->z->y == o2.z.y) && (self->z->z == o2.z.z) &&
+			(self->w->x == o2.w.x) && (self->w->y == o2.w.y) && (self->w->z == o2.w.z)) Py_RETURN_TRUE;
+		else Py_RETURN_FALSE;
+		break;
+	case Py_NE:
+		if ((self->x->x != o2.x.x) || (self->x->y != o2.x.y) || (self->x->z != o2.x.z) ||
+			(self->y->x != o2.y.x) || (self->y->y != o2.y.y) || (self->y->z != o2.y.z) ||
+			(self->z->x != o2.z.x) || (self->z->y != o2.z.y) || (self->z->z != o2.z.z) ||
+			(self->w->x != o2.w.x) || (self->w->y != o2.w.y) || (self->w->z != o2.w.z)) Py_RETURN_TRUE;
+		else Py_RETURN_FALSE;
+		break;
+	default:
 		Py_RETURN_NOTIMPLEMENTED;
 	}
 }
@@ -1008,7 +980,7 @@ static PySequenceMethods tmat4x3SeqMethods = {
 	0, // sq_repeat
 	(ssizeargfunc)tmat4x3_sq_item, // sq_item
 	0,
-	(ssizeobjargproc)tmat4x3_sq_setitem, // sq_ass_item
+	(ssizeobjargproc)tmat4x3_sq_ass_item, // sq_ass_item
 	0,
 	(objobjproc)tmat4x3_contains, // sq_contains
 	0, // sq_inplace_concat

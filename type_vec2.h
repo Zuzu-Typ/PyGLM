@@ -587,17 +587,13 @@ static PyObject* tvec2_sq_item(tvec2 * self, Py_ssize_t index) {
 		return PyFloat_FromDouble(self->x);
 	case 1:
 		return PyFloat_FromDouble(self->y);
-	case -1:
-		return PyFloat_FromDouble(self->y);
-	case -2:
-		return PyFloat_FromDouble(self->x);
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return NULL;
 	}
 }
 
-static int tvec2_sq_setitem(tvec2 * self, Py_ssize_t index, PyObject * value) {
+static int tvec2_sq_ass_item(tvec2 * self, Py_ssize_t index, PyObject * value) {
 	double d;
 	if (IS_NUMERIC(value)) {
 		d = pyvalue_as_double(value);
@@ -612,12 +608,6 @@ static int tvec2_sq_setitem(tvec2 * self, Py_ssize_t index, PyObject * value) {
 		return 0;
 	case 1:
 		self->y = d;
-		return 0;
-	case -1:
-		self->y = d;
-		return 0;
-	case -2:
-		self->x = d;
 		return 0;
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
@@ -636,47 +626,37 @@ static int tvec2_contains(tvec2 * self, PyObject * value) {
 }
 
 static PyObject * tvec2_richcompare(tvec2 * self, PyObject * other, int comp_type) {
-	if (comp_type == Py_EQ) {
-		if (!PyObject_TypeCheck(other, &tvec2Type)) { // incopatible type
+	ivec2 o2;
+
+	if (!unpack_ivec2p(other, &o2)) {
+		if (comp_type == Py_EQ || comp_type == Py_NE) {
 			Py_RETURN_FALSE;
 		}
-		return PyBool_FromLong((self->x == ((tvec2*)other)->x) && (self->y == ((tvec2*)other)->y));
+		Py_RETURN_NOTIMPLEMENTED;
 	}
-	else if (comp_type == Py_NE) {
-		if (!PyObject_TypeCheck(other, &tvec2Type)) { // incopatible type
-			Py_RETURN_TRUE;
-		}
-		return PyBool_FromLong((self->x != ((tvec2*)other)->x) || (self->y != ((tvec2*)other)->y));
-	}
-	else if (comp_type == Py_LT) {
-		if (!PyObject_TypeCheck(other, &tvec2Type)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for <: 'glm::detail::tvec2' and ", other);
-			return NULL;
-		}
-		return pack_tvec2((double)(self->x < ((tvec2*)other)->x), (double)(self->y < ((tvec2*)other)->y));
-	}
-	else if (comp_type == Py_LE) {
-		if (!PyObject_TypeCheck(other, &tvec2Type)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for <=: 'glm::detail::tvec2' and ", other);
-			return NULL;
-		}
-		return pack_tvec2((double)(self->x <= ((tvec2*)other)->x), (double)(self->y <= ((tvec2*)other)->y));
-	}
-	else if (comp_type == Py_GT) {
-		if (!PyObject_TypeCheck(other, &tvec2Type)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for >: 'glm::detail::tvec2' and ", other);
-			return NULL;
-		}
-		return pack_tvec2((double)(self->x > ((tvec2*)other)->x), (double)(self->y > ((tvec2*)other)->y));
-	}
-	else if (comp_type == Py_GE) {
-		if (!PyObject_TypeCheck(other, &tvec2Type)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for >=: 'glm::detail::tvec2' and ", other);
-			return NULL;
-		}
-		return pack_tvec2((double)(self->x >= ((tvec2*)other)->x), (double)(self->y >= ((tvec2*)other)->y));
-	}
-	else {
+
+	switch (comp_type) {
+	case Py_EQ:
+		if ((self->x == o2.x) && (self->y == o2.y)) Py_RETURN_TRUE;
+		else Py_RETURN_FALSE;
+		break;
+	case Py_NE:
+		if ((self->x != o2.x) || (self->y != o2.y)) Py_RETURN_TRUE;
+		else Py_RETURN_FALSE;
+		break;
+	case Py_LT:
+		return pack_tvec2((double)(self->x < o2.x), (double)(self->y < o2.y));
+		break;
+	case Py_LE:
+		return pack_tvec2((double)(self->x <= o2.x), (double)(self->y <= o2.y));
+		break;
+	case Py_GT:
+		return pack_tvec2((double)(self->x > o2.x), (double)(self->y > o2.y));
+		break;
+	case Py_GE:
+		return pack_tvec2((double)(self->x >= o2.x), (double)(self->y >= o2.y));
+		break;
+	default:
 		Py_RETURN_NOTIMPLEMENTED;
 	}
 }
@@ -801,7 +781,7 @@ static PySequenceMethods tvec2SeqMethods = {
 	0, // sq_repeat
 	(ssizeargfunc)tvec2_sq_item, // sq_item
 	0,
-	(ssizeobjargproc)tvec2_sq_setitem, // sq_ass_item
+	(ssizeobjargproc)tvec2_sq_ass_item, // sq_ass_item
 	0,
 	(objobjproc)tvec2_contains, // sq_contains
 	0, // sq_inplace_concat

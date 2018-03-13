@@ -424,21 +424,13 @@ static PyObject* tquat_sq_item(tquat * self, Py_ssize_t index) {
 		return PyFloat_FromDouble(self->z);
 	case 3:
 		return PyFloat_FromDouble(self->w);
-	case -1:
-		return PyFloat_FromDouble(self->w);
-	case -2:
-		return PyFloat_FromDouble(self->z);
-	case -3:
-		return PyFloat_FromDouble(self->y);
-	case -4:
-		return PyFloat_FromDouble(self->x);
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return NULL;
 	}
 }
 
-static int tquat_sq_setitem(tquat * self, Py_ssize_t index, PyObject * value) {
+static int tquat_sq_ass_item(tquat * self, Py_ssize_t index, PyObject * value) {
 	double d;
 	if (IS_NUMERIC(value)) {
 		d = pyvalue_as_double(value);
@@ -460,18 +452,6 @@ static int tquat_sq_setitem(tquat * self, Py_ssize_t index, PyObject * value) {
 	case 3:
 		self->w = d;
 		return 0;
-	case -1:
-		self->w = d;
-		return 0;
-	case -2:
-		self->z = d;
-		return 0;
-	case -3:
-		self->y = d;
-		return 0;
-	case -4:
-		self->x = d;
-		return 0;
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return -1;
@@ -489,47 +469,37 @@ static int tquat_contains(tquat * self, PyObject * value) {
 }
 
 static PyObject * tquat_richcompare(tquat * self, PyObject * other, int comp_type) {
-	if (comp_type == Py_EQ) {
-		if (!PyObject_TypeCheck(other, &tquatType)) { // incopatible type
+	iquat o2;
+
+	if (!unpack_iquatp(other, &o2)) {
+		if (comp_type == Py_EQ || comp_type == Py_NE) {
 			Py_RETURN_FALSE;
 		}
-		return PyBool_FromLong((self->x == ((tquat*)other)->x) && (self->y == ((tquat*)other)->y) && (self->z == ((tquat*)other)->z) && (self->w == ((tquat*)other)->w));
+		Py_RETURN_NOTIMPLEMENTED;
 	}
-	else if (comp_type == Py_NE) {
-		if (!PyObject_TypeCheck(other, &tquatType)) { // incopatible type
-			Py_RETURN_TRUE;
-		}
-		return PyBool_FromLong((self->x != ((tquat*)other)->x) || (self->y != ((tquat*)other)->y) || (self->z != ((tquat*)other)->z) || (self->w != ((tquat*)other)->w));
-	}
-	else if (comp_type == Py_LT) {
-		if (!PyObject_TypeCheck(other, &tquatType)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for <: 'glm::detail::tquat' and ", other);
-			return NULL;
-		}
-		return pack_tquat((double)(self->x < ((tquat*)other)->x), (double)(self->y < ((tquat*)other)->y), (double)(self->z < ((tquat*)other)->z), (double)(self->w < ((tquat*)other)->w));
-	}
-	else if (comp_type == Py_LE) {
-		if (!PyObject_TypeCheck(other, &tquatType)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for <=: 'glm::detail::tquat' and ", other);
-			return NULL;
-		}
-		return pack_tquat((double)(self->x <= ((tquat*)other)->x), (double)(self->y <= ((tquat*)other)->y), (double)(self->z <= ((tquat*)other)->z), (double)(self->w <= ((tquat*)other)->w));
-	}
-	else if (comp_type == Py_GT) {
-		if (!PyObject_TypeCheck(other, &tquatType)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for >: 'glm::detail::tquat' and ", other);
-			return NULL;
-		}
-		return pack_tquat((double)(self->x > ((tquat*)other)->x), (double)(self->y > ((tquat*)other)->y), (double)(self->z > ((tquat*)other)->z), (double)(self->w > ((tquat*)other)->w));
-	}
-	else if (comp_type == Py_GE) {
-		if (!PyObject_TypeCheck(other, &tquatType)) { // incopatible type
-			PY_TYPEERROR("unsupported operand type(s) for >=: 'glm::detail::tquat' and ", other);
-			return NULL;
-		}
-		return pack_tquat((double)(self->x >= ((tquat*)other)->x), (double)(self->y >= ((tquat*)other)->y), (double)(self->z >= ((tquat*)other)->z), (double)(self->w >= ((tquat*)other)->w));
-	}
-	else {
+
+	switch (comp_type) {
+	case Py_EQ:
+		if ((self->x == o2.x) && (self->y == o2.y) && (self->z == o2.z) && (self->w == o2.w)) Py_RETURN_TRUE;
+		else Py_RETURN_FALSE;
+		break;
+	case Py_NE:
+		if ((self->x != o2.x) || (self->y != o2.y) || (self->z != o2.z) || (self->w != o2.w)) Py_RETURN_TRUE;
+		else Py_RETURN_FALSE;
+		break;
+	case Py_LT:
+		return pack_tquat((double)(self->x < o2.x), (double)(self->y < o2.y), (double)(self->z < o2.z), (double)(self->w < o2.w));
+		break;
+	case Py_LE:
+		return pack_tquat((double)(self->x <= o2.x), (double)(self->y <= o2.y), (double)(self->z <= o2.z), (double)(self->w <= o2.w));
+		break;
+	case Py_GT:
+		return pack_tquat((double)(self->x > o2.x), (double)(self->y > o2.y), (double)(self->z > o2.z), (double)(self->w > o2.w));
+		break;
+	case Py_GE:
+		return pack_tquat((double)(self->x >= o2.x), (double)(self->y >= o2.y), (double)(self->z >= o2.z), (double)(self->w >= o2.w));
+		break;
+	default:
 		Py_RETURN_NOTIMPLEMENTED;
 	}
 }
@@ -668,7 +638,7 @@ static PySequenceMethods tquatSeqMethods = {
 	0, // sq_repeat
 	(ssizeargfunc)tquat_sq_item, // sq_item
 	0,
-	(ssizeobjargproc)tquat_sq_setitem, // sq_ass_item
+	(ssizeobjargproc)tquat_sq_ass_item, // sq_ass_item
 	0,
 	(objobjproc)tquat_contains, // sq_contains
 	0, // sq_inplace_concat

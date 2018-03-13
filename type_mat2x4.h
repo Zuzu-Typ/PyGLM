@@ -640,19 +640,13 @@ static PyObject* tmat2x4_sq_item(tmat2x4 * self, Py_ssize_t index) {
 	case 1:
 		Py_INCREF((PyObject*)self->y);
 		return (PyObject*)self->y;
-	case -1:
-		Py_INCREF((PyObject*)self->y);
-		return (PyObject*)self->y;
-	case -2:
-		Py_INCREF((PyObject*)self->x);
-		return (PyObject*)self->x;
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return NULL;
 	}
 }
 
-static int tmat2x4_sq_setitem(tmat2x4 * self, Py_ssize_t index, PyObject * value) {
+static int tmat2x4_sq_ass_item(tmat2x4 * self, Py_ssize_t index, PyObject * value) {
 	ivec4 o;
 	if (!unpack_ivec4p(value, &o)) {
 		PY_TYPEERROR("expected tvec4, got ", value);
@@ -670,18 +664,6 @@ static int tmat2x4_sq_setitem(tmat2x4 * self, Py_ssize_t index, PyObject * value
 		self->y->y = o.y;
 		self->y->z = o.z;
 		self->y->w = o.w;
-		return 0;
-	case -1:
-		self->y->x = o.x;
-		self->y->y = o.y;
-		self->y->z = o.z;
-		self->y->w = o.w;
-		return 0;
-	case -2:
-		self->x->x = o.x;
-		self->x->y = o.y;
-		self->x->z = o.z;
-		self->x->w = o.w;
 		return 0;
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
@@ -704,23 +686,27 @@ static int tmat2x4_contains(tmat2x4 * self, PyObject * value) {
 }
 
 static PyObject * tmat2x4_richcompare(tmat2x4 * self, PyObject * other, int comp_type) {
-	if (comp_type == Py_EQ) {
-		if (!PyObject_TypeCheck(other, &tmat2x4Type)) { // incopatible type
+	imat2x4 o2;
+
+	if (!unpack_imat2x4p(other, &o2)) {
+		if (comp_type == Py_EQ || comp_type == Py_NE) {
 			Py_RETURN_FALSE;
 		}
-		return PyBool_FromLong(
-			(self->x->x == ((tmat2x4*)other)->x->x) && (self->x->y == ((tmat2x4*)other)->x->y) && (self->x->z == ((tmat2x4*)other)->x->z) && (self->x->w == ((tmat2x4*)other)->x->w) &&
-			(self->y->x == ((tmat2x4*)other)->y->x) && (self->y->y == ((tmat2x4*)other)->y->y) && (self->y->z == ((tmat2x4*)other)->y->z) && (self->y->w == ((tmat2x4*)other)->y->w));
+		Py_RETURN_NOTIMPLEMENTED;
 	}
-	else if (comp_type == Py_NE) {
-		if (!PyObject_TypeCheck(other, &tmat2x4Type)) { // incopatible type
-			Py_RETURN_TRUE;
-		}
-		return PyBool_FromLong(
-			(self->x->x != ((tmat2x4*)other)->x->x) || (self->x->y != ((tmat2x4*)other)->x->y) || (self->x->z != ((tmat2x4*)other)->x->z) || (self->x->w != ((tmat2x4*)other)->x->w) ||
-			(self->y->x != ((tmat2x4*)other)->y->x) || (self->y->y != ((tmat2x4*)other)->y->y) || (self->y->z != ((tmat2x4*)other)->y->z) || (self->y->w != ((tmat2x4*)other)->y->w));
-	}
-	else {
+
+	switch (comp_type) {
+	case Py_EQ:
+		if ((self->x->x == o2.x.x) && (self->x->y == o2.x.y) && (self->x->z == o2.x.z) && (self->x->w == o2.x.w) &&
+			(self->y->x == o2.y.x) && (self->y->y == o2.y.y) && (self->y->z == o2.y.z) && (self->y->w == o2.y.w)) Py_RETURN_TRUE;
+		else Py_RETURN_FALSE;
+		break;
+	case Py_NE:
+		if ((self->x->x != o2.x.x) || (self->x->y != o2.x.y) || (self->x->z != o2.x.z) || (self->x->w != o2.x.w) ||
+			(self->y->x != o2.y.x) || (self->y->y != o2.y.y) || (self->y->z != o2.y.z) || (self->y->w != o2.y.w)) Py_RETURN_TRUE;
+		else Py_RETURN_FALSE;
+		break;
+	default:
 		Py_RETURN_NOTIMPLEMENTED;
 	}
 }
@@ -828,7 +814,7 @@ static PySequenceMethods tmat2x4SeqMethods = {
 	0, // sq_repeat
 	(ssizeargfunc)tmat2x4_sq_item, // sq_item
 	0,
-	(ssizeobjargproc)tmat2x4_sq_setitem, // sq_ass_item
+	(ssizeobjargproc)tmat2x4_sq_ass_item, // sq_ass_item
 	0,
 	(objobjproc)tmat2x4_contains, // sq_contains
 	0, // sq_inplace_concat
