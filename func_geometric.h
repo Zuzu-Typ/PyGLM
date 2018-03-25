@@ -83,7 +83,7 @@ static double ilength4(ivec4 o) {
 
 static PyObject * length(PyObject * self, PyObject * arg) {
 	if (IS_NUMERIC(arg)) {
-		return PyObject_CallMethod(arg, "__abs__", "()");
+		return PyNumber_Absolute(arg);
 	}
 	void* o = NULL;
 	char vecType = unpack_ivecq(arg, &o);

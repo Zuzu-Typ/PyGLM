@@ -136,7 +136,7 @@ static PyMethodDef detailmethods[] = {
 	{ "smoothstep", (PyCFunction)smoothstep_, METH_VARARGS, "smoothstep(edge0, edge1, x) -> float or tvecn\nReturns 0.0 if x <= edge0 and 1.0 if x >= edge1 and\nperforms smooth Hermite interpolation between 0 and 1\nwhen edge0 < x < edge1. This is useful in cases where\nyou would want a threshold function with a smooth\ntransition." },
 	{ "isnan", (PyCFunction)isnan_, METH_O, "isnan(x) -> bool or tvecn\nReturns true if x holds a NaN (not a number)\nrepresentation in the underlying implementation's set of\nfloating point representations. Returns false otherwise,\nincluding for implementations with no NaN\nrepresentations." },
 	{ "isinf", (PyCFunction)isinf_, METH_O, "isinf(x) -> bool or tvecn\nReturns true if x holds a positive infinity or negative\ninfinity representation in the underlying implementation's\nset of floating point representations. Returns false\notherwise, including for implementations with no infinity\nrepresentations." },
-	{ "fma", (PyCFunction)fma_, METH_VARARGS, "smoothstep(a, b, c) -> float\nComputes and returns a * b + c." },
+	{ "fma", (PyCFunction)fma_, METH_VARARGS, "fma(a, b, c) -> float\nComputes and returns a * b + c." },
 	{ "frexp", (PyCFunction)frexp_, METH_VARARGS, "frexp(x, exp) -> float or tvecn\nSplits x into a floating-point significand in the range\n[0.5, 1.0) and an integral exponent of two, such that:\nx = significand * exp(2, exponent)" },
 	{ "ldexp", (PyCFunction)ldexp_, METH_VARARGS, "ldexp(x, exp) -> float or tvecn\nBuilds a floating-point number from x and the\ncorresponding integral exponent of two in exp, returning:\nsignificand * exp(2, exponent)" },
 
@@ -295,7 +295,7 @@ static PyMethodDef gtcmethods[] = {
 	{ "quat_cast", (PyCFunction)quat_cast, METH_O, "quat_cast(m) -> tquat\nConverts a 3 * 3 or 4 * 4 matrix to a quaternion." },
 	{ "angle", (PyCFunction)angle, METH_O, "angle(x) -> float\nReturns the quaternion rotation angle." },
 	{ "axis", (PyCFunction)axis, METH_O, "axis(x) -> tvec3\nReturns the quaternion rotation axis." },
-	{ "angleAxis", (PyCFunction)angleAxis, METH_O, "angleAxis(x) -> tquat\nBuild a quaternion from an angle and a normalized axis." },
+	{ "angleAxis", (PyCFunction)angleAxis, METH_VARARGS, "angleAxis(angle, v) -> tquat\nBuild a quaternion from an angle and a normalized axis." },
 
 	// matrix_access
 	{ "row", (PyCFunction)row, METH_VARARGS, "row(m, index[, x]) -> tvecn or tmatnxn\nGet a specific row of a matrix or set a specific row to a matrix." },
@@ -533,7 +533,7 @@ static PyMethodDef glmmethods[] = {
 	{ "quat_cast", (PyCFunction)quat_cast, METH_O, "quat_cast(m) -> tquat\nConverts a 3 * 3 or 4 * 4 matrix to a quaternion." },
 	{ "angle", (PyCFunction)angle, METH_O, "angle(x) -> float\nReturns the quaternion rotation angle." },
 	{ "axis", (PyCFunction)axis, METH_O, "axis(x) -> tvec3\nReturns the quaternion rotation axis." },
-	{ "angleAxis", (PyCFunction)angleAxis, METH_O, "angleAxis(x) -> tquat\nBuild a quaternion from an angle and a normalized axis." },
+	{ "angleAxis", (PyCFunction)angleAxis, METH_VARARGS, "angleAxis(angle, v) -> tquat\nBuild a quaternion from an angle and a normalized axis." },
 
 	// matrix_access
 	{ "row", (PyCFunction)row, METH_VARARGS, "row(m, index[, x]) -> tvecn or tmatnxn\nGet a specific row of a matrix or set a specific row to a matrix." },

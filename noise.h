@@ -1394,7 +1394,7 @@ static PyObject* simplex(PyObject* self, PyObject* arg) {
 
 		// Gradients: 7x7 points over a square, mapped onto an octahedron.
 		// The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
-		double n_ = (0.142857142857); // 1.0/7.0
+		double n_ = (1.0 / 7.0); // 1.0/7.0
 		ivec3 ns = to_ivec3(
 			n_ * D.w - D.x,
 			n_ * D.y - D.z,
@@ -1436,10 +1436,10 @@ static PyObject* simplex(PyObject* self, PyObject* arg) {
 			floor(b0.z) * 2.0 + 1.0,
 			floor(b0.w) * 2.0 + 1.0);
 		ivec4 s1 = to_ivec4(
-			floor(b1.x * 2.0 + 1.0),
-			floor(b1.y * 2.0 + 1.0),
-			floor(b1.z * 2.0 + 1.0),
-			floor(b1.w * 2.0 + 1.0));
+			floor(b1.x) * 2.0 + 1.0,
+			floor(b1.y) * 2.0 + 1.0,
+			floor(b1.z) * 2.0 + 1.0,
+			floor(b1.w) * 2.0 + 1.0);
 		ivec4 sh = to_ivec4(
 			-step(h.x, 0.0),
 			-step(h.y, 0.0),
@@ -1472,8 +1472,6 @@ static PyObject* simplex(PyObject* self, PyObject* arg) {
 		p1 = mulv3d(p1, norm.y);
 		p2 = mulv3d(p2, norm.z);
 		p3 = mulv3d(p3, norm.w);
-		
-		
 
 		// Mix final noise value
 		ivec4 m = to_ivec4(
@@ -1487,15 +1485,17 @@ static PyObject* simplex(PyObject* self, PyObject* arg) {
 		return out;
 	}
 	if (vecType == GLM_TVEC4) {
+		double const sqrt_of_five = sqrt(5.0);
+		double const G4 = (5. - sqrt_of_five) / 20.;
 		ivec4 v = *((ivec4*)o);
 		ivec4 const C = to_ivec4(
-			0.138196601125011,  // (5 - sqrt(5))/20  G4
-			0.276393202250021,  // 2 * G4
-			0.414589803375032,  // 3 * G4
-			-0.447213595499958); // -1 + 4 * G4
+			G4,  // (5 - sqrt(5))/20  G4
+			2.0 * G4,  // 2 * G4
+			3.0 * G4,  // 3 * G4
+			-1. + 4. * G4); // -1 + 4 * G4
 
 								 // (sqrt(5) - 1)/4 = F4, used once below
-		double const F4 = (0.309016994374947451);
+		double const F4 = ((sqrt_of_five - 1.0) / 4.0);
 
 		// First corner
 		ivec4 i = to_ivec4(

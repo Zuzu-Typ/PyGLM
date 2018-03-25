@@ -13,7 +13,7 @@ static double taylormethod_(double x) {
 }
 
 static PyObject* convertLinearToSRGB(PyObject * self, PyObject* args, PyObject* kwargs) {
-	static char *kwlist[] = { "x", "y", NULL };
+	static char *kwlist[] = { "ColorLinear", "Gamma", NULL };
 	PyObject* arg1 = NULL, *arg2 = NULL;
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|O", kwlist, &arg1, &arg2)) {
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for convertLinearToSRGB()");
@@ -101,7 +101,7 @@ static double convertSRGBToRgb_(double x, double y) {
 }
 
 static PyObject* convertSRGBToLinear(PyObject * self, PyObject* args, PyObject* kwargs) {
-	static char *kwlist[] = { "x", "y", NULL };
+	static char *kwlist[] = { "ColorLinear", "Gamma", NULL };
 	PyObject* arg1 = NULL, *arg2 = NULL;
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|O", kwlist, &arg1, &arg2)) {
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for convertSRGBToLinear()");

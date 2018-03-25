@@ -19,3 +19,4 @@ Python.h
 buildcp27.bat
 runreadmelang.bat
 readmelang.py
+pydll test.vcxproj.user
