@@ -77,6 +77,9 @@ sizeof_(PyObject* self, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, &tvec4Type) || arg == (PyObject*)&tvec4Type) {
 		return PyLong_FromLong(sizeof(fvec4));
 	}
+	if (PyObject_TypeCheck(arg, &tquatType) || arg == (PyObject*)&tquatType) {
+		return PyLong_FromLong(sizeof(fquat));
+	}
 	if (PyObject_TypeCheck(arg, &tmat2x2Type) || arg == (PyObject*)&tmat2x2Type) {
 		return PyLong_FromLong(sizeof(fmat2x2));
 	}

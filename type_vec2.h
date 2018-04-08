@@ -339,7 +339,16 @@ tvec2_floordiv(PyObject *obj1, PyObject *obj2)
 
 static PyObject *
 tvec2_divmod(PyObject * obj1, PyObject * obj2) {
-	return Py_BuildValue("(OO)", tvec2_floordiv(obj1, obj2), tvec2_mod(obj1, obj2));
+	PyObject *arg1, *arg2;
+	arg1 = tvec2_floordiv(obj1, obj2);
+	arg2 = tvec2_mod(obj1, obj2);
+	if (arg1 == NULL || arg2 == NULL) {
+		return NULL;
+	}
+	PyObject* out = PyTuple_Pack(2, arg1, arg2);
+	Py_DECREF(arg1);
+	Py_DECREF(arg2);
+	return out;
 }
 
 // ternaryfunc

@@ -2294,7 +2294,7 @@ static char unpack_pyobject(PyObject * arg, void** o, short has) {
 	}
 	if (has & GLM_HAS_TQUAT && PyObject_TypeCheck(arg, &tquatType)) {
 		*o = malloc(sizeof(iquat));
-		*((iquat*)*o) = to_iquatq(((iquat*)arg)->x, ((iquat*)arg)->y, ((iquat*)arg)->z, ((iquat*)arg)->w);
+		*((iquat*)*o) = to_iquatq(((tquat*)arg)->x, ((tquat*)arg)->y, ((tquat*)arg)->z, ((tquat*)arg)->w);
 		return GLM_TQUAT;
 	}
 	if (PyTuple_Check(arg)) {

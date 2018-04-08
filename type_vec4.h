@@ -43,7 +43,7 @@ tvec4_init(tvec4 *self, PyObject *args, PyObject *kwds)
 
 			ivec4 o;
 
-			if (!unpack_ivec4p(arg1, &o)) {
+			if (unpack_ivec4p(arg1, &o)) {
 				self->x = o.x;
 				self->y = o.y;
 				self->z = o.z;
@@ -460,7 +460,16 @@ tvec4_floordiv(PyObject *obj1, PyObject *obj2)
 
 static PyObject *
 tvec4_divmod(PyObject * obj1, PyObject * obj2) {
-	return Py_BuildValue("(OO)", tvec4_floordiv(obj1, obj2), tvec4_mod(obj1, obj2));
+	PyObject *arg1, *arg2;
+	arg1 = tvec4_floordiv(obj1, obj2);
+	arg2 = tvec4_mod(obj1, obj2);
+	if (arg1 == NULL || arg2 == NULL) {
+		return NULL;
+	}
+	PyObject* out = PyTuple_Pack(2, arg1, arg2);
+	Py_DECREF(arg1);
+	Py_DECREF(arg2);
+	return out;
 }
 
 // ternaryfunc

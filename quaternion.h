@@ -223,7 +223,7 @@ tquat_mul(PyObject *obj1, PyObject *obj2)
 {
 	if (IS_NUMERIC(obj1)) {
 		iquat o;
-		if (!unpack_iquatp(obj1, &o)) {
+		if (!unpack_iquatp(obj2, &o)) {
 			PY_TYPEERROR_2O("unsupported operand type(s) for *: ", obj1, obj2);
 			return NULL;
 		}
@@ -281,9 +281,7 @@ tquat_mul(PyObject *obj1, PyObject *obj2)
 		free(o2);
 		return out;
 	}
-	else { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
-		Py_RETURN_NOTIMPLEMENTED;
-	}
+	Py_RETURN_NOTIMPLEMENTED;
 }
 
 static PyObject *
@@ -753,7 +751,8 @@ static PyTypeObject tquatType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE |
+	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
 	"tquat( <tquat compatible type(s)> )\n4 components quaternion of medium double-qualifier floating-point numbers.",            /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */

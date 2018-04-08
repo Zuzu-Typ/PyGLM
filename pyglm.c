@@ -345,7 +345,7 @@ static PyModuleDef gtcmodule = {
 #endif
 
 static PyMethodDef glmmethods[] = {
-	//{"test", (PyCFunction)test, METH_O, ""},
+	//{"test", (PyCFunction)test, METH_VARARGS, ""},
 	// detail
 	// func_vector_relational
 	{ "equal", (PyCFunction)equal, METH_VARARGS, "equal(x, y) -> (x == y)\nReturns the component-wise comparison of result x == y." },
@@ -385,7 +385,7 @@ static PyMethodDef glmmethods[] = {
 	{ "smoothstep", (PyCFunction)smoothstep_, METH_VARARGS, "smoothstep(edge0, edge1, x) -> float or tvecn\nReturns 0.0 if x <= edge0 and 1.0 if x >= edge1 and\nperforms smooth Hermite interpolation between 0 and 1\nwhen edge0 < x < edge1. This is useful in cases where\nyou would want a threshold function with a smooth\ntransition." },
 	{ "isnan", (PyCFunction)isnan_, METH_O, "isnan(x) -> bool or tvecn\nReturns true if x holds a NaN (not a number)\nrepresentation in the underlying implementation's set of\nfloating point representations. Returns false otherwise,\nincluding for implementations with no NaN\nrepresentations." },
 	{ "isinf", (PyCFunction)isinf_, METH_O, "isinf(x) -> bool or tvecn\nReturns true if x holds a positive infinity or negative\ninfinity representation in the underlying implementation's\nset of floating point representations. Returns false\notherwise, including for implementations with no infinity\nrepresentations." },
-	{ "fma", (PyCFunction)fma_, METH_VARARGS, "smoothstep(a, b, c) -> float\nComputes and returns a * b + c." },
+	{ "fma", (PyCFunction)fma_, METH_VARARGS, "fma(a, b, c) -> float\nComputes and returns a * b + c." },
 	{ "frexp", (PyCFunction)frexp_, METH_VARARGS, "frexp(x, exp) -> float or tvecn\nSplits x into a floating-point significand in the range\n[0.5, 1.0) and an integral exponent of two, such that:\nx = significand * exp(2, exponent)" },
 	{ "ldexp", (PyCFunction)ldexp_, METH_VARARGS, "ldexp(x, exp) -> float or tvecn\nBuilds a floating-point number from x and the\ncorresponding integral exponent of two in exp, returning:\nsignificand * exp(2, exponent)" },
 	
@@ -523,7 +523,7 @@ static PyMethodDef glmmethods[] = {
 	// quaternion
 	{ "lerp", (PyCFunction)lerp, METH_VARARGS, "lerp(x, y, a) -> tquat\nLinear interpolation of two quaternions.\nThe interpolation is oriented." },
 	{ "slerp", (PyCFunction)slerp, METH_VARARGS, "slerp(x, y, a) -> tquat\nSpherical linear interpolation of two quaternions.\nThe interpolation always take the short path and the rotation is performed at constant speed." },
-	{ "conjugate", (PyCFunction)conjugate, METH_VARARGS, "conjugate(x, y, a) -> tquat\nReturns the q conjugate." },
+	{ "conjugate", (PyCFunction)conjugate, METH_O, "conjugate(q) -> tquat\nReturns the q conjugate." },
 	{ "eulerAngles", (PyCFunction)eulerAngles, METH_O, "eulerAngles(x) -> tvec3\nReturns euler angles, pitch as x, yaw as y, roll as z." },
 	{ "roll", (PyCFunction)roll, METH_O, "roll(x) -> float\nReturns roll value of euler angles expressed in radians." },
 	{ "pitch", (PyCFunction)pitch, METH_O, "pitch(x) -> float\nReturns pitch value of euler angles expressed in radians." },
@@ -567,7 +567,7 @@ static PyMethodDef glmmethods[] = {
 	{ "acoth", (PyCFunction)acoth_, METH_O, "acoth(x) -> float or tvecn\nInverse cotangent hyperbolic function." },
 
 	// type_ptr
-	{ "value_ptr", (PyCFunction)value_ptr, METH_O, "value_ptr(x) -> void* as int\nReturn the constant address to the data of the input parameter." },
+	{ "value_ptr", (PyCFunction)value_ptr, METH_O, "value_ptr(x) -> void* as int\nReturn the constant address to the data of the input parameter.\nPlease use glm.sizeof(x) to get the size of the pointer's content." },
 	{ "sizeof", (PyCFunction)sizeof_, METH_O, "sizeof(x) -> int\nReturn the size of x in bytes." },
 	{ NULL, NULL, 0, NULL }
 };
