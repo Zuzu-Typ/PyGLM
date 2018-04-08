@@ -24,7 +24,7 @@ static ivec4 grad4(double j, ivec4 ip) {
 	return to_ivec4(pXYZ.x, pXYZ.y, pXYZ.z, pW);
 }
 
-static PyObject * grad4_(PyObject self, PyObject* args) {
+static PyObject * grad4_(PyObject* self, PyObject* args) {
 	PyObject * arg1, *arg2;
 	UNPACK_2_VARARGS(args, "grad4", arg1, arg2);
 	if (!IS_NUMERIC(arg1)) {
