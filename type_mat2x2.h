@@ -619,8 +619,11 @@ static PyObject * tmat2x2_richcompare(tmat2x2 * self, PyObject * other, int comp
 	imat2x2 o2;
 
 	if (!unpack_imat2x2p(other, &o2)) {
-		if (comp_type == Py_EQ || comp_type == Py_NE) {
+		if (comp_type == Py_EQ) {
 			Py_RETURN_FALSE;
+		}
+		if (comp_type == Py_NE) {
+			Py_RETURN_TRUE;
 		}
 		Py_RETURN_NOTIMPLEMENTED;
 	}

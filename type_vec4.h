@@ -812,8 +812,11 @@ static PyObject * tvec4_richcompare(tvec4 * self, PyObject * other, int comp_typ
 	ivec4 o2;
 
 	if (!unpack_ivec4p(other, &o2)) {
-		if (comp_type == Py_EQ || comp_type == Py_NE) {
+		if (comp_type == Py_EQ) {
 			Py_RETURN_FALSE;
+		}
+		if (comp_type == Py_NE) {
+			Py_RETURN_TRUE;
 		}
 		Py_RETURN_NOTIMPLEMENTED;
 	}

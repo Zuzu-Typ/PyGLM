@@ -973,8 +973,11 @@ static PyObject * tmat4x4_richcompare(tmat4x4 * self, PyObject * other, int comp
 	imat4x4 o2;
 
 	if (!unpack_imat4x4p(other, &o2)) {
-		if (comp_type == Py_EQ || comp_type == Py_NE) {
+		if (comp_type == Py_EQ) {
 			Py_RETURN_FALSE;
+		}
+		if (comp_type == Py_NE) {
+			Py_RETURN_TRUE;
 		}
 		Py_RETURN_NOTIMPLEMENTED;
 	}
