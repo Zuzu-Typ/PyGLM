@@ -126,7 +126,7 @@ static PyObject * matrixCompMult(PyObject * self, PyObject * args) {
 #define TRANSPOSE_TMAT4x3P(m) pack_tmat3x4(((imat4x3*)m)->x.x, ((imat4x3*)m)->y.x, ((imat4x3*)m)->z.x, ((imat4x3*)m)->w.x, ((imat4x3*)m)->x.y, ((imat4x3*)m)->y.y, ((imat4x3*)m)->z.y, ((imat4x3*)m)->w.y, ((imat4x3*)m)->x.z, ((imat4x3*)m)->y.z, ((imat4x3*)m)->z.z, ((imat4x3*)m)->w.z)
 
 #define TRANSPOSE_IMAT4x4P(m) to_imat4x4p(((imat4x4*)m)->x.x, ((imat4x4*)m)->y.x, ((imat4x4*)m)->z.x, ((imat4x4*)m)->w.x, ((imat4x4*)m)->x.y, ((imat4x4*)m)->y.y, ((imat4x4*)m)->z.y, ((imat4x4*)m)->w.y, ((imat4x4*)m)->x.z, ((imat4x4*)m)->y.z, ((imat4x4*)m)->z.z, ((imat4x4*)m)->w.z, ((imat4x4*)m)->x.w, ((imat4x4*)m)->y.w, ((imat4x4*)m)->z.w, ((imat4x4*)m)->w.w)
-#define TRANSPOSE_TMAT4x4P(m) pack_tmat4x4(((imat4x4*)m)->x.x, ((imat4x4*)m)->y.x, ((imat4x4*)m)->z.x, ((imat4x4*)m)->w.x, ((imat4x4*)m)->x.y, ((imat4x4*)m)->y.y, ((imat4x4*)m)->y.y, ((imat4x4*)m)->w.y, ((imat4x4*)m)->x.z, ((imat4x4*)m)->y.z, ((imat4x4*)m)->z.z, ((imat4x4*)m)->w.z, ((imat4x4*)m)->x.w, ((imat4x4*)m)->y.w, ((imat4x4*)m)->z.w, ((imat4x4*)m)->w.w)
+#define TRANSPOSE_TMAT4x4P(m) pack_tmat4x4(((imat4x4*)m)->x.x, ((imat4x4*)m)->y.x, ((imat4x4*)m)->z.x, ((imat4x4*)m)->w.x, ((imat4x4*)m)->x.y, ((imat4x4*)m)->y.y, ((imat4x4*)m)->z.y, ((imat4x4*)m)->w.y, ((imat4x4*)m)->x.z, ((imat4x4*)m)->y.z, ((imat4x4*)m)->z.z, ((imat4x4*)m)->w.z, ((imat4x4*)m)->x.w, ((imat4x4*)m)->y.w, ((imat4x4*)m)->z.w, ((imat4x4*)m)->w.w)
 
 
 static PyObject* transpose(PyObject * self, PyObject* arg) {
