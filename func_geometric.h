@@ -248,16 +248,24 @@ static PyObject * normalize(PyObject * self, PyObject * arg) {
 	void* o = NULL;
 	char vecType = unpack_ivecq(arg, &o);
 	if (vecType == GLM_TVEC2) {
-		return build_ivec2(inormalize2(*((ivec2*)o)));
+		PyObject* out = build_ivec2(inormalize2(*((ivec2*)o)));
+		free(o);
+		return out;
 	}
 	if (vecType == GLM_TVEC3) {
-		return build_ivec3(inormalize3(*((ivec3*)o)));
+		PyObject* out = build_ivec3(inormalize3(*((ivec3*)o)));
+		free(o);
+		return out;
 	}
 	if (vecType == GLM_TVEC4) {
-		return build_ivec4(inormalize4(*((ivec4*)o)));
+		PyObject* out = build_ivec4(inormalize4(*((ivec4*)o)));
+		free(o);
+		return out;
 	}
 	if (vecType == GLM_TQUAT) {
-		return build_iquat(inormalizeq(*((iquat*)o)));
+		PyObject* out = build_iquat(inormalizeq(*((iquat*)o)));
+		free(o);
+		return out;
 	}
 	PY_TYPEERROR("unsupported operand type(s) for normalize(): ", arg);
 	return NULL;
