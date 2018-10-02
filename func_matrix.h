@@ -347,14 +347,18 @@ static PyObject * outerProduct(PyObject * self, PyObject * args) {
 
 static imat2x2 INVERSE2(imat2x2 m) {
 	double ood = 1.0 / DETERMINANT2(m);
-	return to_imat2x2((m.y.y * ood), (-m.x.y * ood), (-m.y.x * ood), (m.x.x * ood));
+	return to_imat2x2((m.y.y * ood), (-m.x.y * ood), 
+		(-m.y.x * ood), (m.x.x * ood));
 }
 
 //#define INVERSE3_(m,ood) to_tmat3x3(+(m.y.y * m.z.z - m.z.y * m.y.z) * ood,-(m.x.y * m.z.z - m.z.y * m.x.z) * ood,+(m.x.y * m.y.z - m.y.y * m.x.z) * ood,-(m.y.x * m.z.z - m.z.x * m.y.z) * ood,+(m.x.x * m.z.z - m.z.x * m.x.z) * ood,+(m.y.x * m.z.y - m.z.x * m.y.y) * ood,-(m.x.x * m.y.z - m.y.x * m.x.z) * ood,-(m.x.x * m.z.y - m.z.x * m.x.y) * ood,+(m.x.x * m.y.y - m.y.x * m.x.y) * ood)
 
 static imat3x3 INVERSE3(imat3x3 m) {
 	double ood = 1.0 / DETERMINANT3(m);
-	return to_imat3x3(+(m.y.y * m.z.z - m.z.y * m.y.z) * ood, -(m.x.y * m.z.z - m.z.y * m.x.z) * ood, +(m.x.y * m.y.z - m.y.y * m.x.z) * ood, -(m.y.x * m.z.z - m.z.x * m.y.z) * ood, +(m.x.x * m.z.z - m.z.x * m.x.z) * ood, +(m.y.x * m.z.y - m.z.x * m.y.y) * ood, -(m.x.x * m.y.z - m.y.x * m.x.z) * ood, -(m.x.x * m.z.y - m.z.x * m.x.y) * ood, +(m.x.x * m.y.y - m.y.x * m.x.y) * ood);
+	return to_imat3x3(
+		+(m.y.y * m.z.z - m.z.y * m.y.z) * ood, -(m.x.y * m.z.z - m.z.y * m.x.z) * ood, +(m.x.y * m.y.z - m.y.y * m.x.z) * ood, 
+		-(m.y.x * m.z.z - m.z.x * m.y.z) * ood, +(m.x.x * m.z.z - m.z.x * m.x.z) * ood, -(m.x.x * m.y.z - m.y.x * m.x.z) * ood, 
+		+(m.y.x * m.z.y - m.z.x * m.y.y) * ood, -(m.x.x * m.z.y - m.z.x * m.x.y) * ood, +(m.x.x * m.y.y - m.y.x * m.x.y) * ood);
 }
 
 
