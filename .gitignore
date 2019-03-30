@@ -2,21 +2,14 @@
 build/
 dist/
 PyGLM.egg-info/
+PyGLM test/
+PyGLM build/
 pyvers/
 tests/
-x64/
 .pypirc
 build.bat
 build 32.bat
-buildcp36.bat
 DevToolsx64.lnk
-pydll test.sln
-pydll test.vcxproj
-pydll test.vcxproj.filters
 upload.bat
-setup_no_wheel.py
-Python.h
-buildcp27.bat
 runreadmelang.bat
 readmelang.py
-pydll test.vcxproj.user

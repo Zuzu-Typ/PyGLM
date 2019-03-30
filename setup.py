@@ -11,7 +11,7 @@ from codecs import open
 from os import path
 
 module1 = Extension('glm',
-                    sources = ['pyglm.c'])
+                    sources = ['PyGLM.cpp'], include_dirs=["glm/"])
 
 here = path.abspath(path.dirname(__file__))
 
@@ -31,7 +31,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.4.8b1',
+    version='0.5.0b1',
 
     description='OpenGL Mathematics library for Python',
     long_description=long_description,
@@ -65,13 +65,10 @@ setup(
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
         "Operating System :: OS Independent",
@@ -81,7 +78,7 @@ setup(
     ],
 
     # What does your project relate to?
-    keywords='GLM OpenGL matrix vector vec mat Mathematics 3D python python2 python3 2 3 library python-c-api c-api math-library pip pypi matrix-manipulation matrix-multiplication matrix-functions quaternion c glsl',
+    keywords='GLM OpenGL matrix vector vec mat Mathematics 3D python python3 3 library python-c-api c-api math-library pip pypi matrix-manipulation matrix-multiplication matrix-functions quaternion c glsl',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
