@@ -17,9 +17,6 @@
 #include <glm/gtc/random.hpp>
 #include <glm/gtc/reciprocal.hpp>
 #include <glm/gtc/type_ptr.hpp>
-//#include <string>
-
-#define Py_TPFLAGS_CHECKTYPES 0
 
 //TYPES
 
@@ -357,8 +354,7 @@ static PyTypeObject vec2Type = {
 	0,                         /* tp_setattro */
 	&vec2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"vec2( <vec2 compatible type(s)> )\n2 components vector of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -549,8 +545,7 @@ static PyTypeObject vec3Type = {
 	0,                         /* tp_setattro */
 	&vec3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"vec3( <vec3 compatible type(s)> )\n3 components vector of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -743,8 +738,7 @@ static PyTypeObject vec4Type = {
 	0,                         /* tp_setattro */
 	&vec4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"vec4( <vec4 compatible type(s)> )\n4 components vector of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -924,8 +918,7 @@ static PyTypeObject mvec2Type = {
 	(setattrofunc)mvec2_setattr,                         /* tp_setattro */
 	&mvec2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mvec2( <mvec2 compatible type(s)> )\n2 components mvector of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -1105,8 +1098,7 @@ static PyTypeObject mvec3Type = {
 	(setattrofunc)mvec3_setattr,                         /* tp_setattro */
 	&mvec3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mvec3( <mvec3 compatible type(s)> )\n3 components mvector of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -1286,8 +1278,7 @@ static PyTypeObject mvec4Type = {
 	(setattrofunc)mvec4_setattr,                         /* tp_setattro */
 	&mvec4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mvec4( <mvec4 compatible type(s)> )\n4 components mvector of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -1477,8 +1468,7 @@ static PyTypeObject mat2x2Type = {
 	0,                         /* tp_setattro */
 	&mat2x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mat2x2( <mat2x2 compatible type(s)> )\n2 columns of 2 components matrix of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -1668,8 +1658,7 @@ static PyTypeObject mat2x3Type = {
 	0,                         /* tp_setattro */
 	&mat2x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mat2x3( <mat2x3 compatible type(s)> )\n2 columns of 3 components matrix of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -1859,8 +1848,7 @@ static PyTypeObject mat2x4Type = {
 	0,                         /* tp_setattro */
 	&mat2x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mat2x4( <mat2x4 compatible type(s)> )\n2 columns of 4 components matrix of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -2050,8 +2038,7 @@ static PyTypeObject mat3x2Type = {
 	0,                         /* tp_setattro */
 	&mat3x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mat3x2( <mat3x2 compatible type(s)> )\n3 columns of 2 components matrix of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -2241,8 +2228,7 @@ static PyTypeObject mat3x3Type = {
 	0,                         /* tp_setattro */
 	&mat3x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mat3x3( <mat3x3 compatible type(s)> )\n3 columns of 3 components matrix of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -2432,8 +2418,7 @@ static PyTypeObject mat3x4Type = {
 	0,                         /* tp_setattro */
 	&mat3x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mat3x4( <mat3x4 compatible type(s)> )\n3 columns of 4 components matrix of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -2623,8 +2608,7 @@ static PyTypeObject mat4x2Type = {
 	0,                         /* tp_setattro */
 	&mat4x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mat4x2( <mat4x2 compatible type(s)> )\n4 columns of 2 components matrix of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -2814,8 +2798,7 @@ static PyTypeObject mat4x3Type = {
 	0,                         /* tp_setattro */
 	&mat4x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mat4x3( <mat4x3 compatible type(s)> )\n4 columns of 3 components matrix of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -3005,8 +2988,7 @@ static PyTypeObject mat4x4Type = {
 	0,                         /* tp_setattro */
 	&mat4x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"mat4x4( <mat4x4 compatible type(s)> )\n4 columns of 4 components matrix of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -3191,8 +3173,7 @@ static PyTypeObject quatType = {
 	0,                         /* tp_setattro */
 	&quatBufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE |
-	Py_TPFLAGS_CHECKTYPES,   /* tp_flags */
+	Py_TPFLAGS_BASETYPE,   /* tp_flags */
 	"quat( <quat compatible type(s)> )\n4 components quaternion of medium qualifier floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
@@ -10341,7 +10322,7 @@ mat3x2_init(mat3x2 *self, PyObject *args, PyObject *kwds)
 	}
 
 	if (arg5 == NULL || arg6 == NULL) {
-		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for tmat3x2()");
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x2()");
 		return -1;
 	}
 
@@ -10969,7 +10950,7 @@ mat3x3_init(mat3x3 *self, PyObject *args, PyObject *kwds)
 	}
 
 	if (arg5 == NULL || arg6 == NULL || arg7 == NULL || arg8 == NULL || arg9 == NULL) {
-		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for tmat3x3()");
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x3()");
 		return -1;
 	}
 
@@ -11623,7 +11604,7 @@ mat3x4_init(mat3x4 *self, PyObject *args, PyObject *kwds)
 	}
 
 	if (arg5 == NULL || arg6 == NULL || arg7 == NULL || arg8 == NULL || arg9 == NULL || arg10 == NULL || arg11 == NULL || arg12 == NULL) {
-		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for tmat3x4()");
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x4()");
 		return -1;
 	}
 
@@ -12255,7 +12236,7 @@ mat4x2_init(mat4x2 *self, PyObject *args, PyObject *kwds)
 	}
 
 	if (arg6 == NULL || arg7 == NULL || arg8 == NULL) {
-		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for tmat4x2()");
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x2()");
 		return -1;
 	}
 
@@ -12889,7 +12870,7 @@ mat4x3_init(mat4x3 *self, PyObject *args, PyObject *kwds)
 	}
 
 	if (arg6 == NULL || arg7 == NULL || arg8 == NULL || arg9 == NULL || arg10 == NULL || arg11 == NULL || arg12 == NULL) {
-		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for tmat4x3()");
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x3()");
 		return -1;
 	}
 
@@ -13527,7 +13508,7 @@ mat4x4_init(mat4x4 *self, PyObject *args, PyObject *kwds)
 	}
 
 	if (arg6 == NULL || arg7 == NULL || arg8 == NULL || arg9 == NULL || arg10 == NULL || arg11 == NULL || arg12 == NULL || arg13 == NULL || arg14 == NULL || arg15 == NULL || arg16 == NULL) {
-		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for tmat4x4()");
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x4()");
 		return -1;
 	}
 
@@ -15149,6 +15130,18 @@ NAME##_(PyObject* self, PyObject* args) {\
 	}\
 	return pack_mat4x4(glm::NAME(o, o2, o3));\
 }
+#define PyGLM_MAKE_GLM_FUNC_V3_V3rQ(NAME) \
+static PyObject*\
+NAME##_(PyObject* self, PyObject* args) {\
+	PyObject *arg1, *arg2;\
+	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
+	glm::vec3 o, o2;\
+	if (!unpack_vec3(arg1, &o) || !unpack_vec3(arg2, &o2)) {\
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for " #NAME "()");\
+		return NULL;\
+	}\
+	return pack_quat(glm::NAME(o, o2));\
+}
 #define PyGLM_MAKE_GLM_FUNC_Q_Q_FrQ(NAME) \
 static PyObject*\
 NAME##_(PyObject* self, PyObject* args) {\
@@ -16282,6 +16275,43 @@ epsilonNotEqual_(PyObject* self, PyObject* args) {
 	return NULL;
 }
 
+static PyObject*
+identity_(PyObject* self, PyObject* arg) {
+	if (!PyType_Check(arg)) {
+		PyGLM_TYPEERROR_O("identity() requires a PyGLM matrix type as it's argument, not ", arg);
+		return NULL;
+	}
+	if (arg == (PyObject*)&mat2x2Type) {
+		return pack_mat2x2(glm::identity<glm::mat2x2>());
+	}
+	if (arg == (PyObject*)&mat2x3Type) {
+		return pack_mat2x3(glm::identity<glm::mat2x3>());
+	}
+	if (arg == (PyObject*)&mat2x4Type) {
+		return pack_mat2x4(glm::identity<glm::mat2x4>());
+	}
+	if (arg == (PyObject*)&mat3x2Type) {
+		return pack_mat3x2(glm::identity<glm::mat3x2>());
+	}
+	if (arg == (PyObject*)&mat3x3Type) {
+		return pack_mat3x3(glm::identity<glm::mat3x3>());
+	}
+	if (arg == (PyObject*)&mat3x4Type) {
+		return pack_mat3x4(glm::identity<glm::mat3x4>());
+	}
+	if (arg == (PyObject*)&mat4x2Type) {
+		return pack_mat4x2(glm::identity<glm::mat4x2>());
+	}
+	if (arg == (PyObject*)&mat4x3Type) {
+		return pack_mat4x3(glm::identity<glm::mat4x3>());
+	}
+	if (arg == (PyObject*)&mat4x4Type) {
+		return pack_mat4x4(glm::identity<glm::mat4x4>());
+	}
+	PyErr_Format(PyExc_TypeError, "identity() requires a PyGLM matrix type as it's argument, not '%s'", ((PyTypeObject*)arg)->tp_name);
+	return NULL;
+}
+
 PyGLM_MAKE_GLM_FUNC_M4_V3rM4(translate)
 
 static PyObject*
@@ -16550,6 +16580,10 @@ pickMatrix_(PyObject* self, PyObject* args) {
 PyGLM_MAKE_GLM_FUNC_V3_V3_V3rM4(lookAt)
 PyGLM_MAKE_GLM_FUNC_V3_V3_V3rM4(lookAtLH)
 PyGLM_MAKE_GLM_FUNC_V3_V3_V3rM4(lookAtRH)
+
+PyGLM_MAKE_GLM_FUNC_V3_V3rQ(quatLookAt)
+PyGLM_MAKE_GLM_FUNC_V3_V3rQ(quatLookAtLH)
+PyGLM_MAKE_GLM_FUNC_V3_V3rQ(quatLookAtRH)
 
 PyGLM_MAKE_GLM_FUNC_Q_Q_FrQ(lerp)
 PyGLM_MAKE_GLM_FUNC_Q_Q_FrQ(slerp)
@@ -17242,13 +17276,156 @@ value_ptr_(PyObject* self, PyObject* arg) {
 	return NULL;
 }
 
+static PyObject*
+make_vec2_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_vec2() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_vec2(glm::make_vec2((float*)vp_as_ull));
+}
+static PyObject*
+make_vec3_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_vec3() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_vec3(glm::make_vec3((float*)vp_as_ull));
+}
+static PyObject*
+make_vec4_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_vec4() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_vec4(glm::make_vec4((float*)vp_as_ull));
+}
+static PyObject*
+make_quat_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_quat() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_quat(glm::make_quat((float*)vp_as_ull));
+}
+static PyObject*
+make_mat2x2_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_mat2x2() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_mat2x2(glm::make_mat2x2((float*)vp_as_ull));
+}
+static PyObject*
+make_mat2x3_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_mat2x3() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_mat2x3(glm::make_mat2x3((float*)vp_as_ull));
+}
+static PyObject*
+make_mat2x4_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_mat2x4() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_mat2x4(glm::make_mat2x4((float*)vp_as_ull));
+}
+static PyObject*
+make_mat3x2_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_mat3x2() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_mat3x2(glm::make_mat3x2((float*)vp_as_ull));
+}
+static PyObject*
+make_mat3x3_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_mat3x3() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_mat3x3(glm::make_mat3x3((float*)vp_as_ull));
+}
+static PyObject*
+make_mat3x4_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_mat3x4() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_mat3x4(glm::make_mat3x4((float*)vp_as_ull));
+}
+static PyObject*
+make_mat4x2_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_mat4x2() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_mat4x2(glm::make_mat4x2((float*)vp_as_ull));
+}
+static PyObject*
+make_mat4x3_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_mat4x3() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_mat4x3(glm::make_mat4x3((float*)vp_as_ull));
+}
+static PyObject*
+make_mat4x4_(PyObject* self, PyObject* arg) {
+	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
+		PyGLM_TYPEERROR_O("make_mat4x4() requires a ctypes.c_void_p as it's argument, not ", arg);
+		return NULL;
+	}
+	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
+	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
+	Py_DECREF(vp_as_pyull);
+	return pack_mat4x4(glm::make_mat4x4((float*)vp_as_ull));
+}
+
 //static PyObject*
 //test(PyObject* self, PyObject* arg) {
-//	PyObject* temp = pack_mat2x2(glm::mat2x2());
-//	PyObject* out = pack_mvec2p(&((mat2x2*)temp)->super_type[0], temp);
-//	Py_DECREF(temp);
-//	return out;
+//	return pack_mat2x2(glm::identity<glm::mat2>());
 //}
+//#define HAS_TEST
+//#define TEST_FUNC_TYPE METH_NOARGS
 
 static PyMethodDef detailmethods[] = {
 	// func_vector_relational
@@ -17263,68 +17440,68 @@ static PyMethodDef detailmethods[] = {
 	{ "not_", (PyCFunction)not_, METH_O, "not(x) -> bool\nReturns the component-wise logical complement of x." },
 
 	// func_exponential
-	{ "pow", (PyCFunction)pow_, METH_VARARGS, "pow(base, exponent) -> float or tvecn\nReturns 'base' raised to the power 'exponent'." },
-	{ "exp", (PyCFunction)exp_, METH_O, "exp(x) -> float or tvecn\nReturns the natural exponentiation of x, i.e., e^x." },
-	{ "log", (PyCFunction)log_, METH_O, "log(v) -> float or tvecn\nReturns the natural logarithm of v, i.e.,\nreturns the value y which satisfies the equation x = e^y.\nResults are undefined if v <= 0." },
-	{ "exp2", (PyCFunction)exp2_, METH_O, "exp2(v) -> float or tvecn\nReturns 2 raised to the v power." },
-	{ "log2", (PyCFunction)log2_, METH_O, "log2(x) -> float or tvecn\nReturns the base 2 log of x, i.e., returns the value y,\nwhich satisfies the equation x = 2 ^ y." },
-	{ "sqrt", (PyCFunction)sqrt_, METH_O, "sqrt(v) -> float or tvecn\nReturns the positive square root of v." },
-	{ "inversesqrt", (PyCFunction)inversesqrt_, METH_O, "inversesqrt(v) -> float or tvecn\nReturns the reciprocal of the positive square root of v." },
+	{ "pow", (PyCFunction)pow_, METH_VARARGS, "pow(base, exponent) -> float or vecn\nReturns 'base' raised to the power 'exponent'." },
+	{ "exp", (PyCFunction)exp_, METH_O, "exp(x) -> float or vecn\nReturns the natural exponentiation of x, i.e., e^x." },
+	{ "log", (PyCFunction)log_, METH_O, "log(v) -> float or vecn\nReturns the natural logarithm of v, i.e.,\nreturns the value y which satisfies the equation x = e^y.\nResults are undefined if v <= 0." },
+	{ "exp2", (PyCFunction)exp2_, METH_O, "exp2(v) -> float or vecn\nReturns 2 raised to the v power." },
+	{ "log2", (PyCFunction)log2_, METH_O, "log2(x) -> float or vecn\nReturns the base 2 log of x, i.e., returns the value y,\nwhich satisfies the equation x = 2 ^ y." },
+	{ "sqrt", (PyCFunction)sqrt_, METH_O, "sqrt(v) -> float or vecn\nReturns the positive square root of v." },
+	{ "inversesqrt", (PyCFunction)inversesqrt_, METH_O, "inversesqrt(v) -> float or vecn\nReturns the reciprocal of the positive square root of v." },
 
 	// func_common
-	{ "abs", (PyCFunction)abs_, METH_O, "abs(x) -> float or tvecn\nReturns x if x >= 0; otherwise, it returns -x." },
-	{ "sign", (PyCFunction)sign_, METH_O, "sign(x) -> float or tvecn\nReturns 1.0 if x > 0, 0.0 if x == 0, or -1.0 if x < 0. " },
-	{ "floor", (PyCFunction)floor_, METH_O, "floor(x) -> float or tvecn\nReturns a value equal to the nearest integer that is less then or equal to x." },
-	{ "trunc", (PyCFunction)trunc_, METH_O, "trunc(x) -> float or tvecn\nReturns a value equal to the nearest integer to x\nwhose absolute value is not larger than the absolute value of x." },
-	{ "round", (PyCFunction)round_, METH_O, "round(x) -> float or tvecn\nReturns a value equal to the nearest integer to x.\nThe fraction 0.5 will round in a direction chosen by the\nimplementation, presumably the direction that is fastest.\nThis includes the possibility that round(x) returns the\nsame value as roundEven(x) for all values of x." },
-	{ "roundEven", (PyCFunction)roundEven_, METH_O, "roundEven(x) -> float or tvecn\nReturns a value equal to the nearest integer to x.\nA fractional part of 0.5 will round toward the nearest even\ninteger. (Both 3.5 and 4.5 for x will return 4.0.)" },
-	{ "ceil", (PyCFunction)ceil_, METH_O, "ceil(x) -> float or tvecn\nReturns a value equal to the nearest integer\nthat is greater than or equal to x." },
-	{ "fract", (PyCFunction)fract_, METH_O, "fract(x) -> float or tvecn\nReturn x - floor(x)." },
-	{ "mod", (PyCFunction)mod_, METH_VARARGS, "mod(x, y) -> float or tvecn\nModulus. Returns x - y * floor(x / y)\nfor each component in x using the floating point value y." },
-	{ "min", (PyCFunction)min_, METH_VARARGS, "min(x, y) -> float or tvecn\nReturns y if y < x; otherwise, it returns x." },
-	{ "max", (PyCFunction)max_, METH_VARARGS, "max(x, y) -> float or tvecn\nReturns y if x < y; otherwise, it returns x." },
-	{ "clamp", (PyCFunction)clamp_, METH_VARARGS, "clamp(x, minVal, maxVal) -> float or tvecn\nReturns min(max(x, minVal), maxVal) for each component in x\nusing the floating-point values minVal and maxVal." },
-	{ "mix", (PyCFunction)mix_, METH_VARARGS, "mix(x, y, a) -> float, tvecn or tquat\nReturns x * (1.0 - a) + y * a, i.e., the linear blend of\nx and y using the floating-point value a.\nThe value for a is not restricted to the range [0, 1]." },
+	{ "abs", (PyCFunction)abs_, METH_O, "abs(x) -> float or vecn\nReturns x if x >= 0; otherwise, it returns -x." },
+	{ "sign", (PyCFunction)sign_, METH_O, "sign(x) -> float or vecn\nReturns 1.0 if x > 0, 0.0 if x == 0, or -1.0 if x < 0. " },
+	{ "floor", (PyCFunction)floor_, METH_O, "floor(x) -> float or vecn\nReturns a value equal to the nearest integer that is less then or equal to x." },
+	{ "trunc", (PyCFunction)trunc_, METH_O, "trunc(x) -> float or vecn\nReturns a value equal to the nearest integer to x\nwhose absolute value is not larger than the absolute value of x." },
+	{ "round", (PyCFunction)round_, METH_O, "round(x) -> float or vecn\nReturns a value equal to the nearest integer to x.\nThe fraction 0.5 will round in a direction chosen by the\nimplementation, presumably the direction that is fastest.\nThis includes the possibility that round(x) returns the\nsame value as roundEven(x) for all values of x." },
+	{ "roundEven", (PyCFunction)roundEven_, METH_O, "roundEven(x) -> float or vecn\nReturns a value equal to the nearest integer to x.\nA fractional part of 0.5 will round toward the nearest even\ninteger. (Both 3.5 and 4.5 for x will return 4.0.)" },
+	{ "ceil", (PyCFunction)ceil_, METH_O, "ceil(x) -> float or vecn\nReturns a value equal to the nearest integer\nthat is greater than or equal to x." },
+	{ "fract", (PyCFunction)fract_, METH_O, "fract(x) -> float or vecn\nReturn x - floor(x)." },
+	{ "mod", (PyCFunction)mod_, METH_VARARGS, "mod(x, y) -> float or vecn\nModulus. Returns x - y * floor(x / y)\nfor each component in x using the floating point value y." },
+	{ "min", (PyCFunction)min_, METH_VARARGS, "min(x, y) -> float or vecn\nReturns y if y < x; otherwise, it returns x." },
+	{ "max", (PyCFunction)max_, METH_VARARGS, "max(x, y) -> float or vecn\nReturns y if x < y; otherwise, it returns x." },
+	{ "clamp", (PyCFunction)clamp_, METH_VARARGS, "clamp(x, minVal, maxVal) -> float or vecn\nReturns min(max(x, minVal), maxVal) for each component in x\nusing the floating-point values minVal and maxVal." },
+	{ "mix", (PyCFunction)mix_, METH_VARARGS, "mix(x, y, a) -> float, vecn or quat\nReturns x * (1.0 - a) + y * a, i.e., the linear blend of\nx and y using the floating-point value a.\nThe value for a is not restricted to the range [0, 1]." },
 	{ "step", (PyCFunction)step_, METH_VARARGS, "step(edge, x) -> Returns 0.0 if x < edge, otherwise it returns 1.0." },
-	{ "smoothstep", (PyCFunction)smoothstep_, METH_VARARGS, "smoothstep(edge0, edge1, x) -> float or tvecn\nReturns 0.0 if x <= edge0 and 1.0 if x >= edge1 and\nperforms smooth Hermite interpolation between 0 and 1\nwhen edge0 < x < edge1. This is useful in cases where\nyou would want a threshold function with a smooth\ntransition." },
-	{ "isnan", (PyCFunction)isnan_, METH_O, "isnan(x) -> bool or tvecn\nReturns true if x holds a NaN (not a number)\nrepresentation in the underlying implementation's set of\nfloating point representations. Returns false otherwise,\nincluding for implementations with no NaN\nrepresentations." },
-	{ "isinf", (PyCFunction)isinf_, METH_O, "isinf(x) -> bool or tvecn\nReturns true if x holds a positive infinity or negative\ninfinity representation in the underlying implementation's\nset of floating point representations. Returns false\notherwise, including for implementations with no infinity\nrepresentations." },
+	{ "smoothstep", (PyCFunction)smoothstep_, METH_VARARGS, "smoothstep(edge0, edge1, x) -> float or vecn\nReturns 0.0 if x <= edge0 and 1.0 if x >= edge1 and\nperforms smooth Hermite interpolation between 0 and 1\nwhen edge0 < x < edge1. This is useful in cases where\nyou would want a threshold function with a smooth\ntransition." },
+	{ "isnan", (PyCFunction)isnan_, METH_O, "isnan(x) -> bool or vecn\nReturns true if x holds a NaN (not a number)\nrepresentation in the underlying implementation's set of\nfloating point representations. Returns false otherwise,\nincluding for implementations with no NaN\nrepresentations." },
+	{ "isinf", (PyCFunction)isinf_, METH_O, "isinf(x) -> bool or vecn\nReturns true if x holds a positive infinity or negative\ninfinity representation in the underlying implementation's\nset of floating point representations. Returns false\notherwise, including for implementations with no infinity\nrepresentations." },
 	{ "fma", (PyCFunction)fma_, METH_VARARGS, "fma(a, b, c) -> float\nComputes and returns a * b + c." },
-	//{ "frexp", (PyCFunction)frexp_, METH_VARARGS, "frexp(x, exp) -> float or tvecn\nSplits x into a floating-point significand in the range\n[0.5, 1.0) and an integral exponent of two, such that:\nx = significand * exp(2, exponent)" },
-	//{ "ldexp", (PyCFunction)ldexp_, METH_VARARGS, "ldexp(x, exp) -> float or tvecn\nBuilds a floating-point number from x and the\ncorresponding integral exponent of two in exp, returning:\nsignificand * exp(2, exponent)" },
+	//{ "frexp", (PyCFunction)frexp_, METH_VARARGS, "frexp(x, exp) -> float or vecn\nSplits x into a floating-point significand in the range\n[0.5, 1.0) and an integral exponent of two, such that:\nx = significand * exp(2, exponent)" },
+	//{ "ldexp", (PyCFunction)ldexp_, METH_VARARGS, "ldexp(x, exp) -> float or vecn\nBuilds a floating-point number from x and the\ncorresponding integral exponent of two in exp, returning:\nsignificand * exp(2, exponent)" },
 
 	// func_geometric
 	{ "length", (PyCFunction)length_, METH_O, "length(x) -> float\nReturns the length of x, i.e., sqrt(x * x)." },
 	{ "distance", (PyCFunction)distance_, METH_VARARGS, "distance(p0, p1) -> float\nReturns the distance betwwen p0 and p1, i.e., length(p0 - p1)." },
 	{ "dot", (PyCFunction)dot_, METH_VARARGS, "dot(x, y) -> float\nReturns the dot product of x and y, i.e., result = x * y." },
-	{ "cross", (PyCFunction)cross_, METH_VARARGS, "cross(x, y) -> tvec3 or tquat\nReturns the cross product of x and y." },
-	{ "normalize", (PyCFunction)normalize_, METH_O, "normalize(x) -> tvecn or tquat\nReturns a vector in the same direction as x but with length of 1." },
-	{ "faceforward", (PyCFunction)faceforward_, METH_VARARGS, "faceforward(N, I, Nref) -> float or tvecn\nIf dot(Nref, I) < 0.0, return N, otherwise, return -N." },
-	{ "reflect", (PyCFunction)reflect_, METH_VARARGS, "reflect(I, N) -> float or tvecn\nFor the incident vector I and surface orientation N,\nreturns the reflection direction : result = I - 2.0 * dot(N, I) * N." },
-	{ "refract", (PyCFunction)refract_, METH_VARARGS, "refract(I, N, eta) -> float or tvecn\nFor the incident vector I and surface normal N,\nand the ratio of indices of refraction eta,\nreturn the refraction vector." },
+	{ "cross", (PyCFunction)cross_, METH_VARARGS, "cross(x, y) -> vec3 or quat\nReturns the cross product of x and y." },
+	{ "normalize", (PyCFunction)normalize_, METH_O, "normalize(x) -> vecn or quat\nReturns a vector in the same direction as x but with length of 1." },
+	{ "faceforward", (PyCFunction)faceforward_, METH_VARARGS, "faceforward(N, I, Nref) -> float or vecn\nIf dot(Nref, I) < 0.0, return N, otherwise, return -N." },
+	{ "reflect", (PyCFunction)reflect_, METH_VARARGS, "reflect(I, N) -> float or vecn\nFor the incident vector I and surface orientation N,\nreturns the reflection direction : result = I - 2.0 * dot(N, I) * N." },
+	{ "refract", (PyCFunction)refract_, METH_VARARGS, "refract(I, N, eta) -> float or vecn\nFor the incident vector I and surface normal N,\nand the ratio of indices of refraction eta,\nreturn the refraction vector." },
 
 	// func_matrix
-	{ "matrixCompMult", (PyCFunction)matrixCompMult_, METH_VARARGS, "matrixCompMult(x, y) -> tmatnxn\nMultiply matrix x by matrix y component-wise, i.e.,\nresult[i][j] is the scalar product of x[i][j] and y[i][j]." },
-	{ "outerProduct", (PyCFunction)outerProduct_, METH_VARARGS, "outerProduct(c, r) -> tmatnxn\nTreats the first parameter c as a column vector\nand the second parameter r as a row vector\nand does a linear algebraic matrix multiply c * r." },
-	{ "transpose", (PyCFunction)transpose_, METH_O, "transpose(x) -> tmatnxn\nReturns the transposed matrix of x" },
+	{ "matrixCompMult", (PyCFunction)matrixCompMult_, METH_VARARGS, "matrixCompMult(x, y) -> matnxn\nMultiply matrix x by matrix y component-wise, i.e.,\nresult[i][j] is the scalar product of x[i][j] and y[i][j]." },
+	{ "outerProduct", (PyCFunction)outerProduct_, METH_VARARGS, "outerProduct(c, r) -> matnxn\nTreats the first parameter c as a column vector\nand the second parameter r as a row vector\nand does a linear algebraic matrix multiply c * r." },
+	{ "transpose", (PyCFunction)transpose_, METH_O, "transpose(x) -> matnxn\nReturns the transposed matrix of x" },
 	{ "determinant", (PyCFunction)determinant_, METH_O, "determinant(x) -> float\nReturn the determinant of a squared matrix." },
-	{ "inverse", (PyCFunction)inverse_, METH_O, "inverse(x) -> tmatnxn or tquat\nReturn the inverse of a squared matrix or quaternion." },
+	{ "inverse", (PyCFunction)inverse_, METH_O, "inverse(x) -> matnxn or quat\nReturn the inverse of a squared matrix or quaternion." },
 
 	// func_trigonometric
-	{ "radians", (PyCFunction)radians_, METH_O, "radians(x) -> float or tvecn\nConverts degrees to radians and returns the result." },
-	{ "degrees", (PyCFunction)degrees_, METH_O, "degrees(x) -> float or tvecn\nConverts radians to degrees and returns the result." },
-	{ "sin", (PyCFunction)sin_, METH_O, "sin(x) -> tvecn\nThe standard trigonometric sine function. \nThe values returned by this function will range from [-1, 1]." },
-	{ "cos", (PyCFunction)cos_, METH_O, "cos(x) -> tvecn\nThe standard trigonometric cosine function.\nThe values returned by this function will range from [-1, 1]." },
-	{ "tan", (PyCFunction)tan_, METH_O, "tan(x) -> tvecn\nThe standard trigonometric tangent function." },
-	{ "asin", (PyCFunction)asin_, METH_O, "asin(x) -> tvecn\nArc sine. Returns an angle whose sine is x. \nThe range of values returned by this function is [-PI/2, PI/2].\nResults are undefined if |x| > 1." },
-	{ "acos", (PyCFunction)acos_, METH_O, "acos(x) -> tvecn\nArc cosine. Returns an angle whose sine is x.\nThe range of values returned by this function is [0, PI].\nResults are undefined if |x| > 1." },
-	{ "atan", (PyCFunction)atan_,  METH_VARARGS | METH_KEYWORDS, "atan(y [,x]) -> float or tvecn\nArc tangent. Returns an angle whose tangent is y/x.\nThe signs of x and y are used to determine what\nquadrant the angle is in. The range of values returned\nby this function is [-PI, PI]. Results are undefined\nif x and y are both 0." },
-	{ "sinh", (PyCFunction)sinh_, METH_O, "sinh(x) -> tvecn\nReturns the hyperbolic sine function, (exp(x) - exp(-x)) / 2" },
-	{ "cosh", (PyCFunction)cosh_, METH_O, "cosh(x) -> tvecn\nReturns the hyperbolic cosine function, (exp(x) + exp(-x)) / 2" },
-	{ "tanh", (PyCFunction)tanh_, METH_O, "tanh(x) -> tvecn\nReturns the hyperbolic tangent function, sinh(angle) / cosh(angle)" },
-	{ "asinh", (PyCFunction)asinh_, METH_O, "asinh(x) -> float or tvecn\nArc hyperbolic sine; returns the inverse of sinh." },
-	{ "acosh", (PyCFunction)acosh_, METH_O, "acosh(x) -> float or tvecn\nArc hyperbolic cosine; returns the non-negative inverse\nof cosh. Results are undefined if x < 1." },
-	{ "atanh", (PyCFunction)atanh_, METH_O, "atanh(x) -> float or tvecn\nArc hyperbolic tangent; returns the inverse of tanh.\nResults are undefined if abs(x) >= 1." },
+	{ "radians", (PyCFunction)radians_, METH_O, "radians(x) -> float or vecn\nConverts degrees to radians and returns the result." },
+	{ "degrees", (PyCFunction)degrees_, METH_O, "degrees(x) -> float or vecn\nConverts radians to degrees and returns the result." },
+	{ "sin", (PyCFunction)sin_, METH_O, "sin(x) -> vecn\nThe standard trigonometric sine function. \nThe values returned by this function will range from [-1, 1]." },
+	{ "cos", (PyCFunction)cos_, METH_O, "cos(x) -> vecn\nThe standard trigonometric cosine function.\nThe values returned by this function will range from [-1, 1]." },
+	{ "tan", (PyCFunction)tan_, METH_O, "tan(x) -> vecn\nThe standard trigonometric tangent function." },
+	{ "asin", (PyCFunction)asin_, METH_O, "asin(x) -> vecn\nArc sine. Returns an angle whose sine is x. \nThe range of values returned by this function is [-PI/2, PI/2].\nResults are undefined if |x| > 1." },
+	{ "acos", (PyCFunction)acos_, METH_O, "acos(x) -> vecn\nArc cosine. Returns an angle whose sine is x.\nThe range of values returned by this function is [0, PI].\nResults are undefined if |x| > 1." },
+	{ "atan", (PyCFunction)atan_,  METH_VARARGS | METH_KEYWORDS, "atan(y [,x]) -> float or vecn\nArc tangent. Returns an angle whose tangent is y/x.\nThe signs of x and y are used to determine what\nquadrant the angle is in. The range of values returned\nby this function is [-PI, PI]. Results are undefined\nif x and y are both 0." },
+	{ "sinh", (PyCFunction)sinh_, METH_O, "sinh(x) -> vecn\nReturns the hyperbolic sine function, (exp(x) - exp(-x)) / 2" },
+	{ "cosh", (PyCFunction)cosh_, METH_O, "cosh(x) -> vecn\nReturns the hyperbolic cosine function, (exp(x) + exp(-x)) / 2" },
+	{ "tanh", (PyCFunction)tanh_, METH_O, "tanh(x) -> vecn\nReturns the hyperbolic tangent function, sinh(angle) / cosh(angle)" },
+	{ "asinh", (PyCFunction)asinh_, METH_O, "asinh(x) -> float or vecn\nArc hyperbolic sine; returns the inverse of sinh." },
+	{ "acosh", (PyCFunction)acosh_, METH_O, "acosh(x) -> float or vecn\nArc hyperbolic cosine; returns the non-negative inverse\nof cosh. Results are undefined if x < 1." },
+	{ "atanh", (PyCFunction)atanh_, METH_O, "atanh(x) -> float or vecn\nArc hyperbolic tangent; returns the inverse of tanh.\nResults are undefined if abs(x) >= 1." },
 	{ NULL, NULL, 0, NULL }
 };
 
@@ -17338,8 +17515,8 @@ static PyModuleDef detailmodule = {
 
 static PyMethodDef gtcmethods[] = {
 	// color_space
-	{ "convertLinearToSRGB", (PyCFunction)convertLinearToSRGB_, METH_VARARGS | METH_KEYWORDS, "convertLinearToSRGB(ColorLinear[, Gamma]) -> tvecn\nConvert a linear color to sRGB color using a standard / custom gamma correction." },
-	{ "convertSRGBToLinear", (PyCFunction)convertSRGBToLinear_, METH_VARARGS | METH_KEYWORDS, "convertSRGBToLinear(ColorLinear[, Gamma]) -> tvecn\nConvert a sRGB color to linear color using a standard / custom gamma correction." },
+	{ "convertLinearToSRGB", (PyCFunction)convertLinearToSRGB_, METH_VARARGS | METH_KEYWORDS, "convertLinearToSRGB(ColorLinear[, Gamma]) -> vecn\nConvert a linear color to sRGB color using a standard / custom gamma correction." },
+	{ "convertSRGBToLinear", (PyCFunction)convertSRGBToLinear_, METH_VARARGS | METH_KEYWORDS, "convertSRGBToLinear(ColorLinear[, Gamma]) -> vecn\nConvert a sRGB color to linear color using a standard / custom gamma correction." },
 
 	// constants
 	{ "epsilon", (PyCFunction)epsilon_, METH_NOARGS, "epsilon() -> float\nReturn the epsilon constant for floating point types." },
@@ -17373,115 +17550,135 @@ static PyMethodDef gtcmethods[] = {
 	{ "golden_ratio", (PyCFunction)golden_ratio_, METH_NOARGS, "golden_ratio() -> float\nReturn the golden ratio constant." },
 
 	// epsilon
-	{ "epsilonEqual", (PyCFunction)epsilonEqual_, METH_VARARGS, "epsilonEqual(x, y, epsilon) -> tvecn or tquat\nReturns the component-wise comparison of |x - y| < epsilon.\nTrue if this expression is satisfied." },
-	{ "epsilonNotEqual", (PyCFunction)epsilonNotEqual_, METH_VARARGS, "epsilonNotEqual(x, y, epsilon) -> tvecn or tquat\nReturns the component-wise comparison of |x - y| >= epsilon.\nTrue if this expression is satisfied." },
+	{ "epsilonEqual", (PyCFunction)epsilonEqual_, METH_VARARGS, "epsilonEqual(x, y, epsilon) -> vecn or quat\nReturns the component-wise comparison of |x - y| < epsilon.\nTrue if this expression is satisfied." },
+	{ "epsilonNotEqual", (PyCFunction)epsilonNotEqual_, METH_VARARGS, "epsilonNotEqual(x, y, epsilon) -> vecn or quat\nReturns the component-wise comparison of |x - y| >= epsilon.\nTrue if this expression is satisfied." },
 
 	// matrix_transform
-	{ "translate", (PyCFunction)translate_, METH_VARARGS, "translate(m, v) -> tmat4x4\nBuilds a translation 4 * 4 matrix created from a vector of 3 components." },
-	{ "rotate", (PyCFunction)rotate_, METH_VARARGS, "rotate(m, angle, axis) -> tmat4x4 or tquat\nBuilds a rotation 4 * 4 matrix created from an axis vector and an angle\nor rotates a quaternion from a vector of 3 components axis and an angle." },
-	{ "rotate_slow", (PyCFunction)rotate_slow_, METH_VARARGS, "rotate_slow(m, angle, axis) -> tmat4x4\nBuilds a rotation 4 * 4 matrix created from an axis vector and an angle." },
-	{ "scale", (PyCFunction)scale_, METH_VARARGS, "scale(m, v) -> tmat4x4\nBuilds a scale 4 * 4 matrix created from 3 scalars." },
-	{ "scale_slow", (PyCFunction)scale_slow_, METH_VARARGS, "scale_slow(m, v) -> tmat4x4\nBuilds a scale 4 * 4 matrix created from 3 scalars." },
-	{ "ortho", (PyCFunction)ortho_, METH_VARARGS, "ortho(left, right, bottom, top[, zNear, zFar]) -> tmat4x4\nCreates a matrix for projecting two-dimensional coordinates onto the screen." },
-	{ "orthoLH_ZO", (PyCFunction)orthoLH_ZO_, METH_VARARGS, "orthoLH_ZO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "orthoLH_NO", (PyCFunction)orthoLH_NO_, METH_VARARGS, "orthoLH_NO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "orthoRH_ZO", (PyCFunction)orthoRH_ZO_, METH_VARARGS, "orthoRH_ZO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "orthoRH_NO", (PyCFunction)orthoRH_NO_, METH_VARARGS, "orthoRH_NO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "orthoZO", (PyCFunction)orthoZO_, METH_VARARGS, "orthoZO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "orthoNO", (PyCFunction)orthoNO_, METH_VARARGS, "orthoNO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "orthoLH", (PyCFunction)orthoLH_, METH_VARARGS, "orthoLH(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "orthoRH", (PyCFunction)orthoRH_, METH_VARARGS, "orthoRH(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "frustum", (PyCFunction)frustum_, METH_VARARGS, "frustum(left, right, bottom, top, near, far) -> tmat4x4\nCreates a frustum matrix with default handedness, using right-handedness and -1 to +1 near and far clip planes definition." },
-	{ "frustumLH_ZO", (PyCFunction)frustumLH_ZO_, METH_VARARGS, "frustumLH_ZO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "frustumLH_NO", (PyCFunction)frustumLH_NO_, METH_VARARGS, "frustumLH_NO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "frustumRH_ZO", (PyCFunction)frustumRH_ZO_, METH_VARARGS, "frustumRH_ZO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "frustumRH_NO", (PyCFunction)frustumRH_NO_, METH_VARARGS, "frustumRH_NO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "frustumZO", (PyCFunction)frustumZO_, METH_VARARGS, "frustumZO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "frustumNO", (PyCFunction)frustumNO_, METH_VARARGS, "frustumNO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "frustumLH", (PyCFunction)frustumLH_, METH_VARARGS, "frustumLH(left, right, bottom, top, near, far) -> tmat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "frustumRH", (PyCFunction)frustumRH_, METH_VARARGS, "frustumRH(left, right, bottom, top, near, far) -> tmat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspective", (PyCFunction)perspective_, METH_VARARGS, "perspective(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum." },
-	{ "perspectiveLH_ZO", (PyCFunction)perspectiveLH_ZO_, METH_VARARGS, "perspectiveLH_ZO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveLH_NO", (PyCFunction)perspectiveLH_NO_, METH_VARARGS, "perspectiveLH_NO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveRH_ZO", (PyCFunction)perspectiveRH_ZO_, METH_VARARGS, "perspectiveRH_ZO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveRH_NO", (PyCFunction)perspectiveRH_NO_, METH_VARARGS, "perspectiveRH_NO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveZO", (PyCFunction)perspectiveZO_, METH_VARARGS, "perspectiveZO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveNO", (PyCFunction)perspectiveNO_, METH_VARARGS, "perspectiveNO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveLH", (PyCFunction)perspectiveLH_, METH_VARARGS, "perspectiveLH(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveRH", (PyCFunction)perspectiveRH_, METH_VARARGS, "perspectiveRH(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveFov", (PyCFunction)perspectiveFov_, METH_VARARGS, "perspectiveFov(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates." },
-	{ "perspectiveFovLH_ZO", (PyCFunction)perspectiveFovLH_ZO_, METH_VARARGS, "perspectiveFovLH_ZO(fov, width, height, near, far) -> tmat4x4\n\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveFovLH_NO", (PyCFunction)perspectiveFovLH_NO_, METH_VARARGS, "perspectiveFovLH_NO(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveFovRH_ZO", (PyCFunction)perspectiveFovRH_ZO_, METH_VARARGS, "perspectiveFovRH_ZO(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveFovRH_NO", (PyCFunction)perspectiveFovRH_NO_, METH_VARARGS, "perspectiveFovRH_NO(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveFovZO", (PyCFunction)perspectiveFovZO_, METH_VARARGS, "perspectiveFovZO(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveFovNO", (PyCFunction)perspectiveFovNO_, METH_VARARGS, "perspectiveFovNO(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveFovLH", (PyCFunction)perspectiveFovLH_, METH_VARARGS, "perspectiveFovLH(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveFovRH", (PyCFunction)perspectiveFovRH_, METH_VARARGS, "perspectiveFovRH(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "infinitePerspective", (PyCFunction)infinitePerspective_, METH_VARARGS, "infinitePerspective(fovy, aspect, near) -> tmat4x4\nCreates a matrix for a right handed, symmetric perspective-view frustum with far plane at infinite." },
-	{ "infinitePerspectiveRH", (PyCFunction)infinitePerspectiveRH_, METH_VARARGS, "infinitePerspectiveRH(fovy, aspect, near) -> tmat4x4\nCreates a matrix for a right handed, symmetric perspective-view frustum with far plane at infinite." },
-	{ "infinitePerspectiveLH", (PyCFunction)infinitePerspectiveLH_, METH_VARARGS, "infinitePerspectiveLH(fovy, aspect, near) -> tmat4x4\nCreates a matrix for a left handed, symmetric perspective-view frustum with far plane at infinite." },
-	{ "tweakedInfinitePerspective", (PyCFunction)tweakedInfinitePerspective_, METH_VARARGS, "tweakedInfinitePerspective(fovy, aspect, near[, ep]) -> tmat4x4\nCreates a matrix for a symmetric perspective-view frustum with far plane at infinite for graphics hardware that doesn't support depth clamping." },
-	{ "project", (PyCFunction)project_, METH_VARARGS, "project(obj, model, proj, viewport) -> tvec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "projectNO", (PyCFunction)projectNO_, METH_VARARGS, "projectNO(obj, model, proj, viewport) -> tvec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "projectZO", (PyCFunction)projectZO_, METH_VARARGS, "projectZO(obj, model, proj, viewport) -> tvec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "unProject", (PyCFunction)unProject_, METH_VARARGS, "unProject(obj, model, proj, viewport) -> tvec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "unProjectNO", (PyCFunction)unProjectNO_, METH_VARARGS, "unProjectNO(obj, model, proj, viewport) -> tvec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "unProjectZO", (PyCFunction)unProjectZO_, METH_VARARGS, "unProjectZO(obj, model, proj, viewport) -> tvec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "pickMatrix", (PyCFunction)pickMatrix_, METH_VARARGS, "pickMatrix(center, delta, viewport) -> tmat4x4\nDefine a picking region" },
-	{ "lookAt", (PyCFunction)lookAt_, METH_VARARGS, "lookAt(eye, center, up) -> tmat4x4\nBuild a right handed look at view matrix." },
-	{ "lookAtRH", (PyCFunction)lookAtRH_, METH_VARARGS, "lookAtRH(eye, center, up) -> tmat4x4\nBuild a right handed look at view matrix." },
-	{ "lookAtLH", (PyCFunction)lookAtLH_, METH_VARARGS, "lookAtLH(eye, center, up) -> tmat4x4\nBuild a left handed look at view matrix." },
+	{ "identity", (PyCFunction)identity_, METH_O, "identity(matrix_type) -> matrix\nBuilds an identity matrix." },
+	{ "translate", (PyCFunction)translate_, METH_VARARGS, "translate(m, v) -> mat4x4\nBuilds a translation 4 * 4 matrix created from a vector of 3 components." },
+	{ "rotate", (PyCFunction)rotate_, METH_VARARGS, "rotate(m, angle, axis) -> mat4x4 or quat\nBuilds a rotation 4 * 4 matrix created from an axis vector and an angle\nor rotates a quaternion from a vector of 3 components axis and an angle." },
+	{ "rotate_slow", (PyCFunction)rotate_slow_, METH_VARARGS, "rotate_slow(m, angle, axis) -> mat4x4\nBuilds a rotation 4 * 4 matrix created from an axis vector and an angle." },
+	{ "scale", (PyCFunction)scale_, METH_VARARGS, "scale(m, v) -> mat4x4\nBuilds a scale 4 * 4 matrix created from 3 scalars." },
+	{ "scale_slow", (PyCFunction)scale_slow_, METH_VARARGS, "scale_slow(m, v) -> mat4x4\nBuilds a scale 4 * 4 matrix created from 3 scalars." },
+	{ "ortho", (PyCFunction)ortho_, METH_VARARGS, "ortho(left, right, bottom, top[, zNear, zFar]) -> mat4x4\nCreates a matrix for projecting two-dimensional coordinates onto the screen." },
+	{ "orthoLH_ZO", (PyCFunction)orthoLH_ZO_, METH_VARARGS, "orthoLH_ZO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "orthoLH_NO", (PyCFunction)orthoLH_NO_, METH_VARARGS, "orthoLH_NO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "orthoRH_ZO", (PyCFunction)orthoRH_ZO_, METH_VARARGS, "orthoRH_ZO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "orthoRH_NO", (PyCFunction)orthoRH_NO_, METH_VARARGS, "orthoRH_NO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "orthoZO", (PyCFunction)orthoZO_, METH_VARARGS, "orthoZO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "orthoNO", (PyCFunction)orthoNO_, METH_VARARGS, "orthoNO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "orthoLH", (PyCFunction)orthoLH_, METH_VARARGS, "orthoLH(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "orthoRH", (PyCFunction)orthoRH_, METH_VARARGS, "orthoRH(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "frustum", (PyCFunction)frustum_, METH_VARARGS, "frustum(left, right, bottom, top, near, far) -> mat4x4\nCreates a frustum matrix with default handedness, using right-handedness and -1 to +1 near and far clip planes definition." },
+	{ "frustumLH_ZO", (PyCFunction)frustumLH_ZO_, METH_VARARGS, "frustumLH_ZO(left, right, bottom, top, near, far) -> mat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "frustumLH_NO", (PyCFunction)frustumLH_NO_, METH_VARARGS, "frustumLH_NO(left, right, bottom, top, near, far) -> mat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "frustumRH_ZO", (PyCFunction)frustumRH_ZO_, METH_VARARGS, "frustumRH_ZO(left, right, bottom, top, near, far) -> mat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "frustumRH_NO", (PyCFunction)frustumRH_NO_, METH_VARARGS, "frustumRH_NO(left, right, bottom, top, near, far) -> mat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "frustumZO", (PyCFunction)frustumZO_, METH_VARARGS, "frustumZO(left, right, bottom, top, near, far) -> mat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "frustumNO", (PyCFunction)frustumNO_, METH_VARARGS, "frustumNO(left, right, bottom, top, near, far) -> mat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "frustumLH", (PyCFunction)frustumLH_, METH_VARARGS, "frustumLH(left, right, bottom, top, near, far) -> mat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "frustumRH", (PyCFunction)frustumRH_, METH_VARARGS, "frustumRH(left, right, bottom, top, near, far) -> mat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspective", (PyCFunction)perspective_, METH_VARARGS, "perspective(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum." },
+	{ "perspectiveLH_ZO", (PyCFunction)perspectiveLH_ZO_, METH_VARARGS, "perspectiveLH_ZO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveLH_NO", (PyCFunction)perspectiveLH_NO_, METH_VARARGS, "perspectiveLH_NO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveRH_ZO", (PyCFunction)perspectiveRH_ZO_, METH_VARARGS, "perspectiveRH_ZO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveRH_NO", (PyCFunction)perspectiveRH_NO_, METH_VARARGS, "perspectiveRH_NO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveZO", (PyCFunction)perspectiveZO_, METH_VARARGS, "perspectiveZO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveNO", (PyCFunction)perspectiveNO_, METH_VARARGS, "perspectiveNO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveLH", (PyCFunction)perspectiveLH_, METH_VARARGS, "perspectiveLH(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveRH", (PyCFunction)perspectiveRH_, METH_VARARGS, "perspectiveRH(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveFov", (PyCFunction)perspectiveFov_, METH_VARARGS, "perspectiveFov(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates." },
+	{ "perspectiveFovLH_ZO", (PyCFunction)perspectiveFovLH_ZO_, METH_VARARGS, "perspectiveFovLH_ZO(fov, width, height, near, far) -> mat4x4\n\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveFovLH_NO", (PyCFunction)perspectiveFovLH_NO_, METH_VARARGS, "perspectiveFovLH_NO(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveFovRH_ZO", (PyCFunction)perspectiveFovRH_ZO_, METH_VARARGS, "perspectiveFovRH_ZO(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveFovRH_NO", (PyCFunction)perspectiveFovRH_NO_, METH_VARARGS, "perspectiveFovRH_NO(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveFovZO", (PyCFunction)perspectiveFovZO_, METH_VARARGS, "perspectiveFovZO(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveFovNO", (PyCFunction)perspectiveFovNO_, METH_VARARGS, "perspectiveFovNO(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveFovLH", (PyCFunction)perspectiveFovLH_, METH_VARARGS, "perspectiveFovLH(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveFovRH", (PyCFunction)perspectiveFovRH_, METH_VARARGS, "perspectiveFovRH(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "infinitePerspective", (PyCFunction)infinitePerspective_, METH_VARARGS, "infinitePerspective(fovy, aspect, near) -> mat4x4\nCreates a matrix for a right handed, symmetric perspective-view frustum with far plane at infinite." },
+	{ "infinitePerspectiveRH", (PyCFunction)infinitePerspectiveRH_, METH_VARARGS, "infinitePerspectiveRH(fovy, aspect, near) -> mat4x4\nCreates a matrix for a right handed, symmetric perspective-view frustum with far plane at infinite." },
+	{ "infinitePerspectiveLH", (PyCFunction)infinitePerspectiveLH_, METH_VARARGS, "infinitePerspectiveLH(fovy, aspect, near) -> mat4x4\nCreates a matrix for a left handed, symmetric perspective-view frustum with far plane at infinite." },
+	{ "tweakedInfinitePerspective", (PyCFunction)tweakedInfinitePerspective_, METH_VARARGS, "tweakedInfinitePerspective(fovy, aspect, near[, ep]) -> mat4x4\nCreates a matrix for a symmetric perspective-view frustum with far plane at infinite for graphics hardware that doesn't support depth clamping." },
+	{ "project", (PyCFunction)project_, METH_VARARGS, "project(obj, model, proj, viewport) -> vec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "projectNO", (PyCFunction)projectNO_, METH_VARARGS, "projectNO(obj, model, proj, viewport) -> vec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "projectZO", (PyCFunction)projectZO_, METH_VARARGS, "projectZO(obj, model, proj, viewport) -> vec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "unProject", (PyCFunction)unProject_, METH_VARARGS, "unProject(obj, model, proj, viewport) -> vec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "unProjectNO", (PyCFunction)unProjectNO_, METH_VARARGS, "unProjectNO(obj, model, proj, viewport) -> vec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "unProjectZO", (PyCFunction)unProjectZO_, METH_VARARGS, "unProjectZO(obj, model, proj, viewport) -> vec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "pickMatrix", (PyCFunction)pickMatrix_, METH_VARARGS, "pickMatrix(center, delta, viewport) -> mat4x4\nDefine a picking region" },
+	{ "lookAt", (PyCFunction)lookAt_, METH_VARARGS, "lookAt(eye, center, up) -> mat4x4\nBuild a right handed look at view matrix." },
+	{ "lookAtRH", (PyCFunction)lookAtRH_, METH_VARARGS, "lookAtRH(eye, center, up) -> mat4x4\nBuild a right handed look at view matrix." },
+	{ "lookAtLH", (PyCFunction)lookAtLH_, METH_VARARGS, "lookAtLH(eye, center, up) -> mat4x4\nBuild a left handed look at view matrix." },
 
 	// quaternion
-	{ "lerp", (PyCFunction)lerp_, METH_VARARGS, "lerp(x, y, a) -> tquat\nLinear interpolation of two quaternions.\nThe interpolation is oriented." },
-	{ "slerp", (PyCFunction)slerp_, METH_VARARGS, "slerp(x, y, a) -> tquat\nSpherical linear interpolation of two quaternions.\nThe interpolation always take the short path and the rotation is performed at constant speed." },
-	{ "conjugate", (PyCFunction)conjugate_, METH_O, "conjugate(q) -> tquat\nReturns the q conjugate." },
-	{ "eulerAngles", (PyCFunction)eulerAngles_, METH_O, "eulerAngles(x) -> tvec3\nReturns euler angles, pitch as x, yaw as y, roll as z." },
+	{ "quatLookAt", (PyCFunction)quatLookAt_, METH_VARARGS, "quatLookAt(direction, up) -> quat\nBuild a look at quaternion based on the default handedness." },
+	{ "quatLookAtLH", (PyCFunction)quatLookAtLH_, METH_VARARGS, "quatLookAtLH(direction, up) -> quat\nBuild a left-handed look at quaternion." },
+	{ "quatLookAtRH", (PyCFunction)quatLookAtRH_, METH_VARARGS, "quatLookAtRH(direction, up) -> quat\nBuild a right-handed look at quaternion." },
+	{ "lerp", (PyCFunction)lerp_, METH_VARARGS, "lerp(x, y, a) -> quat\nLinear interpolation of two quaternions.\nThe interpolation is oriented." },
+	{ "slerp", (PyCFunction)slerp_, METH_VARARGS, "slerp(x, y, a) -> quat\nSpherical linear interpolation of two quaternions.\nThe interpolation always take the short path and the rotation is performed at constant speed." },
+	{ "conjugate", (PyCFunction)conjugate_, METH_O, "conjugate(q) -> quat\nReturns the q conjugate." },
+	{ "eulerAngles", (PyCFunction)eulerAngles_, METH_O, "eulerAngles(x) -> vec3\nReturns euler angles, pitch as x, yaw as y, roll as z." },
 	{ "roll", (PyCFunction)roll_, METH_O, "roll(x) -> float\nReturns roll value of euler angles expressed in radians." },
 	{ "pitch", (PyCFunction)pitch_, METH_O, "pitch(x) -> float\nReturns pitch value of euler angles expressed in radians." },
 	{ "yaw", (PyCFunction)yaw_, METH_O, "yaw(x) -> float\nReturns yaw value of euler angles expressed in radians." },
-	{ "mat3_cast", (PyCFunction)mat3_cast_, METH_O, "mat3_cast(x) -> tmat3x3\nConverts a quaternion to a 3 * 3 matrix." },
-	{ "mat4_cast", (PyCFunction)mat4_cast_, METH_O, "mat4_cast(x) -> tmat4x4\nConverts a quaternion to a 4 * 4 matrix." },
-	{ "quat_cast", (PyCFunction)quat_cast_, METH_O, "quat_cast(m) -> tquat\nConverts a 3 * 3 or 4 * 4 matrix to a quaternion." },
+	{ "mat3_cast", (PyCFunction)mat3_cast_, METH_O, "mat3_cast(x) -> mat3x3\nConverts a quaternion to a 3 * 3 matrix." },
+	{ "mat4_cast", (PyCFunction)mat4_cast_, METH_O, "mat4_cast(x) -> mat4x4\nConverts a quaternion to a 4 * 4 matrix." },
+	{ "quat_cast", (PyCFunction)quat_cast_, METH_O, "quat_cast(m) -> quat\nConverts a 3 * 3 or 4 * 4 matrix to a quaternion." },
 	{ "angle", (PyCFunction)angle_, METH_O, "angle(x) -> float\nReturns the quaternion rotation angle." },
-	{ "axis", (PyCFunction)axis_, METH_O, "axis(x) -> tvec3\nReturns the quaternion rotation axis." },
-	{ "angleAxis", (PyCFunction)angleAxis_, METH_VARARGS, "angleAxis(angle, v) -> tquat\nBuild a quaternion from an angle and a normalized axis." },
+	{ "axis", (PyCFunction)axis_, METH_O, "axis(x) -> vec3\nReturns the quaternion rotation axis." },
+	{ "angleAxis", (PyCFunction)angleAxis_, METH_VARARGS, "angleAxis(angle, v) -> quat\nBuild a quaternion from an angle and a normalized axis." },
 
 	// matrix_access
-	{ "row", (PyCFunction)row_, METH_VARARGS | METH_KEYWORDS, "row(m, index[, x]) -> tvecn or tmatnxn\nGet a specific row of a matrix or set a specific row to a matrix." },
-	{ "column", (PyCFunction)column_, METH_VARARGS | METH_KEYWORDS, "column(m, index[, x]) -> tvecn or tmatnxn\nGet a specific column of a matrix or set a specific column to a matrix." },
+	{ "row", (PyCFunction)row_, METH_VARARGS | METH_KEYWORDS, "row(m, index[, x]) -> vecn or matnxn\nGet a specific row of a matrix or set a specific row to a matrix." },
+	{ "column", (PyCFunction)column_, METH_VARARGS | METH_KEYWORDS, "column(m, index[, x]) -> vecn or matnxn\nGet a specific column of a matrix or set a specific column to a matrix." },
 
 	// noise
-	//{ "grad4", (PyCFunction)grad4_, METH_VARARGS, "grad4(j, ip) -> tvec4" },
+	//{ "grad4", (PyCFunction)grad4_, METH_VARARGS, "grad4(j, ip) -> vec4" },
 	{ "perlin", (PyCFunction)perlin_, METH_VARARGS | METH_KEYWORDS, "perlin(p[, rep]) -> float\nClassic or periodic perlin noise." },
 	{ "simplex", (PyCFunction)simplex_, METH_O, "simplex(p) -> float\nSimplex noise." },
 
 	// random
-	{ "linearRand", (PyCFunction)linearRand_, METH_VARARGS, "linearRand(Min, Max) -> float or tvecn\nGenerate random numbers in the interval [Min, Max], according a linear distribution" },
+	{ "linearRand", (PyCFunction)linearRand_, METH_VARARGS, "linearRand(Min, Max) -> float or vecn\nGenerate random numbers in the interval [Min, Max], according a linear distribution" },
 	{ "gaussRand", (PyCFunction)gaussRand_, METH_VARARGS, "gaussRand(Mean, Deviation) -> float\nGenerate random numbers in the interval [Min, Max], according a gaussian distribution" },
-	{ "circularRand", (PyCFunction)circularRand_, METH_O, "circularRand(Radius) -> tvec2\nGenerate a random 2D vector which coordinates are regulary distributed on a circle of a given radius" },
-	{ "sphericalRand", (PyCFunction)sphericalRand_, METH_O, "sphericalRand(Radius) -> tvec3\nGenerate a random 3D vector which coordinates are regulary distributed on a sphere of a given radius" },
-	{ "diskRand", (PyCFunction)diskRand_, METH_O, "diskRand(Radius) -> tvec2\nGenerate a random 2D vector which coordinates are regulary distributed within the area of a disk of a given radius" },
-	{ "ballRand", (PyCFunction)ballRand_, METH_O, "ballRand(Radius) -> tvec3\nGenerate a random 3D vector which coordinates are regulary distributed within the area of a ball of a given radius" },
+	{ "circularRand", (PyCFunction)circularRand_, METH_O, "circularRand(Radius) -> vec2\nGenerate a random 2D vector which coordinates are regulary distributed on a circle of a given radius" },
+	{ "sphericalRand", (PyCFunction)sphericalRand_, METH_O, "sphericalRand(Radius) -> vec3\nGenerate a random 3D vector which coordinates are regulary distributed on a sphere of a given radius" },
+	{ "diskRand", (PyCFunction)diskRand_, METH_O, "diskRand(Radius) -> vec2\nGenerate a random 2D vector which coordinates are regulary distributed within the area of a disk of a given radius" },
+	{ "ballRand", (PyCFunction)ballRand_, METH_O, "ballRand(Radius) -> vec3\nGenerate a random 3D vector which coordinates are regulary distributed within the area of a ball of a given radius" },
 
 	// reciprocal
-	{ "sec", (PyCFunction)sec_, METH_O, "sec(x) -> float or tvecn\nSecant function.\nhypotenuse / adjacent or 1 / cos(x)" },
-	{ "csc", (PyCFunction)csc_, METH_O, "csc(x) -> float or tvecn\nCosecant function.\nhypotenuse / opposite or 1 / sin(x)" },
-	{ "cot", (PyCFunction)cot_, METH_O, "cot(x) -> float or tvecn\nCotangent function.\nadjacent / opposite or 1 / tan(x)" },
-	{ "asec", (PyCFunction)asec_, METH_O, "asec(x) -> float or tvecn\nInverse secant function." },
-	{ "acsc", (PyCFunction)acsc_, METH_O, "acsc(x) -> float or tvecn\nInverse cosecant function." },
-	{ "acot", (PyCFunction)acot_, METH_O, "acot(x) -> float or tvecn\nInverse cotangent function." },
-	{ "sech", (PyCFunction)sech_, METH_O, "sech(x) -> float or tvecn\nSecant hyperbolic function." },
-	{ "csch", (PyCFunction)csch_, METH_O, "csch(x) -> float or tvecn\nCosecant hyperbolic function." },
-	{ "coth", (PyCFunction)coth_, METH_O, "coth(x) -> float or tvecn\nCotangent hyperbolic function." },
-	{ "asech", (PyCFunction)asech_, METH_O, "asech(x) -> float or tvecn\nInverse secant hyperbolic function." },
-	{ "acsch", (PyCFunction)acsch_, METH_O, "acsch(x) -> float or tvecn\nInverse cosecant hyperbolic function." },
-	{ "acoth", (PyCFunction)acoth_, METH_O, "acoth(x) -> float or tvecn\nInverse cotangent hyperbolic function." },
+	{ "sec", (PyCFunction)sec_, METH_O, "sec(x) -> float or vecn\nSecant function.\nhypotenuse / adjacent or 1 / cos(x)" },
+	{ "csc", (PyCFunction)csc_, METH_O, "csc(x) -> float or vecn\nCosecant function.\nhypotenuse / opposite or 1 / sin(x)" },
+	{ "cot", (PyCFunction)cot_, METH_O, "cot(x) -> float or vecn\nCotangent function.\nadjacent / opposite or 1 / tan(x)" },
+	{ "asec", (PyCFunction)asec_, METH_O, "asec(x) -> float or vecn\nInverse secant function." },
+	{ "acsc", (PyCFunction)acsc_, METH_O, "acsc(x) -> float or vecn\nInverse cosecant function." },
+	{ "acot", (PyCFunction)acot_, METH_O, "acot(x) -> float or vecn\nInverse cotangent function." },
+	{ "sech", (PyCFunction)sech_, METH_O, "sech(x) -> float or vecn\nSecant hyperbolic function." },
+	{ "csch", (PyCFunction)csch_, METH_O, "csch(x) -> float or vecn\nCosecant hyperbolic function." },
+	{ "coth", (PyCFunction)coth_, METH_O, "coth(x) -> float or vecn\nCotangent hyperbolic function." },
+	{ "asech", (PyCFunction)asech_, METH_O, "asech(x) -> float or vecn\nInverse secant hyperbolic function." },
+	{ "acsch", (PyCFunction)acsch_, METH_O, "acsch(x) -> float or vecn\nInverse cosecant hyperbolic function." },
+	{ "acoth", (PyCFunction)acoth_, METH_O, "acoth(x) -> float or vecn\nInverse cotangent hyperbolic function." },
 
 	// type_ptr
-	{ "value_ptr", (PyCFunction)value_ptr_, METH_O, "value_ptr(x) -> void* as int\nReturn the constant address to the data of the input parameter." },
+	{ "value_ptr", (PyCFunction)value_ptr_, METH_O, "value_ptr(x) -> ctypes.c_void_p\nReturn the constant address to the data of the input parameter." },
 	{ "sizeof", (PyCFunction)sizeof_, METH_O, "sizeof(x) -> int\nReturn the size of x in bytes." },
+	{ "make_vec2", (PyCFunction)make_vec2_, METH_O, "make_vec2(ctypes.c_void_p) -> vec2\nBuild a vector from a pointer." },
+	{ "make_vec3", (PyCFunction)make_vec3_, METH_O, "make_vec3(ctypes.c_void_p) -> vec3\nBuild a vector from a pointer." },
+	{ "make_vec4", (PyCFunction)make_vec4_, METH_O, "make_vec4(ctypes.c_void_p) -> vec4\nBuild a vector from a pointer." },
+	{ "make_mat2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
+	{ "make_mat2x2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2x2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
+	{ "make_mat2x3", (PyCFunction)make_mat2x3_, METH_O, "make_mat2x3(ctypes.c_void_p) -> mat2x3\nBuild a matrix from a pointer." },
+	{ "make_mat2x4", (PyCFunction)make_mat2x4_, METH_O, "make_mat2x4(ctypes.c_void_p) -> mat2x4\nBuild a matrix from a pointer." },
+	{ "make_mat3x2", (PyCFunction)make_mat3x2_, METH_O, "make_mat3x2(ctypes.c_void_p) -> mat3x2\nBuild a matrix from a pointer." },
+	{ "make_mat3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
+	{ "make_mat3x3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3x3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
+	{ "make_mat3x4", (PyCFunction)make_mat3x4_, METH_O, "make_mat3x4(ctypes.c_void_p) -> mat3x4\nBuild a matrix from a pointer." },
+	{ "make_mat4x2", (PyCFunction)make_mat4x2_, METH_O, "make_mat4x2(ctypes.c_void_p) -> mat4x2\nBuild a matrix from a pointer." },
+	{ "make_mat4x3", (PyCFunction)make_mat4x3_, METH_O, "make_mat4x3(ctypes.c_void_p) -> mat4x3\nBuild a matrix from a pointer." },
+	{ "make_mat4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
+	{ "make_mat4x4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4x4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
+	{ "make_quat", (PyCFunction)make_quat_, METH_O, "make_quat(ctypes.c_void_p) -> quat\nBuild a quaternion from a pointer." },
 	{ NULL, NULL, 0, NULL }
 };
 
@@ -17506,73 +17703,73 @@ static PyMethodDef glmmethods[] = {
 	{ "not_", (PyCFunction)not_, METH_O, "not(x) -> bool\nReturns the component-wise logical complement of x." },
 
 	// func_exponential
-	{ "pow", (PyCFunction)pow_, METH_VARARGS, "pow(base, exponent) -> float or tvecn\nReturns 'base' raised to the power 'exponent'." },
-	{ "exp", (PyCFunction)exp_, METH_O, "exp(x) -> float or tvecn\nReturns the natural exponentiation of x, i.e., e^x." },
-	{ "log", (PyCFunction)log_, METH_O, "log(v) -> float or tvecn\nReturns the natural logarithm of v, i.e.,\nreturns the value y which satisfies the equation x = e^y.\nResults are undefined if v <= 0." },
-	{ "exp2", (PyCFunction)exp2_, METH_O, "exp2(v) -> float or tvecn\nReturns 2 raised to the v power." },
-	{ "log2", (PyCFunction)log2_, METH_O, "log2(x) -> float or tvecn\nReturns the base 2 log of x, i.e., returns the value y,\nwhich satisfies the equation x = 2 ^ y." },
-	{ "sqrt", (PyCFunction)sqrt_, METH_O, "sqrt(v) -> float or tvecn\nReturns the positive square root of v." },
-	{ "inversesqrt", (PyCFunction)inversesqrt_, METH_O, "inversesqrt(v) -> float or tvecn\nReturns the reciprocal of the positive square root of v." },
+	{ "pow", (PyCFunction)pow_, METH_VARARGS, "pow(base, exponent) -> float or vecn\nReturns 'base' raised to the power 'exponent'." },
+	{ "exp", (PyCFunction)exp_, METH_O, "exp(x) -> float or vecn\nReturns the natural exponentiation of x, i.e., e^x." },
+	{ "log", (PyCFunction)log_, METH_O, "log(v) -> float or vecn\nReturns the natural logarithm of v, i.e.,\nreturns the value y which satisfies the equation x = e^y.\nResults are undefined if v <= 0." },
+	{ "exp2", (PyCFunction)exp2_, METH_O, "exp2(v) -> float or vecn\nReturns 2 raised to the v power." },
+	{ "log2", (PyCFunction)log2_, METH_O, "log2(x) -> float or vecn\nReturns the base 2 log of x, i.e., returns the value y,\nwhich satisfies the equation x = 2 ^ y." },
+	{ "sqrt", (PyCFunction)sqrt_, METH_O, "sqrt(v) -> float or vecn\nReturns the positive square root of v." },
+	{ "inversesqrt", (PyCFunction)inversesqrt_, METH_O, "inversesqrt(v) -> float or vecn\nReturns the reciprocal of the positive square root of v." },
 
 	// func_common
-	{ "abs", (PyCFunction)abs_, METH_O, "abs(x) -> float or tvecn\nReturns x if x >= 0; otherwise, it returns -x." },
-	{ "sign", (PyCFunction)sign_, METH_O, "sign(x) -> float or tvecn\nReturns 1.0 if x > 0, 0.0 if x == 0, or -1.0 if x < 0. " },
-	{ "floor", (PyCFunction)floor_, METH_O, "floor(x) -> float or tvecn\nReturns a value equal to the nearest integer that is less then or equal to x." },
-	{ "trunc", (PyCFunction)trunc_, METH_O, "trunc(x) -> float or tvecn\nReturns a value equal to the nearest integer to x\nwhose absolute value is not larger than the absolute value of x." },
-	{ "round", (PyCFunction)round_, METH_O, "round(x) -> float or tvecn\nReturns a value equal to the nearest integer to x.\nThe fraction 0.5 will round in a direction chosen by the\nimplementation, presumably the direction that is fastest.\nThis includes the possibility that round(x) returns the\nsame value as roundEven(x) for all values of x." },
-	{ "roundEven", (PyCFunction)roundEven_, METH_O, "roundEven(x) -> float or tvecn\nReturns a value equal to the nearest integer to x.\nA fractional part of 0.5 will round toward the nearest even\ninteger. (Both 3.5 and 4.5 for x will return 4.0.)" },
-	{ "ceil", (PyCFunction)ceil_, METH_O, "ceil(x) -> float or tvecn\nReturns a value equal to the nearest integer\nthat is greater than or equal to x." },
-	{ "fract", (PyCFunction)fract_, METH_O, "fract(x) -> float or tvecn\nReturn x - floor(x)." },
-	{ "mod", (PyCFunction)mod_, METH_VARARGS, "mod(x, y) -> float or tvecn\nModulus. Returns x - y * floor(x / y)\nfor each component in x using the floating point value y." },
-	{ "min", (PyCFunction)min_, METH_VARARGS, "min(x, y) -> float or tvecn\nReturns y if y < x; otherwise, it returns x." },
-	{ "max", (PyCFunction)max_, METH_VARARGS, "max(x, y) -> float or tvecn\nReturns y if x < y; otherwise, it returns x." },
-	{ "clamp", (PyCFunction)clamp_, METH_VARARGS, "clamp(x, minVal, maxVal) -> float or tvecn\nReturns min(max(x, minVal), maxVal) for each component in x\nusing the floating-point values minVal and maxVal." },
-	{ "mix", (PyCFunction)mix_, METH_VARARGS, "mix(x, y, a) -> float, tvecn or tquat\nReturns x * (1.0 - a) + y * a, i.e., the linear blend of\nx and y using the floating-point value a.\nThe value for a is not restricted to the range [0, 1]." },
+	{ "abs", (PyCFunction)abs_, METH_O, "abs(x) -> float or vecn\nReturns x if x >= 0; otherwise, it returns -x." },
+	{ "sign", (PyCFunction)sign_, METH_O, "sign(x) -> float or vecn\nReturns 1.0 if x > 0, 0.0 if x == 0, or -1.0 if x < 0. " },
+	{ "floor", (PyCFunction)floor_, METH_O, "floor(x) -> float or vecn\nReturns a value equal to the nearest integer that is less then or equal to x." },
+	{ "trunc", (PyCFunction)trunc_, METH_O, "trunc(x) -> float or vecn\nReturns a value equal to the nearest integer to x\nwhose absolute value is not larger than the absolute value of x." },
+	{ "round", (PyCFunction)round_, METH_O, "round(x) -> float or vecn\nReturns a value equal to the nearest integer to x.\nThe fraction 0.5 will round in a direction chosen by the\nimplementation, presumably the direction that is fastest.\nThis includes the possibility that round(x) returns the\nsame value as roundEven(x) for all values of x." },
+	{ "roundEven", (PyCFunction)roundEven_, METH_O, "roundEven(x) -> float or vecn\nReturns a value equal to the nearest integer to x.\nA fractional part of 0.5 will round toward the nearest even\ninteger. (Both 3.5 and 4.5 for x will return 4.0.)" },
+	{ "ceil", (PyCFunction)ceil_, METH_O, "ceil(x) -> float or vecn\nReturns a value equal to the nearest integer\nthat is greater than or equal to x." },
+	{ "fract", (PyCFunction)fract_, METH_O, "fract(x) -> float or vecn\nReturn x - floor(x)." },
+	{ "mod", (PyCFunction)mod_, METH_VARARGS, "mod(x, y) -> float or vecn\nModulus. Returns x - y * floor(x / y)\nfor each component in x using the floating point value y." },
+	{ "min", (PyCFunction)min_, METH_VARARGS, "min(x, y) -> float or vecn\nReturns y if y < x; otherwise, it returns x." },
+	{ "max", (PyCFunction)max_, METH_VARARGS, "max(x, y) -> float or vecn\nReturns y if x < y; otherwise, it returns x." },
+	{ "clamp", (PyCFunction)clamp_, METH_VARARGS, "clamp(x, minVal, maxVal) -> float or vecn\nReturns min(max(x, minVal), maxVal) for each component in x\nusing the floating-point values minVal and maxVal." },
+	{ "mix", (PyCFunction)mix_, METH_VARARGS, "mix(x, y, a) -> float, vecn or quat\nReturns x * (1.0 - a) + y * a, i.e., the linear blend of\nx and y using the floating-point value a.\nThe value for a is not restricted to the range [0, 1]." },
 	{ "step", (PyCFunction)step_, METH_VARARGS, "step(edge, x) -> Returns 0.0 if x < edge, otherwise it returns 1.0." },
-	{ "smoothstep", (PyCFunction)smoothstep_, METH_VARARGS, "smoothstep(edge0, edge1, x) -> float or tvecn\nReturns 0.0 if x <= edge0 and 1.0 if x >= edge1 and\nperforms smooth Hermite interpolation between 0 and 1\nwhen edge0 < x < edge1. This is useful in cases where\nyou would want a threshold function with a smooth\ntransition." },
-	{ "isnan", (PyCFunction)isnan_, METH_O, "isnan(x) -> bool or tvecn\nReturns true if x holds a NaN (not a number)\nrepresentation in the underlying implementation's set of\nfloating point representations. Returns false otherwise,\nincluding for implementations with no NaN\nrepresentations." },
-	{ "isinf", (PyCFunction)isinf_, METH_O, "isinf(x) -> bool or tvecn\nReturns true if x holds a positive infinity or negative\ninfinity representation in the underlying implementation's\nset of floating point representations. Returns false\notherwise, including for implementations with no infinity\nrepresentations." },
+	{ "smoothstep", (PyCFunction)smoothstep_, METH_VARARGS, "smoothstep(edge0, edge1, x) -> float or vecn\nReturns 0.0 if x <= edge0 and 1.0 if x >= edge1 and\nperforms smooth Hermite interpolation between 0 and 1\nwhen edge0 < x < edge1. This is useful in cases where\nyou would want a threshold function with a smooth\ntransition." },
+	{ "isnan", (PyCFunction)isnan_, METH_O, "isnan(x) -> bool or vecn\nReturns true if x holds a NaN (not a number)\nrepresentation in the underlying implementation's set of\nfloating point representations. Returns false otherwise,\nincluding for implementations with no NaN\nrepresentations." },
+	{ "isinf", (PyCFunction)isinf_, METH_O, "isinf(x) -> bool or vecn\nReturns true if x holds a positive infinity or negative\ninfinity representation in the underlying implementation's\nset of floating point representations. Returns false\notherwise, including for implementations with no infinity\nrepresentations." },
 	{ "fma", (PyCFunction)fma_, METH_VARARGS, "fma(a, b, c) -> float\nComputes and returns a * b + c." },
-	//{ "frexp", (PyCFunction)frexp_, METH_VARARGS, "frexp(x, exp) -> float or tvecn\nSplits x into a floating-point significand in the range\n[0.5, 1.0) and an integral exponent of two, such that:\nx = significand * exp(2, exponent)" },
-	//{ "ldexp", (PyCFunction)ldexp_, METH_VARARGS, "ldexp(x, exp) -> float or tvecn\nBuilds a floating-point number from x and the\ncorresponding integral exponent of two in exp, returning:\nsignificand * exp(2, exponent)" },
+	//{ "frexp", (PyCFunction)frexp_, METH_VARARGS, "frexp(x, exp) -> float or vecn\nSplits x into a floating-point significand in the range\n[0.5, 1.0) and an integral exponent of two, such that:\nx = significand * exp(2, exponent)" },
+	//{ "ldexp", (PyCFunction)ldexp_, METH_VARARGS, "ldexp(x, exp) -> float or vecn\nBuilds a floating-point number from x and the\ncorresponding integral exponent of two in exp, returning:\nsignificand * exp(2, exponent)" },
 
 	// func_geometric
 	{ "length", (PyCFunction)length_, METH_O, "length(x) -> float\nReturns the length of x, i.e., sqrt(x * x)." },
 	{ "distance", (PyCFunction)distance_, METH_VARARGS, "distance(p0, p1) -> float\nReturns the distance betwwen p0 and p1, i.e., length(p0 - p1)." },
 	{ "dot", (PyCFunction)dot_, METH_VARARGS, "dot(x, y) -> float\nReturns the dot product of x and y, i.e., result = x * y." },
-	{ "cross", (PyCFunction)cross_, METH_VARARGS, "cross(x, y) -> tvec3 or tquat\nReturns the cross product of x and y." },
-	{ "normalize", (PyCFunction)normalize_, METH_O, "normalize(x) -> tvecn or tquat\nReturns a vector in the same direction as x but with length of 1." },
-	{ "faceforward", (PyCFunction)faceforward_, METH_VARARGS, "faceforward(N, I, Nref) -> float or tvecn\nIf dot(Nref, I) < 0.0, return N, otherwise, return -N." },
-	{ "reflect", (PyCFunction)reflect_, METH_VARARGS, "reflect(I, N) -> float or tvecn\nFor the incident vector I and surface orientation N,\nreturns the reflection direction : result = I - 2.0 * dot(N, I) * N." },
-	{ "refract", (PyCFunction)refract_, METH_VARARGS, "refract(I, N, eta) -> float or tvecn\nFor the incident vector I and surface normal N,\nand the ratio of indices of refraction eta,\nreturn the refraction vector." },
+	{ "cross", (PyCFunction)cross_, METH_VARARGS, "cross(x, y) -> vec3 or quat\nReturns the cross product of x and y." },
+	{ "normalize", (PyCFunction)normalize_, METH_O, "normalize(x) -> vecn or quat\nReturns a vector in the same direction as x but with length of 1." },
+	{ "faceforward", (PyCFunction)faceforward_, METH_VARARGS, "faceforward(N, I, Nref) -> float or vecn\nIf dot(Nref, I) < 0.0, return N, otherwise, return -N." },
+	{ "reflect", (PyCFunction)reflect_, METH_VARARGS, "reflect(I, N) -> float or vecn\nFor the incident vector I and surface orientation N,\nreturns the reflection direction : result = I - 2.0 * dot(N, I) * N." },
+	{ "refract", (PyCFunction)refract_, METH_VARARGS, "refract(I, N, eta) -> float or vecn\nFor the incident vector I and surface normal N,\nand the ratio of indices of refraction eta,\nreturn the refraction vector." },
 
 	// func_matrix
-	{ "matrixCompMult", (PyCFunction)matrixCompMult_, METH_VARARGS, "matrixCompMult(x, y) -> tmatnxn\nMultiply matrix x by matrix y component-wise, i.e.,\nresult[i][j] is the scalar product of x[i][j] and y[i][j]." },
-	{ "outerProduct", (PyCFunction)outerProduct_, METH_VARARGS, "outerProduct(c, r) -> tmatnxn\nTreats the first parameter c as a column vector\nand the second parameter r as a row vector\nand does a linear algebraic matrix multiply c * r." },
-	{ "transpose", (PyCFunction)transpose_, METH_O, "transpose(x) -> tmatnxn\nReturns the transposed matrix of x" },
+	{ "matrixCompMult", (PyCFunction)matrixCompMult_, METH_VARARGS, "matrixCompMult(x, y) -> matnxn\nMultiply matrix x by matrix y component-wise, i.e.,\nresult[i][j] is the scalar product of x[i][j] and y[i][j]." },
+	{ "outerProduct", (PyCFunction)outerProduct_, METH_VARARGS, "outerProduct(c, r) -> matnxn\nTreats the first parameter c as a column vector\nand the second parameter r as a row vector\nand does a linear algebraic matrix multiply c * r." },
+	{ "transpose", (PyCFunction)transpose_, METH_O, "transpose(x) -> matnxn\nReturns the transposed matrix of x" },
 	{ "determinant", (PyCFunction)determinant_, METH_O, "determinant(x) -> float\nReturn the determinant of a squared matrix." },
-	{ "inverse", (PyCFunction)inverse_, METH_O, "inverse(x) -> tmatnxn or tquat\nReturn the inverse of a squared matrix or quaternion." },
+	{ "inverse", (PyCFunction)inverse_, METH_O, "inverse(x) -> matnxn or quat\nReturn the inverse of a squared matrix or quaternion." },
 
 	// func_trigonometric
-	{ "radians", (PyCFunction)radians_, METH_O, "radians(x) -> float or tvecn\nConverts degrees to radians and returns the result." },
-	{ "degrees", (PyCFunction)degrees_, METH_O, "degrees(x) -> float or tvecn\nConverts radians to degrees and returns the result." },
-	{ "sin", (PyCFunction)sin_, METH_O, "sin(x) -> tvecn\nThe standard trigonometric sine function. \nThe values returned by this function will range from [-1, 1]." },
-	{ "cos", (PyCFunction)cos_, METH_O, "cos(x) -> tvecn\nThe standard trigonometric cosine function.\nThe values returned by this function will range from [-1, 1]." },
-	{ "tan", (PyCFunction)tan_, METH_O, "tan(x) -> tvecn\nThe standard trigonometric tangent function." },
-	{ "asin", (PyCFunction)asin_, METH_O, "asin(x) -> tvecn\nArc sine. Returns an angle whose sine is x. \nThe range of values returned by this function is [-PI/2, PI/2].\nResults are undefined if |x| > 1." },
-	{ "acos", (PyCFunction)acos_, METH_O, "acos(x) -> tvecn\nArc cosine. Returns an angle whose sine is x.\nThe range of values returned by this function is [0, PI].\nResults are undefined if |x| > 1." },
-	{ "atan", (PyCFunction)atan_,  METH_VARARGS | METH_KEYWORDS, "atan(y [,x]) -> float or tvecn\nArc tangent. Returns an angle whose tangent is y/x.\nThe signs of x and y are used to determine what\nquadrant the angle is in. The range of values returned\nby this function is [-PI, PI]. Results are undefined\nif x and y are both 0." },
-	{ "sinh", (PyCFunction)sinh_, METH_O, "sinh(x) -> tvecn\nReturns the hyperbolic sine function, (exp(x) - exp(-x)) / 2" },
-	{ "cosh", (PyCFunction)cosh_, METH_O, "cosh(x) -> tvecn\nReturns the hyperbolic cosine function, (exp(x) + exp(-x)) / 2" },
-	{ "tanh", (PyCFunction)tanh_, METH_O, "tanh(x) -> tvecn\nReturns the hyperbolic tangent function, sinh(angle) / cosh(angle)" },
-	{ "asinh", (PyCFunction)asinh_, METH_O, "asinh(x) -> float or tvecn\nArc hyperbolic sine; returns the inverse of sinh." },
-	{ "acosh", (PyCFunction)acosh_, METH_O, "acosh(x) -> float or tvecn\nArc hyperbolic cosine; returns the non-negative inverse\nof cosh. Results are undefined if x < 1." },
-	{ "atanh", (PyCFunction)atanh_, METH_O, "atanh(x) -> float or tvecn\nArc hyperbolic tangent; returns the inverse of tanh.\nResults are undefined if abs(x) >= 1." },
+	{ "radians", (PyCFunction)radians_, METH_O, "radians(x) -> float or vecn\nConverts degrees to radians and returns the result." },
+	{ "degrees", (PyCFunction)degrees_, METH_O, "degrees(x) -> float or vecn\nConverts radians to degrees and returns the result." },
+	{ "sin", (PyCFunction)sin_, METH_O, "sin(x) -> vecn\nThe standard trigonometric sine function. \nThe values returned by this function will range from [-1, 1]." },
+	{ "cos", (PyCFunction)cos_, METH_O, "cos(x) -> vecn\nThe standard trigonometric cosine function.\nThe values returned by this function will range from [-1, 1]." },
+	{ "tan", (PyCFunction)tan_, METH_O, "tan(x) -> vecn\nThe standard trigonometric tangent function." },
+	{ "asin", (PyCFunction)asin_, METH_O, "asin(x) -> vecn\nArc sine. Returns an angle whose sine is x. \nThe range of values returned by this function is [-PI/2, PI/2].\nResults are undefined if |x| > 1." },
+	{ "acos", (PyCFunction)acos_, METH_O, "acos(x) -> vecn\nArc cosine. Returns an angle whose sine is x.\nThe range of values returned by this function is [0, PI].\nResults are undefined if |x| > 1." },
+	{ "atan", (PyCFunction)atan_,  METH_VARARGS | METH_KEYWORDS, "atan(y [,x]) -> float or vecn\nArc tangent. Returns an angle whose tangent is y/x.\nThe signs of x and y are used to determine what\nquadrant the angle is in. The range of values returned\nby this function is [-PI, PI]. Results are undefined\nif x and y are both 0." },
+	{ "sinh", (PyCFunction)sinh_, METH_O, "sinh(x) -> vecn\nReturns the hyperbolic sine function, (exp(x) - exp(-x)) / 2" },
+	{ "cosh", (PyCFunction)cosh_, METH_O, "cosh(x) -> vecn\nReturns the hyperbolic cosine function, (exp(x) + exp(-x)) / 2" },
+	{ "tanh", (PyCFunction)tanh_, METH_O, "tanh(x) -> vecn\nReturns the hyperbolic tangent function, sinh(angle) / cosh(angle)" },
+	{ "asinh", (PyCFunction)asinh_, METH_O, "asinh(x) -> float or vecn\nArc hyperbolic sine; returns the inverse of sinh." },
+	{ "acosh", (PyCFunction)acosh_, METH_O, "acosh(x) -> float or vecn\nArc hyperbolic cosine; returns the non-negative inverse\nof cosh. Results are undefined if x < 1." },
+	{ "atanh", (PyCFunction)atanh_, METH_O, "atanh(x) -> float or vecn\nArc hyperbolic tangent; returns the inverse of tanh.\nResults are undefined if abs(x) >= 1." },
 
 	// GTC
 	// color_space
-	{ "convertLinearToSRGB", (PyCFunction)convertLinearToSRGB_, METH_VARARGS | METH_KEYWORDS, "convertLinearToSRGB(ColorLinear[, Gamma]) -> tvecn\nConvert a linear color to sRGB color using a standard / custom gamma correction." },
-	{ "convertSRGBToLinear", (PyCFunction)convertSRGBToLinear_, METH_VARARGS | METH_KEYWORDS, "convertSRGBToLinear(ColorLinear[, Gamma]) -> tvecn\nConvert a sRGB color to linear color using a standard / custom gamma correction." },
+	{ "convertLinearToSRGB", (PyCFunction)convertLinearToSRGB_, METH_VARARGS | METH_KEYWORDS, "convertLinearToSRGB(ColorLinear[, Gamma]) -> vecn\nConvert a linear color to sRGB color using a standard / custom gamma correction." },
+	{ "convertSRGBToLinear", (PyCFunction)convertSRGBToLinear_, METH_VARARGS | METH_KEYWORDS, "convertSRGBToLinear(ColorLinear[, Gamma]) -> vecn\nConvert a sRGB color to linear color using a standard / custom gamma correction." },
 
 	// constants
 	{ "epsilon", (PyCFunction)epsilon_, METH_NOARGS, "epsilon() -> float\nReturn the epsilon constant for floating point types." },
@@ -17606,116 +17803,138 @@ static PyMethodDef glmmethods[] = {
 	{ "golden_ratio", (PyCFunction)golden_ratio_, METH_NOARGS, "golden_ratio() -> float\nReturn the golden ratio constant." },
 
 	// epsilon
-	{ "epsilonEqual", (PyCFunction)epsilonEqual_, METH_VARARGS, "epsilonEqual(x, y, epsilon) -> tvecn or tquat\nReturns the component-wise comparison of |x - y| < epsilon.\nTrue if this expression is satisfied." },
-	{ "epsilonNotEqual", (PyCFunction)epsilonNotEqual_, METH_VARARGS, "epsilonNotEqual(x, y, epsilon) -> tvecn or tquat\nReturns the component-wise comparison of |x - y| >= epsilon.\nTrue if this expression is satisfied." },
+	{ "epsilonEqual", (PyCFunction)epsilonEqual_, METH_VARARGS, "epsilonEqual(x, y, epsilon) -> vecn or quat\nReturns the component-wise comparison of |x - y| < epsilon.\nTrue if this expression is satisfied." },
+	{ "epsilonNotEqual", (PyCFunction)epsilonNotEqual_, METH_VARARGS, "epsilonNotEqual(x, y, epsilon) -> vecn or quat\nReturns the component-wise comparison of |x - y| >= epsilon.\nTrue if this expression is satisfied." },
 
 	// matrix_transform
-	{ "translate", (PyCFunction)translate_, METH_VARARGS, "translate(m, v) -> tmat4x4\nBuilds a translation 4 * 4 matrix created from a vector of 3 components." },
-	{ "rotate", (PyCFunction)rotate_, METH_VARARGS, "rotate(m, angle, axis) -> tmat4x4 or tquat\nBuilds a rotation 4 * 4 matrix created from an axis vector and an angle\nor rotates a quaternion from a vector of 3 components axis and an angle." },
-	{ "rotate_slow", (PyCFunction)rotate_slow_, METH_VARARGS, "rotate_slow(m, angle, axis) -> tmat4x4\nBuilds a rotation 4 * 4 matrix created from an axis vector and an angle." },
-	{ "scale", (PyCFunction)scale_, METH_VARARGS, "scale(m, v) -> tmat4x4\nBuilds a scale 4 * 4 matrix created from 3 scalars." },
-	{ "scale_slow", (PyCFunction)scale_slow_, METH_VARARGS, "scale_slow(m, v) -> tmat4x4\nBuilds a scale 4 * 4 matrix created from 3 scalars." },
-	{ "ortho", (PyCFunction)ortho_, METH_VARARGS, "ortho(left, right, bottom, top[, zNear, zFar]) -> tmat4x4\nCreates a matrix for projecting two-dimensional coordinates onto the screen." },
-	{ "orthoLH_ZO", (PyCFunction)orthoLH_ZO_, METH_VARARGS, "orthoLH_ZO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "orthoLH_NO", (PyCFunction)orthoLH_NO_, METH_VARARGS, "orthoLH_NO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "orthoRH_ZO", (PyCFunction)orthoRH_ZO_, METH_VARARGS, "orthoRH_ZO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "orthoRH_NO", (PyCFunction)orthoRH_NO_, METH_VARARGS, "orthoRH_NO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "orthoZO", (PyCFunction)orthoZO_, METH_VARARGS, "orthoZO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "orthoNO", (PyCFunction)orthoNO_, METH_VARARGS, "orthoNO(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "orthoLH", (PyCFunction)orthoLH_, METH_VARARGS, "orthoLH(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "orthoRH", (PyCFunction)orthoRH_, METH_VARARGS, "orthoRH(left, right, bottom, top, zNear, zFar) -> tmat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "frustum", (PyCFunction)frustum_, METH_VARARGS, "frustum(left, right, bottom, top, near, far) -> tmat4x4\nCreates a frustum matrix with default handedness, using right-handedness and -1 to +1 near and far clip planes definition." },
-	{ "frustumLH_ZO", (PyCFunction)frustumLH_ZO_, METH_VARARGS, "frustumLH_ZO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "frustumLH_NO", (PyCFunction)frustumLH_NO_, METH_VARARGS, "frustumLH_NO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "frustumRH_ZO", (PyCFunction)frustumRH_ZO_, METH_VARARGS, "frustumRH_ZO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "frustumRH_NO", (PyCFunction)frustumRH_NO_, METH_VARARGS, "frustumRH_NO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "frustumZO", (PyCFunction)frustumZO_, METH_VARARGS, "frustumZO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "frustumNO", (PyCFunction)frustumNO_, METH_VARARGS, "frustumNO(left, right, bottom, top, near, far) -> tmat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "frustumLH", (PyCFunction)frustumLH_, METH_VARARGS, "frustumLH(left, right, bottom, top, near, far) -> tmat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "frustumRH", (PyCFunction)frustumRH_, METH_VARARGS, "frustumRH(left, right, bottom, top, near, far) -> tmat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspective", (PyCFunction)perspective_, METH_VARARGS, "perspective(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum." },
-	{ "perspectiveLH_ZO", (PyCFunction)perspectiveLH_ZO_, METH_VARARGS, "perspectiveLH_ZO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveLH_NO", (PyCFunction)perspectiveLH_NO_, METH_VARARGS, "perspectiveLH_NO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveRH_ZO", (PyCFunction)perspectiveRH_ZO_, METH_VARARGS, "perspectiveRH_ZO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveRH_NO", (PyCFunction)perspectiveRH_NO_, METH_VARARGS, "perspectiveRH_NO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveZO", (PyCFunction)perspectiveZO_, METH_VARARGS, "perspectiveZO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveNO", (PyCFunction)perspectiveNO_, METH_VARARGS, "perspectiveNO(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveLH", (PyCFunction)perspectiveLH_, METH_VARARGS, "perspectiveLH(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveRH", (PyCFunction)perspectiveRH_, METH_VARARGS, "perspectiveRH(fovy, aspect, near, far) -> tmat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveFov", (PyCFunction)perspectiveFov_, METH_VARARGS, "perspectiveFov(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates." },
-	{ "perspectiveFovLH_ZO", (PyCFunction)perspectiveFovLH_ZO_, METH_VARARGS, "perspectiveFovLH_ZO(fov, width, height, near, far) -> tmat4x4\n\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveFovLH_NO", (PyCFunction)perspectiveFovLH_NO_, METH_VARARGS, "perspectiveFovLH_NO(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveFovRH_ZO", (PyCFunction)perspectiveFovRH_ZO_, METH_VARARGS, "perspectiveFovRH_ZO(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveFovRH_NO", (PyCFunction)perspectiveFovRH_NO_, METH_VARARGS, "perspectiveFovRH_NO(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveFovZO", (PyCFunction)perspectiveFovZO_, METH_VARARGS, "perspectiveFovZO(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "perspectiveFovNO", (PyCFunction)perspectiveFovNO_, METH_VARARGS, "perspectiveFovNO(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveFovLH", (PyCFunction)perspectiveFovLH_, METH_VARARGS, "perspectiveFovLH(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "perspectiveFovRH", (PyCFunction)perspectiveFovRH_, METH_VARARGS, "perspectiveFovRH(fov, width, height, near, far) -> tmat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "infinitePerspective", (PyCFunction)infinitePerspective_, METH_VARARGS, "infinitePerspective(fovy, aspect, near) -> tmat4x4\nCreates a matrix for a right handed, symmetric perspective-view frustum with far plane at infinite." },
-	{ "infinitePerspectiveRH", (PyCFunction)infinitePerspectiveRH_, METH_VARARGS, "infinitePerspectiveRH(fovy, aspect, near) -> tmat4x4\nCreates a matrix for a right handed, symmetric perspective-view frustum with far plane at infinite." },
-	{ "infinitePerspectiveLH", (PyCFunction)infinitePerspectiveLH_, METH_VARARGS, "infinitePerspectiveLH(fovy, aspect, near) -> tmat4x4\nCreates a matrix for a left handed, symmetric perspective-view frustum with far plane at infinite." },
-	{ "tweakedInfinitePerspective", (PyCFunction)tweakedInfinitePerspective_, METH_VARARGS, "tweakedInfinitePerspective(fovy, aspect, near[, ep]) -> tmat4x4\nCreates a matrix for a symmetric perspective-view frustum with far plane at infinite for graphics hardware that doesn't support depth clamping." },
-	{ "project", (PyCFunction)project_, METH_VARARGS, "project(obj, model, proj, viewport) -> tvec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "projectNO", (PyCFunction)projectNO_, METH_VARARGS, "projectNO(obj, model, proj, viewport) -> tvec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "projectZO", (PyCFunction)projectZO_, METH_VARARGS, "projectZO(obj, model, proj, viewport) -> tvec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "unProject", (PyCFunction)unProject_, METH_VARARGS, "unProject(obj, model, proj, viewport) -> tvec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "unProjectNO", (PyCFunction)unProjectNO_, METH_VARARGS, "unProjectNO(obj, model, proj, viewport) -> tvec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
-	{ "unProjectZO", (PyCFunction)unProjectZO_, METH_VARARGS, "unProjectZO(obj, model, proj, viewport) -> tvec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
-	{ "pickMatrix", (PyCFunction)pickMatrix_, METH_VARARGS, "pickMatrix(center, delta, viewport) -> tmat4x4\nDefine a picking region" },
-	{ "lookAt", (PyCFunction)lookAt_, METH_VARARGS, "lookAt(eye, center, up) -> tmat4x4\nBuild a right handed look at view matrix." },
-	{ "lookAtRH", (PyCFunction)lookAtRH_, METH_VARARGS, "lookAtRH(eye, center, up) -> tmat4x4\nBuild a right handed look at view matrix." },
-	{ "lookAtLH", (PyCFunction)lookAtLH_, METH_VARARGS, "lookAtLH(eye, center, up) -> tmat4x4\nBuild a left handed look at view matrix." },
+	{ "identity", (PyCFunction)identity_, METH_O, "identity(matrix_type) -> matrix\nBuilds an identity matrix." },
+	{ "translate", (PyCFunction)translate_, METH_VARARGS, "translate(m, v) -> mat4x4\nBuilds a translation 4 * 4 matrix created from a vector of 3 components." },
+	{ "rotate", (PyCFunction)rotate_, METH_VARARGS, "rotate(m, angle, axis) -> mat4x4 or quat\nBuilds a rotation 4 * 4 matrix created from an axis vector and an angle\nor rotates a quaternion from a vector of 3 components axis and an angle." },
+	{ "rotate_slow", (PyCFunction)rotate_slow_, METH_VARARGS, "rotate_slow(m, angle, axis) -> mat4x4\nBuilds a rotation 4 * 4 matrix created from an axis vector and an angle." },
+	{ "scale", (PyCFunction)scale_, METH_VARARGS, "scale(m, v) -> mat4x4\nBuilds a scale 4 * 4 matrix created from 3 scalars." },
+	{ "scale_slow", (PyCFunction)scale_slow_, METH_VARARGS, "scale_slow(m, v) -> mat4x4\nBuilds a scale 4 * 4 matrix created from 3 scalars." },
+	{ "ortho", (PyCFunction)ortho_, METH_VARARGS, "ortho(left, right, bottom, top[, zNear, zFar]) -> mat4x4\nCreates a matrix for projecting two-dimensional coordinates onto the screen." },
+	{ "orthoLH_ZO", (PyCFunction)orthoLH_ZO_, METH_VARARGS, "orthoLH_ZO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "orthoLH_NO", (PyCFunction)orthoLH_NO_, METH_VARARGS, "orthoLH_NO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "orthoRH_ZO", (PyCFunction)orthoRH_ZO_, METH_VARARGS, "orthoRH_ZO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "orthoRH_NO", (PyCFunction)orthoRH_NO_, METH_VARARGS, "orthoRH_NO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "orthoZO", (PyCFunction)orthoZO_, METH_VARARGS, "orthoZO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "orthoNO", (PyCFunction)orthoNO_, METH_VARARGS, "orthoNO(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "orthoLH", (PyCFunction)orthoLH_, METH_VARARGS, "orthoLH(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "orthoRH", (PyCFunction)orthoRH_, METH_VARARGS, "orthoRH(left, right, bottom, top, zNear, zFar) -> mat4x4\nCreates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "frustum", (PyCFunction)frustum_, METH_VARARGS, "frustum(left, right, bottom, top, near, far) -> mat4x4\nCreates a frustum matrix with default handedness, using right-handedness and -1 to +1 near and far clip planes definition." },
+	{ "frustumLH_ZO", (PyCFunction)frustumLH_ZO_, METH_VARARGS, "frustumLH_ZO(left, right, bottom, top, near, far) -> mat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "frustumLH_NO", (PyCFunction)frustumLH_NO_, METH_VARARGS, "frustumLH_NO(left, right, bottom, top, near, far) -> mat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "frustumRH_ZO", (PyCFunction)frustumRH_ZO_, METH_VARARGS, "frustumRH_ZO(left, right, bottom, top, near, far) -> mat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "frustumRH_NO", (PyCFunction)frustumRH_NO_, METH_VARARGS, "frustumRH_NO(left, right, bottom, top, near, far) -> mat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "frustumZO", (PyCFunction)frustumZO_, METH_VARARGS, "frustumZO(left, right, bottom, top, near, far) -> mat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "frustumNO", (PyCFunction)frustumNO_, METH_VARARGS, "frustumNO(left, right, bottom, top, near, far) -> mat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "frustumLH", (PyCFunction)frustumLH_, METH_VARARGS, "frustumLH(left, right, bottom, top, near, far) -> mat4x4\nCreates a left handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "frustumRH", (PyCFunction)frustumRH_, METH_VARARGS, "frustumRH(left, right, bottom, top, near, far) -> mat4x4\nCreates a right handed frustum matrix.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspective", (PyCFunction)perspective_, METH_VARARGS, "perspective(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum." },
+	{ "perspectiveLH_ZO", (PyCFunction)perspectiveLH_ZO_, METH_VARARGS, "perspectiveLH_ZO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveLH_NO", (PyCFunction)perspectiveLH_NO_, METH_VARARGS, "perspectiveLH_NO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveRH_ZO", (PyCFunction)perspectiveRH_ZO_, METH_VARARGS, "perspectiveRH_ZO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveRH_NO", (PyCFunction)perspectiveRH_NO_, METH_VARARGS, "perspectiveRH_NO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveZO", (PyCFunction)perspectiveZO_, METH_VARARGS, "perspectiveZO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveNO", (PyCFunction)perspectiveNO_, METH_VARARGS, "perspectiveNO(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveLH", (PyCFunction)perspectiveLH_, METH_VARARGS, "perspectiveLH(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a left handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveRH", (PyCFunction)perspectiveRH_, METH_VARARGS, "perspectiveRH(fovy, aspect, near, far) -> mat4x4\nCreates a matrix for a right handed, symetric perspective-view frustum.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveFov", (PyCFunction)perspectiveFov_, METH_VARARGS, "perspectiveFov(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates." },
+	{ "perspectiveFovLH_ZO", (PyCFunction)perspectiveFovLH_ZO_, METH_VARARGS, "perspectiveFovLH_ZO(fov, width, height, near, far) -> mat4x4\n\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveFovLH_NO", (PyCFunction)perspectiveFovLH_NO_, METH_VARARGS, "perspectiveFovLH_NO(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveFovRH_ZO", (PyCFunction)perspectiveFovRH_ZO_, METH_VARARGS, "perspectiveFovRH_ZO(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveFovRH_NO", (PyCFunction)perspectiveFovRH_NO_, METH_VARARGS, "perspectiveFovRH_NO(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveFovZO", (PyCFunction)perspectiveFovZO_, METH_VARARGS, "perspectiveFovZO(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "perspectiveFovNO", (PyCFunction)perspectiveFovNO_, METH_VARARGS, "perspectiveFovNO(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveFovLH", (PyCFunction)perspectiveFovLH_, METH_VARARGS, "perspectiveFovLH(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using left-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "perspectiveFovRH", (PyCFunction)perspectiveFovRH_, METH_VARARGS, "perspectiveFovRH(fov, width, height, near, far) -> mat4x4\nBuilds a perspective projection matrix based on a field of view using right-handed coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "infinitePerspective", (PyCFunction)infinitePerspective_, METH_VARARGS, "infinitePerspective(fovy, aspect, near) -> mat4x4\nCreates a matrix for a right handed, symmetric perspective-view frustum with far plane at infinite." },
+	{ "infinitePerspectiveRH", (PyCFunction)infinitePerspectiveRH_, METH_VARARGS, "infinitePerspectiveRH(fovy, aspect, near) -> mat4x4\nCreates a matrix for a right handed, symmetric perspective-view frustum with far plane at infinite." },
+	{ "infinitePerspectiveLH", (PyCFunction)infinitePerspectiveLH_, METH_VARARGS, "infinitePerspectiveLH(fovy, aspect, near) -> mat4x4\nCreates a matrix for a left handed, symmetric perspective-view frustum with far plane at infinite." },
+	{ "tweakedInfinitePerspective", (PyCFunction)tweakedInfinitePerspective_, METH_VARARGS, "tweakedInfinitePerspective(fovy, aspect, near[, ep]) -> mat4x4\nCreates a matrix for a symmetric perspective-view frustum with far plane at infinite for graphics hardware that doesn't support depth clamping." },
+	{ "project", (PyCFunction)project_, METH_VARARGS, "project(obj, model, proj, viewport) -> vec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "projectNO", (PyCFunction)projectNO_, METH_VARARGS, "projectNO(obj, model, proj, viewport) -> vec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "projectZO", (PyCFunction)projectZO_, METH_VARARGS, "projectZO(obj, model, proj, viewport) -> vec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "unProject", (PyCFunction)unProject_, METH_VARARGS, "unProject(obj, model, proj, viewport) -> vec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "unProjectNO", (PyCFunction)unProjectNO_, METH_VARARGS, "unProjectNO(obj, model, proj, viewport) -> vec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" },
+	{ "unProjectZO", (PyCFunction)unProjectZO_, METH_VARARGS, "unProjectZO(obj, model, proj, viewport) -> vec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },
+	{ "pickMatrix", (PyCFunction)pickMatrix_, METH_VARARGS, "pickMatrix(center, delta, viewport) -> mat4x4\nDefine a picking region" },
+	{ "lookAt", (PyCFunction)lookAt_, METH_VARARGS, "lookAt(eye, center, up) -> mat4x4\nBuild a right handed look at view matrix." },
+	{ "lookAtRH", (PyCFunction)lookAtRH_, METH_VARARGS, "lookAtRH(eye, center, up) -> mat4x4\nBuild a right handed look at view matrix." },
+	{ "lookAtLH", (PyCFunction)lookAtLH_, METH_VARARGS, "lookAtLH(eye, center, up) -> mat4x4\nBuild a left handed look at view matrix." },
 
 	// quaternion
-	{ "lerp", (PyCFunction)lerp_, METH_VARARGS, "lerp(x, y, a) -> tquat\nLinear interpolation of two quaternions.\nThe interpolation is oriented." },
-	{ "slerp", (PyCFunction)slerp_, METH_VARARGS, "slerp(x, y, a) -> tquat\nSpherical linear interpolation of two quaternions.\nThe interpolation always take the short path and the rotation is performed at constant speed." },
-	{ "conjugate", (PyCFunction)conjugate_, METH_O, "conjugate(q) -> tquat\nReturns the q conjugate." },
-	{ "eulerAngles", (PyCFunction)eulerAngles_, METH_O, "eulerAngles(x) -> tvec3\nReturns euler angles, pitch as x, yaw as y, roll as z." },
+	{ "quatLookAt", (PyCFunction)quatLookAt_, METH_VARARGS, "quatLookAt(direction, up) -> quat\nBuild a look at quaternion based on the default handedness." },
+	{ "quatLookAtLH", (PyCFunction)quatLookAtLH_, METH_VARARGS, "quatLookAtLH(direction, up) -> quat\nBuild a left-handed look at quaternion." },
+	{ "quatLookAtRH", (PyCFunction)quatLookAtRH_, METH_VARARGS, "quatLookAtRH(direction, up) -> quat\nBuild a right-handed look at quaternion." },
+	{ "lerp", (PyCFunction)lerp_, METH_VARARGS, "lerp(x, y, a) -> quat\nLinear interpolation of two quaternions.\nThe interpolation is oriented." },
+	{ "slerp", (PyCFunction)slerp_, METH_VARARGS, "slerp(x, y, a) -> quat\nSpherical linear interpolation of two quaternions.\nThe interpolation always take the short path and the rotation is performed at constant speed." },
+	{ "conjugate", (PyCFunction)conjugate_, METH_O, "conjugate(q) -> quat\nReturns the q conjugate." },
+	{ "eulerAngles", (PyCFunction)eulerAngles_, METH_O, "eulerAngles(x) -> vec3\nReturns euler angles, pitch as x, yaw as y, roll as z." },
 	{ "roll", (PyCFunction)roll_, METH_O, "roll(x) -> float\nReturns roll value of euler angles expressed in radians." },
 	{ "pitch", (PyCFunction)pitch_, METH_O, "pitch(x) -> float\nReturns pitch value of euler angles expressed in radians." },
 	{ "yaw", (PyCFunction)yaw_, METH_O, "yaw(x) -> float\nReturns yaw value of euler angles expressed in radians." },
-	{ "mat3_cast", (PyCFunction)mat3_cast_, METH_O, "mat3_cast(x) -> tmat3x3\nConverts a quaternion to a 3 * 3 matrix." },
-	{ "mat4_cast", (PyCFunction)mat4_cast_, METH_O, "mat4_cast(x) -> tmat4x4\nConverts a quaternion to a 4 * 4 matrix." },
-	{ "quat_cast", (PyCFunction)quat_cast_, METH_O, "quat_cast(m) -> tquat\nConverts a 3 * 3 or 4 * 4 matrix to a quaternion." },
+	{ "mat3_cast", (PyCFunction)mat3_cast_, METH_O, "mat3_cast(x) -> mat3x3\nConverts a quaternion to a 3 * 3 matrix." },
+	{ "mat4_cast", (PyCFunction)mat4_cast_, METH_O, "mat4_cast(x) -> mat4x4\nConverts a quaternion to a 4 * 4 matrix." },
+	{ "quat_cast", (PyCFunction)quat_cast_, METH_O, "quat_cast(m) -> quat\nConverts a 3 * 3 or 4 * 4 matrix to a quaternion." },
 	{ "angle", (PyCFunction)angle_, METH_O, "angle(x) -> float\nReturns the quaternion rotation angle." },
-	{ "axis", (PyCFunction)axis_, METH_O, "axis(x) -> tvec3\nReturns the quaternion rotation axis." },
-	{ "angleAxis", (PyCFunction)angleAxis_, METH_VARARGS, "angleAxis(angle, v) -> tquat\nBuild a quaternion from an angle and a normalized axis." },
+	{ "axis", (PyCFunction)axis_, METH_O, "axis(x) -> vec3\nReturns the quaternion rotation axis." },
+	{ "angleAxis", (PyCFunction)angleAxis_, METH_VARARGS, "angleAxis(angle, v) -> quat\nBuild a quaternion from an angle and a normalized axis." },
 
 	// matrix_access
-	{ "row", (PyCFunction)row_, METH_VARARGS | METH_KEYWORDS, "row(m, index[, x]) -> tvecn or tmatnxn\nGet a specific row of a matrix or set a specific row to a matrix." },
-	{ "column", (PyCFunction)column_, METH_VARARGS | METH_KEYWORDS, "column(m, index[, x]) -> tvecn or tmatnxn\nGet a specific column of a matrix or set a specific column to a matrix." },
+	{ "row", (PyCFunction)row_, METH_VARARGS | METH_KEYWORDS, "row(m, index[, x]) -> vecn or matnxn\nGet a specific row of a matrix or set a specific row to a matrix." },
+	{ "column", (PyCFunction)column_, METH_VARARGS | METH_KEYWORDS, "column(m, index[, x]) -> vecn or matnxn\nGet a specific column of a matrix or set a specific column to a matrix." },
 
 	// noise
-	//{ "grad4", (PyCFunction)grad4_, METH_VARARGS, "grad4(j, ip) -> tvec4" },
+	//{ "grad4", (PyCFunction)grad4_, METH_VARARGS, "grad4(j, ip) -> vec4" },
 	{ "perlin", (PyCFunction)perlin_, METH_VARARGS, "perlin(p[, rep]) -> float\nClassic or periodic perlin noise." },
 	{ "simplex", (PyCFunction)simplex_, METH_O, "simplex(p) -> float\nSimplex noise." },
 
 	// random
-	{ "linearRand", (PyCFunction)linearRand_, METH_VARARGS, "linearRand(Min, Max) -> float or tvecn\nGenerate random numbers in the interval [Min, Max], according a linear distribution" },
+	{ "linearRand", (PyCFunction)linearRand_, METH_VARARGS, "linearRand(Min, Max) -> float or vecn\nGenerate random numbers in the interval [Min, Max], according a linear distribution" },
 	{ "gaussRand", (PyCFunction)gaussRand_, METH_VARARGS, "gaussRand(Mean, Deviation) -> float\nGenerate random numbers in the interval [Min, Max], according a gaussian distribution" },
-	{ "circularRand", (PyCFunction)circularRand_, METH_O, "circularRand(Radius) -> tvec2\nGenerate a random 2D vector which coordinates are regulary distributed on a circle of a given radius" },
-	{ "sphericalRand", (PyCFunction)sphericalRand_, METH_O, "sphericalRand(Radius) -> tvec3\nGenerate a random 3D vector which coordinates are regulary distributed on a sphere of a given radius" },
-	{ "diskRand", (PyCFunction)diskRand_, METH_O, "diskRand(Radius) -> tvec2\nGenerate a random 2D vector which coordinates are regulary distributed within the area of a disk of a given radius" },
-	{ "ballRand", (PyCFunction)ballRand_, METH_O, "ballRand(Radius) -> tvec3\nGenerate a random 3D vector which coordinates are regulary distributed within the area of a ball of a given radius" },
+	{ "circularRand", (PyCFunction)circularRand_, METH_O, "circularRand(Radius) -> vec2\nGenerate a random 2D vector which coordinates are regulary distributed on a circle of a given radius" },
+	{ "sphericalRand", (PyCFunction)sphericalRand_, METH_O, "sphericalRand(Radius) -> vec3\nGenerate a random 3D vector which coordinates are regulary distributed on a sphere of a given radius" },
+	{ "diskRand", (PyCFunction)diskRand_, METH_O, "diskRand(Radius) -> vec2\nGenerate a random 2D vector which coordinates are regulary distributed within the area of a disk of a given radius" },
+	{ "ballRand", (PyCFunction)ballRand_, METH_O, "ballRand(Radius) -> vec3\nGenerate a random 3D vector which coordinates are regulary distributed within the area of a ball of a given radius" },
 
 	// reciprocal
-	{ "sec", (PyCFunction)sec_, METH_O, "sec(x) -> float or tvecn\nSecant function.\nhypotenuse / adjacent or 1 / cos(x)" },
-	{ "csc", (PyCFunction)csc_, METH_O, "csc(x) -> float or tvecn\nCosecant function.\nhypotenuse / opposite or 1 / sin(x)" },
-	{ "cot", (PyCFunction)cot_, METH_O, "cot(x) -> float or tvecn\nCotangent function.\nadjacent / opposite or 1 / tan(x)" },
-	{ "asec", (PyCFunction)asec_, METH_O, "asec(x) -> float or tvecn\nInverse secant function." },
-	{ "acsc", (PyCFunction)acsc_, METH_O, "acsc(x) -> float or tvecn\nInverse cosecant function." },
-	{ "acot", (PyCFunction)acot_, METH_O, "acot(x) -> float or tvecn\nInverse cotangent function." },
-	{ "sech", (PyCFunction)sech_, METH_O, "sech(x) -> float or tvecn\nSecant hyperbolic function." },
-	{ "csch", (PyCFunction)csch_, METH_O, "csch(x) -> float or tvecn\nCosecant hyperbolic function." },
-	{ "coth", (PyCFunction)coth_, METH_O, "coth(x) -> float or tvecn\nCotangent hyperbolic function." },
-	{ "asech", (PyCFunction)asech_, METH_O, "asech(x) -> float or tvecn\nInverse secant hyperbolic function." },
-	{ "acsch", (PyCFunction)acsch_, METH_O, "acsch(x) -> float or tvecn\nInverse cosecant hyperbolic function." },
-	{ "acoth", (PyCFunction)acoth_, METH_O, "acoth(x) -> float or tvecn\nInverse cotangent hyperbolic function." },
+	{ "sec", (PyCFunction)sec_, METH_O, "sec(x) -> float or vecn\nSecant function.\nhypotenuse / adjacent or 1 / cos(x)" },
+	{ "csc", (PyCFunction)csc_, METH_O, "csc(x) -> float or vecn\nCosecant function.\nhypotenuse / opposite or 1 / sin(x)" },
+	{ "cot", (PyCFunction)cot_, METH_O, "cot(x) -> float or vecn\nCotangent function.\nadjacent / opposite or 1 / tan(x)" },
+	{ "asec", (PyCFunction)asec_, METH_O, "asec(x) -> float or vecn\nInverse secant function." },
+	{ "acsc", (PyCFunction)acsc_, METH_O, "acsc(x) -> float or vecn\nInverse cosecant function." },
+	{ "acot", (PyCFunction)acot_, METH_O, "acot(x) -> float or vecn\nInverse cotangent function." },
+	{ "sech", (PyCFunction)sech_, METH_O, "sech(x) -> float or vecn\nSecant hyperbolic function." },
+	{ "csch", (PyCFunction)csch_, METH_O, "csch(x) -> float or vecn\nCosecant hyperbolic function." },
+	{ "coth", (PyCFunction)coth_, METH_O, "coth(x) -> float or vecn\nCotangent hyperbolic function." },
+	{ "asech", (PyCFunction)asech_, METH_O, "asech(x) -> float or vecn\nInverse secant hyperbolic function." },
+	{ "acsch", (PyCFunction)acsch_, METH_O, "acsch(x) -> float or vecn\nInverse cosecant hyperbolic function." },
+	{ "acoth", (PyCFunction)acoth_, METH_O, "acoth(x) -> float or vecn\nInverse cotangent hyperbolic function." },
 
 	// type_ptr
 	{ "value_ptr", (PyCFunction)value_ptr_, METH_O, "value_ptr(x) -> void* as int\nReturn the constant address to the data of the input parameter." },
 	{ "sizeof", (PyCFunction)sizeof_, METH_O, "sizeof(x) -> int\nReturn the size of x in bytes." },
-	//{"test", (PyCFunction)test, METH_O, ""},
+	{ "make_vec2", (PyCFunction)make_vec2_, METH_O, "make_vec2(ctypes.c_void_p) -> vec2\nBuild a vector from a pointer." },
+	{ "make_vec3", (PyCFunction)make_vec3_, METH_O, "make_vec3(ctypes.c_void_p) -> vec3\nBuild a vector from a pointer." },
+	{ "make_vec4", (PyCFunction)make_vec4_, METH_O, "make_vec4(ctypes.c_void_p) -> vec4\nBuild a vector from a pointer." },
+	{ "make_mat2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
+	{ "make_mat2x2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2x2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
+	{ "make_mat2x3", (PyCFunction)make_mat2x3_, METH_O, "make_mat2x3(ctypes.c_void_p) -> mat2x3\nBuild a matrix from a pointer." },
+	{ "make_mat2x4", (PyCFunction)make_mat2x4_, METH_O, "make_mat2x4(ctypes.c_void_p) -> mat2x4\nBuild a matrix from a pointer." },
+	{ "make_mat3x2", (PyCFunction)make_mat3x2_, METH_O, "make_mat3x2(ctypes.c_void_p) -> mat3x2\nBuild a matrix from a pointer." },
+	{ "make_mat3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
+	{ "make_mat3x3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3x3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
+	{ "make_mat3x4", (PyCFunction)make_mat3x4_, METH_O, "make_mat3x4(ctypes.c_void_p) -> mat3x4\nBuild a matrix from a pointer." },
+	{ "make_mat4x2", (PyCFunction)make_mat4x2_, METH_O, "make_mat4x2(ctypes.c_void_p) -> mat4x2\nBuild a matrix from a pointer." },
+	{ "make_mat4x3", (PyCFunction)make_mat4x3_, METH_O, "make_mat4x3(ctypes.c_void_p) -> mat4x3\nBuild a matrix from a pointer." },
+	{ "make_mat4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
+	{ "make_mat4x4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4x4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
+	{ "make_quat", (PyCFunction)make_quat_, METH_O, "make_quat(ctypes.c_void_p) -> quat\nBuild a quaternion from a pointer." },
+#ifdef HAS_TEST
+	{"test", (PyCFunction)test, TEST_FUNC_TYPE, ""},
+#endif
 	{ NULL, NULL, 0, NULL }
 };
 

@@ -4,12 +4,16 @@ https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
 """
 
+import sys
+if sys.version_info.major < 3 or sys.version_info.minor < 5:
+    raise Exception("PyGLM (0.5.0b1+) requires Python 3.5 or higher. Please install PyGLM==0.4.8b1")
+
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages, Extension
 # To use a consistent encoding
 from codecs import open
 from os import path
-
+    
 module1 = Extension('glm',
                     sources = ['PyGLM.cpp'], include_dirs=["glm/"])
 
@@ -31,7 +35,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.5.0b1',
+    version='0.5.1b1',
 
     description='OpenGL Mathematics library for Python',
     long_description=long_description,

@@ -19,7 +19,7 @@ At the same time, it has **great performance**, being between **2x and 10x as fa
 \(*depending on the individual function*\)  
 ### Installation  
 **PyGLM** supports **Windows**, **Linux**, **MacOS** and other operating systems with either x86 \(**32\-bit**\) or x64 \(**64\-bit**\) architecture,   
-running **Python 3** \(Python 2 was supported up to PyGLM version 0\.4\.8b1\)  
+running **Python 3**\.5 or higher\. \(Prior versions of Python \(such as Python 2\) were supported up to PyGLM version 0\.4\.8b1\)  
   
 It can be installed from the [PyPI](https://pypi.python.org/pypi/PyGLM) using [pip](https://pip.pypa.io/en/stable/):  
 
@@ -61,7 +61,7 @@ In case you need the size of a PyGLM data type, you can use
   
   
 There is currently no documentation for PyGLM\.  
-Please refer to the source \(in Python: **\*\.__doc__**\) and GLM manuals, references and tutorials\.  
+Please refer to the source \(in Python: **\*\.\_\_doc\_\_**\) and GLM manuals, references and tutorials\.  
   
 ### Example  
 

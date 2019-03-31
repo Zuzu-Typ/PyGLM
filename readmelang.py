@@ -21,7 +21,7 @@ SECTION2 = 2**12
 SECTION3 = 2**13
 
 def format_md(text):
-    for char in "\\`*{}[]()#+-.!":
+    for char in "\\`*{}[]()#+-.!_":
         if not char in text: continue
         text = text.replace(char, "\\"+char)
     return text

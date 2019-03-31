@@ -19,7 +19,7 @@ At the same time, it has [b]great performance[/], being between [b]2x and 10x as
 ([i]depending on the individual function[/])
 [s2]Installation[/]
 [b]PyGLM[/] supports [b]Windows[/], [b]Linux[/], [b]MacOS[/] and other operating systems with either x86 ([b]32-bit[/]) or x64 ([b]64-bit[/]) architecture, 
-running [b]Python 3[/] (Python 2 was supported up to PyGLM version 0.4.8b1)
+running [b]Python 3[/].5 or higher. (Prior versions of Python - such as Python 2 - were supported up to PyGLM version 0.4.8b1)
 
 It can be installed from the [url=https://pypi.python.org/pypi/PyGLM]PyPI[/] using [url=https://pip.pypa.io/en/stable/]pip[/]:
 [code]pip install pyglm[/code]
