@@ -15187,6 +15187,447 @@ NAME##_(PyObject* self, PyObject* arg) {\
 #pragma endregion
 
 static PyObject*
+packDouble2x32_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Vec2_Check(arg)) {
+		glm::vec2 o;
+		unpack_vec2(arg, &o);
+		return PyFloat_FromDouble(glm::packDouble2x32((glm::uvec2)o));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for packDouble2x32(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+packHalf2x16_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Vec2_Check(arg)) {
+		glm::vec2 o;
+		unpack_vec2(arg, &o);
+		return PyLong_FromLong((long)glm::packHalf2x16(o));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for packHalf2x16(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+packSnorm2x16_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Vec2_Check(arg)) {
+		glm::vec2 o;
+		unpack_vec2(arg, &o);
+		return PyLong_FromLong((long)glm::packSnorm2x16(o));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for packSnorm2x16(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+packSnorm4x8_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Vec4_Check(arg)) {
+		glm::vec4 o;
+		unpack_vec4(arg, &o);
+		return PyLong_FromLong((long)glm::packSnorm4x8(o));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for packSnorm4x8(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+packUnorm2x16_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Vec2_Check(arg)) {
+		glm::vec2 o;
+		unpack_vec2(arg, &o);
+		return PyLong_FromLong((long)glm::packUnorm2x16(o));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for packUnorm2x16(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+packUnorm4x8_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Vec4_Check(arg)) {
+		glm::vec4 o;
+		unpack_vec4(arg, &o);
+		return PyLong_FromLong((long)glm::packUnorm4x8(o));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for packUnorm4x8(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+unpackDouble2x32_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Number_Check(arg)) {
+		return pack_vec2(glm::unpackDouble2x32(PyGLM_Number_AsDouble(arg)));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for unpackDouble2x32(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+unpackHalf2x16_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Number_Check(arg)) {
+		return pack_vec2(glm::unpackHalf2x16((glm::uint)PyGLM_Number_AsLong(arg)));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for unpackHalf2x16(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+unpackSnorm2x16_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Number_Check(arg)) {
+		return pack_vec2(glm::unpackSnorm2x16((glm::uint)PyGLM_Number_AsLong(arg)));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for unpackSnorm2x16(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+unpackUnorm2x16_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Number_Check(arg)) {
+		return pack_vec2(glm::unpackUnorm2x16((glm::uint)PyGLM_Number_AsLong(arg)));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for unpackUnorm2x16(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+unpackSnorm4x8_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Number_Check(arg)) {
+		return pack_vec4(glm::unpackSnorm4x8((glm::uint)PyGLM_Number_AsLong(arg)));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for unpackSnorm4x8(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+unpackUnorm4x8_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Number_Check(arg)) {
+		return pack_vec4(glm::unpackUnorm4x8((glm::uint)PyGLM_Number_AsLong(arg)));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for unpackUnorm4x8(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+uaddCarry_(PyObject* self, PyObject* args) {
+	PyObject *arg1, *arg2, *arg3;
+	PyGLM_Arg_Unpack_3O(args, "uaddCarry", arg1, arg2, arg3);
+	if (PyGLM_Number_Check(arg1)) {
+		PyErr_SetString(PyExc_TypeError, "uaddCarry() doesn't accept integer inputs in PyGLM");
+		return NULL;
+	}
+	if (PyGLM_Vec2_Check(arg1) && PyGLM_Vec2_Check(arg2) && Py_TYPE(arg3) == &vec2Type) {
+		glm::vec2 o, o2;
+		unpack_vec2(arg1, &o);
+		unpack_vec2(arg2, &o2);
+		glm::uvec2 Carry;
+		glm::uvec2 out = glm::uaddCarry((glm::uvec2)o, (glm::uvec2)o2, Carry);
+		((vec2*)arg3)->super_type = Carry;
+		return pack_vec2(out);
+	}
+	if (PyGLM_Vec3_Check(arg1) && PyGLM_Vec3_Check(arg2) && Py_TYPE(arg3) == &vec3Type) {
+		glm::vec3 o, o2;
+		unpack_vec3(arg1, &o);
+		unpack_vec3(arg2, &o2);
+		glm::uvec3 Carry;
+		glm::uvec3 out = glm::uaddCarry((glm::uvec3)o, (glm::uvec3)o2, Carry);
+		((vec3*)arg3)->super_type = Carry;
+		return pack_vec3(out);
+	}
+	if (PyGLM_Vec4_Check(arg1) && PyGLM_Vec4_Check(arg2) && Py_TYPE(arg3) == &vec4Type) {
+		glm::vec4 o, o2;
+		unpack_vec4(arg1, &o);
+		unpack_vec4(arg2, &o2);
+		glm::uvec4 Carry;
+		glm::uvec4 out = glm::uaddCarry((glm::uvec4)o, (glm::uvec4)o2, Carry);
+		((vec4*)arg3)->super_type = Carry;
+		return pack_vec4(out);
+	}
+	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for uaddCarry()");
+	return NULL;
+}
+
+static PyObject*
+usubBorrow_(PyObject* self, PyObject* args) {
+	PyObject *arg1, *arg2, *arg3;
+	PyGLM_Arg_Unpack_3O(args, "usubBorrow", arg1, arg2, arg3);
+	if (PyGLM_Number_Check(arg1)) {
+		PyErr_SetString(PyExc_TypeError, "usubBorrow() doesn't accept integer inputs in PyGLM");
+		return NULL;
+	}
+	if (PyGLM_Vec2_Check(arg1) && PyGLM_Vec2_Check(arg2) && Py_TYPE(arg3) == &vec2Type) {
+		glm::vec2 o, o2;
+		unpack_vec2(arg1, &o);
+		unpack_vec2(arg2, &o2);
+		glm::uvec2 Borrow;
+		glm::uvec2 out = glm::usubBorrow((glm::uvec2)o, (glm::uvec2)o2, Borrow);
+		((vec2*)arg3)->super_type = Borrow;
+		return pack_vec2(out);
+	}
+	if (PyGLM_Vec3_Check(arg1) && PyGLM_Vec3_Check(arg2) && Py_TYPE(arg3) == &vec3Type) {
+		glm::vec3 o, o2;
+		unpack_vec3(arg1, &o);
+		unpack_vec3(arg2, &o2);
+		glm::uvec3 Borrow;
+		glm::uvec3 out = glm::usubBorrow((glm::uvec3)o, (glm::uvec3)o2, Borrow);
+		((vec3*)arg3)->super_type = Borrow;
+		return pack_vec3(out);
+	}
+	if (PyGLM_Vec4_Check(arg1) && PyGLM_Vec4_Check(arg2) && Py_TYPE(arg3) == &vec4Type) {
+		glm::vec4 o, o2;
+		unpack_vec4(arg1, &o);
+		unpack_vec4(arg2, &o2);
+		glm::uvec4 Borrow;
+		glm::uvec4 out = glm::usubBorrow((glm::uvec4)o, (glm::uvec4)o2, Borrow);
+		((vec4*)arg3)->super_type = Borrow;
+		return pack_vec4(out);
+	}
+	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for usubBorrow()");
+	return NULL;
+}
+
+static PyObject*
+umulExtended_(PyObject* self, PyObject* args) {
+	PyObject *arg1, *arg2, *arg3, *arg4;
+	PyGLM_Arg_Unpack_4O(args, "umulExtended", arg1, arg2, arg3, arg4);
+	if (PyGLM_Number_Check(arg1)) {
+		PyErr_SetString(PyExc_TypeError, "umulExtended() doesn't accept integer inputs in PyGLM");
+		return NULL;
+	}
+	if (PyGLM_Vec2_Check(arg1) && PyGLM_Vec2_Check(arg2) && Py_TYPE(arg3) == &vec2Type && Py_TYPE(arg4) == &vec2Type) {
+		glm::vec2 o, o2;
+		unpack_vec2(arg1, &o);
+		unpack_vec2(arg2, &o2);
+		glm::uvec2 msb, lsb;
+		glm::umulExtended((glm::uvec2)o, (glm::uvec2)o2, msb, lsb);
+		((vec2*)arg3)->super_type = msb;
+		((vec2*)arg4)->super_type = lsb;
+		Py_RETURN_NONE;
+	}
+	if (PyGLM_Vec3_Check(arg1) && PyGLM_Vec3_Check(arg2) && Py_TYPE(arg3) == &vec3Type && Py_TYPE(arg4) == &vec3Type) {
+		glm::vec3 o, o2;
+		unpack_vec3(arg1, &o);
+		unpack_vec3(arg2, &o2);
+		glm::uvec3 msb, lsb;
+		glm::umulExtended((glm::uvec3)o, (glm::uvec3)o2, msb, lsb);
+		((vec3*)arg3)->super_type = msb;
+		((vec3*)arg4)->super_type = lsb;
+		Py_RETURN_NONE;
+	}
+	if (PyGLM_Vec4_Check(arg1) && PyGLM_Vec4_Check(arg2) && Py_TYPE(arg3) == &vec4Type && Py_TYPE(arg4) == &vec4Type) {
+		glm::vec4 o, o2;
+		unpack_vec4(arg1, &o);
+		unpack_vec4(arg2, &o2);
+		glm::uvec4 msb, lsb;
+		glm::umulExtended((glm::uvec4)o, (glm::uvec4)o2, msb, lsb);
+		((vec4*)arg3)->super_type = msb;
+		((vec4*)arg4)->super_type = lsb;
+		Py_RETURN_NONE;
+	}
+	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for umulExtended()");
+	return NULL;
+}
+
+static PyObject*
+imulExtended_(PyObject* self, PyObject* args) {
+	PyObject *arg1, *arg2, *arg3, *arg4;
+	PyGLM_Arg_Unpack_4O(args, "imulExtended", arg1, arg2, arg3, arg4);
+	if (PyGLM_Number_Check(arg1)) {
+		PyErr_SetString(PyExc_TypeError, "imulExtended() doesn't accept integer inputs in PyGLM");
+		return NULL;
+	}
+	if (PyGLM_Vec2_Check(arg1) && PyGLM_Vec2_Check(arg2) && Py_TYPE(arg3) == &vec2Type && Py_TYPE(arg4) == &vec2Type) {
+		glm::vec2 o, o2;
+		unpack_vec2(arg1, &o);
+		unpack_vec2(arg2, &o2);
+		glm::ivec2 msb, lsb;
+		glm::imulExtended((glm::ivec2)o, (glm::ivec2)o2, msb, lsb);
+		((vec2*)arg3)->super_type = msb;
+		((vec2*)arg4)->super_type = lsb;
+		Py_RETURN_NONE;
+	}
+	if (PyGLM_Vec3_Check(arg1) && PyGLM_Vec3_Check(arg2) && Py_TYPE(arg3) == &vec3Type && Py_TYPE(arg4) == &vec3Type) {
+		glm::vec3 o, o2;
+		unpack_vec3(arg1, &o);
+		unpack_vec3(arg2, &o2);
+		glm::ivec3 msb, lsb;
+		glm::imulExtended((glm::ivec3)o, (glm::ivec3)o2, msb, lsb);
+		((vec3*)arg3)->super_type = msb;
+		((vec3*)arg4)->super_type = lsb;
+		Py_RETURN_NONE;
+	}
+	if (PyGLM_Vec4_Check(arg1) && PyGLM_Vec4_Check(arg2) && Py_TYPE(arg3) == &vec4Type && Py_TYPE(arg4) == &vec4Type) {
+		glm::vec4 o, o2;
+		unpack_vec4(arg1, &o);
+		unpack_vec4(arg2, &o2);
+		glm::ivec4 msb, lsb;
+		glm::imulExtended((glm::ivec4)o, (glm::ivec4)o2, msb, lsb);
+		((vec4*)arg3)->super_type = msb;
+		((vec4*)arg4)->super_type = lsb;
+		Py_RETURN_NONE;
+	}
+	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for imulExtended()");
+	return NULL;
+}
+
+static PyObject*
+bitfieldExtract_(PyObject* self, PyObject* args) {
+	PyObject *arg1, *arg2, *arg3;
+	PyGLM_Arg_Unpack_3O(args, "bitfieldExtract", arg1, arg2, arg3);
+	if (PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
+		int i = (int)PyGLM_Number_AsLong(arg2), i2 = (int)PyGLM_Number_AsLong(arg3);
+		if (PyGLM_Number_Check(arg1)) {
+			return PyLong_FromLong(glm::bitfieldExtract(PyGLM_Number_AsLong(arg1), i, i2));
+		}
+		if (PyGLM_Vec2_Check(arg1)) {
+			glm::vec2 o;
+			unpack_vec2(arg1, &o);
+			return pack_vec2(glm::bitfieldExtract((glm::ivec2)o, i, i2));
+		}
+		if (PyGLM_Vec3_Check(arg1)) {
+			glm::vec3 o;
+			unpack_vec3(arg1, &o);
+			return pack_vec3(glm::bitfieldExtract((glm::ivec3)o, i, i2));
+		}
+		if (PyGLM_Vec4_Check(arg1)) {
+			glm::vec4 o;
+			unpack_vec4(arg1, &o);
+			return pack_vec4(glm::bitfieldExtract((glm::ivec4)o, i, i2));
+		}
+	}
+	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for bitfieldExtract()");
+	return NULL;
+}
+
+static PyObject*
+bitfieldInsert_(PyObject* self, PyObject* args) {
+	PyObject *arg1, *arg2, *arg3, *arg4;
+	PyGLM_Arg_Unpack_4O(args, "bitfieldInsert", arg1, arg2, arg3, arg4);
+	if (PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
+		int i = (int)PyGLM_Number_AsLong(arg3), i2 = (int)PyGLM_Number_AsLong(arg4);
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
+			return PyLong_FromLong(glm::bitfieldInsert(PyGLM_Number_AsLong(arg1), PyGLM_Number_AsLong(arg2), i, i2));
+		}
+		if (PyGLM_Vec2_Check(arg1) && PyGLM_Vec2_Check(arg2)) {
+			glm::vec2 o, o2;
+			unpack_vec2(arg1, &o);
+			unpack_vec2(arg2, &o2);
+			return pack_vec2(glm::bitfieldInsert((glm::ivec2)o, (glm::ivec2)o2, i, i2));
+		}
+		if (PyGLM_Vec3_Check(arg1) && PyGLM_Vec3_Check(arg2)) {
+			glm::vec3 o, o2;
+			unpack_vec3(arg1, &o);
+			unpack_vec3(arg2, &o2);
+			return pack_vec3(glm::bitfieldInsert((glm::ivec3)o, (glm::ivec3)o2, i, i2));
+		}
+		if (PyGLM_Vec4_Check(arg1) && PyGLM_Vec4_Check(arg2)) {
+			glm::vec4 o, o2;
+			unpack_vec4(arg1, &o);
+			unpack_vec4(arg2, &o2);
+			return pack_vec4(glm::bitfieldInsert((glm::ivec4)o, (glm::ivec4)o2, i, i2));
+		}
+	}
+	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for bitfieldInsert()");
+	return NULL;
+}
+
+static PyObject* bitfieldReverse_(PyObject* self, PyObject* arg) { 
+	if (PyGLM_Number_Check(arg)) { 
+		return PyLong_FromLong(glm::bitfieldReverse(static_cast<unsigned long>(PyGLM_Number_AsLong(arg)))); 
+	} 
+
+	void* o = NULL; 
+	char vecType = unpack_vec(arg, &o); 
+	if (vecType == PyGLM_TYPE_VEC2) { 
+		PyObject* out = pack_vec2(glm::bitfieldReverse((glm::uvec2)*(glm::vec2*)o)); 
+		free(o); 
+		return out; 
+	} 
+	if (vecType == PyGLM_TYPE_VEC3) { 
+		PyObject* out = pack_vec3(glm::bitfieldReverse((glm::uvec3)*(glm::vec3*)o));
+		free(o); 
+		return out; 
+	} 
+	if (vecType == PyGLM_TYPE_VEC4) { 
+		PyObject* out = pack_vec4(glm::bitfieldReverse((glm::uvec4)*(glm::vec4*)o));
+		free(o); 
+		return out; 
+	} 
+	PyGLM_TYPEERROR_O("invalid argument type for bitfieldReverse(): ", arg); 
+	return NULL; 
+}
+
+static PyObject*
+bitCount_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Number_Check(arg)) {
+		return PyLong_FromLong(glm::bitCount(PyGLM_Number_AsLong(arg)));
+	}
+	if (PyGLM_Vec2_Check(arg)) {
+		glm::vec2 o;
+		unpack_vec2(arg, &o);
+		return pack_vec2(glm::bitCount((glm::ivec2)o));
+	}
+	if (PyGLM_Vec3_Check(arg)) {
+		glm::vec3 o;
+		unpack_vec3(arg, &o);
+		return pack_vec3(glm::bitCount((glm::ivec3)o));
+	}
+	if (PyGLM_Vec4_Check(arg)) {
+		glm::vec4 o;
+		unpack_vec4(arg, &o);
+		return pack_vec4(glm::bitCount((glm::ivec4)o));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for bitCount(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+findLSB_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Number_Check(arg)) {
+		return PyLong_FromLong(glm::findLSB(PyGLM_Number_AsLong(arg)));
+	}
+	if (PyGLM_Vec2_Check(arg)) {
+		glm::vec2 o;
+		unpack_vec2(arg, &o);
+		return pack_vec2(glm::findLSB((glm::ivec2)o));
+	}
+	if (PyGLM_Vec3_Check(arg)) {
+		glm::vec3 o;
+		unpack_vec3(arg, &o);
+		return pack_vec3(glm::findLSB((glm::ivec3)o));
+	}
+	if (PyGLM_Vec4_Check(arg)) {
+		glm::vec4 o;
+		unpack_vec4(arg, &o);
+		return pack_vec4(glm::findLSB((glm::ivec4)o));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for findLSB(): ", arg);
+	return NULL;
+}
+
+static PyObject*
+findMSB_(PyObject* self, PyObject* arg) {
+	if (PyGLM_Number_Check(arg)) {
+		return PyLong_FromLong(glm::findMSB(PyGLM_Number_AsLong(arg)));
+	}
+	if (PyGLM_Vec2_Check(arg)) {
+		glm::vec2 o;
+		unpack_vec2(arg, &o);
+		return pack_vec2(glm::findMSB((glm::ivec2)o));
+	}
+	if (PyGLM_Vec3_Check(arg)) {
+		glm::vec3 o;
+		unpack_vec3(arg, &o);
+		return pack_vec3(glm::findMSB((glm::ivec3)o));
+	}
+	if (PyGLM_Vec4_Check(arg)) {
+		glm::vec4 o;
+		unpack_vec4(arg, &o);
+		return pack_vec4(glm::findMSB((glm::ivec4)o));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for findMSB(): ", arg);
+	return NULL;
+}
+
+static PyObject*
 equal(PyObject* self, PyObject* args) {
 	PyObject *arg1, *arg2;
 	PyGLM_Arg_Unpack_2O(args, "equal", arg1, arg2);
@@ -17428,6 +17869,32 @@ make_mat4x4_(PyObject* self, PyObject* arg) {
 //#define TEST_FUNC_TYPE METH_NOARGS
 
 static PyMethodDef detailmethods[] = {
+	// func_packing
+	{ "packDouble2x32", (PyCFunction)packDouble2x32_, METH_O, "packDouble2x32(v) -> float\nReturns a double-qualifier value obtained by packing the components of v into a 64-bit value." },
+	{ "packUnorm2x16", (PyCFunction)packUnorm2x16_, METH_O, "packUnorm2x16(v) -> int\nFirst, converts each component of the normalized floating-point value v into 8- or 16-bit integer values.\nThen, the results are packed into the returned 32-bit unsigned integer." },
+	{ "packSnorm2x16", (PyCFunction)packSnorm2x16_, METH_O, "packSnorm2x16(v) -> int\nFirst, converts each component of the normalized floating-point value v into 8- or 16-bit integer values.\nThen, the results are packed into the returned 32-bit unsigned integer." },
+	{ "packSnorm4x8", (PyCFunction)packSnorm4x8_, METH_O, "packSnorm4x8(v) -> int\nFirst, converts each component of the normalized floating-point value v into 8- or 16-bit integer values.\nThen, the results are packed into the returned 32-bit unsigned integer." },
+	{ "packUnorm4x8", (PyCFunction)packUnorm4x8_, METH_O, "packUnorm4x8(v) -> int\nFirst, converts each component of the normalized floating-point value v into 8- or 16-bit integer values.\nThen, the results are packed into the returned 32-bit unsigned integer." },
+	{ "packHalf2x16", (PyCFunction)packHalf2x16_, METH_O, "packHalf2x16(v) -> int\nReturns an unsigned integer obtained by converting the components of a two - component floating - point vector\nto the 16-bit floating-point representation found in the OpenGL Specification,\nand then packing these two 16- bit integers into a 32-bit unsigned integer." },
+	{ "unpackDouble2x32", (PyCFunction)unpackDouble2x32_, METH_O, "unpackDouble2x32(v) -> float\nReturns a two-component unsigned integer vector representation of v." },
+	{ "unpackUnorm2x16", (PyCFunction)unpackUnorm2x16_, METH_O, "unpackUnorm2x16(v) -> int\nFirst, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers, four 8-bit unsigned integers, or four 8-bit signed integers.\nThen, each component is converted to a normalized floating-point value to generate the returned two- or four-component vector." },
+	{ "unpackSnorm2x16", (PyCFunction)unpackSnorm2x16_, METH_O, "unpackSnorm2x16(v) -> int\nFirst, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers, four 8-bit unsigned integers, or four 8-bit signed integers.\nThen, each component is converted to a normalized floating-point value to generate the returned two- or four-component vector." },
+	{ "unpackSnorm4x8", (PyCFunction)unpackSnorm4x8_, METH_O, "unpackSnorm4x8(v) -> int\nFirst, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers, four 8-bit unsigned integers, or four 8-bit signed integers.\nThen, each component is converted to a normalized floating-point value to generate the returned two- or four-component vector." },
+	{ "unpackUnorm4x8", (PyCFunction)unpackUnorm4x8_, METH_O, "unpackUnorm4x8(v) -> int\nFirst, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers, four 8-bit unsigned integers, or four 8-bit signed integers.\nThen, each component is converted to a normalized floating-point value to generate the returned two- or four-component vector." },
+	{ "unpackHalf2x16", (PyCFunction)unpackHalf2x16_, METH_O, "unpackHalf2x16(v) -> int\nReturns a two - component floating - point vector with components obtained by unpacking a 32 - bit unsigned integer into a pair of 16 - bit values,\ninterpreting those values as 16-bit floating-point numbers according to the OpenGL Specification,\nand converting them to 32-bit floating-point values." },
+
+	// func_integer
+	{ "uaddCarry", (PyCFunction)uaddCarry_, METH_VARARGS, "uaddCarry(x, y, Carry) -> vecn\nAdds 32-bit unsigned integer x and y, returning the sum\nmodulo pow(2, 32). The value carry is set to 0 if the sum was\nless than pow(2, 32), or to 1 otherwise." },
+	{ "usubBorrow", (PyCFunction)usubBorrow_, METH_VARARGS, "usubBorrow(x, y, Borrow) -> vecn\nSubtracts the 32-bit unsigned integer y from x, returning\nthe difference if non-negative, or pow(2, 32) plus the difference\notherwise. The value borrow is set to 0 if x >= y, or to 1 otherwise." },
+	{ "umulExtended", (PyCFunction)umulExtended_, METH_VARARGS, "umulExtended(x, y, msb, lsb) -> None\nMultiplies 32-bit integers x and y, producing a 64-bit\nresult. The 32 least-significant bits are returned in lsb.\nThe 32 most-significant bits are returned in msb." },
+	{ "imulExtended", (PyCFunction)imulExtended_, METH_VARARGS, "imulExtended(x, y, msb, lsb) -> None\nMultiplies 32-bit integers x and y, producing a 64-bit\nresult. The 32 least-significant bits are returned in lsb.\nThe 32 most-significant bits are returned in msb." },
+	{ "bitfieldExtract", (PyCFunction)bitfieldExtract_, METH_VARARGS, "bitfieldExtract(Value, Offset, Bits) -> vecn or int\nExtracts bits [offset, offset + bits - 1] from value,\nreturning them in the least significant bits of the result." },
+	{ "bitfieldInsert", (PyCFunction)bitfieldInsert_, METH_VARARGS, "bitfieldInsert(Base, Insert, Offset, Bits) -> vecn or int\nReturns the insertion the bits least-significant bits of insert into base." },
+	{ "bitfieldReverse", (PyCFunction)bitfieldReverse_, METH_O, "bitfieldReverse(v) -> vecn or float\nReturns the reversal of the bits of value." },
+	{ "bitCount", (PyCFunction)bitCount_, METH_O, "bitCount(v) -> vecn or int\nReturns the number of bits set to 1 in the binary representation of value." },
+	{ "findLSB", (PyCFunction)findLSB_, METH_O, "findLSB(x) -> vecn or int\nReturns the bit number of the least significant bit set to\n1 in the binary representation of value.\nIf value is zero, -1 will be returned." },
+	{ "findMSB", (PyCFunction)findMSB_, METH_O, "findMSB(x) -> vecn or int\nReturns the bit number of the most significant bit in the binary representation of value." },
+
 	// func_vector_relational
 	{ "equal", (PyCFunction)equal, METH_VARARGS, "equal(x, y) -> (x == y)\nReturns the component-wise comparison of result x == y." },
 	{ "notEqual", (PyCFunction)notEqual, METH_VARARGS, "notEqual(x, y) -> (x != y)\nReturns the component-wise comparison of result x != y." },
@@ -17692,6 +18159,33 @@ static PyModuleDef gtcmodule = {
 
 static PyMethodDef glmmethods[] = {
 	// DETAIL
+	// func_packing
+	{ "packDouble2x32", (PyCFunction)packDouble2x32_, METH_O, "packDouble2x32(v) -> float\nReturns a double-qualifier value obtained by packing the components of v into a 64-bit value." },
+	{ "packUnorm2x16", (PyCFunction)packUnorm2x16_, METH_O, "packUnorm2x16(v) -> int\nFirst, converts each component of the normalized floating-point value v into 8- or 16-bit integer values.\nThen, the results are packed into the returned 32-bit unsigned integer." },
+	{ "packSnorm2x16", (PyCFunction)packSnorm2x16_, METH_O, "packSnorm2x16(v) -> int\nFirst, converts each component of the normalized floating-point value v into 8- or 16-bit integer values.\nThen, the results are packed into the returned 32-bit unsigned integer." },
+	{ "packSnorm4x8", (PyCFunction)packSnorm4x8_, METH_O, "packSnorm4x8(v) -> int\nFirst, converts each component of the normalized floating-point value v into 8- or 16-bit integer values.\nThen, the results are packed into the returned 32-bit unsigned integer." },
+	{ "packUnorm4x8", (PyCFunction)packUnorm4x8_, METH_O, "packUnorm4x8(v) -> int\nFirst, converts each component of the normalized floating-point value v into 8- or 16-bit integer values.\nThen, the results are packed into the returned 32-bit unsigned integer." },
+	{ "packHalf2x16", (PyCFunction)packHalf2x16_, METH_O, "packHalf2x16(v) -> int\nReturns an unsigned integer obtained by converting the components of a two - component floating - point vector\nto the 16-bit floating-point representation found in the OpenGL Specification,\nand then packing these two 16- bit integers into a 32-bit unsigned integer." },
+	{ "unpackDouble2x32", (PyCFunction)unpackDouble2x32_, METH_O, "unpackDouble2x32(v) -> float\nReturns a two-component unsigned integer vector representation of v." },
+	{ "unpackUnorm2x16", (PyCFunction)unpackUnorm2x16_, METH_O, "unpackUnorm2x16(v) -> int\nFirst, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers, four 8-bit unsigned integers, or four 8-bit signed integers.\nThen, each component is converted to a normalized floating-point value to generate the returned two- or four-component vector." },
+	{ "unpackSnorm2x16", (PyCFunction)unpackSnorm2x16_, METH_O, "unpackSnorm2x16(v) -> int\nFirst, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers, four 8-bit unsigned integers, or four 8-bit signed integers.\nThen, each component is converted to a normalized floating-point value to generate the returned two- or four-component vector." },
+	{ "unpackSnorm4x8", (PyCFunction)unpackSnorm4x8_, METH_O, "unpackSnorm4x8(v) -> int\nFirst, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers, four 8-bit unsigned integers, or four 8-bit signed integers.\nThen, each component is converted to a normalized floating-point value to generate the returned two- or four-component vector." },
+	{ "unpackUnorm4x8", (PyCFunction)unpackUnorm4x8_, METH_O, "unpackUnorm4x8(v) -> int\nFirst, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers, four 8-bit unsigned integers, or four 8-bit signed integers.\nThen, each component is converted to a normalized floating-point value to generate the returned two- or four-component vector." },
+	{ "unpackHalf2x16", (PyCFunction)unpackHalf2x16_, METH_O, "unpackHalf2x16(v) -> int\nReturns a two - component floating - point vector with components obtained by unpacking a 32 - bit unsigned integer into a pair of 16 - bit values,\ninterpreting those values as 16-bit floating-point numbers according to the OpenGL Specification,\nand converting them to 32-bit floating-point values." },
+
+	// func_integer
+	{ "uaddCarry", (PyCFunction)uaddCarry_, METH_VARARGS, "uaddCarry(x, y, Carry) -> vecn\nAdds 32-bit unsigned integer x and y, returning the sum\nmodulo pow(2, 32). The value carry is set to 0 if the sum was\nless than pow(2, 32), or to 1 otherwise." },
+	{ "usubBorrow", (PyCFunction)usubBorrow_, METH_VARARGS, "usubBorrow(x, y, Borrow) -> vecn\nSubtracts the 32-bit unsigned integer y from x, returning\nthe difference if non-negative, or pow(2, 32) plus the difference\notherwise. The value borrow is set to 0 if x >= y, or to 1 otherwise." },
+	{ "umulExtended", (PyCFunction)umulExtended_, METH_VARARGS, "umulExtended(x, y, msb, lsb) -> None\nMultiplies 32-bit integers x and y, producing a 64-bit\nresult. The 32 least-significant bits are returned in lsb.\nThe 32 most-significant bits are returned in msb." },
+	{ "imulExtended", (PyCFunction)imulExtended_, METH_VARARGS, "imulExtended(x, y, msb, lsb) -> None\nMultiplies 32-bit integers x and y, producing a 64-bit\nresult. The 32 least-significant bits are returned in lsb.\nThe 32 most-significant bits are returned in msb." },
+	{ "bitfieldExtract", (PyCFunction)bitfieldExtract_, METH_VARARGS, "bitfieldExtract(Value, Offset, Bits) -> vecn or int\nExtracts bits [offset, offset + bits - 1] from value,\nreturning them in the least significant bits of the result." },
+	{ "bitfieldInsert", (PyCFunction)bitfieldInsert_, METH_VARARGS, "bitfieldInsert(Base, Insert, Offset, Bits) -> vecn or int\nReturns the insertion the bits least-significant bits of insert into base." },
+	{ "bitfieldReverse", (PyCFunction)bitfieldReverse_, METH_O, "bitfieldReverse(v) -> vecn or float\nReturns the reversal of the bits of value." },
+	{ "bitCount", (PyCFunction)bitCount_, METH_O, "bitCount(v) -> vecn or int\nReturns the number of bits set to 1 in the binary representation of value." },
+	{ "findLSB", (PyCFunction)findLSB_, METH_O, "findLSB(x) -> vecn or int\nReturns the bit number of the least significant bit set to\n1 in the binary representation of value.\nIf value is zero, -1 will be returned." },
+	{ "findMSB", (PyCFunction)findMSB_, METH_O, "findMSB(x) -> vecn or int\nReturns the bit number of the most significant bit in the binary representation of value." },
+
+	// func_vector_relational
 	{ "equal", (PyCFunction)equal, METH_VARARGS, "equal(x, y) -> (x == y)\nReturns the component-wise comparison of result x == y." },
 	{ "notEqual", (PyCFunction)notEqual, METH_VARARGS, "notEqual(x, y) -> (x != y)\nReturns the component-wise comparison of result x != y." },
 	{ "lessThan", (PyCFunction)lessThan, METH_VARARGS, "lessThan(x, y) -> (x < y)\nReturns the component-wise comparison of result x < y." },
