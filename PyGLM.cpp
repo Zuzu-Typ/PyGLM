@@ -1,13 +1,18 @@
+#define PyGLM_NO_FUNCTIONS 1
+#define PyGLM_NO_ITER_TYPECHECKING 2
+
+#define PyGLM_DEFAULT 0
+#define PyGLM_FAST PyGLM_NO_ITER_TYPECHECKING
+#define PyGLM_MINIMAL PyGLM_NO_FUNCTIONS | PyGLM_NO_ITER_TYPECHECKING
+
+#define PyGLM_BUILD PyGLM_DEFAULT
+
 #include <Python.h>
 #include "structmember.h"
 
-#include <cstdlib>
-#include <cmath>
-
-#include <stdbool.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 #include <glm/gtc/color_space.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/epsilon.hpp>
@@ -17,6 +22,8 @@
 #include <glm/gtc/random.hpp>
 #include <glm/gtc/reciprocal.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#endif
+
 
 //TYPES
 
@@ -3240,6 +3247,7 @@ static PyTypeObject quatIterType{
 // INTERNAL FUNCTIONS
 #pragma region internal functions
 
+#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 PyObject* c_void_p = NULL;
 
 #if defined(_M_IX86) || defined(__i386__)
@@ -3256,6 +3264,7 @@ PyObject* Ctypes_C_VOID_P(void* p) {
 	Py_DECREF(argList);
 	return out;
 }
+#endif
 #endif
 
 #define Py_IS_NOTIMPLEMENTED(op) (op == NULL || (PyObject*)op == Py_NotImplemented) // find out if op is NULL or NotImplemented
@@ -3343,115 +3352,9 @@ float PyGLM_Number_AsFloat(PyObject* arg) {
 	return out;
 }
 
-
-//static char uniterize(PyObject* iterable, void** out, int level = 0) {
-//	PyObject* iterator = PyObject_GetIter(iterable);
-//	if (iterator != NULL) {
-//		Py_ssize_t iterator_length = PyObject_Length(iterable);
-//		if (iterator_length == 2) {
-//			PyObject* value0 = PyIter_Next(iterator);
-//			PyObject* value1 = PyIter_Next(iterator);
-//
-//
-//			Py_DECREF(iterator);
-//
-//
-//			if (value0 == NULL || !PyGLM_Number_Check(value0) || value1 == NULL || !PyGLM_Number_Check(value1)) {
-//
-//				Py_DECREF(value0);
-//				Py_DECREF(value1);
-//
-//				return PyGLM_TYPE_NONE;
-//			}
-//
-//			float value0_as_double = PyGLM_Number_AsFloat(value0);
-//			float value1_as_double = PyGLM_Number_AsFloat(value1);
-//
-//			*out = malloc(sizeof(glm::vec2));
-//			*((glm::vec2*)*out) = glm::vec2(value0_as_double, value1_as_double);
-//
-//
-//			Py_DECREF(value0);
-//			Py_DECREF(value1);
-//
-//			return PyGLM_TYPE_VEC2;
-//
-//		}
-//		if (iterator_length == 3) {
-//			PyObject* value0 = PyIter_Next(iterator);
-//			PyObject* value1 = PyIter_Next(iterator);
-//			PyObject* value2 = PyIter_Next(iterator);
-//
-//
-//			Py_DECREF(iterator);
-//
-//
-//			if (value0 == NULL || !PyGLM_Number_Check(value0) || value1 == NULL || !PyGLM_Number_Check(value1) || value2 == NULL || !PyGLM_Number_Check(value2)) {
-//
-//				Py_DECREF(value0);
-//				Py_DECREF(value1);
-//				Py_DECREF(value2);
-//
-//				return PyGLM_TYPE_NONE;
-//			}
-//
-//			float value0_as_double = PyGLM_Number_AsFloat(value0);
-//			float value1_as_double = PyGLM_Number_AsFloat(value1);
-//			float value2_as_double = PyGLM_Number_AsFloat(value2);
-//
-//			*out = malloc(sizeof(glm::vec3));
-//			*((glm::vec3*)*out) = glm::vec3(value0_as_double, value1_as_double, value2_as_double);
-//
-//
-//			Py_DECREF(value0);
-//			Py_DECREF(value1);
-//			Py_DECREF(value2);
-//
-//			return PyGLM_TYPE_VEC3;
-//		}
-//		if (iterator_length == 4) {
-//			PyObject* value0 = PyIter_Next(iterator);
-//			PyObject* value1 = PyIter_Next(iterator);
-//			PyObject* value2 = PyIter_Next(iterator);
-//			PyObject* value3 = PyIter_Next(iterator);
-//
-//
-//			Py_DECREF(iterator);
-//
-//
-//			if (value0 == NULL || !PyGLM_Number_Check(value0) || value1 == NULL || !PyGLM_Number_Check(value1) || value2 == NULL || !PyGLM_Number_Check(value2) || value3 == NULL || !PyGLM_Number_Check(value3)) {
-//
-//				Py_DECREF(value0);
-//				Py_DECREF(value1);
-//				Py_DECREF(value2);
-//				Py_DECREF(value3);
-//
-//				return PyGLM_TYPE_NONE;
-//			}
-//
-//			float value0_as_double = PyGLM_Number_AsFloat(value0);
-//			float value1_as_double = PyGLM_Number_AsFloat(value1);
-//			float value2_as_double = PyGLM_Number_AsFloat(value2);
-//			float value3_as_double = PyGLM_Number_AsFloat(value3);
-//
-//			*out = malloc(sizeof(glm::vec4));
-//			*((glm::vec4*)*out) = glm::vec4(value0_as_double, value1_as_double, value2_as_double, value3_as_double);
-//
-//
-//			Py_DECREF(value0);
-//			Py_DECREF(value1);
-//			Py_DECREF(value2);
-//			Py_DECREF(value3);
-//
-//			return PyGLM_TYPE_VEC4;
-//		}
-//	}
-//
-//	return PyGLM_TYPE_NONE;
-//}
-
 // type checkers
 #pragma region type checkers
+#if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
 bool PyGLM_Vec2i_Check(PyObject* o) {
 	if (!PyObject_IterCheck(o)) {
 		return false;
@@ -3570,6 +3473,12 @@ bool PyGLM_Vec4i_Check(PyObject* o) {
 #define PyGLM_Vec3_Check(o) (PyObject_TypeCheck(o, &vec3Type) || Py_TYPE(o) == &mvec3Type || (!(PyObject_TypeCheck(o, &mat2x3Type) || PyObject_TypeCheck(o, &mat3x3Type) || PyObject_TypeCheck(o, &mat4x3Type)) && PyGLM_Vec3i_Check(o)))
 #define PyGLM_Vec4_Check(o) (PyObject_TypeCheck(o, &vec4Type) || Py_TYPE(o) == &mvec4Type || (!(PyObject_TypeCheck(o, &mat2x4Type) || PyObject_TypeCheck(o, &mat3x4Type) || PyObject_TypeCheck(o, &mat4x4Type)) && PyGLM_Vec4i_Check(o)))
 
+#else
+#define PyGLM_Vec2_Check(o) (PyObject_TypeCheck(o, &vec2Type) || Py_TYPE(o) == &mvec2Type)
+#define PyGLM_Vec3_Check(o) (PyObject_TypeCheck(o, &vec3Type) || Py_TYPE(o) == &mvec3Type)
+#define PyGLM_Vec4_Check(o) (PyObject_TypeCheck(o, &vec4Type) || Py_TYPE(o) == &mvec4Type)
+#endif
+
 #define PyGLM_Vec_GetTypeCheck(o) (PyGLM_Vec2_Check(o)) ? PyGLM_TYPE_VEC2 : (PyGLM_Vec3_Check(o)) ? PyGLM_TYPE_VEC3 : (PyGLM_Vec4_Check(o)) ? PyGLM_TYPE_VEC4 : PyGLM_TYPE_NONE
 
 #define PyGLM_Vec_GetType PyGLM_Vec_GetTypeCheck
@@ -3609,6 +3518,7 @@ static bool unpack_vec2(PyObject* value, glm::vec2* out) {
 		*out = *((mvec2*)value)->super_type;
 		return true;
 	}
+#if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
 	if (PyObject_IterCheck(value) && PyObject_Length(value) == 2) {
 		PyObject* value_iter = PyObject_GetIter(value);
 		if (value_iter != NULL) {
@@ -3639,6 +3549,7 @@ static bool unpack_vec2(PyObject* value, glm::vec2* out) {
 			return true;
 		}
 	}
+#endif
 	return false;
 }
 
@@ -3651,6 +3562,7 @@ static bool unpack_vec3(PyObject* value, glm::vec3* out) {
 		*out = *((mvec3*)value)->super_type;
 		return true;
 	}
+#if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
 	if (PyObject_IterCheck(value) && PyObject_Length(value) == 3) {
 		PyObject* value_iter = PyObject_GetIter(value);
 		if (value_iter != NULL) {
@@ -3685,6 +3597,7 @@ static bool unpack_vec3(PyObject* value, glm::vec3* out) {
 			return true;
 		}
 	}
+#endif
 	return false;
 }
 
@@ -3697,6 +3610,7 @@ static bool unpack_vec4(PyObject* value, glm::vec4* out) {
 		*out = *((mvec4*)value)->super_type;
 		return true;
 	}
+#if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
 	if (PyObject_IterCheck(value) && PyObject_Length(value) == 4) {
 		PyObject* value_iter = PyObject_GetIter(value);
 		if (value_iter != NULL) {
@@ -3735,6 +3649,7 @@ static bool unpack_vec4(PyObject* value, glm::vec4* out) {
 			return true;
 		}
 	}
+#endif
 	return false;
 }
 
@@ -4843,14 +4758,14 @@ vec3_init(vec3 *self, PyObject *args, PyObject *kwds)
 				return 0;
 			}
 
-			if (PyGLM_Vec3i_Check(arg1)) {
+			if (PyGLM_Vec3_Check(arg1)) {
 				glm::vec3 o;
 				if (unpack_vec3(arg1, &o)) {
 					self->super_type = o;
 					return 0;
 				}
 			}
-			else if (PyGLM_Vec4i_Check(arg1)) {
+			else if (PyGLM_Vec4_Check(arg1)) {
 				glm::vec4 o;
 				if (unpack_vec4(arg1, &o)) {
 					self->super_type = o;
@@ -14527,7 +14442,7 @@ quat_releasebuffer(quat* self, Py_buffer* view) {
 }
 #pragma endregion
 
-
+#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 #pragma region macro generator functions
 #define PyGLM_MAKE_GLM_FUNC_VF_VF(NAME) \
 static PyObject*\
@@ -17868,6 +17783,7 @@ make_mat4x4_(PyObject* self, PyObject* arg) {
 //#define HAS_TEST
 //#define TEST_FUNC_TYPE METH_NOARGS
 
+
 static PyMethodDef detailmethods[] = {
 	// func_packing
 	{ "packDouble2x32", (PyCFunction)packDouble2x32_, METH_O, "packDouble2x32(v) -> float\nReturns a double-qualifier value obtained by packing the components of v into a 64-bit value." },
@@ -18432,18 +18348,26 @@ static PyMethodDef glmmethods[] = {
 	{ NULL, NULL, 0, NULL }
 };
 
+#endif
+
 static PyModuleDef glmmodule = {
 	PyModuleDef_HEAD_INIT,
 	"glm",
 	"Features that implement in Python the GLSL specification as closely as necessary.",
 	-1,
-	glmmethods, NULL, NULL, NULL, NULL
+#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
+	glmmethods, 
+#else
+	NULL,
+#endif
+	NULL, NULL, NULL, NULL
 };
 
 extern "C" {
 	PyMODINIT_FUNC
 		PyInit_glm(void)
 	{
+#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 		PyObject* mainmod = PyImport_AddModule("__main__");
 		PyObject* maindict = PyModule_GetDict(mainmod);
 
@@ -18452,8 +18376,12 @@ extern "C" {
 		c_void_p = PyObject_GetAttr(PyImport_ImportModuleEx("ctypes", maindict, maindict, c_void_p_str), PyUnicode_FromString("c_void_p"));
 
 		Py_DECREF(c_void_p_str);
+#endif
 
-		PyObject* module_glm, *detail, *gtc;
+		PyObject* module_glm;
+#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
+		PyObject *detail, *gtc;
+#endif
 
 		if (PyType_Ready(&vec2Type) < 0 || PyType_Ready(&vec2IterType) < 0
 			|| PyType_Ready(&vec3Type) < 0 || PyType_Ready(&vec3IterType) < 0
@@ -18479,6 +18407,7 @@ extern "C" {
 
 		// detail
 		// namespace detail
+#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 		detail = PyModule_Create(&detailmodule);
 
 		if (detail == NULL)
@@ -18495,6 +18424,7 @@ extern "C" {
 
 		Py_INCREF(gtc);
 		PyModule_AddObject(module_glm, "gtc", gtc);
+#endif
 
 		Py_INCREF(&vec2Type);
 		PyModule_AddObject(module_glm, "vec2", (PyObject *)&vec2Type);
@@ -18545,8 +18475,10 @@ extern "C" {
 		Py_INCREF(&quatType);
 		PyModule_AddObject(module_glm, "quat", (PyObject *)&quatType);
 
+#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 		Py_DECREF(gtc);
 		Py_DECREF(detail);
+#endif
 
 		return module_glm;
 	}
