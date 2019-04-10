@@ -10,6 +10,8 @@
 #include <Python.h>
 #include "structmember.h"
 
+#include <cstdlib>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
@@ -16121,53 +16123,53 @@ fma_(PyObject* self, PyObject* args) {
 	return NULL;
 }
 
-//static PyObject*
-//frexp_(PyObject* self, PyObject* args) {
-//	PyObject *arg1, *arg2;
-//	PyGLM_Arg_Unpack_2O(args, "frexp", arg1, arg2);
-//	int i = 0;
-//	glm::frexp(9.f,i);
-//	if (PyGLM_Vec2_Check(arg1) && PyObject_TypeCheck(arg2, &vec2Type)) {
-//		glm::vec2 o;
-//		unpack_vec2(arg1, &o);
-//		return pack_vec2(glm::frexp(o, ((vec2*)arg2)->super_type));
-//	}
-//	if (PyGLM_Vec3_Check(arg1) && PyObject_TypeCheck(arg2, &vec3Type)) {
-//		glm::vec3 o;
-//		unpack_vec3(arg1, &o);
-//		return pack_vec3(glm::frexp(o, ((vec3*)arg2)->super_type));
-//	}
-//	if (PyGLM_Vec4_Check(arg1) && PyObject_TypeCheck(arg2, &vec4Type)) {
-//		glm::vec4 o;
-//		unpack_vec4(arg1, &o);
-//		return pack_vec4(glm::frexp(o, ((vec4*)arg2)->super_type));
-//	}
-//	PyGLM_TYPEERROR_2O("invalid argument type(s) for frexp(): ", arg1, arg2);
-//	return NULL;
-//}
-//
-//static PyObject*
-//ldexp_(PyObject* self, PyObject* args) {
-//	PyObject *arg1, *arg2;
-//	PyGLM_Arg_Unpack_2O(args, "ldexp", arg1, arg2);
-//	if (PyGLM_Vec2_Check(arg1) && PyObject_TypeCheck(arg2, &vec2Type)) {
-//		glm::vec2 o;
-//		unpack_vec2(arg1, &o);
-//		return pack_vec2(glm::ldexp(o, ((vec2*)arg2)->super_type));
-//	}
-//	if (PyGLM_Vec3_Check(arg1) && PyObject_TypeCheck(arg2, &vec3Type)) {
-//		glm::vec3 o;
-//		unpack_vec3(arg1, &o);
-//		return pack_vec3(glm::ldexp(o, ((vec3*)arg2)->super_type));
-//	}
-//	if (PyGLM_Vec4_Check(arg1) && PyObject_TypeCheck(arg2, &vec4Type)) {
-//		glm::vec4 o;
-//		unpack_vec4(arg1, &o);
-//		return pack_vec4(glm::ldexp(o, ((vec4*)arg2)->super_type));
-//	}
-//	PyGLM_TYPEERROR_2O("invalid argument type(s) for ldexp(): ", arg1, arg2);
-//	return NULL;
-//}
+static PyObject*
+frexp_(PyObject* self, PyObject* args) {
+	PyObject *arg1, *arg2;
+	PyGLM_Arg_Unpack_2O(args, "frexp", arg1, arg2);
+	int i = 0;
+	glm::frexp(9.f,i);
+	if (PyGLM_Vec2_Check(arg1) && PyObject_TypeCheck(arg2, &vec2Type)) {
+		glm::vec2 o;
+		unpack_vec2(arg1, &o);
+		return pack_vec2(glm::frexp(o, ((vec2*)arg2)->super_type));
+	}
+	if (PyGLM_Vec3_Check(arg1) && PyObject_TypeCheck(arg2, &vec3Type)) {
+		glm::vec3 o;
+		unpack_vec3(arg1, &o);
+		return pack_vec3(glm::frexp(o, ((vec3*)arg2)->super_type));
+	}
+	if (PyGLM_Vec4_Check(arg1) && PyObject_TypeCheck(arg2, &vec4Type)) {
+		glm::vec4 o;
+		unpack_vec4(arg1, &o);
+		return pack_vec4(glm::frexp(o, ((vec4*)arg2)->super_type));
+	}
+	PyGLM_TYPEERROR_2O("invalid argument type(s) for frexp(): ", arg1, arg2);
+	return NULL;
+}
+
+static PyObject*
+ldexp_(PyObject* self, PyObject* args) {
+	PyObject *arg1, *arg2;
+	PyGLM_Arg_Unpack_2O(args, "ldexp", arg1, arg2);
+	if (PyGLM_Vec2_Check(arg1) && PyObject_TypeCheck(arg2, &vec2Type)) {
+		glm::vec2 o;
+		unpack_vec2(arg1, &o);
+		return pack_vec2(glm::ldexp(o, ((vec2*)arg2)->super_type));
+	}
+	if (PyGLM_Vec3_Check(arg1) && PyObject_TypeCheck(arg2, &vec3Type)) {
+		glm::vec3 o;
+		unpack_vec3(arg1, &o);
+		return pack_vec3(glm::ldexp(o, ((vec3*)arg2)->super_type));
+	}
+	if (PyGLM_Vec4_Check(arg1) && PyObject_TypeCheck(arg2, &vec4Type)) {
+		glm::vec4 o;
+		unpack_vec4(arg1, &o);
+		return pack_vec4(glm::ldexp(o, ((vec4*)arg2)->super_type));
+	}
+	PyGLM_TYPEERROR_2O("invalid argument type(s) for ldexp(): ", arg1, arg2);
+	return NULL;
+}
 
 PyGLM_MAKE_GLM_FUNC_VFrF(length)
 
@@ -17850,8 +17852,8 @@ static PyMethodDef detailmethods[] = {
 	{ "isnan", (PyCFunction)isnan_, METH_O, "isnan(x) -> bool or vecn\nReturns true if x holds a NaN (not a number)\nrepresentation in the underlying implementation's set of\nfloating point representations. Returns false otherwise,\nincluding for implementations with no NaN\nrepresentations." },
 	{ "isinf", (PyCFunction)isinf_, METH_O, "isinf(x) -> bool or vecn\nReturns true if x holds a positive infinity or negative\ninfinity representation in the underlying implementation's\nset of floating point representations. Returns false\notherwise, including for implementations with no infinity\nrepresentations." },
 	{ "fma", (PyCFunction)fma_, METH_VARARGS, "fma(a, b, c) -> float\nComputes and returns a * b + c." },
-	//{ "frexp", (PyCFunction)frexp_, METH_VARARGS, "frexp(x, exp) -> float or vecn\nSplits x into a floating-point significand in the range\n[0.5, 1.0) and an integral exponent of two, such that:\nx = significand * exp(2, exponent)" },
-	//{ "ldexp", (PyCFunction)ldexp_, METH_VARARGS, "ldexp(x, exp) -> float or vecn\nBuilds a floating-point number from x and the\ncorresponding integral exponent of two in exp, returning:\nsignificand * exp(2, exponent)" },
+	{ "frexp", (PyCFunction)frexp_, METH_VARARGS, "frexp(x, exp) -> float or vecn\nSplits x into a floating-point significand in the range\n[0.5, 1.0) and an integral exponent of two, such that:\nx = significand * exp(2, exponent)" },
+	{ "ldexp", (PyCFunction)ldexp_, METH_VARARGS, "ldexp(x, exp) -> float or vecn\nBuilds a floating-point number from x and the\ncorresponding integral exponent of two in exp, returning:\nsignificand * exp(2, exponent)" },
 
 	// func_geometric
 	{ "length", (PyCFunction)length_, METH_O, "length(x) -> float\nReturns the length of x, i.e., sqrt(x * x)." },
@@ -18017,7 +18019,6 @@ static PyMethodDef gtcmethods[] = {
 	{ "column", (PyCFunction)column_, METH_VARARGS | METH_KEYWORDS, "column(m, index[, x]) -> vecn or matnxn\nGet a specific column of a matrix or set a specific column to a matrix." },
 
 	// noise
-	//{ "grad4", (PyCFunction)grad4_, METH_VARARGS, "grad4(j, ip) -> vec4" },
 	{ "perlin", (PyCFunction)perlin_, METH_VARARGS | METH_KEYWORDS, "perlin(p[, rep]) -> float\nClassic or periodic perlin noise." },
 	{ "simplex", (PyCFunction)simplex_, METH_O, "simplex(p) -> float\nSimplex noise." },
 
@@ -18140,8 +18141,8 @@ static PyMethodDef glmmethods[] = {
 	{ "isnan", (PyCFunction)isnan_, METH_O, "isnan(x) -> bool or vecn\nReturns true if x holds a NaN (not a number)\nrepresentation in the underlying implementation's set of\nfloating point representations. Returns false otherwise,\nincluding for implementations with no NaN\nrepresentations." },
 	{ "isinf", (PyCFunction)isinf_, METH_O, "isinf(x) -> bool or vecn\nReturns true if x holds a positive infinity or negative\ninfinity representation in the underlying implementation's\nset of floating point representations. Returns false\notherwise, including for implementations with no infinity\nrepresentations." },
 	{ "fma", (PyCFunction)fma_, METH_VARARGS, "fma(a, b, c) -> float\nComputes and returns a * b + c." },
-	//{ "frexp", (PyCFunction)frexp_, METH_VARARGS, "frexp(x, exp) -> float or vecn\nSplits x into a floating-point significand in the range\n[0.5, 1.0) and an integral exponent of two, such that:\nx = significand * exp(2, exponent)" },
-	//{ "ldexp", (PyCFunction)ldexp_, METH_VARARGS, "ldexp(x, exp) -> float or vecn\nBuilds a floating-point number from x and the\ncorresponding integral exponent of two in exp, returning:\nsignificand * exp(2, exponent)" },
+	{ "frexp", (PyCFunction)frexp_, METH_VARARGS, "frexp(x, exp) -> float or vecn\nSplits x into a floating-point significand in the range\n[0.5, 1.0) and an integral exponent of two, such that:\nx = significand * exp(2, exponent)" },
+	{ "ldexp", (PyCFunction)ldexp_, METH_VARARGS, "ldexp(x, exp) -> float or vecn\nBuilds a floating-point number from x and the\ncorresponding integral exponent of two in exp, returning:\nsignificand * exp(2, exponent)" },
 
 	// func_geometric
 	{ "length", (PyCFunction)length_, METH_O, "length(x) -> float\nReturns the length of x, i.e., sqrt(x * x)." },
@@ -18297,7 +18298,6 @@ static PyMethodDef glmmethods[] = {
 	{ "column", (PyCFunction)column_, METH_VARARGS | METH_KEYWORDS, "column(m, index[, x]) -> vecn or matnxn\nGet a specific column of a matrix or set a specific column to a matrix." },
 
 	// noise
-	//{ "grad4", (PyCFunction)grad4_, METH_VARARGS, "grad4(j, ip) -> vec4" },
 	{ "perlin", (PyCFunction)perlin_, METH_VARARGS, "perlin(p[, rep]) -> float\nClassic or periodic perlin noise." },
 	{ "simplex", (PyCFunction)simplex_, METH_O, "simplex(p) -> float\nSimplex noise." },
 
