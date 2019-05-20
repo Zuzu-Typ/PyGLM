@@ -384,7 +384,7 @@ static PyTypeObject vec2Type = {
 	(newfunc)vec2_new,                 /* tp_new */
 };
 
-static PyTypeObject vec2IterType{
+static PyTypeObject vec2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"vec2Iter",             /* tp_name */
 	sizeof(vec2Iter),             /* tp_basicsize */
@@ -575,7 +575,7 @@ static PyTypeObject vec3Type = {
 	(newfunc)vec3_new,                 /* tp_new */
 };
 
-static PyTypeObject vec3IterType{
+static PyTypeObject vec3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"vec3Iter",             /* tp_name */
 	sizeof(vec3Iter),             /* tp_basicsize */
@@ -768,7 +768,7 @@ static PyTypeObject vec4Type = {
 	(newfunc)vec4_new,                 /* tp_new */
 };
 
-static PyTypeObject vec4IterType{
+static PyTypeObject vec4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"vec4Iter",             /* tp_name */
 	sizeof(vec4Iter),             /* tp_basicsize */
@@ -948,7 +948,7 @@ static PyTypeObject mvec2Type = {
 	0,                 /* tp_new */
 };
 
-static PyTypeObject mvec2IterType{
+static PyTypeObject mvec2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"mvec2Iter",             /* tp_name */
 	sizeof(mvec2Iter),             /* tp_basicsize */
@@ -1128,7 +1128,7 @@ static PyTypeObject mvec3Type = {
 	0,                 /* tp_new */
 };
 
-static PyTypeObject mvec3IterType{
+static PyTypeObject mvec3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"mvec3Iter",             /* tp_name */
 	sizeof(mvec3Iter),             /* tp_basicsize */
@@ -1308,7 +1308,7 @@ static PyTypeObject mvec4Type = {
 	0,                 /* tp_new */
 };
 
-static PyTypeObject mvec4IterType{
+static PyTypeObject mvec4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"mvec4Iter",             /* tp_name */
 	sizeof(mvec4Iter),             /* tp_basicsize */
@@ -3203,7 +3203,7 @@ static PyTypeObject quatType = {
 	(newfunc)quat_new,                 /* tp_new */
 };
 
-static PyTypeObject quatIterType{
+static PyTypeObject quatIterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"quatIter",             /* tp_name */
 	sizeof(quatIter),             /* tp_basicsize */
