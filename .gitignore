@@ -13,3 +13,4 @@ DevToolsx64.lnk
 upload.bat
 runreadmelang.bat
 readmelang.py
+*.pyc
