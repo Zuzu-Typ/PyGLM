@@ -16127,22 +16127,29 @@ static PyObject*
 frexp_(PyObject* self, PyObject* args) {
 	PyObject *arg1, *arg2;
 	PyGLM_Arg_Unpack_2O(args, "frexp", arg1, arg2);
-	int i = 0;
-	glm::frexp(9.f,i);
 	if (PyGLM_Vec2_Check(arg1) && PyObject_TypeCheck(arg2, &vec2Type)) {
 		glm::vec2 o;
 		unpack_vec2(arg1, &o);
-		return pack_vec2(glm::frexp(o, ((vec2*)arg2)->super_type));
+		glm::ivec2 o2 = ((vec2*)arg2)->super_type;
+		PyObject* out = pack_vec2(glm::frexp(o, o2));
+		((vec2*)arg2)->super_type = o2;
+		return out;
 	}
 	if (PyGLM_Vec3_Check(arg1) && PyObject_TypeCheck(arg2, &vec3Type)) {
 		glm::vec3 o;
 		unpack_vec3(arg1, &o);
-		return pack_vec3(glm::frexp(o, ((vec3*)arg2)->super_type));
+		glm::ivec3 o2 = ((vec3*)arg2)->super_type;
+		PyObject* out = pack_vec2(glm::frexp(o, o2));
+		((vec3*)arg2)->super_type = o2;
+		return out;
 	}
 	if (PyGLM_Vec4_Check(arg1) && PyObject_TypeCheck(arg2, &vec4Type)) {
 		glm::vec4 o;
 		unpack_vec4(arg1, &o);
-		return pack_vec4(glm::frexp(o, ((vec4*)arg2)->super_type));
+		glm::ivec4 o2 = ((vec4*)arg2)->super_type;
+		PyObject* out = pack_vec4(glm::frexp(o, o2));
+		((vec4*)arg2)->super_type = o2;
+		return out;
 	}
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for frexp(): ", arg1, arg2);
 	return NULL;
@@ -16155,17 +16162,26 @@ ldexp_(PyObject* self, PyObject* args) {
 	if (PyGLM_Vec2_Check(arg1) && PyObject_TypeCheck(arg2, &vec2Type)) {
 		glm::vec2 o;
 		unpack_vec2(arg1, &o);
-		return pack_vec2(glm::ldexp(o, ((vec2*)arg2)->super_type));
+		glm::ivec2 o2 = ((vec2*)arg2)->super_type;
+		PyObject* out = pack_vec2(glm::ldexp(o, o2));
+		((vec2*)arg2)->super_type = o2;
+		return out;
 	}
 	if (PyGLM_Vec3_Check(arg1) && PyObject_TypeCheck(arg2, &vec3Type)) {
 		glm::vec3 o;
 		unpack_vec3(arg1, &o);
-		return pack_vec3(glm::ldexp(o, ((vec3*)arg2)->super_type));
+		glm::ivec3 o2 = ((vec3*)arg2)->super_type;
+		PyObject* out = pack_vec3(glm::ldexp(o, o2));
+		((vec3*)arg2)->super_type = o2;
+		return out;
 	}
 	if (PyGLM_Vec4_Check(arg1) && PyObject_TypeCheck(arg2, &vec4Type)) {
 		glm::vec4 o;
 		unpack_vec4(arg1, &o);
-		return pack_vec4(glm::ldexp(o, ((vec4*)arg2)->super_type));
+		glm::ivec4 o2 = ((vec4*)arg2)->super_type;
+		PyObject* out = pack_vec4(glm::ldexp(o, o2));
+		((vec4*)arg2)->super_type = o2;
+		return out;
 	}
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for ldexp(): ", arg1, arg2);
 	return NULL;
