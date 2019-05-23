@@ -12,6 +12,8 @@
 
 #include <cstdlib>
 
+#define GLM_FORCE_CTOR_INIT
+
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
