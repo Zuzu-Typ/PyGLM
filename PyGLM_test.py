@@ -6,6 +6,8 @@ v4 = glm.vec4()
 
 vectors = [v2, v3, v4]
 
+vector_types = [glm.vec2, glm.vec3, glm.vec4]
+
 m22 = glm.mat2x2()
 m23 = glm.mat2x3()
 m24 = glm.mat2x4()
@@ -18,9 +20,15 @@ m44 = glm.mat4x4()
 
 matrices = [m22, m23, m24, m32, m33, m34, m42, m43, m44]
 
+matrix_types = [glm.mat2x2, glm.mat2x3, glm.mat2x4, glm.mat3x2, glm.mat3x3, glm.mat3x4, glm.mat4x2, glm.mat4x3, glm.mat4x4]
+
 q = glm.quat()
 
+all_types = vector_types + matrix_types + [glm.quat]
+
 all_type_objects = vectors + matrices + [q]
+
+get_obj_generator = lambda types: (x() for x in types)
 
 class FAssertionError(Exception):
     pass
@@ -86,165 +94,158 @@ for args in [(), (q,), (v3,), (m33,), (m44,), (1, v3), (v3, v3), (1, 2, 3, 4)]:
 #/Initialization #
 
 # neg #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     fassert(obj.__neg__, ())
 #/neg #
 
 # pos #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     fassert(obj.__pos__, ())
 #/pos #
 
 # abs #
-for obj in all_type_objects:
+for tobj in all_types:
+    obj = tobj()
     fassert(obj.__abs__, ())
 #/abs #
 
 # add #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     fassert(obj.__add__, (obj,))
 #/add #
 
 # sub #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     fassert(obj.__sub__, (obj,))
 #/sub #
 
 # mul #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     fassert(obj.__mul__, (1,))
 #/mul #
 
 # div #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     fassert(obj.__truediv__, (1,))
 #/div #
 
 # mod #
-for obj in vectors:
+for obj in get_obj_generator(vector_types):
     fassert(obj.__mod__, (1,))
 #/mod #
 
 # floordiv #
-for obj in vectors:
+for obj in get_obj_generator(vector_types):
     fassert(obj.__floordiv__, (1,))
 #/floordiv #
 
 # divmod #
-for obj in vectors:
+for obj in get_obj_generator(vector_types):
     fassert(obj.__divmod__, (1,))
 #/divmod #
 
 # pow #
-for obj in vectors:
+for obj in get_obj_generator(vector_types):
     fassert(obj.__pow__, (obj,))
     fassert(obj.__pow__, (obj, obj))
 #/pow #
 
 # iadd #
-for obj in all_type_objects:
-    temp_obj = type(obj)()
-    fassert(temp_obj.__iadd__, (temp_obj,))
+for obj in get_obj_generator(all_types):
+    fassert(obj.__iadd__, (obj,))
 #/iadd #
 
 # isub #
-for obj in all_type_objects:
-    temp_obj = type(obj)()
-    fassert(temp_obj.__isub__, (temp_obj,))
+for obj in get_obj_generator(all_types):
+    fassert(obj.__isub__, (obj,))
 #/isub #
 
 # imul #
-for obj in all_type_objects:
-    temp_obj = type(obj)()
-    fassert(temp_obj.__imul__, (1,))
+for obj in get_obj_generator(all_types):
+    fassert(obj.__imul__, (1,))
 #/imul #
 
 # idiv #
-for obj in all_type_objects:
-    temp_obj = type(obj)()
-    fassert(temp_obj.__itruediv__, (1,))
+for obj in get_obj_generator(all_types):
+    fassert(obj.__itruediv__, (1,))
 #/idiv #
 
 # imod #
-for obj in vectors:
-    temp_obj = type(obj)()
-    fassert(temp_obj.__imod__, (1,))
+for obj in get_obj_generator(vector_types):
+    fassert(obj.__imod__, (1,))
 #/imod #
 
 # ifloordiv #
-for obj in vectors:
-    temp_obj = type(obj)()
-    fassert(temp_obj.__ifloordiv__, (1,))
+for obj in get_obj_generator(vector_types):
+    fassert(obj.__ifloordiv__, (1,))
 #/ifloordiv #
 
 # ipow #
-for obj in vectors:
-    temp_obj = type(obj)()
-    fassert(temp_obj.__ipow__, (temp_obj,))
+for obj in get_obj_generator(vector_types):
+    fassert(obj.__ipow__, (obj,))
 #/ipow #
 
 # str #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     assert str(obj), obj
 #/str #
 
 # repr #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     assert repr(obj), obj
 #/repr #
 
 # len #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     assert len(obj), obj
 #/len #
 
 # getitem #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     for i in range(len(obj)):
         assert obj[i] != None, obj
 #/getitem #
 
 # setitem #
-for obj in all_type_objects:
-    temp_obj = type(obj)()
+for obj in get_obj_generator(all_types):
     for i in range(len(obj)):
-        fassert(temp_obj.__setitem__,(i, temp_obj[i]))
+        fassert(obj.__setitem__,(i, obj[i]))
 #/setitem #
 
 # contains #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     assert obj[0] in obj, obj
 #/contains #
 
 # Richcompare #
 ## EQ
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     assert obj == type(obj)(obj), obj
 
 ## NE
-for obj in vectors + matrices:
+for obj in get_obj_generator(vector_types + matrix_types):
     assert obj != (obj + 1), obj
 assert q != (1,0,0,0)
 
 ## LT
-for obj in vectors:
+for obj in get_obj_generator(vector_types):
     assert all(obj < (obj + 1)) and not any(obj < obj), obj
 
 ## LE
-for obj in vectors:
+for obj in get_obj_generator(vector_types):
     assert all(obj <= obj) and all(obj <= (obj + 1)) and not any(obj <= (obj - 1)), obj
 
 ## GT
-for obj in vectors:
+for obj in get_obj_generator(vector_types):
     assert all(obj > (obj - 1)) and not any(obj > obj), obj
 
 ## GE
-for obj in vectors:
+for obj in get_obj_generator(vector_types):
     assert all(obj >= obj) and all(obj >= (obj - 1)) and not any(obj >= (obj + 1)), obj
 #/Richcompare #
 
 # iter #
-for obj in all_type_objects:
+for obj in get_obj_generator(all_types):
     fassert(iter, (obj,))
 #/iter #
 
