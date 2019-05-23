@@ -245,6 +245,6 @@ for obj in vectors:
 
 # iter #
 for obj in all_type_objects:
-    fassert(iter, obj)
+    fassert(iter, (obj,))
 #/iter #
 
