@@ -13774,136 +13774,136 @@ PyObject* PyGLM_ToCtypesP(bool* ptr) {
 
 template<int L, typename T>
 static PyTypeObject* PyGLM_VEC_TYPE() {
-	if (std::is_same<vec<L, T>, vec<1, float>>::value) {
+	if (std::is_same<vec<L, T>, vec<1, float> >::value) {
 		return (PyTypeObject*)&hfvec1Type;
 	}
-	if (std::is_same<vec<L, T>, vec<2, float>>::value) {
+	if (std::is_same<vec<L, T>, vec<2, float> >::value) {
 		return (PyTypeObject*)&hfvec2Type;
 	}
-	if (std::is_same<vec<L, T>, vec<3, float>>::value) {
+	if (std::is_same<vec<L, T>, vec<3, float> >::value) {
 		return (PyTypeObject*)&hfvec3Type;
 	}
-	if (std::is_same<vec<L, T>, vec<4, float>>::value) {
+	if (std::is_same<vec<L, T>, vec<4, float> >::value) {
 		return (PyTypeObject*)&hfvec4Type;
 	}
-	if (std::is_same<vec<L, T>, vec<1, double>>::value) {
+	if (std::is_same<vec<L, T>, vec<1, double> >::value) {
 		return (PyTypeObject*)&hdvec1Type;
 	}
-	if (std::is_same<vec<L, T>, vec<2, double>>::value) {
+	if (std::is_same<vec<L, T>, vec<2, double> >::value) {
 		return (PyTypeObject*)&hdvec2Type;
 	}
-	if (std::is_same<vec<L, T>, vec<3, double>>::value) {
+	if (std::is_same<vec<L, T>, vec<3, double> >::value) {
 		return (PyTypeObject*)&hdvec3Type;
 	}
-	if (std::is_same<vec<L, T>, vec<4, double>>::value) {
+	if (std::is_same<vec<L, T>, vec<4, double> >::value) {
 		return (PyTypeObject*)&hdvec4Type;
 	}
-	if (std::is_same<vec<L, T>, vec<1, glm::i8>>::value) {
+	if (std::is_same<vec<L, T>, vec<1, glm::i8> >::value) {
 		return (PyTypeObject*)&hi8vec1Type;
 	}
-	if (std::is_same<vec<L, T>, vec<2, glm::i8>>::value) {
+	if (std::is_same<vec<L, T>, vec<2, glm::i8> >::value) {
 		return (PyTypeObject*)&hi8vec2Type;
 	}
-	if (std::is_same<vec<L, T>, vec<3, glm::i8>>::value) {
+	if (std::is_same<vec<L, T>, vec<3, glm::i8> >::value) {
 		return (PyTypeObject*)&hi8vec3Type;
 	}
-	if (std::is_same<vec<L, T>, vec<4, glm::i8>>::value) {
+	if (std::is_same<vec<L, T>, vec<4, glm::i8> >::value) {
 		return (PyTypeObject*)&hi8vec4Type;
 	}
-	if (std::is_same<vec<L, T>, vec<1, glm::i16>>::value) {
+	if (std::is_same<vec<L, T>, vec<1, glm::i16> >::value) {
 		return (PyTypeObject*)&hi16vec1Type;
 	}
-	if (std::is_same<vec<L, T>, vec<2, glm::i16>>::value) {
+	if (std::is_same<vec<L, T>, vec<2, glm::i16> >::value) {
 		return (PyTypeObject*)&hi16vec2Type;
 	}
-	if (std::is_same<vec<L, T>, vec<3, glm::i16>>::value) {
+	if (std::is_same<vec<L, T>, vec<3, glm::i16> >::value) {
 		return (PyTypeObject*)&hi16vec3Type;
 	}
-	if (std::is_same<vec<L, T>, vec<4, glm::i16>>::value) {
+	if (std::is_same<vec<L, T>, vec<4, glm::i16> >::value) {
 		return (PyTypeObject*)&hi16vec4Type;
 	}
-	if (std::is_same<vec<L, T>, vec<1, glm::i32>>::value) {
+	if (std::is_same<vec<L, T>, vec<1, glm::i32> >::value) {
 		return (PyTypeObject*)&hivec1Type;
 	}
-	if (std::is_same<vec<L, T>, vec<2, glm::i32>>::value) {
+	if (std::is_same<vec<L, T>, vec<2, glm::i32> >::value) {
 		return (PyTypeObject*)&hivec2Type;
 	}
-	if (std::is_same<vec<L, T>, vec<3, glm::i32>>::value) {
+	if (std::is_same<vec<L, T>, vec<3, glm::i32> >::value) {
 		return (PyTypeObject*)&hivec3Type;
 	}
-	if (std::is_same<vec<L, T>, vec<4, glm::i32>>::value) {
+	if (std::is_same<vec<L, T>, vec<4, glm::i32> >::value) {
 		return (PyTypeObject*)&hivec4Type;
 	}
-	if (std::is_same<vec<L, T>, vec<1, glm::i64>>::value) {
+	if (std::is_same<vec<L, T>, vec<1, glm::i64> >::value) {
 		return (PyTypeObject*)&hi64vec1Type;
 	}
-	if (std::is_same<vec<L, T>, vec<2, glm::i64>>::value) {
+	if (std::is_same<vec<L, T>, vec<2, glm::i64> >::value) {
 		return (PyTypeObject*)&hi64vec2Type;
 	}
-	if (std::is_same<vec<L, T>, vec<3, glm::i64>>::value) {
+	if (std::is_same<vec<L, T>, vec<3, glm::i64> >::value) {
 		return (PyTypeObject*)&hi64vec3Type;
 	}
-	if (std::is_same<vec<L, T>, vec<4, glm::i64>>::value) {
+	if (std::is_same<vec<L, T>, vec<4, glm::i64> >::value) {
 		return (PyTypeObject*)&hi64vec4Type;
 	}
-	if (std::is_same<vec<L, T>, vec<1, glm::u8>>::value) {
+	if (std::is_same<vec<L, T>, vec<1, glm::u8> >::value) {
 		return (PyTypeObject*)&hu8vec1Type;
 	}
-	if (std::is_same<vec<L, T>, vec<2, glm::u8>>::value) {
+	if (std::is_same<vec<L, T>, vec<2, glm::u8> >::value) {
 		return (PyTypeObject*)&hu8vec2Type;
 	}
-	if (std::is_same<vec<L, T>, vec<3, glm::u8>>::value) {
+	if (std::is_same<vec<L, T>, vec<3, glm::u8> >::value) {
 		return (PyTypeObject*)&hu8vec3Type;
 	}
-	if (std::is_same<vec<L, T>, vec<4, glm::u8>>::value) {
+	if (std::is_same<vec<L, T>, vec<4, glm::u8> >::value) {
 		return (PyTypeObject*)&hu8vec4Type;
 	}
-	if (std::is_same<vec<L, T>, vec<1, glm::u16>>::value) {
+	if (std::is_same<vec<L, T>, vec<1, glm::u16> >::value) {
 		return (PyTypeObject*)&hu16vec1Type;
 	}
-	if (std::is_same<vec<L, T>, vec<2, glm::u16>>::value) {
+	if (std::is_same<vec<L, T>, vec<2, glm::u16> >::value) {
 		return (PyTypeObject*)&hu16vec2Type;
 	}
-	if (std::is_same<vec<L, T>, vec<3, glm::u16>>::value) {
+	if (std::is_same<vec<L, T>, vec<3, glm::u16> >::value) {
 		return (PyTypeObject*)&hu16vec3Type;
 	}
-	if (std::is_same<vec<L, T>, vec<4, glm::u16>>::value) {
+	if (std::is_same<vec<L, T>, vec<4, glm::u16> >::value) {
 		return (PyTypeObject*)&hu16vec4Type;
 	}
-	if (std::is_same<vec<L, T>, vec<1, glm::u32>>::value) {
+	if (std::is_same<vec<L, T>, vec<1, glm::u32> >::value) {
 		return (PyTypeObject*)&huvec1Type;
 	}
-	if (std::is_same<vec<L, T>, vec<2, glm::u32>>::value) {
+	if (std::is_same<vec<L, T>, vec<2, glm::u32> >::value) {
 		return (PyTypeObject*)&huvec2Type;
 	}
-	if (std::is_same<vec<L, T>, vec<3, glm::u32>>::value) {
+	if (std::is_same<vec<L, T>, vec<3, glm::u32> >::value) {
 		return (PyTypeObject*)&huvec3Type;
 	}
-	if (std::is_same<vec<L, T>, vec<4, glm::u32>>::value) {
+	if (std::is_same<vec<L, T>, vec<4, glm::u32> >::value) {
 		return (PyTypeObject*)&huvec4Type;
 	}
-	if (std::is_same<vec<L, T>, vec<1, glm::u64>>::value) {
+	if (std::is_same<vec<L, T>, vec<1, glm::u64> >::value) {
 		return (PyTypeObject*)&hu64vec1Type;
 	}
-	if (std::is_same<vec<L, T>, vec<2, glm::u64>>::value) {
+	if (std::is_same<vec<L, T>, vec<2, glm::u64> >::value) {
 		return (PyTypeObject*)&hu64vec2Type;
 	}
-	if (std::is_same<vec<L, T>, vec<3, glm::u64>>::value) {
+	if (std::is_same<vec<L, T>, vec<3, glm::u64> >::value) {
 		return (PyTypeObject*)&hu64vec3Type;
 	}
-	if (std::is_same<vec<L, T>, vec<4, glm::u64>>::value) {
+	if (std::is_same<vec<L, T>, vec<4, glm::u64> >::value) {
 		return (PyTypeObject*)&hu64vec4Type;
 	}
-	if (std::is_same<vec<L, T>, vec<1, bool>>::value) {
+	if (std::is_same<vec<L, T>, vec<1, bool> >::value) {
 		return (PyTypeObject*)&hbvec1Type;
 	}
-	if (std::is_same<vec<L, T>, vec<2, bool>>::value) {
+	if (std::is_same<vec<L, T>, vec<2, bool> >::value) {
 		return (PyTypeObject*)&hbvec2Type;
 	}
-	if (std::is_same<vec<L, T>, vec<3, bool>>::value) {
+	if (std::is_same<vec<L, T>, vec<3, bool> >::value) {
 		return (PyTypeObject*)&hbvec3Type;
 	}
-	if (std::is_same<vec<L, T>, vec<4, bool>>::value) {
+	if (std::is_same<vec<L, T>, vec<4, bool> >::value) {
 		return (PyTypeObject*)&hbvec4Type;
 	}
 	return (PyTypeObject*)0;
@@ -13911,136 +13911,136 @@ static PyTypeObject* PyGLM_VEC_TYPE() {
 
 template<int L, typename T>
 static PyTypeObject* PyGLM_VECITER_TYPE() {
-	if (std::is_same<vecIter<L, T>, vecIter<1, float>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<1, float> >::value) {
 		return (PyTypeObject*)&hfvec1IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<2, float>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<2, float> >::value) {
 		return (PyTypeObject*)&hfvec2IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<3, float>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<3, float> >::value) {
 		return (PyTypeObject*)&hfvec3IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<4, float>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<4, float> >::value) {
 		return (PyTypeObject*)&hfvec4IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<1, double>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<1, double> >::value) {
 		return (PyTypeObject*)&hdvec1IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<2, double>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<2, double> >::value) {
 		return (PyTypeObject*)&hdvec2IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<3, double>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<3, double> >::value) {
 		return (PyTypeObject*)&hdvec3IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<4, double>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<4, double> >::value) {
 		return (PyTypeObject*)&hdvec4IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<1, glm::i8>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<1, glm::i8> >::value) {
 		return (PyTypeObject*)&hi8vec1IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<2, glm::i8>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<2, glm::i8> >::value) {
 		return (PyTypeObject*)&hi8vec2IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<3, glm::i8>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<3, glm::i8> >::value) {
 		return (PyTypeObject*)&hi8vec3IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<4, glm::i8>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<4, glm::i8> >::value) {
 		return (PyTypeObject*)&hi8vec4IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<1, glm::i16>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<1, glm::i16> >::value) {
 		return (PyTypeObject*)&hi16vec1IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<2, glm::i16>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<2, glm::i16> >::value) {
 		return (PyTypeObject*)&hi16vec2IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<3, glm::i16>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<3, glm::i16> >::value) {
 		return (PyTypeObject*)&hi16vec3IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<4, glm::i16>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<4, glm::i16> >::value) {
 		return (PyTypeObject*)&hi16vec4IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<1, glm::i32>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<1, glm::i32> >::value) {
 		return (PyTypeObject*)&hivec1IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<2, glm::i32>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<2, glm::i32> >::value) {
 		return (PyTypeObject*)&hivec2IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<3, glm::i32>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<3, glm::i32> >::value) {
 		return (PyTypeObject*)&hivec3IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<4, glm::i32>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<4, glm::i32> >::value) {
 		return (PyTypeObject*)&hivec4IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<1, glm::i64>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<1, glm::i64> >::value) {
 		return (PyTypeObject*)&hi64vec1IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<2, glm::i64>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<2, glm::i64> >::value) {
 		return (PyTypeObject*)&hi64vec2IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<3, glm::i64>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<3, glm::i64> >::value) {
 		return (PyTypeObject*)&hi64vec3IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<4, glm::i64>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<4, glm::i64> >::value) {
 		return (PyTypeObject*)&hi64vec4IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<1, glm::u8>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<1, glm::u8> >::value) {
 		return (PyTypeObject*)&hu8vec1IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<2, glm::u8>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<2, glm::u8> >::value) {
 		return (PyTypeObject*)&hu8vec2IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<3, glm::u8>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<3, glm::u8> >::value) {
 		return (PyTypeObject*)&hu8vec3IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<4, glm::u8>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<4, glm::u8> >::value) {
 		return (PyTypeObject*)&hu8vec4IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<1, glm::u16>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<1, glm::u16> >::value) {
 		return (PyTypeObject*)&hu16vec1IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<2, glm::u16>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<2, glm::u16> >::value) {
 		return (PyTypeObject*)&hu16vec2IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<3, glm::u16>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<3, glm::u16> >::value) {
 		return (PyTypeObject*)&hu16vec3IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<4, glm::u16>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<4, glm::u16> >::value) {
 		return (PyTypeObject*)&hu16vec4IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<1, glm::u32>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<1, glm::u32> >::value) {
 		return (PyTypeObject*)&huvec1IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<2, glm::u32>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<2, glm::u32> >::value) {
 		return (PyTypeObject*)&huvec2IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<3, glm::u32>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<3, glm::u32> >::value) {
 		return (PyTypeObject*)&huvec3IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<4, glm::u32>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<4, glm::u32> >::value) {
 		return (PyTypeObject*)&huvec4IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<1, glm::u64>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<1, glm::u64> >::value) {
 		return (PyTypeObject*)&hu64vec1IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<2, glm::u64>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<2, glm::u64> >::value) {
 		return (PyTypeObject*)&hu64vec2IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<3, glm::u64>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<3, glm::u64> >::value) {
 		return (PyTypeObject*)&hu64vec3IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<4, glm::u64>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<4, glm::u64> >::value) {
 		return (PyTypeObject*)&hu64vec4IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<1, bool>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<1, bool> >::value) {
 		return (PyTypeObject*)&hbvec1IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<2, bool>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<2, bool> >::value) {
 		return (PyTypeObject*)&hbvec2IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<3, bool>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<3, bool> >::value) {
 		return (PyTypeObject*)&hbvec3IterType;
 	}
-	if (std::is_same<vecIter<L, T>, vecIter<4, bool>>::value) {
+	if (std::is_same<vecIter<L, T>, vecIter<4, bool> >::value) {
 		return (PyTypeObject*)&hbvec4IterType;
 	}
 	return (PyTypeObject*)0;
@@ -14048,40 +14048,40 @@ static PyTypeObject* PyGLM_VECITER_TYPE() {
 
 template<int L, typename T>
 static PyTypeObject* PyGLM_MVEC_TYPE() {
-	if (std::is_same<mvec<L, T>, mvec<2, float>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<2, float> >::value) {
 		return (PyTypeObject*)&hfmvec2Type;
 	}
-	if (std::is_same<mvec<L, T>, mvec<3, float>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<3, float> >::value) {
 		return (PyTypeObject*)&hfmvec3Type;
 	}
-	if (std::is_same<mvec<L, T>, mvec<4, float>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<4, float> >::value) {
 		return (PyTypeObject*)&hfmvec4Type;
 	}
-	if (std::is_same<mvec<L, T>, mvec<2, double>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<2, double> >::value) {
 		return (PyTypeObject*)&hdmvec2Type;
 	}
-	if (std::is_same<mvec<L, T>, mvec<3, double>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<3, double> >::value) {
 		return (PyTypeObject*)&hdmvec3Type;
 	}
-	if (std::is_same<mvec<L, T>, mvec<4, double>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<4, double> >::value) {
 		return (PyTypeObject*)&hdmvec4Type;
 	}
-	if (std::is_same<mvec<L, T>, mvec<2, glm::i32>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<2, glm::i32> >::value) {
 		return (PyTypeObject*)&himvec2Type;
 	}
-	if (std::is_same<mvec<L, T>, mvec<3, glm::i32>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<3, glm::i32> >::value) {
 		return (PyTypeObject*)&himvec3Type;
 	}
-	if (std::is_same<mvec<L, T>, mvec<4, glm::i32>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<4, glm::i32> >::value) {
 		return (PyTypeObject*)&himvec4Type;
 	}
-	if (std::is_same<mvec<L, T>, mvec<2, glm::u32>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<2, glm::u32> >::value) {
 		return (PyTypeObject*)&humvec2Type;
 	}
-	if (std::is_same<mvec<L, T>, mvec<3, glm::u32>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<3, glm::u32> >::value) {
 		return (PyTypeObject*)&humvec3Type;
 	}
-	if (std::is_same<mvec<L, T>, mvec<4, glm::u32>>::value) {
+	if (std::is_same<mvec<L, T>, mvec<4, glm::u32> >::value) {
 		return (PyTypeObject*)&humvec4Type;
 	}
 	return (PyTypeObject*)0;
@@ -14089,40 +14089,40 @@ static PyTypeObject* PyGLM_MVEC_TYPE() {
 
 template<int L, typename T>
 static PyTypeObject* PyGLM_MVECITER_TYPE() {
-	if (std::is_same<mvecIter<L, T>, mvecIter<2, float>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<2, float> >::value) {
 		return (PyTypeObject*)&hfmvec2IterType;
 	}
-	if (std::is_same<mvecIter<L, T>, mvecIter<3, float>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<3, float> >::value) {
 		return (PyTypeObject*)&hfmvec3IterType;
 	}
-	if (std::is_same<mvecIter<L, T>, mvecIter<4, float>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<4, float> >::value) {
 		return (PyTypeObject*)&hfmvec4IterType;
 	}
-	if (std::is_same<mvecIter<L, T>, mvecIter<2, double>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<2, double> >::value) {
 		return (PyTypeObject*)&hdmvec2IterType;
 	}
-	if (std::is_same<mvecIter<L, T>, mvecIter<3, double>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<3, double> >::value) {
 		return (PyTypeObject*)&hdmvec3IterType;
 	}
-	if (std::is_same<mvecIter<L, T>, mvecIter<4, double>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<4, double> >::value) {
 		return (PyTypeObject*)&hdmvec4IterType;
 	}
-	if (std::is_same<mvecIter<L, T>, mvecIter<2, glm::i32>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<2, glm::i32> >::value) {
 		return (PyTypeObject*)&himvec2IterType;
 	}
-	if (std::is_same<mvecIter<L, T>, mvecIter<3, glm::i32>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<3, glm::i32> >::value) {
 		return (PyTypeObject*)&himvec3IterType;
 	}
-	if (std::is_same<mvecIter<L, T>, mvecIter<4, glm::i32>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<4, glm::i32> >::value) {
 		return (PyTypeObject*)&himvec4IterType;
 	}
-	if (std::is_same<mvecIter<L, T>, mvecIter<2, glm::u32>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<2, glm::u32> >::value) {
 		return (PyTypeObject*)&humvec2IterType;
 	}
-	if (std::is_same<mvecIter<L, T>, mvecIter<3, glm::u32>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<3, glm::u32> >::value) {
 		return (PyTypeObject*)&humvec3IterType;
 	}
-	if (std::is_same<mvecIter<L, T>, mvecIter<4, glm::u32>>::value) {
+	if (std::is_same<mvecIter<L, T>, mvecIter<4, glm::u32> >::value) {
 		return (PyTypeObject*)&humvec4IterType;
 	}
 	return (PyTypeObject*)0;
@@ -14130,112 +14130,112 @@ static PyTypeObject* PyGLM_MVECITER_TYPE() {
 
 template<int C, int R, typename T>
 static PyTypeObject* PyGLM_MAT_TYPE() {
-	if (std::is_same<mat<C, R, T>, mat<2, 2, float>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 2, float> >::value) {
 		return (PyTypeObject*)&hfmat2x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<2, 3, float>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 3, float> >::value) {
 		return (PyTypeObject*)&hfmat2x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<2, 4, float>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 4, float> >::value) {
 		return (PyTypeObject*)&hfmat2x4Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 2, float>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 2, float> >::value) {
 		return (PyTypeObject*)&hfmat3x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 3, float>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 3, float> >::value) {
 		return (PyTypeObject*)&hfmat3x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 4, float>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 4, float> >::value) {
 		return (PyTypeObject*)&hfmat3x4Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 2, float>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 2, float> >::value) {
 		return (PyTypeObject*)&hfmat4x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 3, float>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 3, float> >::value) {
 		return (PyTypeObject*)&hfmat4x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 4, float>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 4, float> >::value) {
 		return (PyTypeObject*)&hfmat4x4Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<2, 2, double>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 2, double> >::value) {
 		return (PyTypeObject*)&hdmat2x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<2, 3, double>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 3, double> >::value) {
 		return (PyTypeObject*)&hdmat2x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<2, 4, double>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 4, double> >::value) {
 		return (PyTypeObject*)&hdmat2x4Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 2, double>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 2, double> >::value) {
 		return (PyTypeObject*)&hdmat3x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 3, double>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 3, double> >::value) {
 		return (PyTypeObject*)&hdmat3x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 4, double>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 4, double> >::value) {
 		return (PyTypeObject*)&hdmat3x4Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 2, double>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 2, double> >::value) {
 		return (PyTypeObject*)&hdmat4x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 3, double>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 3, double> >::value) {
 		return (PyTypeObject*)&hdmat4x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 4, double>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 4, double> >::value) {
 		return (PyTypeObject*)&hdmat4x4Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<2, 2, glm::i32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 2, glm::i32> >::value) {
 		return (PyTypeObject*)&himat2x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<2, 3, glm::i32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 3, glm::i32> >::value) {
 		return (PyTypeObject*)&himat2x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<2, 4, glm::i32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 4, glm::i32> >::value) {
 		return (PyTypeObject*)&himat2x4Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 2, glm::i32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 2, glm::i32> >::value) {
 		return (PyTypeObject*)&himat3x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 3, glm::i32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 3, glm::i32> >::value) {
 		return (PyTypeObject*)&himat3x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 4, glm::i32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 4, glm::i32> >::value) {
 		return (PyTypeObject*)&himat3x4Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 2, glm::i32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 2, glm::i32> >::value) {
 		return (PyTypeObject*)&himat4x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 3, glm::i32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 3, glm::i32> >::value) {
 		return (PyTypeObject*)&himat4x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 4, glm::i32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 4, glm::i32> >::value) {
 		return (PyTypeObject*)&himat4x4Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<2, 2, glm::u32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 2, glm::u32> >::value) {
 		return (PyTypeObject*)&humat2x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<2, 3, glm::u32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 3, glm::u32> >::value) {
 		return (PyTypeObject*)&humat2x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<2, 4, glm::u32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<2, 4, glm::u32> >::value) {
 		return (PyTypeObject*)&humat2x4Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 2, glm::u32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 2, glm::u32> >::value) {
 		return (PyTypeObject*)&humat3x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 3, glm::u32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 3, glm::u32> >::value) {
 		return (PyTypeObject*)&humat3x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<3, 4, glm::u32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<3, 4, glm::u32> >::value) {
 		return (PyTypeObject*)&humat3x4Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 2, glm::u32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 2, glm::u32> >::value) {
 		return (PyTypeObject*)&humat4x2Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 3, glm::u32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 3, glm::u32> >::value) {
 		return (PyTypeObject*)&humat4x3Type;
 	}
-	if (std::is_same<mat<C, R, T>, mat<4, 4, glm::u32>>::value) {
+	if (std::is_same<mat<C, R, T>, mat<4, 4, glm::u32> >::value) {
 		return (PyTypeObject*)&humat4x4Type;
 	}
 	return (PyTypeObject*)0;
@@ -14243,112 +14243,112 @@ static PyTypeObject* PyGLM_MAT_TYPE() {
 
 template<int C, int R, typename T>
 static PyTypeObject* PyGLM_MATITER_TYPE() {
-	if (std::is_same<matIter<C, R, T>, matIter<2, 2, float>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 2, float> >::value) {
 		return (PyTypeObject*)&hfmat2x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<2, 3, float>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 3, float> >::value) {
 		return (PyTypeObject*)&hfmat2x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<2, 4, float>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 4, float> >::value) {
 		return (PyTypeObject*)&hfmat2x4IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 2, float>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 2, float> >::value) {
 		return (PyTypeObject*)&hfmat3x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 3, float>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 3, float> >::value) {
 		return (PyTypeObject*)&hfmat3x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 4, float>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 4, float> >::value) {
 		return (PyTypeObject*)&hfmat3x4IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 2, float>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 2, float> >::value) {
 		return (PyTypeObject*)&hfmat4x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 3, float>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 3, float> >::value) {
 		return (PyTypeObject*)&hfmat4x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 4, float>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 4, float> >::value) {
 		return (PyTypeObject*)&hfmat4x4IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<2, 2, double>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 2, double> >::value) {
 		return (PyTypeObject*)&hdmat2x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<2, 3, double>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 3, double> >::value) {
 		return (PyTypeObject*)&hdmat2x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<2, 4, double>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 4, double> >::value) {
 		return (PyTypeObject*)&hdmat2x4IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 2, double>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 2, double> >::value) {
 		return (PyTypeObject*)&hdmat3x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 3, double>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 3, double> >::value) {
 		return (PyTypeObject*)&hdmat3x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 4, double>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 4, double> >::value) {
 		return (PyTypeObject*)&hdmat3x4IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 2, double>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 2, double> >::value) {
 		return (PyTypeObject*)&hdmat4x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 3, double>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 3, double> >::value) {
 		return (PyTypeObject*)&hdmat4x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 4, double>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 4, double> >::value) {
 		return (PyTypeObject*)&hdmat4x4IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<2, 2, glm::i32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 2, glm::i32> >::value) {
 		return (PyTypeObject*)&himat2x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<2, 3, glm::i32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 3, glm::i32> >::value) {
 		return (PyTypeObject*)&himat2x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<2, 4, glm::i32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 4, glm::i32> >::value) {
 		return (PyTypeObject*)&himat2x4IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 2, glm::i32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 2, glm::i32> >::value) {
 		return (PyTypeObject*)&himat3x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 3, glm::i32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 3, glm::i32> >::value) {
 		return (PyTypeObject*)&himat3x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 4, glm::i32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 4, glm::i32> >::value) {
 		return (PyTypeObject*)&himat3x4IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 2, glm::i32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 2, glm::i32> >::value) {
 		return (PyTypeObject*)&himat4x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 3, glm::i32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 3, glm::i32> >::value) {
 		return (PyTypeObject*)&himat4x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 4, glm::i32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 4, glm::i32> >::value) {
 		return (PyTypeObject*)&himat4x4IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<2, 2, glm::u32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 2, glm::u32> >::value) {
 		return (PyTypeObject*)&humat2x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<2, 3, glm::u32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 3, glm::u32> >::value) {
 		return (PyTypeObject*)&humat2x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<2, 4, glm::u32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<2, 4, glm::u32> >::value) {
 		return (PyTypeObject*)&humat2x4IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 2, glm::u32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 2, glm::u32> >::value) {
 		return (PyTypeObject*)&humat3x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 3, glm::u32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 3, glm::u32> >::value) {
 		return (PyTypeObject*)&humat3x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<3, 4, glm::u32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<3, 4, glm::u32> >::value) {
 		return (PyTypeObject*)&humat3x4IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 2, glm::u32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 2, glm::u32> >::value) {
 		return (PyTypeObject*)&humat4x2IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 3, glm::u32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 3, glm::u32> >::value) {
 		return (PyTypeObject*)&humat4x3IterType;
 	}
-	if (std::is_same<matIter<C, R, T>, matIter<4, 4, glm::u32>>::value) {
+	if (std::is_same<matIter<C, R, T>, matIter<4, 4, glm::u32> >::value) {
 		return (PyTypeObject*)&humat4x4IterType;
 	}
 	return (PyTypeObject*)0;
@@ -14356,10 +14356,10 @@ static PyTypeObject* PyGLM_MATITER_TYPE() {
 
 template<typename T>
 static PyTypeObject* PyGLM_QUA_TYPE() {
-	if (std::is_same<qua<T>, qua<float>>::value) {
+	if (std::is_same<qua<T>, qua<float> >::value) {
 		return (PyTypeObject*)&hfquaType;
 	}
-	if (std::is_same<qua<T>, qua<double>>::value) {
+	if (std::is_same<qua<T>, qua<double> >::value) {
 		return (PyTypeObject*)&hdquaType;
 	}
 	return (PyTypeObject*)0;
@@ -14367,10 +14367,10 @@ static PyTypeObject* PyGLM_QUA_TYPE() {
 
 template<typename T>
 static PyTypeObject* PyGLM_QUAITER_TYPE() {
-	if (std::is_same<quaIter<T>, quaIter<float>>::value) {
+	if (std::is_same<quaIter<T>, quaIter<float> >::value) {
 		return (PyTypeObject*)&hfquaIterType;
 	}
-	if (std::is_same<quaIter<T>, quaIter<double>>::value) {
+	if (std::is_same<quaIter<T>, quaIter<double> >::value) {
 		return (PyTypeObject*)&hdquaIterType;
 	}
 	return (PyTypeObject*)0;
@@ -23543,112 +23543,112 @@ identity_(PyObject*, PyObject* arg) {
 		return NULL;
 	}
 	if (arg == (PyObject*)&hfmat2x2Type) {
-		return pack(glm::identity<glm::mat<2, 2, float>>());
+		return pack(glm::identity<glm::mat<2, 2, float> >());
 	}
 	if (arg == (PyObject*)&hdmat2x2Type) {
-		return pack(glm::identity<glm::mat<2, 2, double>>());
+		return pack(glm::identity<glm::mat<2, 2, double> >());
 	}
 	if (arg == (PyObject*)&himat2x2Type) {
-		return pack(glm::identity<glm::mat<2, 2, int>>());
+		return pack(glm::identity<glm::mat<2, 2, int> >());
 	}
 	if (arg == (PyObject*)&humat2x2Type) {
-		return pack(glm::identity<glm::mat<2, 2, glm::uint>>());
+		return pack(glm::identity<glm::mat<2, 2, glm::uint> >());
 	}
 	if (arg == (PyObject*)&hfmat2x3Type) {
-		return pack(glm::identity<glm::mat<2, 3, float>>());
+		return pack(glm::identity<glm::mat<2, 3, float> >());
 	}
 	if (arg == (PyObject*)&hdmat2x3Type) {
-		return pack(glm::identity<glm::mat<2, 3, double>>());
+		return pack(glm::identity<glm::mat<2, 3, double> >());
 	}
 	if (arg == (PyObject*)&himat2x3Type) {
-		return pack(glm::identity<glm::mat<2, 3, int>>());
+		return pack(glm::identity<glm::mat<2, 3, int> >());
 	}
 	if (arg == (PyObject*)&humat2x3Type) {
-		return pack(glm::identity<glm::mat<2, 3, glm::uint>>());
+		return pack(glm::identity<glm::mat<2, 3, glm::uint> >());
 	}
 	if (arg == (PyObject*)&hfmat2x4Type) {
-		return pack(glm::identity<glm::mat<2, 4, float>>());
+		return pack(glm::identity<glm::mat<2, 4, float> >());
 	}
 	if (arg == (PyObject*)&hdmat2x4Type) {
-		return pack(glm::identity<glm::mat<2, 4, double>>());
+		return pack(glm::identity<glm::mat<2, 4, double> >());
 	}
 	if (arg == (PyObject*)&himat2x4Type) {
-		return pack(glm::identity<glm::mat<2, 4, int>>());
+		return pack(glm::identity<glm::mat<2, 4, int> >());
 	}
 	if (arg == (PyObject*)&humat2x4Type) {
-		return pack(glm::identity<glm::mat<2, 4, glm::uint>>());
+		return pack(glm::identity<glm::mat<2, 4, glm::uint> >());
 	}
 	if (arg == (PyObject*)&hfmat3x2Type) {
-		return pack(glm::identity<glm::mat<3, 2, float>>());
+		return pack(glm::identity<glm::mat<3, 2, float> >());
 	}
 	if (arg == (PyObject*)&hdmat3x2Type) {
-		return pack(glm::identity<glm::mat<3, 2, double>>());
+		return pack(glm::identity<glm::mat<3, 2, double> >());
 	}
 	if (arg == (PyObject*)&himat3x2Type) {
-		return pack(glm::identity<glm::mat<3, 2, int>>());
+		return pack(glm::identity<glm::mat<3, 2, int> >());
 	}
 	if (arg == (PyObject*)&humat3x2Type) {
-		return pack(glm::identity<glm::mat<3, 2, glm::uint>>());
+		return pack(glm::identity<glm::mat<3, 2, glm::uint> >());
 	}
 	if (arg == (PyObject*)&hfmat3x3Type) {
-		return pack(glm::identity<glm::mat<3, 3, float>>());
+		return pack(glm::identity<glm::mat<3, 3, float> >());
 	}
 	if (arg == (PyObject*)&hdmat3x3Type) {
-		return pack(glm::identity<glm::mat<3, 3, double>>());
+		return pack(glm::identity<glm::mat<3, 3, double> >());
 	}
 	if (arg == (PyObject*)&himat3x3Type) {
-		return pack(glm::identity<glm::mat<3, 3, int>>());
+		return pack(glm::identity<glm::mat<3, 3, int> >());
 	}
 	if (arg == (PyObject*)&humat3x3Type) {
-		return pack(glm::identity<glm::mat<3, 3, glm::uint>>());
+		return pack(glm::identity<glm::mat<3, 3, glm::uint> >());
 	}
 	if (arg == (PyObject*)&hfmat3x4Type) {
-		return pack(glm::identity<glm::mat<3, 4, float>>());
+		return pack(glm::identity<glm::mat<3, 4, float> >());
 	}
 	if (arg == (PyObject*)&hdmat3x4Type) {
-		return pack(glm::identity<glm::mat<3, 4, double>>());
+		return pack(glm::identity<glm::mat<3, 4, double> >());
 	}
 	if (arg == (PyObject*)&himat3x4Type) {
-		return pack(glm::identity<glm::mat<3, 4, int>>());
+		return pack(glm::identity<glm::mat<3, 4, int> >());
 	}
 	if (arg == (PyObject*)&humat3x4Type) {
-		return pack(glm::identity<glm::mat<3, 4, glm::uint>>());
+		return pack(glm::identity<glm::mat<3, 4, glm::uint> >());
 	}
 	if (arg == (PyObject*)&hfmat4x2Type) {
-		return pack(glm::identity<glm::mat<4, 2, float>>());
+		return pack(glm::identity<glm::mat<4, 2, float> >());
 	}
 	if (arg == (PyObject*)&hdmat4x2Type) {
-		return pack(glm::identity<glm::mat<4, 2, double>>());
+		return pack(glm::identity<glm::mat<4, 2, double> >());
 	}
 	if (arg == (PyObject*)&himat4x2Type) {
-		return pack(glm::identity<glm::mat<4, 2, int>>());
+		return pack(glm::identity<glm::mat<4, 2, int> >());
 	}
 	if (arg == (PyObject*)&humat4x2Type) {
-		return pack(glm::identity<glm::mat<4, 2, glm::uint>>());
+		return pack(glm::identity<glm::mat<4, 2, glm::uint> >());
 	}
 	if (arg == (PyObject*)&hfmat4x3Type) {
-		return pack(glm::identity<glm::mat<4, 3, float>>());
+		return pack(glm::identity<glm::mat<4, 3, float> >());
 	}
 	if (arg == (PyObject*)&hdmat4x3Type) {
-		return pack(glm::identity<glm::mat<4, 3, double>>());
+		return pack(glm::identity<glm::mat<4, 3, double> >());
 	}
 	if (arg == (PyObject*)&himat4x3Type) {
-		return pack(glm::identity<glm::mat<4, 3, int>>());
+		return pack(glm::identity<glm::mat<4, 3, int> >());
 	}
 	if (arg == (PyObject*)&humat4x3Type) {
-		return pack(glm::identity<glm::mat<4, 3, glm::uint>>());
+		return pack(glm::identity<glm::mat<4, 3, glm::uint> >());
 	}
 	if (arg == (PyObject*)&hfmat4x4Type) {
-		return pack(glm::identity<glm::mat<4, 4, float>>());
+		return pack(glm::identity<glm::mat<4, 4, float> >());
 	}
 	if (arg == (PyObject*)&hdmat4x4Type) {
-		return pack(glm::identity<glm::mat<4, 4, double>>());
+		return pack(glm::identity<glm::mat<4, 4, double> >());
 	}
 	if (arg == (PyObject*)&himat4x4Type) {
-		return pack(glm::identity<glm::mat<4, 4, int>>());
+		return pack(glm::identity<glm::mat<4, 4, int> >());
 	}
 	if (arg == (PyObject*)&humat4x4Type) {
-		return pack(glm::identity<glm::mat<4, 4, glm::uint>>());
+		return pack(glm::identity<glm::mat<4, 4, glm::uint> >());
 	}
 	PyErr_Format(PyExc_TypeError, "identity() requires a PyGLM matrix type as it's argument, not '%s'", ((PyTypeObject*)arg)->tp_name);
 	return NULL;

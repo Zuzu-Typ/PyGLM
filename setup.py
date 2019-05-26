@@ -15,7 +15,7 @@ from codecs import open
 from os import path
     
 module1 = Extension('glm',
-                    sources = ['PyGLM.cpp'], include_dirs=["glm/"])
+                    sources = ['PyGLM.cpp'], include_dirs=["glm/"], extra_compile_args=['-std=c++11'])
 
 here = path.abspath(path.dirname(__file__))
 
