@@ -104,8 +104,7 @@ for obj in get_obj_generator(all_types):
 #/pos #
 
 # abs #
-for tobj in all_types:
-    obj = tobj()
+for obj in get_obj_generator(vector_types):
     fassert(obj.__abs__, ())
 #/abs #
 

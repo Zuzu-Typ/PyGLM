@@ -9415,7 +9415,7 @@ static PyTypeObject hfmat4x4IterType = {
 #pragma endregion
 #pragma region double
 static PyMethodDef hdmat2x2_methods[] = {
-	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x2"},
+	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::dmat2x2"},
 	{ NULL }
 };
 static PyBufferProcs hdmat2x2BufferMethods = {
@@ -9477,7 +9477,7 @@ static PyNumberMethods hdmat2x2NumMethods = {
 };
 static PyTypeObject hdmat2x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x2",             /* tp_name */
+	"glm::dmat2x2",             /* tp_name */
 	sizeof(mat<2, 2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -9497,7 +9497,7 @@ static PyTypeObject hdmat2x2Type = {
 	&hdmat2x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat2x2( <mat2x2 compatible type(s)> )\n2 columns of 2 components matrix of double numbers.",           /* tp_doc */
+	"dmat2x2( <dmat2x2 compatible type(s)> )\n2 columns of 2 components matrix of double numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<2, 2, double>,                         /* tp_richcompare */
@@ -9518,7 +9518,7 @@ static PyTypeObject hdmat2x2Type = {
 };
 static PyTypeObject hdmat2x2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat2x2Iter",             /* tp_name */
+	"dmat2x2Iter",             /* tp_name */
 	sizeof(matIter<2, 2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<2, 2, double>, /* tp_dealloc */
@@ -9537,7 +9537,7 @@ static PyTypeObject hdmat2x2IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat2x2 iterator",           /* tp_doc */
+	"dmat2x2 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -9558,7 +9558,7 @@ static PyTypeObject hdmat2x2IterType = {
 };
 
 static PyMethodDef hdmat2x3_methods[] = {
-	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x3"},
+	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::dmat2x3"},
 	{ NULL }
 };
 static PyBufferProcs hdmat2x3BufferMethods = {
@@ -9620,7 +9620,7 @@ static PyNumberMethods hdmat2x3NumMethods = {
 };
 static PyTypeObject hdmat2x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x3",             /* tp_name */
+	"glm::dmat2x3",             /* tp_name */
 	sizeof(mat<2, 3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -9640,7 +9640,7 @@ static PyTypeObject hdmat2x3Type = {
 	&hdmat2x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat2x3( <mat2x3 compatible type(s)> )\n2 columns of 3 components matrix of double numbers.",           /* tp_doc */
+	"dmat2x3( <dmat2x3 compatible type(s)> )\n2 columns of 3 components matrix of double numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<2, 3, double>,                         /* tp_richcompare */
@@ -9661,7 +9661,7 @@ static PyTypeObject hdmat2x3Type = {
 };
 static PyTypeObject hdmat2x3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat2x3Iter",             /* tp_name */
+	"dmat2x3Iter",             /* tp_name */
 	sizeof(matIter<2, 3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<2, 3, double>, /* tp_dealloc */
@@ -9680,7 +9680,7 @@ static PyTypeObject hdmat2x3IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat2x3 iterator",           /* tp_doc */
+	"dmat2x3 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -9701,7 +9701,7 @@ static PyTypeObject hdmat2x3IterType = {
 };
 
 static PyMethodDef hdmat2x4_methods[] = {
-	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x4"},
+	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::dmat2x4"},
 	{ NULL }
 };
 static PyBufferProcs hdmat2x4BufferMethods = {
@@ -9763,7 +9763,7 @@ static PyNumberMethods hdmat2x4NumMethods = {
 };
 static PyTypeObject hdmat2x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x4",             /* tp_name */
+	"glm::dmat2x4",             /* tp_name */
 	sizeof(mat<2, 4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -9783,7 +9783,7 @@ static PyTypeObject hdmat2x4Type = {
 	&hdmat2x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat2x4( <mat2x4 compatible type(s)> )\n2 columns of 4 components matrix of double numbers.",           /* tp_doc */
+	"dmat2x4( <dmat2x4 compatible type(s)> )\n2 columns of 4 components matrix of double numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<2, 4, double>,                         /* tp_richcompare */
@@ -9804,7 +9804,7 @@ static PyTypeObject hdmat2x4Type = {
 };
 static PyTypeObject hdmat2x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat2x4Iter",             /* tp_name */
+	"dmat2x4Iter",             /* tp_name */
 	sizeof(matIter<2, 4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<2, 4, double>, /* tp_dealloc */
@@ -9823,7 +9823,7 @@ static PyTypeObject hdmat2x4IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat2x4 iterator",           /* tp_doc */
+	"dmat2x4 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -9844,7 +9844,7 @@ static PyTypeObject hdmat2x4IterType = {
 };
 
 static PyMethodDef hdmat3x2_methods[] = {
-	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x2"},
+	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::dmat3x2"},
 	{ NULL }
 };
 static PyBufferProcs hdmat3x2BufferMethods = {
@@ -9906,7 +9906,7 @@ static PyNumberMethods hdmat3x2NumMethods = {
 };
 static PyTypeObject hdmat3x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x2",             /* tp_name */
+	"glm::dmat3x2",             /* tp_name */
 	sizeof(mat<3, 2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -9926,7 +9926,7 @@ static PyTypeObject hdmat3x2Type = {
 	&hdmat3x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat3x2( <mat3x2 compatible type(s)> )\n3 columns of 2 components matrix of double numbers.",           /* tp_doc */
+	"dmat3x2( <dmat3x2 compatible type(s)> )\n3 columns of 2 components matrix of double numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<3, 2, double>,                         /* tp_richcompare */
@@ -9947,7 +9947,7 @@ static PyTypeObject hdmat3x2Type = {
 };
 static PyTypeObject hdmat3x2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat3x2Iter",             /* tp_name */
+	"dmat3x2Iter",             /* tp_name */
 	sizeof(matIter<3, 2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<3, 2, double>, /* tp_dealloc */
@@ -9966,7 +9966,7 @@ static PyTypeObject hdmat3x2IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat3x2 iterator",           /* tp_doc */
+	"dmat3x2 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -9987,7 +9987,7 @@ static PyTypeObject hdmat3x2IterType = {
 };
 
 static PyMethodDef hdmat3x3_methods[] = {
-	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x3"},
+	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::dmat3x3"},
 	{ NULL }
 };
 static PyBufferProcs hdmat3x3BufferMethods = {
@@ -10049,7 +10049,7 @@ static PyNumberMethods hdmat3x3NumMethods = {
 };
 static PyTypeObject hdmat3x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x3",             /* tp_name */
+	"glm::dmat3x3",             /* tp_name */
 	sizeof(mat<3, 3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10069,7 +10069,7 @@ static PyTypeObject hdmat3x3Type = {
 	&hdmat3x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat3x3( <mat3x3 compatible type(s)> )\n3 columns of 3 components matrix of double numbers.",           /* tp_doc */
+	"dmat3x3( <dmat3x3 compatible type(s)> )\n3 columns of 3 components matrix of double numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<3, 3, double>,                         /* tp_richcompare */
@@ -10090,7 +10090,7 @@ static PyTypeObject hdmat3x3Type = {
 };
 static PyTypeObject hdmat3x3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat3x3Iter",             /* tp_name */
+	"dmat3x3Iter",             /* tp_name */
 	sizeof(matIter<3, 3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<3, 3, double>, /* tp_dealloc */
@@ -10109,7 +10109,7 @@ static PyTypeObject hdmat3x3IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat3x3 iterator",           /* tp_doc */
+	"dmat3x3 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -10130,7 +10130,7 @@ static PyTypeObject hdmat3x3IterType = {
 };
 
 static PyMethodDef hdmat3x4_methods[] = {
-	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x4"},
+	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::dmat3x4"},
 	{ NULL }
 };
 static PyBufferProcs hdmat3x4BufferMethods = {
@@ -10192,7 +10192,7 @@ static PyNumberMethods hdmat3x4NumMethods = {
 };
 static PyTypeObject hdmat3x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x4",             /* tp_name */
+	"glm::dmat3x4",             /* tp_name */
 	sizeof(mat<3, 4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10212,7 +10212,7 @@ static PyTypeObject hdmat3x4Type = {
 	&hdmat3x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat3x4( <mat3x4 compatible type(s)> )\n3 columns of 4 components matrix of double numbers.",           /* tp_doc */
+	"dmat3x4( <dmat3x4 compatible type(s)> )\n3 columns of 4 components matrix of double numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<3, 4, double>,                         /* tp_richcompare */
@@ -10233,7 +10233,7 @@ static PyTypeObject hdmat3x4Type = {
 };
 static PyTypeObject hdmat3x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat3x4Iter",             /* tp_name */
+	"dmat3x4Iter",             /* tp_name */
 	sizeof(matIter<3, 4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<3, 4, double>, /* tp_dealloc */
@@ -10252,7 +10252,7 @@ static PyTypeObject hdmat3x4IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat3x4 iterator",           /* tp_doc */
+	"dmat3x4 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -10273,7 +10273,7 @@ static PyTypeObject hdmat3x4IterType = {
 };
 
 static PyMethodDef hdmat4x2_methods[] = {
-	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x2"},
+	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::dmat4x2"},
 	{ NULL }
 };
 static PyBufferProcs hdmat4x2BufferMethods = {
@@ -10335,7 +10335,7 @@ static PyNumberMethods hdmat4x2NumMethods = {
 };
 static PyTypeObject hdmat4x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x2",             /* tp_name */
+	"glm::dmat4x2",             /* tp_name */
 	sizeof(mat<4, 2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10355,7 +10355,7 @@ static PyTypeObject hdmat4x2Type = {
 	&hdmat4x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat4x2( <mat4x2 compatible type(s)> )\n4 columns of 2 components matrix of double numbers.",           /* tp_doc */
+	"dmat4x2( <dmat4x2 compatible type(s)> )\n4 columns of 2 components matrix of double numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<4, 2, double>,                         /* tp_richcompare */
@@ -10376,7 +10376,7 @@ static PyTypeObject hdmat4x2Type = {
 };
 static PyTypeObject hdmat4x2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat4x2Iter",             /* tp_name */
+	"dmat4x2Iter",             /* tp_name */
 	sizeof(matIter<4, 2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<4, 2, double>, /* tp_dealloc */
@@ -10395,7 +10395,7 @@ static PyTypeObject hdmat4x2IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat4x2 iterator",           /* tp_doc */
+	"dmat4x2 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -10416,7 +10416,7 @@ static PyTypeObject hdmat4x2IterType = {
 };
 
 static PyMethodDef hdmat4x3_methods[] = {
-	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x3"},
+	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::dmat4x3"},
 	{ NULL }
 };
 static PyBufferProcs hdmat4x3BufferMethods = {
@@ -10478,7 +10478,7 @@ static PyNumberMethods hdmat4x3NumMethods = {
 };
 static PyTypeObject hdmat4x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x3",             /* tp_name */
+	"glm::dmat4x3",             /* tp_name */
 	sizeof(mat<4, 3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10498,7 +10498,7 @@ static PyTypeObject hdmat4x3Type = {
 	&hdmat4x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat4x3( <mat4x3 compatible type(s)> )\n4 columns of 3 components matrix of double numbers.",           /* tp_doc */
+	"dmat4x3( <dmat4x3 compatible type(s)> )\n4 columns of 3 components matrix of double numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<4, 3, double>,                         /* tp_richcompare */
@@ -10519,7 +10519,7 @@ static PyTypeObject hdmat4x3Type = {
 };
 static PyTypeObject hdmat4x3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat4x3Iter",             /* tp_name */
+	"dmat4x3Iter",             /* tp_name */
 	sizeof(matIter<4, 3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<4, 3, double>, /* tp_dealloc */
@@ -10538,7 +10538,7 @@ static PyTypeObject hdmat4x3IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat4x3 iterator",           /* tp_doc */
+	"dmat4x3 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -10559,7 +10559,7 @@ static PyTypeObject hdmat4x3IterType = {
 };
 
 static PyMethodDef hdmat4x4_methods[] = {
-	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x4"},
+	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::dmat4x4"},
 	{ NULL }
 };
 static PyBufferProcs hdmat4x4BufferMethods = {
@@ -10621,7 +10621,7 @@ static PyNumberMethods hdmat4x4NumMethods = {
 };
 static PyTypeObject hdmat4x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x4",             /* tp_name */
+	"glm::dmat4x4",             /* tp_name */
 	sizeof(mat<4, 4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10641,7 +10641,7 @@ static PyTypeObject hdmat4x4Type = {
 	&hdmat4x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat4x4( <mat4x4 compatible type(s)> )\n4 columns of 4 components matrix of double numbers.",           /* tp_doc */
+	"dmat4x4( <dmat4x4 compatible type(s)> )\n4 columns of 4 components matrix of double numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<4, 4, double>,                         /* tp_richcompare */
@@ -10662,7 +10662,7 @@ static PyTypeObject hdmat4x4Type = {
 };
 static PyTypeObject hdmat4x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat4x4Iter",             /* tp_name */
+	"dmat4x4Iter",             /* tp_name */
 	sizeof(matIter<4, 4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<4, 4, double>, /* tp_dealloc */
@@ -10681,7 +10681,7 @@ static PyTypeObject hdmat4x4IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat4x4 iterator",           /* tp_doc */
+	"dmat4x4 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -10703,7 +10703,7 @@ static PyTypeObject hdmat4x4IterType = {
 #pragma endregion
 #pragma region i32
 static PyMethodDef himat2x2_methods[] = {
-	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x2"},
+	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::imat2x2"},
 	{ NULL }
 };
 static PyBufferProcs himat2x2BufferMethods = {
@@ -10765,7 +10765,7 @@ static PyNumberMethods himat2x2NumMethods = {
 };
 static PyTypeObject himat2x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x2",             /* tp_name */
+	"glm::imat2x2",             /* tp_name */
 	sizeof(mat<2, 2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10785,7 +10785,7 @@ static PyTypeObject himat2x2Type = {
 	&himat2x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat2x2( <mat2x2 compatible type(s)> )\n2 columns of 2 components matrix of integer numbers.",           /* tp_doc */
+	"imat2x2( <imat2x2 compatible type(s)> )\n2 columns of 2 components matrix of integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<2, 2, glm::i32>,                         /* tp_richcompare */
@@ -10806,7 +10806,7 @@ static PyTypeObject himat2x2Type = {
 };
 static PyTypeObject himat2x2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat2x2Iter",             /* tp_name */
+	"imat2x2Iter",             /* tp_name */
 	sizeof(matIter<2, 2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<2, 2, glm::i32>, /* tp_dealloc */
@@ -10825,7 +10825,7 @@ static PyTypeObject himat2x2IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat2x2 iterator",           /* tp_doc */
+	"imat2x2 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -10846,7 +10846,7 @@ static PyTypeObject himat2x2IterType = {
 };
 
 static PyMethodDef himat2x3_methods[] = {
-	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x3"},
+	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::imat2x3"},
 	{ NULL }
 };
 static PyBufferProcs himat2x3BufferMethods = {
@@ -10908,7 +10908,7 @@ static PyNumberMethods himat2x3NumMethods = {
 };
 static PyTypeObject himat2x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x3",             /* tp_name */
+	"glm::imat2x3",             /* tp_name */
 	sizeof(mat<2, 3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10928,7 +10928,7 @@ static PyTypeObject himat2x3Type = {
 	&himat2x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat2x3( <mat2x3 compatible type(s)> )\n2 columns of 3 components matrix of integer numbers.",           /* tp_doc */
+	"imat2x3( <imat2x3 compatible type(s)> )\n2 columns of 3 components matrix of integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<2, 3, glm::i32>,                         /* tp_richcompare */
@@ -10949,7 +10949,7 @@ static PyTypeObject himat2x3Type = {
 };
 static PyTypeObject himat2x3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat2x3Iter",             /* tp_name */
+	"imat2x3Iter",             /* tp_name */
 	sizeof(matIter<2, 3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<2, 3, glm::i32>, /* tp_dealloc */
@@ -10968,7 +10968,7 @@ static PyTypeObject himat2x3IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat2x3 iterator",           /* tp_doc */
+	"imat2x3 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -10989,7 +10989,7 @@ static PyTypeObject himat2x3IterType = {
 };
 
 static PyMethodDef himat2x4_methods[] = {
-	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x4"},
+	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::imat2x4"},
 	{ NULL }
 };
 static PyBufferProcs himat2x4BufferMethods = {
@@ -11051,7 +11051,7 @@ static PyNumberMethods himat2x4NumMethods = {
 };
 static PyTypeObject himat2x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x4",             /* tp_name */
+	"glm::imat2x4",             /* tp_name */
 	sizeof(mat<2, 4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11071,7 +11071,7 @@ static PyTypeObject himat2x4Type = {
 	&himat2x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat2x4( <mat2x4 compatible type(s)> )\n2 columns of 4 components matrix of integer numbers.",           /* tp_doc */
+	"imat2x4( <imat2x4 compatible type(s)> )\n2 columns of 4 components matrix of integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<2, 4, glm::i32>,                         /* tp_richcompare */
@@ -11092,7 +11092,7 @@ static PyTypeObject himat2x4Type = {
 };
 static PyTypeObject himat2x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat2x4Iter",             /* tp_name */
+	"imat2x4Iter",             /* tp_name */
 	sizeof(matIter<2, 4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<2, 4, glm::i32>, /* tp_dealloc */
@@ -11111,7 +11111,7 @@ static PyTypeObject himat2x4IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat2x4 iterator",           /* tp_doc */
+	"imat2x4 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -11132,7 +11132,7 @@ static PyTypeObject himat2x4IterType = {
 };
 
 static PyMethodDef himat3x2_methods[] = {
-	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x2"},
+	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::imat3x2"},
 	{ NULL }
 };
 static PyBufferProcs himat3x2BufferMethods = {
@@ -11194,7 +11194,7 @@ static PyNumberMethods himat3x2NumMethods = {
 };
 static PyTypeObject himat3x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x2",             /* tp_name */
+	"glm::imat3x2",             /* tp_name */
 	sizeof(mat<3, 2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11214,7 +11214,7 @@ static PyTypeObject himat3x2Type = {
 	&himat3x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat3x2( <mat3x2 compatible type(s)> )\n3 columns of 2 components matrix of integer numbers.",           /* tp_doc */
+	"imat3x2( <imat3x2 compatible type(s)> )\n3 columns of 2 components matrix of integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<3, 2, glm::i32>,                         /* tp_richcompare */
@@ -11235,7 +11235,7 @@ static PyTypeObject himat3x2Type = {
 };
 static PyTypeObject himat3x2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat3x2Iter",             /* tp_name */
+	"imat3x2Iter",             /* tp_name */
 	sizeof(matIter<3, 2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<3, 2, glm::i32>, /* tp_dealloc */
@@ -11254,7 +11254,7 @@ static PyTypeObject himat3x2IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat3x2 iterator",           /* tp_doc */
+	"imat3x2 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -11275,7 +11275,7 @@ static PyTypeObject himat3x2IterType = {
 };
 
 static PyMethodDef himat3x3_methods[] = {
-	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x3"},
+	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::imat3x3"},
 	{ NULL }
 };
 static PyBufferProcs himat3x3BufferMethods = {
@@ -11337,7 +11337,7 @@ static PyNumberMethods himat3x3NumMethods = {
 };
 static PyTypeObject himat3x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x3",             /* tp_name */
+	"glm::imat3x3",             /* tp_name */
 	sizeof(mat<3, 3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11357,7 +11357,7 @@ static PyTypeObject himat3x3Type = {
 	&himat3x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat3x3( <mat3x3 compatible type(s)> )\n3 columns of 3 components matrix of integer numbers.",           /* tp_doc */
+	"imat3x3( <imat3x3 compatible type(s)> )\n3 columns of 3 components matrix of integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<3, 3, glm::i32>,                         /* tp_richcompare */
@@ -11378,7 +11378,7 @@ static PyTypeObject himat3x3Type = {
 };
 static PyTypeObject himat3x3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat3x3Iter",             /* tp_name */
+	"imat3x3Iter",             /* tp_name */
 	sizeof(matIter<3, 3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<3, 3, glm::i32>, /* tp_dealloc */
@@ -11397,7 +11397,7 @@ static PyTypeObject himat3x3IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat3x3 iterator",           /* tp_doc */
+	"imat3x3 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -11418,7 +11418,7 @@ static PyTypeObject himat3x3IterType = {
 };
 
 static PyMethodDef himat3x4_methods[] = {
-	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x4"},
+	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::imat3x4"},
 	{ NULL }
 };
 static PyBufferProcs himat3x4BufferMethods = {
@@ -11480,7 +11480,7 @@ static PyNumberMethods himat3x4NumMethods = {
 };
 static PyTypeObject himat3x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x4",             /* tp_name */
+	"glm::imat3x4",             /* tp_name */
 	sizeof(mat<3, 4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11500,7 +11500,7 @@ static PyTypeObject himat3x4Type = {
 	&himat3x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat3x4( <mat3x4 compatible type(s)> )\n3 columns of 4 components matrix of integer numbers.",           /* tp_doc */
+	"imat3x4( <imat3x4 compatible type(s)> )\n3 columns of 4 components matrix of integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<3, 4, glm::i32>,                         /* tp_richcompare */
@@ -11521,7 +11521,7 @@ static PyTypeObject himat3x4Type = {
 };
 static PyTypeObject himat3x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat3x4Iter",             /* tp_name */
+	"imat3x4Iter",             /* tp_name */
 	sizeof(matIter<3, 4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<3, 4, glm::i32>, /* tp_dealloc */
@@ -11540,7 +11540,7 @@ static PyTypeObject himat3x4IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat3x4 iterator",           /* tp_doc */
+	"imat3x4 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -11561,7 +11561,7 @@ static PyTypeObject himat3x4IterType = {
 };
 
 static PyMethodDef himat4x2_methods[] = {
-	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x2"},
+	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::imat4x2"},
 	{ NULL }
 };
 static PyBufferProcs himat4x2BufferMethods = {
@@ -11623,7 +11623,7 @@ static PyNumberMethods himat4x2NumMethods = {
 };
 static PyTypeObject himat4x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x2",             /* tp_name */
+	"glm::imat4x2",             /* tp_name */
 	sizeof(mat<4, 2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11643,7 +11643,7 @@ static PyTypeObject himat4x2Type = {
 	&himat4x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat4x2( <mat4x2 compatible type(s)> )\n4 columns of 2 components matrix of integer numbers.",           /* tp_doc */
+	"imat4x2( <imat4x2 compatible type(s)> )\n4 columns of 2 components matrix of integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<4, 2, glm::i32>,                         /* tp_richcompare */
@@ -11664,7 +11664,7 @@ static PyTypeObject himat4x2Type = {
 };
 static PyTypeObject himat4x2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat4x2Iter",             /* tp_name */
+	"imat4x2Iter",             /* tp_name */
 	sizeof(matIter<4, 2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<4, 2, glm::i32>, /* tp_dealloc */
@@ -11683,7 +11683,7 @@ static PyTypeObject himat4x2IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat4x2 iterator",           /* tp_doc */
+	"imat4x2 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -11704,7 +11704,7 @@ static PyTypeObject himat4x2IterType = {
 };
 
 static PyMethodDef himat4x3_methods[] = {
-	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x3"},
+	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::imat4x3"},
 	{ NULL }
 };
 static PyBufferProcs himat4x3BufferMethods = {
@@ -11766,7 +11766,7 @@ static PyNumberMethods himat4x3NumMethods = {
 };
 static PyTypeObject himat4x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x3",             /* tp_name */
+	"glm::imat4x3",             /* tp_name */
 	sizeof(mat<4, 3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11786,7 +11786,7 @@ static PyTypeObject himat4x3Type = {
 	&himat4x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat4x3( <mat4x3 compatible type(s)> )\n4 columns of 3 components matrix of integer numbers.",           /* tp_doc */
+	"imat4x3( <imat4x3 compatible type(s)> )\n4 columns of 3 components matrix of integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<4, 3, glm::i32>,                         /* tp_richcompare */
@@ -11807,7 +11807,7 @@ static PyTypeObject himat4x3Type = {
 };
 static PyTypeObject himat4x3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat4x3Iter",             /* tp_name */
+	"imat4x3Iter",             /* tp_name */
 	sizeof(matIter<4, 3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<4, 3, glm::i32>, /* tp_dealloc */
@@ -11826,7 +11826,7 @@ static PyTypeObject himat4x3IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat4x3 iterator",           /* tp_doc */
+	"imat4x3 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -11847,7 +11847,7 @@ static PyTypeObject himat4x3IterType = {
 };
 
 static PyMethodDef himat4x4_methods[] = {
-	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x4"},
+	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::imat4x4"},
 	{ NULL }
 };
 static PyBufferProcs himat4x4BufferMethods = {
@@ -11909,7 +11909,7 @@ static PyNumberMethods himat4x4NumMethods = {
 };
 static PyTypeObject himat4x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x4",             /* tp_name */
+	"glm::imat4x4",             /* tp_name */
 	sizeof(mat<4, 4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11929,7 +11929,7 @@ static PyTypeObject himat4x4Type = {
 	&himat4x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat4x4( <mat4x4 compatible type(s)> )\n4 columns of 4 components matrix of integer numbers.",           /* tp_doc */
+	"imat4x4( <imat4x4 compatible type(s)> )\n4 columns of 4 components matrix of integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<4, 4, glm::i32>,                         /* tp_richcompare */
@@ -11950,7 +11950,7 @@ static PyTypeObject himat4x4Type = {
 };
 static PyTypeObject himat4x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat4x4Iter",             /* tp_name */
+	"imat4x4Iter",             /* tp_name */
 	sizeof(matIter<4, 4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<4, 4, glm::i32>, /* tp_dealloc */
@@ -11969,7 +11969,7 @@ static PyTypeObject himat4x4IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat4x4 iterator",           /* tp_doc */
+	"imat4x4 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -11991,7 +11991,7 @@ static PyTypeObject himat4x4IterType = {
 #pragma endregion
 #pragma region u32
 static PyMethodDef humat2x2_methods[] = {
-	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x2"},
+	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::umat2x2"},
 	{ NULL }
 };
 static PyBufferProcs humat2x2BufferMethods = {
@@ -12053,7 +12053,7 @@ static PyNumberMethods humat2x2NumMethods = {
 };
 static PyTypeObject humat2x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x2",             /* tp_name */
+	"glm::umat2x2",             /* tp_name */
 	sizeof(mat<2, 2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12073,7 +12073,7 @@ static PyTypeObject humat2x2Type = {
 	&humat2x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat2x2( <mat2x2 compatible type(s)> )\n2 columns of 2 components matrix of unsigned integer numbers.",           /* tp_doc */
+	"umat2x2( <umat2x2 compatible type(s)> )\n2 columns of 2 components matrix of unsigned integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<2, 2, glm::u32>,                         /* tp_richcompare */
@@ -12094,7 +12094,7 @@ static PyTypeObject humat2x2Type = {
 };
 static PyTypeObject humat2x2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat2x2Iter",             /* tp_name */
+	"umat2x2Iter",             /* tp_name */
 	sizeof(matIter<2, 2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<2, 2, glm::u32>, /* tp_dealloc */
@@ -12113,7 +12113,7 @@ static PyTypeObject humat2x2IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat2x2 iterator",           /* tp_doc */
+	"umat2x2 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -12134,7 +12134,7 @@ static PyTypeObject humat2x2IterType = {
 };
 
 static PyMethodDef humat2x3_methods[] = {
-	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x3"},
+	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::umat2x3"},
 	{ NULL }
 };
 static PyBufferProcs humat2x3BufferMethods = {
@@ -12196,7 +12196,7 @@ static PyNumberMethods humat2x3NumMethods = {
 };
 static PyTypeObject humat2x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x3",             /* tp_name */
+	"glm::umat2x3",             /* tp_name */
 	sizeof(mat<2, 3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12216,7 +12216,7 @@ static PyTypeObject humat2x3Type = {
 	&humat2x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat2x3( <mat2x3 compatible type(s)> )\n2 columns of 3 components matrix of unsigned integer numbers.",           /* tp_doc */
+	"umat2x3( <umat2x3 compatible type(s)> )\n2 columns of 3 components matrix of unsigned integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<2, 3, glm::u32>,                         /* tp_richcompare */
@@ -12237,7 +12237,7 @@ static PyTypeObject humat2x3Type = {
 };
 static PyTypeObject humat2x3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat2x3Iter",             /* tp_name */
+	"umat2x3Iter",             /* tp_name */
 	sizeof(matIter<2, 3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<2, 3, glm::u32>, /* tp_dealloc */
@@ -12256,7 +12256,7 @@ static PyTypeObject humat2x3IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat2x3 iterator",           /* tp_doc */
+	"umat2x3 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -12277,7 +12277,7 @@ static PyTypeObject humat2x3IterType = {
 };
 
 static PyMethodDef humat2x4_methods[] = {
-	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x4"},
+	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::umat2x4"},
 	{ NULL }
 };
 static PyBufferProcs humat2x4BufferMethods = {
@@ -12339,7 +12339,7 @@ static PyNumberMethods humat2x4NumMethods = {
 };
 static PyTypeObject humat2x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x4",             /* tp_name */
+	"glm::umat2x4",             /* tp_name */
 	sizeof(mat<2, 4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12359,7 +12359,7 @@ static PyTypeObject humat2x4Type = {
 	&humat2x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat2x4( <mat2x4 compatible type(s)> )\n2 columns of 4 components matrix of unsigned integer numbers.",           /* tp_doc */
+	"umat2x4( <umat2x4 compatible type(s)> )\n2 columns of 4 components matrix of unsigned integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<2, 4, glm::u32>,                         /* tp_richcompare */
@@ -12380,7 +12380,7 @@ static PyTypeObject humat2x4Type = {
 };
 static PyTypeObject humat2x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat2x4Iter",             /* tp_name */
+	"umat2x4Iter",             /* tp_name */
 	sizeof(matIter<2, 4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<2, 4, glm::u32>, /* tp_dealloc */
@@ -12399,7 +12399,7 @@ static PyTypeObject humat2x4IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat2x4 iterator",           /* tp_doc */
+	"umat2x4 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -12420,7 +12420,7 @@ static PyTypeObject humat2x4IterType = {
 };
 
 static PyMethodDef humat3x2_methods[] = {
-	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x2"},
+	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::umat3x2"},
 	{ NULL }
 };
 static PyBufferProcs humat3x2BufferMethods = {
@@ -12482,7 +12482,7 @@ static PyNumberMethods humat3x2NumMethods = {
 };
 static PyTypeObject humat3x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x2",             /* tp_name */
+	"glm::umat3x2",             /* tp_name */
 	sizeof(mat<3, 2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12502,7 +12502,7 @@ static PyTypeObject humat3x2Type = {
 	&humat3x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat3x2( <mat3x2 compatible type(s)> )\n3 columns of 2 components matrix of unsigned integer numbers.",           /* tp_doc */
+	"umat3x2( <umat3x2 compatible type(s)> )\n3 columns of 2 components matrix of unsigned integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<3, 2, glm::u32>,                         /* tp_richcompare */
@@ -12523,7 +12523,7 @@ static PyTypeObject humat3x2Type = {
 };
 static PyTypeObject humat3x2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat3x2Iter",             /* tp_name */
+	"umat3x2Iter",             /* tp_name */
 	sizeof(matIter<3, 2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<3, 2, glm::u32>, /* tp_dealloc */
@@ -12542,7 +12542,7 @@ static PyTypeObject humat3x2IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat3x2 iterator",           /* tp_doc */
+	"umat3x2 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -12563,7 +12563,7 @@ static PyTypeObject humat3x2IterType = {
 };
 
 static PyMethodDef humat3x3_methods[] = {
-	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x3"},
+	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::umat3x3"},
 	{ NULL }
 };
 static PyBufferProcs humat3x3BufferMethods = {
@@ -12625,7 +12625,7 @@ static PyNumberMethods humat3x3NumMethods = {
 };
 static PyTypeObject humat3x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x3",             /* tp_name */
+	"glm::umat3x3",             /* tp_name */
 	sizeof(mat<3, 3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12645,7 +12645,7 @@ static PyTypeObject humat3x3Type = {
 	&humat3x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat3x3( <mat3x3 compatible type(s)> )\n3 columns of 3 components matrix of unsigned integer numbers.",           /* tp_doc */
+	"umat3x3( <umat3x3 compatible type(s)> )\n3 columns of 3 components matrix of unsigned integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<3, 3, glm::u32>,                         /* tp_richcompare */
@@ -12666,7 +12666,7 @@ static PyTypeObject humat3x3Type = {
 };
 static PyTypeObject humat3x3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat3x3Iter",             /* tp_name */
+	"umat3x3Iter",             /* tp_name */
 	sizeof(matIter<3, 3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<3, 3, glm::u32>, /* tp_dealloc */
@@ -12685,7 +12685,7 @@ static PyTypeObject humat3x3IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat3x3 iterator",           /* tp_doc */
+	"umat3x3 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -12706,7 +12706,7 @@ static PyTypeObject humat3x3IterType = {
 };
 
 static PyMethodDef humat3x4_methods[] = {
-	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x4"},
+	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::umat3x4"},
 	{ NULL }
 };
 static PyBufferProcs humat3x4BufferMethods = {
@@ -12768,7 +12768,7 @@ static PyNumberMethods humat3x4NumMethods = {
 };
 static PyTypeObject humat3x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x4",             /* tp_name */
+	"glm::umat3x4",             /* tp_name */
 	sizeof(mat<3, 4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12788,7 +12788,7 @@ static PyTypeObject humat3x4Type = {
 	&humat3x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat3x4( <mat3x4 compatible type(s)> )\n3 columns of 4 components matrix of unsigned integer numbers.",           /* tp_doc */
+	"umat3x4( <umat3x4 compatible type(s)> )\n3 columns of 4 components matrix of unsigned integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<3, 4, glm::u32>,                         /* tp_richcompare */
@@ -12809,7 +12809,7 @@ static PyTypeObject humat3x4Type = {
 };
 static PyTypeObject humat3x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat3x4Iter",             /* tp_name */
+	"umat3x4Iter",             /* tp_name */
 	sizeof(matIter<3, 4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<3, 4, glm::u32>, /* tp_dealloc */
@@ -12828,7 +12828,7 @@ static PyTypeObject humat3x4IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat3x4 iterator",           /* tp_doc */
+	"umat3x4 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -12849,7 +12849,7 @@ static PyTypeObject humat3x4IterType = {
 };
 
 static PyMethodDef humat4x2_methods[] = {
-	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x2"},
+	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::umat4x2"},
 	{ NULL }
 };
 static PyBufferProcs humat4x2BufferMethods = {
@@ -12911,7 +12911,7 @@ static PyNumberMethods humat4x2NumMethods = {
 };
 static PyTypeObject humat4x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x2",             /* tp_name */
+	"glm::umat4x2",             /* tp_name */
 	sizeof(mat<4, 2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12931,7 +12931,7 @@ static PyTypeObject humat4x2Type = {
 	&humat4x2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat4x2( <mat4x2 compatible type(s)> )\n4 columns of 2 components matrix of unsigned integer numbers.",           /* tp_doc */
+	"umat4x2( <umat4x2 compatible type(s)> )\n4 columns of 2 components matrix of unsigned integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<4, 2, glm::u32>,                         /* tp_richcompare */
@@ -12952,7 +12952,7 @@ static PyTypeObject humat4x2Type = {
 };
 static PyTypeObject humat4x2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat4x2Iter",             /* tp_name */
+	"umat4x2Iter",             /* tp_name */
 	sizeof(matIter<4, 2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<4, 2, glm::u32>, /* tp_dealloc */
@@ -12971,7 +12971,7 @@ static PyTypeObject humat4x2IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat4x2 iterator",           /* tp_doc */
+	"umat4x2 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -12992,7 +12992,7 @@ static PyTypeObject humat4x2IterType = {
 };
 
 static PyMethodDef humat4x3_methods[] = {
-	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x3"},
+	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::umat4x3"},
 	{ NULL }
 };
 static PyBufferProcs humat4x3BufferMethods = {
@@ -13054,7 +13054,7 @@ static PyNumberMethods humat4x3NumMethods = {
 };
 static PyTypeObject humat4x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x3",             /* tp_name */
+	"glm::umat4x3",             /* tp_name */
 	sizeof(mat<4, 3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -13074,7 +13074,7 @@ static PyTypeObject humat4x3Type = {
 	&humat4x3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat4x3( <mat4x3 compatible type(s)> )\n4 columns of 3 components matrix of unsigned integer numbers.",           /* tp_doc */
+	"umat4x3( <umat4x3 compatible type(s)> )\n4 columns of 3 components matrix of unsigned integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<4, 3, glm::u32>,                         /* tp_richcompare */
@@ -13095,7 +13095,7 @@ static PyTypeObject humat4x3Type = {
 };
 static PyTypeObject humat4x3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat4x3Iter",             /* tp_name */
+	"umat4x3Iter",             /* tp_name */
 	sizeof(matIter<4, 3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<4, 3, glm::u32>, /* tp_dealloc */
@@ -13114,7 +13114,7 @@ static PyTypeObject humat4x3IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat4x3 iterator",           /* tp_doc */
+	"umat4x3 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -13135,7 +13135,7 @@ static PyTypeObject humat4x3IterType = {
 };
 
 static PyMethodDef humat4x4_methods[] = {
-	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x4"},
+	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::umat4x4"},
 	{ NULL }
 };
 static PyBufferProcs humat4x4BufferMethods = {
@@ -13197,7 +13197,7 @@ static PyNumberMethods humat4x4NumMethods = {
 };
 static PyTypeObject humat4x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x4",             /* tp_name */
+	"glm::umat4x4",             /* tp_name */
 	sizeof(mat<4, 4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -13217,7 +13217,7 @@ static PyTypeObject humat4x4Type = {
 	&humat4x4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat4x4( <mat4x4 compatible type(s)> )\n4 columns of 4 components matrix of unsigned integer numbers.",           /* tp_doc */
+	"umat4x4( <umat4x4 compatible type(s)> )\n4 columns of 4 components matrix of unsigned integer numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)mat_richcompare<4, 4, glm::u32>,                         /* tp_richcompare */
@@ -13238,7 +13238,7 @@ static PyTypeObject humat4x4Type = {
 };
 static PyTypeObject humat4x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"mat4x4Iter",             /* tp_name */
+	"umat4x4Iter",             /* tp_name */
 	sizeof(matIter<4, 4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)matIter_dealloc<4, 4, glm::u32>, /* tp_dealloc */
@@ -13257,7 +13257,7 @@ static PyTypeObject humat4x4IterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"mat4x4 iterator",           /* tp_doc */
+	"umat4x4 iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -13420,7 +13420,7 @@ static PyNumberMethods hfquaNumMethods = {
 };
 static PyTypeObject hfquaType = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::qua",             /* tp_name */
+	"glm::quat",             /* tp_name */
 	sizeof(qua<float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)qua_dealloc, /* tp_dealloc */
@@ -13440,7 +13440,7 @@ static PyTypeObject hfquaType = {
 	&hfquaBufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"qua( <qua compatible type(s)> )\n4 components quaternion of floating-point numbers.",           /* tp_doc */
+	"quat( <quat compatible type(s)> )\n4 components quaternion of floating-point numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)qua_richcompare<float>,                         /* tp_richcompare */
@@ -13480,7 +13480,7 @@ static PyTypeObject hfquaIterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"qua iterator",           /* tp_doc */
+	"quat iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -13502,15 +13502,15 @@ static PyTypeObject hfquaIterType = {
 #pragma endregion
 #pragma region double
 static PyMethodDef hdqua_methods[] = {
-	{"length", (PyCFunction)qua_length, METH_NOARGS, "returns the length of glm::quat"},
+	{"length", (PyCFunction)qua_length, METH_NOARGS, "returns the length of glm::dquat"},
 	{ NULL }
 };
 
 static PyMemberDef hdqua_members[] = {
-	{ (char*)"x", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.x), 0, (char*)"quat.x" },
-	{ (char*)"y", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.y), 0, (char*)"quat.y" },
-	{ (char*)"z", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.z), 0, (char*)"quat.z" },
-	{ (char*)"w", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.w), 0, (char*)"quat.w" },
+	{ (char*)"x", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.x), 0, (char*)"dquat.x" },
+	{ (char*)"y", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.y), 0, (char*)"dquat.y" },
+	{ (char*)"z", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.z), 0, (char*)"dquat.z" },
+	{ (char*)"w", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.w), 0, (char*)"dquat.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdquaBufferMethods = {
@@ -13567,7 +13567,7 @@ static PyNumberMethods hdquaNumMethods = {
 };
 static PyTypeObject hdquaType = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::qua",             /* tp_name */
+	"glm::dquat",             /* tp_name */
 	sizeof(qua<double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)qua_dealloc, /* tp_dealloc */
@@ -13587,7 +13587,7 @@ static PyTypeObject hdquaType = {
 	&hdquaBufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"qua( <qua compatible type(s)> )\n4 components quaternion of double numbers.",           /* tp_doc */
+	"dquat( <dquat compatible type(s)> )\n4 components quaternion of double numbers.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)qua_richcompare<double>,                         /* tp_richcompare */
@@ -13608,7 +13608,7 @@ static PyTypeObject hdquaType = {
 };
 static PyTypeObject hdquaIterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"quaIter",             /* tp_name */
+	"dquatIter",             /* tp_name */
 	sizeof(quaIter<double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)quaIter_dealloc<double>, /* tp_dealloc */
@@ -13627,7 +13627,7 @@ static PyTypeObject hdquaIterType = {
 	0,                         /* tp_setattro */
 	0,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT,   /* tp_flags */
-	"qua iterator",           /* tp_doc */
+	"dquat iterator",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
@@ -19475,6 +19475,22 @@ static int mat_contains(mat<C, R, T> * self, PyObject * value) {
 			}
 		}
 		return (int)contains;
+	}
+	if (PyGLM_Vec_Check(R, T, value)) {
+		glm::vec<R, T> o;
+		unpack_vec(value, o);
+		for (int n = 0; n < C; n++) {
+			bool contains = true;
+			for (int m = 0; m < R; m++) {
+				if (o[m] != self->super_type[n][m]) {
+					contains = false;
+					break;
+				}
+			}
+			if (contains) {
+				return 1;
+			}
+		}
 	}
 	return 0;
 
