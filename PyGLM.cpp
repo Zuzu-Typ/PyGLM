@@ -226,7 +226,7 @@ static PyObject* vecIter_new(PyTypeObject *type, PyObject *args, PyObject *kwarg
 
 #pragma region float
 static PyMemberDef hfvec1_members[] = {
-	{ "x", T_FLOAT, offsetof(UNBRACKET(vec<1, float>), super_type.x), 0, "vec1.x" },
+	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(vec<1, float>), super_type.x), 0, (char*)"vec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec1BufferMethods = {
@@ -364,8 +364,8 @@ static PyTypeObject hfvec1IterType = {
 };
 
 static PyMemberDef hfvec2_members[] = {
-	{ "x", T_FLOAT, offsetof(UNBRACKET(vec<2, float>), super_type.x), 0, "vec2.x" },
-	{ "y", T_FLOAT, offsetof(UNBRACKET(vec<2, float>), super_type.y), 0, "vec2.y" },
+	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(vec<2, float>), super_type.x), 0, (char*)"vec2.x" },
+	{ (char*)"y", T_FLOAT, offsetof(UNBRACKET(vec<2, float>), super_type.y), 0, (char*)"vec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec2BufferMethods = {
@@ -503,9 +503,9 @@ static PyTypeObject hfvec2IterType = {
 };
 
 static PyMemberDef hfvec3_members[] = {
-	{ "x", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.x), 0, "vec3.x" },
-	{ "y", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.y), 0, "vec3.y" },
-	{ "z", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.z), 0, "vec3.z" },
+	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.x), 0, (char*)"vec3.x" },
+	{ (char*)"y", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.y), 0, (char*)"vec3.y" },
+	{ (char*)"z", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.z), 0, (char*)"vec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec3BufferMethods = {
@@ -643,10 +643,10 @@ static PyTypeObject hfvec3IterType = {
 };
 
 static PyMemberDef hfvec4_members[] = {
-	{ "x", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.x), 0, "vec4.x" },
-	{ "y", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.y), 0, "vec4.y" },
-	{ "z", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.z), 0, "vec4.z" },
-	{ "w", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.w), 0, "vec4.w" },
+	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.x), 0, (char*)"vec4.x" },
+	{ (char*)"y", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.y), 0, (char*)"vec4.y" },
+	{ (char*)"z", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.z), 0, (char*)"vec4.z" },
+	{ (char*)"w", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.w), 0, (char*)"vec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec4BufferMethods = {
@@ -785,7 +785,7 @@ static PyTypeObject hfvec4IterType = {
 #pragma endregion
 #pragma region double
 static PyMemberDef hdvec1_members[] = {
-	{ "x", T_DOUBLE, offsetof(UNBRACKET(vec<1, double>), super_type.x), 0, "dvec1.x" },
+	{ (char*)"x", T_DOUBLE, offsetof(UNBRACKET(vec<1, double>), super_type.x), 0, (char*)"dvec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec1BufferMethods = {
@@ -923,8 +923,8 @@ static PyTypeObject hdvec1IterType = {
 };
 
 static PyMemberDef hdvec2_members[] = {
-	{ "x", T_DOUBLE, offsetof(UNBRACKET(vec<2, double>), super_type.x), 0, "dvec2.x" },
-	{ "y", T_DOUBLE, offsetof(UNBRACKET(vec<2, double>), super_type.y), 0, "dvec2.y" },
+	{ (char*)"x", T_DOUBLE, offsetof(UNBRACKET(vec<2, double>), super_type.x), 0, (char*)"dvec2.x" },
+	{ (char*)"y", T_DOUBLE, offsetof(UNBRACKET(vec<2, double>), super_type.y), 0, (char*)"dvec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec2BufferMethods = {
@@ -1062,9 +1062,9 @@ static PyTypeObject hdvec2IterType = {
 };
 
 static PyMemberDef hdvec3_members[] = {
-	{ "x", T_DOUBLE, offsetof(UNBRACKET(vec<3, double>), super_type.x), 0, "dvec3.x" },
-	{ "y", T_DOUBLE, offsetof(UNBRACKET(vec<3, double>), super_type.y), 0, "dvec3.y" },
-	{ "z", T_DOUBLE, offsetof(UNBRACKET(vec<3, double>), super_type.z), 0, "dvec3.z" },
+	{ (char*)"x", T_DOUBLE, offsetof(UNBRACKET(vec<3, double>), super_type.x), 0, (char*)"dvec3.x" },
+	{ (char*)"y", T_DOUBLE, offsetof(UNBRACKET(vec<3, double>), super_type.y), 0, (char*)"dvec3.y" },
+	{ (char*)"z", T_DOUBLE, offsetof(UNBRACKET(vec<3, double>), super_type.z), 0, (char*)"dvec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec3BufferMethods = {
@@ -1202,10 +1202,10 @@ static PyTypeObject hdvec3IterType = {
 };
 
 static PyMemberDef hdvec4_members[] = {
-	{ "x", T_DOUBLE, offsetof(UNBRACKET(vec<4, double>), super_type.x), 0, "dvec4.x" },
-	{ "y", T_DOUBLE, offsetof(UNBRACKET(vec<4, double>), super_type.y), 0, "dvec4.y" },
-	{ "z", T_DOUBLE, offsetof(UNBRACKET(vec<4, double>), super_type.z), 0, "dvec4.z" },
-	{ "w", T_DOUBLE, offsetof(UNBRACKET(vec<4, double>), super_type.w), 0, "dvec4.w" },
+	{ (char*)"x", T_DOUBLE, offsetof(UNBRACKET(vec<4, double>), super_type.x), 0, (char*)"dvec4.x" },
+	{ (char*)"y", T_DOUBLE, offsetof(UNBRACKET(vec<4, double>), super_type.y), 0, (char*)"dvec4.y" },
+	{ (char*)"z", T_DOUBLE, offsetof(UNBRACKET(vec<4, double>), super_type.z), 0, (char*)"dvec4.z" },
+	{ (char*)"w", T_DOUBLE, offsetof(UNBRACKET(vec<4, double>), super_type.w), 0, (char*)"dvec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec4BufferMethods = {
@@ -1344,7 +1344,7 @@ static PyTypeObject hdvec4IterType = {
 #pragma endregion
 #pragma region int8
 static PyMemberDef hi8vec1_members[] = {
-	{ "x", T_BYTE, offsetof(UNBRACKET(vec<1, glm::i8>), super_type.x), 0, "i8vec1.x" },
+	{ (char*)"x", T_BYTE, offsetof(UNBRACKET(vec<1, glm::i8>), super_type.x), 0, (char*)"i8vec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec1BufferMethods = {
@@ -1482,8 +1482,8 @@ static PyTypeObject hi8vec1IterType = {
 };
 
 static PyMemberDef hi8vec2_members[] = {
-	{ "x", T_BYTE, offsetof(UNBRACKET(vec<2, glm::i8>), super_type.x), 0, "i8vec2.x" },
-	{ "y", T_BYTE, offsetof(UNBRACKET(vec<2, glm::i8>), super_type.y), 0, "i8vec2.y" },
+	{ (char*)"x", T_BYTE, offsetof(UNBRACKET(vec<2, glm::i8>), super_type.x), 0, (char*)"i8vec2.x" },
+	{ (char*)"y", T_BYTE, offsetof(UNBRACKET(vec<2, glm::i8>), super_type.y), 0, (char*)"i8vec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec2BufferMethods = {
@@ -1621,9 +1621,9 @@ static PyTypeObject hi8vec2IterType = {
 };
 
 static PyMemberDef hi8vec3_members[] = {
-	{ "x", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.x), 0, "i8vec3.x" },
-	{ "y", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.y), 0, "i8vec3.y" },
-	{ "z", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.z), 0, "i8vec3.z" },
+	{ (char*)"x", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.x), 0, (char*)"i8vec3.x" },
+	{ (char*)"y", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.y), 0, (char*)"i8vec3.y" },
+	{ (char*)"z", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.z), 0, (char*)"i8vec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec3BufferMethods = {
@@ -1761,10 +1761,10 @@ static PyTypeObject hi8vec3IterType = {
 };
 
 static PyMemberDef hi8vec4_members[] = {
-	{ "x", T_BYTE, offsetof(UNBRACKET(vec<4, glm::i8>), super_type.x), 0, "i8vec4.x" },
-	{ "y", T_BYTE, offsetof(UNBRACKET(vec<4, glm::i8>), super_type.y), 0, "i8vec4.y" },
-	{ "z", T_BYTE, offsetof(UNBRACKET(vec<4, glm::i8>), super_type.z), 0, "i8vec4.z" },
-	{ "w", T_BYTE, offsetof(UNBRACKET(vec<4, glm::i8>), super_type.w), 0, "i8vec4.w" },
+	{ (char*)"x", T_BYTE, offsetof(UNBRACKET(vec<4, glm::i8>), super_type.x), 0, (char*)"i8vec4.x" },
+	{ (char*)"y", T_BYTE, offsetof(UNBRACKET(vec<4, glm::i8>), super_type.y), 0, (char*)"i8vec4.y" },
+	{ (char*)"z", T_BYTE, offsetof(UNBRACKET(vec<4, glm::i8>), super_type.z), 0, (char*)"i8vec4.z" },
+	{ (char*)"w", T_BYTE, offsetof(UNBRACKET(vec<4, glm::i8>), super_type.w), 0, (char*)"i8vec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec4BufferMethods = {
@@ -1903,7 +1903,7 @@ static PyTypeObject hi8vec4IterType = {
 #pragma endregion
 #pragma region int16
 static PyMemberDef hi16vec1_members[] = {
-	{ "x", T_SHORT, offsetof(UNBRACKET(vec<1, glm::i16>), super_type.x), 0, "i16vec1.x" },
+	{ (char*)"x", T_SHORT, offsetof(UNBRACKET(vec<1, glm::i16>), super_type.x), 0, (char*)"i16vec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec1BufferMethods = {
@@ -2041,8 +2041,8 @@ static PyTypeObject hi16vec1IterType = {
 };
 
 static PyMemberDef hi16vec2_members[] = {
-	{ "x", T_SHORT, offsetof(UNBRACKET(vec<2, glm::i16>), super_type.x), 0, "i16vec2.x" },
-	{ "y", T_SHORT, offsetof(UNBRACKET(vec<2, glm::i16>), super_type.y), 0, "i16vec2.y" },
+	{ (char*)"x", T_SHORT, offsetof(UNBRACKET(vec<2, glm::i16>), super_type.x), 0, (char*)"i16vec2.x" },
+	{ (char*)"y", T_SHORT, offsetof(UNBRACKET(vec<2, glm::i16>), super_type.y), 0, (char*)"i16vec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec2BufferMethods = {
@@ -2180,9 +2180,9 @@ static PyTypeObject hi16vec2IterType = {
 };
 
 static PyMemberDef hi16vec3_members[] = {
-	{ "x", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.x), 0, "i16vec3.x" },
-	{ "y", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.y), 0, "i16vec3.y" },
-	{ "z", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.z), 0, "i16vec3.z" },
+	{ (char*)"x", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.x), 0, (char*)"i16vec3.x" },
+	{ (char*)"y", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.y), 0, (char*)"i16vec3.y" },
+	{ (char*)"z", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.z), 0, (char*)"i16vec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec3BufferMethods = {
@@ -2320,10 +2320,10 @@ static PyTypeObject hi16vec3IterType = {
 };
 
 static PyMemberDef hi16vec4_members[] = {
-	{ "x", T_SHORT, offsetof(UNBRACKET(vec<4, glm::i16>), super_type.x), 0, "i16vec4.x" },
-	{ "y", T_SHORT, offsetof(UNBRACKET(vec<4, glm::i16>), super_type.y), 0, "i16vec4.y" },
-	{ "z", T_SHORT, offsetof(UNBRACKET(vec<4, glm::i16>), super_type.z), 0, "i16vec4.z" },
-	{ "w", T_SHORT, offsetof(UNBRACKET(vec<4, glm::i16>), super_type.w), 0, "i16vec4.w" },
+	{ (char*)"x", T_SHORT, offsetof(UNBRACKET(vec<4, glm::i16>), super_type.x), 0, (char*)"i16vec4.x" },
+	{ (char*)"y", T_SHORT, offsetof(UNBRACKET(vec<4, glm::i16>), super_type.y), 0, (char*)"i16vec4.y" },
+	{ (char*)"z", T_SHORT, offsetof(UNBRACKET(vec<4, glm::i16>), super_type.z), 0, (char*)"i16vec4.z" },
+	{ (char*)"w", T_SHORT, offsetof(UNBRACKET(vec<4, glm::i16>), super_type.w), 0, (char*)"i16vec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec4BufferMethods = {
@@ -2462,7 +2462,7 @@ static PyTypeObject hi16vec4IterType = {
 #pragma endregion
 #pragma region int32
 static PyMemberDef hivec1_members[] = {
-	{ "x", T_INT, offsetof(UNBRACKET(vec<1, glm::i32>), super_type.x), 0, "ivec1.x" },
+	{ (char*)"x", T_INT, offsetof(UNBRACKET(vec<1, glm::i32>), super_type.x), 0, (char*)"ivec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec1BufferMethods = {
@@ -2600,8 +2600,8 @@ static PyTypeObject hivec1IterType = {
 };
 
 static PyMemberDef hivec2_members[] = {
-	{ "x", T_INT, offsetof(UNBRACKET(vec<2, glm::i32>), super_type.x), 0, "ivec2.x" },
-	{ "y", T_INT, offsetof(UNBRACKET(vec<2, glm::i32>), super_type.y), 0, "ivec2.y" },
+	{ (char*)"x", T_INT, offsetof(UNBRACKET(vec<2, glm::i32>), super_type.x), 0, (char*)"ivec2.x" },
+	{ (char*)"y", T_INT, offsetof(UNBRACKET(vec<2, glm::i32>), super_type.y), 0, (char*)"ivec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec2BufferMethods = {
@@ -2739,9 +2739,9 @@ static PyTypeObject hivec2IterType = {
 };
 
 static PyMemberDef hivec3_members[] = {
-	{ "x", T_INT, offsetof(UNBRACKET(vec<3, glm::i32>), super_type.x), 0, "ivec3.x" },
-	{ "y", T_INT, offsetof(UNBRACKET(vec<3, glm::i32>), super_type.y), 0, "ivec3.y" },
-	{ "z", T_INT, offsetof(UNBRACKET(vec<3, glm::i32>), super_type.z), 0, "ivec3.z" },
+	{ (char*)"x", T_INT, offsetof(UNBRACKET(vec<3, glm::i32>), super_type.x), 0, (char*)"ivec3.x" },
+	{ (char*)"y", T_INT, offsetof(UNBRACKET(vec<3, glm::i32>), super_type.y), 0, (char*)"ivec3.y" },
+	{ (char*)"z", T_INT, offsetof(UNBRACKET(vec<3, glm::i32>), super_type.z), 0, (char*)"ivec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec3BufferMethods = {
@@ -2879,10 +2879,10 @@ static PyTypeObject hivec3IterType = {
 };
 
 static PyMemberDef hivec4_members[] = {
-	{ "x", T_INT, offsetof(UNBRACKET(vec<4, glm::i32>), super_type.x), 0, "ivec4.x" },
-	{ "y", T_INT, offsetof(UNBRACKET(vec<4, glm::i32>), super_type.y), 0, "ivec4.y" },
-	{ "z", T_INT, offsetof(UNBRACKET(vec<4, glm::i32>), super_type.z), 0, "ivec4.z" },
-	{ "w", T_INT, offsetof(UNBRACKET(vec<4, glm::i32>), super_type.w), 0, "ivec4.w" },
+	{ (char*)"x", T_INT, offsetof(UNBRACKET(vec<4, glm::i32>), super_type.x), 0, (char*)"ivec4.x" },
+	{ (char*)"y", T_INT, offsetof(UNBRACKET(vec<4, glm::i32>), super_type.y), 0, (char*)"ivec4.y" },
+	{ (char*)"z", T_INT, offsetof(UNBRACKET(vec<4, glm::i32>), super_type.z), 0, (char*)"ivec4.z" },
+	{ (char*)"w", T_INT, offsetof(UNBRACKET(vec<4, glm::i32>), super_type.w), 0, (char*)"ivec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec4BufferMethods = {
@@ -3021,7 +3021,7 @@ static PyTypeObject hivec4IterType = {
 #pragma endregion
 #pragma region int64
 static PyMemberDef hi64vec1_members[] = {
-	{ "x", T_LONGLONG, offsetof(UNBRACKET(vec<1, glm::i64>), super_type.x), 0, "i64vec1.x" },
+	{ (char*)"x", T_LONGLONG, offsetof(UNBRACKET(vec<1, glm::i64>), super_type.x), 0, (char*)"i64vec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec1BufferMethods = {
@@ -3159,8 +3159,8 @@ static PyTypeObject hi64vec1IterType = {
 };
 
 static PyMemberDef hi64vec2_members[] = {
-	{ "x", T_LONGLONG, offsetof(UNBRACKET(vec<2, glm::i64>), super_type.x), 0, "i64vec2.x" },
-	{ "y", T_LONGLONG, offsetof(UNBRACKET(vec<2, glm::i64>), super_type.y), 0, "i64vec2.y" },
+	{ (char*)"x", T_LONGLONG, offsetof(UNBRACKET(vec<2, glm::i64>), super_type.x), 0, (char*)"i64vec2.x" },
+	{ (char*)"y", T_LONGLONG, offsetof(UNBRACKET(vec<2, glm::i64>), super_type.y), 0, (char*)"i64vec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec2BufferMethods = {
@@ -3298,9 +3298,9 @@ static PyTypeObject hi64vec2IterType = {
 };
 
 static PyMemberDef hi64vec3_members[] = {
-	{ "x", T_LONGLONG, offsetof(UNBRACKET(vec<3, glm::i64>), super_type.x), 0, "i64vec3.x" },
-	{ "y", T_LONGLONG, offsetof(UNBRACKET(vec<3, glm::i64>), super_type.y), 0, "i64vec3.y" },
-	{ "z", T_LONGLONG, offsetof(UNBRACKET(vec<3, glm::i64>), super_type.z), 0, "i64vec3.z" },
+	{ (char*)"x", T_LONGLONG, offsetof(UNBRACKET(vec<3, glm::i64>), super_type.x), 0, (char*)"i64vec3.x" },
+	{ (char*)"y", T_LONGLONG, offsetof(UNBRACKET(vec<3, glm::i64>), super_type.y), 0, (char*)"i64vec3.y" },
+	{ (char*)"z", T_LONGLONG, offsetof(UNBRACKET(vec<3, glm::i64>), super_type.z), 0, (char*)"i64vec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec3BufferMethods = {
@@ -3438,10 +3438,10 @@ static PyTypeObject hi64vec3IterType = {
 };
 
 static PyMemberDef hi64vec4_members[] = {
-	{ "x", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.x), 0, "i64vec4.x" },
-	{ "y", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.y), 0, "i64vec4.y" },
-	{ "z", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.z), 0, "i64vec4.z" },
-	{ "w", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.w), 0, "i64vec4.w" },
+	{ (char*)"x", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.x), 0, (char*)"i64vec4.x" },
+	{ (char*)"y", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.y), 0, (char*)"i64vec4.y" },
+	{ (char*)"z", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.z), 0, (char*)"i64vec4.z" },
+	{ (char*)"w", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.w), 0, (char*)"i64vec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec4BufferMethods = {
@@ -3580,7 +3580,7 @@ static PyTypeObject hi64vec4IterType = {
 #pragma endregion
 #pragma region uint8
 static PyMemberDef hu8vec1_members[] = {
-	{ "x", T_UBYTE, offsetof(UNBRACKET(vec<1, glm::u8>), super_type.x), 0, "u8vec1.x" },
+	{ (char*)"x", T_UBYTE, offsetof(UNBRACKET(vec<1, glm::u8>), super_type.x), 0, (char*)"u8vec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec1BufferMethods = {
@@ -3718,8 +3718,8 @@ static PyTypeObject hu8vec1IterType = {
 };
 
 static PyMemberDef hu8vec2_members[] = {
-	{ "x", T_UBYTE, offsetof(UNBRACKET(vec<2, glm::u8>), super_type.x), 0, "u8vec2.x" },
-	{ "y", T_UBYTE, offsetof(UNBRACKET(vec<2, glm::u8>), super_type.y), 0, "u8vec2.y" },
+	{ (char*)"x", T_UBYTE, offsetof(UNBRACKET(vec<2, glm::u8>), super_type.x), 0, (char*)"u8vec2.x" },
+	{ (char*)"y", T_UBYTE, offsetof(UNBRACKET(vec<2, glm::u8>), super_type.y), 0, (char*)"u8vec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec2BufferMethods = {
@@ -3857,9 +3857,9 @@ static PyTypeObject hu8vec2IterType = {
 };
 
 static PyMemberDef hu8vec3_members[] = {
-	{ "x", T_UBYTE, offsetof(UNBRACKET(vec<3, glm::u8>), super_type.x), 0, "u8vec3.x" },
-	{ "y", T_UBYTE, offsetof(UNBRACKET(vec<3, glm::u8>), super_type.y), 0, "u8vec3.y" },
-	{ "z", T_UBYTE, offsetof(UNBRACKET(vec<3, glm::u8>), super_type.z), 0, "u8vec3.z" },
+	{ (char*)"x", T_UBYTE, offsetof(UNBRACKET(vec<3, glm::u8>), super_type.x), 0, (char*)"u8vec3.x" },
+	{ (char*)"y", T_UBYTE, offsetof(UNBRACKET(vec<3, glm::u8>), super_type.y), 0, (char*)"u8vec3.y" },
+	{ (char*)"z", T_UBYTE, offsetof(UNBRACKET(vec<3, glm::u8>), super_type.z), 0, (char*)"u8vec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec3BufferMethods = {
@@ -3997,10 +3997,10 @@ static PyTypeObject hu8vec3IterType = {
 };
 
 static PyMemberDef hu8vec4_members[] = {
-	{ "x", T_UBYTE, offsetof(UNBRACKET(vec<4, glm::u8>), super_type.x), 0, "u8vec4.x" },
-	{ "y", T_UBYTE, offsetof(UNBRACKET(vec<4, glm::u8>), super_type.y), 0, "u8vec4.y" },
-	{ "z", T_UBYTE, offsetof(UNBRACKET(vec<4, glm::u8>), super_type.z), 0, "u8vec4.z" },
-	{ "w", T_UBYTE, offsetof(UNBRACKET(vec<4, glm::u8>), super_type.w), 0, "u8vec4.w" },
+	{ (char*)"x", T_UBYTE, offsetof(UNBRACKET(vec<4, glm::u8>), super_type.x), 0, (char*)"u8vec4.x" },
+	{ (char*)"y", T_UBYTE, offsetof(UNBRACKET(vec<4, glm::u8>), super_type.y), 0, (char*)"u8vec4.y" },
+	{ (char*)"z", T_UBYTE, offsetof(UNBRACKET(vec<4, glm::u8>), super_type.z), 0, (char*)"u8vec4.z" },
+	{ (char*)"w", T_UBYTE, offsetof(UNBRACKET(vec<4, glm::u8>), super_type.w), 0, (char*)"u8vec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec4BufferMethods = {
@@ -4139,7 +4139,7 @@ static PyTypeObject hu8vec4IterType = {
 #pragma endregion
 #pragma region uint16
 static PyMemberDef hu16vec1_members[] = {
-	{ "x", T_USHORT, offsetof(UNBRACKET(vec<1, glm::u16>), super_type.x), 0, "u16vec1.x" },
+	{ (char*)"x", T_USHORT, offsetof(UNBRACKET(vec<1, glm::u16>), super_type.x), 0, (char*)"u16vec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec1BufferMethods = {
@@ -4277,8 +4277,8 @@ static PyTypeObject hu16vec1IterType = {
 };
 
 static PyMemberDef hu16vec2_members[] = {
-	{ "x", T_USHORT, offsetof(UNBRACKET(vec<2, glm::u16>), super_type.x), 0, "u16vec2.x" },
-	{ "y", T_USHORT, offsetof(UNBRACKET(vec<2, glm::u16>), super_type.y), 0, "u16vec2.y" },
+	{ (char*)"x", T_USHORT, offsetof(UNBRACKET(vec<2, glm::u16>), super_type.x), 0, (char*)"u16vec2.x" },
+	{ (char*)"y", T_USHORT, offsetof(UNBRACKET(vec<2, glm::u16>), super_type.y), 0, (char*)"u16vec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec2BufferMethods = {
@@ -4416,9 +4416,9 @@ static PyTypeObject hu16vec2IterType = {
 };
 
 static PyMemberDef hu16vec3_members[] = {
-	{ "x", T_USHORT, offsetof(UNBRACKET(vec<3, glm::u16>), super_type.x), 0, "u16vec3.x" },
-	{ "y", T_USHORT, offsetof(UNBRACKET(vec<3, glm::u16>), super_type.y), 0, "u16vec3.y" },
-	{ "z", T_USHORT, offsetof(UNBRACKET(vec<3, glm::u16>), super_type.z), 0, "u16vec3.z" },
+	{ (char*)"x", T_USHORT, offsetof(UNBRACKET(vec<3, glm::u16>), super_type.x), 0, (char*)"u16vec3.x" },
+	{ (char*)"y", T_USHORT, offsetof(UNBRACKET(vec<3, glm::u16>), super_type.y), 0, (char*)"u16vec3.y" },
+	{ (char*)"z", T_USHORT, offsetof(UNBRACKET(vec<3, glm::u16>), super_type.z), 0, (char*)"u16vec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec3BufferMethods = {
@@ -4556,10 +4556,10 @@ static PyTypeObject hu16vec3IterType = {
 };
 
 static PyMemberDef hu16vec4_members[] = {
-	{ "x", T_USHORT, offsetof(UNBRACKET(vec<4, glm::u16>), super_type.x), 0, "u16vec4.x" },
-	{ "y", T_USHORT, offsetof(UNBRACKET(vec<4, glm::u16>), super_type.y), 0, "u16vec4.y" },
-	{ "z", T_USHORT, offsetof(UNBRACKET(vec<4, glm::u16>), super_type.z), 0, "u16vec4.z" },
-	{ "w", T_USHORT, offsetof(UNBRACKET(vec<4, glm::u16>), super_type.w), 0, "u16vec4.w" },
+	{ (char*)"x", T_USHORT, offsetof(UNBRACKET(vec<4, glm::u16>), super_type.x), 0, (char*)"u16vec4.x" },
+	{ (char*)"y", T_USHORT, offsetof(UNBRACKET(vec<4, glm::u16>), super_type.y), 0, (char*)"u16vec4.y" },
+	{ (char*)"z", T_USHORT, offsetof(UNBRACKET(vec<4, glm::u16>), super_type.z), 0, (char*)"u16vec4.z" },
+	{ (char*)"w", T_USHORT, offsetof(UNBRACKET(vec<4, glm::u16>), super_type.w), 0, (char*)"u16vec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec4BufferMethods = {
@@ -4698,7 +4698,7 @@ static PyTypeObject hu16vec4IterType = {
 #pragma endregion
 #pragma region uint32
 static PyMemberDef huvec1_members[] = {
-	{ "x", T_UINT, offsetof(UNBRACKET(vec<1, glm::u32>), super_type.x), 0, "uvec1.x" },
+	{ (char*)"x", T_UINT, offsetof(UNBRACKET(vec<1, glm::u32>), super_type.x), 0, (char*)"uvec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec1BufferMethods = {
@@ -4836,8 +4836,8 @@ static PyTypeObject huvec1IterType = {
 };
 
 static PyMemberDef huvec2_members[] = {
-	{ "x", T_UINT, offsetof(UNBRACKET(vec<2, glm::u32>), super_type.x), 0, "uvec2.x" },
-	{ "y", T_UINT, offsetof(UNBRACKET(vec<2, glm::u32>), super_type.y), 0, "uvec2.y" },
+	{ (char*)"x", T_UINT, offsetof(UNBRACKET(vec<2, glm::u32>), super_type.x), 0, (char*)"uvec2.x" },
+	{ (char*)"y", T_UINT, offsetof(UNBRACKET(vec<2, glm::u32>), super_type.y), 0, (char*)"uvec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec2BufferMethods = {
@@ -4975,9 +4975,9 @@ static PyTypeObject huvec2IterType = {
 };
 
 static PyMemberDef huvec3_members[] = {
-	{ "x", T_UINT, offsetof(UNBRACKET(vec<3, glm::u32>), super_type.x), 0, "uvec3.x" },
-	{ "y", T_UINT, offsetof(UNBRACKET(vec<3, glm::u32>), super_type.y), 0, "uvec3.y" },
-	{ "z", T_UINT, offsetof(UNBRACKET(vec<3, glm::u32>), super_type.z), 0, "uvec3.z" },
+	{ (char*)"x", T_UINT, offsetof(UNBRACKET(vec<3, glm::u32>), super_type.x), 0, (char*)"uvec3.x" },
+	{ (char*)"y", T_UINT, offsetof(UNBRACKET(vec<3, glm::u32>), super_type.y), 0, (char*)"uvec3.y" },
+	{ (char*)"z", T_UINT, offsetof(UNBRACKET(vec<3, glm::u32>), super_type.z), 0, (char*)"uvec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec3BufferMethods = {
@@ -5115,10 +5115,10 @@ static PyTypeObject huvec3IterType = {
 };
 
 static PyMemberDef huvec4_members[] = {
-	{ "x", T_UINT, offsetof(UNBRACKET(vec<4, glm::u32>), super_type.x), 0, "uvec4.x" },
-	{ "y", T_UINT, offsetof(UNBRACKET(vec<4, glm::u32>), super_type.y), 0, "uvec4.y" },
-	{ "z", T_UINT, offsetof(UNBRACKET(vec<4, glm::u32>), super_type.z), 0, "uvec4.z" },
-	{ "w", T_UINT, offsetof(UNBRACKET(vec<4, glm::u32>), super_type.w), 0, "uvec4.w" },
+	{ (char*)"x", T_UINT, offsetof(UNBRACKET(vec<4, glm::u32>), super_type.x), 0, (char*)"uvec4.x" },
+	{ (char*)"y", T_UINT, offsetof(UNBRACKET(vec<4, glm::u32>), super_type.y), 0, (char*)"uvec4.y" },
+	{ (char*)"z", T_UINT, offsetof(UNBRACKET(vec<4, glm::u32>), super_type.z), 0, (char*)"uvec4.z" },
+	{ (char*)"w", T_UINT, offsetof(UNBRACKET(vec<4, glm::u32>), super_type.w), 0, (char*)"uvec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec4BufferMethods = {
@@ -5257,7 +5257,7 @@ static PyTypeObject huvec4IterType = {
 #pragma endregion
 #pragma region uint64
 static PyMemberDef hu64vec1_members[] = {
-	{ "x", T_ULONGLONG, offsetof(UNBRACKET(vec<1, glm::u64>), super_type.x), 0, "u64vec1.x" },
+	{ (char*)"x", T_ULONGLONG, offsetof(UNBRACKET(vec<1, glm::u64>), super_type.x), 0, (char*)"u64vec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec1BufferMethods = {
@@ -5395,8 +5395,8 @@ static PyTypeObject hu64vec1IterType = {
 };
 
 static PyMemberDef hu64vec2_members[] = {
-	{ "x", T_ULONGLONG, offsetof(UNBRACKET(vec<2, glm::u64>), super_type.x), 0, "u64vec2.x" },
-	{ "y", T_ULONGLONG, offsetof(UNBRACKET(vec<2, glm::u64>), super_type.y), 0, "u64vec2.y" },
+	{ (char*)"x", T_ULONGLONG, offsetof(UNBRACKET(vec<2, glm::u64>), super_type.x), 0, (char*)"u64vec2.x" },
+	{ (char*)"y", T_ULONGLONG, offsetof(UNBRACKET(vec<2, glm::u64>), super_type.y), 0, (char*)"u64vec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec2BufferMethods = {
@@ -5534,9 +5534,9 @@ static PyTypeObject hu64vec2IterType = {
 };
 
 static PyMemberDef hu64vec3_members[] = {
-	{ "x", T_ULONGLONG, offsetof(UNBRACKET(vec<3, glm::u64>), super_type.x), 0, "u64vec3.x" },
-	{ "y", T_ULONGLONG, offsetof(UNBRACKET(vec<3, glm::u64>), super_type.y), 0, "u64vec3.y" },
-	{ "z", T_ULONGLONG, offsetof(UNBRACKET(vec<3, glm::u64>), super_type.z), 0, "u64vec3.z" },
+	{ (char*)"x", T_ULONGLONG, offsetof(UNBRACKET(vec<3, glm::u64>), super_type.x), 0, (char*)"u64vec3.x" },
+	{ (char*)"y", T_ULONGLONG, offsetof(UNBRACKET(vec<3, glm::u64>), super_type.y), 0, (char*)"u64vec3.y" },
+	{ (char*)"z", T_ULONGLONG, offsetof(UNBRACKET(vec<3, glm::u64>), super_type.z), 0, (char*)"u64vec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec3BufferMethods = {
@@ -5674,10 +5674,10 @@ static PyTypeObject hu64vec3IterType = {
 };
 
 static PyMemberDef hu64vec4_members[] = {
-	{ "x", T_ULONGLONG, offsetof(UNBRACKET(vec<4, glm::u64>), super_type.x), 0, "u64vec4.x" },
-	{ "y", T_ULONGLONG, offsetof(UNBRACKET(vec<4, glm::u64>), super_type.y), 0, "u64vec4.y" },
-	{ "z", T_ULONGLONG, offsetof(UNBRACKET(vec<4, glm::u64>), super_type.z), 0, "u64vec4.z" },
-	{ "w", T_ULONGLONG, offsetof(UNBRACKET(vec<4, glm::u64>), super_type.w), 0, "u64vec4.w" },
+	{ (char*)"x", T_ULONGLONG, offsetof(UNBRACKET(vec<4, glm::u64>), super_type.x), 0, (char*)"u64vec4.x" },
+	{ (char*)"y", T_ULONGLONG, offsetof(UNBRACKET(vec<4, glm::u64>), super_type.y), 0, (char*)"u64vec4.y" },
+	{ (char*)"z", T_ULONGLONG, offsetof(UNBRACKET(vec<4, glm::u64>), super_type.z), 0, (char*)"u64vec4.z" },
+	{ (char*)"w", T_ULONGLONG, offsetof(UNBRACKET(vec<4, glm::u64>), super_type.w), 0, (char*)"u64vec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec4BufferMethods = {
@@ -5816,7 +5816,7 @@ static PyTypeObject hu64vec4IterType = {
 #pragma endregion
 #pragma region bool
 static PyMemberDef hbvec1_members[] = {
-	{ "x", T_BOOL, offsetof(UNBRACKET(vec<1, bool>), super_type.x), 0, "bvec1.x" },
+	{ (char*)"x", T_BOOL, offsetof(UNBRACKET(vec<1, bool>), super_type.x), 0, (char*)"bvec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hbvec1BufferMethods = {
@@ -5918,8 +5918,8 @@ static PyTypeObject hbvec1IterType = {
 };
 
 static PyMemberDef hbvec2_members[] = {
-	{ "x", T_BOOL, offsetof(UNBRACKET(vec<2, bool>), super_type.x), 0, "bvec2.x" },
-	{ "y", T_BOOL, offsetof(UNBRACKET(vec<2, bool>), super_type.y), 0, "bvec2.y" },
+	{ (char*)"x", T_BOOL, offsetof(UNBRACKET(vec<2, bool>), super_type.x), 0, (char*)"bvec2.x" },
+	{ (char*)"y", T_BOOL, offsetof(UNBRACKET(vec<2, bool>), super_type.y), 0, (char*)"bvec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hbvec2BufferMethods = {
@@ -6021,9 +6021,9 @@ static PyTypeObject hbvec2IterType = {
 };
 
 static PyMemberDef hbvec3_members[] = {
-	{ "x", T_BOOL, offsetof(UNBRACKET(vec<3, bool>), super_type.x), 0, "bvec3.x" },
-	{ "y", T_BOOL, offsetof(UNBRACKET(vec<3, bool>), super_type.y), 0, "bvec3.y" },
-	{ "z", T_BOOL, offsetof(UNBRACKET(vec<3, bool>), super_type.z), 0, "bvec3.z" },
+	{ (char*)"x", T_BOOL, offsetof(UNBRACKET(vec<3, bool>), super_type.x), 0, (char*)"bvec3.x" },
+	{ (char*)"y", T_BOOL, offsetof(UNBRACKET(vec<3, bool>), super_type.y), 0, (char*)"bvec3.y" },
+	{ (char*)"z", T_BOOL, offsetof(UNBRACKET(vec<3, bool>), super_type.z), 0, (char*)"bvec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hbvec3BufferMethods = {
@@ -6125,10 +6125,10 @@ static PyTypeObject hbvec3IterType = {
 };
 
 static PyMemberDef hbvec4_members[] = {
-	{ "x", T_BOOL, offsetof(UNBRACKET(vec<4, bool>), super_type.x), 0, "bvec4.x" },
-	{ "y", T_BOOL, offsetof(UNBRACKET(vec<4, bool>), super_type.y), 0, "bvec4.y" },
-	{ "z", T_BOOL, offsetof(UNBRACKET(vec<4, bool>), super_type.z), 0, "bvec4.z" },
-	{ "w", T_BOOL, offsetof(UNBRACKET(vec<4, bool>), super_type.w), 0, "bvec4.w" },
+	{ (char*)"x", T_BOOL, offsetof(UNBRACKET(vec<4, bool>), super_type.x), 0, (char*)"bvec4.x" },
+	{ (char*)"y", T_BOOL, offsetof(UNBRACKET(vec<4, bool>), super_type.y), 0, (char*)"bvec4.y" },
+	{ (char*)"z", T_BOOL, offsetof(UNBRACKET(vec<4, bool>), super_type.z), 0, (char*)"bvec4.z" },
+	{ (char*)"w", T_BOOL, offsetof(UNBRACKET(vec<4, bool>), super_type.w), 0, (char*)"bvec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hbvec4BufferMethods = {
@@ -13360,10 +13360,10 @@ static PyMethodDef hfqua_methods[] = {
 };
 
 static PyMemberDef hfqua_members[] = {
-	{ "x", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.x), 0, "quat.x" },
-	{ "y", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.y), 0, "quat.y" },
-	{ "z", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.z), 0, "quat.z" },
-	{ "w", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.w), 0, "quat.w" },
+	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.x), 0, (char*)"quat.x" },
+	{ (char*)"y", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.y), 0, (char*)"quat.y" },
+	{ (char*)"z", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.z), 0, (char*)"quat.z" },
+	{ (char*)"w", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.w), 0, (char*)"quat.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfquaBufferMethods = {
@@ -13507,10 +13507,10 @@ static PyMethodDef hdqua_methods[] = {
 };
 
 static PyMemberDef hdqua_members[] = {
-	{ "x", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.x), 0, "quat.x" },
-	{ "y", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.y), 0, "quat.y" },
-	{ "z", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.z), 0, "quat.z" },
-	{ "w", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.w), 0, "quat.w" },
+	{ (char*)"x", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.x), 0, (char*)"quat.x" },
+	{ (char*)"y", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.y), 0, (char*)"quat.y" },
+	{ (char*)"z", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.z), 0, (char*)"quat.z" },
+	{ (char*)"w", T_DOUBLE, offsetof(UNBRACKET(qua<double>), super_type.w), 0, (char*)"quat.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdquaBufferMethods = {
@@ -14574,35 +14574,13 @@ bool PyGLM_Vec4i_Check(PyObject* o) {
 
 #define PyGLM_Veci_Check(L, o) ((L == 2) ? PyGLM_Vec2i_Check(o) : (L == 3) ? PyGLM_Vec3i_Check(o) : PyGLM_Vec4i_Check(o))
 
-//#define PyGLM_Vec2_Check(o) (PyObject_TypeCheck(o, &vec2Type) || Py_TYPE(o) == &mvec2Type || (!(PyObject_TypeCheck(o, &mat2x2Type) || PyObject_TypeCheck(o, &mat3x2Type) || PyObject_TypeCheck(o, &mat4x2Type)) && PyGLM_Vec2i_Check(o)))
-//#define PyGLM_Vec3_Check(o) (PyObject_TypeCheck(o, &vec3Type) || Py_TYPE(o) == &mvec3Type || (!(PyObject_TypeCheck(o, &mat2x3Type) || PyObject_TypeCheck(o, &mat3x3Type) || PyObject_TypeCheck(o, &mat4x3Type)) && PyGLM_Vec3i_Check(o)))
-//#define PyGLM_Vec4_Check(o) (PyObject_TypeCheck(o, &vec4Type) || Py_TYPE(o) == &mvec4Type || (!(PyObject_TypeCheck(o, &mat2x4Type) || PyObject_TypeCheck(o, &mat3x4Type) || PyObject_TypeCheck(o, &mat4x4Type)) && PyGLM_Vec4i_Check(o)))
-
 #define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || (!(PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 2, T>())) || PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 3, T>())) || PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 4, T>()))) && PyGLM_Veci_Check(L, o)))
 
 #else
-//#define PyGLM_Vec2_Check(o) (PyObject_TypeCheck(o, &vec2Type) || Py_TYPE(o) == &mvec2Type)
-//#define PyGLM_Vec3_Check(o) (PyObject_TypeCheck(o, &vec3Type) || Py_TYPE(o) == &mvec3Type)
-//#define PyGLM_Vec4_Check(o) (PyObject_TypeCheck(o, &vec4Type) || Py_TYPE(o) == &mvec4Type)
-
 #define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>())
 #endif
 
-//#define PyGLM_Vec_GetTypeCheck(o) (PyGLM_Vec2_Check(o)) ? PyGLM_TYPE_VEC2 : (PyGLM_Vec3_Check(o)) ? PyGLM_TYPE_VEC3 : (PyGLM_Vec4_Check(o)) ? PyGLM_TYPE_VEC4 : PyGLM_TYPE_NONE
-//
-//#define PyGLM_Vec_GetType PyGLM_Vec_GetTypeCheck
-
 #define PyGLM_Qua_Check(T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())))
-
-//#define PyGLM_Mat2x2_Check(o) PyObject_TypeCheck(o, &mat2x2Type)
-//#define PyGLM_Mat2x3_Check(o) PyObject_TypeCheck(o, &mat2x3Type)
-//#define PyGLM_Mat2x4_Check(o) PyObject_TypeCheck(o, &mat2x4Type)
-//#define PyGLM_Mat3x2_Check(o) PyObject_TypeCheck(o, &mat3x2Type)
-//#define PyGLM_Mat3x3_Check(o) PyObject_TypeCheck(o, &mat3x3Type)
-//#define PyGLM_Mat3x4_Check(o) PyObject_TypeCheck(o, &mat3x4Type)
-//#define PyGLM_Mat4x2_Check(o) PyObject_TypeCheck(o, &mat4x2Type)
-//#define PyGLM_Mat4x3_Check(o) PyObject_TypeCheck(o, &mat4x3Type)
-//#define PyGLM_Mat4x4_Check(o) PyObject_TypeCheck(o, &mat4x4Type)
 
 #define PyGLM_Mat_Check(C, R, T, o) PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>()))
 
@@ -22841,38 +22819,6 @@ PyGLM_MAKE_GLM_FUNC_V_Q__tfF(normalize)
 PyGLM_MAKE_GLM_FUNC_NNN_VVV__tfF(faceforward)
 
 PyGLM_MAKE_GLM_FUNC_NN_VV__tfF(reflect)
-
-//static PyObject*
-//refract_(PyObject*, PyObject* args) {
-//	PyObject *arg1, *arg2, *arg3;
-//	PyGLM_Arg_Unpack_3O(args, "refract", arg1, arg2, arg3);
-//
-//	if (PyGLM_Number_Check(arg3)) {
-//		if (PyGLM_Number_Check(arg1), PyGLM_Number_Check(arg2)) {
-//			return PyFloat_FromDouble((double)glm::refract(PyGLM_Number_AsFloat(arg1), PyGLM_Number_AsFloat(arg2), PyGLM_Number_AsFloat(arg3)));
-//		}
-//		if (PyGLM_Vec2_Check(arg1) && PyGLM_Vec2_Check(arg2)) {
-//			glm::vec2 o, o2;
-//			unpack_vec2(arg1, o);
-//			unpack_vec2(arg2, o2);
-//			return pack_vec2(glm::refract(o, o2, PyGLM_Number_AsFloat(arg3)));
-//		}
-//		if (PyGLM_Vec3_Check(arg1) && PyGLM_Vec3_Check(arg2)) {
-//			glm::vec3 o, o2;
-//			unpack_vec3(arg1, o);
-//			unpack_vec3(arg2, o2);
-//			return pack_vec3(glm::refract(o, o2, PyGLM_Number_AsFloat(arg3)));
-//		}
-//		if (PyGLM_Vec4_Check(arg1) && PyGLM_Vec4_Check(arg2)) {
-//			glm::vec4 o, o2;
-//			unpack_vec4(arg1, o);
-//			unpack_vec4(arg2, o2);
-//			return pack_vec4(glm::refract(o, o2, PyGLM_Number_AsFloat(arg3)));
-//		}
-//	}
-//	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for refract()");
-//	return NULL;
-//}
 
 PyGLM_MAKE_GLM_FUNC_NNN_VVN__tfF(refract)
 
