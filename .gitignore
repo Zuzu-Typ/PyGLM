@@ -13,3 +13,6 @@ DevToolsx64.lnk
 upload.bat
 runreadmelang.bat
 readmelang.py
+*.pyc
+gen_macro_function.py
+expand.py
