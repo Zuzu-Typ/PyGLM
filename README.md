@@ -6,8 +6,7 @@
 *Work in progress\.*  
   
 **PyGLM** is using [GLM by G\-Truc](https://glm.g-truc.net) to offer a lot of the original features\.    
-PyGLM is missing some features, either because they couldn't be implemented properly   
-or were found to be unnecessary effort \(like glm::**vec1**\)\.  
+Currently, some features haven't yet found their way into PyGLM and some never will \(such as unstable extensions\)\.  
 If you encounter any issues or want to request a feature, please create an issue on the [issue tracker](https://github.com/Zuzu-Typ/PyGLM/issues)\.  
   
 ## Tiny Documentation  
@@ -19,7 +18,7 @@ At the same time, it has **great performance**, being between **2x and 10x as fa
 \(*depending on the individual function*\)  
 ### Installation  
 **PyGLM** supports **Windows**, **Linux**, **MacOS** and other operating systems with either x86 \(**32\-bit**\) or x64 \(**64\-bit**\) architecture,   
-running **Python 3**\.5 or higher\. \(Prior versions of Python \(such as Python 2\) were supported up to PyGLM version 0\.4\.8b1\)  
+running **Python 3**\.5 or higher\. \(Prior versions of Python \- such as Python 2 \- were supported up to PyGLM version 0\.4\.8b1\)  
   
 It can be installed from the [PyPI](https://pypi.python.org/pypi/PyGLM) using [pip](https://pip.pypa.io/en/stable/):  
 
@@ -32,33 +31,37 @@ And finally imported and used:
 ### Using PyGLM  
 PyGLM's syntax is very similar to the original GLM's syntax\.  
 There is no need to import anything but **glm**, as it already contains the entire package\.  
+#### Differences to glm  
 Instead of using double colons \(**::**\) for namespaces, periods \(**\.**\) are used, so  
-
-    glm::detail::vec2
+`glm::detail::vec2` becomes `glm.detail.vec2`\.  
+You can also use the base namespace *glm* \(e\.g\. `glm.vec2`\)\.  
   
-becomes  
-
-    glm.detail.vec2
+PyGLM doesn't support precision qualifiers\. All types use the default precision \(`packed_highp`\)\.  
   
-You can also use the base namespace *glm*\.  
-
-    glm.vec2
-  
+If a glm function normally accepts `float` and `double` arguments, the higher precision \(`double`\) is used\.  
   
 There is no way to set preprocessor definitions \(macros\)\.  
 If \- for example \- you need to use the left handed coordinate system, you have to use **\*LH**, so  
-
-    glm.perspective
+`glm.perspective` becomes `glm.perspectiveLH`\.  
   
-becomes  
-
-    glm.perspectiveLH
+All types are initialized by default to avoid memory access violations\.  
+\(i\.e\. the macro `GLM_FORCE_CTOR_INIT` is defined\)  
   
-  
-In case you need the size of a PyGLM data type, you can use   
+In case you need the size of a PyGLM datatype, you can use   
 
     glm.sizeof(<type>)
   
+  
+The function `glm.frexp(x, exp)` returns a tuple `(m, e)`, if the input arguments are numerical\.  
+This function may issue a `UserWarning`\. You can silence this warning using `glm.silence(1)`\.  
+  
+The function `glm.value_ptr(x)` returns a ctypes pointer of the respective type\.  
+I\.e\. if the datatype of `x` is `float`, then a `c_float` pointer will be returned\.  
+Likewise the reverse\-functions \(such as `make_vec2(ptr)`\) will take a ctypes pointer as their argument  
+and return \(in this case\) a 2 component vector of the pointers underlying type\.  
+  
+`glm.silence(ID)` can be used to silence specific warnings\.  
+Supplying an id of 0 will silence all warnings\.  
   
 There is currently no documentation for PyGLM\.  
 Please refer to the source \(in Python: **\*\.\_\_doc\_\_**\) and GLM manuals, references and tutorials\.  
@@ -74,10 +77,10 @@ Please refer to the source \(in Python: **\*\.\_\_doc\_\_**\) and GLM manuals, r
     
     >>> m = glm.mat4()
     >>> print(m)
-    [            0 |            0 |            0 |            0 ]
-    [            0 |            0 |            0 |            0 ]
-    [            0 |            0 |            0 |            0 ]
-    [            0 |            0 |            0 |            0 ]
+    [            1 |            0 |            0 |            0 ]
+    [            0 |            1 |            0 |            0 ]
+    [            0 |            0 |            1 |            0 ]
+    [            0 |            0 |            0 |            1 ]
     
     >>> v = glm.vec4(1, 2, 3, 4)
     >>> print(v + (8, 7, 6, 5))
