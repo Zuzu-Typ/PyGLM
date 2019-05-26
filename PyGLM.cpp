@@ -13654,27 +13654,122 @@ static PyTypeObject hdquaIterType = {
 #pragma region internal functions
 
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
-PyObject* c_void_p = NULL;
+PyObject* ctypes_void_p = NULL;
+PyObject* ctypes_cast = NULL;
+PyObject* ctypes_float_p = NULL;
+PyObject* ctypes_double_p = NULL;
+PyObject* ctypes_int64_p = NULL;
+PyObject* ctypes_int32_p = NULL;
+PyObject* ctypes_int16_p = NULL;
+PyObject* ctypes_int8_p = NULL;
+PyObject* ctypes_uint64_p = NULL;
+PyObject* ctypes_uint32_p = NULL;
+PyObject* ctypes_uint16_p = NULL;
+PyObject* ctypes_uint8_p = NULL;
+PyObject* ctypes_bool_p = NULL;
 
 #define PyGLM_FREXP_WARNING 1
 
 int PyGLM_SHOW_WARNINGS = PyGLM_FREXP_WARNING;
 
 #if defined(_M_IX86) || defined(__i386__)
-PyObject* Ctypes_C_VOID_P(void* p) {
+PyObject* PyGLM_CtypesVoidP_FromVoidP(void* p) {
 	PyObject* argList = Py_BuildValue("(K)", (unsigned long)p);
-	PyObject* out = PyObject_CallObject(c_void_p, argList);
+	PyObject* out = PyObject_CallObject(ctypes_void_p, argList);
 	Py_DECREF(argList);
+	return out;
+}
+unsigned long PyGLM_UnsignedLongLong_FromCtypesP(PyObject* ptr) {
+	PyObject* ptr_as_c_void_p = PyObject_CallFunctionObjArgs(ctypes_cast, ptr, ctypes_void_p, NULL);
+	PyObject* ptr_value = PyObject_GetAttrString(ptr_as_c_void_p, "value");
+	unsigned long out = PyLong_AsUnsignedLong(ptr_value);
+	Py_DECREF(ptr_value);
+	Py_DECREF(ptr_as_c_void_p);
 	return out;
 }
 #else
-PyObject* Ctypes_C_VOID_P(void* p) {
+PyObject* PyGLM_CtypesVoidP_FromVoidP(void* p) {
 	PyObject* argList = Py_BuildValue("(K)", (unsigned long long)p);
-	PyObject* out = PyObject_CallObject(c_void_p, argList);
+	PyObject* out = PyObject_CallObject(ctypes_void_p, argList);
 	Py_DECREF(argList);
 	return out;
 }
+unsigned long long PyGLM_UnsignedLongLong_FromCtypesP(PyObject* ptr) {
+	PyObject* ptr_as_c_void_p = PyObject_CallFunctionObjArgs(ctypes_cast, ptr, ctypes_void_p, NULL);
+	PyObject* ptr_value = PyObject_GetAttrString(ptr_as_c_void_p, "value");
+	unsigned long long out = PyLong_AsUnsignedLongLong(ptr_value);
+	Py_DECREF(ptr_value);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
 #endif
+
+PyObject* PyGLM_ToCtypesP(float* ptr) {
+	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
+	PyObject* out = PyObject_CallFunctionObjArgs(ctypes_cast, ptr_as_c_void_p, ctypes_float_p, NULL);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
+PyObject* PyGLM_ToCtypesP(double* ptr) {
+	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
+	PyObject* out = PyObject_CallFunctionObjArgs(ctypes_cast, ptr_as_c_void_p, ctypes_double_p, NULL);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
+PyObject* PyGLM_ToCtypesP(glm::int64* ptr) {
+	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
+	PyObject* out = PyObject_CallFunctionObjArgs(ctypes_cast, ptr_as_c_void_p, ctypes_int64_p, NULL);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
+PyObject* PyGLM_ToCtypesP(glm::int32* ptr) {
+	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
+	PyObject* out = PyObject_CallFunctionObjArgs(ctypes_cast, ptr_as_c_void_p, ctypes_int32_p, NULL);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
+PyObject* PyGLM_ToCtypesP(glm::int16* ptr) {
+	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
+	PyObject* out = PyObject_CallFunctionObjArgs(ctypes_cast, ptr_as_c_void_p, ctypes_int16_p, NULL);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
+PyObject* PyGLM_ToCtypesP(glm::int8* ptr) {
+	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
+	PyObject* out = PyObject_CallFunctionObjArgs(ctypes_cast, ptr_as_c_void_p, ctypes_int8_p, NULL);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
+PyObject* PyGLM_ToCtypesP(glm::uint64* ptr) {
+	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
+	PyObject* out = PyObject_CallFunctionObjArgs(ctypes_cast, ptr_as_c_void_p, ctypes_uint64_p, NULL);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
+PyObject* PyGLM_ToCtypesP(glm::uint32* ptr) {
+	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
+	PyObject* out = PyObject_CallFunctionObjArgs(ctypes_cast, ptr_as_c_void_p, ctypes_uint32_p, NULL);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
+PyObject* PyGLM_ToCtypesP(glm::uint16* ptr) {
+	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
+	PyObject* out = PyObject_CallFunctionObjArgs(ctypes_cast, ptr_as_c_void_p, ctypes_uint16_p, NULL);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
+PyObject* PyGLM_ToCtypesP(glm::uint8* ptr) {
+	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
+	PyObject* out = PyObject_CallFunctionObjArgs(ctypes_cast, ptr_as_c_void_p, ctypes_uint8_p, NULL);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
+PyObject* PyGLM_ToCtypesP(bool* ptr) {
+	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
+	PyObject* out = PyObject_CallFunctionObjArgs(ctypes_cast, ptr_as_c_void_p, ctypes_bool_p, NULL);
+	Py_DECREF(ptr_as_c_void_p);
+	return out;
+}
 #endif
 
 template<int L, typename T>
@@ -21373,7 +21468,7 @@ not_(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
-//PyGLM_MAKE_GLM_FUNC_VF_VF(pow)
+PyGLM_MAKE_GLM_FUNC_NN_VV__tfF(pow)
 
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(exp)
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(log)
@@ -22702,7 +22797,9 @@ frexp_(PyObject*, PyObject* args) {
 	PyGLM_Arg_Unpack_2O(args, "frexp", arg1, arg2);
 	if (PyGLM_Number_Check(arg1) && PyLong_Check(arg2)) {
 		if (PyGLM_SHOW_WARNINGS & PyGLM_FREXP_WARNING) PyErr_WarnEx(PyExc_UserWarning, "This function will return this pair: (m, e), which differs from glm behaviour. You can silence this warning by calling glm.silence(1)", 1);
-		
+		int e = (int)PyLong_AS_LONG(arg2);
+		double m = glm::frexp(PyGLM_Number_FromPyObject<double>(arg1), e);
+		return Py_BuildValue("(d, i)", m, e);
 	}
 	if (PyGLM_Vec_Check(2, float, arg1) && PyObject_TypeCheck(arg2, &hivec2Type)) {
 		glm::vec<2, float> o;
@@ -28265,401 +28362,506 @@ sizeof_(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
-//static PyObject*
-//value_ptr_(PyObject* self, PyObject* arg) {
-//	if (Py_TYPE(arg) == &hfvec1Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<1, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdvec1Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<1, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hivec1Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<1, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &huvec1Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<1, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi64vec1Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<1, glm::i64>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu64vec1Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<1, glm::u64>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi16vec1Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<1, glm::i16>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu16vec1Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<1, glm::u16>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi8vec1Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<1, glm::i8>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu8vec1Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<1, glm::u8>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hbvec1Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<1, bool>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfvec2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<2, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdvec2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<2, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hivec2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<2, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &huvec2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<2, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi64vec2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<2, glm::i64>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu64vec2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<2, glm::u64>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi16vec2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<2, glm::i16>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu16vec2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<2, glm::u16>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi8vec2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<2, glm::i8>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu8vec2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<2, glm::u8>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hbvec2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<2, bool>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfvec3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<3, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdvec3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<3, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hivec3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<3, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &huvec3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<3, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi64vec3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<3, glm::i64>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu64vec3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<3, glm::u64>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi16vec3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<3, glm::i16>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu16vec3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<3, glm::u16>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi8vec3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<3, glm::i8>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu8vec3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<3, glm::u8>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hbvec3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<3, bool>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfvec4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<4, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdvec4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<4, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hivec4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<4, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &huvec4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<4, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi64vec4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<4, glm::i64>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu64vec4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<4, glm::u64>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi16vec4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<4, glm::i16>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu16vec4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<4, glm::u16>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hi8vec4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<4, glm::i8>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hu8vec4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<4, glm::u8>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hbvec4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((vec<4, bool>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfquaType) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((qua<float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdquaType) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((qua<double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfmat2x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 2, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdmat2x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 2, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &himat2x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 2, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &humat2x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 2, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfmat2x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 3, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdmat2x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 3, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &himat2x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 3, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &humat2x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 3, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfmat2x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 4, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdmat2x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 4, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &himat2x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 4, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &humat2x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<2, 4, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfmat3x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 2, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdmat3x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 2, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &himat3x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 2, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &humat3x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 2, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfmat3x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 3, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdmat3x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 3, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &himat3x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 3, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &humat3x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 3, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfmat3x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 4, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdmat3x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 4, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &himat3x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 4, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &humat3x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<3, 4, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfmat4x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 2, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdmat4x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 2, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &himat4x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 2, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &humat4x2Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 2, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfmat4x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 3, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdmat4x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 3, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &himat4x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 3, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &humat4x3Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 3, glm::uint>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hfmat4x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 4, float>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &hdmat4x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 4, double>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &himat4x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 4, int>*)arg)->super_type));
-//	}
-//	if (Py_TYPE(arg) == &humat4x4Type) {
-//		return Ctypes_C_VOID_P(glm::value_ptr(((mat<4, 4, glm::uint>*)arg)->super_type));
-//	}
-//	PyGLM_TYPEERROR_O("value_ptr() requires the argument to be a glm type, not ", arg);
-//	return NULL;
-//}
-//
-//static PyObject*
-//make_vec2_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_vec2() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack(glm::make_vec2((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_vec3_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_vec3() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_vec3(glm::make_vec3((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_vec4_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_vec4() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_vec4(glm::make_vec4((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_quat_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_quat() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_quat(glm::make_quat((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_mat2x2_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_mat2x2() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_mat2x2(glm::make_mat2x2((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_mat2x3_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_mat2x3() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_mat2x3(glm::make_mat2x3((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_mat2x4_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_mat2x4() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_mat2x4(glm::make_mat2x4((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_mat3x2_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_mat3x2() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_mat3x2(glm::make_mat3x2((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_mat3x3_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_mat3x3() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_mat3x3(glm::make_mat3x3((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_mat3x4_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_mat3x4() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_mat3x4(glm::make_mat3x4((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_mat4x2_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_mat4x2() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_mat4x2(glm::make_mat4x2((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_mat4x3_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_mat4x3() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_mat4x3(glm::make_mat4x3((float*)vp_as_ull));
-//}
-//static PyObject*
-//make_mat4x4_(PyObject* self, PyObject* arg) {
-//	if (!PyObject_TypeCheck(arg, (PyTypeObject*)c_void_p)) {
-//		PyGLM_TYPEERROR_O("make_mat4x4() requires a ctypes.c_void_p as it's argument, not ", arg);
-//		return NULL;
-//	}
-//	PyObject* vp_as_pyull = PyObject_GetAttrString(arg, "value");
-//	unsigned long long vp_as_ull = PyLong_AsUnsignedLongLong(vp_as_pyull);
-//	Py_DECREF(vp_as_pyull);
-//	return pack_mat4x4(glm::make_mat4x4((float*)vp_as_ull));
-//}
+static PyObject*
+value_ptr_(PyObject* self, PyObject* arg) {
+	if (Py_TYPE(arg) == &hfvec2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdvec2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hivec2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &huvec2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hi64vec2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::i64>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hu64vec2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::u64>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hi16vec2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::i16>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hu16vec2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::u16>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hi8vec2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::i8>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hu8vec2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::u8>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hbvec2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, bool>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfvec3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdvec3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hivec3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &huvec3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hi64vec3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::i64>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hu64vec3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::u64>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hi16vec3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::i16>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hu16vec3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::u16>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hi8vec3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::i8>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hu8vec3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::u8>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hbvec3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, bool>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfvec4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdvec4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hivec4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &huvec4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hi64vec4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::i64>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hu64vec4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::u64>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hi16vec4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::i16>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hu16vec4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::u16>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hi8vec4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::i8>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hu8vec4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::u8>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hbvec4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, bool>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfquaType) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((qua<float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdquaType) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((qua<double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfmat2x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 2, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdmat2x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 2, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &himat2x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 2, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &humat2x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 2, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfmat2x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 3, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdmat2x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 3, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &himat2x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 3, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &humat2x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 3, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfmat2x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 4, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdmat2x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 4, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &himat2x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 4, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &humat2x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 4, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfmat3x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 2, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdmat3x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 2, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &himat3x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 2, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &humat3x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 2, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfmat3x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 3, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdmat3x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 3, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &himat3x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 3, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &humat3x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 3, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfmat3x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 4, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdmat3x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 4, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &himat3x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 4, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &humat3x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 4, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfmat4x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 2, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdmat4x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 2, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &himat4x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 2, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &humat4x2Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 2, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfmat4x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 3, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdmat4x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 3, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &himat4x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 3, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &humat4x3Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 3, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hfmat4x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 4, float>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &hdmat4x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 4, double>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &himat4x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 4, int>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &humat4x4Type) {
+		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 4, glm::uint>*)arg)->super_type));
+	}
+	PyGLM_TYPEERROR_O("value_ptr() requires the argument to be a glm type, not ", arg);
+	return NULL;
+}
+
+static PyObject*
+make_vec2_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_vec2((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_vec2((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_vec2((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_vec2((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int64_p)) {
+		return pack(glm::make_vec2((glm::i64*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint64_p)) {
+		return pack(glm::make_vec2((glm::u64*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int16_p)) {
+		return pack(glm::make_vec2((glm::i16*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint16_p)) {
+		return pack(glm::make_vec2((glm::u16*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int8_p)) {
+		return pack(glm::make_vec2((glm::i8*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint8_p)) {
+		return pack(glm::make_vec2((glm::u8*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_bool_p)) {
+		return pack(glm::make_vec2((bool*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_vec2() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+
+static PyObject*
+make_vec3_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_vec3((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_vec3((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_vec3((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_vec3((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int64_p)) {
+		return pack(glm::make_vec3((glm::i64*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint64_p)) {
+		return pack(glm::make_vec3((glm::u64*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int16_p)) {
+		return pack(glm::make_vec3((glm::i16*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint16_p)) {
+		return pack(glm::make_vec3((glm::u16*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int8_p)) {
+		return pack(glm::make_vec3((glm::i8*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint8_p)) {
+		return pack(glm::make_vec3((glm::u8*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_bool_p)) {
+		return pack(glm::make_vec3((bool*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_vec3() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+
+static PyObject*
+make_vec4_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_vec4((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_vec4((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_vec4((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_vec4((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int64_p)) {
+		return pack(glm::make_vec4((glm::i64*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint64_p)) {
+		return pack(glm::make_vec4((glm::u64*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int16_p)) {
+		return pack(glm::make_vec4((glm::i16*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint16_p)) {
+		return pack(glm::make_vec4((glm::u16*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int8_p)) {
+		return pack(glm::make_vec4((glm::i8*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint8_p)) {
+		return pack(glm::make_vec4((glm::u8*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_bool_p)) {
+		return pack(glm::make_vec4((bool*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_vec4() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+static PyObject*
+make_quat_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_quat((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_quat((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_quat() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+static PyObject*
+make_mat2x2_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_mat2x2((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_mat2x2((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_mat2x2((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_mat2x2((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_mat2x2() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+static PyObject*
+make_mat2x3_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_mat2x3((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_mat2x3((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_mat2x3((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_mat2x3((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_mat2x3() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+static PyObject*
+make_mat2x4_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_mat2x4((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_mat2x4((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_mat2x4((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_mat2x4((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_mat2x4() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+static PyObject*
+make_mat3x2_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_mat3x2((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_mat3x2((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_mat3x2((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_mat3x2((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_mat3x2() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+static PyObject*
+make_mat3x3_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_mat3x3((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_mat3x3((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_mat3x3((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_mat3x3((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_mat3x3() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+static PyObject*
+make_mat3x4_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_mat3x4((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_mat3x4((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_mat3x4((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_mat3x4((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_mat3x4() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+static PyObject*
+make_mat4x2_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_mat4x2((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_mat4x2((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_mat4x2((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_mat4x2((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_mat4x2() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+static PyObject*
+make_mat4x3_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_mat4x3((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_mat4x3((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_mat4x3((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_mat4x3((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_mat4x3() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+static PyObject*
+make_mat4x4_(PyObject* self, PyObject* arg) {
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
+		return pack(glm::make_mat4x4((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_double_p)) {
+		return pack(glm::make_mat4x4((double*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_int32_p)) {
+		return pack(glm::make_mat4x4((int*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_uint32_p)) {
+		return pack(glm::make_mat4x4((glm::uint*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
+	}
+	PyGLM_TYPEERROR_O("make_mat4x4() requires a ctypes pointer as it's argument, not ", arg);
+	return NULL;
+}
+
 
 static PyObject*
 silence(PyObject*, PyObject* arg) {
@@ -28728,7 +28930,7 @@ static PyMethodDef detailmethods[] = {
 	{ "not_", (PyCFunction)not_, METH_O, "not(x) -> bool\nReturns the component-wise logical complement of x." },
 
 	// func_exponential
-	//{ "pow", (PyCFunction)pow_, METH_VARARGS, "pow(base, exponent) -> float or vecn\nReturns 'base' raised to the power 'exponent'." },
+	{ "pow", (PyCFunction)pow_, METH_VARARGS, "pow(base, exponent) -> float or vecn\nReturns 'base' raised to the power 'exponent'." },
 	{ "exp", (PyCFunction)exp_, METH_O, "exp(x) -> float or vecn\nReturns the natural exponentiation of x, i.e., e^x." },
 	{ "log", (PyCFunction)log_, METH_O, "log(v) -> float or vecn\nReturns the natural logarithm of v, i.e.,\nreturns the value y which satisfies the equation x = e^y.\nResults are undefined if v <= 0." },
 	{ "exp2", (PyCFunction)exp2_, METH_O, "exp2(v) -> float or vecn\nReturns 2 raised to the v power." },
@@ -28948,24 +29150,24 @@ static PyMethodDef gtcmethods[] = {
 	{ "acoth", (PyCFunction)acoth_, METH_O, "acoth(x) -> float or vecn\nInverse cotangent hyperbolic function." },
 
 	// type_ptr
-	//{ "value_ptr", (PyCFunction)value_ptr_, METH_O, "value_ptr(x) -> ctypes.c_void_p\nReturn the constant address to the data of the input parameter." },
+	{ "value_ptr", (PyCFunction)value_ptr_, METH_O, "value_ptr(x) -> ctypes.c_void_p\nReturn the constant address to the data of the input parameter." },
 	{ "sizeof", (PyCFunction)sizeof_, METH_O, "sizeof(x) -> int\nReturn the size of x in bytes." },
-	//{ "make_vec2", (PyCFunction)make_vec2_, METH_O, "make_vec2(ctypes.c_void_p) -> vec2\nBuild a vector from a pointer." },
-	//{ "make_vec3", (PyCFunction)make_vec3_, METH_O, "make_vec3(ctypes.c_void_p) -> vec3\nBuild a vector from a pointer." },
-	//{ "make_vec4", (PyCFunction)make_vec4_, METH_O, "make_vec4(ctypes.c_void_p) -> vec4\nBuild a vector from a pointer." },
-	//{ "make_mat2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
-	//{ "make_mat2x2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2x2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
-	//{ "make_mat2x3", (PyCFunction)make_mat2x3_, METH_O, "make_mat2x3(ctypes.c_void_p) -> mat2x3\nBuild a matrix from a pointer." },
-	//{ "make_mat2x4", (PyCFunction)make_mat2x4_, METH_O, "make_mat2x4(ctypes.c_void_p) -> mat2x4\nBuild a matrix from a pointer." },
-	//{ "make_mat3x2", (PyCFunction)make_mat3x2_, METH_O, "make_mat3x2(ctypes.c_void_p) -> mat3x2\nBuild a matrix from a pointer." },
-	//{ "make_mat3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
-	//{ "make_mat3x3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3x3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
-	//{ "make_mat3x4", (PyCFunction)make_mat3x4_, METH_O, "make_mat3x4(ctypes.c_void_p) -> mat3x4\nBuild a matrix from a pointer." },
-	//{ "make_mat4x2", (PyCFunction)make_mat4x2_, METH_O, "make_mat4x2(ctypes.c_void_p) -> mat4x2\nBuild a matrix from a pointer." },
-	//{ "make_mat4x3", (PyCFunction)make_mat4x3_, METH_O, "make_mat4x3(ctypes.c_void_p) -> mat4x3\nBuild a matrix from a pointer." },
-	//{ "make_mat4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
-	//{ "make_mat4x4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4x4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
-	//{ "make_quat", (PyCFunction)make_quat_, METH_O, "make_quat(ctypes.c_void_p) -> quat\nBuild a quaternion from a pointer." },
+	{ "make_vec2", (PyCFunction)make_vec2_, METH_O, "make_vec2(ctypes.c_void_p) -> vec2\nBuild a vector from a pointer." },
+	{ "make_vec3", (PyCFunction)make_vec3_, METH_O, "make_vec3(ctypes.c_void_p) -> vec3\nBuild a vector from a pointer." },
+	{ "make_vec4", (PyCFunction)make_vec4_, METH_O, "make_vec4(ctypes.c_void_p) -> vec4\nBuild a vector from a pointer." },
+	{ "make_mat2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
+	{ "make_mat2x2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2x2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
+	{ "make_mat2x3", (PyCFunction)make_mat2x3_, METH_O, "make_mat2x3(ctypes.c_void_p) -> mat2x3\nBuild a matrix from a pointer." },
+	{ "make_mat2x4", (PyCFunction)make_mat2x4_, METH_O, "make_mat2x4(ctypes.c_void_p) -> mat2x4\nBuild a matrix from a pointer." },
+	{ "make_mat3x2", (PyCFunction)make_mat3x2_, METH_O, "make_mat3x2(ctypes.c_void_p) -> mat3x2\nBuild a matrix from a pointer." },
+	{ "make_mat3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
+	{ "make_mat3x3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3x3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
+	{ "make_mat3x4", (PyCFunction)make_mat3x4_, METH_O, "make_mat3x4(ctypes.c_void_p) -> mat3x4\nBuild a matrix from a pointer." },
+	{ "make_mat4x2", (PyCFunction)make_mat4x2_, METH_O, "make_mat4x2(ctypes.c_void_p) -> mat4x2\nBuild a matrix from a pointer." },
+	{ "make_mat4x3", (PyCFunction)make_mat4x3_, METH_O, "make_mat4x3(ctypes.c_void_p) -> mat4x3\nBuild a matrix from a pointer." },
+	{ "make_mat4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
+	{ "make_mat4x4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4x4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
+	{ "make_quat", (PyCFunction)make_quat_, METH_O, "make_quat(ctypes.c_void_p) -> quat\nBuild a quaternion from a pointer." },
 	{ NULL, NULL, 0, NULL }
 };
 
@@ -29017,7 +29219,7 @@ static PyMethodDef glmmethods[] = {
 	{ "not_", (PyCFunction)not_, METH_O, "not(x) -> bool\nReturns the component-wise logical complement of x." },
 
 	// func_exponential
-	//{ "pow", (PyCFunction)pow_, METH_VARARGS, "pow(base, exponent) -> float or vecn\nReturns 'base' raised to the power 'exponent'." },
+	{ "pow", (PyCFunction)pow_, METH_VARARGS, "pow(base, exponent) -> float or vecn\nReturns 'base' raised to the power 'exponent'." },
 	{ "exp", (PyCFunction)exp_, METH_O, "exp(x) -> float or vecn\nReturns the natural exponentiation of x, i.e., e^x." },
 	{ "log", (PyCFunction)log_, METH_O, "log(v) -> float or vecn\nReturns the natural logarithm of v, i.e.,\nreturns the value y which satisfies the equation x = e^y.\nResults are undefined if v <= 0." },
 	{ "exp2", (PyCFunction)exp2_, METH_O, "exp2(v) -> float or vecn\nReturns 2 raised to the v power." },
@@ -29227,24 +29429,24 @@ static PyMethodDef glmmethods[] = {
 	{ "acoth", (PyCFunction)acoth_, METH_O, "acoth(x) -> float or vecn\nInverse cotangent hyperbolic function." },
 
 	// type_ptr
-	//{ "value_ptr", (PyCFunction)value_ptr_, METH_O, "value_ptr(x) -> void* as int\nReturn the constant address to the data of the input parameter." },
+	{ "value_ptr", (PyCFunction)value_ptr_, METH_O, "value_ptr(x) -> void* as int\nReturn the constant address to the data of the input parameter." },
 	{ "sizeof", (PyCFunction)sizeof_, METH_O, "sizeof(x) -> int\nReturn the size of x in bytes." },
-	//{ "make_vec2", (PyCFunction)make_vec2_, METH_O, "make_vec2(ctypes.c_void_p) -> vec2\nBuild a vector from a pointer." },
-	//{ "make_vec3", (PyCFunction)make_vec3_, METH_O, "make_vec3(ctypes.c_void_p) -> vec3\nBuild a vector from a pointer." },
-	//{ "make_vec4", (PyCFunction)make_vec4_, METH_O, "make_vec4(ctypes.c_void_p) -> vec4\nBuild a vector from a pointer." },
-	//{ "make_mat2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
-	//{ "make_mat2x2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2x2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
-	//{ "make_mat2x3", (PyCFunction)make_mat2x3_, METH_O, "make_mat2x3(ctypes.c_void_p) -> mat2x3\nBuild a matrix from a pointer." },
-	//{ "make_mat2x4", (PyCFunction)make_mat2x4_, METH_O, "make_mat2x4(ctypes.c_void_p) -> mat2x4\nBuild a matrix from a pointer." },
-	//{ "make_mat3x2", (PyCFunction)make_mat3x2_, METH_O, "make_mat3x2(ctypes.c_void_p) -> mat3x2\nBuild a matrix from a pointer." },
-	//{ "make_mat3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
-	//{ "make_mat3x3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3x3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
-	//{ "make_mat3x4", (PyCFunction)make_mat3x4_, METH_O, "make_mat3x4(ctypes.c_void_p) -> mat3x4\nBuild a matrix from a pointer." },
-	//{ "make_mat4x2", (PyCFunction)make_mat4x2_, METH_O, "make_mat4x2(ctypes.c_void_p) -> mat4x2\nBuild a matrix from a pointer." },
-	//{ "make_mat4x3", (PyCFunction)make_mat4x3_, METH_O, "make_mat4x3(ctypes.c_void_p) -> mat4x3\nBuild a matrix from a pointer." },
-	//{ "make_mat4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
-	//{ "make_mat4x4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4x4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
-	//{ "make_quat", (PyCFunction)make_quat_, METH_O, "make_quat(ctypes.c_void_p) -> quat\nBuild a quaternion from a pointer." },
+	{ "make_vec2", (PyCFunction)make_vec2_, METH_O, "make_vec2(ctypes.c_void_p) -> vec2\nBuild a vector from a pointer." },
+	{ "make_vec3", (PyCFunction)make_vec3_, METH_O, "make_vec3(ctypes.c_void_p) -> vec3\nBuild a vector from a pointer." },
+	{ "make_vec4", (PyCFunction)make_vec4_, METH_O, "make_vec4(ctypes.c_void_p) -> vec4\nBuild a vector from a pointer." },
+	{ "make_mat2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
+	{ "make_mat2x2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2x2(ctypes.c_void_p) -> mat2x2\nBuild a matrix from a pointer." },
+	{ "make_mat2x3", (PyCFunction)make_mat2x3_, METH_O, "make_mat2x3(ctypes.c_void_p) -> mat2x3\nBuild a matrix from a pointer." },
+	{ "make_mat2x4", (PyCFunction)make_mat2x4_, METH_O, "make_mat2x4(ctypes.c_void_p) -> mat2x4\nBuild a matrix from a pointer." },
+	{ "make_mat3x2", (PyCFunction)make_mat3x2_, METH_O, "make_mat3x2(ctypes.c_void_p) -> mat3x2\nBuild a matrix from a pointer." },
+	{ "make_mat3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
+	{ "make_mat3x3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3x3(ctypes.c_void_p) -> mat3x3\nBuild a matrix from a pointer." },
+	{ "make_mat3x4", (PyCFunction)make_mat3x4_, METH_O, "make_mat3x4(ctypes.c_void_p) -> mat3x4\nBuild a matrix from a pointer." },
+	{ "make_mat4x2", (PyCFunction)make_mat4x2_, METH_O, "make_mat4x2(ctypes.c_void_p) -> mat4x2\nBuild a matrix from a pointer." },
+	{ "make_mat4x3", (PyCFunction)make_mat4x3_, METH_O, "make_mat4x3(ctypes.c_void_p) -> mat4x3\nBuild a matrix from a pointer." },
+	{ "make_mat4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
+	{ "make_mat4x4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4x4(ctypes.c_void_p) -> mat4x4\nBuild a matrix from a pointer." },
+	{ "make_quat", (PyCFunction)make_quat_, METH_O, "make_quat(ctypes.c_void_p) -> quat\nBuild a quaternion from a pointer." },
 	{ "silence", (PyCFunction)silence, METH_O, "silence(ID) -> None\nSilence a PyGLM warning (or all using 0)." },
 #ifdef HAS_TEST
 	{"test", (PyCFunction)test, TEST_FUNC_TYPE, ""},
@@ -29274,12 +29476,64 @@ extern "C" {
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 		PyObject* mainmod = PyImport_AddModule("__main__");
 		PyObject* maindict = PyModule_GetDict(mainmod);
+		PyObject* ctypes_list = Py_BuildValue("(s, s, s, s, s, s, s, s, s, s, s, s, s, s)", "cast", "c_void_p", "POINTER", "c_float", "c_double", "c_int64", "c_int32", "c_int16", "c_int8", "c_uint64", "c_uint32", "c_uint16", "c_uint8", "c_bool");
 
-		PyObject* c_void_p_str = Py_BuildValue("(s)", "c_void_p");
+		PyObject* ctypes_module = PyImport_ImportModuleEx("ctypes", maindict, maindict, ctypes_list);
+		Py_DECREF(ctypes_list);
 
-		c_void_p = PyObject_GetAttr(PyImport_ImportModuleEx("ctypes", maindict, maindict, c_void_p_str), PyUnicode_FromString("c_void_p"));
+		ctypes_cast = PyObject_GetAttrString(ctypes_module, "cast");
 
-		Py_DECREF(c_void_p_str);
+		ctypes_void_p = PyObject_GetAttrString(ctypes_module, "c_void_p");
+
+		PyObject* ctypes_POINTER = PyObject_GetAttrString(ctypes_module, "POINTER");
+
+		PyObject* ctypes_float = PyObject_GetAttrString(ctypes_module, "c_float");
+		ctypes_float_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_float, NULL);
+		Py_DECREF(ctypes_float);
+
+		PyObject* ctypes_double = PyObject_GetAttrString(ctypes_module, "c_double");
+		ctypes_double_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_double, NULL);
+		Py_DECREF(ctypes_double);
+
+		PyObject* ctypes_int64 = PyObject_GetAttrString(ctypes_module, "c_int64");
+		ctypes_int64_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_int64, NULL);
+		Py_DECREF(ctypes_int64);
+
+		PyObject* ctypes_int32 = PyObject_GetAttrString(ctypes_module, "c_int32");
+		ctypes_int32_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_int32, NULL);
+		Py_DECREF(ctypes_int32);
+
+		PyObject* ctypes_int16 = PyObject_GetAttrString(ctypes_module, "c_int16");
+		ctypes_int16_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_int16, NULL);
+		Py_DECREF(ctypes_int16);
+
+		PyObject* ctypes_int8 = PyObject_GetAttrString(ctypes_module, "c_int8");
+		ctypes_int8_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_int8, NULL);
+		Py_DECREF(ctypes_int8);
+
+		PyObject* ctypes_uint64 = PyObject_GetAttrString(ctypes_module, "c_uint64");
+		ctypes_uint64_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_uint64, NULL);
+		Py_DECREF(ctypes_uint64);
+
+		PyObject* ctypes_uint32 = PyObject_GetAttrString(ctypes_module, "c_uint32");
+		ctypes_uint32_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_uint32, NULL);
+		Py_DECREF(ctypes_uint32);
+
+		PyObject* ctypes_uint16 = PyObject_GetAttrString(ctypes_module, "c_uint16");
+		ctypes_uint16_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_uint16, NULL);
+		Py_DECREF(ctypes_uint16);
+
+		PyObject* ctypes_uint8 = PyObject_GetAttrString(ctypes_module, "c_uint8");
+		ctypes_uint8_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_uint8, NULL);
+		Py_DECREF(ctypes_uint8);
+
+		PyObject* ctypes_bool = PyObject_GetAttrString(ctypes_module, "c_bool");
+		ctypes_bool_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_bool, NULL);
+		Py_DECREF(ctypes_bool);
+
+		Py_DECREF(ctypes_POINTER);
+		Py_DECREF(ctypes_module);
+		
 #endif
 
 		PyObject* module_glm;
@@ -29381,87 +29635,6 @@ extern "C" {
 			|| PyType_Ready(&humat4x4Type) < 0 || PyType_Ready(&humat4x4IterType) < 0
 			|| PyType_Ready(&hfquaType) < 0 || PyType_Ready(&hfquaIterType) < 0
 			|| PyType_Ready(&hdquaType) < 0 || PyType_Ready(&hdquaIterType) < 0)
-
-			//|| PyType_Ready(&mfvec2Type) < 0 || PyType_Ready(&mfvec2IterType) < 0
-			//|| PyType_Ready(&mfvec3Type) < 0 || PyType_Ready(&mfvec3IterType) < 0
-			//|| PyType_Ready(&mfvec4Type) < 0 || PyType_Ready(&mfvec4IterType) < 0
-			//|| PyType_Ready(&mdvec2Type) < 0 || PyType_Ready(&mdvec2IterType) < 0
-			//|| PyType_Ready(&mdvec3Type) < 0 || PyType_Ready(&mdvec3IterType) < 0
-			//|| PyType_Ready(&mdvec4Type) < 0 || PyType_Ready(&mdvec4IterType) < 0
-			//|| PyType_Ready(&mi8vec2Type) < 0 || PyType_Ready(&mi8vec2IterType) < 0
-			//|| PyType_Ready(&mi8vec3Type) < 0 || PyType_Ready(&mi8vec3IterType) < 0
-			//|| PyType_Ready(&mi8vec4Type) < 0 || PyType_Ready(&mi8vec4IterType) < 0
-			//|| PyType_Ready(&mi16vec2Type) < 0 || PyType_Ready(&mi16vec2IterType) < 0
-			//|| PyType_Ready(&mi16vec3Type) < 0 || PyType_Ready(&mi16vec3IterType) < 0
-			//|| PyType_Ready(&mi16vec4Type) < 0 || PyType_Ready(&mi16vec4IterType) < 0
-			//|| PyType_Ready(&mivec2Type) < 0 || PyType_Ready(&mivec2IterType) < 0
-			//|| PyType_Ready(&mivec3Type) < 0 || PyType_Ready(&mivec3IterType) < 0
-			//|| PyType_Ready(&mivec4Type) < 0 || PyType_Ready(&mivec4IterType) < 0
-			//|| PyType_Ready(&mi64vec2Type) < 0 || PyType_Ready(&mi64vec2IterType) < 0
-			//|| PyType_Ready(&mi64vec3Type) < 0 || PyType_Ready(&mi64vec3IterType) < 0
-			//|| PyType_Ready(&mi64vec4Type) < 0 || PyType_Ready(&mi64vec4IterType) < 0
-			//|| PyType_Ready(&mu8vec2Type) < 0 || PyType_Ready(&mu8vec2IterType) < 0
-			//|| PyType_Ready(&mu8vec3Type) < 0 || PyType_Ready(&mu8vec3IterType) < 0
-			//|| PyType_Ready(&mu8vec4Type) < 0 || PyType_Ready(&mu8vec4IterType) < 0
-			//|| PyType_Ready(&mu16vec2Type) < 0 || PyType_Ready(&mu16vec2IterType) < 0
-			//|| PyType_Ready(&mu16vec3Type) < 0 || PyType_Ready(&mu16vec3IterType) < 0
-			//|| PyType_Ready(&mu16vec4Type) < 0 || PyType_Ready(&mu16vec4IterType) < 0
-			//|| PyType_Ready(&muvec2Type) < 0 || PyType_Ready(&muvec2IterType) < 0
-			//|| PyType_Ready(&muvec3Type) < 0 || PyType_Ready(&muvec3IterType) < 0
-			//|| PyType_Ready(&muvec4Type) < 0 || PyType_Ready(&muvec4IterType) < 0
-			//|| PyType_Ready(&mu64vec2Type) < 0 || PyType_Ready(&mu64vec2IterType) < 0
-			//|| PyType_Ready(&mu64vec3Type) < 0 || PyType_Ready(&mu64vec3IterType) < 0
-			//|| PyType_Ready(&mu64vec4Type) < 0 || PyType_Ready(&mu64vec4IterType) < 0
-			//|| PyType_Ready(&mbvec2Type) < 0 || PyType_Ready(&mbvec2IterType) < 0
-			//|| PyType_Ready(&mbvec3Type) < 0 || PyType_Ready(&mbvec3IterType) < 0
-			//|| PyType_Ready(&mbvec4Type) < 0 || PyType_Ready(&mbvec4IterType) < 0
-
-			//|| PyType_Ready(&lfvec2Type) < 0 || PyType_Ready(&lfvec2IterType) < 0
-			//|| PyType_Ready(&lfvec3Type) < 0 || PyType_Ready(&lfvec3IterType) < 0
-			//|| PyType_Ready(&lfvec4Type) < 0 || PyType_Ready(&lfvec4IterType) < 0
-			//|| PyType_Ready(&ldvec2Type) < 0 || PyType_Ready(&ldvec2IterType) < 0
-			//|| PyType_Ready(&ldvec3Type) < 0 || PyType_Ready(&ldvec3IterType) < 0
-			//|| PyType_Ready(&ldvec4Type) < 0 || PyType_Ready(&ldvec4IterType) < 0
-			//|| PyType_Ready(&li8vec2Type) < 0 || PyType_Ready(&li8vec2IterType) < 0
-			//|| PyType_Ready(&li8vec3Type) < 0 || PyType_Ready(&li8vec3IterType) < 0
-			//|| PyType_Ready(&li8vec4Type) < 0 || PyType_Ready(&li8vec4IterType) < 0
-			//|| PyType_Ready(&li16vec2Type) < 0 || PyType_Ready(&li16vec2IterType) < 0
-			//|| PyType_Ready(&li16vec3Type) < 0 || PyType_Ready(&li16vec3IterType) < 0
-			//|| PyType_Ready(&li16vec4Type) < 0 || PyType_Ready(&li16vec4IterType) < 0
-			//|| PyType_Ready(&livec2Type) < 0 || PyType_Ready(&livec2IterType) < 0
-			//|| PyType_Ready(&livec3Type) < 0 || PyType_Ready(&livec3IterType) < 0
-			//|| PyType_Ready(&livec4Type) < 0 || PyType_Ready(&livec4IterType) < 0
-			//|| PyType_Ready(&li64vec2Type) < 0 || PyType_Ready(&li64vec2IterType) < 0
-			//|| PyType_Ready(&li64vec3Type) < 0 || PyType_Ready(&li64vec3IterType) < 0
-			//|| PyType_Ready(&li64vec4Type) < 0 || PyType_Ready(&li64vec4IterType) < 0
-			//|| PyType_Ready(&lu8vec2Type) < 0 || PyType_Ready(&lu8vec2IterType) < 0
-			//|| PyType_Ready(&lu8vec3Type) < 0 || PyType_Ready(&lu8vec3IterType) < 0
-			//|| PyType_Ready(&lu8vec4Type) < 0 || PyType_Ready(&lu8vec4IterType) < 0
-			//|| PyType_Ready(&lu16vec2Type) < 0 || PyType_Ready(&lu16vec2IterType) < 0
-			//|| PyType_Ready(&lu16vec3Type) < 0 || PyType_Ready(&lu16vec3IterType) < 0
-			//|| PyType_Ready(&lu16vec4Type) < 0 || PyType_Ready(&lu16vec4IterType) < 0
-			//|| PyType_Ready(&luvec2Type) < 0 || PyType_Ready(&luvec2IterType) < 0
-			//|| PyType_Ready(&luvec3Type) < 0 || PyType_Ready(&luvec3IterType) < 0
-			//|| PyType_Ready(&luvec4Type) < 0 || PyType_Ready(&luvec4IterType) < 0
-			//|| PyType_Ready(&lu64vec2Type) < 0 || PyType_Ready(&lu64vec2IterType) < 0
-			//|| PyType_Ready(&lu64vec3Type) < 0 || PyType_Ready(&lu64vec3IterType) < 0
-			//|| PyType_Ready(&lu64vec4Type) < 0 || PyType_Ready(&lu64vec4IterType) < 0
-			//|| PyType_Ready(&lbvec2Type) < 0 || PyType_Ready(&lbvec2IterType) < 0
-			//|| PyType_Ready(&lbvec3Type) < 0 || PyType_Ready(&lbvec3IterType) < 0
-			//|| PyType_Ready(&lbvec4Type) < 0 || PyType_Ready(&lbvec4IterType) < 0)
-			//|| PyType_Ready(&mvec2Type) < 0 || PyType_Ready(&mvec2IterType) < 0
-			//|| PyType_Ready(&mvec3Type) < 0 || PyType_Ready(&mvec3IterType) < 0
-			//|| PyType_Ready(&mvec4Type) < 0 || PyType_Ready(&mvec4IterType) < 0
-			//|| PyType_Ready(&mat2x2Type) < 0 || PyType_Ready(&mat2x2IterType) < 0
-			//|| PyType_Ready(&mat2x3Type) < 0 || PyType_Ready(&mat2x3IterType) < 0
-			//|| PyType_Ready(&mat2x4Type) < 0 || PyType_Ready(&mat2x4IterType) < 0
-			//|| PyType_Ready(&mat3x2Type) < 0 || PyType_Ready(&mat3x2IterType) < 0
-			//|| PyType_Ready(&mat3x3Type) < 0 || PyType_Ready(&mat3x3IterType) < 0
-			//|| PyType_Ready(&mat3x4Type) < 0 || PyType_Ready(&mat3x4IterType) < 0
-			//|| PyType_Ready(&mat4x2Type) < 0 || PyType_Ready(&mat4x2IterType) < 0
-			//|| PyType_Ready(&mat4x3Type) < 0 || PyType_Ready(&mat4x3IterType) < 0
-			//|| PyType_Ready(&mat4x4Type) < 0 || PyType_Ready(&mat4x4IterType) < 0
-			//|| PyType_Ready(&quatType) < 0 || PyType_Ready(&quatIterType) < 0)
 			return NULL;
 
 		module_glm = PyModule_Create(&glmmodule);
@@ -29746,27 +29919,6 @@ extern "C" {
 		Py_INCREF(&humat4x4Type);
 		PyModule_AddObject(module_glm, "u32mat4", (PyObject *)&humat4x4Type);
 
-		//Py_INCREF(&hfvec2Type);
-		//PyModule_AddObject(module_glm, "highp_vec2", (PyObject *)&hfvec2Type);
-		//Py_INCREF(&hfvec3Type);
-		//PyModule_AddObject(module_glm, "highp_vec3", (PyObject *)&hfvec3Type);
-		//Py_INCREF(&hfvec4Type);
-		//PyModule_AddObject(module_glm, "highp_vec4", (PyObject *)&hfvec4Type);
-
-		//Py_INCREF(&mfvec2Type);
-		//PyModule_AddObject(module_glm, "mediump_vec2", (PyObject *)&mfvec2Type);
-		//Py_INCREF(&mfvec3Type);
-		//PyModule_AddObject(module_glm, "mediump_vec3", (PyObject *)&mfvec3Type);
-		//Py_INCREF(&mfvec4Type);
-		//PyModule_AddObject(module_glm, "mediump_vec4", (PyObject *)&mfvec4Type);
-
-		//Py_INCREF(&lfvec2Type);
-		//PyModule_AddObject(module_glm, "lowp_vec2", (PyObject *)&lfvec2Type);
-		//Py_INCREF(&lfvec3Type);
-		//PyModule_AddObject(module_glm, "lowp_vec3", (PyObject *)&lfvec3Type);
-		//Py_INCREF(&lfvec4Type);
-		//PyModule_AddObject(module_glm, "lowp_vec4", (PyObject *)&lfvec4Type);
-
 		Py_INCREF(&hfvec1Type);
 		PyModule_AddObject(module_glm, "fvec1", (PyObject *)&hfvec1Type);
 		Py_INCREF(&hfvec2Type);
@@ -29901,361 +30053,6 @@ extern "C" {
 		PyModule_AddObject(module_glm, "bvec3", (PyObject *)&hbvec3Type);
 		Py_INCREF(&hbvec4Type);
 		PyModule_AddObject(module_glm, "bvec4", (PyObject *)&hbvec4Type);
-
-		//Py_INCREF(&hfvec2Type);
-		//PyModule_AddObject(module_glm, "highp_fvec2", (PyObject *)&hfvec2Type);
-		//Py_INCREF(&hfvec3Type);
-		//PyModule_AddObject(module_glm, "highp_fvec3", (PyObject *)&hfvec3Type);
-		//Py_INCREF(&hfvec4Type);
-		//PyModule_AddObject(module_glm, "highp_fvec4", (PyObject *)&hfvec4Type);
-
-		//Py_INCREF(&hdvec2Type);
-		//PyModule_AddObject(module_glm, "highp_dvec2", (PyObject *)&hdvec2Type);
-		//Py_INCREF(&hdvec3Type);
-		//PyModule_AddObject(module_glm, "highp_dvec3", (PyObject *)&hdvec3Type);
-		//Py_INCREF(&hdvec4Type);
-		//PyModule_AddObject(module_glm, "highp_dvec4", (PyObject *)&hdvec4Type);
-
-		//Py_INCREF(&hfvec2Type);
-		//PyModule_AddObject(module_glm, "highp_f32vec2", (PyObject *)&hfvec2Type);
-		//Py_INCREF(&hfvec3Type);
-		//PyModule_AddObject(module_glm, "highp_f32vec3", (PyObject *)&hfvec3Type);
-		//Py_INCREF(&hfvec4Type);
-		//PyModule_AddObject(module_glm, "highp_f32vec4", (PyObject *)&hfvec4Type);
-
-		//Py_INCREF(&hdvec2Type);
-		//PyModule_AddObject(module_glm, "highp_f64vec2", (PyObject *)&hdvec2Type);
-		//Py_INCREF(&hdvec3Type);
-		//PyModule_AddObject(module_glm, "highp_f64vec3", (PyObject *)&hdvec3Type);
-		//Py_INCREF(&hdvec4Type);
-		//PyModule_AddObject(module_glm, "highp_f64vec4", (PyObject *)&hdvec4Type);
-
-		//Py_INCREF(&hi8vec2Type);
-		//PyModule_AddObject(module_glm, "highp_i8vec2", (PyObject *)&hi8vec2Type);
-		//Py_INCREF(&hi8vec3Type);
-		//PyModule_AddObject(module_glm, "highp_i8vec3", (PyObject *)&hi8vec3Type);
-		//Py_INCREF(&hi8vec4Type);
-		//PyModule_AddObject(module_glm, "highp_i8vec4", (PyObject *)&hi8vec4Type);
-
-		//Py_INCREF(&hi16vec2Type);
-		//PyModule_AddObject(module_glm, "highp_i16vec2", (PyObject *)&hi16vec2Type);
-		//Py_INCREF(&hi16vec3Type);
-		//PyModule_AddObject(module_glm, "highp_i16vec3", (PyObject *)&hi16vec3Type);
-		//Py_INCREF(&hi16vec4Type);
-		//PyModule_AddObject(module_glm, "highp_i16vec4", (PyObject *)&hi16vec4Type);
-
-		//Py_INCREF(&hivec2Type);
-		//PyModule_AddObject(module_glm, "highp_i32vec2", (PyObject *)&hivec2Type);
-		//Py_INCREF(&hivec3Type);
-		//PyModule_AddObject(module_glm, "highp_i32vec3", (PyObject *)&hivec3Type);
-		//Py_INCREF(&hivec4Type);
-		//PyModule_AddObject(module_glm, "highp_i32vec4", (PyObject *)&hivec4Type);
-
-		//Py_INCREF(&hivec2Type);
-		//PyModule_AddObject(module_glm, "highp_ivec2", (PyObject *)&hivec2Type);
-		//Py_INCREF(&hivec3Type);
-		//PyModule_AddObject(module_glm, "highp_ivec3", (PyObject *)&hivec3Type);
-		//Py_INCREF(&hivec4Type);
-		//PyModule_AddObject(module_glm, "highp_ivec4", (PyObject *)&hivec4Type);
-
-		//Py_INCREF(&hi64vec2Type);
-		//PyModule_AddObject(module_glm, "highp_i64vec2", (PyObject *)&hi64vec2Type);
-		//Py_INCREF(&hi64vec3Type);
-		//PyModule_AddObject(module_glm, "highp_i64vec3", (PyObject *)&hi64vec3Type);
-		//Py_INCREF(&hi64vec4Type);
-		//PyModule_AddObject(module_glm, "highp_i64vec4", (PyObject *)&hi64vec4Type);
-
-		//Py_INCREF(&hu8vec2Type);
-		//PyModule_AddObject(module_glm, "highp_u8vec2", (PyObject *)&hu8vec2Type);
-		//Py_INCREF(&hu8vec3Type);
-		//PyModule_AddObject(module_glm, "highp_u8vec3", (PyObject *)&hu8vec3Type);
-		//Py_INCREF(&hu8vec4Type);
-		//PyModule_AddObject(module_glm, "highp_u8vec4", (PyObject *)&hu8vec4Type);
-
-		//Py_INCREF(&hu16vec2Type);
-		//PyModule_AddObject(module_glm, "highp_u16vec2", (PyObject *)&hu16vec2Type);
-		//Py_INCREF(&hu16vec3Type);
-		//PyModule_AddObject(module_glm, "highp_u16vec3", (PyObject *)&hu16vec3Type);
-		//Py_INCREF(&hu16vec4Type);
-		//PyModule_AddObject(module_glm, "highp_u16vec4", (PyObject *)&hu16vec4Type);
-
-		//Py_INCREF(&huvec2Type);
-		//PyModule_AddObject(module_glm, "highp_u32vec2", (PyObject *)&huvec2Type);
-		//Py_INCREF(&huvec3Type);
-		//PyModule_AddObject(module_glm, "highp_u32vec3", (PyObject *)&huvec3Type);
-		//Py_INCREF(&huvec4Type);
-		//PyModule_AddObject(module_glm, "highp_u32vec4", (PyObject *)&huvec4Type);
-
-		//Py_INCREF(&huvec2Type);
-		//PyModule_AddObject(module_glm, "highp_uvec2", (PyObject *)&huvec2Type);
-		//Py_INCREF(&huvec3Type);
-		//PyModule_AddObject(module_glm, "highp_uvec3", (PyObject *)&huvec3Type);
-		//Py_INCREF(&huvec4Type);
-		//PyModule_AddObject(module_glm, "highp_uvec4", (PyObject *)&huvec4Type);
-
-		//Py_INCREF(&hu64vec2Type);
-		//PyModule_AddObject(module_glm, "highp_u64vec2", (PyObject *)&hu64vec2Type);
-		//Py_INCREF(&hu64vec3Type);
-		//PyModule_AddObject(module_glm, "highp_u64vec3", (PyObject *)&hu64vec3Type);
-		//Py_INCREF(&hu64vec4Type);
-		//PyModule_AddObject(module_glm, "highp_u64vec4", (PyObject *)&hu64vec4Type);
-
-		//Py_INCREF(&hbvec2Type);
-		//PyModule_AddObject(module_glm, "highp_bvec2", (PyObject *)&hbvec2Type);
-		//Py_INCREF(&hbvec3Type);
-		//PyModule_AddObject(module_glm, "highp_bvec3", (PyObject *)&hbvec3Type);
-		//Py_INCREF(&hbvec4Type);
-		//PyModule_AddObject(module_glm, "highp_bvec4", (PyObject *)&hbvec4Type);
-
-		//Py_INCREF(&mfvec2Type);
-		//PyModule_AddObject(module_glm, "mediump_fvec2", (PyObject *)&mfvec2Type);
-		//Py_INCREF(&mfvec3Type);
-		//PyModule_AddObject(module_glm, "mediump_fvec3", (PyObject *)&mfvec3Type);
-		//Py_INCREF(&mfvec4Type);
-		//PyModule_AddObject(module_glm, "mediump_fvec4", (PyObject *)&mfvec4Type);
-
-		//Py_INCREF(&mdvec2Type);
-		//PyModule_AddObject(module_glm, "mediump_dvec2", (PyObject *)&mdvec2Type);
-		//Py_INCREF(&mdvec3Type);
-		//PyModule_AddObject(module_glm, "mediump_dvec3", (PyObject *)&mdvec3Type);
-		//Py_INCREF(&mdvec4Type);
-		//PyModule_AddObject(module_glm, "mediump_dvec4", (PyObject *)&mdvec4Type);
-
-		//Py_INCREF(&mfvec2Type);
-		//PyModule_AddObject(module_glm, "mediump_f32vec2", (PyObject *)&mfvec2Type);
-		//Py_INCREF(&mfvec3Type);
-		//PyModule_AddObject(module_glm, "mediump_f32vec3", (PyObject *)&mfvec3Type);
-		//Py_INCREF(&mfvec4Type);
-		//PyModule_AddObject(module_glm, "mediump_f32vec4", (PyObject *)&mfvec4Type);
-
-		//Py_INCREF(&mdvec2Type);
-		//PyModule_AddObject(module_glm, "mediump_f64vec2", (PyObject *)&mdvec2Type);
-		//Py_INCREF(&mdvec3Type);
-		//PyModule_AddObject(module_glm, "mediump_f64vec3", (PyObject *)&mdvec3Type);
-		//Py_INCREF(&mdvec4Type);
-		//PyModule_AddObject(module_glm, "mediump_f64vec4", (PyObject *)&mdvec4Type);
-
-		//Py_INCREF(&mi8vec2Type);
-		//PyModule_AddObject(module_glm, "mediump_i8vec2", (PyObject *)&mi8vec2Type);
-		//Py_INCREF(&mi8vec3Type);
-		//PyModule_AddObject(module_glm, "mediump_i8vec3", (PyObject *)&mi8vec3Type);
-		//Py_INCREF(&mi8vec4Type);
-		//PyModule_AddObject(module_glm, "mediump_i8vec4", (PyObject *)&mi8vec4Type);
-
-		//Py_INCREF(&mi16vec2Type);
-		//PyModule_AddObject(module_glm, "mediump_i16vec2", (PyObject *)&mi16vec2Type);
-		//Py_INCREF(&mi16vec3Type);
-		//PyModule_AddObject(module_glm, "mediump_i16vec3", (PyObject *)&mi16vec3Type);
-		//Py_INCREF(&mi16vec4Type);
-		//PyModule_AddObject(module_glm, "mediump_i16vec4", (PyObject *)&mi16vec4Type);
-
-		//Py_INCREF(&mivec2Type);
-		//PyModule_AddObject(module_glm, "mediump_i32vec2", (PyObject *)&mivec2Type);
-		//Py_INCREF(&mivec3Type);
-		//PyModule_AddObject(module_glm, "mediump_i32vec3", (PyObject *)&mivec3Type);
-		//Py_INCREF(&mivec4Type);
-		//PyModule_AddObject(module_glm, "mediump_i32vec4", (PyObject *)&mivec4Type);
-
-		//Py_INCREF(&mivec2Type);
-		//PyModule_AddObject(module_glm, "mediump_ivec2", (PyObject *)&mivec2Type);
-		//Py_INCREF(&mivec3Type);
-		//PyModule_AddObject(module_glm, "mediump_ivec3", (PyObject *)&mivec3Type);
-		//Py_INCREF(&mivec4Type);
-		//PyModule_AddObject(module_glm, "mediump_ivec4", (PyObject *)&mivec4Type);
-
-		//Py_INCREF(&mi64vec2Type);
-		//PyModule_AddObject(module_glm, "mediump_i64vec2", (PyObject *)&mi64vec2Type);
-		//Py_INCREF(&mi64vec3Type);
-		//PyModule_AddObject(module_glm, "mediump_i64vec3", (PyObject *)&mi64vec3Type);
-		//Py_INCREF(&mi64vec4Type);
-		//PyModule_AddObject(module_glm, "mediump_i64vec4", (PyObject *)&mi64vec4Type);
-
-		//Py_INCREF(&mu8vec2Type);
-		//PyModule_AddObject(module_glm, "mediump_u8vec2", (PyObject *)&mu8vec2Type);
-		//Py_INCREF(&mu8vec3Type);
-		//PyModule_AddObject(module_glm, "mediump_u8vec3", (PyObject *)&mu8vec3Type);
-		//Py_INCREF(&mu8vec4Type);
-		//PyModule_AddObject(module_glm, "mediump_u8vec4", (PyObject *)&mu8vec4Type);
-
-		//Py_INCREF(&mu16vec2Type);
-		//PyModule_AddObject(module_glm, "mediump_u16vec2", (PyObject *)&mu16vec2Type);
-		//Py_INCREF(&mu16vec3Type);
-		//PyModule_AddObject(module_glm, "mediump_u16vec3", (PyObject *)&mu16vec3Type);
-		//Py_INCREF(&mu16vec4Type);
-		//PyModule_AddObject(module_glm, "mediump_u16vec4", (PyObject *)&mu16vec4Type);
-
-		//Py_INCREF(&muvec2Type);
-		//PyModule_AddObject(module_glm, "mediump_u32vec2", (PyObject *)&muvec2Type);
-		//Py_INCREF(&muvec3Type);
-		//PyModule_AddObject(module_glm, "mediump_u32vec3", (PyObject *)&muvec3Type);
-		//Py_INCREF(&muvec4Type);
-		//PyModule_AddObject(module_glm, "mediump_u32vec4", (PyObject *)&muvec4Type);
-
-		//Py_INCREF(&muvec2Type);
-		//PyModule_AddObject(module_glm, "mediump_uvec2", (PyObject *)&muvec2Type);
-		//Py_INCREF(&muvec3Type);
-		//PyModule_AddObject(module_glm, "mediump_uvec3", (PyObject *)&muvec3Type);
-		//Py_INCREF(&muvec4Type);
-		//PyModule_AddObject(module_glm, "mediump_uvec4", (PyObject *)&muvec4Type);
-
-		//Py_INCREF(&mu64vec2Type);
-		//PyModule_AddObject(module_glm, "mediump_u64vec2", (PyObject *)&mu64vec2Type);
-		//Py_INCREF(&mu64vec3Type);
-		//PyModule_AddObject(module_glm, "mediump_u64vec3", (PyObject *)&mu64vec3Type);
-		//Py_INCREF(&mu64vec4Type);
-		//PyModule_AddObject(module_glm, "mediump_u64vec4", (PyObject *)&mu64vec4Type);
-
-		//Py_INCREF(&mbvec2Type);
-		//PyModule_AddObject(module_glm, "mediump_bvec2", (PyObject *)&mbvec2Type);
-		//Py_INCREF(&mbvec3Type);
-		//PyModule_AddObject(module_glm, "mediump_bvec3", (PyObject *)&mbvec3Type);
-		//Py_INCREF(&mbvec4Type);
-		//PyModule_AddObject(module_glm, "mediump_bvec4", (PyObject *)&mbvec4Type);
-
-		//Py_INCREF(&lfvec2Type);
-		//PyModule_AddObject(module_glm, "lowp_fvec2", (PyObject *)&lfvec2Type);
-		//Py_INCREF(&lfvec3Type);
-		//PyModule_AddObject(module_glm, "lowp_fvec3", (PyObject *)&lfvec3Type);
-		//Py_INCREF(&lfvec4Type);
-		//PyModule_AddObject(module_glm, "lowp_fvec4", (PyObject *)&lfvec4Type);
-
-		//Py_INCREF(&ldvec2Type);
-		//PyModule_AddObject(module_glm, "lowp_dvec2", (PyObject *)&ldvec2Type);
-		//Py_INCREF(&ldvec3Type);
-		//PyModule_AddObject(module_glm, "lowp_dvec3", (PyObject *)&ldvec3Type);
-		//Py_INCREF(&ldvec4Type);
-		//PyModule_AddObject(module_glm, "lowp_dvec4", (PyObject *)&ldvec4Type);
-
-		//Py_INCREF(&lfvec2Type);
-		//PyModule_AddObject(module_glm, "lowp_f32vec2", (PyObject *)&lfvec2Type);
-		//Py_INCREF(&lfvec3Type);
-		//PyModule_AddObject(module_glm, "lowp_f32vec3", (PyObject *)&lfvec3Type);
-		//Py_INCREF(&lfvec4Type);
-		//PyModule_AddObject(module_glm, "lowp_f32vec4", (PyObject *)&lfvec4Type);
-
-		//Py_INCREF(&ldvec2Type);
-		//PyModule_AddObject(module_glm, "lowp_f64vec2", (PyObject *)&ldvec2Type);
-		//Py_INCREF(&ldvec3Type);
-		//PyModule_AddObject(module_glm, "lowp_f64vec3", (PyObject *)&ldvec3Type);
-		//Py_INCREF(&ldvec4Type);
-		//PyModule_AddObject(module_glm, "lowp_f64vec4", (PyObject *)&ldvec4Type);
-
-		//Py_INCREF(&li8vec2Type);
-		//PyModule_AddObject(module_glm, "lowp_i8vec2", (PyObject *)&li8vec2Type);
-		//Py_INCREF(&li8vec3Type);
-		//PyModule_AddObject(module_glm, "lowp_i8vec3", (PyObject *)&li8vec3Type);
-		//Py_INCREF(&li8vec4Type);
-		//PyModule_AddObject(module_glm, "lowp_i8vec4", (PyObject *)&li8vec4Type);
-
-		//Py_INCREF(&li16vec2Type);
-		//PyModule_AddObject(module_glm, "lowp_i16vec2", (PyObject *)&li16vec2Type);
-		//Py_INCREF(&li16vec3Type);
-		//PyModule_AddObject(module_glm, "lowp_i16vec3", (PyObject *)&li16vec3Type);
-		//Py_INCREF(&li16vec4Type);
-		//PyModule_AddObject(module_glm, "lowp_i16vec4", (PyObject *)&li16vec4Type);
-
-		//Py_INCREF(&livec2Type);
-		//PyModule_AddObject(module_glm, "lowp_i32vec2", (PyObject *)&livec2Type);
-		//Py_INCREF(&livec3Type);
-		//PyModule_AddObject(module_glm, "lowp_i32vec3", (PyObject *)&livec3Type);
-		//Py_INCREF(&livec4Type);
-		//PyModule_AddObject(module_glm, "lowp_i32vec4", (PyObject *)&livec4Type);
-
-		//Py_INCREF(&livec2Type);
-		//PyModule_AddObject(module_glm, "lowp_ivec2", (PyObject *)&livec2Type);
-		//Py_INCREF(&livec3Type);
-		//PyModule_AddObject(module_glm, "lowp_ivec3", (PyObject *)&livec3Type);
-		//Py_INCREF(&livec4Type);
-		//PyModule_AddObject(module_glm, "lowp_ivec4", (PyObject *)&livec4Type);
-
-		//Py_INCREF(&li64vec2Type);
-		//PyModule_AddObject(module_glm, "lowp_i64vec2", (PyObject *)&li64vec2Type);
-		//Py_INCREF(&li64vec3Type);
-		//PyModule_AddObject(module_glm, "lowp_i64vec3", (PyObject *)&li64vec3Type);
-		//Py_INCREF(&li64vec4Type);
-		//PyModule_AddObject(module_glm, "lowp_i64vec4", (PyObject *)&li64vec4Type);
-
-		//Py_INCREF(&lu8vec2Type);
-		//PyModule_AddObject(module_glm, "lowp_u8vec2", (PyObject *)&lu8vec2Type);
-		//Py_INCREF(&lu8vec3Type);
-		//PyModule_AddObject(module_glm, "lowp_u8vec3", (PyObject *)&lu8vec3Type);
-		//Py_INCREF(&lu8vec4Type);
-		//PyModule_AddObject(module_glm, "lowp_u8vec4", (PyObject *)&lu8vec4Type);
-
-		//Py_INCREF(&lu16vec2Type);
-		//PyModule_AddObject(module_glm, "lowp_u16vec2", (PyObject *)&lu16vec2Type);
-		//Py_INCREF(&lu16vec3Type);
-		//PyModule_AddObject(module_glm, "lowp_u16vec3", (PyObject *)&lu16vec3Type);
-		//Py_INCREF(&lu16vec4Type);
-		//PyModule_AddObject(module_glm, "lowp_u16vec4", (PyObject *)&lu16vec4Type);
-
-		//Py_INCREF(&luvec2Type);
-		//PyModule_AddObject(module_glm, "lowp_u32vec2", (PyObject *)&luvec2Type);
-		//Py_INCREF(&luvec3Type);
-		//PyModule_AddObject(module_glm, "lowp_u32vec3", (PyObject *)&luvec3Type);
-		//Py_INCREF(&luvec4Type);
-		//PyModule_AddObject(module_glm, "lowp_u32vec4", (PyObject *)&luvec4Type);
-
-		//Py_INCREF(&luvec2Type);
-		//PyModule_AddObject(module_glm, "lowp_uvec2", (PyObject *)&luvec2Type);
-		//Py_INCREF(&luvec3Type);
-		//PyModule_AddObject(module_glm, "lowp_uvec3", (PyObject *)&luvec3Type);
-		//Py_INCREF(&luvec4Type);
-		//PyModule_AddObject(module_glm, "lowp_uvec4", (PyObject *)&luvec4Type);
-
-		//Py_INCREF(&lu64vec2Type);
-		//PyModule_AddObject(module_glm, "lowp_u64vec2", (PyObject *)&lu64vec2Type);
-		//Py_INCREF(&lu64vec3Type);
-		//PyModule_AddObject(module_glm, "lowp_u64vec3", (PyObject *)&lu64vec3Type);
-		//Py_INCREF(&lu64vec4Type);
-		//PyModule_AddObject(module_glm, "lowp_u64vec4", (PyObject *)&lu64vec4Type);
-
-		//Py_INCREF(&lbvec2Type);
-		//PyModule_AddObject(module_glm, "lowp_bvec2", (PyObject *)&lbvec2Type);
-		//Py_INCREF(&lbvec3Type);
-		//PyModule_AddObject(module_glm, "lowp_bvec3", (PyObject *)&lbvec3Type);
-		//Py_INCREF(&lbvec4Type);
-		//PyModule_AddObject(module_glm, "lowp_bvec4", (PyObject *)&lbvec4Type);
-
-		//Py_INCREF(&mat2x2Type);
-		//PyModule_AddObject(module_glm, "mat2x2", (PyObject *)&mat2x2Type);
-
-		//Py_INCREF(&mat2x3Type);
-		//PyModule_AddObject(module_glm, "mat2x3", (PyObject *)&mat2x3Type);
-
-		//Py_INCREF(&mat2x4Type);
-		//PyModule_AddObject(module_glm, "mat2x4", (PyObject *)&mat2x4Type);
-
-		//Py_INCREF(&mat3x2Type);
-		//PyModule_AddObject(module_glm, "mat3x2", (PyObject *)&mat3x2Type);
-
-		//Py_INCREF(&mat3x3Type);
-		//PyModule_AddObject(module_glm, "mat3x3", (PyObject *)&mat3x3Type);
-
-		//Py_INCREF(&mat3x4Type);
-		//PyModule_AddObject(module_glm, "mat3x4", (PyObject *)&mat3x4Type);
-
-		//Py_INCREF(&mat4x2Type);
-		//PyModule_AddObject(module_glm, "mat4x2", (PyObject *)&mat4x2Type);
-
-		//Py_INCREF(&mat4x3Type);
-		//PyModule_AddObject(module_glm, "mat4x3", (PyObject *)&mat4x3Type);
-
-		//Py_INCREF(&mat4x4Type);
-		//PyModule_AddObject(module_glm, "mat4x4", (PyObject *)&mat4x4Type);
-
-
-		//Py_INCREF(&mat2x2Type);
-		//PyModule_AddObject(module_glm, "mat2", (PyObject *)&mat2x2Type);
-
-		//Py_INCREF(&mat3x3Type);
-		//PyModule_AddObject(module_glm, "mat3", (PyObject *)&mat3x3Type);
-
-		//Py_INCREF(&mat4x4Type);
-		//PyModule_AddObject(module_glm, "mat4", (PyObject *)&mat4x4Type);
-
-		//Py_INCREF(&quatType);
-		//PyModule_AddObject(module_glm, "quat", (PyObject *)&quatType);
 
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 		Py_DECREF(gtc);
