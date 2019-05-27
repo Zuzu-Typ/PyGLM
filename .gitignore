@@ -16,4 +16,3 @@ readmelang.py
 *.pyc
 gen_macro_function.py
 expand.py
-*.pyd
