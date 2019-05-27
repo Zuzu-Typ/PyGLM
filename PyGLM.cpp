@@ -20099,25 +20099,31 @@ qua_releasebuffer(PyObject*, Py_buffer* view) {
 static PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	if (PyGLM_Number_Check(arg)) {\
-		return PyGLM_PyObject_FromNumber(glm::NAME(PyGLM_Number_FromPyObject<double>(arg)));\
+		return pack(glm::NAME(PyGLM_Number_FromPyObject<double>(arg)));\
+	}\
+	if (PyGLM_Vec_Check(1, float, arg)) {\
+		return pack(glm::NAME(unpack_vec<1, float>(arg)));\
+	}\
+	if (PyGLM_Vec_Check(1, double, arg)) {\
+		return pack(glm::NAME(unpack_vec<1, double>(arg)));\
 	}\
 	if (PyGLM_Vec_Check(2, float, arg)) {\
-		return pack_vec(glm::NAME(unpack_vec<2, float>(arg)));\
+		return pack(glm::NAME(unpack_vec<2, float>(arg)));\
 	}\
 	if (PyGLM_Vec_Check(2, double, arg)) {\
-		return pack_vec(glm::NAME(unpack_vec<2, double>(arg)));\
+		return pack(glm::NAME(unpack_vec<2, double>(arg)));\
 	}\
 	if (PyGLM_Vec_Check(3, float, arg)) {\
-		return pack_vec(glm::NAME(unpack_vec<3, float>(arg)));\
+		return pack(glm::NAME(unpack_vec<3, float>(arg)));\
 	}\
 	if (PyGLM_Vec_Check(3, double, arg)) {\
-		return pack_vec(glm::NAME(unpack_vec<3, double>(arg)));\
+		return pack(glm::NAME(unpack_vec<3, double>(arg)));\
 	}\
 	if (PyGLM_Vec_Check(4, float, arg)) {\
-		return pack_vec(glm::NAME(unpack_vec<4, float>(arg)));\
+		return pack(glm::NAME(unpack_vec<4, float>(arg)));\
 	}\
 	if (PyGLM_Vec_Check(4, double, arg)) {\
-		return pack_vec(glm::NAME(unpack_vec<4, double>(arg)));\
+		return pack(glm::NAME(unpack_vec<4, double>(arg)));\
 	}\
 	PyGLM_TYPEERROR_O("invalid argument type for " #NAME "(): ", arg);\
 	return NULL;\
@@ -20129,43 +20135,55 @@ NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {\
-		return PyGLM_PyObject_FromNumber(glm::NAME(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
+		return pack(glm::NAME(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, float>(arg1), unpack_vec<1, float>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, double>(arg1), unpack_vec<1, double>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<2, float>(arg1), unpack_vec<2, float>(arg2)));\
+		return pack(glm::NAME(unpack_vec<2, float>(arg1), unpack_vec<2, float>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<2, double>(arg1), unpack_vec<2, double>(arg2)));\
+		return pack(glm::NAME(unpack_vec<2, double>(arg1), unpack_vec<2, double>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<3, float>(arg1), unpack_vec<3, float>(arg2)));\
+		return pack(glm::NAME(unpack_vec<3, float>(arg1), unpack_vec<3, float>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<3, double>(arg1), unpack_vec<3, double>(arg2)));\
+		return pack(glm::NAME(unpack_vec<3, double>(arg1), unpack_vec<3, double>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<4, float>(arg1), unpack_vec<4, float>(arg2)));\
+		return pack(glm::NAME(unpack_vec<4, float>(arg1), unpack_vec<4, float>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<4, double>(arg1), unpack_vec<4, double>(arg2)));\
+		return pack(glm::NAME(unpack_vec<4, double>(arg1), unpack_vec<4, double>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Number_Check(arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Number_Check(arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Number_Check(arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<2, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2)));\
+		return pack(glm::NAME(unpack_vec<2, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Number_Check(arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<2, double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
+		return pack(glm::NAME(unpack_vec<2, double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Number_Check(arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<3, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2)));\
+		return pack(glm::NAME(unpack_vec<3, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Number_Check(arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<3, double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
+		return pack(glm::NAME(unpack_vec<3, double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Number_Check(arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<4, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2)));\
+		return pack(glm::NAME(unpack_vec<4, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Number_Check(arg2)) {\
-		return pack_vec(glm::NAME(unpack_vec<4, double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
+		return pack(glm::NAME(unpack_vec<4, double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
 	}\
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for " #NAME "(): ", arg1, arg2);\
 	return NULL;\
@@ -20177,25 +20195,31 @@ NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2, *arg3;\
 	PyGLM_Arg_Unpack_3O(args, #NAME, arg1, arg2, arg3);\
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
-		return PyGLM_PyObject_FromNumber(glm::NAME(PyGLM_Number_FromPyObject<float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
+		return pack(glm::NAME(PyGLM_Number_FromPyObject<float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2) && PyGLM_Vec_Check(1, float, arg3)) {\
+		return pack(glm::NAME(unpack_vec<1, float>(arg1), unpack_vec<1, float>(arg2), unpack_vec<1, float>(arg3)));\
 	}\
 	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2) && PyGLM_Vec_Check(2, float, arg3)) {\
-		return pack_vec(glm::NAME(unpack_vec<2, float>(arg1), unpack_vec<2, float>(arg2), unpack_vec<2, float>(arg3)));\
+		return pack(glm::NAME(unpack_vec<2, float>(arg1), unpack_vec<2, float>(arg2), unpack_vec<2, float>(arg3)));\
 	}\
 	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2) && PyGLM_Vec_Check(3, float, arg3)) {\
-		return pack_vec(glm::NAME(unpack_vec<3, float>(arg1), unpack_vec<3, float>(arg2), unpack_vec<3, float>(arg3)));\
+		return pack(glm::NAME(unpack_vec<3, float>(arg1), unpack_vec<3, float>(arg2), unpack_vec<3, float>(arg3)));\
 	}\
 	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2) && PyGLM_Vec_Check(4, float, arg3)) {\
-		return pack_vec(glm::NAME(unpack_vec<4, float>(arg1), unpack_vec<4, float>(arg2), unpack_vec<4, float>(arg3)));\
+		return pack(glm::NAME(unpack_vec<4, float>(arg1), unpack_vec<4, float>(arg2), unpack_vec<4, float>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
+		return pack(glm::NAME(unpack_vec<1, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
 	}\
 	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
-		return pack_vec(glm::NAME(unpack_vec<2, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
+		return pack(glm::NAME(unpack_vec<2, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
 	}\
 	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
-		return pack_vec(glm::NAME(unpack_vec<3, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
+		return pack(glm::NAME(unpack_vec<3, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
 	}\
 	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
-		return pack_vec(glm::NAME(unpack_vec<4, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
+		return pack(glm::NAME(unpack_vec<4, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
 	}\
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for " #NAME "()");\
 	return NULL;\
@@ -20206,6 +20230,12 @@ static PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	if (PyGLM_Number_Check(arg)) {\
 		return pack(glm::NAME(PyGLM_Number_FromPyObject<double>(arg)));\
+	}\
+	if (PyGLM_Vec_Check(1, float, arg)) {\
+		return pack(glm::NAME(unpack_vec<1, float>(arg)));\
+	}\
+	if (PyGLM_Vec_Check(1, double, arg)) {\
+		return pack(glm::NAME(unpack_vec<1, double>(arg)));\
 	}\
 	if (PyGLM_Vec_Check(2, float, arg)) {\
 		return pack(glm::NAME(unpack_vec<2, float>(arg)));\
@@ -20242,6 +20272,12 @@ NAME##_(PyObject*, PyObject* args) {\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {\
 		return pack(glm::NAME(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, float>(arg1), unpack_vec<1, float>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, double>(arg1), unpack_vec<1, double>(arg2)));\
 	}\
 	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {\
 		return pack(glm::NAME(unpack_vec<2, float>(arg1), unpack_vec<2, float>(arg2)));\
@@ -20295,7 +20331,6 @@ NAME##_(PyObject*, PyObject* arg) {\
 	PyGLM_TYPEERROR_O("invalid argument type for " #NAME "(): ", arg);\
 	return NULL;\
 }
-
 #define PyGLM_MAKE_GLM_FUNC_NNN_VVV__tfF(NAME)\
 static PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
@@ -20303,6 +20338,12 @@ NAME##_(PyObject*, PyObject* args) {\
 	PyGLM_Arg_Unpack_3O(args, #NAME, arg1, arg2, arg3);\
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
 		return pack(glm::NAME(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2) && PyGLM_Vec_Check(1, float, arg3)) {\
+		return pack(glm::NAME(unpack_vec<1, float>(arg1), unpack_vec<1, float>(arg2), unpack_vec<1, float>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2) && PyGLM_Vec_Check(1, double, arg3)) {\
+		return pack(glm::NAME(unpack_vec<1, double>(arg1), unpack_vec<1, double>(arg2), unpack_vec<1, double>(arg3)));\
 	}\
 	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2) && PyGLM_Vec_Check(2, float, arg3)) {\
 		return pack(glm::NAME(unpack_vec<2, float>(arg1), unpack_vec<2, float>(arg2), unpack_vec<2, float>(arg3)));\
@@ -20333,6 +20374,12 @@ NAME##_(PyObject*, PyObject* args) {\
 	PyGLM_Arg_Unpack_3O(args, #NAME, arg1, arg2, arg3);\
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
 		return pack(glm::NAME(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2) && PyGLM_Number_Check(arg3)) {\
+		return pack(glm::NAME(unpack_vec<1, float>(arg1), unpack_vec<1, float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2) && PyGLM_Number_Check(arg3)) {\
+		return pack(glm::NAME(unpack_vec<1, double>(arg1), unpack_vec<1, double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));\
 	}\
 	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2) && PyGLM_Number_Check(arg3)) {\
 		return pack(glm::NAME(unpack_vec<2, float>(arg1), unpack_vec<2, float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
