@@ -16,8 +16,6 @@
 
 #define GLM_FORCE_CTOR_INIT
 
-#define GLM_FORCE_CTOR_INIT
-
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_integer.hpp>
