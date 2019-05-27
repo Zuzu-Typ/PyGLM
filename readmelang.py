@@ -19,6 +19,7 @@ SUBTITLE = 2**10
 SECTION1 = 2**11
 SECTION2 = 2**12
 SECTION3 = 2**13
+INLINE_CODE = 2**14
 
 def format_md(text):
     for char in "\\`*{}[]()#+-.!_":
@@ -40,7 +41,7 @@ class Object:
 
     def to_rst(self, to_be_inlined = True):
         text = self.text
-        if self.mode != CODE:
+        if not self.mode in (CODE, INLINE_CODE):
             text = format_rst(text)
         if self.mode in (NONE, TEXT):
             ind = text.rfind("\n")
@@ -83,11 +84,11 @@ class Object:
             if to_be_inlined:
                 return "| `{} <{}>`_".format(text, self.options["url"])
             return "`{} <{}>`_".format(text, self.options["url"])
+        if self.mode == INLINE_CODE:
+            if to_be_inlined:
+                return "| :code:`{}`".format(text)
+            return ":code:`{}`".format(text)
         if self.mode == CODE:
-##            if not "\n" in text:
-##                if to_be_inlined:
-##                    return "| ``{}``".format(text)
-##                return "``{}``".format(text)
             if to_be_inlined:
                 out = "\n\n::\n\n"
             else:
@@ -114,7 +115,7 @@ class Object:
 
     def to_md(self):
         text = self.text
-        if self.mode != CODE:
+        if not self.mode in (CODE, INLINE_CODE):
             text = format_md(text)
         if self.mode in (NONE, TEXT):
             return text.replace("\n", "  \n")
@@ -132,9 +133,10 @@ class Object:
             return "**{}**".format(text)
         if self.mode == URL:
             return "[{}]({})".format(text, self.options["url"])
+        if self.mode == INLINE_CODE:
+            print(text)
+            return "`{}`".format(text)
         if self.mode == CODE:
-##            if not "\n" in text:
-##                return "```{}```".format(text)
             out = "\n"
             for line in text.split("\n"):
                 out += "    {}\n".format(line)
@@ -151,7 +153,7 @@ class Main:
         self.understood_content = [Object()]
         self.understand()
 
-    def interpret_single(self, text, index=None, char_index=None):
+    def interpret_single(self, text, index=None, char_index=None,something_other_than_code = False):
         if text in ("/","/b", "/i", "/url", "/code","/title","/subtitle", "/s1", "/s", "/s2", "/s3", "/list", "/seperator", "/footnote", "/deffootnote", "/hyperlink"):
             self.understood_content.append(Object())
             return
@@ -173,7 +175,7 @@ class Main:
                 self.understood_content[-1].options["url"] = None
             return
         if text == "code":
-            self.understood_content.append(Object(CODE))
+            self.understood_content.append(Object(CODE if not something_other_than_code else INLINE_CODE))
             return
         if text == "title":
             self.understood_content.append(Object(TITLE))
@@ -224,6 +226,7 @@ class Main:
     def understand(self):
         index = 0
         for line in self.content:
+            something_other_than_code = False
             ignore = False
             interpret_mode = False
             to_be_interpreted = ""
@@ -249,13 +252,16 @@ class Main:
                     continue
                 
                 if char == "[":
+                    if line[char_index+1] != "/":
+                        if line.find("]", line.find("]")+1) != -1 and (char_index != 0 or line.find("]", line.find("]")+1)+1 < len(line.strip())):
+                            something_other_than_code = True
                     interpret_mode = True
                     to_be_interpreted = ""
                     continue
 
                 if char == "]":
                     interpret_mode = False
-                    self.interpret_single(to_be_interpreted, index, char_index)
+                    self.interpret_single(to_be_interpreted, index, char_index, something_other_than_code)
                     continue
 
                 if interpret_mode:
