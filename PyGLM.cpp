@@ -16072,7 +16072,7 @@ template<typename T>
 static PyObject *
 vec1Iter_next(vecIter<1, T> *rgstate)
 {
-	if (rgstate->seq_index == 0) {
+	if (rgstate->seq_index++ == 0) {
 		return PyGLM_PyObject_FromNumber<T>(rgstate->sequence->super_type.x);
 	}
 	rgstate->seq_index = 1;

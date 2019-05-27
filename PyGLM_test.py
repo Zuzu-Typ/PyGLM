@@ -1,12 +1,13 @@
 import glm, sys
 
+v1 = glm.vec1()
 v2 = glm.vec2()
 v3 = glm.vec3()
 v4 = glm.vec4()
 
-vectors = [v2, v3, v4]
+vectors = [v1, v2, v3, v4]
 
-vector_types = [glm.vec2, glm.vec3, glm.vec4]
+vector_types = [glm.vec1, glm.vec2, glm.vec3, glm.vec4]
 
 m22 = glm.mat2x2()
 m23 = glm.mat2x3()
@@ -178,7 +179,7 @@ for obj in get_obj_generator(vector_types):
 for obj in get_obj_generator(vector_types):
     fassert(obj.__ifloordiv__, (1,))
 #/ifloordiv #
-
+    
 # ipow #
 for obj in get_obj_generator(vector_types):
     fassert(obj.__ipow__, (obj,))
@@ -204,7 +205,7 @@ for obj in get_obj_generator(all_types):
     for i in range(len(obj)):
         assert obj[i] != None, obj
 #/getitem #
-
+        
 # setitem #
 for obj in get_obj_generator(all_types):
     for i in range(len(obj)):
@@ -225,7 +226,6 @@ for obj in get_obj_generator(all_types):
 for obj in get_obj_generator(vector_types + matrix_types):
     assert obj != (obj + 1), obj
 assert q != (1,0,0,0)
-
 ## LT
 for obj in get_obj_generator(vector_types):
     assert all(obj < (obj + 1)) and not any(obj < obj), obj
@@ -233,7 +233,6 @@ for obj in get_obj_generator(vector_types):
 ## LE
 for obj in get_obj_generator(vector_types):
     assert all(obj <= obj) and all(obj <= (obj + 1)) and not any(obj <= (obj - 1)), obj
-
 ## GT
 for obj in get_obj_generator(vector_types):
     assert all(obj > (obj - 1)) and not any(obj > obj), obj
