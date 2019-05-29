@@ -21702,222 +21702,222 @@ equal(PyObject*, PyObject* args) {
 			return pack(glm::equal(o, o2));
 		}
 
-		if (PyGLM_Mat_Check(2, 2, float, arg1) && PyGLM_Mat_Check(2, 2, float, arg2)) {
-			glm::mat<2, 2, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 2, double, arg1) && PyGLM_Mat_Check(2, 2, double, arg2)) {
-			glm::mat<2, 2, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 2, int, arg1) && PyGLM_Mat_Check(2, 2, int, arg2)) {
-			glm::mat<2, 2, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 2, glm::uint, arg1) && PyGLM_Mat_Check(2, 2, glm::uint, arg2)) {
-			glm::mat<2, 2, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 3, float, arg1) && PyGLM_Mat_Check(2, 3, float, arg2)) {
-			glm::mat<2, 3, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 3, double, arg1) && PyGLM_Mat_Check(2, 3, double, arg2)) {
-			glm::mat<2, 3, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 3, int, arg1) && PyGLM_Mat_Check(2, 3, int, arg2)) {
-			glm::mat<2, 3, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 3, glm::uint, arg1) && PyGLM_Mat_Check(2, 3, glm::uint, arg2)) {
-			glm::mat<2, 3, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 4, float, arg1) && PyGLM_Mat_Check(2, 4, float, arg2)) {
-			glm::mat<2, 4, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 4, double, arg1) && PyGLM_Mat_Check(2, 4, double, arg2)) {
-			glm::mat<2, 4, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 4, int, arg1) && PyGLM_Mat_Check(2, 4, int, arg2)) {
-			glm::mat<2, 4, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 4, glm::uint, arg1) && PyGLM_Mat_Check(2, 4, glm::uint, arg2)) {
-			glm::mat<2, 4, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 2, float, arg1) && PyGLM_Mat_Check(3, 2, float, arg2)) {
-			glm::mat<3, 2, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 2, double, arg1) && PyGLM_Mat_Check(3, 2, double, arg2)) {
-			glm::mat<3, 2, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 2, int, arg1) && PyGLM_Mat_Check(3, 2, int, arg2)) {
-			glm::mat<3, 2, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 2, glm::uint, arg1) && PyGLM_Mat_Check(3, 2, glm::uint, arg2)) {
-			glm::mat<3, 2, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 3, float, arg1) && PyGLM_Mat_Check(3, 3, float, arg2)) {
-			glm::mat<3, 3, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 3, double, arg1) && PyGLM_Mat_Check(3, 3, double, arg2)) {
-			glm::mat<3, 3, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 3, int, arg1) && PyGLM_Mat_Check(3, 3, int, arg2)) {
-			glm::mat<3, 3, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 3, glm::uint, arg1) && PyGLM_Mat_Check(3, 3, glm::uint, arg2)) {
-			glm::mat<3, 3, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 4, float, arg1) && PyGLM_Mat_Check(3, 4, float, arg2)) {
-			glm::mat<3, 4, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 4, double, arg1) && PyGLM_Mat_Check(3, 4, double, arg2)) {
-			glm::mat<3, 4, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 4, int, arg1) && PyGLM_Mat_Check(3, 4, int, arg2)) {
-			glm::mat<3, 4, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 4, glm::uint, arg1) && PyGLM_Mat_Check(3, 4, glm::uint, arg2)) {
-			glm::mat<3, 4, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 2, float, arg1) && PyGLM_Mat_Check(4, 2, float, arg2)) {
-			glm::mat<4, 2, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 2, double, arg1) && PyGLM_Mat_Check(4, 2, double, arg2)) {
-			glm::mat<4, 2, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 2, int, arg1) && PyGLM_Mat_Check(4, 2, int, arg2)) {
-			glm::mat<4, 2, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 2, glm::uint, arg1) && PyGLM_Mat_Check(4, 2, glm::uint, arg2)) {
-			glm::mat<4, 2, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 3, float, arg1) && PyGLM_Mat_Check(4, 3, float, arg2)) {
-			glm::mat<4, 3, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 3, double, arg1) && PyGLM_Mat_Check(4, 3, double, arg2)) {
-			glm::mat<4, 3, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 3, int, arg1) && PyGLM_Mat_Check(4, 3, int, arg2)) {
-			glm::mat<4, 3, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 3, glm::uint, arg1) && PyGLM_Mat_Check(4, 3, glm::uint, arg2)) {
-			glm::mat<4, 3, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 4, float, arg1) && PyGLM_Mat_Check(4, 4, float, arg2)) {
-			glm::mat<4, 4, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 4, double, arg1) && PyGLM_Mat_Check(4, 4, double, arg2)) {
-			glm::mat<4, 4, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 4, int, arg1) && PyGLM_Mat_Check(4, 4, int, arg2)) {
-			glm::mat<4, 4, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 4, glm::uint, arg1) && PyGLM_Mat_Check(4, 4, glm::uint, arg2)) {
-			glm::mat<4, 4, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::equal(o, o2));
-		}
+		//if (PyGLM_Mat_Check(2, 2, float, arg1) && PyGLM_Mat_Check(2, 2, float, arg2)) {
+		//	glm::mat<2, 2, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 2, double, arg1) && PyGLM_Mat_Check(2, 2, double, arg2)) {
+		//	glm::mat<2, 2, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 2, int, arg1) && PyGLM_Mat_Check(2, 2, int, arg2)) {
+		//	glm::mat<2, 2, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 2, glm::uint, arg1) && PyGLM_Mat_Check(2, 2, glm::uint, arg2)) {
+		//	glm::mat<2, 2, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 3, float, arg1) && PyGLM_Mat_Check(2, 3, float, arg2)) {
+		//	glm::mat<2, 3, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 3, double, arg1) && PyGLM_Mat_Check(2, 3, double, arg2)) {
+		//	glm::mat<2, 3, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 3, int, arg1) && PyGLM_Mat_Check(2, 3, int, arg2)) {
+		//	glm::mat<2, 3, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 3, glm::uint, arg1) && PyGLM_Mat_Check(2, 3, glm::uint, arg2)) {
+		//	glm::mat<2, 3, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 4, float, arg1) && PyGLM_Mat_Check(2, 4, float, arg2)) {
+		//	glm::mat<2, 4, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 4, double, arg1) && PyGLM_Mat_Check(2, 4, double, arg2)) {
+		//	glm::mat<2, 4, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 4, int, arg1) && PyGLM_Mat_Check(2, 4, int, arg2)) {
+		//	glm::mat<2, 4, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 4, glm::uint, arg1) && PyGLM_Mat_Check(2, 4, glm::uint, arg2)) {
+		//	glm::mat<2, 4, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 2, float, arg1) && PyGLM_Mat_Check(3, 2, float, arg2)) {
+		//	glm::mat<3, 2, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 2, double, arg1) && PyGLM_Mat_Check(3, 2, double, arg2)) {
+		//	glm::mat<3, 2, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 2, int, arg1) && PyGLM_Mat_Check(3, 2, int, arg2)) {
+		//	glm::mat<3, 2, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 2, glm::uint, arg1) && PyGLM_Mat_Check(3, 2, glm::uint, arg2)) {
+		//	glm::mat<3, 2, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 3, float, arg1) && PyGLM_Mat_Check(3, 3, float, arg2)) {
+		//	glm::mat<3, 3, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 3, double, arg1) && PyGLM_Mat_Check(3, 3, double, arg2)) {
+		//	glm::mat<3, 3, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 3, int, arg1) && PyGLM_Mat_Check(3, 3, int, arg2)) {
+		//	glm::mat<3, 3, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 3, glm::uint, arg1) && PyGLM_Mat_Check(3, 3, glm::uint, arg2)) {
+		//	glm::mat<3, 3, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 4, float, arg1) && PyGLM_Mat_Check(3, 4, float, arg2)) {
+		//	glm::mat<3, 4, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 4, double, arg1) && PyGLM_Mat_Check(3, 4, double, arg2)) {
+		//	glm::mat<3, 4, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 4, int, arg1) && PyGLM_Mat_Check(3, 4, int, arg2)) {
+		//	glm::mat<3, 4, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 4, glm::uint, arg1) && PyGLM_Mat_Check(3, 4, glm::uint, arg2)) {
+		//	glm::mat<3, 4, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 2, float, arg1) && PyGLM_Mat_Check(4, 2, float, arg2)) {
+		//	glm::mat<4, 2, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 2, double, arg1) && PyGLM_Mat_Check(4, 2, double, arg2)) {
+		//	glm::mat<4, 2, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 2, int, arg1) && PyGLM_Mat_Check(4, 2, int, arg2)) {
+		//	glm::mat<4, 2, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 2, glm::uint, arg1) && PyGLM_Mat_Check(4, 2, glm::uint, arg2)) {
+		//	glm::mat<4, 2, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 3, float, arg1) && PyGLM_Mat_Check(4, 3, float, arg2)) {
+		//	glm::mat<4, 3, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 3, double, arg1) && PyGLM_Mat_Check(4, 3, double, arg2)) {
+		//	glm::mat<4, 3, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 3, int, arg1) && PyGLM_Mat_Check(4, 3, int, arg2)) {
+		//	glm::mat<4, 3, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 3, glm::uint, arg1) && PyGLM_Mat_Check(4, 3, glm::uint, arg2)) {
+		//	glm::mat<4, 3, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 4, float, arg1) && PyGLM_Mat_Check(4, 4, float, arg2)) {
+		//	glm::mat<4, 4, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 4, double, arg1) && PyGLM_Mat_Check(4, 4, double, arg2)) {
+		//	glm::mat<4, 4, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 4, int, arg1) && PyGLM_Mat_Check(4, 4, int, arg2)) {
+		//	glm::mat<4, 4, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 4, glm::uint, arg1) && PyGLM_Mat_Check(4, 4, glm::uint, arg2)) {
+		//	glm::mat<4, 4, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::equal(o, o2));
+		//}
 
 		if (PyGLM_Qua_Check(float, arg1) && PyGLM_Qua_Check(float, arg2)) {
 			glm::qua<float> o, o2;
@@ -22844,222 +22844,222 @@ notEqual(PyObject*, PyObject* args) {
 			return pack(glm::notEqual(o, o2));
 		}
 
-		if (PyGLM_Mat_Check(2, 2, float, arg1) && PyGLM_Mat_Check(2, 2, float, arg2)) {
-			glm::mat<2, 2, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 2, double, arg1) && PyGLM_Mat_Check(2, 2, double, arg2)) {
-			glm::mat<2, 2, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 2, int, arg1) && PyGLM_Mat_Check(2, 2, int, arg2)) {
-			glm::mat<2, 2, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 2, glm::uint, arg1) && PyGLM_Mat_Check(2, 2, glm::uint, arg2)) {
-			glm::mat<2, 2, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 3, float, arg1) && PyGLM_Mat_Check(2, 3, float, arg2)) {
-			glm::mat<2, 3, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 3, double, arg1) && PyGLM_Mat_Check(2, 3, double, arg2)) {
-			glm::mat<2, 3, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 3, int, arg1) && PyGLM_Mat_Check(2, 3, int, arg2)) {
-			glm::mat<2, 3, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 3, glm::uint, arg1) && PyGLM_Mat_Check(2, 3, glm::uint, arg2)) {
-			glm::mat<2, 3, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 4, float, arg1) && PyGLM_Mat_Check(2, 4, float, arg2)) {
-			glm::mat<2, 4, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 4, double, arg1) && PyGLM_Mat_Check(2, 4, double, arg2)) {
-			glm::mat<2, 4, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 4, int, arg1) && PyGLM_Mat_Check(2, 4, int, arg2)) {
-			glm::mat<2, 4, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(2, 4, glm::uint, arg1) && PyGLM_Mat_Check(2, 4, glm::uint, arg2)) {
-			glm::mat<2, 4, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 2, float, arg1) && PyGLM_Mat_Check(3, 2, float, arg2)) {
-			glm::mat<3, 2, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 2, double, arg1) && PyGLM_Mat_Check(3, 2, double, arg2)) {
-			glm::mat<3, 2, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 2, int, arg1) && PyGLM_Mat_Check(3, 2, int, arg2)) {
-			glm::mat<3, 2, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 2, glm::uint, arg1) && PyGLM_Mat_Check(3, 2, glm::uint, arg2)) {
-			glm::mat<3, 2, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 3, float, arg1) && PyGLM_Mat_Check(3, 3, float, arg2)) {
-			glm::mat<3, 3, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 3, double, arg1) && PyGLM_Mat_Check(3, 3, double, arg2)) {
-			glm::mat<3, 3, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 3, int, arg1) && PyGLM_Mat_Check(3, 3, int, arg2)) {
-			glm::mat<3, 3, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 3, glm::uint, arg1) && PyGLM_Mat_Check(3, 3, glm::uint, arg2)) {
-			glm::mat<3, 3, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 4, float, arg1) && PyGLM_Mat_Check(3, 4, float, arg2)) {
-			glm::mat<3, 4, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 4, double, arg1) && PyGLM_Mat_Check(3, 4, double, arg2)) {
-			glm::mat<3, 4, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 4, int, arg1) && PyGLM_Mat_Check(3, 4, int, arg2)) {
-			glm::mat<3, 4, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(3, 4, glm::uint, arg1) && PyGLM_Mat_Check(3, 4, glm::uint, arg2)) {
-			glm::mat<3, 4, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 2, float, arg1) && PyGLM_Mat_Check(4, 2, float, arg2)) {
-			glm::mat<4, 2, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 2, double, arg1) && PyGLM_Mat_Check(4, 2, double, arg2)) {
-			glm::mat<4, 2, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 2, int, arg1) && PyGLM_Mat_Check(4, 2, int, arg2)) {
-			glm::mat<4, 2, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 2, glm::uint, arg1) && PyGLM_Mat_Check(4, 2, glm::uint, arg2)) {
-			glm::mat<4, 2, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 3, float, arg1) && PyGLM_Mat_Check(4, 3, float, arg2)) {
-			glm::mat<4, 3, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 3, double, arg1) && PyGLM_Mat_Check(4, 3, double, arg2)) {
-			glm::mat<4, 3, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 3, int, arg1) && PyGLM_Mat_Check(4, 3, int, arg2)) {
-			glm::mat<4, 3, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 3, glm::uint, arg1) && PyGLM_Mat_Check(4, 3, glm::uint, arg2)) {
-			glm::mat<4, 3, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 4, float, arg1) && PyGLM_Mat_Check(4, 4, float, arg2)) {
-			glm::mat<4, 4, float> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 4, double, arg1) && PyGLM_Mat_Check(4, 4, double, arg2)) {
-			glm::mat<4, 4, double> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 4, int, arg1) && PyGLM_Mat_Check(4, 4, int, arg2)) {
-			glm::mat<4, 4, int> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
-		if (PyGLM_Mat_Check(4, 4, glm::uint, arg1) && PyGLM_Mat_Check(4, 4, glm::uint, arg2)) {
-			glm::mat<4, 4, glm::uint> o, o2;
-			unpack_mat(arg1, o);
-			unpack_mat(arg2, o2);
-			return pack(glm::notEqual(o, o2));
-		}
+		//if (PyGLM_Mat_Check(2, 2, float, arg1) && PyGLM_Mat_Check(2, 2, float, arg2)) {
+		//	glm::mat<2, 2, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 2, double, arg1) && PyGLM_Mat_Check(2, 2, double, arg2)) {
+		//	glm::mat<2, 2, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 2, int, arg1) && PyGLM_Mat_Check(2, 2, int, arg2)) {
+		//	glm::mat<2, 2, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 2, glm::uint, arg1) && PyGLM_Mat_Check(2, 2, glm::uint, arg2)) {
+		//	glm::mat<2, 2, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 3, float, arg1) && PyGLM_Mat_Check(2, 3, float, arg2)) {
+		//	glm::mat<2, 3, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 3, double, arg1) && PyGLM_Mat_Check(2, 3, double, arg2)) {
+		//	glm::mat<2, 3, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 3, int, arg1) && PyGLM_Mat_Check(2, 3, int, arg2)) {
+		//	glm::mat<2, 3, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 3, glm::uint, arg1) && PyGLM_Mat_Check(2, 3, glm::uint, arg2)) {
+		//	glm::mat<2, 3, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 4, float, arg1) && PyGLM_Mat_Check(2, 4, float, arg2)) {
+		//	glm::mat<2, 4, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 4, double, arg1) && PyGLM_Mat_Check(2, 4, double, arg2)) {
+		//	glm::mat<2, 4, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 4, int, arg1) && PyGLM_Mat_Check(2, 4, int, arg2)) {
+		//	glm::mat<2, 4, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(2, 4, glm::uint, arg1) && PyGLM_Mat_Check(2, 4, glm::uint, arg2)) {
+		//	glm::mat<2, 4, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 2, float, arg1) && PyGLM_Mat_Check(3, 2, float, arg2)) {
+		//	glm::mat<3, 2, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 2, double, arg1) && PyGLM_Mat_Check(3, 2, double, arg2)) {
+		//	glm::mat<3, 2, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 2, int, arg1) && PyGLM_Mat_Check(3, 2, int, arg2)) {
+		//	glm::mat<3, 2, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 2, glm::uint, arg1) && PyGLM_Mat_Check(3, 2, glm::uint, arg2)) {
+		//	glm::mat<3, 2, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 3, float, arg1) && PyGLM_Mat_Check(3, 3, float, arg2)) {
+		//	glm::mat<3, 3, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 3, double, arg1) && PyGLM_Mat_Check(3, 3, double, arg2)) {
+		//	glm::mat<3, 3, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 3, int, arg1) && PyGLM_Mat_Check(3, 3, int, arg2)) {
+		//	glm::mat<3, 3, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 3, glm::uint, arg1) && PyGLM_Mat_Check(3, 3, glm::uint, arg2)) {
+		//	glm::mat<3, 3, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 4, float, arg1) && PyGLM_Mat_Check(3, 4, float, arg2)) {
+		//	glm::mat<3, 4, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 4, double, arg1) && PyGLM_Mat_Check(3, 4, double, arg2)) {
+		//	glm::mat<3, 4, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 4, int, arg1) && PyGLM_Mat_Check(3, 4, int, arg2)) {
+		//	glm::mat<3, 4, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(3, 4, glm::uint, arg1) && PyGLM_Mat_Check(3, 4, glm::uint, arg2)) {
+		//	glm::mat<3, 4, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 2, float, arg1) && PyGLM_Mat_Check(4, 2, float, arg2)) {
+		//	glm::mat<4, 2, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 2, double, arg1) && PyGLM_Mat_Check(4, 2, double, arg2)) {
+		//	glm::mat<4, 2, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 2, int, arg1) && PyGLM_Mat_Check(4, 2, int, arg2)) {
+		//	glm::mat<4, 2, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 2, glm::uint, arg1) && PyGLM_Mat_Check(4, 2, glm::uint, arg2)) {
+		//	glm::mat<4, 2, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 3, float, arg1) && PyGLM_Mat_Check(4, 3, float, arg2)) {
+		//	glm::mat<4, 3, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 3, double, arg1) && PyGLM_Mat_Check(4, 3, double, arg2)) {
+		//	glm::mat<4, 3, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 3, int, arg1) && PyGLM_Mat_Check(4, 3, int, arg2)) {
+		//	glm::mat<4, 3, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 3, glm::uint, arg1) && PyGLM_Mat_Check(4, 3, glm::uint, arg2)) {
+		//	glm::mat<4, 3, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 4, float, arg1) && PyGLM_Mat_Check(4, 4, float, arg2)) {
+		//	glm::mat<4, 4, float> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 4, double, arg1) && PyGLM_Mat_Check(4, 4, double, arg2)) {
+		//	glm::mat<4, 4, double> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 4, int, arg1) && PyGLM_Mat_Check(4, 4, int, arg2)) {
+		//	glm::mat<4, 4, int> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
+		//if (PyGLM_Mat_Check(4, 4, glm::uint, arg1) && PyGLM_Mat_Check(4, 4, glm::uint, arg2)) {
+		//	glm::mat<4, 4, glm::uint> o, o2;
+		//	unpack_mat(arg1, o);
+		//	unpack_mat(arg2, o2);
+		//	return pack(glm::notEqual(o, o2));
+		//}
 
 		if (PyGLM_Qua_Check(float, arg1) && PyGLM_Qua_Check(float, arg2)) {
 			glm::qua<float> o, o2;
@@ -25709,222 +25709,222 @@ mix_(PyObject*, PyObject* args) {
 			return pack(glm::mix(o, o2, o3));
 		}
 	}
-	if (PyGLM_Mat_Check(2, 3, float, arg1) && PyGLM_Mat_Check(2, 3, float, arg2)) {
-		glm::mat<2, 3, float> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(2, 3, float, arg3)) {
-			glm::mat<2, 3, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(2, 3, double, arg3)) {
-			glm::mat<2, 3, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(2, 3, double, arg1) && PyGLM_Mat_Check(2, 3, double, arg2)) {
-		glm::mat<2, 3, double> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(2, 3, float, arg3)) {
-			glm::mat<2, 3, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(2, 3, double, arg3)) {
-			glm::mat<2, 3, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(2, 3, int, arg1) && PyGLM_Mat_Check(2, 3, int, arg2)) {
-		glm::mat<2, 3, int> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(2, 3, float, arg3)) {
-			glm::mat<2, 3, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(2, 3, double, arg3)) {
-			glm::mat<2, 3, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(2, 3, glm::uint, arg1) && PyGLM_Mat_Check(2, 3, glm::uint, arg2)) {
-		glm::mat<2, 3, glm::uint> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(2, 3, float, arg3)) {
-			glm::mat<2, 3, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(2, 3, double, arg3)) {
-			glm::mat<2, 3, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(2, 4, float, arg1) && PyGLM_Mat_Check(2, 4, float, arg2)) {
-		glm::mat<2, 4, float> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(2, 4, float, arg3)) {
-			glm::mat<2, 4, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(2, 4, double, arg3)) {
-			glm::mat<2, 4, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(2, 4, double, arg1) && PyGLM_Mat_Check(2, 4, double, arg2)) {
-		glm::mat<2, 4, double> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(2, 4, float, arg3)) {
-			glm::mat<2, 4, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(2, 4, double, arg3)) {
-			glm::mat<2, 4, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(2, 4, int, arg1) && PyGLM_Mat_Check(2, 4, int, arg2)) {
-		glm::mat<2, 4, int> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(2, 4, float, arg3)) {
-			glm::mat<2, 4, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(2, 4, double, arg3)) {
-			glm::mat<2, 4, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(2, 4, glm::uint, arg1) && PyGLM_Mat_Check(2, 4, glm::uint, arg2)) {
-		glm::mat<2, 4, glm::uint> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(2, 4, float, arg3)) {
-			glm::mat<2, 4, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(2, 4, double, arg3)) {
-			glm::mat<2, 4, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(3, 2, float, arg1) && PyGLM_Mat_Check(3, 2, float, arg2)) {
-		glm::mat<3, 2, float> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(3, 2, float, arg3)) {
-			glm::mat<3, 2, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(3, 2, double, arg3)) {
-			glm::mat<3, 2, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(3, 2, double, arg1) && PyGLM_Mat_Check(3, 2, double, arg2)) {
-		glm::mat<3, 2, double> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(3, 2, float, arg3)) {
-			glm::mat<3, 2, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(3, 2, double, arg3)) {
-			glm::mat<3, 2, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(3, 2, int, arg1) && PyGLM_Mat_Check(3, 2, int, arg2)) {
-		glm::mat<3, 2, int> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(3, 2, float, arg3)) {
-			glm::mat<3, 2, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(3, 2, double, arg3)) {
-			glm::mat<3, 2, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(3, 2, glm::uint, arg1) && PyGLM_Mat_Check(3, 2, glm::uint, arg2)) {
-		glm::mat<3, 2, glm::uint> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(3, 2, float, arg3)) {
-			glm::mat<3, 2, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(3, 2, double, arg3)) {
-			glm::mat<3, 2, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
+	//if (PyGLM_Mat_Check(2, 3, float, arg1) && PyGLM_Mat_Check(2, 3, float, arg2)) {
+	//	glm::mat<2, 3, float> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 3, float, arg3)) {
+	//		glm::mat<2, 3, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 3, double, arg3)) {
+	//		glm::mat<2, 3, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(2, 3, double, arg1) && PyGLM_Mat_Check(2, 3, double, arg2)) {
+	//	glm::mat<2, 3, double> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 3, float, arg3)) {
+	//		glm::mat<2, 3, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 3, double, arg3)) {
+	//		glm::mat<2, 3, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(2, 3, int, arg1) && PyGLM_Mat_Check(2, 3, int, arg2)) {
+	//	glm::mat<2, 3, int> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 3, float, arg3)) {
+	//		glm::mat<2, 3, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 3, double, arg3)) {
+	//		glm::mat<2, 3, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(2, 3, glm::uint, arg1) && PyGLM_Mat_Check(2, 3, glm::uint, arg2)) {
+	//	glm::mat<2, 3, glm::uint> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 3, float, arg3)) {
+	//		glm::mat<2, 3, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 3, double, arg3)) {
+	//		glm::mat<2, 3, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(2, 4, float, arg1) && PyGLM_Mat_Check(2, 4, float, arg2)) {
+	//	glm::mat<2, 4, float> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 4, float, arg3)) {
+	//		glm::mat<2, 4, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 4, double, arg3)) {
+	//		glm::mat<2, 4, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(2, 4, double, arg1) && PyGLM_Mat_Check(2, 4, double, arg2)) {
+	//	glm::mat<2, 4, double> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 4, float, arg3)) {
+	//		glm::mat<2, 4, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 4, double, arg3)) {
+	//		glm::mat<2, 4, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(2, 4, int, arg1) && PyGLM_Mat_Check(2, 4, int, arg2)) {
+	//	glm::mat<2, 4, int> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 4, float, arg3)) {
+	//		glm::mat<2, 4, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 4, double, arg3)) {
+	//		glm::mat<2, 4, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(2, 4, glm::uint, arg1) && PyGLM_Mat_Check(2, 4, glm::uint, arg2)) {
+	//	glm::mat<2, 4, glm::uint> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 4, float, arg3)) {
+	//		glm::mat<2, 4, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(2, 4, double, arg3)) {
+	//		glm::mat<2, 4, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(3, 2, float, arg1) && PyGLM_Mat_Check(3, 2, float, arg2)) {
+	//	glm::mat<3, 2, float> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 2, float, arg3)) {
+	//		glm::mat<3, 2, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 2, double, arg3)) {
+	//		glm::mat<3, 2, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(3, 2, double, arg1) && PyGLM_Mat_Check(3, 2, double, arg2)) {
+	//	glm::mat<3, 2, double> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 2, float, arg3)) {
+	//		glm::mat<3, 2, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 2, double, arg3)) {
+	//		glm::mat<3, 2, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(3, 2, int, arg1) && PyGLM_Mat_Check(3, 2, int, arg2)) {
+	//	glm::mat<3, 2, int> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 2, float, arg3)) {
+	//		glm::mat<3, 2, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 2, double, arg3)) {
+	//		glm::mat<3, 2, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(3, 2, glm::uint, arg1) && PyGLM_Mat_Check(3, 2, glm::uint, arg2)) {
+	//	glm::mat<3, 2, glm::uint> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 2, float, arg3)) {
+	//		glm::mat<3, 2, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 2, double, arg3)) {
+	//		glm::mat<3, 2, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
 	if (PyGLM_Mat_Check(3, 3, float, arg1) && PyGLM_Mat_Check(3, 3, float, arg2)) {
 		glm::mat<3, 3, float> o, o2;
 		unpack_mat(arg1, o);
@@ -25997,222 +25997,222 @@ mix_(PyObject*, PyObject* args) {
 			return pack(glm::mix(o, o2, o3));
 		}
 	}
-	if (PyGLM_Mat_Check(3, 4, float, arg1) && PyGLM_Mat_Check(3, 4, float, arg2)) {
-		glm::mat<3, 4, float> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(3, 4, float, arg3)) {
-			glm::mat<3, 4, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(3, 4, double, arg3)) {
-			glm::mat<3, 4, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(3, 4, double, arg1) && PyGLM_Mat_Check(3, 4, double, arg2)) {
-		glm::mat<3, 4, double> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(3, 4, float, arg3)) {
-			glm::mat<3, 4, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(3, 4, double, arg3)) {
-			glm::mat<3, 4, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(3, 4, int, arg1) && PyGLM_Mat_Check(3, 4, int, arg2)) {
-		glm::mat<3, 4, int> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(3, 4, float, arg3)) {
-			glm::mat<3, 4, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(3, 4, double, arg3)) {
-			glm::mat<3, 4, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(3, 4, glm::uint, arg1) && PyGLM_Mat_Check(3, 4, glm::uint, arg2)) {
-		glm::mat<3, 4, glm::uint> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(3, 4, float, arg3)) {
-			glm::mat<3, 4, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(3, 4, double, arg3)) {
-			glm::mat<3, 4, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(4, 2, float, arg1) && PyGLM_Mat_Check(4, 2, float, arg2)) {
-		glm::mat<4, 2, float> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(4, 2, float, arg3)) {
-			glm::mat<4, 2, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(4, 2, double, arg3)) {
-			glm::mat<4, 2, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(4, 2, double, arg1) && PyGLM_Mat_Check(4, 2, double, arg2)) {
-		glm::mat<4, 2, double> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(4, 2, float, arg3)) {
-			glm::mat<4, 2, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(4, 2, double, arg3)) {
-			glm::mat<4, 2, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(4, 2, int, arg1) && PyGLM_Mat_Check(4, 2, int, arg2)) {
-		glm::mat<4, 2, int> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(4, 2, float, arg3)) {
-			glm::mat<4, 2, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(4, 2, double, arg3)) {
-			glm::mat<4, 2, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(4, 2, glm::uint, arg1) && PyGLM_Mat_Check(4, 2, glm::uint, arg2)) {
-		glm::mat<4, 2, glm::uint> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(4, 2, float, arg3)) {
-			glm::mat<4, 2, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(4, 2, double, arg3)) {
-			glm::mat<4, 2, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(4, 3, float, arg1) && PyGLM_Mat_Check(4, 3, float, arg2)) {
-		glm::mat<4, 3, float> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(4, 3, float, arg3)) {
-			glm::mat<4, 3, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(4, 3, double, arg3)) {
-			glm::mat<4, 3, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(4, 3, double, arg1) && PyGLM_Mat_Check(4, 3, double, arg2)) {
-		glm::mat<4, 3, double> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(4, 3, float, arg3)) {
-			glm::mat<4, 3, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(4, 3, double, arg3)) {
-			glm::mat<4, 3, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(4, 3, int, arg1) && PyGLM_Mat_Check(4, 3, int, arg2)) {
-		glm::mat<4, 3, int> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(4, 3, float, arg3)) {
-			glm::mat<4, 3, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(4, 3, double, arg3)) {
-			glm::mat<4, 3, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_Check(4, 3, glm::uint, arg1) && PyGLM_Mat_Check(4, 3, glm::uint, arg2)) {
-		glm::mat<4, 3, glm::uint> o, o2;
-		unpack_mat(arg1, o);
-		unpack_mat(arg2, o2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Mat_Check(4, 3, float, arg3)) {
-			glm::mat<4, 3, float> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_Check(4, 3, double, arg3)) {
-			glm::mat<4, 3, double> o3;
-			unpack_mat(arg3, o3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
+	//if (PyGLM_Mat_Check(3, 4, float, arg1) && PyGLM_Mat_Check(3, 4, float, arg2)) {
+	//	glm::mat<3, 4, float> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 4, float, arg3)) {
+	//		glm::mat<3, 4, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 4, double, arg3)) {
+	//		glm::mat<3, 4, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(3, 4, double, arg1) && PyGLM_Mat_Check(3, 4, double, arg2)) {
+	//	glm::mat<3, 4, double> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 4, float, arg3)) {
+	//		glm::mat<3, 4, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 4, double, arg3)) {
+	//		glm::mat<3, 4, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(3, 4, int, arg1) && PyGLM_Mat_Check(3, 4, int, arg2)) {
+	//	glm::mat<3, 4, int> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 4, float, arg3)) {
+	//		glm::mat<3, 4, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 4, double, arg3)) {
+	//		glm::mat<3, 4, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(3, 4, glm::uint, arg1) && PyGLM_Mat_Check(3, 4, glm::uint, arg2)) {
+	//	glm::mat<3, 4, glm::uint> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 4, float, arg3)) {
+	//		glm::mat<3, 4, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(3, 4, double, arg3)) {
+	//		glm::mat<3, 4, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(4, 2, float, arg1) && PyGLM_Mat_Check(4, 2, float, arg2)) {
+	//	glm::mat<4, 2, float> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 2, float, arg3)) {
+	//		glm::mat<4, 2, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 2, double, arg3)) {
+	//		glm::mat<4, 2, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(4, 2, double, arg1) && PyGLM_Mat_Check(4, 2, double, arg2)) {
+	//	glm::mat<4, 2, double> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 2, float, arg3)) {
+	//		glm::mat<4, 2, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 2, double, arg3)) {
+	//		glm::mat<4, 2, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(4, 2, int, arg1) && PyGLM_Mat_Check(4, 2, int, arg2)) {
+	//	glm::mat<4, 2, int> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 2, float, arg3)) {
+	//		glm::mat<4, 2, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 2, double, arg3)) {
+	//		glm::mat<4, 2, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(4, 2, glm::uint, arg1) && PyGLM_Mat_Check(4, 2, glm::uint, arg2)) {
+	//	glm::mat<4, 2, glm::uint> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 2, float, arg3)) {
+	//		glm::mat<4, 2, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 2, double, arg3)) {
+	//		glm::mat<4, 2, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(4, 3, float, arg1) && PyGLM_Mat_Check(4, 3, float, arg2)) {
+	//	glm::mat<4, 3, float> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 3, float, arg3)) {
+	//		glm::mat<4, 3, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 3, double, arg3)) {
+	//		glm::mat<4, 3, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(4, 3, double, arg1) && PyGLM_Mat_Check(4, 3, double, arg2)) {
+	//	glm::mat<4, 3, double> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 3, float, arg3)) {
+	//		glm::mat<4, 3, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 3, double, arg3)) {
+	//		glm::mat<4, 3, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(4, 3, int, arg1) && PyGLM_Mat_Check(4, 3, int, arg2)) {
+	//	glm::mat<4, 3, int> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 3, float, arg3)) {
+	//		glm::mat<4, 3, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 3, double, arg3)) {
+	//		glm::mat<4, 3, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
+	//if (PyGLM_Mat_Check(4, 3, glm::uint, arg1) && PyGLM_Mat_Check(4, 3, glm::uint, arg2)) {
+	//	glm::mat<4, 3, glm::uint> o, o2;
+	//	unpack_mat(arg1, o);
+	//	unpack_mat(arg2, o2);
+	//	if (PyGLM_Number_Check(arg3)) {
+	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 3, float, arg3)) {
+	//		glm::mat<4, 3, float> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//	if (PyGLM_Mat_Check(4, 3, double, arg3)) {
+	//		glm::mat<4, 3, double> o3;
+	//		unpack_mat(arg3, o3);
+	//		return pack(glm::mix(o, o2, o3));
+	//	}
+	//}
 	if (PyGLM_Mat_Check(4, 4, float, arg1) && PyGLM_Mat_Check(4, 4, float, arg2)) {
 		glm::mat<4, 4, float> o, o2;
 		unpack_mat(arg1, o);
