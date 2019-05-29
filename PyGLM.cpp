@@ -20336,6 +20336,12 @@ NAME##_(PyObject*, PyObject* args) {\
 #define PyGLM_MAKE_GLM_FUNC_V_Q__tfF(NAME)\
 static PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
+	if (PyGLM_Vec_Check(1, float, arg)) {\
+		return pack(glm::NAME(unpack_vec<1, float>(arg)));\
+	}\
+	if (PyGLM_Vec_Check(1, double, arg)) {\
+		return pack(glm::NAME(unpack_vec<1, double>(arg)));\
+	}\
 	if (PyGLM_Vec_Check(2, float, arg)) {\
 		return pack(glm::NAME(unpack_vec<2, float>(arg)));\
 	}\
@@ -20626,25 +20632,17 @@ static PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
-		if (PyGLM_Mat_Check(4, 4, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {\
-		glm::mat<4, 4, float> m;\
-		glm::vec<3, float> v;\
-		return pack(glm::NAME(m, v));\
+	if (PyGLM_Mat_Check(4, 4, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {\
+		return pack(glm::NAME(unpack_mat<4, 4, float>(arg1), unpack_vec<3, float>(arg2)));\
 	}\
 	if (PyGLM_Mat_Check(4, 4, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {\
-		glm::mat<4, 4, double> m;\
-		glm::vec<3, double> v;\
-		return pack(glm::NAME(m, v));\
+		return pack(glm::NAME(unpack_mat<4, 4, double>(arg1), unpack_vec<3, double>(arg2)));\
 	}\
 	if (PyGLM_Mat_Check(4, 4, int, arg1) && PyGLM_Vec_Check(3, int, arg2)) {\
-		glm::mat<4, 4, int> m;\
-		glm::vec<3, int> v;\
-		return pack(glm::NAME(m, v));\
+		return pack(glm::NAME(unpack_mat<4, 4, int>(arg1), unpack_vec<3, int>(arg2)));\
 	}\
 	if (PyGLM_Mat_Check(4, 4, glm::uint, arg1) && PyGLM_Vec_Check(3, glm::uint, arg2)) {\
-		glm::mat<4, 4, glm::uint> m;\
-		glm::vec<3, glm::uint> v;\
-		return pack(glm::NAME(m, v));\
+		return pack(glm::NAME(unpack_mat<4, 4, glm::uint>(arg1), unpack_vec<3, glm::uint>(arg2)));\
 	}\
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for " #NAME "(): ", arg1, arg2);\
 	return NULL;\
