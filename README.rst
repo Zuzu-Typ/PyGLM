@@ -57,8 +57,7 @@ Using PyGLM
 Differences to glm
 ^^^^^^^^^^^^^^^^^^
 | Instead of using double colons \(**\:\:**\) for namespaces\, periods \(**\.**\) are used\, so
-| :code:`glm::detail::vec2` becomes :code:`glm.detail.vec2`\.
-| You can also use the base namespace *glm* \(e\.g\. :code:`glm.vec2`\)\.
+| :code:`glm::vec2` becomes :code:`glm.vec2`\.
 | 
 | PyGLM doesn\'t support precision qualifiers\. All types use the default precision \(:code:`packed_highp`\)\.
 | 
@@ -80,6 +79,8 @@ Differences to glm
 
  
 | 
+| The function :code:`glm.identity` requires a matrix type as it\'s argument\.
+| 
 | The function :code:`glm.frexp(x, exp)` returns a tuple :code:`(m, e)`\, if the input arguments are numerical\.
 | This function may issue a :code:`UserWarning`\. You can silence this warning using :code:`glm.silence(1)`\.
 | 
@@ -93,6 +94,15 @@ Differences to glm
 | 
 | There is currently no documentation for PyGLM\.
 | Please refer to the source \(in Python\: **\*\.\_\_doc\_\_**\) and GLM manuals\, references and tutorials\.
+| 
+
+Unsupported functions
+^^^^^^^^^^^^^^^^^^^^^
+| Aside from the unstable extensions\,
+| PyGLM doesn\'t support the following extensions and methods\, due to compatibility issues\:
+| The :code:`GLM_GTC_bitfield` extension\,
+| :code:`glm::log2` from GLM\_GTC\_integer\.
+| :code:`glm::packUnorm` and :code:`glm::packSnorm` from GLM\_GTC\_packing\.
 | 
 
 Example
