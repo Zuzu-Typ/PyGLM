@@ -35,7 +35,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.6.1b1',
+    version='0.7.0b1',
 
     description='OpenGL Mathematics library for Python',
     long_description=long_description,
@@ -75,14 +75,13 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
-        "Operating System :: OS Independent",
         "Operating System :: MacOS",
         'Topic :: Software Development :: Libraries'
         
     ],
 
     # What does your project relate to?
-    keywords='GLM OpenGL matrix vector vec mat Mathematics 3D python python3 3 library python-c-api c-api math-library pip pypi matrix-manipulation matrix-multiplication matrix-functions quaternion c glsl',
+    keywords='GLM OpenGL matrix vector vec mat Mathematics 3D python python3 3 library python-c-api c-api math-library numpy pyrr pip pypi matrix-manipulation matrix-multiplication matrix-functions quaternion c glsl',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
