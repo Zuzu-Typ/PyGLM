@@ -14409,7 +14409,7 @@ static PyTypeObject* PyGLM_QUAITER_TYPE() {
 
 #define Py_IS_NOTIMPLEMENTED(op) (op == NULL || (PyObject*)op == Py_NotImplemented) // find out if op is NULL or NotImplemented
 
-#define PyGLM_ASSERT(cond, msg) if (!cond) PyErr_SetString(PyExc_AssertionError, msg); return NULL
+#define PyGLM_ASSERT(cond, msg) if (!cond) {PyErr_SetString(PyExc_AssertionError, msg); return NULL;}
 
 #define PyObject_IterCheck(op) ((op)->ob_type->tp_iter != 0)
 
@@ -14613,6 +14613,36 @@ static PyObject* PyGLM_PyObject_FromNumber(T value) {
 // type checkers
 #pragma region type checkers
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
+bool PyGLM_Vec1i_Check(PyObject* o) {
+	if (!PyObject_IterCheck(o)) {
+		return false;
+	}
+	if (PyTuple_Check(o)) {
+		if (Py_SIZE(o) == 1 && PyGLM_Number_Check(PyTuple_GET_ITEM(o, 0))) {
+			return true;
+		}
+		return false;
+	}
+	if (PyObject_Length(o) != 1) {
+		return false;
+	}
+
+	PyObject* iterator = PyObject_GetIter(o);
+
+	PyObject* value0 = PyIter_Next(iterator);
+
+	Py_DECREF(iterator);
+
+	if (value0 == NULL || !PyGLM_Number_Check(value0)) {
+		Py_XDECREF(value0);
+
+		return false;
+	}
+	Py_DECREF(value0);
+
+	return true;
+}
+
 bool PyGLM_Vec2i_Check(PyObject* o) {
 	if (!PyObject_IterCheck(o)) {
 		return false;
@@ -14727,7 +14757,7 @@ bool PyGLM_Vec4i_Check(PyObject* o) {
 	return true;
 }
 
-#define PyGLM_Veci_Check(L, o) ((L == 2) ? PyGLM_Vec2i_Check(o) : (L == 3) ? PyGLM_Vec3i_Check(o) : PyGLM_Vec4i_Check(o))
+#define PyGLM_Veci_Check(L, o) ((L == 1) ? PyGLM_Vec1i_Check(o) : (L == 2) ? PyGLM_Vec2i_Check(o) : (L == 3) ? PyGLM_Vec3i_Check(o) : PyGLM_Vec4i_Check(o))
 
 #define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || (!(PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 2, T>())) || PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 3, T>())) || PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 4, T>()))) && PyGLM_Veci_Check(L, o)))
 
@@ -21353,6 +21383,147 @@ NAME##_(PyObject*, PyObject* args) {\
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for " #NAME "(): ", arg1, arg2);\
 	return NULL;\
 }
+
+#define PyGLM_MAKE_GLM_FUNC_VV(NAME)\
+static PyObject*\
+NAME##_(PyObject*, PyObject* args) {\
+	PyObject *arg1, *arg2;\
+	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
+	if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, float>(arg1), unpack_vec<1, float>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, double>(arg1), unpack_vec<1, double>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, int, arg1) && PyGLM_Vec_Check(1, int, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, int>(arg1), unpack_vec<1, int>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, glm::uint, arg1) && PyGLM_Vec_Check(1, glm::uint, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, glm::uint>(arg1), unpack_vec<1, glm::uint>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, glm::i64, arg1) && PyGLM_Vec_Check(1, glm::i64, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, glm::i64>(arg1), unpack_vec<1, glm::i64>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, glm::u64, arg1) && PyGLM_Vec_Check(1, glm::u64, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, glm::u64>(arg1), unpack_vec<1, glm::u64>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, glm::i16, arg1) && PyGLM_Vec_Check(1, glm::i16, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, glm::i16>(arg1), unpack_vec<1, glm::i16>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, glm::u16, arg1) && PyGLM_Vec_Check(1, glm::u16, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, glm::u16>(arg1), unpack_vec<1, glm::u16>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, glm::i8, arg1) && PyGLM_Vec_Check(1, glm::i8, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, glm::i8>(arg1), unpack_vec<1, glm::i8>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, glm::u8, arg1) && PyGLM_Vec_Check(1, glm::u8, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, glm::u8>(arg1), unpack_vec<1, glm::u8>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(1, bool, arg1) && PyGLM_Vec_Check(1, bool, arg2)) {\
+		return pack(glm::NAME(unpack_vec<1, bool>(arg1), unpack_vec<1, bool>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {\
+		return pack(glm::NAME(unpack_vec<2, float>(arg1), unpack_vec<2, float>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {\
+		return pack(glm::NAME(unpack_vec<2, double>(arg1), unpack_vec<2, double>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(2, int, arg1) && PyGLM_Vec_Check(2, int, arg2)) {\
+		return pack(glm::NAME(unpack_vec<2, int>(arg1), unpack_vec<2, int>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2)) {\
+		return pack(glm::NAME(unpack_vec<2, glm::uint>(arg1), unpack_vec<2, glm::uint>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(2, glm::i64, arg1) && PyGLM_Vec_Check(2, glm::i64, arg2)) {\
+		return pack(glm::NAME(unpack_vec<2, glm::i64>(arg1), unpack_vec<2, glm::i64>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(2, glm::u64, arg1) && PyGLM_Vec_Check(2, glm::u64, arg2)) {\
+		return pack(glm::NAME(unpack_vec<2, glm::u64>(arg1), unpack_vec<2, glm::u64>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(2, glm::i16, arg1) && PyGLM_Vec_Check(2, glm::i16, arg2)) {\
+		return pack(glm::NAME(unpack_vec<2, glm::i16>(arg1), unpack_vec<2, glm::i16>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(2, glm::u16, arg1) && PyGLM_Vec_Check(2, glm::u16, arg2)) {\
+		return pack(glm::NAME(unpack_vec<2, glm::u16>(arg1), unpack_vec<2, glm::u16>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(2, glm::i8, arg1) && PyGLM_Vec_Check(2, glm::i8, arg2)) {\
+		return pack(glm::NAME(unpack_vec<2, glm::i8>(arg1), unpack_vec<2, glm::i8>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(2, glm::u8, arg1) && PyGLM_Vec_Check(2, glm::u8, arg2)) {\
+		return pack(glm::NAME(unpack_vec<2, glm::u8>(arg1), unpack_vec<2, glm::u8>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(2, bool, arg1) && PyGLM_Vec_Check(2, bool, arg2)) {\
+		return pack(glm::NAME(unpack_vec<2, bool>(arg1), unpack_vec<2, bool>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {\
+		return pack(glm::NAME(unpack_vec<3, float>(arg1), unpack_vec<3, float>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {\
+		return pack(glm::NAME(unpack_vec<3, double>(arg1), unpack_vec<3, double>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(3, int, arg1) && PyGLM_Vec_Check(3, int, arg2)) {\
+		return pack(glm::NAME(unpack_vec<3, int>(arg1), unpack_vec<3, int>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(3, glm::uint, arg1) && PyGLM_Vec_Check(3, glm::uint, arg2)) {\
+		return pack(glm::NAME(unpack_vec<3, glm::uint>(arg1), unpack_vec<3, glm::uint>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(3, glm::i64, arg1) && PyGLM_Vec_Check(3, glm::i64, arg2)) {\
+		return pack(glm::NAME(unpack_vec<3, glm::i64>(arg1), unpack_vec<3, glm::i64>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(3, glm::u64, arg1) && PyGLM_Vec_Check(3, glm::u64, arg2)) {\
+		return pack(glm::NAME(unpack_vec<3, glm::u64>(arg1), unpack_vec<3, glm::u64>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(3, glm::i16, arg1) && PyGLM_Vec_Check(3, glm::i16, arg2)) {\
+		return pack(glm::NAME(unpack_vec<3, glm::i16>(arg1), unpack_vec<3, glm::i16>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(3, glm::u16, arg1) && PyGLM_Vec_Check(3, glm::u16, arg2)) {\
+		return pack(glm::NAME(unpack_vec<3, glm::u16>(arg1), unpack_vec<3, glm::u16>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(3, glm::i8, arg1) && PyGLM_Vec_Check(3, glm::i8, arg2)) {\
+		return pack(glm::NAME(unpack_vec<3, glm::i8>(arg1), unpack_vec<3, glm::i8>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(3, glm::u8, arg1) && PyGLM_Vec_Check(3, glm::u8, arg2)) {\
+		return pack(glm::NAME(unpack_vec<3, glm::u8>(arg1), unpack_vec<3, glm::u8>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(3, bool, arg1) && PyGLM_Vec_Check(3, bool, arg2)) {\
+		return pack(glm::NAME(unpack_vec<3, bool>(arg1), unpack_vec<3, bool>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {\
+		return pack(glm::NAME(unpack_vec<4, float>(arg1), unpack_vec<4, float>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2)) {\
+		return pack(glm::NAME(unpack_vec<4, double>(arg1), unpack_vec<4, double>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(4, int, arg1) && PyGLM_Vec_Check(4, int, arg2)) {\
+		return pack(glm::NAME(unpack_vec<4, int>(arg1), unpack_vec<4, int>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(4, glm::uint, arg1) && PyGLM_Vec_Check(4, glm::uint, arg2)) {\
+		return pack(glm::NAME(unpack_vec<4, glm::uint>(arg1), unpack_vec<4, glm::uint>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(4, glm::i64, arg1) && PyGLM_Vec_Check(4, glm::i64, arg2)) {\
+		return pack(glm::NAME(unpack_vec<4, glm::i64>(arg1), unpack_vec<4, glm::i64>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(4, glm::u64, arg1) && PyGLM_Vec_Check(4, glm::u64, arg2)) {\
+		return pack(glm::NAME(unpack_vec<4, glm::u64>(arg1), unpack_vec<4, glm::u64>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(4, glm::i16, arg1) && PyGLM_Vec_Check(4, glm::i16, arg2)) {\
+		return pack(glm::NAME(unpack_vec<4, glm::i16>(arg1), unpack_vec<4, glm::i16>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(4, glm::u16, arg1) && PyGLM_Vec_Check(4, glm::u16, arg2)) {\
+		return pack(glm::NAME(unpack_vec<4, glm::u16>(arg1), unpack_vec<4, glm::u16>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(4, glm::i8, arg1) && PyGLM_Vec_Check(4, glm::i8, arg2)) {\
+		return pack(glm::NAME(unpack_vec<4, glm::i8>(arg1), unpack_vec<4, glm::i8>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(4, glm::u8, arg1) && PyGLM_Vec_Check(4, glm::u8, arg2)) {\
+		return pack(glm::NAME(unpack_vec<4, glm::u8>(arg1), unpack_vec<4, glm::u8>(arg2)));\
+	}\
+	if (PyGLM_Vec_Check(4, bool, arg1) && PyGLM_Vec_Check(4, bool, arg2)) {\
+		return pack(glm::NAME(unpack_vec<4, bool>(arg1), unpack_vec<4, bool>(arg2)));\
+	}\
+	PyGLM_TYPEERROR_2O("invalid argument type(s) for " #NAME "(): ", arg1, arg2);\
+	return NULL;\
+}
 #pragma endregion
 
 
@@ -22142,6 +22313,9 @@ unpackRGBM_(PyObject*, PyObject* arg) {
 
 static PyObject*
 unpackHalf_(PyObject*, PyObject* arg) {
+	if (PyGLM_Vec_Check(1, glm::u16, arg)) {
+		return pack(glm::unpackHalf(unpack_vec<1, glm::u16>(arg)));
+	}
 	if (PyGLM_Vec_Check(2, glm::u16, arg)) {
 		return pack(glm::unpackHalf(unpack_vec<2, glm::u16>(arg)));
 	}
@@ -22162,6 +22336,12 @@ uaddCarry_(PyObject*, PyObject* args) {
 	if (PyGLM_Number_Check(arg1)) {
 		PyErr_SetString(PyExc_TypeError, "uaddCarry() doesn't accept integer inputs in PyGLM");
 		return NULL;
+	}
+	if(PyGLM_Vec_Check(1, glm::uint, arg1) && PyGLM_Vec_Check(1, glm::uint, arg2) && Py_TYPE(arg3) == &huvec1Type) {
+		glm::uvec1 o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		return pack_vec(glm::uaddCarry(o, o2, ((vec<1, glm::uint>*)arg3)->super_type));
 	}
 	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2) && Py_TYPE(arg3) == &huvec2Type) {
 		glm::uvec2 o, o2;
@@ -22193,6 +22373,12 @@ usubBorrow_(PyObject*, PyObject* args) {
 		PyErr_SetString(PyExc_TypeError, "usubBorrow() doesn't accept integer inputs in PyGLM");
 		return NULL;
 	}
+	if (PyGLM_Vec_Check(1, glm::uint, arg1) && PyGLM_Vec_Check(1, glm::uint, arg2) && Py_TYPE(arg3) == &huvec1Type) {
+		glm::uvec1 o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		return pack_vec(glm::usubBorrow(o, o2, ((vec<1, glm::uint>*)arg3)->super_type));
+	}
 	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2) && Py_TYPE(arg3) == &huvec2Type) {
 		glm::uvec2 o, o2;
 		unpack_vec(arg1, o);
@@ -22222,6 +22408,13 @@ umulExtended_(PyObject*, PyObject* args) {
 	if (PyGLM_Number_Check(arg1)) {
 		PyErr_SetString(PyExc_TypeError, "umulExtended() doesn't accept integer inputs in PyGLM");
 		return NULL;
+	}
+	if (PyGLM_Vec_Check(1, glm::uint, arg1) && PyGLM_Vec_Check(1, glm::uint, arg2) && Py_TYPE(arg3) == &huvec1Type && Py_TYPE(arg4) == &huvec1Type) {
+		glm::uvec1 o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		glm::umulExtended(o, o2, ((vec<1, glm::uint>*)arg3)->super_type, ((vec<1, glm::uint>*)arg4)->super_type);
+		Py_RETURN_NONE;
 	}
 	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2) && Py_TYPE(arg3) == &huvec2Type && Py_TYPE(arg4) == &huvec2Type) {
 		glm::uvec2 o, o2;
@@ -22255,6 +22448,13 @@ imulExtended_(PyObject*, PyObject* args) {
 	if (PyGLM_Number_Check(arg1)) {
 		PyErr_SetString(PyExc_TypeError, "imulExtended() doesn't accept integer inputs in PyGLM");
 		return NULL;
+	}
+	if (PyGLM_Vec_Check(1, int, arg1) && PyGLM_Vec_Check(1, int, arg2) && Py_TYPE(arg3) == &hivec1Type && Py_TYPE(arg4) == &hivec1Type) {
+		glm::ivec1 o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		glm::imulExtended(o, o2, ((vec<1, int>*)arg3)->super_type, ((vec<1, int>*)arg4)->super_type);
+		Py_RETURN_NONE;
 	}
 	if (PyGLM_Vec_Check(2, int, arg1) && PyGLM_Vec_Check(2, int, arg2) && Py_TYPE(arg3) == &hivec2Type && Py_TYPE(arg4) == &hivec2Type) {
 		glm::ivec2 o, o2;
@@ -22290,6 +22490,11 @@ bitfieldExtract_(PyObject*, PyObject* args) {
 		if (PyLong_Check(arg1)) {
 			return PyLong_FromLong(glm::bitfieldExtract(PyLong_AS_LONG(arg1), i, i2));
 		}
+		if (PyGLM_Vec_Check(1, int, arg1)) {
+			glm::ivec1 o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::bitfieldExtract(o, i, i2));
+		}
 		if (PyGLM_Vec_Check(2, int, arg1)) {
 			glm::ivec2 o;
 			unpack_vec(arg1, o);
@@ -22314,10 +22519,16 @@ static PyObject*
 bitfieldInsert_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3, *arg4;
 	PyGLM_Arg_Unpack_4O(args, "bitfieldInsert", arg1, arg2, arg3, arg4);
-	if (PyLong_Check(arg2) && PyLong_Check(arg3)) {
+	if (PyLong_Check(arg3) && PyLong_Check(arg4)) {
 		int i = (int)PyLong_AS_LONG(arg3), i2 = (int)PyLong_AS_LONG(arg4);
 		if (PyLong_Check(arg1) && PyLong_Check(arg2)) {
 			return PyLong_FromLong(glm::bitfieldInsert(PyLong_AS_LONG(arg1), PyLong_AS_LONG(arg2), i, i2));
+		}
+		if (PyGLM_Vec_Check(1, int, arg1) && PyGLM_Vec_Check(1, int, arg2)) {
+			glm::ivec1 o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack_vec(glm::bitfieldInsert(o, o2, i, i2));
 		}
 		if (PyGLM_Vec_Check(2, int, arg1) && PyGLM_Vec_Check(2, int, arg2)) {
 			glm::ivec2 o, o2;
@@ -22346,6 +22557,9 @@ static PyObject* bitfieldReverse_(PyObject*, PyObject* arg) {
 	if (PyLong_Check(arg)) {
 		return PyLong_FromLong(glm::bitfieldReverse(PyLong_AsUnsignedLong(arg))); 
 	} 
+	if (PyGLM_Vec_Check(1, glm::uint, arg)) {
+		return pack_vec(glm::bitfieldReverse(unpack_vec<1, glm::uint>(arg)));
+	}
 	if (PyGLM_Vec_Check(2, glm::uint, arg)) { 
 		return pack_vec(glm::bitfieldReverse(unpack_vec<2, glm::uint>(arg)));
 	} 
@@ -22363,6 +22577,11 @@ static PyObject*
 bitCount_(PyObject*, PyObject* arg) {
 	if (PyLong_Check(arg)) {
 		return PyLong_FromLong(glm::bitCount(PyLong_AS_LONG(arg)));
+	}
+	if (PyGLM_Vec_Check(1, int, arg)) {
+		glm::ivec1 o;
+		unpack_vec(arg, o);
+		return pack_vec(glm::bitCount(o));
 	}
 	if (PyGLM_Vec_Check(2, int, arg)) {
 		glm::ivec2 o;
@@ -22388,6 +22607,11 @@ findLSB_(PyObject*, PyObject* arg) {
 	if (PyLong_Check(arg)) {
 		return PyLong_FromLong(glm::findLSB(PyLong_AS_LONG(arg)));
 	}
+	if (PyGLM_Vec_Check(1, int, arg)) {
+		glm::ivec1 o;
+		unpack_vec(arg, o);
+		return pack_vec(glm::findLSB(o));
+	}
 	if (PyGLM_Vec_Check(2, int, arg)) {
 		glm::ivec2 o;
 		unpack_vec(arg, o);
@@ -22411,6 +22635,11 @@ static PyObject*
 findMSB_(PyObject* , PyObject* arg) {
 	if (PyLong_Check(arg)) {
 		return PyLong_FromLong(glm::findMSB(PyLong_AS_LONG(arg)));
+	}
+	if (PyGLM_Vec_Check(1, int, arg)) {
+		glm::ivec1 o;
+		unpack_vec(arg, o);
+		return pack_vec(glm::findMSB(o));
 	}
 	if (PyGLM_Vec_Check(2, int, arg)) {
 		glm::ivec2 o;
@@ -22436,6 +22665,72 @@ equal(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3 = NULL;
 	if (!PyArg_UnpackTuple(args, "equal", 2, 3, &arg1, &arg2, &arg3)) return NULL;
 	if (arg3 == NULL) {
+		if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2)) {
+			glm::vec<1, float> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::equal(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2)) {
+			glm::vec<1, double> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::equal(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, int, arg1) && PyGLM_Vec_Check(1, int, arg2)) {
+			glm::vec<1, int> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::equal(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::uint, arg1) && PyGLM_Vec_Check(1, glm::uint, arg2)) {
+			glm::vec<1, glm::uint> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::equal(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::i64, arg1) && PyGLM_Vec_Check(1, glm::i64, arg2)) {
+			glm::vec<1, glm::i64> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::equal(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::u64, arg1) && PyGLM_Vec_Check(1, glm::u64, arg2)) {
+			glm::vec<1, glm::u64> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::equal(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::i16, arg1) && PyGLM_Vec_Check(1, glm::i16, arg2)) {
+			glm::vec<1, glm::i16> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::equal(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::u16, arg1) && PyGLM_Vec_Check(1, glm::u16, arg2)) {
+			glm::vec<1, glm::u16> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::equal(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::i8, arg1) && PyGLM_Vec_Check(1, glm::i8, arg2)) {
+			glm::vec<1, glm::i8> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::equal(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::u8, arg1) && PyGLM_Vec_Check(1, glm::u8, arg2)) {
+			glm::vec<1, glm::u8> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::equal(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg1) && PyGLM_Vec_Check(1, bool, arg2)) {
+			glm::vec<1, bool> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::equal(o, o2));
+		}
 		if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
 			glm::vec<2, float> o, o2;
 			unpack_vec(arg1, o);
@@ -23578,6 +23873,72 @@ notEqual(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3 = NULL;
 	if (!PyArg_UnpackTuple(args, "notEqual", 2, 3, &arg1, &arg2, &arg3)) return NULL;
 	if (arg3 == NULL) {
+		if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2)) {
+			glm::vec<1, float> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::notEqual(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2)) {
+			glm::vec<1, double> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::notEqual(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, int, arg1) && PyGLM_Vec_Check(1, int, arg2)) {
+			glm::vec<1, int> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::notEqual(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::uint, arg1) && PyGLM_Vec_Check(1, glm::uint, arg2)) {
+			glm::vec<1, glm::uint> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::notEqual(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::i64, arg1) && PyGLM_Vec_Check(1, glm::i64, arg2)) {
+			glm::vec<1, glm::i64> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::notEqual(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::u64, arg1) && PyGLM_Vec_Check(1, glm::u64, arg2)) {
+			glm::vec<1, glm::u64> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::notEqual(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::i16, arg1) && PyGLM_Vec_Check(1, glm::i16, arg2)) {
+			glm::vec<1, glm::i16> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::notEqual(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::u16, arg1) && PyGLM_Vec_Check(1, glm::u16, arg2)) {
+			glm::vec<1, glm::u16> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::notEqual(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::i8, arg1) && PyGLM_Vec_Check(1, glm::i8, arg2)) {
+			glm::vec<1, glm::i8> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::notEqual(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::u8, arg1) && PyGLM_Vec_Check(1, glm::u8, arg2)) {
+			glm::vec<1, glm::u8> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::notEqual(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg1) && PyGLM_Vec_Check(1, bool, arg2)) {
+			glm::vec<1, bool> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::notEqual(o, o2));
+		}
 		if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
 			glm::vec<2, float> o, o2;
 			unpack_vec(arg1, o);
@@ -24715,832 +25076,843 @@ notEqual(PyObject*, PyObject* args) {
 	return NULL;
 }
 
-static PyObject*
-lessThan(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2;
-	PyGLM_Arg_Unpack_2O(args, "lessThan", arg1, arg2);
-	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
-		glm::vec<2, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {
-		glm::vec<2, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, int, arg1) && PyGLM_Vec_Check(2, int, arg2)) {
-		glm::vec<2, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2)) {
-		glm::vec<2, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i64, arg1) && PyGLM_Vec_Check(2, glm::i64, arg2)) {
-		glm::vec<2, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u64, arg1) && PyGLM_Vec_Check(2, glm::u64, arg2)) {
-		glm::vec<2, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i16, arg1) && PyGLM_Vec_Check(2, glm::i16, arg2)) {
-		glm::vec<2, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u16, arg1) && PyGLM_Vec_Check(2, glm::u16, arg2)) {
-		glm::vec<2, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i8, arg1) && PyGLM_Vec_Check(2, glm::i8, arg2)) {
-		glm::vec<2, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u8, arg1) && PyGLM_Vec_Check(2, glm::u8, arg2)) {
-		glm::vec<2, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, bool, arg1) && PyGLM_Vec_Check(2, bool, arg2)) {
-		glm::vec<2, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {
-		glm::vec<3, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {
-		glm::vec<3, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, int, arg1) && PyGLM_Vec_Check(3, int, arg2)) {
-		glm::vec<3, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::uint, arg1) && PyGLM_Vec_Check(3, glm::uint, arg2)) {
-		glm::vec<3, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i64, arg1) && PyGLM_Vec_Check(3, glm::i64, arg2)) {
-		glm::vec<3, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u64, arg1) && PyGLM_Vec_Check(3, glm::u64, arg2)) {
-		glm::vec<3, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i16, arg1) && PyGLM_Vec_Check(3, glm::i16, arg2)) {
-		glm::vec<3, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u16, arg1) && PyGLM_Vec_Check(3, glm::u16, arg2)) {
-		glm::vec<3, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i8, arg1) && PyGLM_Vec_Check(3, glm::i8, arg2)) {
-		glm::vec<3, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u8, arg1) && PyGLM_Vec_Check(3, glm::u8, arg2)) {
-		glm::vec<3, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, bool, arg1) && PyGLM_Vec_Check(3, bool, arg2)) {
-		glm::vec<3, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {
-		glm::vec<4, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2)) {
-		glm::vec<4, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, int, arg1) && PyGLM_Vec_Check(4, int, arg2)) {
-		glm::vec<4, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::uint, arg1) && PyGLM_Vec_Check(4, glm::uint, arg2)) {
-		glm::vec<4, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i64, arg1) && PyGLM_Vec_Check(4, glm::i64, arg2)) {
-		glm::vec<4, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u64, arg1) && PyGLM_Vec_Check(4, glm::u64, arg2)) {
-		glm::vec<4, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i16, arg1) && PyGLM_Vec_Check(4, glm::i16, arg2)) {
-		glm::vec<4, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u16, arg1) && PyGLM_Vec_Check(4, glm::u16, arg2)) {
-		glm::vec<4, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i8, arg1) && PyGLM_Vec_Check(4, glm::i8, arg2)) {
-		glm::vec<4, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u8, arg1) && PyGLM_Vec_Check(4, glm::u8, arg2)) {
-		glm::vec<4, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, bool, arg1) && PyGLM_Vec_Check(4, bool, arg2)) {
-		glm::vec<4, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThan(o, o2));
-	}
-	PyGLM_TYPEERROR_2O("invalid argument type(s) for lessThan(): ", arg1, arg2);
-	return NULL;
-}
+PyGLM_MAKE_GLM_FUNC_VV(lessThan)
+PyGLM_MAKE_GLM_FUNC_VV(lessThanEqual)
+PyGLM_MAKE_GLM_FUNC_VV(greaterThan)
+PyGLM_MAKE_GLM_FUNC_VV(greaterThanEqual)
 
-static PyObject*
-lessThanEqual(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2;
-	PyGLM_Arg_Unpack_2O(args, "lessThanEqual", arg1, arg2);
-	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
-		glm::vec<2, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {
-		glm::vec<2, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, int, arg1) && PyGLM_Vec_Check(2, int, arg2)) {
-		glm::vec<2, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2)) {
-		glm::vec<2, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i64, arg1) && PyGLM_Vec_Check(2, glm::i64, arg2)) {
-		glm::vec<2, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u64, arg1) && PyGLM_Vec_Check(2, glm::u64, arg2)) {
-		glm::vec<2, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i16, arg1) && PyGLM_Vec_Check(2, glm::i16, arg2)) {
-		glm::vec<2, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u16, arg1) && PyGLM_Vec_Check(2, glm::u16, arg2)) {
-		glm::vec<2, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i8, arg1) && PyGLM_Vec_Check(2, glm::i8, arg2)) {
-		glm::vec<2, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u8, arg1) && PyGLM_Vec_Check(2, glm::u8, arg2)) {
-		glm::vec<2, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, bool, arg1) && PyGLM_Vec_Check(2, bool, arg2)) {
-		glm::vec<2, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {
-		glm::vec<3, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {
-		glm::vec<3, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, int, arg1) && PyGLM_Vec_Check(3, int, arg2)) {
-		glm::vec<3, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::uint, arg1) && PyGLM_Vec_Check(3, glm::uint, arg2)) {
-		glm::vec<3, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i64, arg1) && PyGLM_Vec_Check(3, glm::i64, arg2)) {
-		glm::vec<3, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u64, arg1) && PyGLM_Vec_Check(3, glm::u64, arg2)) {
-		glm::vec<3, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i16, arg1) && PyGLM_Vec_Check(3, glm::i16, arg2)) {
-		glm::vec<3, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u16, arg1) && PyGLM_Vec_Check(3, glm::u16, arg2)) {
-		glm::vec<3, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i8, arg1) && PyGLM_Vec_Check(3, glm::i8, arg2)) {
-		glm::vec<3, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u8, arg1) && PyGLM_Vec_Check(3, glm::u8, arg2)) {
-		glm::vec<3, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, bool, arg1) && PyGLM_Vec_Check(3, bool, arg2)) {
-		glm::vec<3, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {
-		glm::vec<4, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2)) {
-		glm::vec<4, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, int, arg1) && PyGLM_Vec_Check(4, int, arg2)) {
-		glm::vec<4, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::uint, arg1) && PyGLM_Vec_Check(4, glm::uint, arg2)) {
-		glm::vec<4, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i64, arg1) && PyGLM_Vec_Check(4, glm::i64, arg2)) {
-		glm::vec<4, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u64, arg1) && PyGLM_Vec_Check(4, glm::u64, arg2)) {
-		glm::vec<4, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i16, arg1) && PyGLM_Vec_Check(4, glm::i16, arg2)) {
-		glm::vec<4, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u16, arg1) && PyGLM_Vec_Check(4, glm::u16, arg2)) {
-		glm::vec<4, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i8, arg1) && PyGLM_Vec_Check(4, glm::i8, arg2)) {
-		glm::vec<4, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u8, arg1) && PyGLM_Vec_Check(4, glm::u8, arg2)) {
-		glm::vec<4, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, bool, arg1) && PyGLM_Vec_Check(4, bool, arg2)) {
-		glm::vec<4, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::lessThanEqual(o, o2));
-	}
-	PyGLM_TYPEERROR_2O("invalid argument type(s) for lessThanEqual(): ", arg1, arg2);
-	return NULL;
-}
-
-static PyObject*
-greaterThan(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2;
-	PyGLM_Arg_Unpack_2O(args, "greaterThan", arg1, arg2);
-	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
-		glm::vec<2, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {
-		glm::vec<2, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, int, arg1) && PyGLM_Vec_Check(2, int, arg2)) {
-		glm::vec<2, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2)) {
-		glm::vec<2, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i64, arg1) && PyGLM_Vec_Check(2, glm::i64, arg2)) {
-		glm::vec<2, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u64, arg1) && PyGLM_Vec_Check(2, glm::u64, arg2)) {
-		glm::vec<2, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i16, arg1) && PyGLM_Vec_Check(2, glm::i16, arg2)) {
-		glm::vec<2, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u16, arg1) && PyGLM_Vec_Check(2, glm::u16, arg2)) {
-		glm::vec<2, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i8, arg1) && PyGLM_Vec_Check(2, glm::i8, arg2)) {
-		glm::vec<2, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u8, arg1) && PyGLM_Vec_Check(2, glm::u8, arg2)) {
-		glm::vec<2, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, bool, arg1) && PyGLM_Vec_Check(2, bool, arg2)) {
-		glm::vec<2, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {
-		glm::vec<3, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {
-		glm::vec<3, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, int, arg1) && PyGLM_Vec_Check(3, int, arg2)) {
-		glm::vec<3, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::uint, arg1) && PyGLM_Vec_Check(3, glm::uint, arg2)) {
-		glm::vec<3, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i64, arg1) && PyGLM_Vec_Check(3, glm::i64, arg2)) {
-		glm::vec<3, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u64, arg1) && PyGLM_Vec_Check(3, glm::u64, arg2)) {
-		glm::vec<3, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i16, arg1) && PyGLM_Vec_Check(3, glm::i16, arg2)) {
-		glm::vec<3, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u16, arg1) && PyGLM_Vec_Check(3, glm::u16, arg2)) {
-		glm::vec<3, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i8, arg1) && PyGLM_Vec_Check(3, glm::i8, arg2)) {
-		glm::vec<3, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u8, arg1) && PyGLM_Vec_Check(3, glm::u8, arg2)) {
-		glm::vec<3, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, bool, arg1) && PyGLM_Vec_Check(3, bool, arg2)) {
-		glm::vec<3, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {
-		glm::vec<4, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2)) {
-		glm::vec<4, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, int, arg1) && PyGLM_Vec_Check(4, int, arg2)) {
-		glm::vec<4, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::uint, arg1) && PyGLM_Vec_Check(4, glm::uint, arg2)) {
-		glm::vec<4, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i64, arg1) && PyGLM_Vec_Check(4, glm::i64, arg2)) {
-		glm::vec<4, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u64, arg1) && PyGLM_Vec_Check(4, glm::u64, arg2)) {
-		glm::vec<4, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i16, arg1) && PyGLM_Vec_Check(4, glm::i16, arg2)) {
-		glm::vec<4, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u16, arg1) && PyGLM_Vec_Check(4, glm::u16, arg2)) {
-		glm::vec<4, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i8, arg1) && PyGLM_Vec_Check(4, glm::i8, arg2)) {
-		glm::vec<4, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u8, arg1) && PyGLM_Vec_Check(4, glm::u8, arg2)) {
-		glm::vec<4, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, bool, arg1) && PyGLM_Vec_Check(4, bool, arg2)) {
-		glm::vec<4, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThan(o, o2));
-	}
-	PyGLM_TYPEERROR_2O("invalid argument type(s) for greaterThan(): ", arg1, arg2);
-	return NULL;
-}
-
-static PyObject*
-greaterThanEqual(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2;
-	PyGLM_Arg_Unpack_2O(args, "greaterThanEqual", arg1, arg2);
-	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
-		glm::vec<2, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {
-		glm::vec<2, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, int, arg1) && PyGLM_Vec_Check(2, int, arg2)) {
-		glm::vec<2, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2)) {
-		glm::vec<2, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i64, arg1) && PyGLM_Vec_Check(2, glm::i64, arg2)) {
-		glm::vec<2, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u64, arg1) && PyGLM_Vec_Check(2, glm::u64, arg2)) {
-		glm::vec<2, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i16, arg1) && PyGLM_Vec_Check(2, glm::i16, arg2)) {
-		glm::vec<2, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u16, arg1) && PyGLM_Vec_Check(2, glm::u16, arg2)) {
-		glm::vec<2, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::i8, arg1) && PyGLM_Vec_Check(2, glm::i8, arg2)) {
-		glm::vec<2, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, glm::u8, arg1) && PyGLM_Vec_Check(2, glm::u8, arg2)) {
-		glm::vec<2, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(2, bool, arg1) && PyGLM_Vec_Check(2, bool, arg2)) {
-		glm::vec<2, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {
-		glm::vec<3, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {
-		glm::vec<3, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, int, arg1) && PyGLM_Vec_Check(3, int, arg2)) {
-		glm::vec<3, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::uint, arg1) && PyGLM_Vec_Check(3, glm::uint, arg2)) {
-		glm::vec<3, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i64, arg1) && PyGLM_Vec_Check(3, glm::i64, arg2)) {
-		glm::vec<3, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u64, arg1) && PyGLM_Vec_Check(3, glm::u64, arg2)) {
-		glm::vec<3, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i16, arg1) && PyGLM_Vec_Check(3, glm::i16, arg2)) {
-		glm::vec<3, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u16, arg1) && PyGLM_Vec_Check(3, glm::u16, arg2)) {
-		glm::vec<3, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::i8, arg1) && PyGLM_Vec_Check(3, glm::i8, arg2)) {
-		glm::vec<3, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, glm::u8, arg1) && PyGLM_Vec_Check(3, glm::u8, arg2)) {
-		glm::vec<3, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(3, bool, arg1) && PyGLM_Vec_Check(3, bool, arg2)) {
-		glm::vec<3, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {
-		glm::vec<4, float> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2)) {
-		glm::vec<4, double> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, int, arg1) && PyGLM_Vec_Check(4, int, arg2)) {
-		glm::vec<4, int> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::uint, arg1) && PyGLM_Vec_Check(4, glm::uint, arg2)) {
-		glm::vec<4, glm::uint> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i64, arg1) && PyGLM_Vec_Check(4, glm::i64, arg2)) {
-		glm::vec<4, glm::i64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u64, arg1) && PyGLM_Vec_Check(4, glm::u64, arg2)) {
-		glm::vec<4, glm::u64> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i16, arg1) && PyGLM_Vec_Check(4, glm::i16, arg2)) {
-		glm::vec<4, glm::i16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u16, arg1) && PyGLM_Vec_Check(4, glm::u16, arg2)) {
-		glm::vec<4, glm::u16> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::i8, arg1) && PyGLM_Vec_Check(4, glm::i8, arg2)) {
-		glm::vec<4, glm::i8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, glm::u8, arg1) && PyGLM_Vec_Check(4, glm::u8, arg2)) {
-		glm::vec<4, glm::u8> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	if (PyGLM_Vec_Check(4, bool, arg1) && PyGLM_Vec_Check(4, bool, arg2)) {
-		glm::vec<4, bool> o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		return pack(glm::greaterThanEqual(o, o2));
-	}
-	PyGLM_TYPEERROR_2O("invalid argument type(s) for greaterThanEqual(): ", arg1, arg2);
-	return NULL;
-}
+//static PyObject*
+//lessThan(PyObject*, PyObject* args) {
+//	PyObject *arg1, *arg2;
+//	PyGLM_Arg_Unpack_2O(args, "lessThan", arg1, arg2);
+//	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
+//		glm::vec<2, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {
+//		glm::vec<2, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, int, arg1) && PyGLM_Vec_Check(2, int, arg2)) {
+//		glm::vec<2, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2)) {
+//		glm::vec<2, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i64, arg1) && PyGLM_Vec_Check(2, glm::i64, arg2)) {
+//		glm::vec<2, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u64, arg1) && PyGLM_Vec_Check(2, glm::u64, arg2)) {
+//		glm::vec<2, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i16, arg1) && PyGLM_Vec_Check(2, glm::i16, arg2)) {
+//		glm::vec<2, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u16, arg1) && PyGLM_Vec_Check(2, glm::u16, arg2)) {
+//		glm::vec<2, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i8, arg1) && PyGLM_Vec_Check(2, glm::i8, arg2)) {
+//		glm::vec<2, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u8, arg1) && PyGLM_Vec_Check(2, glm::u8, arg2)) {
+//		glm::vec<2, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, bool, arg1) && PyGLM_Vec_Check(2, bool, arg2)) {
+//		glm::vec<2, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {
+//		glm::vec<3, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {
+//		glm::vec<3, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, int, arg1) && PyGLM_Vec_Check(3, int, arg2)) {
+//		glm::vec<3, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::uint, arg1) && PyGLM_Vec_Check(3, glm::uint, arg2)) {
+//		glm::vec<3, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i64, arg1) && PyGLM_Vec_Check(3, glm::i64, arg2)) {
+//		glm::vec<3, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u64, arg1) && PyGLM_Vec_Check(3, glm::u64, arg2)) {
+//		glm::vec<3, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i16, arg1) && PyGLM_Vec_Check(3, glm::i16, arg2)) {
+//		glm::vec<3, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u16, arg1) && PyGLM_Vec_Check(3, glm::u16, arg2)) {
+//		glm::vec<3, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i8, arg1) && PyGLM_Vec_Check(3, glm::i8, arg2)) {
+//		glm::vec<3, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u8, arg1) && PyGLM_Vec_Check(3, glm::u8, arg2)) {
+//		glm::vec<3, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, bool, arg1) && PyGLM_Vec_Check(3, bool, arg2)) {
+//		glm::vec<3, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {
+//		glm::vec<4, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2)) {
+//		glm::vec<4, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, int, arg1) && PyGLM_Vec_Check(4, int, arg2)) {
+//		glm::vec<4, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::uint, arg1) && PyGLM_Vec_Check(4, glm::uint, arg2)) {
+//		glm::vec<4, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i64, arg1) && PyGLM_Vec_Check(4, glm::i64, arg2)) {
+//		glm::vec<4, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u64, arg1) && PyGLM_Vec_Check(4, glm::u64, arg2)) {
+//		glm::vec<4, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i16, arg1) && PyGLM_Vec_Check(4, glm::i16, arg2)) {
+//		glm::vec<4, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u16, arg1) && PyGLM_Vec_Check(4, glm::u16, arg2)) {
+//		glm::vec<4, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i8, arg1) && PyGLM_Vec_Check(4, glm::i8, arg2)) {
+//		glm::vec<4, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u8, arg1) && PyGLM_Vec_Check(4, glm::u8, arg2)) {
+//		glm::vec<4, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, bool, arg1) && PyGLM_Vec_Check(4, bool, arg2)) {
+//		glm::vec<4, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThan(o, o2));
+//	}
+//	PyGLM_TYPEERROR_2O("invalid argument type(s) for lessThan(): ", arg1, arg2);
+//	return NULL;
+//}
+//
+//static PyObject*
+//lessThanEqual(PyObject*, PyObject* args) {
+//	PyObject *arg1, *arg2;
+//	PyGLM_Arg_Unpack_2O(args, "lessThanEqual", arg1, arg2);
+//	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
+//		glm::vec<2, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {
+//		glm::vec<2, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, int, arg1) && PyGLM_Vec_Check(2, int, arg2)) {
+//		glm::vec<2, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2)) {
+//		glm::vec<2, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i64, arg1) && PyGLM_Vec_Check(2, glm::i64, arg2)) {
+//		glm::vec<2, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u64, arg1) && PyGLM_Vec_Check(2, glm::u64, arg2)) {
+//		glm::vec<2, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i16, arg1) && PyGLM_Vec_Check(2, glm::i16, arg2)) {
+//		glm::vec<2, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u16, arg1) && PyGLM_Vec_Check(2, glm::u16, arg2)) {
+//		glm::vec<2, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i8, arg1) && PyGLM_Vec_Check(2, glm::i8, arg2)) {
+//		glm::vec<2, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u8, arg1) && PyGLM_Vec_Check(2, glm::u8, arg2)) {
+//		glm::vec<2, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, bool, arg1) && PyGLM_Vec_Check(2, bool, arg2)) {
+//		glm::vec<2, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {
+//		glm::vec<3, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {
+//		glm::vec<3, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, int, arg1) && PyGLM_Vec_Check(3, int, arg2)) {
+//		glm::vec<3, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::uint, arg1) && PyGLM_Vec_Check(3, glm::uint, arg2)) {
+//		glm::vec<3, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i64, arg1) && PyGLM_Vec_Check(3, glm::i64, arg2)) {
+//		glm::vec<3, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u64, arg1) && PyGLM_Vec_Check(3, glm::u64, arg2)) {
+//		glm::vec<3, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i16, arg1) && PyGLM_Vec_Check(3, glm::i16, arg2)) {
+//		glm::vec<3, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u16, arg1) && PyGLM_Vec_Check(3, glm::u16, arg2)) {
+//		glm::vec<3, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i8, arg1) && PyGLM_Vec_Check(3, glm::i8, arg2)) {
+//		glm::vec<3, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u8, arg1) && PyGLM_Vec_Check(3, glm::u8, arg2)) {
+//		glm::vec<3, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, bool, arg1) && PyGLM_Vec_Check(3, bool, arg2)) {
+//		glm::vec<3, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {
+//		glm::vec<4, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2)) {
+//		glm::vec<4, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, int, arg1) && PyGLM_Vec_Check(4, int, arg2)) {
+//		glm::vec<4, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::uint, arg1) && PyGLM_Vec_Check(4, glm::uint, arg2)) {
+//		glm::vec<4, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i64, arg1) && PyGLM_Vec_Check(4, glm::i64, arg2)) {
+//		glm::vec<4, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u64, arg1) && PyGLM_Vec_Check(4, glm::u64, arg2)) {
+//		glm::vec<4, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i16, arg1) && PyGLM_Vec_Check(4, glm::i16, arg2)) {
+//		glm::vec<4, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u16, arg1) && PyGLM_Vec_Check(4, glm::u16, arg2)) {
+//		glm::vec<4, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i8, arg1) && PyGLM_Vec_Check(4, glm::i8, arg2)) {
+//		glm::vec<4, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u8, arg1) && PyGLM_Vec_Check(4, glm::u8, arg2)) {
+//		glm::vec<4, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, bool, arg1) && PyGLM_Vec_Check(4, bool, arg2)) {
+//		glm::vec<4, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::lessThanEqual(o, o2));
+//	}
+//	PyGLM_TYPEERROR_2O("invalid argument type(s) for lessThanEqual(): ", arg1, arg2);
+//	return NULL;
+//}
+//
+//static PyObject*
+//greaterThan(PyObject*, PyObject* args) {
+//	PyObject *arg1, *arg2;
+//	PyGLM_Arg_Unpack_2O(args, "greaterThan", arg1, arg2);
+//	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
+//		glm::vec<2, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {
+//		glm::vec<2, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, int, arg1) && PyGLM_Vec_Check(2, int, arg2)) {
+//		glm::vec<2, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2)) {
+//		glm::vec<2, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i64, arg1) && PyGLM_Vec_Check(2, glm::i64, arg2)) {
+//		glm::vec<2, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u64, arg1) && PyGLM_Vec_Check(2, glm::u64, arg2)) {
+//		glm::vec<2, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i16, arg1) && PyGLM_Vec_Check(2, glm::i16, arg2)) {
+//		glm::vec<2, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u16, arg1) && PyGLM_Vec_Check(2, glm::u16, arg2)) {
+//		glm::vec<2, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i8, arg1) && PyGLM_Vec_Check(2, glm::i8, arg2)) {
+//		glm::vec<2, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u8, arg1) && PyGLM_Vec_Check(2, glm::u8, arg2)) {
+//		glm::vec<2, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, bool, arg1) && PyGLM_Vec_Check(2, bool, arg2)) {
+//		glm::vec<2, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {
+//		glm::vec<3, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {
+//		glm::vec<3, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, int, arg1) && PyGLM_Vec_Check(3, int, arg2)) {
+//		glm::vec<3, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::uint, arg1) && PyGLM_Vec_Check(3, glm::uint, arg2)) {
+//		glm::vec<3, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i64, arg1) && PyGLM_Vec_Check(3, glm::i64, arg2)) {
+//		glm::vec<3, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u64, arg1) && PyGLM_Vec_Check(3, glm::u64, arg2)) {
+//		glm::vec<3, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i16, arg1) && PyGLM_Vec_Check(3, glm::i16, arg2)) {
+//		glm::vec<3, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u16, arg1) && PyGLM_Vec_Check(3, glm::u16, arg2)) {
+//		glm::vec<3, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i8, arg1) && PyGLM_Vec_Check(3, glm::i8, arg2)) {
+//		glm::vec<3, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u8, arg1) && PyGLM_Vec_Check(3, glm::u8, arg2)) {
+//		glm::vec<3, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, bool, arg1) && PyGLM_Vec_Check(3, bool, arg2)) {
+//		glm::vec<3, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {
+//		glm::vec<4, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2)) {
+//		glm::vec<4, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, int, arg1) && PyGLM_Vec_Check(4, int, arg2)) {
+//		glm::vec<4, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::uint, arg1) && PyGLM_Vec_Check(4, glm::uint, arg2)) {
+//		glm::vec<4, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i64, arg1) && PyGLM_Vec_Check(4, glm::i64, arg2)) {
+//		glm::vec<4, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u64, arg1) && PyGLM_Vec_Check(4, glm::u64, arg2)) {
+//		glm::vec<4, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i16, arg1) && PyGLM_Vec_Check(4, glm::i16, arg2)) {
+//		glm::vec<4, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u16, arg1) && PyGLM_Vec_Check(4, glm::u16, arg2)) {
+//		glm::vec<4, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i8, arg1) && PyGLM_Vec_Check(4, glm::i8, arg2)) {
+//		glm::vec<4, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u8, arg1) && PyGLM_Vec_Check(4, glm::u8, arg2)) {
+//		glm::vec<4, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, bool, arg1) && PyGLM_Vec_Check(4, bool, arg2)) {
+//		glm::vec<4, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThan(o, o2));
+//	}
+//	PyGLM_TYPEERROR_2O("invalid argument type(s) for greaterThan(): ", arg1, arg2);
+//	return NULL;
+//}
+//
+//static PyObject*
+//greaterThanEqual(PyObject*, PyObject* args) {
+//	PyObject *arg1, *arg2;
+//	PyGLM_Arg_Unpack_2O(args, "greaterThanEqual", arg1, arg2);
+//	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
+//		glm::vec<2, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {
+//		glm::vec<2, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, int, arg1) && PyGLM_Vec_Check(2, int, arg2)) {
+//		glm::vec<2, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::uint, arg1) && PyGLM_Vec_Check(2, glm::uint, arg2)) {
+//		glm::vec<2, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i64, arg1) && PyGLM_Vec_Check(2, glm::i64, arg2)) {
+//		glm::vec<2, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u64, arg1) && PyGLM_Vec_Check(2, glm::u64, arg2)) {
+//		glm::vec<2, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i16, arg1) && PyGLM_Vec_Check(2, glm::i16, arg2)) {
+//		glm::vec<2, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u16, arg1) && PyGLM_Vec_Check(2, glm::u16, arg2)) {
+//		glm::vec<2, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::i8, arg1) && PyGLM_Vec_Check(2, glm::i8, arg2)) {
+//		glm::vec<2, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, glm::u8, arg1) && PyGLM_Vec_Check(2, glm::u8, arg2)) {
+//		glm::vec<2, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(2, bool, arg1) && PyGLM_Vec_Check(2, bool, arg2)) {
+//		glm::vec<2, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {
+//		glm::vec<3, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {
+//		glm::vec<3, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, int, arg1) && PyGLM_Vec_Check(3, int, arg2)) {
+//		glm::vec<3, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::uint, arg1) && PyGLM_Vec_Check(3, glm::uint, arg2)) {
+//		glm::vec<3, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i64, arg1) && PyGLM_Vec_Check(3, glm::i64, arg2)) {
+//		glm::vec<3, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u64, arg1) && PyGLM_Vec_Check(3, glm::u64, arg2)) {
+//		glm::vec<3, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i16, arg1) && PyGLM_Vec_Check(3, glm::i16, arg2)) {
+//		glm::vec<3, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u16, arg1) && PyGLM_Vec_Check(3, glm::u16, arg2)) {
+//		glm::vec<3, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::i8, arg1) && PyGLM_Vec_Check(3, glm::i8, arg2)) {
+//		glm::vec<3, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, glm::u8, arg1) && PyGLM_Vec_Check(3, glm::u8, arg2)) {
+//		glm::vec<3, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(3, bool, arg1) && PyGLM_Vec_Check(3, bool, arg2)) {
+//		glm::vec<3, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {
+//		glm::vec<4, float> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2)) {
+//		glm::vec<4, double> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, int, arg1) && PyGLM_Vec_Check(4, int, arg2)) {
+//		glm::vec<4, int> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::uint, arg1) && PyGLM_Vec_Check(4, glm::uint, arg2)) {
+//		glm::vec<4, glm::uint> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i64, arg1) && PyGLM_Vec_Check(4, glm::i64, arg2)) {
+//		glm::vec<4, glm::i64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u64, arg1) && PyGLM_Vec_Check(4, glm::u64, arg2)) {
+//		glm::vec<4, glm::u64> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i16, arg1) && PyGLM_Vec_Check(4, glm::i16, arg2)) {
+//		glm::vec<4, glm::i16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u16, arg1) && PyGLM_Vec_Check(4, glm::u16, arg2)) {
+//		glm::vec<4, glm::u16> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::i8, arg1) && PyGLM_Vec_Check(4, glm::i8, arg2)) {
+//		glm::vec<4, glm::i8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, glm::u8, arg1) && PyGLM_Vec_Check(4, glm::u8, arg2)) {
+//		glm::vec<4, glm::u8> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	if (PyGLM_Vec_Check(4, bool, arg1) && PyGLM_Vec_Check(4, bool, arg2)) {
+//		glm::vec<4, bool> o, o2;
+//		unpack_vec(arg1, o);
+//		unpack_vec(arg2, o2);
+//		return pack(glm::greaterThanEqual(o, o2));
+//	}
+//	PyGLM_TYPEERROR_2O("invalid argument type(s) for greaterThanEqual(): ", arg1, arg2);
+//	return NULL;
+//}
 
 static PyObject*
 any(PyObject*, PyObject* arg) {
+	if (PyGLM_Vec_Check(1, bool, arg)) {
+		if (glm::any(unpack_vec<1, bool>(arg))) {
+			Py_RETURN_TRUE;
+		}
+		Py_RETURN_FALSE;
+	}
 	if (PyGLM_Vec_Check(2, bool, arg)) {
 		if (glm::any(unpack_vec<2, bool>(arg))) {
 			Py_RETURN_TRUE;
@@ -25565,6 +25937,12 @@ any(PyObject*, PyObject* arg) {
 
 static PyObject*
 all(PyObject*, PyObject* arg) {
+	if (PyGLM_Vec_Check(1, bool, arg)) {
+		if (glm::all(unpack_vec<1, bool>(arg))) {
+			Py_RETURN_TRUE;
+		}
+		Py_RETURN_FALSE;
+	}
 	if (PyGLM_Vec_Check(2, bool, arg)) {
 		if (glm::all(unpack_vec<2, bool>(arg))) {
 			Py_RETURN_TRUE;
@@ -25589,6 +25967,9 @@ all(PyObject*, PyObject* arg) {
 
 static PyObject*
 not_(PyObject*, PyObject* arg) {
+	if (PyGLM_Vec_Check(1, bool, arg)) {
+		return pack_vec(glm::not_(unpack_vec<1, bool>(arg)));
+	}
 	if (PyGLM_Vec_Check(2, bool, arg)) {
 		return pack_vec(glm::not_(unpack_vec<2, bool>(arg)));
 	}
@@ -25661,49 +26042,49 @@ iround_(PyObject*, PyObject* arg) {
 	if (PyGLM_Vec_Check(1, float, arg)) {
 		glm::vec<1, float> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<1, float>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<1, float>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::iround(o));
 	}
 	if (PyGLM_Vec_Check(1, double, arg)) {
 		glm::vec<1, double> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<1, double>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<1, double>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::iround(o));
 	}
 	if (PyGLM_Vec_Check(2, float, arg)) {
 		glm::vec<2, float> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<2, float>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<2, float>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::iround(o));
 	}
 	if (PyGLM_Vec_Check(2, double, arg)) {
 		glm::vec<2, double> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<2, double>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<2, double>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::iround(o));
 	}
 	if (PyGLM_Vec_Check(3, float, arg)) {
 		glm::vec<3, float> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<3, float>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<3, float>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::iround(o));
 	}
 	if (PyGLM_Vec_Check(3, double, arg)) {
 		glm::vec<3, double> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<3, double>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<3, double>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::iround(o));
 	}
 	if (PyGLM_Vec_Check(4, float, arg)) {
 		glm::vec<4, float> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<4, float>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<4, float>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::iround(o));
 	}
 	if (PyGLM_Vec_Check(4, double, arg)) {
 		glm::vec<4, double> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<4, double>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<4, double>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::iround(o));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for iround(): ", arg);
@@ -25720,49 +26101,49 @@ uround_(PyObject*, PyObject* arg) {
 	if (PyGLM_Vec_Check(1, float, arg)) {
 		glm::vec<1, float> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<1, float>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<1, float>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::uround(o));
 	}
 	if (PyGLM_Vec_Check(1, double, arg)) {
 		glm::vec<1, double> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<1, double>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<1, double>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::uround(o));
 	}
 	if (PyGLM_Vec_Check(2, float, arg)) {
 		glm::vec<2, float> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<2, float>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<2, float>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::uround(o));
 	}
 	if (PyGLM_Vec_Check(2, double, arg)) {
 		glm::vec<2, double> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<2, double>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<2, double>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::uround(o));
 	}
 	if (PyGLM_Vec_Check(3, float, arg)) {
 		glm::vec<3, float> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<3, float>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<3, float>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::uround(o));
 	}
 	if (PyGLM_Vec_Check(3, double, arg)) {
 		glm::vec<3, double> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<3, double>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<3, double>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::uround(o));
 	}
 	if (PyGLM_Vec_Check(4, float, arg)) {
 		glm::vec<4, float> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<4, float>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<4, float>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::uround(o));
 	}
 	if (PyGLM_Vec_Check(4, double, arg)) {
 		glm::vec<4, double> o;
 		unpack_vec(arg, o);
-		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<4, double>(0), o))), "x has to be greater or equal to 0");
+		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<4, double>(0), o))), "x has to be greater than or equal to 0");
 		return pack(glm::uround(o));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for uround(): ", arg);
@@ -26293,6 +26674,259 @@ mix_(PyObject*, PyObject* args) {
 		return pack_qua(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 	}
 
+	if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2)) {
+		glm::vec<1, float> o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg3)) {
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg3)) {
+			glm::bvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+	}
+	if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2)) {
+		glm::vec<1, double> o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg3)) {
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg3)) {
+			glm::bvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+	}
+	if (PyGLM_Vec_Check(1, int, arg1) && PyGLM_Vec_Check(1, int, arg2)) {
+		glm::vec<1, int> o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg3)) {
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg3)) {
+			glm::bvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::uint, arg1) && PyGLM_Vec_Check(1, glm::uint, arg2)) {
+		glm::vec<1, glm::uint> o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg3)) {
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg3)) {
+			glm::bvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::i64, arg1) && PyGLM_Vec_Check(1, glm::i64, arg2)) {
+		glm::vec<1, glm::i64> o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg3)) {
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg3)) {
+			glm::bvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::u64, arg1) && PyGLM_Vec_Check(1, glm::u64, arg2)) {
+		glm::vec<1, glm::u64> o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg3)) {
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg3)) {
+			glm::bvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::i16, arg1) && PyGLM_Vec_Check(1, glm::i16, arg2)) {
+		glm::vec<1, glm::i16> o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg3)) {
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg3)) {
+			glm::bvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::u16, arg1) && PyGLM_Vec_Check(1, glm::u16, arg2)) {
+		glm::vec<1, glm::u16> o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg3)) {
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg3)) {
+			glm::bvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::i8, arg1) && PyGLM_Vec_Check(1, glm::i8, arg2)) {
+		glm::vec<1, glm::i8> o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg3)) {
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg3)) {
+			glm::bvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::u8, arg1) && PyGLM_Vec_Check(1, glm::u8, arg2)) {
+		glm::vec<1, glm::u8> o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg3)) {
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg3)) {
+			glm::bvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+	}
+	if (PyGLM_Vec_Check(1, bool, arg1) && PyGLM_Vec_Check(1, bool, arg2)) {
+		glm::vec<1, bool> o, o2;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg3)) {
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg3)) {
+			glm::bvec1 o3;
+			unpack_vec(arg3, o3);
+			return pack_vec(glm::mix(o, o2, o3));
+		}
+	}
 	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
 		glm::vec<2, float> o, o2;
 		unpack_vec(arg1, o);
@@ -27710,8 +28344,140 @@ static PyObject*
 step_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2;
 	PyGLM_Arg_Unpack_2O(args, "step", arg1, arg2);
-	if (PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg1)) {
+	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 		return PyGLM_PyObject_FromNumber(glm::step(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));
+	}
+	if (PyGLM_Vec_Check(1, float, arg2)) {
+		glm::vec<1, float> o2;
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg1)) {
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<float>(arg1), o2));
+		}
+		if (PyGLM_Vec_Check(1, float, arg1)) {
+			glm::vec<1, float> o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::step(o, o2));
+		}
+	}
+	if (PyGLM_Vec_Check(1, double, arg2)) {
+		glm::vec<1, double> o2;
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg1)) {
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<double>(arg1), o2));
+		}
+		if (PyGLM_Vec_Check(1, double, arg1)) {
+			glm::vec<1, double> o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::step(o, o2));
+		}
+	}
+	if (PyGLM_Vec_Check(1, int, arg2)) {
+		glm::vec<1, int> o2;
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg1)) {
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<int>(arg1), o2));
+		}
+		if (PyGLM_Vec_Check(1, int, arg1)) {
+			glm::vec<1, int> o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::step(o, o2));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::uint, arg2)) {
+		glm::vec<1, glm::uint> o2;
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg1)) {
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::uint>(arg1), o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::uint, arg1)) {
+			glm::vec<1, glm::uint> o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::step(o, o2));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::i64, arg2)) {
+		glm::vec<1, glm::i64> o2;
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg1)) {
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i64>(arg1), o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::i64, arg1)) {
+			glm::vec<1, glm::i64> o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::step(o, o2));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::u64, arg2)) {
+		glm::vec<1, glm::u64> o2;
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg1)) {
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u64>(arg1), o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::u64, arg1)) {
+			glm::vec<1, glm::u64> o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::step(o, o2));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::i16, arg2)) {
+		glm::vec<1, glm::i16> o2;
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg1)) {
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i16>(arg1), o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::i16, arg1)) {
+			glm::vec<1, glm::i16> o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::step(o, o2));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::u16, arg2)) {
+		glm::vec<1, glm::u16> o2;
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg1)) {
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u16>(arg1), o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::u16, arg1)) {
+			glm::vec<1, glm::u16> o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::step(o, o2));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::i8, arg2)) {
+		glm::vec<1, glm::i8> o2;
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg1)) {
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i8>(arg1), o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::i8, arg1)) {
+			glm::vec<1, glm::i8> o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::step(o, o2));
+		}
+	}
+	if (PyGLM_Vec_Check(1, glm::u8, arg2)) {
+		glm::vec<1, glm::u8> o2;
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg1)) {
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u8>(arg1), o2));
+		}
+		if (PyGLM_Vec_Check(1, glm::u8, arg1)) {
+			glm::vec<1, glm::u8> o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::step(o, o2));
+		}
+	}
+	if (PyGLM_Vec_Check(1, bool, arg2)) {
+		glm::vec<1, bool> o2;
+		unpack_vec(arg2, o2);
+		if (PyGLM_Number_Check(arg1)) {
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<bool>(arg1), o2));
+		}
+		if (PyGLM_Vec_Check(1, bool, arg1)) {
+			glm::vec<1, bool> o;
+			unpack_vec(arg1, o);
+			return pack_vec(glm::step(o, o2));
+		}
 	}
 	if (PyGLM_Vec_Check(2, float, arg2)) {
 		glm::vec<2, float> o2;
@@ -28120,6 +28886,32 @@ smoothstep_(PyObject*, PyObject* args) {
 	if (PyGLM_Number_Check(arg3) && PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 		return PyGLM_PyObject_FromNumber(glm::smoothstep(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));
 	}
+	if (PyGLM_Vec_Check(1, float, arg3)) {
+		glm::vec<1, float> o3;
+		unpack_vec(arg3, o3);
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
+			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), o3));
+		}
+		if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2)) {
+			glm::vec<1, float> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack_vec(glm::smoothstep(o, o2, o3));
+		}
+	}
+	if (PyGLM_Vec_Check(1, double, arg3)) {
+		glm::vec<1, double> o3;
+		unpack_vec(arg3, o3);
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
+			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2)) {
+			glm::vec<1, double> o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack_vec(glm::smoothstep(o, o2, o3));
+		}
+	}
 	if (PyGLM_Vec_Check(2, float, arg3)) {
 		glm::vec<2, float> o3;
 		unpack_vec(arg3, o3);
@@ -28226,6 +29018,16 @@ frexp_(PyObject*, PyObject* args) {
 		double m = glm::frexp(PyGLM_Number_FromPyObject<double>(arg1), e);
 		return Py_BuildValue("(d, i)", m, e);
 	}
+	if (PyGLM_Vec_Check(1, float, arg1) && PyObject_TypeCheck(arg2, &hivec1Type)) {
+		glm::vec<1, float> o;
+		unpack_vec(arg1, o);
+		return pack_vec(glm::frexp(o, ((vec<1, int>*)arg2)->super_type));
+	}
+	if (PyGLM_Vec_Check(1, double, arg1) && PyObject_TypeCheck(arg2, &hivec1Type)) {
+		glm::vec<1, double> o;
+		unpack_vec(arg1, o);
+		return pack_vec(glm::frexp(o, ((vec<1, int>*)arg2)->super_type));
+	}
 	if (PyGLM_Vec_Check(2, float, arg1) && PyObject_TypeCheck(arg2, &hivec2Type)) {
 		glm::vec<2, float> o;
 		unpack_vec(arg1, o);
@@ -28264,6 +29066,16 @@ static PyObject*
 ldexp_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2;
 	PyGLM_Arg_Unpack_2O(args, "ldexp", arg1, arg2);
+	if (PyGLM_Vec_Check(1, float, arg1) && PyObject_TypeCheck(arg2, &hivec1Type)) {
+		glm::vec<1, float> o;
+		unpack_vec(arg1, o);
+		return pack_vec(glm::ldexp(o, ((vec<1, int>*)arg2)->super_type));
+	}
+	if (PyGLM_Vec_Check(1, double, arg1) && PyObject_TypeCheck(arg2, &hivec1Type)) {
+		glm::vec<1, double> o;
+		unpack_vec(arg1, o);
+		return pack_vec(glm::ldexp(o, ((vec<1, int>*)arg2)->super_type));
+	}
 	if (PyGLM_Vec_Check(2, float, arg1) && PyObject_TypeCheck(arg2, &hivec2Type)) {
 		glm::vec<2, float> o;
 		unpack_vec(arg1, o);
@@ -28546,6 +29358,12 @@ atan_(PyObject*, PyObject* args) {
 		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 			return pack(glm::atan(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));
 		}
+		if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2)) {
+			glm::vec1 o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::atan(o, o2));
+		}
 		if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
 			glm::vec2 o, o2;
 			unpack_vec(arg1, o);
@@ -28560,6 +29378,12 @@ atan_(PyObject*, PyObject* args) {
 		}
 		if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {
 			glm::vec4 o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack(glm::atan(o, o2));
+		}
+		if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2)) {
+			glm::dvec1 o, o2;
 			unpack_vec(arg1, o);
 			unpack_vec(arg2, o2);
 			return pack(glm::atan(o, o2));
@@ -28589,6 +29413,11 @@ atan_(PyObject*, PyObject* args) {
 	if (PyGLM_Number_Check(arg1)) {
 		return pack(glm::atan(PyGLM_Number_FromPyObject<double>(arg1)));
 	}
+	if (PyGLM_Vec_Check(1, float, arg1)) {
+		glm::vec1 o;
+		unpack_vec(arg1, o);
+		return pack(glm::atan(o));
+	}
 	if (PyGLM_Vec_Check(2, float, arg1)) {
 		glm::vec2 o;
 		unpack_vec(arg1, o);
@@ -28601,6 +29430,11 @@ atan_(PyObject*, PyObject* args) {
 	}
 	if (PyGLM_Vec_Check(4, float, arg1)) {
 		glm::vec4 o;
+		unpack_vec(arg1, o);
+		return pack(glm::atan(o));
+	}
+	if (PyGLM_Vec_Check(1, double, arg1)) {
+		glm::dvec1 o;
 		unpack_vec(arg1, o);
 		return pack(glm::atan(o));
 	}
@@ -28639,6 +29473,14 @@ convertLinearToSRGB_(PyObject*, PyObject* args) {
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for convertLinearToSRGB()");
 		return NULL;
 	}
+	if (PyGLM_Vec_Check(1, float, arg1)) {
+		glm::vec1 o;
+		unpack_vec(arg1, o);
+		if (arg2 != NULL && PyGLM_Number_Check(arg2)) {
+			return pack(glm::convertLinearToSRGB(o, PyGLM_Number_FromPyObject<float>(arg2)));
+		}
+		return pack(glm::convertLinearToSRGB(o));
+	}
 	if (PyGLM_Vec_Check(2, float, arg1)) {
 		glm::vec2 o;
 		unpack_vec(arg1, o);
@@ -28660,6 +29502,14 @@ convertLinearToSRGB_(PyObject*, PyObject* args) {
 		unpack_vec(arg1, o);
 		if (arg2 != NULL && PyGLM_Number_Check(arg2)) {
 			return pack(glm::convertLinearToSRGB(o, PyGLM_Number_FromPyObject<float>(arg2)));
+		}
+		return pack(glm::convertLinearToSRGB(o));
+	}
+	if (PyGLM_Vec_Check(1, double, arg1)) {
+		glm::dvec1 o;
+		unpack_vec(arg1, o);
+		if (arg2 != NULL && PyGLM_Number_Check(arg2)) {
+			return pack(glm::convertLinearToSRGB(o, PyGLM_Number_FromPyObject<double>(arg2)));
 		}
 		return pack(glm::convertLinearToSRGB(o));
 	}
@@ -28699,6 +29549,14 @@ convertSRGBToLinear_(PyObject*, PyObject* args) {
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for convertSRGBToLinear()");
 		return NULL;
 	}
+	if (PyGLM_Vec_Check(1, float, arg1)) {
+		glm::vec1 o;
+		unpack_vec(arg1, o);
+		if (arg2 != NULL && PyGLM_Number_Check(arg2)) {
+			return pack(glm::convertSRGBToLinear(o, PyGLM_Number_FromPyObject<float>(arg2)));
+		}
+		return pack(glm::convertSRGBToLinear(o));
+	}
 	if (PyGLM_Vec_Check(2, float, arg1)) {
 		glm::vec2 o;
 		unpack_vec(arg1, o);
@@ -28720,6 +29578,14 @@ convertSRGBToLinear_(PyObject*, PyObject* args) {
 		unpack_vec(arg1, o);
 		if (arg2 != NULL && PyGLM_Number_Check(arg2)) {
 			return pack(glm::convertSRGBToLinear(o, PyGLM_Number_FromPyObject<float>(arg2)));
+		}
+		return pack(glm::convertSRGBToLinear(o));
+	}
+	if (PyGLM_Vec_Check(1, double, arg1)) {
+		glm::dvec1 o;
+		unpack_vec(arg1, o);
+		if (arg2 != NULL && PyGLM_Number_Check(arg2)) {
+			return pack(glm::convertSRGBToLinear(o, PyGLM_Number_FromPyObject<double>(arg2)));
 		}
 		return pack(glm::convertSRGBToLinear(o));
 	}
@@ -28796,6 +29662,12 @@ epsilonEqual_(PyObject*, PyObject* args) {
 				Py_RETURN_FALSE;
 			}
 		}
+		if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2)) {
+			glm::vec1 o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack_vec(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
+		}
 		if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
 			glm::vec2 o, o2;
 			unpack_vec(arg1, o);
@@ -28813,6 +29685,12 @@ epsilonEqual_(PyObject*, PyObject* args) {
 			unpack_vec(arg1, o);
 			unpack_vec(arg2, o2);
 			return pack_vec(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2)) {
+			glm::dvec1 o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack_vec(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
 		if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {
 			glm::dvec2 o, o2;
@@ -28846,6 +29724,13 @@ epsilonEqual_(PyObject*, PyObject* args) {
 		}
 	}
 	else {
+		if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2) && PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o, o2, o3;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			unpack_vec(arg3, o3);
+			return pack(glm::epsilonEqual(o, o2, o3));
+		}
 		if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2) && PyGLM_Vec_Check(2, float, arg3)) {
 			glm::vec2 o, o2, o3;
 			unpack_vec(arg1, o);
@@ -28862,6 +29747,13 @@ epsilonEqual_(PyObject*, PyObject* args) {
 		}
 		if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2) && PyGLM_Vec_Check(4, float, arg3)) {
 			glm::vec4 o, o2, o3;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			unpack_vec(arg3, o3);
+			return pack(glm::epsilonEqual(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2) && PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o, o2, o3;
 			unpack_vec(arg1, o);
 			unpack_vec(arg2, o2);
 			unpack_vec(arg3, o3);
@@ -28906,6 +29798,12 @@ epsilonNotEqual_(PyObject*, PyObject* args) {
 				Py_RETURN_FALSE;
 			}
 		}
+		if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2)) {
+			glm::vec1 o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack_vec(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
+		}
 		if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
 			glm::vec2 o, o2;
 			unpack_vec(arg1, o);
@@ -28923,6 +29821,12 @@ epsilonNotEqual_(PyObject*, PyObject* args) {
 			unpack_vec(arg1, o);
 			unpack_vec(arg2, o2);
 			return pack_vec(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
+		}
+		if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2)) {
+			glm::dvec1 o, o2;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			return pack_vec(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
 		if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {
 			glm::dvec2 o, o2;
@@ -28956,6 +29860,13 @@ epsilonNotEqual_(PyObject*, PyObject* args) {
 		}
 	}
 	else {
+		if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2) && PyGLM_Vec_Check(1, float, arg3)) {
+			glm::vec1 o, o2, o3;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			unpack_vec(arg3, o3);
+			return pack(glm::epsilonNotEqual(o, o2, o3));
+		}
 		if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2) && PyGLM_Vec_Check(2, float, arg3)) {
 			glm::vec2 o, o2, o3;
 			unpack_vec(arg1, o);
@@ -28972,6 +29883,13 @@ epsilonNotEqual_(PyObject*, PyObject* args) {
 		}
 		if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2) && PyGLM_Vec_Check(4, float, arg3)) {
 			glm::vec4 o, o2, o3;
+			unpack_vec(arg1, o);
+			unpack_vec(arg2, o2);
+			unpack_vec(arg3, o3);
+			return pack(glm::epsilonNotEqual(o, o2, o3));
+		}
+		if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2) && PyGLM_Vec_Check(1, double, arg3)) {
+			glm::dvec1 o, o2, o3;
 			unpack_vec(arg1, o);
 			unpack_vec(arg2, o2);
 			unpack_vec(arg3, o3);
@@ -29411,6 +30329,9 @@ pickMatrix_(PyObject*, PyObject* args) {
 	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2) && PyGLM_Vec_Check(4, float, arg3)) {
 		glm::vec2 o, o2;
 		glm::vec4 o3;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		unpack_vec(arg3, o3);
 		if (!(o.x > 0.0f && o.y > 0.0f)) {
 			PyErr_SetString(PyExc_ValueError, "delta has to be greater than 0 for pickMatrix()");
 			return NULL;
@@ -29420,6 +30341,9 @@ pickMatrix_(PyObject*, PyObject* args) {
 	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2) && PyGLM_Vec_Check(4, double, arg3)) {
 		glm::dvec2 o, o2;
 		glm::dvec4 o3;
+		unpack_vec(arg1, o);
+		unpack_vec(arg2, o2);
+		unpack_vec(arg3, o3);
 		if (!(o.x > 0.0 && o.y > 0.0)) {
 			PyErr_SetString(PyExc_ValueError, "delta has to be greater than 0 for pickMatrix()");
 			return NULL;
@@ -29438,7 +30362,24 @@ PyGLM_MAKE_GLM_FUNC_V3V3__tfF(quatLookAt)
 PyGLM_MAKE_GLM_FUNC_V3V3__tfF(quatLookAtLH)
 PyGLM_MAKE_GLM_FUNC_V3V3__tfF(quatLookAtRH)
 
-PyGLM_MAKE_GLM_FUNC_QQN__tfF(lerp)
+static PyObject*
+lerp_(PyObject*, PyObject* args) {
+	PyObject *arg1, *arg2, *arg3;
+	PyGLM_Arg_Unpack_3O(args, "lerp", arg1, arg2, arg3);
+	if (PyGLM_Qua_Check(float, arg1) && PyGLM_Qua_Check(float, arg2) && PyGLM_Number_Check(arg3)) {
+		float a = PyGLM_Number_FromPyObject<float>(arg3);
+		PyGLM_ASSERT((a >= 0.0f && a <= 1.0f), "Lerp is only defined in [0, 1]")
+		return pack(glm::lerp(unpack_qua<float>(arg1), unpack_qua<float>(arg2), a));
+	}
+	if (PyGLM_Qua_Check(double, arg1) && PyGLM_Qua_Check(double, arg2) && PyGLM_Number_Check(arg3)) {
+		double a = PyGLM_Number_FromPyObject<double>(arg3);
+		PyGLM_ASSERT((a >= 0.0 && a <= 1.0), "Lerp is only defined in [0, 1]")
+		return pack(glm::lerp(unpack_qua<double>(arg1), unpack_qua<double>(arg2), a));
+	}
+	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for lerp()");
+	return NULL;
+}
+
 PyGLM_MAKE_GLM_FUNC_QQN__tfF(slerp)
 
 PyGLM_MAKE_GLM_FUNC_Q(conjugate)
@@ -31455,7 +32396,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(3, 2, float, arg1)) {
-				if (index > 1) {
+				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31464,7 +32405,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(4, 2, float, arg1)) {
-				if (index > 1) {
+				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31477,7 +32418,7 @@ column_(PyObject*, PyObject* args) {
 			glm::vec<3, float> x;
 			unpack_vec(arg3, x);
 			if (PyGLM_Mat_Check(2, 3, float, arg1)) {
-				if (index > 2) {
+				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31495,7 +32436,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(4, 3, float, arg1)) {
-				if (index > 2) {
+				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31508,7 +32449,7 @@ column_(PyObject*, PyObject* args) {
 			glm::vec<4, float> x;
 			unpack_vec(arg3, x);
 			if (PyGLM_Mat_Check(2, 4, float, arg1)) {
-				if (index > 3) {
+				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31517,7 +32458,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(3, 4, float, arg1)) {
-				if (index > 3) {
+				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31548,7 +32489,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(3, 2, double, arg1)) {
-				if (index > 1) {
+				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31557,7 +32498,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(4, 2, double, arg1)) {
-				if (index > 1) {
+				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31570,7 +32511,7 @@ column_(PyObject*, PyObject* args) {
 			glm::vec<3, double> x;
 			unpack_vec(arg3, x);
 			if (PyGLM_Mat_Check(2, 3, double, arg1)) {
-				if (index > 2) {
+				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31588,7 +32529,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(4, 3, double, arg1)) {
-				if (index > 2) {
+				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31601,7 +32542,7 @@ column_(PyObject*, PyObject* args) {
 			glm::vec<4, double> x;
 			unpack_vec(arg3, x);
 			if (PyGLM_Mat_Check(2, 4, double, arg1)) {
-				if (index > 3) {
+				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31610,7 +32551,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(3, 4, double, arg1)) {
-				if (index > 3) {
+				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31641,7 +32582,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(3, 2, int, arg1)) {
-				if (index > 1) {
+				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31650,7 +32591,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(4, 2, int, arg1)) {
-				if (index > 1) {
+				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31663,7 +32604,7 @@ column_(PyObject*, PyObject* args) {
 			glm::vec<3, int> x;
 			unpack_vec(arg3, x);
 			if (PyGLM_Mat_Check(2, 3, int, arg1)) {
-				if (index > 2) {
+				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31681,7 +32622,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(4, 3, int, arg1)) {
-				if (index > 2) {
+				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31694,7 +32635,7 @@ column_(PyObject*, PyObject* args) {
 			glm::vec<4, int> x;
 			unpack_vec(arg3, x);
 			if (PyGLM_Mat_Check(2, 4, int, arg1)) {
-				if (index > 3) {
+				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31703,7 +32644,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(3, 4, int, arg1)) {
-				if (index > 3) {
+				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31734,7 +32675,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(3, 2, glm::uint, arg1)) {
-				if (index > 1) {
+				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31743,7 +32684,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(4, 2, glm::uint, arg1)) {
-				if (index > 1) {
+				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31756,7 +32697,7 @@ column_(PyObject*, PyObject* args) {
 			glm::vec<3, glm::uint> x;
 			unpack_vec(arg3, x);
 			if (PyGLM_Mat_Check(2, 3, glm::uint, arg1)) {
-				if (index > 2) {
+				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31774,7 +32715,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(4, 3, glm::uint, arg1)) {
-				if (index > 2) {
+				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31787,7 +32728,7 @@ column_(PyObject*, PyObject* args) {
 			glm::vec<4, glm::uint> x;
 			unpack_vec(arg3, x);
 			if (PyGLM_Mat_Check(2, 4, glm::uint, arg1)) {
-				if (index > 3) {
+				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31796,7 +32737,7 @@ column_(PyObject*, PyObject* args) {
 				return pack(glm::column(m, index, x));
 			}
 			if (PyGLM_Mat_Check(3, 4, glm::uint, arg1)) {
-				if (index > 3) {
+				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
 				}
@@ -31810,657 +32751,6 @@ column_(PyObject*, PyObject* args) {
 					return NULL;
 				}
 				glm::mat<4, 4, glm::uint> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(2, glm::i64, arg3)) {
-			glm::vec<2, glm::i64> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 2, glm::i64, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 2, glm::i64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 2, glm::i64, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 2, glm::i64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 2, glm::i64, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 2, glm::i64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(3, glm::i64, arg3)) {
-			glm::vec<3, glm::i64> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 3, glm::i64, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 3, glm::i64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 3, glm::i64, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 3, glm::i64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 3, glm::i64, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 3, glm::i64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(4, glm::i64, arg3)) {
-			glm::vec<4, glm::i64> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 4, glm::i64, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 4, glm::i64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 4, glm::i64, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 4, glm::i64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 4, glm::i64, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 4, glm::i64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(2, glm::u64, arg3)) {
-			glm::vec<2, glm::u64> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 2, glm::u64, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 2, glm::u64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 2, glm::u64, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 2, glm::u64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 2, glm::u64, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 2, glm::u64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(3, glm::u64, arg3)) {
-			glm::vec<3, glm::u64> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 3, glm::u64, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 3, glm::u64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 3, glm::u64, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 3, glm::u64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 3, glm::u64, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 3, glm::u64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(4, glm::u64, arg3)) {
-			glm::vec<4, glm::u64> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 4, glm::u64, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 4, glm::u64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 4, glm::u64, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 4, glm::u64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 4, glm::u64, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 4, glm::u64> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(2, glm::i16, arg3)) {
-			glm::vec<2, glm::i16> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 2, glm::i16, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 2, glm::i16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 2, glm::i16, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 2, glm::i16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 2, glm::i16, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 2, glm::i16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(3, glm::i16, arg3)) {
-			glm::vec<3, glm::i16> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 3, glm::i16, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 3, glm::i16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 3, glm::i16, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 3, glm::i16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 3, glm::i16, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 3, glm::i16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(4, glm::i16, arg3)) {
-			glm::vec<4, glm::i16> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 4, glm::i16, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 4, glm::i16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 4, glm::i16, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 4, glm::i16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 4, glm::i16, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 4, glm::i16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(2, glm::u16, arg3)) {
-			glm::vec<2, glm::u16> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 2, glm::u16, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 2, glm::u16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 2, glm::u16, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 2, glm::u16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 2, glm::u16, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 2, glm::u16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(3, glm::u16, arg3)) {
-			glm::vec<3, glm::u16> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 3, glm::u16, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 3, glm::u16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 3, glm::u16, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 3, glm::u16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 3, glm::u16, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 3, glm::u16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(4, glm::u16, arg3)) {
-			glm::vec<4, glm::u16> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 4, glm::u16, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 4, glm::u16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 4, glm::u16, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 4, glm::u16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 4, glm::u16, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 4, glm::u16> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(2, glm::i8, arg3)) {
-			glm::vec<2, glm::i8> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 2, glm::i8, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 2, glm::i8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 2, glm::i8, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 2, glm::i8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 2, glm::i8, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 2, glm::i8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(3, glm::i8, arg3)) {
-			glm::vec<3, glm::i8> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 3, glm::i8, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 3, glm::i8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 3, glm::i8, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 3, glm::i8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 3, glm::i8, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 3, glm::i8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(4, glm::i8, arg3)) {
-			glm::vec<4, glm::i8> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 4, glm::i8, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 4, glm::i8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 4, glm::i8, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 4, glm::i8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 4, glm::i8, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 4, glm::i8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(2, glm::u8, arg3)) {
-			glm::vec<2, glm::u8> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 2, glm::u8, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 2, glm::u8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 2, glm::u8, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 2, glm::u8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 2, glm::u8, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 2, glm::u8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(3, glm::u8, arg3)) {
-			glm::vec<3, glm::u8> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 3, glm::u8, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 3, glm::u8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 3, glm::u8, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 3, glm::u8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 3, glm::u8, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 3, glm::u8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(4, glm::u8, arg3)) {
-			glm::vec<4, glm::u8> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 4, glm::u8, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 4, glm::u8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 4, glm::u8, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 4, glm::u8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 4, glm::u8, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 4, glm::u8> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(2, bool, arg3)) {
-			glm::vec<2, bool> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 2, bool, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 2, bool> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 2, bool, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 2, bool> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 2, bool, arg1)) {
-				if (index > 1) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 2, bool> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(3, bool, arg3)) {
-			glm::vec<3, bool> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 3, bool, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 3, bool> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 3, bool, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 3, bool> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 3, bool, arg1)) {
-				if (index > 2) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 3, bool> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-		}
-		if (PyGLM_Vec_Check(4, bool, arg3)) {
-			glm::vec<4, bool> x;
-			unpack_vec(arg3, x);
-			if (PyGLM_Mat_Check(2, 4, bool, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<2, 4, bool> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(3, 4, bool, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<3, 4, bool> m;
-				unpack_mat(arg1, m);
-				return pack(glm::column(m, index, x));
-			}
-			if (PyGLM_Mat_Check(4, 4, bool, arg1)) {
-				if (index > 3) {
-					PyErr_SetString(PyExc_IndexError, "index out of range");
-					return NULL;
-				}
-				glm::mat<4, 4, bool> m;
 				unpack_mat(arg1, m);
 				return pack(glm::column(m, index, x));
 			}
@@ -34375,6 +34665,7 @@ next_float_(PyObject*, PyObject* args) {
 	}
 	if (PyLong_Check(arg2)) {
 		int ULPs = PyGLM_Number_FromPyObject<int>(arg2);
+		PyGLM_ASSERT((ULPs >= 0), "'ULPs' has to be greater than or equal to 0")
 		if (PyGLM_Number_Check(arg1)) {
 			return pack(glm::next_float(PyGLM_Number_FromPyObject<double>(arg1), ULPs));
 		}
@@ -34470,6 +34761,7 @@ prev_float_(PyObject*, PyObject* args) {
 	}
 	if (PyLong_Check(arg2)) {
 		int ULPs = PyGLM_Number_FromPyObject<int>(arg2);
+		PyGLM_ASSERT((ULPs >= 0), "'ULPs' has to be greater than or equal to 0")
 		if (PyGLM_Number_Check(arg1)) {
 			return pack(glm::prev_float(PyGLM_Number_FromPyObject<double>(arg1), ULPs));
 		}
@@ -34588,10 +34880,10 @@ static PyMethodDef glmmethods[] = {
 	// func_vector_relational
 	{ "equal", (PyCFunction)equal, METH_VARARGS, "equal(x, y[, ...]) -> (x == y)\nReturns the component-wise comparison of result x == y." },
 	{ "notEqual", (PyCFunction)notEqual, METH_VARARGS, "notEqual(x, y[, ...]) -> (x != y)\nReturns the component-wise comparison of result x != y." },
-	{ "lessThan", (PyCFunction)lessThan, METH_VARARGS, "lessThan(x, y) -> (x < y)\nReturns the component-wise comparison of result x < y." },
-	{ "lessThanEqual", (PyCFunction)lessThanEqual, METH_VARARGS, "lessThanEqual(x, y) -> (x <= y)\nReturns the component-wise comparison of result x <= y." },
-	{ "greaterThan", (PyCFunction)greaterThan, METH_VARARGS, "greaterThan(x, y) -> (x > y)\nReturns the component-wise comparison of result x > y." },
-	{ "greaterThanEqual", (PyCFunction)greaterThanEqual, METH_VARARGS, "greaterThanEqual(x, y) -> (x >= y)\nReturns the component-wise comparison of result x >= y." },
+	{ "lessThan", (PyCFunction)lessThan_, METH_VARARGS, "lessThan(x, y) -> (x < y)\nReturns the component-wise comparison of result x < y." },
+	{ "lessThanEqual", (PyCFunction)lessThanEqual_, METH_VARARGS, "lessThanEqual(x, y) -> (x <= y)\nReturns the component-wise comparison of result x <= y." },
+	{ "greaterThan", (PyCFunction)greaterThan_, METH_VARARGS, "greaterThan(x, y) -> (x > y)\nReturns the component-wise comparison of result x > y." },
+	{ "greaterThanEqual", (PyCFunction)greaterThanEqual_, METH_VARARGS, "greaterThanEqual(x, y) -> (x >= y)\nReturns the component-wise comparison of result x >= y." },
 	{ "any", (PyCFunction)any, METH_O, "any(x) -> bool\nReturns true if any component of x is true." },
 	{ "all", (PyCFunction)all, METH_O, "all(x) -> bool\nReturns true if all components of x are true." },
 	{ "not_", (PyCFunction)not_, METH_O, "not(x) -> bool\nReturns the component-wise logical complement of x." },
@@ -34654,7 +34946,7 @@ static PyMethodDef glmmethods[] = {
 	{ "tan", (PyCFunction)tan_, METH_O, "tan(x) -> vecn\nThe standard trigonometric tangent function." },
 	{ "asin", (PyCFunction)asin_, METH_O, "asin(x) -> vecn\nArc sine. Returns an angle whose sine is x. \nThe range of values returned by this function is [-PI/2, PI/2].\nResults are undefined if |x| > 1." },
 	{ "acos", (PyCFunction)acos_, METH_O, "acos(x) -> vecn\nArc cosine. Returns an angle whose sine is x.\nThe range of values returned by this function is [0, PI].\nResults are undefined if |x| > 1." },
-	{ "atan", (PyCFunction)atan_,  METH_VARARGS | METH_KEYWORDS, "atan(y [,x]) -> float or vecn\nArc tangent. Returns an angle whose tangent is y/x.\nThe signs of x and y are used to determine what\nquadrant the angle is in. The range of values returned\nby this function is [-PI, PI]. Results are undefined\nif x and y are both 0." },
+	{ "atan", (PyCFunction)atan_,  METH_VARARGS, "atan(y [,x]) -> float or vecn\nArc tangent. Returns an angle whose tangent is y/x.\nThe signs of x and y are used to determine what\nquadrant the angle is in. The range of values returned\nby this function is [-PI, PI]. Results are undefined\nif x and y are both 0." },
 	{ "sinh", (PyCFunction)sinh_, METH_O, "sinh(x) -> vecn\nReturns the hyperbolic sine function, (exp(x) - exp(-x)) / 2" },
 	{ "cosh", (PyCFunction)cosh_, METH_O, "cosh(x) -> vecn\nReturns the hyperbolic cosine function, (exp(x) + exp(-x)) / 2" },
 	{ "tanh", (PyCFunction)tanh_, METH_O, "tanh(x) -> vecn\nReturns the hyperbolic tangent function, sinh(angle) / cosh(angle)" },
@@ -34664,8 +34956,8 @@ static PyMethodDef glmmethods[] = {
 
 	// EXTENSIONS
 	// color_space
-	{ "convertLinearToSRGB", (PyCFunction)convertLinearToSRGB_, METH_VARARGS | METH_KEYWORDS, "convertLinearToSRGB(ColorLinear[, Gamma]) -> vecn\nConvert a linear color to sRGB color using a standard / custom gamma correction." },
-	{ "convertSRGBToLinear", (PyCFunction)convertSRGBToLinear_, METH_VARARGS | METH_KEYWORDS, "convertSRGBToLinear(ColorLinear[, Gamma]) -> vecn\nConvert a sRGB color to linear color using a standard / custom gamma correction." },
+	{ "convertLinearToSRGB", (PyCFunction)convertLinearToSRGB_, METH_VARARGS, "convertLinearToSRGB(ColorLinear[, Gamma]) -> vecn\nConvert a linear color to sRGB color using a standard / custom gamma correction." },
+	{ "convertSRGBToLinear", (PyCFunction)convertSRGBToLinear_, METH_VARARGS, "convertSRGBToLinear(ColorLinear[, Gamma]) -> vecn\nConvert a sRGB color to linear color using a standard / custom gamma correction." },
 
 	// constants
 	{ "epsilon", (PyCFunction)epsilon_, METH_NOARGS, "epsilon() -> float\nReturn the epsilon constant for floating point types." },
@@ -34787,8 +35079,8 @@ static PyMethodDef glmmethods[] = {
 	{ "angleAxis", (PyCFunction)angleAxis_, METH_VARARGS, "angleAxis(angle, v) -> quat\nBuild a quaternion from an angle and a normalized axis." },
 
 	// matrix_access
-	{ "row", (PyCFunction)row_, METH_VARARGS | METH_KEYWORDS, "row(m, index[, x]) -> vecn or matnxn\nGet a specific row of a matrix or set a specific row to a matrix." },
-	{ "column", (PyCFunction)column_, METH_VARARGS | METH_KEYWORDS, "column(m, index[, x]) -> vecn or matnxn\nGet a specific column of a matrix or set a specific column to a matrix." },
+	{ "row", (PyCFunction)row_, METH_VARARGS, "row(m, index[, x]) -> vecn or matnxn\nGet a specific row of a matrix or set a specific row to a matrix." },
+	{ "column", (PyCFunction)column_, METH_VARARGS, "column(m, index[, x]) -> vecn or matnxn\nGet a specific column of a matrix or set a specific column to a matrix." },
 
 	// noise
 	{ "perlin", (PyCFunction)perlin_, METH_VARARGS, "perlin(p[, rep]) -> float\nClassic or periodic perlin noise." },
@@ -34929,6 +35221,22 @@ static PyMethodDef glmmethods[] = {
 
 #endif
 
+static void glm_clear(PyObject* module_glm) {
+	Py_XDECREF(ctypes_float_p);
+	Py_XDECREF(ctypes_double_p);
+	Py_XDECREF(ctypes_int64_p);
+	Py_XDECREF(ctypes_int32_p);
+	Py_XDECREF(ctypes_int16_p);
+	Py_XDECREF(ctypes_int8_p);
+	Py_XDECREF(ctypes_uint64_p);
+	Py_XDECREF(ctypes_uint32_p);
+	Py_XDECREF(ctypes_uint16_p);
+	Py_XDECREF(ctypes_uint8_p);
+	Py_XDECREF(ctypes_bool_p);
+	Py_XDECREF(ctypes_cast);
+	Py_XDECREF(ctypes_void_p);
+}
+
 static PyModuleDef glmmodule = {
 	PyModuleDef_HEAD_INIT,
 	"glm",
@@ -34939,7 +35247,7 @@ static PyModuleDef glmmodule = {
 #else
 	NULL,
 #endif
-	NULL, NULL, NULL, NULL
+	NULL, NULL, NULL, (freefunc)glm_clear
 };
 
 extern "C" {

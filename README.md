@@ -33,8 +33,7 @@ PyGLM's syntax is very similar to the original GLM's syntax\.
 There is no need to import anything but **glm**, as it already contains the entire package\.  
 #### Differences to glm  
 Instead of using double colons \(**::**\) for namespaces, periods \(**\.**\) are used, so  
-`glm::detail::vec2` becomes `glm.detail.vec2`\.  
-You can also use the base namespace *glm* \(e\.g\. `glm.vec2`\)\.  
+`glm::vec2` becomes `glm.vec2`\.  
   
 PyGLM doesn't support precision qualifiers\. All types use the default precision \(`packed_highp`\)\.  
   
@@ -65,6 +64,13 @@ Supplying an id of 0 will silence all warnings\.
   
 There is currently no documentation for PyGLM\.  
 Please refer to the source \(in Python: **\*\.\_\_doc\_\_**\) and GLM manuals, references and tutorials\.  
+  
+#### Unsupported functionality  
+Aside from the unstable extensions,  
+PyGLM doesn't support the following extensions and methods, due to compatibility issues:  
+The `GLM_GTC_bitfield` extension,  
+`glm::log2` from GLM\_GTC\_integer\.  
+`glm::packUnorm` and `glm::packSnorm` from GLM\_GTC\_packing\.  
   
 ### Example  
 
