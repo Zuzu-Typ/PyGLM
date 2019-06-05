@@ -79,6 +79,8 @@ Differences to glm
 
  
 | 
+| The function :code:`glm.identity` requires a matrix type as it\'s argument\.
+| 
 | The function :code:`glm.frexp(x, exp)` returns a tuple :code:`(m, e)`\, if the input arguments are numerical\.
 | This function may issue a :code:`UserWarning`\. You can silence this warning using :code:`glm.silence(1)`\.
 | 
@@ -94,8 +96,8 @@ Differences to glm
 | Please refer to the source \(in Python\: **\*\.\_\_doc\_\_**\) and GLM manuals\, references and tutorials\.
 | 
 
-Unsupported functionality
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Unsupported functions
+^^^^^^^^^^^^^^^^^^^^^
 | Aside from the unstable extensions\,
 | PyGLM doesn\'t support the following extensions and methods\, due to compatibility issues\:
 | The :code:`GLM_GTC_bitfield` extension\,
