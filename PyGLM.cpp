@@ -218,6 +218,15 @@ static PyObject* vec3_str(vec<3, T>* self);
 template<typename T>
 static PyObject* vec4_str(vec<4, T>* self);
 
+template<typename T>
+static PyObject* vec1_repr(vec<1, T>* self);
+template<typename T>
+static PyObject* vec2_repr(vec<2, T>* self);
+template<typename T>
+static PyObject* vec3_repr(vec<3, T>* self);
+template<typename T>
+static PyObject* vec4_repr(vec<4, T>* self);
+
 template<int L, typename T>
 static PyObject* vec_getattr(PyObject* obj, PyObject* name);
 
@@ -313,7 +322,7 @@ static PyNumberMethods hfvec1NumMethods = {
 };
 static PyTypeObject hfvec1Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::vec1",             /* tp_name */
+	"glm.vec1",             /* tp_name */
 	sizeof(vec<1, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -321,7 +330,7 @@ static PyTypeObject hfvec1Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec1_str<float>,                         /* tp_repr */
+	(reprfunc)vec1_repr<float>,                         /* tp_repr */
 	&hfvec1NumMethods,             /* tp_as_number */
 	&hfvec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -452,7 +461,7 @@ static PyNumberMethods hfvec2NumMethods = {
 };
 static PyTypeObject hfvec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::vec2",             /* tp_name */
+	"glm.vec2",             /* tp_name */
 	sizeof(vec<2, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -460,7 +469,7 @@ static PyTypeObject hfvec2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec2_str<float>,                         /* tp_repr */
+	(reprfunc)vec2_repr<float>,                         /* tp_repr */
 	&hfvec2NumMethods,             /* tp_as_number */
 	&hfvec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -592,7 +601,7 @@ static PyNumberMethods hfvec3NumMethods = {
 };
 static PyTypeObject hfvec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::vec3",             /* tp_name */
+	"glm.vec3",             /* tp_name */
 	sizeof(vec<3, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -600,7 +609,7 @@ static PyTypeObject hfvec3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec3_str<float>,                         /* tp_repr */
+	(reprfunc)vec3_repr<float>,                         /* tp_repr */
 	&hfvec3NumMethods,             /* tp_as_number */
 	&hfvec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -733,7 +742,7 @@ static PyNumberMethods hfvec4NumMethods = {
 };
 static PyTypeObject hfvec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::vec4",             /* tp_name */
+	"glm.vec4",             /* tp_name */
 	sizeof(vec<4, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -741,7 +750,7 @@ static PyTypeObject hfvec4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec4_str<float>,                         /* tp_repr */
+	(reprfunc)vec4_repr<float>,                         /* tp_repr */
 	&hfvec4NumMethods,             /* tp_as_number */
 	&hfvec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -872,7 +881,7 @@ static PyNumberMethods hdvec1NumMethods = {
 };
 static PyTypeObject hdvec1Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dvec1",             /* tp_name */
+	"glm.dvec1",             /* tp_name */
 	sizeof(vec<1, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -880,7 +889,7 @@ static PyTypeObject hdvec1Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec1_str<double>,                         /* tp_repr */
+	(reprfunc)vec1_repr<double>,                         /* tp_repr */
 	&hdvec1NumMethods,             /* tp_as_number */
 	&hdvec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -1011,7 +1020,7 @@ static PyNumberMethods hdvec2NumMethods = {
 };
 static PyTypeObject hdvec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dvec2",             /* tp_name */
+	"glm.dvec2",             /* tp_name */
 	sizeof(vec<2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -1019,7 +1028,7 @@ static PyTypeObject hdvec2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec2_str<double>,                         /* tp_repr */
+	(reprfunc)vec2_repr<double>,                         /* tp_repr */
 	&hdvec2NumMethods,             /* tp_as_number */
 	&hdvec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -1151,7 +1160,7 @@ static PyNumberMethods hdvec3NumMethods = {
 };
 static PyTypeObject hdvec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dvec3",             /* tp_name */
+	"glm.dvec3",             /* tp_name */
 	sizeof(vec<3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -1159,7 +1168,7 @@ static PyTypeObject hdvec3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec3_str<double>,                         /* tp_repr */
+	(reprfunc)vec3_repr<double>,                         /* tp_repr */
 	&hdvec3NumMethods,             /* tp_as_number */
 	&hdvec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -1292,7 +1301,7 @@ static PyNumberMethods hdvec4NumMethods = {
 };
 static PyTypeObject hdvec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dvec4",             /* tp_name */
+	"glm.dvec4",             /* tp_name */
 	sizeof(vec<4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -1300,7 +1309,7 @@ static PyTypeObject hdvec4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec4_str<double>,                         /* tp_repr */
+	(reprfunc)vec4_repr<double>,                         /* tp_repr */
 	&hdvec4NumMethods,             /* tp_as_number */
 	&hdvec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -1431,7 +1440,7 @@ static PyNumberMethods hi8vec1NumMethods = {
 };
 static PyTypeObject hi8vec1Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i8vec1",             /* tp_name */
+	"glm.i8vec1",             /* tp_name */
 	sizeof(vec<1, glm::i8>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -1439,7 +1448,7 @@ static PyTypeObject hi8vec1Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec1_str<glm::i8>,                         /* tp_repr */
+	(reprfunc)vec1_repr<glm::i8>,                         /* tp_repr */
 	&hi8vec1NumMethods,             /* tp_as_number */
 	&hi8vec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -1570,7 +1579,7 @@ static PyNumberMethods hi8vec2NumMethods = {
 };
 static PyTypeObject hi8vec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i8vec2",             /* tp_name */
+	"glm.i8vec2",             /* tp_name */
 	sizeof(vec<2, glm::i8>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -1578,7 +1587,7 @@ static PyTypeObject hi8vec2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec2_str<glm::i8>,                         /* tp_repr */
+	(reprfunc)vec2_repr<glm::i8>,                         /* tp_repr */
 	&hi8vec2NumMethods,             /* tp_as_number */
 	&hi8vec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -1710,7 +1719,7 @@ static PyNumberMethods hi8vec3NumMethods = {
 };
 static PyTypeObject hi8vec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i8vec3",             /* tp_name */
+	"glm.i8vec3",             /* tp_name */
 	sizeof(vec<3, glm::i8>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -1718,7 +1727,7 @@ static PyTypeObject hi8vec3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec3_str<glm::i8>,                         /* tp_repr */
+	(reprfunc)vec3_repr<glm::i8>,                         /* tp_repr */
 	&hi8vec3NumMethods,             /* tp_as_number */
 	&hi8vec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -1851,7 +1860,7 @@ static PyNumberMethods hi8vec4NumMethods = {
 };
 static PyTypeObject hi8vec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i8vec4",             /* tp_name */
+	"glm.i8vec4",             /* tp_name */
 	sizeof(vec<4, glm::i8>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -1859,7 +1868,7 @@ static PyTypeObject hi8vec4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec4_str<glm::i8>,                         /* tp_repr */
+	(reprfunc)vec4_repr<glm::i8>,                         /* tp_repr */
 	&hi8vec4NumMethods,             /* tp_as_number */
 	&hi8vec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -1990,7 +1999,7 @@ static PyNumberMethods hi16vec1NumMethods = {
 };
 static PyTypeObject hi16vec1Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i16vec1",             /* tp_name */
+	"glm.i16vec1",             /* tp_name */
 	sizeof(vec<1, glm::i16>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -1998,7 +2007,7 @@ static PyTypeObject hi16vec1Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec1_str<glm::i16>,                         /* tp_repr */
+	(reprfunc)vec1_repr<glm::i16>,                         /* tp_repr */
 	&hi16vec1NumMethods,             /* tp_as_number */
 	&hi16vec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -2129,7 +2138,7 @@ static PyNumberMethods hi16vec2NumMethods = {
 };
 static PyTypeObject hi16vec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i16vec2",             /* tp_name */
+	"glm.i16vec2",             /* tp_name */
 	sizeof(vec<2, glm::i16>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -2137,7 +2146,7 @@ static PyTypeObject hi16vec2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec2_str<glm::i16>,                         /* tp_repr */
+	(reprfunc)vec2_repr<glm::i16>,                         /* tp_repr */
 	&hi16vec2NumMethods,             /* tp_as_number */
 	&hi16vec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -2269,7 +2278,7 @@ static PyNumberMethods hi16vec3NumMethods = {
 };
 static PyTypeObject hi16vec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i16vec3",             /* tp_name */
+	"glm.i16vec3",             /* tp_name */
 	sizeof(vec<3, glm::i16>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -2277,7 +2286,7 @@ static PyTypeObject hi16vec3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec3_str<glm::i16>,                         /* tp_repr */
+	(reprfunc)vec3_repr<glm::i16>,                         /* tp_repr */
 	&hi16vec3NumMethods,             /* tp_as_number */
 	&hi16vec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -2410,7 +2419,7 @@ static PyNumberMethods hi16vec4NumMethods = {
 };
 static PyTypeObject hi16vec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i16vec4",             /* tp_name */
+	"glm.i16vec4",             /* tp_name */
 	sizeof(vec<4, glm::i16>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -2418,7 +2427,7 @@ static PyTypeObject hi16vec4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec4_str<glm::i16>,                         /* tp_repr */
+	(reprfunc)vec4_repr<glm::i16>,                         /* tp_repr */
 	&hi16vec4NumMethods,             /* tp_as_number */
 	&hi16vec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -2549,7 +2558,7 @@ static PyNumberMethods hivec1NumMethods = {
 };
 static PyTypeObject hivec1Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::ivec1",             /* tp_name */
+	"glm.ivec1",             /* tp_name */
 	sizeof(vec<1, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -2557,7 +2566,7 @@ static PyTypeObject hivec1Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec1_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)vec1_repr<glm::i32>,                         /* tp_repr */
 	&hivec1NumMethods,             /* tp_as_number */
 	&hivec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -2688,7 +2697,7 @@ static PyNumberMethods hivec2NumMethods = {
 };
 static PyTypeObject hivec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::ivec2",             /* tp_name */
+	"glm.ivec2",             /* tp_name */
 	sizeof(vec<2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -2696,7 +2705,7 @@ static PyTypeObject hivec2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec2_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)vec2_repr<glm::i32>,                         /* tp_repr */
 	&hivec2NumMethods,             /* tp_as_number */
 	&hivec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -2828,7 +2837,7 @@ static PyNumberMethods hivec3NumMethods = {
 };
 static PyTypeObject hivec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::ivec3",             /* tp_name */
+	"glm.ivec3",             /* tp_name */
 	sizeof(vec<3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -2836,7 +2845,7 @@ static PyTypeObject hivec3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec3_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)vec3_repr<glm::i32>,                         /* tp_repr */
 	&hivec3NumMethods,             /* tp_as_number */
 	&hivec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -2969,7 +2978,7 @@ static PyNumberMethods hivec4NumMethods = {
 };
 static PyTypeObject hivec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::ivec4",             /* tp_name */
+	"glm.ivec4",             /* tp_name */
 	sizeof(vec<4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -2977,7 +2986,7 @@ static PyTypeObject hivec4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec4_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)vec4_repr<glm::i32>,                         /* tp_repr */
 	&hivec4NumMethods,             /* tp_as_number */
 	&hivec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -3108,7 +3117,7 @@ static PyNumberMethods hi64vec1NumMethods = {
 };
 static PyTypeObject hi64vec1Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i64vec1",             /* tp_name */
+	"glm.i64vec1",             /* tp_name */
 	sizeof(vec<1, glm::i64>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -3116,7 +3125,7 @@ static PyTypeObject hi64vec1Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec1_str<glm::i64>,                         /* tp_repr */
+	(reprfunc)vec1_repr<glm::i64>,                         /* tp_repr */
 	&hi64vec1NumMethods,             /* tp_as_number */
 	&hi64vec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -3247,7 +3256,7 @@ static PyNumberMethods hi64vec2NumMethods = {
 };
 static PyTypeObject hi64vec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i64vec2",             /* tp_name */
+	"glm.i64vec2",             /* tp_name */
 	sizeof(vec<2, glm::i64>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -3255,7 +3264,7 @@ static PyTypeObject hi64vec2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec2_str<glm::i64>,                         /* tp_repr */
+	(reprfunc)vec2_repr<glm::i64>,                         /* tp_repr */
 	&hi64vec2NumMethods,             /* tp_as_number */
 	&hi64vec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -3387,7 +3396,7 @@ static PyNumberMethods hi64vec3NumMethods = {
 };
 static PyTypeObject hi64vec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i64vec3",             /* tp_name */
+	"glm.i64vec3",             /* tp_name */
 	sizeof(vec<3, glm::i64>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -3395,7 +3404,7 @@ static PyTypeObject hi64vec3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec3_str<glm::i64>,                         /* tp_repr */
+	(reprfunc)vec3_repr<glm::i64>,                         /* tp_repr */
 	&hi64vec3NumMethods,             /* tp_as_number */
 	&hi64vec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -3528,7 +3537,7 @@ static PyNumberMethods hi64vec4NumMethods = {
 };
 static PyTypeObject hi64vec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::i64vec4",             /* tp_name */
+	"glm.i64vec4",             /* tp_name */
 	sizeof(vec<4, glm::i64>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -3536,7 +3545,7 @@ static PyTypeObject hi64vec4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec4_str<glm::i64>,                         /* tp_repr */
+	(reprfunc)vec4_repr<glm::i64>,                         /* tp_repr */
 	&hi64vec4NumMethods,             /* tp_as_number */
 	&hi64vec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -3667,7 +3676,7 @@ static PyNumberMethods hu8vec1NumMethods = {
 };
 static PyTypeObject hu8vec1Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u8vec1",             /* tp_name */
+	"glm.u8vec1",             /* tp_name */
 	sizeof(vec<1, glm::u8>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -3675,7 +3684,7 @@ static PyTypeObject hu8vec1Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec1_str<glm::u8>,                         /* tp_repr */
+	(reprfunc)vec1_repr<glm::u8>,                         /* tp_repr */
 	&hu8vec1NumMethods,             /* tp_as_number */
 	&hu8vec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -3806,7 +3815,7 @@ static PyNumberMethods hu8vec2NumMethods = {
 };
 static PyTypeObject hu8vec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u8vec2",             /* tp_name */
+	"glm.u8vec2",             /* tp_name */
 	sizeof(vec<2, glm::u8>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -3814,7 +3823,7 @@ static PyTypeObject hu8vec2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec2_str<glm::u8>,                         /* tp_repr */
+	(reprfunc)vec2_repr<glm::u8>,                         /* tp_repr */
 	&hu8vec2NumMethods,             /* tp_as_number */
 	&hu8vec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -3946,7 +3955,7 @@ static PyNumberMethods hu8vec3NumMethods = {
 };
 static PyTypeObject hu8vec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u8vec3",             /* tp_name */
+	"glm.u8vec3",             /* tp_name */
 	sizeof(vec<3, glm::u8>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -3954,7 +3963,7 @@ static PyTypeObject hu8vec3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec3_str<glm::u8>,                         /* tp_repr */
+	(reprfunc)vec3_repr<glm::u8>,                         /* tp_repr */
 	&hu8vec3NumMethods,             /* tp_as_number */
 	&hu8vec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -4087,7 +4096,7 @@ static PyNumberMethods hu8vec4NumMethods = {
 };
 static PyTypeObject hu8vec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u8vec4",             /* tp_name */
+	"glm.u8vec4",             /* tp_name */
 	sizeof(vec<4, glm::u8>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -4095,7 +4104,7 @@ static PyTypeObject hu8vec4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec4_str<glm::u8>,                         /* tp_repr */
+	(reprfunc)vec4_repr<glm::u8>,                         /* tp_repr */
 	&hu8vec4NumMethods,             /* tp_as_number */
 	&hu8vec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -4226,7 +4235,7 @@ static PyNumberMethods hu16vec1NumMethods = {
 };
 static PyTypeObject hu16vec1Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u16vec1",             /* tp_name */
+	"glm.u16vec1",             /* tp_name */
 	sizeof(vec<1, glm::u16>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -4234,7 +4243,7 @@ static PyTypeObject hu16vec1Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec1_str<glm::u16>,                         /* tp_repr */
+	(reprfunc)vec1_repr<glm::u16>,                         /* tp_repr */
 	&hu16vec1NumMethods,             /* tp_as_number */
 	&hu16vec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -4365,7 +4374,7 @@ static PyNumberMethods hu16vec2NumMethods = {
 };
 static PyTypeObject hu16vec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u16vec2",             /* tp_name */
+	"glm.u16vec2",             /* tp_name */
 	sizeof(vec<2, glm::u16>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -4373,7 +4382,7 @@ static PyTypeObject hu16vec2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec2_str<glm::u16>,                         /* tp_repr */
+	(reprfunc)vec2_repr<glm::u16>,                         /* tp_repr */
 	&hu16vec2NumMethods,             /* tp_as_number */
 	&hu16vec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -4505,7 +4514,7 @@ static PyNumberMethods hu16vec3NumMethods = {
 };
 static PyTypeObject hu16vec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u16vec3",             /* tp_name */
+	"glm.u16vec3",             /* tp_name */
 	sizeof(vec<3, glm::u16>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -4513,7 +4522,7 @@ static PyTypeObject hu16vec3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec3_str<glm::u16>,                         /* tp_repr */
+	(reprfunc)vec3_repr<glm::u16>,                         /* tp_repr */
 	&hu16vec3NumMethods,             /* tp_as_number */
 	&hu16vec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -4646,7 +4655,7 @@ static PyNumberMethods hu16vec4NumMethods = {
 };
 static PyTypeObject hu16vec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u16vec4",             /* tp_name */
+	"glm.u16vec4",             /* tp_name */
 	sizeof(vec<4, glm::u16>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -4654,7 +4663,7 @@ static PyTypeObject hu16vec4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec4_str<glm::u16>,                         /* tp_repr */
+	(reprfunc)vec4_repr<glm::u16>,                         /* tp_repr */
 	&hu16vec4NumMethods,             /* tp_as_number */
 	&hu16vec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -4785,7 +4794,7 @@ static PyNumberMethods huvec1NumMethods = {
 };
 static PyTypeObject huvec1Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::uvec1",             /* tp_name */
+	"glm.uvec1",             /* tp_name */
 	sizeof(vec<1, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -4793,7 +4802,7 @@ static PyTypeObject huvec1Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec1_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)vec1_repr<glm::u32>,                         /* tp_repr */
 	&huvec1NumMethods,             /* tp_as_number */
 	&huvec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -4924,7 +4933,7 @@ static PyNumberMethods huvec2NumMethods = {
 };
 static PyTypeObject huvec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::uvec2",             /* tp_name */
+	"glm.uvec2",             /* tp_name */
 	sizeof(vec<2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -4932,7 +4941,7 @@ static PyTypeObject huvec2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec2_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)vec2_repr<glm::u32>,                         /* tp_repr */
 	&huvec2NumMethods,             /* tp_as_number */
 	&huvec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -5064,7 +5073,7 @@ static PyNumberMethods huvec3NumMethods = {
 };
 static PyTypeObject huvec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::uvec3",             /* tp_name */
+	"glm.uvec3",             /* tp_name */
 	sizeof(vec<3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -5072,7 +5081,7 @@ static PyTypeObject huvec3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec3_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)vec3_repr<glm::u32>,                         /* tp_repr */
 	&huvec3NumMethods,             /* tp_as_number */
 	&huvec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -5205,7 +5214,7 @@ static PyNumberMethods huvec4NumMethods = {
 };
 static PyTypeObject huvec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::uvec4",             /* tp_name */
+	"glm.uvec4",             /* tp_name */
 	sizeof(vec<4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -5213,7 +5222,7 @@ static PyTypeObject huvec4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec4_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)vec4_repr<glm::u32>,                         /* tp_repr */
 	&huvec4NumMethods,             /* tp_as_number */
 	&huvec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -5344,7 +5353,7 @@ static PyNumberMethods hu64vec1NumMethods = {
 };
 static PyTypeObject hu64vec1Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u64vec1",             /* tp_name */
+	"glm.u64vec1",             /* tp_name */
 	sizeof(vec<1, glm::u64>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -5352,7 +5361,7 @@ static PyTypeObject hu64vec1Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec1_str<glm::u64>,                         /* tp_repr */
+	(reprfunc)vec1_repr<glm::u64>,                         /* tp_repr */
 	&hu64vec1NumMethods,             /* tp_as_number */
 	&hu64vec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -5483,7 +5492,7 @@ static PyNumberMethods hu64vec2NumMethods = {
 };
 static PyTypeObject hu64vec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u64vec2",             /* tp_name */
+	"glm.u64vec2",             /* tp_name */
 	sizeof(vec<2, glm::u64>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -5491,7 +5500,7 @@ static PyTypeObject hu64vec2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec2_str<glm::u64>,                         /* tp_repr */
+	(reprfunc)vec2_repr<glm::u64>,                         /* tp_repr */
 	&hu64vec2NumMethods,             /* tp_as_number */
 	&hu64vec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -5623,7 +5632,7 @@ static PyNumberMethods hu64vec3NumMethods = {
 };
 static PyTypeObject hu64vec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u64vec3",             /* tp_name */
+	"glm.u64vec3",             /* tp_name */
 	sizeof(vec<3, glm::u64>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -5631,7 +5640,7 @@ static PyTypeObject hu64vec3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec3_str<glm::u64>,                         /* tp_repr */
+	(reprfunc)vec3_repr<glm::u64>,                         /* tp_repr */
 	&hu64vec3NumMethods,             /* tp_as_number */
 	&hu64vec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -5764,7 +5773,7 @@ static PyNumberMethods hu64vec4NumMethods = {
 };
 static PyTypeObject hu64vec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::u64vec4",             /* tp_name */
+	"glm.u64vec4",             /* tp_name */
 	sizeof(vec<4, glm::u64>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -5772,7 +5781,7 @@ static PyTypeObject hu64vec4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec4_str<glm::u64>,                         /* tp_repr */
+	(reprfunc)vec4_repr<glm::u64>,                         /* tp_repr */
 	&hu64vec4NumMethods,             /* tp_as_number */
 	&hu64vec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -5867,7 +5876,7 @@ static PySequenceMethods hbvec1SeqMethods = {
 };
 static PyTypeObject hbvec1Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::bvec1",             /* tp_name */
+	"glm.bvec1",             /* tp_name */
 	sizeof(vec<1, bool>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -5875,7 +5884,7 @@ static PyTypeObject hbvec1Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec1_str<bool>,                         /* tp_repr */
+	(reprfunc)vec1_repr<bool>,                         /* tp_repr */
 	0,             /* tp_as_number */
 	&hbvec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -5970,7 +5979,7 @@ static PySequenceMethods hbvec2SeqMethods = {
 };
 static PyTypeObject hbvec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::bvec2",             /* tp_name */
+	"glm.bvec2",             /* tp_name */
 	sizeof(vec<2, bool>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -5978,7 +5987,7 @@ static PyTypeObject hbvec2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec2_str<bool>,                         /* tp_repr */
+	(reprfunc)vec2_repr<bool>,                         /* tp_repr */
 	0,             /* tp_as_number */
 	&hbvec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -6074,7 +6083,7 @@ static PySequenceMethods hbvec3SeqMethods = {
 };
 static PyTypeObject hbvec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::bvec3",             /* tp_name */
+	"glm.bvec3",             /* tp_name */
 	sizeof(vec<3, bool>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -6082,7 +6091,7 @@ static PyTypeObject hbvec3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec3_str<bool>,                         /* tp_repr */
+	(reprfunc)vec3_repr<bool>,                         /* tp_repr */
 	0,             /* tp_as_number */
 	&hbvec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -6179,7 +6188,7 @@ static PySequenceMethods hbvec4SeqMethods = {
 };
 static PyTypeObject hbvec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::bvec4",             /* tp_name */
+	"glm.bvec4",             /* tp_name */
 	sizeof(vec<4, bool>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)vec_dealloc, /* tp_dealloc */
@@ -6187,7 +6196,7 @@ static PyTypeObject hbvec4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)vec4_str<bool>,                         /* tp_repr */
+	(reprfunc)vec4_repr<bool>,                         /* tp_repr */
 	0,             /* tp_as_number */
 	&hbvec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -6435,7 +6444,7 @@ static PyNumberMethods hfmvec2NumMethods = {
 };
 static PyTypeObject hfmvec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mvec2",             /* tp_name */
+	"glm.mvec2",             /* tp_name */
 	sizeof(mvec<2, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<2, float>, /* tp_dealloc */
@@ -6569,7 +6578,7 @@ static PyNumberMethods hfmvec3NumMethods = {
 };
 static PyTypeObject hfmvec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mvec3",             /* tp_name */
+	"glm.mvec3",             /* tp_name */
 	sizeof(mvec<3, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<3, float>, /* tp_dealloc */
@@ -6703,7 +6712,7 @@ static PyNumberMethods hfmvec4NumMethods = {
 };
 static PyTypeObject hfmvec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mvec4",             /* tp_name */
+	"glm.mvec4",             /* tp_name */
 	sizeof(mvec<4, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<4, float>, /* tp_dealloc */
@@ -6838,7 +6847,7 @@ static PyNumberMethods hdmvec2NumMethods = {
 };
 static PyTypeObject hdmvec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmvec2",             /* tp_name */
+	"glm.dmvec2",             /* tp_name */
 	sizeof(mvec<2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<2, double>, /* tp_dealloc */
@@ -6972,7 +6981,7 @@ static PyNumberMethods hdmvec3NumMethods = {
 };
 static PyTypeObject hdmvec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmvec3",             /* tp_name */
+	"glm.dmvec3",             /* tp_name */
 	sizeof(mvec<3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<3, double>, /* tp_dealloc */
@@ -7106,7 +7115,7 @@ static PyNumberMethods hdmvec4NumMethods = {
 };
 static PyTypeObject hdmvec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmvec4",             /* tp_name */
+	"glm.dmvec4",             /* tp_name */
 	sizeof(mvec<4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<4, double>, /* tp_dealloc */
@@ -7241,7 +7250,7 @@ static PyNumberMethods himvec2NumMethods = {
 };
 static PyTypeObject himvec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imvec2",             /* tp_name */
+	"glm.imvec2",             /* tp_name */
 	sizeof(mvec<2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<2, glm::i32>, /* tp_dealloc */
@@ -7375,7 +7384,7 @@ static PyNumberMethods himvec3NumMethods = {
 };
 static PyTypeObject himvec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imvec3",             /* tp_name */
+	"glm.imvec3",             /* tp_name */
 	sizeof(mvec<3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<3, glm::i32>, /* tp_dealloc */
@@ -7509,7 +7518,7 @@ static PyNumberMethods himvec4NumMethods = {
 };
 static PyTypeObject himvec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imvec4",             /* tp_name */
+	"glm.imvec4",             /* tp_name */
 	sizeof(mvec<4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<4, glm::i32>, /* tp_dealloc */
@@ -7644,7 +7653,7 @@ static PyNumberMethods humvec2NumMethods = {
 };
 static PyTypeObject humvec2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umvec2",             /* tp_name */
+	"glm.umvec2",             /* tp_name */
 	sizeof(mvec<2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<2, glm::u32>, /* tp_dealloc */
@@ -7778,7 +7787,7 @@ static PyNumberMethods humvec3NumMethods = {
 };
 static PyTypeObject humvec3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umvec3",             /* tp_name */
+	"glm.umvec3",             /* tp_name */
 	sizeof(mvec<3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<3, glm::u32>, /* tp_dealloc */
@@ -7912,7 +7921,7 @@ static PyNumberMethods humvec4NumMethods = {
 };
 static PyTypeObject humvec4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umvec4",             /* tp_name */
+	"glm.umvec4",             /* tp_name */
 	sizeof(mvec<4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mvec_dealloc<4, glm::u32>, /* tp_dealloc */
@@ -8118,6 +8127,25 @@ static PyObject* mat4x3_str(mat<4, 3, T>* self);
 template<typename T>
 static PyObject* mat4x4_str(mat<4, 4, T>* self);
 
+template<typename T>
+static PyObject* mat2x2_repr(mat<2, 2, T>* self);
+template<typename T>
+static PyObject* mat2x3_repr(mat<2, 3, T>* self);
+template<typename T>
+static PyObject* mat2x4_repr(mat<2, 4, T>* self);
+template<typename T>
+static PyObject* mat3x2_repr(mat<3, 2, T>* self);
+template<typename T>
+static PyObject* mat3x3_repr(mat<3, 3, T>* self);
+template<typename T>
+static PyObject* mat3x4_repr(mat<3, 4, T>* self);
+template<typename T>
+static PyObject* mat4x2_repr(mat<4, 2, T>* self);
+template<typename T>
+static PyObject* mat4x3_repr(mat<4, 3, T>* self);
+template<typename T>
+static PyObject* mat4x4_repr(mat<4, 4, T>* self);
+
 template<int C, int R, typename T>
 static PyObject* mat_richcompare(mat<C, R, T>* self, PyObject* other, int comp_type);
 
@@ -8219,7 +8247,7 @@ static PyNumberMethods hfmat2x2NumMethods = {
 };
 static PyTypeObject hfmat2x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x2",             /* tp_name */
+	"glm.mat2x2",             /* tp_name */
 	sizeof(mat<2, 2, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -8227,7 +8255,7 @@ static PyTypeObject hfmat2x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x2_str<float>,                         /* tp_repr */
+	(reprfunc)mat2x2_repr<float>,                         /* tp_repr */
 	&hfmat2x2NumMethods,             /* tp_as_number */
 	&hfmat2x2SeqMethods,                         /* tp_as_sequence */
 	&hfmat2x2MapMethods,                         /* tp_as_mapping */
@@ -8362,7 +8390,7 @@ static PyNumberMethods hfmat2x3NumMethods = {
 };
 static PyTypeObject hfmat2x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x3",             /* tp_name */
+	"glm.mat2x3",             /* tp_name */
 	sizeof(mat<2, 3, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -8370,7 +8398,7 @@ static PyTypeObject hfmat2x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x3_str<float>,                         /* tp_repr */
+	(reprfunc)mat2x3_repr<float>,                         /* tp_repr */
 	&hfmat2x3NumMethods,             /* tp_as_number */
 	&hfmat2x3SeqMethods,                         /* tp_as_sequence */
 	&hfmat2x3MapMethods,                         /* tp_as_mapping */
@@ -8505,7 +8533,7 @@ static PyNumberMethods hfmat2x4NumMethods = {
 };
 static PyTypeObject hfmat2x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat2x4",             /* tp_name */
+	"glm.mat2x4",             /* tp_name */
 	sizeof(mat<2, 4, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -8513,7 +8541,7 @@ static PyTypeObject hfmat2x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x4_str<float>,                         /* tp_repr */
+	(reprfunc)mat2x4_repr<float>,                         /* tp_repr */
 	&hfmat2x4NumMethods,             /* tp_as_number */
 	&hfmat2x4SeqMethods,                         /* tp_as_sequence */
 	&hfmat2x4MapMethods,                         /* tp_as_mapping */
@@ -8648,7 +8676,7 @@ static PyNumberMethods hfmat3x2NumMethods = {
 };
 static PyTypeObject hfmat3x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x2",             /* tp_name */
+	"glm.mat3x2",             /* tp_name */
 	sizeof(mat<3, 2, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -8656,7 +8684,7 @@ static PyTypeObject hfmat3x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x2_str<float>,                         /* tp_repr */
+	(reprfunc)mat3x2_repr<float>,                         /* tp_repr */
 	&hfmat3x2NumMethods,             /* tp_as_number */
 	&hfmat3x2SeqMethods,                         /* tp_as_sequence */
 	&hfmat3x2MapMethods,                         /* tp_as_mapping */
@@ -8791,7 +8819,7 @@ static PyNumberMethods hfmat3x3NumMethods = {
 };
 static PyTypeObject hfmat3x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x3",             /* tp_name */
+	"glm.mat3x3",             /* tp_name */
 	sizeof(mat<3, 3, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -8799,7 +8827,7 @@ static PyTypeObject hfmat3x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x3_str<float>,                         /* tp_repr */
+	(reprfunc)mat3x3_repr<float>,                         /* tp_repr */
 	&hfmat3x3NumMethods,             /* tp_as_number */
 	&hfmat3x3SeqMethods,                         /* tp_as_sequence */
 	&hfmat3x3MapMethods,                         /* tp_as_mapping */
@@ -8934,7 +8962,7 @@ static PyNumberMethods hfmat3x4NumMethods = {
 };
 static PyTypeObject hfmat3x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat3x4",             /* tp_name */
+	"glm.mat3x4",             /* tp_name */
 	sizeof(mat<3, 4, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -8942,7 +8970,7 @@ static PyTypeObject hfmat3x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x4_str<float>,                         /* tp_repr */
+	(reprfunc)mat3x4_repr<float>,                         /* tp_repr */
 	&hfmat3x4NumMethods,             /* tp_as_number */
 	&hfmat3x4SeqMethods,                         /* tp_as_sequence */
 	&hfmat3x4MapMethods,                         /* tp_as_mapping */
@@ -9077,7 +9105,7 @@ static PyNumberMethods hfmat4x2NumMethods = {
 };
 static PyTypeObject hfmat4x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x2",             /* tp_name */
+	"glm.mat4x2",             /* tp_name */
 	sizeof(mat<4, 2, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -9085,7 +9113,7 @@ static PyTypeObject hfmat4x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x2_str<float>,                         /* tp_repr */
+	(reprfunc)mat4x2_repr<float>,                         /* tp_repr */
 	&hfmat4x2NumMethods,             /* tp_as_number */
 	&hfmat4x2SeqMethods,                         /* tp_as_sequence */
 	&hfmat4x2MapMethods,                         /* tp_as_mapping */
@@ -9220,7 +9248,7 @@ static PyNumberMethods hfmat4x3NumMethods = {
 };
 static PyTypeObject hfmat4x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x3",             /* tp_name */
+	"glm.mat4x3",             /* tp_name */
 	sizeof(mat<4, 3, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -9228,7 +9256,7 @@ static PyTypeObject hfmat4x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x3_str<float>,                         /* tp_repr */
+	(reprfunc)mat4x3_repr<float>,                         /* tp_repr */
 	&hfmat4x3NumMethods,             /* tp_as_number */
 	&hfmat4x3SeqMethods,                         /* tp_as_sequence */
 	&hfmat4x3MapMethods,                         /* tp_as_mapping */
@@ -9363,7 +9391,7 @@ static PyNumberMethods hfmat4x4NumMethods = {
 };
 static PyTypeObject hfmat4x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::mat4x4",             /* tp_name */
+	"glm.mat4x4",             /* tp_name */
 	sizeof(mat<4, 4, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -9371,7 +9399,7 @@ static PyTypeObject hfmat4x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x4_str<float>,                         /* tp_repr */
+	(reprfunc)mat4x4_repr<float>,                         /* tp_repr */
 	&hfmat4x4NumMethods,             /* tp_as_number */
 	&hfmat4x4SeqMethods,                         /* tp_as_sequence */
 	&hfmat4x4MapMethods,                         /* tp_as_mapping */
@@ -9507,7 +9535,7 @@ static PyNumberMethods hdmat2x2NumMethods = {
 };
 static PyTypeObject hdmat2x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmat2x2",             /* tp_name */
+	"glm.dmat2x2",             /* tp_name */
 	sizeof(mat<2, 2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -9515,7 +9543,7 @@ static PyTypeObject hdmat2x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x2_str<double>,                         /* tp_repr */
+	(reprfunc)mat2x2_repr<double>,                         /* tp_repr */
 	&hdmat2x2NumMethods,             /* tp_as_number */
 	&hdmat2x2SeqMethods,                         /* tp_as_sequence */
 	&hdmat2x2MapMethods,                         /* tp_as_mapping */
@@ -9650,7 +9678,7 @@ static PyNumberMethods hdmat2x3NumMethods = {
 };
 static PyTypeObject hdmat2x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmat2x3",             /* tp_name */
+	"glm.dmat2x3",             /* tp_name */
 	sizeof(mat<2, 3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -9658,7 +9686,7 @@ static PyTypeObject hdmat2x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x3_str<double>,                         /* tp_repr */
+	(reprfunc)mat2x3_repr<double>,                         /* tp_repr */
 	&hdmat2x3NumMethods,             /* tp_as_number */
 	&hdmat2x3SeqMethods,                         /* tp_as_sequence */
 	&hdmat2x3MapMethods,                         /* tp_as_mapping */
@@ -9793,7 +9821,7 @@ static PyNumberMethods hdmat2x4NumMethods = {
 };
 static PyTypeObject hdmat2x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmat2x4",             /* tp_name */
+	"glm.dmat2x4",             /* tp_name */
 	sizeof(mat<2, 4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -9801,7 +9829,7 @@ static PyTypeObject hdmat2x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x4_str<double>,                         /* tp_repr */
+	(reprfunc)mat2x4_repr<double>,                         /* tp_repr */
 	&hdmat2x4NumMethods,             /* tp_as_number */
 	&hdmat2x4SeqMethods,                         /* tp_as_sequence */
 	&hdmat2x4MapMethods,                         /* tp_as_mapping */
@@ -9936,7 +9964,7 @@ static PyNumberMethods hdmat3x2NumMethods = {
 };
 static PyTypeObject hdmat3x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmat3x2",             /* tp_name */
+	"glm.dmat3x2",             /* tp_name */
 	sizeof(mat<3, 2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -9944,7 +9972,7 @@ static PyTypeObject hdmat3x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x2_str<double>,                         /* tp_repr */
+	(reprfunc)mat3x2_repr<double>,                         /* tp_repr */
 	&hdmat3x2NumMethods,             /* tp_as_number */
 	&hdmat3x2SeqMethods,                         /* tp_as_sequence */
 	&hdmat3x2MapMethods,                         /* tp_as_mapping */
@@ -10079,7 +10107,7 @@ static PyNumberMethods hdmat3x3NumMethods = {
 };
 static PyTypeObject hdmat3x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmat3x3",             /* tp_name */
+	"glm.dmat3x3",             /* tp_name */
 	sizeof(mat<3, 3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10087,7 +10115,7 @@ static PyTypeObject hdmat3x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x3_str<double>,                         /* tp_repr */
+	(reprfunc)mat3x3_repr<double>,                         /* tp_repr */
 	&hdmat3x3NumMethods,             /* tp_as_number */
 	&hdmat3x3SeqMethods,                         /* tp_as_sequence */
 	&hdmat3x3MapMethods,                         /* tp_as_mapping */
@@ -10222,7 +10250,7 @@ static PyNumberMethods hdmat3x4NumMethods = {
 };
 static PyTypeObject hdmat3x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmat3x4",             /* tp_name */
+	"glm.dmat3x4",             /* tp_name */
 	sizeof(mat<3, 4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10230,7 +10258,7 @@ static PyTypeObject hdmat3x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x4_str<double>,                         /* tp_repr */
+	(reprfunc)mat3x4_repr<double>,                         /* tp_repr */
 	&hdmat3x4NumMethods,             /* tp_as_number */
 	&hdmat3x4SeqMethods,                         /* tp_as_sequence */
 	&hdmat3x4MapMethods,                         /* tp_as_mapping */
@@ -10365,7 +10393,7 @@ static PyNumberMethods hdmat4x2NumMethods = {
 };
 static PyTypeObject hdmat4x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmat4x2",             /* tp_name */
+	"glm.dmat4x2",             /* tp_name */
 	sizeof(mat<4, 2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10373,7 +10401,7 @@ static PyTypeObject hdmat4x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x2_str<double>,                         /* tp_repr */
+	(reprfunc)mat4x2_repr<double>,                         /* tp_repr */
 	&hdmat4x2NumMethods,             /* tp_as_number */
 	&hdmat4x2SeqMethods,                         /* tp_as_sequence */
 	&hdmat4x2MapMethods,                         /* tp_as_mapping */
@@ -10508,7 +10536,7 @@ static PyNumberMethods hdmat4x3NumMethods = {
 };
 static PyTypeObject hdmat4x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmat4x3",             /* tp_name */
+	"glm.dmat4x3",             /* tp_name */
 	sizeof(mat<4, 3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10516,7 +10544,7 @@ static PyTypeObject hdmat4x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x3_str<double>,                         /* tp_repr */
+	(reprfunc)mat4x3_repr<double>,                         /* tp_repr */
 	&hdmat4x3NumMethods,             /* tp_as_number */
 	&hdmat4x3SeqMethods,                         /* tp_as_sequence */
 	&hdmat4x3MapMethods,                         /* tp_as_mapping */
@@ -10651,7 +10679,7 @@ static PyNumberMethods hdmat4x4NumMethods = {
 };
 static PyTypeObject hdmat4x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dmat4x4",             /* tp_name */
+	"glm.dmat4x4",             /* tp_name */
 	sizeof(mat<4, 4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10659,7 +10687,7 @@ static PyTypeObject hdmat4x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x4_str<double>,                         /* tp_repr */
+	(reprfunc)mat4x4_repr<double>,                         /* tp_repr */
 	&hdmat4x4NumMethods,             /* tp_as_number */
 	&hdmat4x4SeqMethods,                         /* tp_as_sequence */
 	&hdmat4x4MapMethods,                         /* tp_as_mapping */
@@ -10795,7 +10823,7 @@ static PyNumberMethods himat2x2NumMethods = {
 };
 static PyTypeObject himat2x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imat2x2",             /* tp_name */
+	"glm.imat2x2",             /* tp_name */
 	sizeof(mat<2, 2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10803,7 +10831,7 @@ static PyTypeObject himat2x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x2_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)mat2x2_repr<glm::i32>,                         /* tp_repr */
 	&himat2x2NumMethods,             /* tp_as_number */
 	&himat2x2SeqMethods,                         /* tp_as_sequence */
 	&himat2x2MapMethods,                         /* tp_as_mapping */
@@ -10938,7 +10966,7 @@ static PyNumberMethods himat2x3NumMethods = {
 };
 static PyTypeObject himat2x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imat2x3",             /* tp_name */
+	"glm.imat2x3",             /* tp_name */
 	sizeof(mat<2, 3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -10946,7 +10974,7 @@ static PyTypeObject himat2x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x3_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)mat2x3_repr<glm::i32>,                         /* tp_repr */
 	&himat2x3NumMethods,             /* tp_as_number */
 	&himat2x3SeqMethods,                         /* tp_as_sequence */
 	&himat2x3MapMethods,                         /* tp_as_mapping */
@@ -11081,7 +11109,7 @@ static PyNumberMethods himat2x4NumMethods = {
 };
 static PyTypeObject himat2x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imat2x4",             /* tp_name */
+	"glm.imat2x4",             /* tp_name */
 	sizeof(mat<2, 4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11089,7 +11117,7 @@ static PyTypeObject himat2x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x4_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)mat2x4_repr<glm::i32>,                         /* tp_repr */
 	&himat2x4NumMethods,             /* tp_as_number */
 	&himat2x4SeqMethods,                         /* tp_as_sequence */
 	&himat2x4MapMethods,                         /* tp_as_mapping */
@@ -11224,7 +11252,7 @@ static PyNumberMethods himat3x2NumMethods = {
 };
 static PyTypeObject himat3x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imat3x2",             /* tp_name */
+	"glm.imat3x2",             /* tp_name */
 	sizeof(mat<3, 2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11232,7 +11260,7 @@ static PyTypeObject himat3x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x2_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)mat3x2_repr<glm::i32>,                         /* tp_repr */
 	&himat3x2NumMethods,             /* tp_as_number */
 	&himat3x2SeqMethods,                         /* tp_as_sequence */
 	&himat3x2MapMethods,                         /* tp_as_mapping */
@@ -11367,7 +11395,7 @@ static PyNumberMethods himat3x3NumMethods = {
 };
 static PyTypeObject himat3x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imat3x3",             /* tp_name */
+	"glm.imat3x3",             /* tp_name */
 	sizeof(mat<3, 3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11375,7 +11403,7 @@ static PyTypeObject himat3x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x3_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)mat3x3_repr<glm::i32>,                         /* tp_repr */
 	&himat3x3NumMethods,             /* tp_as_number */
 	&himat3x3SeqMethods,                         /* tp_as_sequence */
 	&himat3x3MapMethods,                         /* tp_as_mapping */
@@ -11510,7 +11538,7 @@ static PyNumberMethods himat3x4NumMethods = {
 };
 static PyTypeObject himat3x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imat3x4",             /* tp_name */
+	"glm.imat3x4",             /* tp_name */
 	sizeof(mat<3, 4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11518,7 +11546,7 @@ static PyTypeObject himat3x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x4_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)mat3x4_repr<glm::i32>,                         /* tp_repr */
 	&himat3x4NumMethods,             /* tp_as_number */
 	&himat3x4SeqMethods,                         /* tp_as_sequence */
 	&himat3x4MapMethods,                         /* tp_as_mapping */
@@ -11653,7 +11681,7 @@ static PyNumberMethods himat4x2NumMethods = {
 };
 static PyTypeObject himat4x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imat4x2",             /* tp_name */
+	"glm.imat4x2",             /* tp_name */
 	sizeof(mat<4, 2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11661,7 +11689,7 @@ static PyTypeObject himat4x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x2_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)mat4x2_repr<glm::i32>,                         /* tp_repr */
 	&himat4x2NumMethods,             /* tp_as_number */
 	&himat4x2SeqMethods,                         /* tp_as_sequence */
 	&himat4x2MapMethods,                         /* tp_as_mapping */
@@ -11796,7 +11824,7 @@ static PyNumberMethods himat4x3NumMethods = {
 };
 static PyTypeObject himat4x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imat4x3",             /* tp_name */
+	"glm.imat4x3",             /* tp_name */
 	sizeof(mat<4, 3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11804,7 +11832,7 @@ static PyTypeObject himat4x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x3_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)mat4x3_repr<glm::i32>,                         /* tp_repr */
 	&himat4x3NumMethods,             /* tp_as_number */
 	&himat4x3SeqMethods,                         /* tp_as_sequence */
 	&himat4x3MapMethods,                         /* tp_as_mapping */
@@ -11939,7 +11967,7 @@ static PyNumberMethods himat4x4NumMethods = {
 };
 static PyTypeObject himat4x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::imat4x4",             /* tp_name */
+	"glm.imat4x4",             /* tp_name */
 	sizeof(mat<4, 4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -11947,7 +11975,7 @@ static PyTypeObject himat4x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x4_str<glm::i32>,                         /* tp_repr */
+	(reprfunc)mat4x4_repr<glm::i32>,                         /* tp_repr */
 	&himat4x4NumMethods,             /* tp_as_number */
 	&himat4x4SeqMethods,                         /* tp_as_sequence */
 	&himat4x4MapMethods,                         /* tp_as_mapping */
@@ -12083,7 +12111,7 @@ static PyNumberMethods humat2x2NumMethods = {
 };
 static PyTypeObject humat2x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umat2x2",             /* tp_name */
+	"glm.umat2x2",             /* tp_name */
 	sizeof(mat<2, 2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12091,7 +12119,7 @@ static PyTypeObject humat2x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x2_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)mat2x2_repr<glm::u32>,                         /* tp_repr */
 	&humat2x2NumMethods,             /* tp_as_number */
 	&humat2x2SeqMethods,                         /* tp_as_sequence */
 	&humat2x2MapMethods,                         /* tp_as_mapping */
@@ -12226,7 +12254,7 @@ static PyNumberMethods humat2x3NumMethods = {
 };
 static PyTypeObject humat2x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umat2x3",             /* tp_name */
+	"glm.umat2x3",             /* tp_name */
 	sizeof(mat<2, 3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12234,7 +12262,7 @@ static PyTypeObject humat2x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x3_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)mat2x3_repr<glm::u32>,                         /* tp_repr */
 	&humat2x3NumMethods,             /* tp_as_number */
 	&humat2x3SeqMethods,                         /* tp_as_sequence */
 	&humat2x3MapMethods,                         /* tp_as_mapping */
@@ -12369,7 +12397,7 @@ static PyNumberMethods humat2x4NumMethods = {
 };
 static PyTypeObject humat2x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umat2x4",             /* tp_name */
+	"glm.umat2x4",             /* tp_name */
 	sizeof(mat<2, 4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12377,7 +12405,7 @@ static PyTypeObject humat2x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat2x4_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)mat2x4_repr<glm::u32>,                         /* tp_repr */
 	&humat2x4NumMethods,             /* tp_as_number */
 	&humat2x4SeqMethods,                         /* tp_as_sequence */
 	&humat2x4MapMethods,                         /* tp_as_mapping */
@@ -12512,7 +12540,7 @@ static PyNumberMethods humat3x2NumMethods = {
 };
 static PyTypeObject humat3x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umat3x2",             /* tp_name */
+	"glm.umat3x2",             /* tp_name */
 	sizeof(mat<3, 2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12520,7 +12548,7 @@ static PyTypeObject humat3x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x2_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)mat3x2_repr<glm::u32>,                         /* tp_repr */
 	&humat3x2NumMethods,             /* tp_as_number */
 	&humat3x2SeqMethods,                         /* tp_as_sequence */
 	&humat3x2MapMethods,                         /* tp_as_mapping */
@@ -12655,7 +12683,7 @@ static PyNumberMethods humat3x3NumMethods = {
 };
 static PyTypeObject humat3x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umat3x3",             /* tp_name */
+	"glm.umat3x3",             /* tp_name */
 	sizeof(mat<3, 3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12663,7 +12691,7 @@ static PyTypeObject humat3x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x3_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)mat3x3_repr<glm::u32>,                         /* tp_repr */
 	&humat3x3NumMethods,             /* tp_as_number */
 	&humat3x3SeqMethods,                         /* tp_as_sequence */
 	&humat3x3MapMethods,                         /* tp_as_mapping */
@@ -12798,7 +12826,7 @@ static PyNumberMethods humat3x4NumMethods = {
 };
 static PyTypeObject humat3x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umat3x4",             /* tp_name */
+	"glm.umat3x4",             /* tp_name */
 	sizeof(mat<3, 4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12806,7 +12834,7 @@ static PyTypeObject humat3x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat3x4_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)mat3x4_repr<glm::u32>,                         /* tp_repr */
 	&humat3x4NumMethods,             /* tp_as_number */
 	&humat3x4SeqMethods,                         /* tp_as_sequence */
 	&humat3x4MapMethods,                         /* tp_as_mapping */
@@ -12941,7 +12969,7 @@ static PyNumberMethods humat4x2NumMethods = {
 };
 static PyTypeObject humat4x2Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umat4x2",             /* tp_name */
+	"glm.umat4x2",             /* tp_name */
 	sizeof(mat<4, 2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -12949,7 +12977,7 @@ static PyTypeObject humat4x2Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x2_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)mat4x2_repr<glm::u32>,                         /* tp_repr */
 	&humat4x2NumMethods,             /* tp_as_number */
 	&humat4x2SeqMethods,                         /* tp_as_sequence */
 	&humat4x2MapMethods,                         /* tp_as_mapping */
@@ -13084,7 +13112,7 @@ static PyNumberMethods humat4x3NumMethods = {
 };
 static PyTypeObject humat4x3Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umat4x3",             /* tp_name */
+	"glm.umat4x3",             /* tp_name */
 	sizeof(mat<4, 3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -13092,7 +13120,7 @@ static PyTypeObject humat4x3Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x3_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)mat4x3_repr<glm::u32>,                         /* tp_repr */
 	&humat4x3NumMethods,             /* tp_as_number */
 	&humat4x3SeqMethods,                         /* tp_as_sequence */
 	&humat4x3MapMethods,                         /* tp_as_mapping */
@@ -13227,7 +13255,7 @@ static PyNumberMethods humat4x4NumMethods = {
 };
 static PyTypeObject humat4x4Type = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::umat4x4",             /* tp_name */
+	"glm.umat4x4",             /* tp_name */
 	sizeof(mat<4, 4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)mat_dealloc, /* tp_dealloc */
@@ -13235,7 +13263,7 @@ static PyTypeObject humat4x4Type = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)mat4x4_str<glm::u32>,                         /* tp_repr */
+	(reprfunc)mat4x4_repr<glm::u32>,                         /* tp_repr */
 	&humat4x4NumMethods,             /* tp_as_number */
 	&humat4x4SeqMethods,                         /* tp_as_sequence */
 	&humat4x4MapMethods,                         /* tp_as_mapping */
@@ -13363,6 +13391,9 @@ template<typename T>
 static PyObject* qua_str(qua<T>* self);
 
 template<typename T>
+static PyObject* qua_repr(qua<T>* self);
+
+template<typename T>
 static PyObject* qua_richcompare(qua<T>* self, PyObject* other, int comp_type);
 
 template<typename T>
@@ -13450,7 +13481,7 @@ static PyNumberMethods hfquaNumMethods = {
 };
 static PyTypeObject hfquaType = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::quat",             /* tp_name */
+	"glm.quat",             /* tp_name */
 	sizeof(qua<float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)qua_dealloc, /* tp_dealloc */
@@ -13458,7 +13489,7 @@ static PyTypeObject hfquaType = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)qua_str<float>,                         /* tp_repr */
+	(reprfunc)qua_repr<float>,                         /* tp_repr */
 	&hfquaNumMethods,             /* tp_as_number */
 	&hfquaSeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -13597,7 +13628,7 @@ static PyNumberMethods hdquaNumMethods = {
 };
 static PyTypeObject hdquaType = {
 	PyObject_HEAD_INIT(NULL)
-	"glm::dquat",             /* tp_name */
+	"glm.dquat",             /* tp_name */
 	sizeof(qua<double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
 	(destructor)qua_dealloc, /* tp_dealloc */
@@ -13605,7 +13636,7 @@ static PyTypeObject hdquaType = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)qua_str<double>,                         /* tp_repr */
+	(reprfunc)qua_repr<double>,                         /* tp_repr */
 	&hdquaNumMethods,             /* tp_as_number */
 	&hdquaSeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
@@ -14759,15 +14790,88 @@ bool PyGLM_Vec4i_Check(PyObject* o) {
 
 #define PyGLM_Veci_Check(L, o) ((L == 1) ? PyGLM_Vec1i_Check(o) : (L == 2) ? PyGLM_Vec2i_Check(o) : (L == 3) ? PyGLM_Vec3i_Check(o) : PyGLM_Vec4i_Check(o))
 
-#define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || (!(PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 2, T>())) || PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 3, T>())) || PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 4, T>()))) && PyGLM_Veci_Check(L, o)))
+template<typename T>
+static bool get_view_format_equal(char* value) {
+	char& v_char = value[0];
+	if (v_char == 'f') {
+		return std::is_same<T, float>::value;
+	}
+	if (v_char == 'd') {
+		return std::is_same<T, double>::value;
+	}
+	if (v_char == 'c') {
+		return std::is_same<T, std::int8_t>::value;
+	}
+	if (v_char == 'b') {
+		return std::is_same<T, std::uint8_t>::value;
+	}
+	if (v_char == 'h') {
+		return std::is_same<T, std::int16_t>::value;
+	}
+	if (v_char == 'H') {
+		return std::is_same<T, std::uint16_t>::value;
+	}
+	if (v_char == 'i') {
+		return std::is_same<T, std::int32_t>::value;
+	}
+	if (v_char == 'I') {
+		return std::is_same<T, std::uint32_t>::value;
+	}
+	if (v_char == 'L') {
+		return std::is_same<T, std::int64_t>::value;
+	}
+	if (v_char == 'K') {
+		return std::is_same<T, std::uint64_t>::value;
+	}
+	if (v_char == 'p') {
+		return std::is_same<T, bool>::value;
+	}
+	return false;
+}
+
+template<typename T>
+static bool PyGLM_Matb_Check(int C, int R, PyObject* o) {
+	if (!PyObject_CheckBuffer(o)) {
+		return false;
+	}
+	Py_buffer view;
+	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (((view.ndim != 2 || view.shape[0] != C || view.shape[1] != R || !get_view_format_equal<T>(view.format)) && (view.ndim != 1 || view.shape[0] != C * R * sizeof(T) || view.format[0] != 'B')))) {
+		PyBuffer_Release(&view);
+		return false;
+	}
+	PyBuffer_Release(&view);
+	return true;
+}
+
+template<typename T>
+static bool PyGLM_Vecb_Check(int L, PyObject* o) {
+	if (!PyObject_CheckBuffer(o)) {
+		return false;
+	}
+	Py_buffer view;
+	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (view.ndim != 1 || ((view.shape[0] != L || !get_view_format_equal<T>(view.format)) && (view.shape[0] != L * sizeof(T) || view.format[0] != 'B')))) {
+		PyBuffer_Release(&view);
+		return false;
+	}
+	PyBuffer_Release(&view);
+	return true;
+}
+
+#define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || (!(PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 2, T>())) || PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 3, T>())) || PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 4, T>()))) && ((PyGLM_Vecb_Check<T>(L, (PyObject*)o)) || (PyGLM_Veci_Check(L, o)))))
+
+#define PyGLM_Qua_Check(T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())) || PyGLM_Vecb_Check<T>(4, (PyObject*)o))
+
+#define PyGLM_Mat_Check(C, R, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) || PyGLM_Matb_Check<T>(C, R, (PyObject*)o))
 
 #else
 #define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>())
-#endif
 
 #define PyGLM_Qua_Check(T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())))
 
 #define PyGLM_Mat_Check(C, R, T, o) PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>()))
+#endif
+
+
 
 #pragma endregion
 
@@ -14780,6 +14884,16 @@ static bool unpack_vec(PyObject* value, glm::vec<1, T>& out) {
 		return true;
 	}
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
+	if (PyObject_CheckBuffer(value)) {
+		Py_buffer view;
+		if (PyObject_GetBuffer(value, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (view.ndim != 1 || ((view.shape[0] != 1 || !get_view_format_equal<T>(view.format)) && (view.shape[0] != 1 * sizeof(T) || view.format[0] != 'B')))) {
+			PyBuffer_Release(&view);
+		}
+		else {
+			memcpy(&out.x, view.buf, sizeof(out));
+			return true;
+		}
+	}
 	if (PyObject_IterCheck(value) && PyObject_Length(value) == 1) {
 		PyObject* value_iter = PyObject_GetIter(value);
 		if (value_iter != NULL) {
@@ -14821,6 +14935,16 @@ static bool unpack_vec(PyObject* value, glm::vec<2, T>& out) {
 		return true;
 	}
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
+	if (PyObject_CheckBuffer(value)) {
+		Py_buffer view;
+		if (PyObject_GetBuffer(value, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (view.ndim != 1 || ((view.shape[0] != 2 || !get_view_format_equal<T>(view.format)) && (view.shape[0] != 2 * sizeof(T) || view.format[0] != 'B')))) {
+			PyBuffer_Release(&view);
+		}
+		else {
+			memcpy(glm::value_ptr(out), view.buf, sizeof(out));
+			return true;
+		}
+	}
 	if (PyObject_IterCheck(value) && PyObject_Length(value) == 2) {
 		PyObject* value_iter = PyObject_GetIter(value);
 		if (value_iter != NULL) {
@@ -14865,6 +14989,16 @@ static bool unpack_vec(PyObject* value, glm::vec<3, T>& out) {
 		return true;
 	}
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
+	if (PyObject_CheckBuffer(value)) {
+		Py_buffer view;
+		if (PyObject_GetBuffer(value, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (view.ndim != 1 || ((view.shape[0] != 3 || !get_view_format_equal<T>(view.format)) && (view.shape[0] != 3 * sizeof(T) || view.format[0] != 'B')))) {
+			PyBuffer_Release(&view);
+		}
+		else {
+			memcpy(glm::value_ptr(out), view.buf, sizeof(out));
+			return true;
+		}
+	}
 	if (PyObject_IterCheck(value) && PyObject_Length(value) == 3) {
 		PyObject* value_iter = PyObject_GetIter(value);
 		if (value_iter != NULL) {
@@ -14914,6 +15048,16 @@ static bool unpack_vec(PyObject* value, glm::vec<4, T>& out) {
 		return true;
 	}
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
+	if (PyObject_CheckBuffer(value)) {
+		Py_buffer view;
+		if (PyObject_GetBuffer(value, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (view.ndim != 1 || ((view.shape[0] != 4 || !get_view_format_equal<T>(view.format)) && (view.shape[0] != 4 * sizeof(T) || view.format[0] != 'B')))) {
+			PyBuffer_Release(&view);
+		}
+		else {
+			memcpy(glm::value_ptr(out), view.buf, sizeof(out));
+			return true;
+		}
+	}
 	if (PyObject_IterCheck(value) && PyObject_Length(value) == 4) {
 		PyObject* value_iter = PyObject_GetIter(value);
 		if (value_iter != NULL) {
@@ -14969,6 +15113,17 @@ static bool unpack_mat(PyObject* value, glm::mat<C, R, T>& out) {
 		out = ((mat<C, R, T>*)value)->super_type;
 		return true;
 	}
+#if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
+	if (PyObject_CheckBuffer(value)) {
+		Py_buffer view;
+		if (PyObject_GetBuffer(value, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (((view.ndim != 2 || view.shape[0] != C || view.shape[1] != R || !get_view_format_equal<T>(view.format)) && (view.ndim != 1 || view.shape[0] != C * R * sizeof(T) || view.format[0] != 'B')))) {
+			PyBuffer_Release(&view);
+			return false;
+		}
+		memcpy(glm::value_ptr(out), view.buf, sizeof(out));
+		return true;
+	}
+#endif
 	return false;
 }
 
@@ -14985,6 +15140,17 @@ static bool unpack_qua(PyObject* value, glm::qua<T>& out) {
 		out = ((qua<T>*)value)->super_type;
 		return true;
 	}
+#if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
+	if (PyObject_CheckBuffer(value)) {
+		Py_buffer view;
+		if (PyObject_GetBuffer(value, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (view.ndim != 1 || ((view.shape[0] != 4 || !get_view_format_equal<T>(view.format)) && (view.shape[0] != 4 * sizeof(T) || view.format[0] != 'B')))) {
+			PyBuffer_Release(&view);
+			return false;
+		}
+		memcpy(glm::value_ptr(out), view.buf, sizeof(out));
+		return true;
+	}
+#endif
 	return false;
 }
 
@@ -15391,7 +15557,7 @@ vec_add(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -15420,7 +15586,7 @@ vec_sub(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -15449,7 +15615,7 @@ vec_mul(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for *: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for *: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -15478,7 +15644,7 @@ vec_div(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for /: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for /: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -15507,7 +15673,7 @@ vec_mod(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for %: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for %: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -15536,7 +15702,7 @@ vec_floordiv(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for //: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for //: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -15598,7 +15764,7 @@ vec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for **: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for **: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -15764,8 +15930,10 @@ template<typename T>
 static PyObject *
 vec1_str(vec<1, T>* self)
 {
-	char * out = (char*)malloc((21) * sizeof(char));
-	snprintf(out, 21, "vec1( %12.6g )", (double)self->super_type.x);
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 17 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %12.6g )", &name[4], (double)self->super_type.x);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -15775,8 +15943,10 @@ template<typename T>
 static PyObject *
 vec2_str(vec<2, T>* self)
 {
-	char * out = (char*)malloc((35) * sizeof(char));
-	snprintf(out, 35, "vec2( %12.6g, %12.6g )", (double)self->super_type.x, (double)self->super_type.y);
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 31 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %12.6g, %12.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -15786,8 +15956,10 @@ template<typename T>
 static PyObject *
 vec3_str(vec<3, T>* self)
 {
-	char * out = (char*)malloc((49) * sizeof(char));
-	snprintf(out, 49, "vec3( %12.6g, %12.6g, %12.6g )", (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 45 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -15797,8 +15969,62 @@ template<typename T>
 static PyObject *
 vec4_str(vec<4, T>* self)
 {
-	char * out = (char*)malloc((63) * sizeof(char));
-	snprintf(out, 63, "vec4( %12.6g, %12.6g, %12.6g, %12.6g )", (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 59 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+vec1_repr(vec<1, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 17 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g )", &name[4], (double)self->super_type.x);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+vec2_repr(vec<2, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 31 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+vec3_repr(vec<3, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 45 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+vec4_repr(vec<4, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 59 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -16247,6 +16473,11 @@ vec_getbuffer(vec<L, T>* self, Py_buffer* view, int flags) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
 		return -1;
 	}
+	if ((flags & PyBUF_RECORDS_RO) != PyBUF_RECORDS_RO || (flags & PyBUF_F_CONTIGUOUS) == PyBUF_F_CONTIGUOUS || (flags & PyBUF_ANY_CONTIGUOUS) == PyBUF_ANY_CONTIGUOUS) {
+		PyErr_SetString(PyExc_BufferError, "This type of buffer is not supported.");
+		view->obj = NULL;
+		return -1;
+	}
 	view->obj = (PyObject*)self;
 	view->buf = (void*)&self->super_type[0];
 	view->len = sizeof(glm::vec<L, T>);
@@ -16325,7 +16556,7 @@ mvec_add(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -16354,7 +16585,7 @@ mvec_sub(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -16383,7 +16614,7 @@ mvec_mul(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for *: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for *: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -16412,7 +16643,7 @@ mvec_div(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for /: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for /: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -16441,7 +16672,7 @@ mvec_mod(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for %: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for %: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -16470,7 +16701,7 @@ mvec_floordiv(PyObject *obj1, PyObject *obj2)
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for //: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for //: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -16532,7 +16763,7 @@ mvec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 	glm::vec<L, T> o;
 
 	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for **: 'glm::vec' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for **: 'glm.vec' and ", obj1);
 		return NULL;
 	}
 
@@ -16698,8 +16929,10 @@ template<typename T>
 static PyObject *
 mvec2_str(mvec<2, T>* self)
 {
-	char * out = (char*)malloc((36) * sizeof(char));
-	snprintf(out, 36, "mvec2( %12.6g, %12.6g )", (double)self->super_type->x, (double)self->super_type->y);
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 32 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %12.6g, %12.6g )", &name[4], (double)self->super_type->x, (double)self->super_type->y);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -16709,8 +16942,10 @@ template<typename T>
 static PyObject *
 mvec3_str(mvec<3, T>* self)
 {
-	char * out = (char*)malloc((50) * sizeof(char));
-	snprintf(out, 50, "mvec3( %12.6g, %12.6g, %12.6g )", (double)self->super_type->x, (double)self->super_type->y, (double)self->super_type->z);
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 46 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type->x, (double)self->super_type->y, (double)self->super_type->z);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -16720,8 +16955,10 @@ template<typename T>
 static PyObject *
 mvec4_str(mvec<4, T>* self)
 {
-	char * out = (char*)malloc((64) * sizeof(char));
-	snprintf(out, 64, "mvec4( %12.6g, %12.6g, %12.6g, %12.6g )", (double)self->super_type->x, (double)self->super_type->y, (double)self->super_type->z, (double)self->super_type->w);
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 60 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type->x, (double)self->super_type->y, (double)self->super_type->z, (double)self->super_type->w);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -17184,6 +17421,11 @@ static int
 mvec_getbuffer(mvec<L, T>* self, Py_buffer* view, int flags) {
 	if (view == NULL) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
+		return -1;
+	}
+	if ((flags & PyBUF_RECORDS_RO) != PyBUF_RECORDS_RO || (flags & PyBUF_F_CONTIGUOUS) == PyBUF_F_CONTIGUOUS || (flags & PyBUF_ANY_CONTIGUOUS) == PyBUF_ANY_CONTIGUOUS) {
+		PyErr_SetString(PyExc_BufferError, "This type of buffer is not supported.");
+		view->obj = NULL;
 		return -1;
 	}
 	view->obj = (PyObject*)self;
@@ -18220,7 +18462,7 @@ matsq_add(PyObject *obj1, PyObject *obj2)
 	glm::mat<C, R, T> o;
 
 	if (!unpack_mat(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm::mat' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm.mat' and ", obj1);
 		return NULL;
 	}
 
@@ -18245,7 +18487,7 @@ mat_add(PyObject *obj1, PyObject *obj2)
 	glm::mat<C, R, T> o;
 
 	if (!unpack_mat(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm::mat' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm.mat' and ", obj1);
 		return NULL;
 	}
 
@@ -18274,7 +18516,7 @@ matsq_sub(PyObject *obj1, PyObject *obj2)
 	glm::mat<C, R, T> o;
 
 	if (!unpack_mat(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm::mat' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm.mat' and ", obj1);
 		return NULL;
 	}
 
@@ -18299,7 +18541,7 @@ mat_sub(PyObject *obj1, PyObject *obj2)
 	glm::mat<C, R, T> o;
 
 	if (!unpack_mat(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm::mat' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm.mat' and ", obj1);
 		return NULL;
 	}
 
@@ -18561,7 +18803,7 @@ static PyObject *
 mat2x2_str(mat<2, 2, T>* self)
 {
 	char * out = (char*)malloc((64) * sizeof(char));
-	snprintf(out, 64, "[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]", (float)self->super_type[0][0], (float)self->super_type[0][1], (float)self->super_type[1][0], (float)self->super_type[1][1]);
+	snprintf(out, 64, "[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -18572,7 +18814,7 @@ static PyObject *
 mat2x3_str(mat<2, 3, T>* self)
 {
 	char * out = (char*)malloc((94) * sizeof(char));
-	snprintf(out, 94, "[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]", (float)self->super_type[0][0], (float)self->super_type[0][1], (float)self->super_type[0][2], (float)self->super_type[1][0], (float)self->super_type[1][1], (float)self->super_type[1][2]);
+	snprintf(out, 94, "[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -18583,7 +18825,7 @@ static PyObject *
 mat2x4_str(mat<2, 4, T>* self)
 {
 	char * out = (char*)malloc((124) * sizeof(char));
-	snprintf(out, 124, "[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", (float)self->super_type[0][0], (float)self->super_type[0][1], (float)self->super_type[0][2], (float)self->super_type[0][3], (float)self->super_type[1][0], (float)self->super_type[1][1], (float)self->super_type[1][2], (float)self->super_type[1][3]);
+	snprintf(out, 124, "[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -18594,7 +18836,7 @@ static PyObject *
 mat3x2_str(mat<3, 2, T>* self)
 {
 	char * out = (char*)malloc((96) * sizeof(char));
-	snprintf(out, 96, "[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]", (float)self->super_type[0][0], (float)self->super_type[0][1], (float)self->super_type[1][0], (float)self->super_type[1][1], (float)self->super_type[2][0], (float)self->super_type[2][1]);
+	snprintf(out, 96, "[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -18605,7 +18847,7 @@ static PyObject *
 mat3x3_str(mat<3, 3, T>* self)
 {
 	char * out = (char*)malloc((141) * sizeof(char));
-	snprintf(out, 141, "[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]", (float)self->super_type[0][0], (float)self->super_type[0][1], (float)self->super_type[0][2], (float)self->super_type[1][0], (float)self->super_type[1][1], (float)self->super_type[1][2], (float)self->super_type[2][0], (float)self->super_type[2][1], (float)self->super_type[2][2]);
+	snprintf(out, 141, "[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -18616,7 +18858,7 @@ static PyObject *
 mat3x4_str(mat<3, 4, T>* self)
 {
 	char * out = (char*)malloc((186) * sizeof(char));
-	snprintf(out, 186, "[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", (float)self->super_type[0][0], (float)self->super_type[0][1], (float)self->super_type[0][2], (float)self->super_type[0][3], (float)self->super_type[1][0], (float)self->super_type[1][1], (float)self->super_type[1][2], (float)self->super_type[1][3], (float)self->super_type[2][0], (float)self->super_type[2][1], (float)self->super_type[2][2], (float)self->super_type[2][3]);
+	snprintf(out, 186, "[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -18627,7 +18869,7 @@ static PyObject *
 mat4x2_str(mat<4, 2, T>* self)
 {
 	char * out = (char*)malloc((128) * sizeof(char));
-	snprintf(out, 128, "[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]", (float)self->super_type[0][0], (float)self->super_type[0][1], (float)self->super_type[1][0], (float)self->super_type[1][1], (float)self->super_type[2][0], (float)self->super_type[2][1], (float)self->super_type[3][0], (float)self->super_type[3][1]);
+	snprintf(out, 128, "[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[3][0], (double)self->super_type[3][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -18638,7 +18880,7 @@ static PyObject *
 mat4x3_str(mat<4, 3, T>* self)
 {
 	char * out = (char*)malloc((188) * sizeof(char));
-	snprintf(out, 188, "[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]", (float)self->super_type[0][0], (float)self->super_type[0][1], (float)self->super_type[0][2], (float)self->super_type[1][0], (float)self->super_type[1][1], (float)self->super_type[1][2], (float)self->super_type[2][0], (float)self->super_type[2][1], (float)self->super_type[2][2], (float)self->super_type[3][0], (float)self->super_type[3][1], (float)self->super_type[3][2]);
+	snprintf(out, 188, "[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -18649,7 +18891,124 @@ static PyObject *
 mat4x4_str(mat<4, 4, T>* self)
 {
 	char * out = (char*)malloc((248) * sizeof(char));
-	snprintf(out, 248, "[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", (float)self->super_type[0][0], (float)self->super_type[0][1], (float)self->super_type[0][2], (float)self->super_type[0][3], (float)self->super_type[1][0], (float)self->super_type[1][1], (float)self->super_type[1][2], (float)self->super_type[1][3], (float)self->super_type[2][0], (float)self->super_type[2][1], (float)self->super_type[2][2], (float)self->super_type[2][3], (float)self->super_type[3][0], (float)self->super_type[3][1], (float)self->super_type[3][2], (float)self->super_type[3][3]);
+	snprintf(out, 248, "[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2], (double)self->super_type[3][3]);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+mat2x2_repr(mat<2, 2, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 60 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g | %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1]);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+mat2x3_repr(mat<2, 3, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 88 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g | %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2]);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+mat2x4_repr(mat<2, 4, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 116 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3]);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+mat3x2_repr(mat<3, 2, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 89 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g | %.6g, %.6g | %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1]);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+mat3x3_repr(mat<3, 3, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 131 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g | %.6g, %.6g, %.6g | %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2]);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+mat3x4_repr(mat<3, 4, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 173 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3]);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+mat4x2_repr(mat<4, 2, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 118 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g | %.6g, %.6g | %.6g, %.6g | %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[3][0], (double)self->super_type[3][1]);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+mat4x3_repr(mat<4, 3, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 174 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g | %.6g, %.6g, %.6g | %.6g, %.6g, %.6g | %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2]);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+mat4x4_repr(mat<4, 4, T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 230 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2], (double)self->super_type[3][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -19677,6 +20036,11 @@ mat_getbuffer(mat<C, R, T>* self, Py_buffer* view, int flags) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
 		return -1;
 	}
+	if ((flags & PyBUF_RECORDS_RO) != PyBUF_RECORDS_RO || (flags & PyBUF_F_CONTIGUOUS) == PyBUF_F_CONTIGUOUS || (flags & PyBUF_ANY_CONTIGUOUS) == PyBUF_ANY_CONTIGUOUS) {
+		PyErr_SetString(PyExc_BufferError, "This type of buffer is not supported.");
+		view->obj = NULL;
+		return -1;
+	}
 	view->obj = (PyObject*)self;
 	view->buf = (void*)&self->super_type[0][0];
 	view->len = sizeof(glm::mat<C, R, T>);
@@ -19842,7 +20206,7 @@ qua_add(PyObject *obj1, PyObject *obj2)
 	glm::qua<T> o;
 
 	if (!unpack_qua(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm::qua' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm.qua' and ", obj1);
 		return NULL;
 	}
 
@@ -19863,7 +20227,7 @@ qua_sub(PyObject *obj1, PyObject *obj2)
 	glm::qua<T> o;
 
 	if (!unpack_qua(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm::qua' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm.qua' and ", obj1);
 		return NULL;
 	}
 
@@ -19896,7 +20260,7 @@ qua_mul(PyObject *obj1, PyObject *obj2)
 	glm::qua<T> o;
 
 	if (!unpack_qua(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for *: 'glm::qua' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for *: 'glm.qua' and ", obj1);
 		return NULL;
 	}
 
@@ -19929,7 +20293,7 @@ qua_div(PyObject *obj1, PyObject *obj2)
 	glm::qua<T> o;
 
 	if (!unpack_qua(obj1, o)) { // obj1 is not supported.
-		PyGLM_TYPEERROR_O("unsupported operand type(s) for /: 'glm::qua' and ", obj1);
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for /: 'glm.qua' and ", obj1);
 		return NULL;
 	}
 
@@ -20011,8 +20375,23 @@ template<typename T>
 static PyObject *
 qua_str(qua<T>* self)
 {
-	char * out = (char*)malloc((63) * sizeof(char));
-	snprintf(out, 63, "quat( %12.6g, %12.6g, %12.6g, %12.6g )", (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 59 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject *
+qua_repr(qua<T>* self)
+{
+	const char* name = ((PyObject*)self)->ob_type->tp_name;
+	size_t required_space = 59 + strlen(name) - 4;
+	char * out = (char*)malloc((required_space) * sizeof(char));
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -20155,6 +20534,11 @@ static int
 qua_getbuffer(qua<T>* self, Py_buffer* view, int flags) {
 	if (view == NULL) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
+		return -1;
+	}
+	if ((flags & PyBUF_RECORDS_RO) != PyBUF_RECORDS_RO || (flags & PyBUF_F_CONTIGUOUS) == PyBUF_F_CONTIGUOUS || (flags & PyBUF_ANY_CONTIGUOUS) == PyBUF_ANY_CONTIGUOUS) {
+		PyErr_SetString(PyExc_BufferError, "This type of buffer is not supported.");
+		view->obj = NULL;
 		return -1;
 	}
 	view->obj = (PyObject*)self;

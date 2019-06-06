@@ -256,7 +256,7 @@ class FAssertionError(Exception):
 
 def fassert(func, args):
     try:
-        func(*args)
+        return func(*args)
     except:
         raise FAssertionError("{} raised {} with {}".format(func, sys.exc_info()[1], repr(args)))
 
@@ -455,6 +455,11 @@ for obj in gen_obj("#uV__fFiqsuIQSU"):
 for obj in gen_obj("V_M_Q"):
     fassert(iter, (obj,))
 #/iter #
+
+# buffer protocol #
+for type_ in vector_types + matrix_types + quat_types:
+    fassert(type_, (fassert(bytes, (type_(),)),))
+#/buffer protocol #
 
 ## DETAIL ##
 
