@@ -65,11 +65,23 @@
 
 #define UNBRACKET(...) __VA_ARGS__
 
+// type identifiers
+#define PyGLM_TYPE_UNKNOWN 0
+#define PyGLM_TYPE_VEC 1
+#define PyGLM_TYPE_MAT 2
+#define PyGLM_TYPE_QUA 3
+
 // type definitions
 #pragma region type definitions
+struct shape_helper {
+	PyObject_HEAD
+		uint8_t shape;
+};
+
 template<int L, typename T>
 struct vec {
 	PyObject_HEAD
+		uint8_t shape;
 	glm::vec<L, T> super_type;
 };
 
@@ -80,9 +92,17 @@ struct vecIter {
 	vec<L, T>* sequence;
 };
 
+struct mvec_helper {
+	PyObject_HEAD
+		uint8_t shape;
+	void* super_type;
+	PyObject* master;
+};
+
 template<int L, typename T>
 struct mvec {
 	PyObject_HEAD
+		uint8_t shape;
 		glm::vec<L, T>* super_type;
 	PyObject* master;
 };
@@ -97,6 +117,7 @@ struct mvecIter {
 template<int C, int R, typename T>
 struct mat {
 	PyObject_HEAD
+		uint8_t shape;
 		glm::mat<C, R, T> super_type;
 };
 
@@ -6350,7 +6371,6 @@ static PyObject * mvec_ifloordiv(mvec<L, T>* self, PyObject *obj);
 template<int L, typename T>
 static PyObject * mvec_idiv(mvec<L, T>* self, PyObject *obj);
 
-template<int L, typename T>
 static void mvec_dealloc(PyObject* self);
 
 template<typename T>
@@ -6447,7 +6467,7 @@ static PyTypeObject hfmvec2Type = {
 	"glm.mvec2",             /* tp_name */
 	sizeof(mvec<2, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<2, float>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -6581,7 +6601,7 @@ static PyTypeObject hfmvec3Type = {
 	"glm.mvec3",             /* tp_name */
 	sizeof(mvec<3, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<3, float>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -6715,7 +6735,7 @@ static PyTypeObject hfmvec4Type = {
 	"glm.mvec4",             /* tp_name */
 	sizeof(mvec<4, float>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<4, float>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -6850,7 +6870,7 @@ static PyTypeObject hdmvec2Type = {
 	"glm.dmvec2",             /* tp_name */
 	sizeof(mvec<2, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<2, double>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -6984,7 +7004,7 @@ static PyTypeObject hdmvec3Type = {
 	"glm.dmvec3",             /* tp_name */
 	sizeof(mvec<3, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<3, double>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -7118,7 +7138,7 @@ static PyTypeObject hdmvec4Type = {
 	"glm.dmvec4",             /* tp_name */
 	sizeof(mvec<4, double>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<4, double>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -7253,7 +7273,7 @@ static PyTypeObject himvec2Type = {
 	"glm.imvec2",             /* tp_name */
 	sizeof(mvec<2, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<2, glm::i32>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -7387,7 +7407,7 @@ static PyTypeObject himvec3Type = {
 	"glm.imvec3",             /* tp_name */
 	sizeof(mvec<3, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<3, glm::i32>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -7521,7 +7541,7 @@ static PyTypeObject himvec4Type = {
 	"glm.imvec4",             /* tp_name */
 	sizeof(mvec<4, glm::i32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<4, glm::i32>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -7656,7 +7676,7 @@ static PyTypeObject humvec2Type = {
 	"glm.umvec2",             /* tp_name */
 	sizeof(mvec<2, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<2, glm::u32>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -7790,7 +7810,7 @@ static PyTypeObject humvec3Type = {
 	"glm.umvec3",             /* tp_name */
 	sizeof(mvec<3, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<3, glm::u32>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -7924,7 +7944,7 @@ static PyTypeObject humvec4Type = {
 	"glm.umvec4",             /* tp_name */
 	sizeof(mvec<4, glm::u32>),             /* tp_basicsize */
 	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc<4, glm::u32>, /* tp_dealloc */
+	(destructor)mvec_dealloc, /* tp_dealloc */
 	0,                         /* tp_print */
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
@@ -14643,6 +14663,12 @@ static PyObject* PyGLM_PyObject_FromNumber(T value) {
 
 // type checkers
 #pragma region type checkers
+#define _SUB_PyGLM_GET_TYPE(o) ((o->ob_type->tp_dealloc == NULL) ? PyGLM_TYPE_UNKNOWN : (o->ob_type->tp_dealloc == (destructor)vec_dealloc) ? PyGLM_TYPE_VEC : (o->ob_type->tp_dealloc == (destructor)mat_dealloc) ? PyGLM_TYPE_MAT : (o->ob_type->tp_dealloc == (destructor)qua_dealloc) ? PyGLM_TYPE_QUA : (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) ? PyGLM_TYPE_VEC : PyGLM_TYPE_UNKNOWN)
+#define PyGLM_GET_TYPE(o) _SUB_PyGLM_GET_TYPE(((PyObject*)o))
+
+#define PyGLM_VEC_SHAPE_CHECK(o, L) (((shape_helper*)o)->shape == L)
+#define PyGLM_MAT_SHAPE_CHECK(o, C, R) (((shape_helper*)o)->shape == (C + (R << 3)))
+
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
 bool PyGLM_Vec1i_Check(PyObject* o) {
 	if (!PyObject_IterCheck(o)) {
@@ -14857,11 +14883,11 @@ static bool PyGLM_Vecb_Check(int L, PyObject* o) {
 	return true;
 }
 
-#define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || (!(PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 2, T>())) || PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 3, T>())) || PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<L, 4, T>()))) && ((PyGLM_Vecb_Check<T>(L, (PyObject*)o)) || (PyGLM_Veci_Check(L, o)))))
+#define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_VEC && PyGLM_VEC_SHAPE_CHECK(o, L))) && ((PyGLM_Vecb_Check<T>(L, (PyObject*)o)) || (PyGLM_Veci_Check(L, o)))))
 
-#define PyGLM_Qua_Check(T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())) || PyGLM_Vecb_Check<T>(4, (PyObject*)o))
+#define PyGLM_Qua_Check(T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_QUA)) && PyGLM_Vecb_Check<T>(4, (PyObject*)o)))
 
-#define PyGLM_Mat_Check(C, R, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) || PyGLM_Matb_Check<T>(C, R, (PyObject*)o))
+#define PyGLM_Mat_Check(C, R, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_MAT && PyGLM_MAT_SHAPE_CHECK(o, C, R))) && PyGLM_Matb_Check<T>(C, R, (PyObject*)o)))
 
 #else
 #define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>())
@@ -15172,6 +15198,7 @@ pack_vec(glm::vec<L, T> value) {
 	vec<L, T>* out = (vec<L, T>*)vecType->tp_alloc(vecType, 0);
 
 	if (out != NULL) {
+		out->shape = L;
 		out->super_type = value;
 	}
 
@@ -15185,6 +15212,7 @@ pack_mvec(glm::vec<L, T>* value, PyObject* master) {
 	mvec<L, T>* out = (mvec<L, T>*)mvecType->tp_alloc(mvecType, 0);
 
 	if (out != NULL) {
+		out->shape = L;
 		out->super_type = value;
 		out->master = master;
 		Py_INCREF(master);
@@ -15200,6 +15228,7 @@ pack_mat(glm::mat<C, R, T> value) {
 	mat<C, R, T>* out = (mat<C, R, T>*)matType->tp_alloc(matType, 0);
 
 	if (out != NULL) {
+		out->shape = C + (R << 3);
 		out->super_type = value;
 	}
 
@@ -15262,6 +15291,7 @@ vec_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
 	vec<L, T> *self = (vec<L, T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
+		self->shape = L;
 		self->super_type = glm::vec<L, T>();
 	}
 
@@ -16514,11 +16544,10 @@ vec_releasebuffer(PyObject*, Py_buffer* view) {
 
 // type mvec
 #pragma region type mvec
-template<int L, typename T>
 static void
 mvec_dealloc(PyObject* self)
 {
-	Py_XDECREF(((mvec<L, T>*)self)->master);
+	Py_XDECREF(((mvec_helper*)self)->master);
 	self->ob_type->tp_free(self);
 }
 
@@ -17474,6 +17503,7 @@ mat_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
 	mat<C, R, T> *self = (mat<C, R, T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
+		self->shape = C + (R << 3);
 		self->super_type = glm::mat<C, R, T>();
 	}
 	return (PyObject *)self;
@@ -35228,10 +35258,10 @@ silence(PyObject*, PyObject* arg) {
 
 //static PyObject*
 //test(PyObject* self, PyObject* arg) {
-//	return pack_mat2x2(glm::identity<glm::mat2>());
+//	return PyLong_FromLong((long)((shape_helper*)arg)->shape);
 //}
 //#define HAS_TEST
-//#define TEST_FUNC_TYPE METH_NOARGS
+//#define TEST_FUNC_TYPE METH_O
 
 static PyMethodDef glmmethods[] = {
 	// DETAIL
