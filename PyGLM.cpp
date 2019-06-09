@@ -14877,7 +14877,7 @@ static bool PyGLM_Matb_Check(int C, int R, PyObject* o) {
 		return false;
 	}
 	Py_buffer view;
-	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (((view.ndim != 2 || view.shape[0] != C || view.shape[1] != R || !get_view_format_equal<T>(view.format)) && (view.ndim != 1 || view.shape[0] != C * R * sizeof(T) || view.format[0] != 'B')))) {
+	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (((view.ndim != 2 || view.shape[0] != static_cast<Py_ssize_t>(C) || view.shape[1] != static_cast<Py_ssize_t>(R) || !get_view_format_equal<T>(view.format)) && (view.ndim != 1 || view.shape[0] != static_cast<Py_ssize_t>(C * R * sizeof(T)) || view.format[0] != 'B')))) {
 		PyBuffer_Release(&view);
 		return false;
 	}
@@ -14891,7 +14891,7 @@ static bool PyGLM_Vecb_Check(int L, PyObject* o) {
 		return false;
 	}
 	Py_buffer view;
-	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (view.ndim != 1 || ((view.shape[0] != L || !get_view_format_equal<T>(view.format)) && (view.shape[0] != L * sizeof(T) || view.format[0] != 'B')))) {
+	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (view.ndim != 1 || ((view.shape[0] != static_cast<Py_ssize_t>(L) || !get_view_format_equal<T>(view.format)) && (view.shape[0] != static_cast<Py_ssize_t>(L) * sizeof(T) || view.format[0] != 'B')))) {
 		PyBuffer_Release(&view);
 		return false;
 	}
