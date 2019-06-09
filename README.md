@@ -39,7 +39,9 @@ You can do so by copying either the `COPYING` or `GLM_LICENSE` file \(or their c
 Instead of using double colons \(**::**\) for namespaces, periods \(**\.**\) are used, so  
 `glm::vec2` becomes `glm.vec2`\.  
   
-PyGLM is compatible to numpy, meaning you can e\.g\. convert a glm matrix to a numpy array and vice versa\.  
+PyGLM supports the [buffer protocol](https://docs.python.org/3/c-api/buffer.html), meaning its compitible to other objects that support the buffer protocol,  
+such as `bytes` or `numpy.array`   
+\(for example you can convert a glm matrix to a numpy array and vice versa\)\.  
 PyGLM is also capable of interpreting iterables \(such as tuples\) as vectors, so e\.g\. the following equasion is possible:  
 
     result = glm.vec2(1) * (2, 3)
@@ -83,6 +85,18 @@ PyGLM doesn't support the following extensions and methods, due to compatibility
 The `GLM_GTC_bitfield` extension,  
 `glm::log2` from GLM\_GTC\_integer\.  
 `glm::packUnorm` and `glm::packSnorm` from GLM\_GTC\_packing\.  
+  
+#### Build options  
+PyGLM can be built from source in a couple of different ways\.  
+In `PyGLM.cpp` there is a preprocessor option `PyGLM_BUILD` which is set to `PyGLM_DEFAULT` by default\.  
+`PyGLM_DEFAULT` will build all of PyGLM's functions and features\.  
+  
+A few other flags exist:  
+`PyGLM_FAST` removes PyGLM's iterable and GetBuffer checking, thus making it incompatible with tuples, numpy arrays and bytes objects while increasing overall performance\.  
+  
+`PyGLM_NO_FUNCTIONS` removes all of the functions of glm and only builds the bare types\.  
+  
+`PyGLM_MINIMAL` combines `PyGLM_FAST` and `PyGLM_NO_FUNCTIONS`\.  
   
 ### Example  
 

@@ -1,3 +1,5 @@
+#define PyGLM_VERSION "0.7.2b1"
+
 #define PyGLM_NO_FUNCTIONS 1
 #define PyGLM_NO_ITER_TYPECHECKING 2
 
@@ -6,6 +8,18 @@
 #define PyGLM_MINIMAL PyGLM_NO_FUNCTIONS | PyGLM_NO_ITER_TYPECHECKING
 
 #define PyGLM_BUILD PyGLM_DEFAULT
+
+#if (PyGLM_BUILD == PyGLM_DEFAULT)
+#define PyGLM_BUILD_STRING "DEFAULT"
+#elif (PyGLM_BUILD == PyGLM_FAST)
+#define PyGLM_BUILD_STRING "FAST"
+#elif (PyGLM_BUILD == PyGLM_NO_FUNCTIONS)
+#define PyGLM_BUILD_STRING "NO_FUNCTIONS"
+#elif (PyGLM_BUILD == PyGLM_MINIMAL)
+#define PyGLM_BUILD_STRING "MINIMAL"
+#else
+#define PyGLM_BUILD_STRING "CUSTOM"
+#endif
 
 #include <Python.h>
 #include "structmember.h"
@@ -13748,6 +13762,8 @@ PyObject* ctypes_uint32_p = NULL;
 PyObject* ctypes_uint16_p = NULL;
 PyObject* ctypes_uint8_p = NULL;
 PyObject* ctypes_bool_p = NULL;
+
+PyObject* PyGLM_VERSION_STRING = NULL;
 
 #define PyGLM_FREXP_WARNING 1
 
@@ -35649,6 +35665,7 @@ static void glm_clear(PyObject* module_glm) {
 	Py_XDECREF(ctypes_bool_p);
 	Py_XDECREF(ctypes_cast);
 	Py_XDECREF(ctypes_void_p);
+	Py_XDECREF(PyGLM_VERSION_STRING);
 }
 
 static PyModuleDef glmmodule = {
@@ -36235,6 +36252,10 @@ extern "C" {
 		PyModule_AddObject(module_glm, "bvec3", (PyObject *)&hbvec3Type);
 		Py_INCREF(&hbvec4Type);
 		PyModule_AddObject(module_glm, "bvec4", (PyObject *)&hbvec4Type);
+
+		PyGLM_VERSION_STRING = PyUnicode_FromString("PyGLM (" PyGLM_BUILD_STRING ") version " PyGLM_VERSION);
+		Py_INCREF(PyGLM_VERSION_STRING);
+		PyModule_AddObject(module_glm, "version", PyGLM_VERSION_STRING);
 
 		return module_glm;
 	}
