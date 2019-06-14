@@ -5,7 +5,7 @@
   
 **PyGLM** is a Python extension written in **C\+\+**\.   
 By using [GLM by G\-Truc](https://glm.g-truc.net) under the hood, it manages to bring **glm's features** to Python\.    
-Currently, some features haven't yet found their way into PyGLM and some never will \(such as unstable extensions\)\.  
+Some features are unsupported \(such as unstable extensions\) \- Please see \[*Unsupported Functions*\] below\.  
 If you encounter any issues or want to request a feature, please create an issue on the [issue tracker](https://github.com/Zuzu-Typ/PyGLM/issues)\.  
   
 ## Tiny Documentation  
