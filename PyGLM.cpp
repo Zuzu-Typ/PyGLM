@@ -75,6 +75,17 @@
 
 #endif
 
+#if GLM_COMPILER & GLM_COMPILER_VC
+#pragma warning(push)
+#pragma warning(disable : 4127)
+#elif GLM_COMPILER & GLM_COMPILER_GCC
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunknown-pragmas"
+#elif GLM_COMPILER & GLM_COMPILER_CLANG
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-braces"
+#endif
+
 //TYPES
 
 #define UNBRACKET(...) __VA_ARGS__
@@ -14877,7 +14888,7 @@ static bool PyGLM_Matb_Check(int C, int R, PyObject* o) {
 		return false;
 	}
 	Py_buffer view;
-	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (((view.ndim != 2 || view.shape[0] != C || view.shape[1] != R || !get_view_format_equal<T>(view.format)) && (view.ndim != 1 || view.shape[0] != C * R * sizeof(T) || view.format[0] != 'B')))) {
+	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (((view.ndim != 2 || view.shape[0] != static_cast<Py_ssize_t>(C) || view.shape[1] != static_cast<Py_ssize_t>(R) || !get_view_format_equal<T>(view.format)) && (view.ndim != 1 || view.shape[0] != static_cast<Py_ssize_t>(C * R * sizeof(T)) || view.format[0] != 'B')))) {
 		PyBuffer_Release(&view);
 		return false;
 	}
@@ -14891,7 +14902,7 @@ static bool PyGLM_Vecb_Check(int L, PyObject* o) {
 		return false;
 	}
 	Py_buffer view;
-	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (view.ndim != 1 || ((view.shape[0] != L || !get_view_format_equal<T>(view.format)) && (view.shape[0] != L * sizeof(T) || view.format[0] != 'B')))) {
+	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (view.ndim != 1 || ((view.shape[0] != static_cast<Py_ssize_t>(L) || !get_view_format_equal<T>(view.format)) && (view.shape[0] != static_cast<Py_ssize_t>(L * sizeof(T)) || view.format[0] != 'B')))) {
 		PyBuffer_Release(&view);
 		return false;
 	}
@@ -15303,7 +15314,7 @@ vec_dealloc(PyObject* self)
 
 template<int L, typename T>
 static PyObject *
-vec_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+vec_new(PyTypeObject *type, PyObject *, PyObject *)
 {
 	vec<L, T> *self = (vec<L, T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
@@ -16404,7 +16415,7 @@ static PyObject * vec_getattr(PyObject * obj, PyObject * name) {
 
 template<int L, typename T>
 static PyObject *
-vecIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs)
+vecIter_new(PyTypeObject *type, PyObject *args, PyObject *)
 {
 	vec<L, T> *sequence;
 
@@ -16957,7 +16968,7 @@ mvec_ifloordiv(mvec<L, T> *self, PyObject *obj)
 // ternaryfunc
 template<int L, typename T>
 static PyObject *
-mvec_ipow(mvec<L, T> *self, PyObject *obj1, PyObject * obj2) // obj2 is unused. It points to an invalid address!
+mvec_ipow(mvec<L, T> *self, PyObject *obj1, PyObject *) // obj2 is unused. It points to an invalid address!
 {
 	vec<L, T> * temp = (vec<L, T>*)mvec_pow<L, T>((PyObject*)self, obj1, Py_None);
 
@@ -17010,7 +17021,7 @@ mvec4_str(mvec<4, T>* self)
 }
 
 template<int L>
-static Py_ssize_t mvec_len(PyObject * self) {
+static Py_ssize_t mvec_len(PyObject *) {
 	return (Py_ssize_t)L;
 }
 
@@ -17365,7 +17376,7 @@ static int mvec4_setattr(mvec<4, T>* obj, PyObject* name, PyObject* value) {
 
 template<int L, typename T>
 static PyObject *
-mvecIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs)
+mvecIter_new(PyTypeObject *type, PyObject *args, PyObject *)
 {
 	mvec<L, T> *sequence;
 
@@ -17503,7 +17514,7 @@ mvec_releasebuffer(PyObject*, Py_buffer* view) {
 // type vec
 #pragma region type mat
 template<int C>
-static PyObject* mat_length(PyObject * self, PyObject* arg) {
+static PyObject* mat_length(PyObject *, PyObject*) {
 	return PyLong_FromLong(C);
 }
 
@@ -17515,7 +17526,7 @@ mat_dealloc(PyObject* self)
 
 template<int C, int R, typename T>
 static PyObject *
-mat_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+mat_new(PyTypeObject *type, PyObject *, PyObject *)
 {
 	mat<C, R, T> *self = (mat<C, R, T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
@@ -17528,7 +17539,7 @@ mat_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 
 template<typename T>
 static int
-mat2x2_init(mat<2, 2, T> *self, PyObject *args, PyObject *kwds)
+mat2x2_init(mat<2, 2, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -17620,7 +17631,7 @@ mat2x2_init(mat<2, 2, T> *self, PyObject *args, PyObject *kwds)
 
 template<typename T>
 static int
-mat2x3_init(mat<2, 3, T> *self, PyObject *args, PyObject *kwds)
+mat2x3_init(mat<2, 3, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -17714,7 +17725,7 @@ mat2x3_init(mat<2, 3, T> *self, PyObject *args, PyObject *kwds)
 
 template<typename T>
 static int
-mat2x4_init(mat<2, 4, T> *self, PyObject *args, PyObject *kwds)
+mat2x4_init(mat<2, 4, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -17810,7 +17821,7 @@ mat2x4_init(mat<2, 4, T> *self, PyObject *args, PyObject *kwds)
 
 template<typename T>
 static int
-mat3x2_init(mat<3, 2, T> *self, PyObject *args, PyObject *kwds)
+mat3x2_init(mat<3, 2, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -17914,7 +17925,7 @@ mat3x2_init(mat<3, 2, T> *self, PyObject *args, PyObject *kwds)
 
 template<typename T>
 static int
-mat3x3_init(mat<3, 3, T> *self, PyObject *args, PyObject *kwds)
+mat3x3_init(mat<3, 3, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -18021,7 +18032,7 @@ mat3x3_init(mat<3, 3, T> *self, PyObject *args, PyObject *kwds)
 
 template<typename T>
 static int
-mat3x4_init(mat<3, 4, T> *self, PyObject *args, PyObject *kwds)
+mat3x4_init(mat<3, 4, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -18131,7 +18142,7 @@ mat3x4_init(mat<3, 4, T> *self, PyObject *args, PyObject *kwds)
 
 template<typename T>
 static int
-mat4x2_init(mat<4, 2, T> *self, PyObject *args, PyObject *kwds)
+mat4x2_init(mat<4, 2, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -18242,7 +18253,7 @@ mat4x2_init(mat<4, 2, T> *self, PyObject *args, PyObject *kwds)
 
 template<typename T>
 static int
-mat4x3_init(mat<4, 3, T> *self, PyObject *args, PyObject *kwds)
+mat4x3_init(mat<4, 3, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -18357,7 +18368,7 @@ mat4x3_init(mat<4, 3, T> *self, PyObject *args, PyObject *kwds)
 
 template<typename T>
 static int
-mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *kwds)
+mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -19061,7 +19072,7 @@ mat4x4_repr(mat<4, 4, T>* self)
 }
 
 template<int C>
-static Py_ssize_t mat_len(PyObject * self) {
+static Py_ssize_t mat_len(PyObject *) {
 	return (Py_ssize_t)C;
 }
 
@@ -20023,7 +20034,7 @@ static PyObject * mat_richcompare(mat<C, R, T> * self, PyObject * other, int com
 
 template<int C, int R, typename T>
 static PyObject *
-matIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs)
+matIter_new(PyTypeObject *type, PyObject *args, PyObject *)
 {
 	mat<C, R, T> *sequence;
 
@@ -20135,7 +20146,7 @@ qua_dealloc(PyObject* self)
 
 template<typename T>
 static PyObject *
-qua_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+qua_new(PyTypeObject *type, PyObject *, PyObject *)
 {
 	qua<T> *self = (qua<T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
@@ -20524,7 +20535,7 @@ static PyObject * qua_richcompare(qua<T> * self, PyObject * other, int comp_type
 
 template<typename T>
 static PyObject *
-quaIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs)
+quaIter_new(PyTypeObject *type, PyObject *args, PyObject *)
 {
 	qua<T> *sequence;
 
@@ -34559,7 +34570,7 @@ sizeof_(PyObject*, PyObject* arg) {
 }
 
 static PyObject*
-value_ptr_(PyObject* self, PyObject* arg) {
+value_ptr_(PyObject*, PyObject* arg) {
 	if (Py_TYPE(arg) == &hfvec2Type) {
 		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, float>*)arg)->super_type));
 	}
@@ -34778,7 +34789,7 @@ value_ptr_(PyObject* self, PyObject* arg) {
 }
 
 static PyObject*
-make_vec2_(PyObject* self, PyObject* arg) {
+make_vec2_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_vec2((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -34817,7 +34828,7 @@ make_vec2_(PyObject* self, PyObject* arg) {
 }
 
 static PyObject*
-make_vec3_(PyObject* self, PyObject* arg) {
+make_vec3_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_vec3((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -34856,7 +34867,7 @@ make_vec3_(PyObject* self, PyObject* arg) {
 }
 
 static PyObject*
-make_vec4_(PyObject* self, PyObject* arg) {
+make_vec4_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_vec4((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -34894,7 +34905,7 @@ make_vec4_(PyObject* self, PyObject* arg) {
 	return NULL;
 }
 static PyObject*
-make_quat_(PyObject* self, PyObject* arg) {
+make_quat_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_quat((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -34905,7 +34916,7 @@ make_quat_(PyObject* self, PyObject* arg) {
 	return NULL;
 }
 static PyObject*
-make_mat2x2_(PyObject* self, PyObject* arg) {
+make_mat2x2_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_mat2x2((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -34922,7 +34933,7 @@ make_mat2x2_(PyObject* self, PyObject* arg) {
 	return NULL;
 }
 static PyObject*
-make_mat2x3_(PyObject* self, PyObject* arg) {
+make_mat2x3_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_mat2x3((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -34939,7 +34950,7 @@ make_mat2x3_(PyObject* self, PyObject* arg) {
 	return NULL;
 }
 static PyObject*
-make_mat2x4_(PyObject* self, PyObject* arg) {
+make_mat2x4_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_mat2x4((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -34956,7 +34967,7 @@ make_mat2x4_(PyObject* self, PyObject* arg) {
 	return NULL;
 }
 static PyObject*
-make_mat3x2_(PyObject* self, PyObject* arg) {
+make_mat3x2_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_mat3x2((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -34973,7 +34984,7 @@ make_mat3x2_(PyObject* self, PyObject* arg) {
 	return NULL;
 }
 static PyObject*
-make_mat3x3_(PyObject* self, PyObject* arg) {
+make_mat3x3_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_mat3x3((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -34990,7 +35001,7 @@ make_mat3x3_(PyObject* self, PyObject* arg) {
 	return NULL;
 }
 static PyObject*
-make_mat3x4_(PyObject* self, PyObject* arg) {
+make_mat3x4_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_mat3x4((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -35007,7 +35018,7 @@ make_mat3x4_(PyObject* self, PyObject* arg) {
 	return NULL;
 }
 static PyObject*
-make_mat4x2_(PyObject* self, PyObject* arg) {
+make_mat4x2_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_mat4x2((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -35024,7 +35035,7 @@ make_mat4x2_(PyObject* self, PyObject* arg) {
 	return NULL;
 }
 static PyObject*
-make_mat4x3_(PyObject* self, PyObject* arg) {
+make_mat4x3_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_mat4x3((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -35041,7 +35052,7 @@ make_mat4x3_(PyObject* self, PyObject* arg) {
 	return NULL;
 }
 static PyObject*
-make_mat4x4_(PyObject* self, PyObject* arg) {
+make_mat4x4_(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, (PyTypeObject*)ctypes_float_p)) {
 		return pack(glm::make_mat4x4((float*)PyGLM_UnsignedLongLong_FromCtypesP(arg)));
 	}
@@ -35651,7 +35662,7 @@ static PyMethodDef glmmethods[] = {
 
 #endif
 
-static void glm_clear(PyObject* module_glm) {
+static void glm_clear(PyObject*) {
 	Py_XDECREF(ctypes_float_p);
 	Py_XDECREF(ctypes_double_p);
 	Py_XDECREF(ctypes_int64_p);
@@ -36260,3 +36271,10 @@ extern "C" {
 		return module_glm;
 	}
 }
+#if GLM_COMPILER & GLM_COMPILER_VC
+#pragma warning(pop)
+#elif GLM_COMPILER & GLM_COMPILER_GCC
+#pragma GCC diagnostic pop
+#elif GLM_COMPILER & GLM_COMPILER_CLANG
+#pragma clang diagnostic pop
+#endif
