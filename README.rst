@@ -23,7 +23,7 @@ Why PyGLM\?
 | Besides the obvious \- being mostly compatible with **GLM** \- PyGLM offers a variety of features for **vector** and **matrix manipulation**\.
 | It has a lot of possible use cases\, including **3D\-Graphics** \(OpenGL\, DirectX\, \.\.\.\)\, **Physics** and more\.
 | 
-| At the same time\, it has **great performance**\, being between **2x and 15x as fast as numpy\!**
+| At the same time\, it has **great performance**\, being between **2x and 15x as fast as numpy\!** \(see end of page\)
 | \(*depending on the individual function*\)
 
 Installation
@@ -160,5 +160,25 @@ Example
     >>> v = glm.vec4(1, 2, 3, 4)
     >>> print(v + (8, 7, 6, 5))
     vec4(            9,            9,            9,            9 )
+
+ 
+| 
+
+Speed comparison to numpy
+-------------------------
+
+
+::
+
+    
+    How PyGLM's performance roughly compares to NumPy's performance:
+    instruction     | np speed (%)  | glm speed (%)
+    import          |   4.76        |  100.00
+    mat4()          |   9.76        |  100.00
+    dot(vec3, vec3) |  28.92        |  100.00
+    transpose(mat4) |  25.64        |  100.00
+    vec4 * vec4     |  27.89        |  100.00
+    mat4 * vec4     |  17.68        |  100.00
+    mat4[0]         |  49.99        |  100.00
 
  

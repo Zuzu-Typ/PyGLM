@@ -1,6 +1,18 @@
-import numpy, glm
+#import numpy, glm
 
 import time
+
+start_time = time.time()
+import glm
+glm_import_time = time.time() - start_time
+
+start_time = time.time()
+import numpy
+numpy_import_time = time.time() - start_time
+
+numpy_import_time /= glm_import_time
+numpy_import_time = (1. / numpy_import_time) * 100
+glm_import_time = 100
 
 REPETITIONS = 100000
 
@@ -18,7 +30,7 @@ glm_v3 = glm.vec3()
 numpy_v3 = numpy.array((0,0,0), dtype=numpy.float32)
 
 glm_v4 = glm.vec4()
-numpy_v4 = numpy.array((0,0,0,0), dtype=numpy.float32)
+numpy_v4 = numpy.zeros((4,), dtype=numpy.float32)#numpy.array((0,0,0,0), dtype=numpy.float32)
 
 glm_m44 = glm.mat4()
 numpy_m44 = numpy.identity(4, dtype=numpy.float32)
@@ -35,14 +47,32 @@ numpy_mul_v4_v4 = lambda: numpy_v4 * numpy_v4
 glm_mul_m44_v4 = lambda: glm_m44 * glm_v4
 numpy_mul_m44_v4 = lambda: numpy_m44 * numpy_v4
 
+glm_mat4_getitem = lambda: glm_m44[0]
+numpy_mat4_getitem = lambda: numpy_m44[0]
+
 print("How PyGLM's performance roughly compares to NumPy's performance:")
 
-print("4x4 matrices were created {} times as fast in PyGLM".format((round(test_func(numpy_create_mat4) / test_func(glm_create_mat4), 2))))
+print("instruction\t | np speed (%)\t | glm speed (%)\t ")
 
-print("The dot product of two 3 component vectors was calculated {} times as fast in PyGLM".format((round(test_func(numpy_dot) / test_func(glm_dot), 2))))
+def print_instruction(string_, np_func, glm_func):
+    np_result = test_func(np_func)
+    glm_result = test_func(glm_func)
+    np_result /= glm_result
+    np_result = (1. / np_result) * 100
+    glm_result = 100
 
-print("Transposing a 4x4 matrix was {} times as fast in PyGLM".format((round(test_func(numpy_transpose) / test_func(glm_transpose), 2))))
+    print(string_ + " | {: 6.2f}\t | {: 6.2f}".format(np_result, glm_result))
 
-print("Multiplying a 4 component vector by a 4 component vector was {} times as fast in PyGLM".format((round(test_func(numpy_mul_v4_v4) / test_func(glm_mul_v4_v4), 2))))
+print("import\t\t | {: 6.2f}\t | {: 6.2f}".format(numpy_import_time, glm_import_time))
 
-print("Multiplying a 4x4 matrix by a 4 component vector was {} times as fast in PyGLM".format((round(test_func(numpy_mul_m44_v4) / test_func(glm_mul_m44_v4), 2))))
+instructions = [
+    ("mat4()\t\t", numpy_create_mat4, glm_create_mat4),
+    ("dot(vec3, vec3)\t", numpy_dot, glm_dot),
+    ("transpose(mat4)\t", numpy_transpose, glm_transpose),
+    ("vec4 * vec4\t", numpy_mul_v4_v4, glm_mul_v4_v4),
+    ("mat4 * vec4\t", numpy_mul_m44_v4, glm_mul_m44_v4),
+    ("mat4[0]\t\t", numpy_mat4_getitem, glm_mat4_getitem),
+    ]
+
+for s, np_f, glm_f in instructions:
+    print_instruction(s, np_f, glm_f)
