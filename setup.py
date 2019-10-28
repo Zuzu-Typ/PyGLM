@@ -35,7 +35,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.1',
+    version='1.1.0',
 
     description='OpenGL Mathematics library for Python',
     long_description=long_description,
@@ -74,6 +74,7 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
         "Operating System :: MacOS",

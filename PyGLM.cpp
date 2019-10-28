@@ -1,4 +1,4 @@
-#define PyGLM_VERSION "1.0.1"
+#define PyGLM_VERSION "1.1.0"
 
 #define PyGLM_NO_FUNCTIONS 1
 #define PyGLM_NO_ITER_TYPECHECKING 2
@@ -255,6 +255,10 @@ static PyObject * vec_idiv(vec<L, T>* self, PyObject *obj);
 
 static void vec_dealloc(PyObject* self);
 
+static PyObject* generic_copy(PyObject* self, PyObject*);
+
+static PyObject* generic_deepcopy(PyObject* self, PyObject* memo);
+
 template<typename T>
 static PyObject* vec1_str(vec<1, T>* self);
 template<typename T>
@@ -312,6 +316,11 @@ static PyObject* vecIter_new(PyTypeObject *type, PyObject *args, PyObject *kwarg
 #pragma region float
 static PyMemberDef hfvec1_members[] = {
 	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(vec<1, float>), super_type.x), 0, (char*)"vec1.x" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hfvec1_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec1BufferMethods = {
@@ -395,7 +404,7 @@ static PyTypeObject hfvec1Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<1, float>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hfvec1_methods,             /* tp_methods */
 	hfvec1_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -451,6 +460,11 @@ static PyTypeObject hfvec1IterType = {
 static PyMemberDef hfvec2_members[] = {
 	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(vec<2, float>), super_type.x), 0, (char*)"vec2.x" },
 	{ (char*)"y", T_FLOAT, offsetof(UNBRACKET(vec<2, float>), super_type.y), 0, (char*)"vec2.y" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hfvec2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec2BufferMethods = {
@@ -534,7 +548,7 @@ static PyTypeObject hfvec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<2, float>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hfvec2_methods,             /* tp_methods */
 	hfvec2_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -591,6 +605,11 @@ static PyMemberDef hfvec3_members[] = {
 	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.x), 0, (char*)"vec3.x" },
 	{ (char*)"y", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.y), 0, (char*)"vec3.y" },
 	{ (char*)"z", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.z), 0, (char*)"vec3.z" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hfvec3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec3BufferMethods = {
@@ -674,7 +693,7 @@ static PyTypeObject hfvec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<3, float>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hfvec3_methods,             /* tp_methods */
 	hfvec3_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -732,6 +751,11 @@ static PyMemberDef hfvec4_members[] = {
 	{ (char*)"y", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.y), 0, (char*)"vec4.y" },
 	{ (char*)"z", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.z), 0, (char*)"vec4.z" },
 	{ (char*)"w", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.w), 0, (char*)"vec4.w" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hfvec4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec4BufferMethods = {
@@ -815,7 +839,7 @@ static PyTypeObject hfvec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<4, float>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hfvec4_methods,             /* tp_methods */
 	hfvec4_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -871,6 +895,11 @@ static PyTypeObject hfvec4IterType = {
 #pragma region double
 static PyMemberDef hdvec1_members[] = {
 	{ (char*)"x", T_DOUBLE, offsetof(UNBRACKET(vec<1, double>), super_type.x), 0, (char*)"dvec1.x" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hdvec1_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec1BufferMethods = {
@@ -954,7 +983,7 @@ static PyTypeObject hdvec1Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<1, double>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hdvec1_methods,             /* tp_methods */
 	hdvec1_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -1010,6 +1039,11 @@ static PyTypeObject hdvec1IterType = {
 static PyMemberDef hdvec2_members[] = {
 	{ (char*)"x", T_DOUBLE, offsetof(UNBRACKET(vec<2, double>), super_type.x), 0, (char*)"dvec2.x" },
 	{ (char*)"y", T_DOUBLE, offsetof(UNBRACKET(vec<2, double>), super_type.y), 0, (char*)"dvec2.y" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hdvec2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec2BufferMethods = {
@@ -1093,7 +1127,7 @@ static PyTypeObject hdvec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<2, double>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hdvec2_methods,             /* tp_methods */
 	hdvec2_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -1150,6 +1184,11 @@ static PyMemberDef hdvec3_members[] = {
 	{ (char*)"x", T_DOUBLE, offsetof(UNBRACKET(vec<3, double>), super_type.x), 0, (char*)"dvec3.x" },
 	{ (char*)"y", T_DOUBLE, offsetof(UNBRACKET(vec<3, double>), super_type.y), 0, (char*)"dvec3.y" },
 	{ (char*)"z", T_DOUBLE, offsetof(UNBRACKET(vec<3, double>), super_type.z), 0, (char*)"dvec3.z" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hdvec3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec3BufferMethods = {
@@ -1233,7 +1272,7 @@ static PyTypeObject hdvec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<3, double>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hdvec3_methods,             /* tp_methods */
 	hdvec3_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -1291,6 +1330,11 @@ static PyMemberDef hdvec4_members[] = {
 	{ (char*)"y", T_DOUBLE, offsetof(UNBRACKET(vec<4, double>), super_type.y), 0, (char*)"dvec4.y" },
 	{ (char*)"z", T_DOUBLE, offsetof(UNBRACKET(vec<4, double>), super_type.z), 0, (char*)"dvec4.z" },
 	{ (char*)"w", T_DOUBLE, offsetof(UNBRACKET(vec<4, double>), super_type.w), 0, (char*)"dvec4.w" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hdvec4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec4BufferMethods = {
@@ -1374,7 +1418,7 @@ static PyTypeObject hdvec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<4, double>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hdvec4_methods,             /* tp_methods */
 	hdvec4_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -1430,6 +1474,11 @@ static PyTypeObject hdvec4IterType = {
 #pragma region int8
 static PyMemberDef hi8vec1_members[] = {
 	{ (char*)"x", T_BYTE, offsetof(UNBRACKET(vec<1, glm::i8>), super_type.x), 0, (char*)"i8vec1.x" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi8vec1_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec1BufferMethods = {
@@ -1513,7 +1562,7 @@ static PyTypeObject hi8vec1Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<1, glm::i8>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi8vec1_methods,             /* tp_methods */
 	hi8vec1_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -1569,6 +1618,11 @@ static PyTypeObject hi8vec1IterType = {
 static PyMemberDef hi8vec2_members[] = {
 	{ (char*)"x", T_BYTE, offsetof(UNBRACKET(vec<2, glm::i8>), super_type.x), 0, (char*)"i8vec2.x" },
 	{ (char*)"y", T_BYTE, offsetof(UNBRACKET(vec<2, glm::i8>), super_type.y), 0, (char*)"i8vec2.y" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi8vec2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec2BufferMethods = {
@@ -1652,7 +1706,7 @@ static PyTypeObject hi8vec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<2, glm::i8>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi8vec2_methods,             /* tp_methods */
 	hi8vec2_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -1709,6 +1763,11 @@ static PyMemberDef hi8vec3_members[] = {
 	{ (char*)"x", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.x), 0, (char*)"i8vec3.x" },
 	{ (char*)"y", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.y), 0, (char*)"i8vec3.y" },
 	{ (char*)"z", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.z), 0, (char*)"i8vec3.z" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi8vec3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec3BufferMethods = {
@@ -1792,7 +1851,7 @@ static PyTypeObject hi8vec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<3, glm::i8>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi8vec3_methods,             /* tp_methods */
 	hi8vec3_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -1850,6 +1909,11 @@ static PyMemberDef hi8vec4_members[] = {
 	{ (char*)"y", T_BYTE, offsetof(UNBRACKET(vec<4, glm::i8>), super_type.y), 0, (char*)"i8vec4.y" },
 	{ (char*)"z", T_BYTE, offsetof(UNBRACKET(vec<4, glm::i8>), super_type.z), 0, (char*)"i8vec4.z" },
 	{ (char*)"w", T_BYTE, offsetof(UNBRACKET(vec<4, glm::i8>), super_type.w), 0, (char*)"i8vec4.w" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi8vec4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec4BufferMethods = {
@@ -1933,7 +1997,7 @@ static PyTypeObject hi8vec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<4, glm::i8>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi8vec4_methods,             /* tp_methods */
 	hi8vec4_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -1989,6 +2053,11 @@ static PyTypeObject hi8vec4IterType = {
 #pragma region int16
 static PyMemberDef hi16vec1_members[] = {
 	{ (char*)"x", T_SHORT, offsetof(UNBRACKET(vec<1, glm::i16>), super_type.x), 0, (char*)"i16vec1.x" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi16vec1_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec1BufferMethods = {
@@ -2072,7 +2141,7 @@ static PyTypeObject hi16vec1Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<1, glm::i16>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi16vec1_methods,             /* tp_methods */
 	hi16vec1_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -2128,6 +2197,11 @@ static PyTypeObject hi16vec1IterType = {
 static PyMemberDef hi16vec2_members[] = {
 	{ (char*)"x", T_SHORT, offsetof(UNBRACKET(vec<2, glm::i16>), super_type.x), 0, (char*)"i16vec2.x" },
 	{ (char*)"y", T_SHORT, offsetof(UNBRACKET(vec<2, glm::i16>), super_type.y), 0, (char*)"i16vec2.y" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi16vec2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec2BufferMethods = {
@@ -2211,7 +2285,7 @@ static PyTypeObject hi16vec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<2, glm::i16>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi16vec2_methods,             /* tp_methods */
 	hi16vec2_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -2268,6 +2342,11 @@ static PyMemberDef hi16vec3_members[] = {
 	{ (char*)"x", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.x), 0, (char*)"i16vec3.x" },
 	{ (char*)"y", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.y), 0, (char*)"i16vec3.y" },
 	{ (char*)"z", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.z), 0, (char*)"i16vec3.z" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi16vec3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec3BufferMethods = {
@@ -2351,7 +2430,7 @@ static PyTypeObject hi16vec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<3, glm::i16>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi16vec3_methods,             /* tp_methods */
 	hi16vec3_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -2409,6 +2488,11 @@ static PyMemberDef hi16vec4_members[] = {
 	{ (char*)"y", T_SHORT, offsetof(UNBRACKET(vec<4, glm::i16>), super_type.y), 0, (char*)"i16vec4.y" },
 	{ (char*)"z", T_SHORT, offsetof(UNBRACKET(vec<4, glm::i16>), super_type.z), 0, (char*)"i16vec4.z" },
 	{ (char*)"w", T_SHORT, offsetof(UNBRACKET(vec<4, glm::i16>), super_type.w), 0, (char*)"i16vec4.w" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi16vec4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec4BufferMethods = {
@@ -2492,7 +2576,7 @@ static PyTypeObject hi16vec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<4, glm::i16>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi16vec4_methods,             /* tp_methods */
 	hi16vec4_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -2548,6 +2632,11 @@ static PyTypeObject hi16vec4IterType = {
 #pragma region int32
 static PyMemberDef hivec1_members[] = {
 	{ (char*)"x", T_INT, offsetof(UNBRACKET(vec<1, glm::i32>), super_type.x), 0, (char*)"ivec1.x" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hivec1_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec1BufferMethods = {
@@ -2631,7 +2720,7 @@ static PyTypeObject hivec1Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<1, glm::i32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hivec1_methods,             /* tp_methods */
 	hivec1_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -2687,6 +2776,11 @@ static PyTypeObject hivec1IterType = {
 static PyMemberDef hivec2_members[] = {
 	{ (char*)"x", T_INT, offsetof(UNBRACKET(vec<2, glm::i32>), super_type.x), 0, (char*)"ivec2.x" },
 	{ (char*)"y", T_INT, offsetof(UNBRACKET(vec<2, glm::i32>), super_type.y), 0, (char*)"ivec2.y" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hivec2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec2BufferMethods = {
@@ -2770,7 +2864,7 @@ static PyTypeObject hivec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<2, glm::i32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hivec2_methods,             /* tp_methods */
 	hivec2_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -2827,6 +2921,11 @@ static PyMemberDef hivec3_members[] = {
 	{ (char*)"x", T_INT, offsetof(UNBRACKET(vec<3, glm::i32>), super_type.x), 0, (char*)"ivec3.x" },
 	{ (char*)"y", T_INT, offsetof(UNBRACKET(vec<3, glm::i32>), super_type.y), 0, (char*)"ivec3.y" },
 	{ (char*)"z", T_INT, offsetof(UNBRACKET(vec<3, glm::i32>), super_type.z), 0, (char*)"ivec3.z" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hivec3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec3BufferMethods = {
@@ -2910,7 +3009,7 @@ static PyTypeObject hivec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<3, glm::i32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hivec3_methods,             /* tp_methods */
 	hivec3_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -2968,6 +3067,11 @@ static PyMemberDef hivec4_members[] = {
 	{ (char*)"y", T_INT, offsetof(UNBRACKET(vec<4, glm::i32>), super_type.y), 0, (char*)"ivec4.y" },
 	{ (char*)"z", T_INT, offsetof(UNBRACKET(vec<4, glm::i32>), super_type.z), 0, (char*)"ivec4.z" },
 	{ (char*)"w", T_INT, offsetof(UNBRACKET(vec<4, glm::i32>), super_type.w), 0, (char*)"ivec4.w" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hivec4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec4BufferMethods = {
@@ -3051,7 +3155,7 @@ static PyTypeObject hivec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<4, glm::i32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hivec4_methods,             /* tp_methods */
 	hivec4_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -3107,6 +3211,11 @@ static PyTypeObject hivec4IterType = {
 #pragma region int64
 static PyMemberDef hi64vec1_members[] = {
 	{ (char*)"x", T_LONGLONG, offsetof(UNBRACKET(vec<1, glm::i64>), super_type.x), 0, (char*)"i64vec1.x" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi64vec1_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec1BufferMethods = {
@@ -3190,7 +3299,7 @@ static PyTypeObject hi64vec1Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<1, glm::i64>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi64vec1_methods,             /* tp_methods */
 	hi64vec1_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -3246,6 +3355,11 @@ static PyTypeObject hi64vec1IterType = {
 static PyMemberDef hi64vec2_members[] = {
 	{ (char*)"x", T_LONGLONG, offsetof(UNBRACKET(vec<2, glm::i64>), super_type.x), 0, (char*)"i64vec2.x" },
 	{ (char*)"y", T_LONGLONG, offsetof(UNBRACKET(vec<2, glm::i64>), super_type.y), 0, (char*)"i64vec2.y" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi64vec2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec2BufferMethods = {
@@ -3329,7 +3443,7 @@ static PyTypeObject hi64vec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<2, glm::i64>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi64vec2_methods,             /* tp_methods */
 	hi64vec2_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -3386,6 +3500,11 @@ static PyMemberDef hi64vec3_members[] = {
 	{ (char*)"x", T_LONGLONG, offsetof(UNBRACKET(vec<3, glm::i64>), super_type.x), 0, (char*)"i64vec3.x" },
 	{ (char*)"y", T_LONGLONG, offsetof(UNBRACKET(vec<3, glm::i64>), super_type.y), 0, (char*)"i64vec3.y" },
 	{ (char*)"z", T_LONGLONG, offsetof(UNBRACKET(vec<3, glm::i64>), super_type.z), 0, (char*)"i64vec3.z" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi64vec3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec3BufferMethods = {
@@ -3469,7 +3588,7 @@ static PyTypeObject hi64vec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<3, glm::i64>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi64vec3_methods,             /* tp_methods */
 	hi64vec3_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -3527,6 +3646,11 @@ static PyMemberDef hi64vec4_members[] = {
 	{ (char*)"y", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.y), 0, (char*)"i64vec4.y" },
 	{ (char*)"z", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.z), 0, (char*)"i64vec4.z" },
 	{ (char*)"w", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.w), 0, (char*)"i64vec4.w" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hi64vec4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec4BufferMethods = {
@@ -3610,7 +3734,7 @@ static PyTypeObject hi64vec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<4, glm::i64>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hi64vec4_methods,             /* tp_methods */
 	hi64vec4_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -3666,6 +3790,11 @@ static PyTypeObject hi64vec4IterType = {
 #pragma region uint8
 static PyMemberDef hu8vec1_members[] = {
 	{ (char*)"x", T_UBYTE, offsetof(UNBRACKET(vec<1, glm::u8>), super_type.x), 0, (char*)"u8vec1.x" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu8vec1_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec1BufferMethods = {
@@ -3749,7 +3878,7 @@ static PyTypeObject hu8vec1Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<1, glm::u8>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu8vec1_methods,             /* tp_methods */
 	hu8vec1_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -3805,6 +3934,11 @@ static PyTypeObject hu8vec1IterType = {
 static PyMemberDef hu8vec2_members[] = {
 	{ (char*)"x", T_UBYTE, offsetof(UNBRACKET(vec<2, glm::u8>), super_type.x), 0, (char*)"u8vec2.x" },
 	{ (char*)"y", T_UBYTE, offsetof(UNBRACKET(vec<2, glm::u8>), super_type.y), 0, (char*)"u8vec2.y" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu8vec2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec2BufferMethods = {
@@ -3888,7 +4022,7 @@ static PyTypeObject hu8vec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<2, glm::u8>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu8vec2_methods,             /* tp_methods */
 	hu8vec2_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -3945,6 +4079,11 @@ static PyMemberDef hu8vec3_members[] = {
 	{ (char*)"x", T_UBYTE, offsetof(UNBRACKET(vec<3, glm::u8>), super_type.x), 0, (char*)"u8vec3.x" },
 	{ (char*)"y", T_UBYTE, offsetof(UNBRACKET(vec<3, glm::u8>), super_type.y), 0, (char*)"u8vec3.y" },
 	{ (char*)"z", T_UBYTE, offsetof(UNBRACKET(vec<3, glm::u8>), super_type.z), 0, (char*)"u8vec3.z" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu8vec3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec3BufferMethods = {
@@ -4028,7 +4167,7 @@ static PyTypeObject hu8vec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<3, glm::u8>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu8vec3_methods,             /* tp_methods */
 	hu8vec3_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -4086,6 +4225,11 @@ static PyMemberDef hu8vec4_members[] = {
 	{ (char*)"y", T_UBYTE, offsetof(UNBRACKET(vec<4, glm::u8>), super_type.y), 0, (char*)"u8vec4.y" },
 	{ (char*)"z", T_UBYTE, offsetof(UNBRACKET(vec<4, glm::u8>), super_type.z), 0, (char*)"u8vec4.z" },
 	{ (char*)"w", T_UBYTE, offsetof(UNBRACKET(vec<4, glm::u8>), super_type.w), 0, (char*)"u8vec4.w" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu8vec4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec4BufferMethods = {
@@ -4169,7 +4313,7 @@ static PyTypeObject hu8vec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<4, glm::u8>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu8vec4_methods,             /* tp_methods */
 	hu8vec4_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -4225,6 +4369,11 @@ static PyTypeObject hu8vec4IterType = {
 #pragma region uint16
 static PyMemberDef hu16vec1_members[] = {
 	{ (char*)"x", T_USHORT, offsetof(UNBRACKET(vec<1, glm::u16>), super_type.x), 0, (char*)"u16vec1.x" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu16vec1_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec1BufferMethods = {
@@ -4308,7 +4457,7 @@ static PyTypeObject hu16vec1Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<1, glm::u16>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu16vec1_methods,             /* tp_methods */
 	hu16vec1_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -4364,6 +4513,11 @@ static PyTypeObject hu16vec1IterType = {
 static PyMemberDef hu16vec2_members[] = {
 	{ (char*)"x", T_USHORT, offsetof(UNBRACKET(vec<2, glm::u16>), super_type.x), 0, (char*)"u16vec2.x" },
 	{ (char*)"y", T_USHORT, offsetof(UNBRACKET(vec<2, glm::u16>), super_type.y), 0, (char*)"u16vec2.y" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu16vec2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec2BufferMethods = {
@@ -4447,7 +4601,7 @@ static PyTypeObject hu16vec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<2, glm::u16>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu16vec2_methods,             /* tp_methods */
 	hu16vec2_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -4504,6 +4658,11 @@ static PyMemberDef hu16vec3_members[] = {
 	{ (char*)"x", T_USHORT, offsetof(UNBRACKET(vec<3, glm::u16>), super_type.x), 0, (char*)"u16vec3.x" },
 	{ (char*)"y", T_USHORT, offsetof(UNBRACKET(vec<3, glm::u16>), super_type.y), 0, (char*)"u16vec3.y" },
 	{ (char*)"z", T_USHORT, offsetof(UNBRACKET(vec<3, glm::u16>), super_type.z), 0, (char*)"u16vec3.z" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu16vec3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec3BufferMethods = {
@@ -4587,7 +4746,7 @@ static PyTypeObject hu16vec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<3, glm::u16>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu16vec3_methods,             /* tp_methods */
 	hu16vec3_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -4645,6 +4804,11 @@ static PyMemberDef hu16vec4_members[] = {
 	{ (char*)"y", T_USHORT, offsetof(UNBRACKET(vec<4, glm::u16>), super_type.y), 0, (char*)"u16vec4.y" },
 	{ (char*)"z", T_USHORT, offsetof(UNBRACKET(vec<4, glm::u16>), super_type.z), 0, (char*)"u16vec4.z" },
 	{ (char*)"w", T_USHORT, offsetof(UNBRACKET(vec<4, glm::u16>), super_type.w), 0, (char*)"u16vec4.w" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu16vec4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec4BufferMethods = {
@@ -4728,7 +4892,7 @@ static PyTypeObject hu16vec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<4, glm::u16>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu16vec4_methods,             /* tp_methods */
 	hu16vec4_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -4784,6 +4948,11 @@ static PyTypeObject hu16vec4IterType = {
 #pragma region uint32
 static PyMemberDef huvec1_members[] = {
 	{ (char*)"x", T_UINT, offsetof(UNBRACKET(vec<1, glm::u32>), super_type.x), 0, (char*)"uvec1.x" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef huvec1_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec1BufferMethods = {
@@ -4867,7 +5036,7 @@ static PyTypeObject huvec1Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<1, glm::u32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	huvec1_methods,             /* tp_methods */
 	huvec1_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -4923,6 +5092,11 @@ static PyTypeObject huvec1IterType = {
 static PyMemberDef huvec2_members[] = {
 	{ (char*)"x", T_UINT, offsetof(UNBRACKET(vec<2, glm::u32>), super_type.x), 0, (char*)"uvec2.x" },
 	{ (char*)"y", T_UINT, offsetof(UNBRACKET(vec<2, glm::u32>), super_type.y), 0, (char*)"uvec2.y" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef huvec2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec2BufferMethods = {
@@ -5006,7 +5180,7 @@ static PyTypeObject huvec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<2, glm::u32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	huvec2_methods,             /* tp_methods */
 	huvec2_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -5063,6 +5237,11 @@ static PyMemberDef huvec3_members[] = {
 	{ (char*)"x", T_UINT, offsetof(UNBRACKET(vec<3, glm::u32>), super_type.x), 0, (char*)"uvec3.x" },
 	{ (char*)"y", T_UINT, offsetof(UNBRACKET(vec<3, glm::u32>), super_type.y), 0, (char*)"uvec3.y" },
 	{ (char*)"z", T_UINT, offsetof(UNBRACKET(vec<3, glm::u32>), super_type.z), 0, (char*)"uvec3.z" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef huvec3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec3BufferMethods = {
@@ -5146,7 +5325,7 @@ static PyTypeObject huvec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<3, glm::u32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	huvec3_methods,             /* tp_methods */
 	huvec3_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -5204,6 +5383,11 @@ static PyMemberDef huvec4_members[] = {
 	{ (char*)"y", T_UINT, offsetof(UNBRACKET(vec<4, glm::u32>), super_type.y), 0, (char*)"uvec4.y" },
 	{ (char*)"z", T_UINT, offsetof(UNBRACKET(vec<4, glm::u32>), super_type.z), 0, (char*)"uvec4.z" },
 	{ (char*)"w", T_UINT, offsetof(UNBRACKET(vec<4, glm::u32>), super_type.w), 0, (char*)"uvec4.w" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef huvec4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec4BufferMethods = {
@@ -5287,7 +5471,7 @@ static PyTypeObject huvec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<4, glm::u32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	huvec4_methods,             /* tp_methods */
 	huvec4_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -5343,6 +5527,11 @@ static PyTypeObject huvec4IterType = {
 #pragma region uint64
 static PyMemberDef hu64vec1_members[] = {
 	{ (char*)"x", T_ULONGLONG, offsetof(UNBRACKET(vec<1, glm::u64>), super_type.x), 0, (char*)"u64vec1.x" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu64vec1_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec1BufferMethods = {
@@ -5426,7 +5615,7 @@ static PyTypeObject hu64vec1Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<1, glm::u64>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu64vec1_methods,             /* tp_methods */
 	hu64vec1_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -5482,6 +5671,11 @@ static PyTypeObject hu64vec1IterType = {
 static PyMemberDef hu64vec2_members[] = {
 	{ (char*)"x", T_ULONGLONG, offsetof(UNBRACKET(vec<2, glm::u64>), super_type.x), 0, (char*)"u64vec2.x" },
 	{ (char*)"y", T_ULONGLONG, offsetof(UNBRACKET(vec<2, glm::u64>), super_type.y), 0, (char*)"u64vec2.y" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu64vec2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec2BufferMethods = {
@@ -5565,7 +5759,7 @@ static PyTypeObject hu64vec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<2, glm::u64>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu64vec2_methods,             /* tp_methods */
 	hu64vec2_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -5622,6 +5816,11 @@ static PyMemberDef hu64vec3_members[] = {
 	{ (char*)"x", T_ULONGLONG, offsetof(UNBRACKET(vec<3, glm::u64>), super_type.x), 0, (char*)"u64vec3.x" },
 	{ (char*)"y", T_ULONGLONG, offsetof(UNBRACKET(vec<3, glm::u64>), super_type.y), 0, (char*)"u64vec3.y" },
 	{ (char*)"z", T_ULONGLONG, offsetof(UNBRACKET(vec<3, glm::u64>), super_type.z), 0, (char*)"u64vec3.z" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu64vec3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec3BufferMethods = {
@@ -5705,7 +5904,7 @@ static PyTypeObject hu64vec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<3, glm::u64>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu64vec3_methods,             /* tp_methods */
 	hu64vec3_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -5763,6 +5962,11 @@ static PyMemberDef hu64vec4_members[] = {
 	{ (char*)"y", T_ULONGLONG, offsetof(UNBRACKET(vec<4, glm::u64>), super_type.y), 0, (char*)"u64vec4.y" },
 	{ (char*)"z", T_ULONGLONG, offsetof(UNBRACKET(vec<4, glm::u64>), super_type.z), 0, (char*)"u64vec4.z" },
 	{ (char*)"w", T_ULONGLONG, offsetof(UNBRACKET(vec<4, glm::u64>), super_type.w), 0, (char*)"u64vec4.w" },
+	{ NULL }  /* Sentinel */
+};
+static PyMethodDef hu64vec4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec4BufferMethods = {
@@ -5846,7 +6050,7 @@ static PyTypeObject hu64vec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<4, glm::u64>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hu64vec4_methods,             /* tp_methods */
 	hu64vec4_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -5904,6 +6108,11 @@ static PyMemberDef hbvec1_members[] = {
 	{ (char*)"x", T_BOOL, offsetof(UNBRACKET(vec<1, bool>), super_type.x), 0, (char*)"bvec1.x" },
 	{ NULL }  /* Sentinel */
 };
+static PyMethodDef hbvec1_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs hbvec1BufferMethods = {
 	(getbufferproc)vec_getbuffer<1, bool>,
 	(releasebufferproc)vec_releasebuffer,
@@ -5949,7 +6158,7 @@ static PyTypeObject hbvec1Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<1, bool>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hbvec1_methods,             /* tp_methods */
 	hbvec1_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -6007,6 +6216,11 @@ static PyMemberDef hbvec2_members[] = {
 	{ (char*)"y", T_BOOL, offsetof(UNBRACKET(vec<2, bool>), super_type.y), 0, (char*)"bvec2.y" },
 	{ NULL }  /* Sentinel */
 };
+static PyMethodDef hbvec2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs hbvec2BufferMethods = {
 	(getbufferproc)vec_getbuffer<2, bool>,
 	(releasebufferproc)vec_releasebuffer,
@@ -6052,7 +6266,7 @@ static PyTypeObject hbvec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<2, bool>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hbvec2_methods,             /* tp_methods */
 	hbvec2_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -6111,6 +6325,11 @@ static PyMemberDef hbvec3_members[] = {
 	{ (char*)"z", T_BOOL, offsetof(UNBRACKET(vec<3, bool>), super_type.z), 0, (char*)"bvec3.z" },
 	{ NULL }  /* Sentinel */
 };
+static PyMethodDef hbvec3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs hbvec3BufferMethods = {
 	(getbufferproc)vec_getbuffer<3, bool>,
 	(releasebufferproc)vec_releasebuffer,
@@ -6156,7 +6375,7 @@ static PyTypeObject hbvec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<3, bool>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hbvec3_methods,             /* tp_methods */
 	hbvec3_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -6216,6 +6435,11 @@ static PyMemberDef hbvec4_members[] = {
 	{ (char*)"w", T_BOOL, offsetof(UNBRACKET(vec<4, bool>), super_type.w), 0, (char*)"bvec4.w" },
 	{ NULL }  /* Sentinel */
 };
+static PyMethodDef hbvec4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs hbvec4BufferMethods = {
 	(getbufferproc)vec_getbuffer<4, bool>,
 	(releasebufferproc)vec_releasebuffer,
@@ -6261,7 +6485,7 @@ static PyTypeObject hbvec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)vec_geniter<4, bool>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hbvec4_methods,             /* tp_methods */
 	hbvec4_members,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -6398,6 +6622,12 @@ static PyObject * mvec_idiv(mvec<L, T>* self, PyObject *obj);
 
 static void mvec_dealloc(PyObject* self);
 
+template<int L, typename T>
+static PyObject* mvec_copy(PyObject* self, PyObject*);
+
+template<int L, typename T>
+static PyObject* mvec_deepcopy(PyObject* self, PyObject* memo);
+
 template<typename T>
 static PyObject* mvec2_str(mvec<2, T>* self);
 template<typename T>
@@ -6435,6 +6665,11 @@ template<int L, typename T>
 static PyObject* mvecIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
 
 #pragma region float
+static PyMethodDef hfmvec2_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<2, float>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<2, float>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs hfmvec2BufferMethods = {
 	(getbufferproc)mvec_getbuffer<2, float>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -6516,7 +6751,7 @@ static PyTypeObject hfmvec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<2, float>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hfmvec2_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -6569,6 +6804,11 @@ static PyTypeObject hfmvec2IterType = {
 	(newfunc)mvecIter_new<2, float>,                 /* tp_new */
 };
 
+static PyMethodDef hfmvec3_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<3, float>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<3, float>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs hfmvec3BufferMethods = {
 	(getbufferproc)mvec_getbuffer<3, float>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -6650,7 +6890,7 @@ static PyTypeObject hfmvec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<3, float>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hfmvec3_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -6703,6 +6943,11 @@ static PyTypeObject hfmvec3IterType = {
 	(newfunc)mvecIter_new<3, float>,                 /* tp_new */
 };
 
+static PyMethodDef hfmvec4_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<4, float>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<4, float>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs hfmvec4BufferMethods = {
 	(getbufferproc)mvec_getbuffer<4, float>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -6784,7 +7029,7 @@ static PyTypeObject hfmvec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<4, float>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hfmvec4_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -6838,6 +7083,11 @@ static PyTypeObject hfmvec4IterType = {
 };
 #pragma endregion
 #pragma region double
+static PyMethodDef hdmvec2_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<2, double>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<2, double>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs hdmvec2BufferMethods = {
 	(getbufferproc)mvec_getbuffer<2, double>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -6919,7 +7169,7 @@ static PyTypeObject hdmvec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<2, double>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hdmvec2_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -6972,6 +7222,11 @@ static PyTypeObject hdmvec2IterType = {
 	(newfunc)mvecIter_new<2, double>,                 /* tp_new */
 };
 
+static PyMethodDef hdmvec3_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<3, double>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<3, double>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs hdmvec3BufferMethods = {
 	(getbufferproc)mvec_getbuffer<3, double>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -7053,7 +7308,7 @@ static PyTypeObject hdmvec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<3, double>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hdmvec3_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -7106,6 +7361,11 @@ static PyTypeObject hdmvec3IterType = {
 	(newfunc)mvecIter_new<3, double>,                 /* tp_new */
 };
 
+static PyMethodDef hdmvec4_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<4, double>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<4, double>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs hdmvec4BufferMethods = {
 	(getbufferproc)mvec_getbuffer<4, double>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -7187,7 +7447,7 @@ static PyTypeObject hdmvec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<4, double>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	hdmvec4_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -7241,6 +7501,11 @@ static PyTypeObject hdmvec4IterType = {
 };
 #pragma endregion
 #pragma region int32
+static PyMethodDef himvec2_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<2, glm::i32>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<2, glm::i32>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs himvec2BufferMethods = {
 	(getbufferproc)mvec_getbuffer<2, glm::i32>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -7322,7 +7587,7 @@ static PyTypeObject himvec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<2, glm::i32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	himvec2_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -7375,6 +7640,11 @@ static PyTypeObject himvec2IterType = {
 	(newfunc)mvecIter_new<2, glm::i32>,                 /* tp_new */
 };
 
+static PyMethodDef himvec3_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<3, glm::i32>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<3, glm::i32>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs himvec3BufferMethods = {
 	(getbufferproc)mvec_getbuffer<3, glm::i32>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -7456,7 +7726,7 @@ static PyTypeObject himvec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<3, glm::i32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	himvec3_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -7509,6 +7779,11 @@ static PyTypeObject himvec3IterType = {
 	(newfunc)mvecIter_new<3, glm::i32>,                 /* tp_new */
 };
 
+static PyMethodDef himvec4_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<4, glm::i32>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<4, glm::i32>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs himvec4BufferMethods = {
 	(getbufferproc)mvec_getbuffer<4, glm::i32>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -7590,7 +7865,7 @@ static PyTypeObject himvec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<4, glm::i32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	himvec4_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -7644,6 +7919,11 @@ static PyTypeObject himvec4IterType = {
 };
 #pragma endregion
 #pragma region uint32
+static PyMethodDef humvec2_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<2, glm::u32>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<2, glm::u32>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs humvec2BufferMethods = {
 	(getbufferproc)mvec_getbuffer<2, glm::u32>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -7725,7 +8005,7 @@ static PyTypeObject humvec2Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<2, glm::u32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	humvec2_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -7778,6 +8058,11 @@ static PyTypeObject humvec2IterType = {
 	(newfunc)mvecIter_new<2, glm::u32>,                 /* tp_new */
 };
 
+static PyMethodDef humvec3_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<3, glm::u32>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<3, glm::u32>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs humvec3BufferMethods = {
 	(getbufferproc)mvec_getbuffer<3, glm::u32>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -7859,7 +8144,7 @@ static PyTypeObject humvec3Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<3, glm::u32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	humvec3_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -7912,6 +8197,11 @@ static PyTypeObject humvec3IterType = {
 	(newfunc)mvecIter_new<3, glm::u32>,                 /* tp_new */
 };
 
+static PyMethodDef humvec4_methods[] = {
+	{ "__copy__", (PyCFunction)mvec_copy<4, glm::u32>, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<4, glm::u32>, METH_O, "Create a (deep)copy of this instance"},
+	{ NULL }  /* Sentinel */
+};
 static PyBufferProcs humvec4BufferMethods = {
 	(getbufferproc)mvec_getbuffer<4, glm::u32>,
 	(releasebufferproc)mvec_releasebuffer,
@@ -7993,7 +8283,7 @@ static PyTypeObject humvec4Type = {
 	0,                         /* tp_weaklistoffset */
 	(getiterfunc)mvec_geniter<4, glm::u32>,                         /* tp_iter */
 	0,                         /* tp_iternext */
-	0,             /* tp_methods */
+	humvec4_methods,             /* tp_methods */
 	0,             /* tp_members */
 	0,           			/* tp_getset */
 	0,                         /* tp_base */
@@ -8230,6 +8520,8 @@ static PyObject* matIter_new(PyTypeObject *type, PyObject *args, PyObject *kwarg
 
 #pragma region float
 static PyMethodDef hfmat2x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x2"},
 	{ NULL }
 };
@@ -8373,6 +8665,8 @@ static PyTypeObject hfmat2x2IterType = {
 };
 
 static PyMethodDef hfmat2x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x3"},
 	{ NULL }
 };
@@ -8516,6 +8810,8 @@ static PyTypeObject hfmat2x3IterType = {
 };
 
 static PyMethodDef hfmat2x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x4"},
 	{ NULL }
 };
@@ -8659,6 +8955,8 @@ static PyTypeObject hfmat2x4IterType = {
 };
 
 static PyMethodDef hfmat3x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x2"},
 	{ NULL }
 };
@@ -8802,6 +9100,8 @@ static PyTypeObject hfmat3x2IterType = {
 };
 
 static PyMethodDef hfmat3x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x3"},
 	{ NULL }
 };
@@ -8945,6 +9245,8 @@ static PyTypeObject hfmat3x3IterType = {
 };
 
 static PyMethodDef hfmat3x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x4"},
 	{ NULL }
 };
@@ -9088,6 +9390,8 @@ static PyTypeObject hfmat3x4IterType = {
 };
 
 static PyMethodDef hfmat4x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x2"},
 	{ NULL }
 };
@@ -9231,6 +9535,8 @@ static PyTypeObject hfmat4x2IterType = {
 };
 
 static PyMethodDef hfmat4x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x3"},
 	{ NULL }
 };
@@ -9374,6 +9680,8 @@ static PyTypeObject hfmat4x3IterType = {
 };
 
 static PyMethodDef hfmat4x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x4"},
 	{ NULL }
 };
@@ -9518,6 +9826,8 @@ static PyTypeObject hfmat4x4IterType = {
 #pragma endregion
 #pragma region double
 static PyMethodDef hdmat2x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::dmat2x2"},
 	{ NULL }
 };
@@ -9661,6 +9971,8 @@ static PyTypeObject hdmat2x2IterType = {
 };
 
 static PyMethodDef hdmat2x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::dmat2x3"},
 	{ NULL }
 };
@@ -9804,6 +10116,8 @@ static PyTypeObject hdmat2x3IterType = {
 };
 
 static PyMethodDef hdmat2x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::dmat2x4"},
 	{ NULL }
 };
@@ -9947,6 +10261,8 @@ static PyTypeObject hdmat2x4IterType = {
 };
 
 static PyMethodDef hdmat3x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::dmat3x2"},
 	{ NULL }
 };
@@ -10090,6 +10406,8 @@ static PyTypeObject hdmat3x2IterType = {
 };
 
 static PyMethodDef hdmat3x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::dmat3x3"},
 	{ NULL }
 };
@@ -10233,6 +10551,8 @@ static PyTypeObject hdmat3x3IterType = {
 };
 
 static PyMethodDef hdmat3x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::dmat3x4"},
 	{ NULL }
 };
@@ -10376,6 +10696,8 @@ static PyTypeObject hdmat3x4IterType = {
 };
 
 static PyMethodDef hdmat4x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::dmat4x2"},
 	{ NULL }
 };
@@ -10519,6 +10841,8 @@ static PyTypeObject hdmat4x2IterType = {
 };
 
 static PyMethodDef hdmat4x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::dmat4x3"},
 	{ NULL }
 };
@@ -10662,6 +10986,8 @@ static PyTypeObject hdmat4x3IterType = {
 };
 
 static PyMethodDef hdmat4x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::dmat4x4"},
 	{ NULL }
 };
@@ -10806,6 +11132,8 @@ static PyTypeObject hdmat4x4IterType = {
 #pragma endregion
 #pragma region i32
 static PyMethodDef himat2x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::imat2x2"},
 	{ NULL }
 };
@@ -10949,6 +11277,8 @@ static PyTypeObject himat2x2IterType = {
 };
 
 static PyMethodDef himat2x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::imat2x3"},
 	{ NULL }
 };
@@ -11092,6 +11422,8 @@ static PyTypeObject himat2x3IterType = {
 };
 
 static PyMethodDef himat2x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::imat2x4"},
 	{ NULL }
 };
@@ -11235,6 +11567,8 @@ static PyTypeObject himat2x4IterType = {
 };
 
 static PyMethodDef himat3x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::imat3x2"},
 	{ NULL }
 };
@@ -11378,6 +11712,8 @@ static PyTypeObject himat3x2IterType = {
 };
 
 static PyMethodDef himat3x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::imat3x3"},
 	{ NULL }
 };
@@ -11521,6 +11857,8 @@ static PyTypeObject himat3x3IterType = {
 };
 
 static PyMethodDef himat3x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::imat3x4"},
 	{ NULL }
 };
@@ -11664,6 +12002,8 @@ static PyTypeObject himat3x4IterType = {
 };
 
 static PyMethodDef himat4x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::imat4x2"},
 	{ NULL }
 };
@@ -11807,6 +12147,8 @@ static PyTypeObject himat4x2IterType = {
 };
 
 static PyMethodDef himat4x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::imat4x3"},
 	{ NULL }
 };
@@ -11950,6 +12292,8 @@ static PyTypeObject himat4x3IterType = {
 };
 
 static PyMethodDef himat4x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::imat4x4"},
 	{ NULL }
 };
@@ -12094,6 +12438,8 @@ static PyTypeObject himat4x4IterType = {
 #pragma endregion
 #pragma region u32
 static PyMethodDef humat2x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::umat2x2"},
 	{ NULL }
 };
@@ -12237,6 +12583,8 @@ static PyTypeObject humat2x2IterType = {
 };
 
 static PyMethodDef humat2x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::umat2x3"},
 	{ NULL }
 };
@@ -12380,6 +12728,8 @@ static PyTypeObject humat2x3IterType = {
 };
 
 static PyMethodDef humat2x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::umat2x4"},
 	{ NULL }
 };
@@ -12523,6 +12873,8 @@ static PyTypeObject humat2x4IterType = {
 };
 
 static PyMethodDef humat3x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::umat3x2"},
 	{ NULL }
 };
@@ -12666,6 +13018,8 @@ static PyTypeObject humat3x2IterType = {
 };
 
 static PyMethodDef humat3x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::umat3x3"},
 	{ NULL }
 };
@@ -12809,6 +13163,8 @@ static PyTypeObject humat3x3IterType = {
 };
 
 static PyMethodDef humat3x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::umat3x4"},
 	{ NULL }
 };
@@ -12952,6 +13308,8 @@ static PyTypeObject humat3x4IterType = {
 };
 
 static PyMethodDef humat4x2_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::umat4x2"},
 	{ NULL }
 };
@@ -13095,6 +13453,8 @@ static PyTypeObject humat4x2IterType = {
 };
 
 static PyMethodDef humat4x3_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::umat4x3"},
 	{ NULL }
 };
@@ -13238,6 +13598,8 @@ static PyTypeObject humat4x3IterType = {
 };
 
 static PyMethodDef humat4x4_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::umat4x4"},
 	{ NULL }
 };
@@ -13461,6 +13823,8 @@ static PyObject* quaIter_new(PyTypeObject *type, PyObject *args, PyObject *kwarg
 
 #pragma region float
 static PyMethodDef hfqua_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)qua_length, METH_NOARGS, "returns the length of glm::quat"},
 	{ NULL }
 };
@@ -13608,6 +13972,8 @@ static PyTypeObject hfquaIterType = {
 #pragma endregion
 #pragma region double
 static PyMethodDef hdqua_methods[] = {
+	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
+	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)qua_length, METH_NOARGS, "returns the length of glm::dquat"},
 	{ NULL }
 };
@@ -16567,6 +16933,33 @@ void
 vec_releasebuffer(PyObject*, Py_buffer* view) {
 	free(view->shape);
 }
+
+static PyObject*
+generic_copy(PyObject* self, PyObject*) {
+	return PyObject_Call((PyObject*)(self->ob_type), PyTuple_Pack(1, self), NULL);
+}
+
+static PyObject*
+generic_deepcopy(PyObject* self, PyObject* memo) {
+	PyObject* copy = generic_copy(self, NULL);
+	PyDict_SetItem(memo, PyLong_FromVoidPtr((void*)self), copy);
+	return copy;
+}
+
+template<int L, typename T>
+static PyObject*
+mvec_copy(PyObject* self, PyObject*) {
+	return pack_vec(*((mvec<L, T>*)self)->super_type);
+}
+
+template<int L, typename T>
+static PyObject*
+mvec_deepcopy(PyObject* self, PyObject* memo) {
+	PyObject* copy = mvec_copy<L, T>(self, NULL);
+	PyDict_SetItem(memo, PyLong_FromVoidPtr((void*)self), copy);
+	return copy;
+}
+
 #pragma endregion 
 
 // type mvec
