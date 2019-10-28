@@ -1,4 +1,4 @@
-import glm, sys, random, time
+import glm, sys, random, time, copy
 
 glm.silence(0)
 
@@ -460,6 +460,12 @@ for obj in gen_obj("V_M_Q"):
 for type_ in vector_types + matrix_types + quat_types:
     fassert(type_, (fassert(bytes, (type_(),)),))
 #/buffer protocol #
+
+# copy module #
+for args in gen_args("V_M_Q"):
+    fassert(copy.copy, args)
+    fassert(copy.deepcopy, args)
+#/copy module #
 
 ## DETAIL ##
 
