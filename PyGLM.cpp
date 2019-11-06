@@ -1,4 +1,4 @@
-#define PyGLM_VERSION "1.1.0"
+#define PyGLM_VERSION "1.1.1"
 
 #define PyGLM_NO_FUNCTIONS 1
 #define PyGLM_NO_ITER_TYPECHECKING 2
@@ -15276,7 +15276,9 @@ static bool PyGLM_Vecb_Check(int L, PyObject* o) {
 	return true;
 }
 
-#define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_VEC && PyGLM_VEC_SHAPE_CHECK(o, L))) && ((PyGLM_Vecb_Check<T>(L, (PyObject*)o)) || (PyGLM_Veci_Check(L, o)))))
+#define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && (PyGLM_Vecb_Check<T>(L, (PyObject*)o))))
+
+#define PyGLM_Vec_Check_IgnoreType(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_VEC && PyGLM_VEC_SHAPE_CHECK(o, L))) && ((PyGLM_Vecb_Check<T>(L, (PyObject*)o)) || (PyGLM_Veci_Check(L, o)))))
 
 #define PyGLM_Qua_Check(T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_QUA)) && PyGLM_Vecb_Check<T>(4, (PyObject*)o)))
 
@@ -15284,6 +15286,8 @@ static bool PyGLM_Vecb_Check(int L, PyObject* o) {
 
 #else
 #define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>())
+
+#define PyGLM_Vec_Check_IgnoreType PyGLM_Vec_Check
 
 #define PyGLM_Qua_Check(T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())))
 
@@ -15709,19 +15713,19 @@ vec1_init(vec<1, T> *self, PyObject *args, PyObject *kwds)
 			self->super_type = glm::vec<1, T>(PyGLM_Number_FromPyObject<T>(arg));
 			return 0;
 		}
-		if (PyGLM_Vec_Check(1, T, arg)) {
+		if (PyGLM_Vec_Check_IgnoreType(1, T, arg)) {
 			self->super_type = unpack_vec<1, T>(arg);
 			return 0;
 		}
-		if (PyGLM_Vec_Check(2, T, arg)) {
+		if (PyGLM_Vec_Check_IgnoreType(2, T, arg)) {
 			self->super_type = unpack_vec<2, T>(arg);
 			return 0;
 		}
-		if (PyGLM_Vec_Check(3, T, arg)) {
+		if (PyGLM_Vec_Check_IgnoreType(3, T, arg)) {
 			self->super_type = unpack_vec<3, T>(arg);
 			return 0;
 		}
-		if (PyGLM_Vec_Check(4, T, arg)) {
+		if (PyGLM_Vec_Check_IgnoreType(4, T, arg)) {
 			self->super_type = unpack_vec<4, T>(arg);
 			return 0;
 		}
@@ -15752,15 +15756,15 @@ vec2_init(vec<2, T> *self, PyObject *args, PyObject *kwds)
 				return 0;
 			}
 
-			if (PyGLM_Vec_Check(2, T, arg1)) {
+			if (PyGLM_Vec_Check_IgnoreType(2, T, arg1)) {
 				self->super_type = unpack_vec<2, T>(arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_Check(3, T, arg1)) {
+			if (PyGLM_Vec_Check_IgnoreType(3, T, arg1)) {
 				self->super_type = unpack_vec<3, T>(arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_Check(4, T, arg1)) {
+			if (PyGLM_Vec_Check_IgnoreType(4, T, arg1)) {
 				self->super_type = unpack_vec<4, T>(arg1);
 				return 0;
 			}
@@ -15797,11 +15801,11 @@ vec3_init(vec<3, T> *self, PyObject *args, PyObject *kwds)
 				return 0;
 			}
 
-			if (PyGLM_Vec_Check(3, T, arg1)) {
+			if (PyGLM_Vec_Check_IgnoreType(3, T, arg1)) {
 				self->super_type = unpack_vec<3, T>(arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_Check(4, T, arg1)) {
+			if (PyGLM_Vec_Check_IgnoreType(4, T, arg1)) {
 				self->super_type = unpack_vec<4, T>(arg1);
 				return 0;
 			}
@@ -35678,7 +35682,10 @@ silence(PyObject*, PyObject* arg) {
 
 //static PyObject*
 //test(PyObject* self, PyObject* arg) {
-//	return PyLong_FromLong((long)((shape_helper*)arg)->shape);
+//	if (PyGLM_Vec_Check(3, double, arg)) {
+//		Py_RETURN_TRUE;
+//	}
+//	Py_RETURN_FALSE;
 //}
 //#define HAS_TEST
 //#define TEST_FUNC_TYPE METH_O

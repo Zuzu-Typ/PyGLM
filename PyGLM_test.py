@@ -928,6 +928,10 @@ for args in gen_args("V__S"):
 
 # random #
 for args in gen_args("NN_VV__fFiqsuIQSU"):
+    comp = args[0] > args[1]
+    if type(comp) != bool: comp = any(comp)
+    if len(args) == 2 and comp:
+        args = (args[1], args[0])
     fassert(glm.linearRand, args)
     fassert(glm.gaussRand, args)
 
@@ -997,7 +1001,7 @@ for T_id in quat_type_ids:
 #/type_ptr #
 
 # ulp #
-for args in gen_args("#uN_V_NNi_VNi_VVi_fF"):
+for args in gen_args("#uN_V_NNi_VNi_VVi__fF"):
     fassert(glm.next_float, args)
     fassert(glm.prev_float, args)
 
