@@ -15819,7 +15819,7 @@ vec3_init(vec<3, T> *self, PyObject *args, PyObject *kwds)
 					PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for vec3()");
 					return -1;
 				}
-				self->super_type = glm::vec3(PyGLM_Number_FromPyObject<T>(arg1), o);
+				self->super_type = glm::vec<3, T>(PyGLM_Number_FromPyObject<T>(arg1), o);
 				return 0;
 			}
 			if (PyGLM_Number_Check(arg2)) {
@@ -15828,14 +15828,14 @@ vec3_init(vec<3, T> *self, PyObject *args, PyObject *kwds)
 					PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for vec3()");
 					return -1;
 				}
-				self->super_type = glm::vec3(o, PyGLM_Number_FromPyObject<T>(arg2));
+				self->super_type = glm::vec<3, T>(o, PyGLM_Number_FromPyObject<T>(arg2));
 				return 0;
 			}
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for vec3()");
 			return -1;
 		}
 		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-			self->super_type = glm::vec3(PyGLM_Number_FromPyObject<T>(arg1), PyGLM_Number_FromPyObject<T>(arg2), PyGLM_Number_FromPyObject<T>(arg3));
+			self->super_type = glm::vec<3, T>(PyGLM_Number_FromPyObject<T>(arg1), PyGLM_Number_FromPyObject<T>(arg2), PyGLM_Number_FromPyObject<T>(arg3));
 			return 0;
 		}
 	}
