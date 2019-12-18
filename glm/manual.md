@@ -25,7 +25,7 @@
 + [2.8. GLM\_FORCE\_INLINE: Force inline](#section2_8)
 + [2.9. GLM\_FORCE\_ALIGNED\_GENTYPES: Force GLM to enable aligned types](#section2_9)
 + [2.10. GLM\_FORCE\_DEFAULT\_ALIGNED\_GENTYPES: Force GLM to use aligned types by default](#section2_10)
-+ [2.11. GLM\_FORCE\_SIMD\_**: Using SIMD optimizations](#section2_11)
++ [2.11. GLM\_FORCE\_INTRINSICS: Using SIMD optimizations](#section2_11)
 + [2.12. GLM\_FORCE\_PRECISION\_**: Default precision](#section2_12)
 + [2.13. GLM\_FORCE\_SINGLE\_ONLY: Removed explicit 64-bits floating point types](#section2_13)
 + [2.14. GLM\_FORCE\_SWIZZLE: Enable swizzle operators](#section2_14)
@@ -70,7 +70,7 @@
 + [4.20. GLM_GTC_vec1](#section4_20)
 + [5. OpenGL interoperability](#section5)
 + [5.1. GLM Replacements for deprecated OpenGL functions](#section5_1)
-+ [5.2. GLM Replacements for GPU functions](#section5_2)
++ [5.2. GLM Replacements for GLU functions](#section5_2)
 + [6. Known issues](#section6)
 + [6.1. Not function](#section6_1)
 + [6.2. Precision qualifiers support](#section6_2)
@@ -319,7 +319,7 @@ The following subsections describe each configurations and defines.
 
 ### <a name="section2_4"></a> 2.4. GLM\_FORCE\_ARCH\_UNKNOWN: Force GLM to no detect the build architecture
 
-`GLM_FORCE_ARCH_UNKNOWN` prevents GLM from detecting the build target architechture.
+`GLM_FORCE_ARCH_UNKNOWN` prevents GLM from detecting the build target architecture.
 
 ### <a name="section2_5"></a> 2.5. GLM\_FORCE\_CXX\_UNKNOWN: Force GLM to no detect the C++ standard
 
@@ -456,10 +456,10 @@ void foo()
 
 *Note: GLM SIMD optimizations require the use of aligned types*
 
-### <a name="section2_11"></a> 2.11. GLM\_FORCE\_SIMD\_**: Using SIMD optimizations
+### <a name="section2_11"></a> 2.11. GLM\_FORCE\_INTRINSICS: Using SIMD optimizations
 
 GLM provides some SIMD optimizations based on [compiler intrinsics](https://msdn.microsoft.com/en-us/library/26td21ds.aspx).
-These optimizations will be automatically thanks to compiler arguments.
+These optimizations will be automatically thanks to compiler arguments when `GLM_FORCE_INTRINSICS` is defined before including GLM files.
 For example, if a program is compiled with Visual Studio using `/arch:AVX`, GLM will detect this argument and generate code using AVX instructions automatically when available.
 
 It’s possible to avoid the instruction set detection by forcing the use of a specific instruction set with one of the fallowing define:
@@ -640,7 +640,7 @@ void foo()
 ### <a name="section2_15"></a> 2.15. GLM\_FORCE\_XYZW\_ONLY: Only exposes x, y, z and w components
 
 Following GLSL specifications, GLM supports three sets of components to access vector types member: x, y, z, w; r, g, b, a; and s, t, p, q.
-Also, this is making vector component very expressive in the code, it may make debugging vector types a little cubersom as the debuggers will typically display three time the values for each compoenents due to the existance of the three sets.
+Also, this is making vector component very expressive in the code, it may make debugging vector types a little cubersom as the debuggers will typically display three time the values for each compoenents due to the existence of the three sets.
 
 To simplify vector types, GLM allows exposing only x, y, z and w components thanks to `GLM_FORCE_XYZW_ONLY` define.
 

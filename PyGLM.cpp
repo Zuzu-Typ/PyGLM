@@ -34689,7 +34689,7 @@ ballRand_(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
-//PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(isPowerOfTwo);
+PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(isPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(ceilPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(floorPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(roundPowerOfTwo);
@@ -36004,7 +36004,7 @@ static PyMethodDef glmmethods[] = {
 	{ "ballRand", (PyCFunction)ballRand_, METH_O, "ballRand(Radius) -> vec3\nGenerate a random 3D vector which coordinates are regulary distributed within the area of a ball of a given radius" },
 
 	// round
-	//{ "isPowerOfTwo", (PyCFunction)isPowerOfTwo_, METH_O, "isPowerOfTwo(v) -> bool or bvecn\nReturn true if the value is a power of two number." },
+	{ "isPowerOfTwo", (PyCFunction)isPowerOfTwo_, METH_O, "isPowerOfTwo(v) -> bool or bvecn\nReturn true if the value is a power of two number." },
 	{ "ceilPowerOfTwo", (PyCFunction)ceilPowerOfTwo_, METH_O, "ceilPowerOfTwo(v) -> float or vecn\nReturn the power of two number which value is just higher the input value,\nround up to a power of two." },
 	{ "floorPowerOfTwo", (PyCFunction)floorPowerOfTwo_, METH_O, "floorPowerOfTwo(v) -> float or vecn\nReturn the power of two number which value is just lower the input value,\nround down to a power of two." },
 	{ "roundPowerOfTwo", (PyCFunction)roundPowerOfTwo_, METH_O, "roundPowerOfTwo(v) -> float or vecn\nReturn the power of two number which value is the closet to the input value." },
