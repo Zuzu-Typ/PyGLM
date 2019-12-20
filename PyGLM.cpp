@@ -1,4 +1,4 @@
-#define PyGLM_VERSION "1.1.2"
+#define PyGLM_VERSION "1.1.3"
 
 #define PyGLM_NO_FUNCTIONS 1
 #define PyGLM_NO_ITER_TYPECHECKING 2
@@ -21117,13 +21117,13 @@ NAME##_(PyObject*, PyObject* args) {\
 	return NULL;\
 }
 
-#define PyGLM_MAKE_GLM_FUNC_NNN_VVV_VNN__tf(NAME)\
+#define PyGLM_MAKE_GLM_FUNC_NNN_VVV_VNN__tfF(NAME)\
 static PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2, *arg3;\
 	PyGLM_Arg_Unpack_3O(args, #NAME, arg1, arg2, arg3);\
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
-		return pack(glm::NAME(PyGLM_Number_FromPyObject<float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
+		return pack(glm::NAME(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));\
 	}\
 	if (PyGLM_Vec_Check(1, float, arg1) && PyGLM_Vec_Check(1, float, arg2) && PyGLM_Vec_Check(1, float, arg3)) {\
 		return pack(glm::NAME(unpack_vec<1, float>(arg1), unpack_vec<1, float>(arg2), unpack_vec<1, float>(arg3)));\
@@ -21148,6 +21148,30 @@ NAME##_(PyObject*, PyObject* args) {\
 	}\
 	if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
 		return pack(glm::NAME(unpack_vec<4, float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Vec_Check(1, double, arg2) && PyGLM_Vec_Check(1, double, arg3)) {\
+		return pack(glm::NAME(unpack_vec<1, double>(arg1), unpack_vec<1, double>(arg2), unpack_vec<1, double>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2) && PyGLM_Vec_Check(2, double, arg3)) {\
+		return pack(glm::NAME(unpack_vec<2, double>(arg1), unpack_vec<2, double>(arg2), unpack_vec<2, double>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2) && PyGLM_Vec_Check(3, double, arg3)) {\
+		return pack(glm::NAME(unpack_vec<3, double>(arg1), unpack_vec<3, double>(arg2), unpack_vec<3, double>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2) && PyGLM_Vec_Check(4, double, arg3)) {\
+		return pack(glm::NAME(unpack_vec<4, double>(arg1), unpack_vec<4, double>(arg2), unpack_vec<4, double>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(1, double, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
+		return pack(glm::NAME(unpack_vec<1, double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
+		return pack(glm::NAME(unpack_vec<2, double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
+		return pack(glm::NAME(unpack_vec<3, double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));\
+	}\
+	if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {\
+		return pack(glm::NAME(unpack_vec<4, double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));\
 	}\
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for " #NAME "()");\
 	return NULL;\
@@ -27484,7 +27508,7 @@ fmax_(PyObject*, PyObject* args) {
 	return NULL;
 }
 
-PyGLM_MAKE_GLM_FUNC_NNN_VVV_VNN__tf(clamp)
+PyGLM_MAKE_GLM_FUNC_NNN_VVV_VNN__tfF(clamp)
 
 static PyObject*
 mix_(PyObject*, PyObject* args) {
@@ -34689,7 +34713,7 @@ ballRand_(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
-//PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(isPowerOfTwo);
+PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(isPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(ceilPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(floorPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(roundPowerOfTwo);
@@ -35682,13 +35706,10 @@ silence(PyObject*, PyObject* arg) {
 
 //static PyObject*
 //test(PyObject* self, PyObject* arg) {
-//	if (PyGLM_Vec_Check(3, double, arg)) {
-//		Py_RETURN_TRUE;
-//	}
-//	Py_RETURN_FALSE;
+//	return PyFloat_FromDouble(glm::clamp(0.1, 0.0, 0.2));
 //}
 //#define HAS_TEST
-//#define TEST_FUNC_TYPE METH_O
+//#define TEST_FUNC_TYPE METH_NOARGS
 
 static PyMethodDef glmmethods[] = {
 	// DETAIL
@@ -36004,7 +36025,7 @@ static PyMethodDef glmmethods[] = {
 	{ "ballRand", (PyCFunction)ballRand_, METH_O, "ballRand(Radius) -> vec3\nGenerate a random 3D vector which coordinates are regulary distributed within the area of a ball of a given radius" },
 
 	// round
-	//{ "isPowerOfTwo", (PyCFunction)isPowerOfTwo_, METH_O, "isPowerOfTwo(v) -> bool or bvecn\nReturn true if the value is a power of two number." },
+	{ "isPowerOfTwo", (PyCFunction)isPowerOfTwo_, METH_O, "isPowerOfTwo(v) -> bool or bvecn\nReturn true if the value is a power of two number." },
 	{ "ceilPowerOfTwo", (PyCFunction)ceilPowerOfTwo_, METH_O, "ceilPowerOfTwo(v) -> float or vecn\nReturn the power of two number which value is just higher the input value,\nround up to a power of two." },
 	{ "floorPowerOfTwo", (PyCFunction)floorPowerOfTwo_, METH_O, "floorPowerOfTwo(v) -> float or vecn\nReturn the power of two number which value is just lower the input value,\nround down to a power of two." },
 	{ "roundPowerOfTwo", (PyCFunction)roundPowerOfTwo_, METH_O, "roundPowerOfTwo(v) -> float or vecn\nReturn the power of two number which value is the closet to the input value." },

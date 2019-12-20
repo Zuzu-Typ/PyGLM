@@ -6,6 +6,7 @@ PyGLM test/
 PyGLM build/
 pyvers/
 tests/
+glm_old/
 .pypirc
 build.bat
 build 32.bat
