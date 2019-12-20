@@ -563,7 +563,7 @@ for args in gen_args("NN_VV_VN_NNN_VVV_NNNN_VVVV__fF"):
     fassert(glm.fmin, args)
     fassert(glm.fmax, args)
 
-for args in gen_args("NNN_VVV_VNN__f"):
+for args in gen_args("NNN_VVV_VNN__fF"):
     fassert(glm.clamp, args)
 
 for args in list(gen_args("NNNB_NNN_QQN__fF")) + list(gen_args("VVN_VVVf_VVVF_VVVB")): # need to add support for _MMN_MMMf_MMMF
@@ -945,6 +945,7 @@ for args in gen_args("#pN"):
 # round #
 for args in gen_args("N_V__iqsu"):
     # need to add support for isPowerOfTwo
+    fassert(glm.isPowerOfTwo, args)
     fassert(glm.ceilPowerOfTwo, args)
     fassert(glm.floorPowerOfTwo, args)
     fassert(glm.roundPowerOfTwo, args)
