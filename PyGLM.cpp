@@ -1,4 +1,4 @@
-#define PyGLM_VERSION "1.1.2"
+#define PyGLM_VERSION "1.1.3"
 
 #define PyGLM_NO_FUNCTIONS 1
 #define PyGLM_NO_ITER_TYPECHECKING 2
