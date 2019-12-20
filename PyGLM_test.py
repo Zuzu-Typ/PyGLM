@@ -260,6 +260,11 @@ def fassert(func, args):
     except:
         raise FAssertionError("{} raised {} with {}".format(func, sys.exc_info()[1], repr(args)))
 
+# Specific #
+assert isinstance(glm.version, str)
+assert isinstance(glm.license, str)
+#/Specific #
+
 # Initialization #
 ## vec1
 for args in gen_args("#u-_N"): # need to add support for _V1_V2_V3_V4
