@@ -86,6 +86,7 @@
 #include <stdint.h>
 
 #define GLM_FORCE_CTOR_INIT
+#define GLM_ENABLE_EXPERIMENTAL
 
 #include <glm/glm.hpp>
 
@@ -129,6 +130,9 @@
 #include <glm/gtc/round.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/ulp.hpp>
+
+// Unstable extensions
+#include <glm/gtx/polar_coordinates.hpp>
 
 #endif
 
@@ -21081,6 +21085,32 @@ qua_releasebuffer(PyObject*, Py_buffer* view) {
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 
 #pragma region macro generator functions
+#define PyGLM_MAKE_GLM_FUNC_V3__tfF(NAME)\
+static PyObject*\
+NAME##_(PyObject*, PyObject* arg) {\
+	if (PyGLM_Vec_Check(3, float, arg)) {\
+		return pack(glm::NAME(unpack_vec<3, float>(arg)));\
+	}\
+	if (PyGLM_Vec_Check(3, double, arg)) {\
+		return pack(glm::NAME(unpack_vec<3, double>(arg)));\
+	}\
+	PyGLM_TYPEERROR_O("invalid argument type for " #NAME "(): ", arg);\
+	return NULL;\
+}
+
+#define PyGLM_MAKE_GLM_FUNC_V2__tfF(NAME)\
+static PyObject*\
+NAME##_(PyObject*, PyObject* arg) {\
+	if (PyGLM_Vec_Check(2, float, arg)) {\
+		return pack(glm::NAME(unpack_vec<2, float>(arg)));\
+	}\
+	if (PyGLM_Vec_Check(2, double, arg)) {\
+		return pack(glm::NAME(unpack_vec<2, double>(arg)));\
+	}\
+	PyGLM_TYPEERROR_O("invalid argument type for " #NAME "(): ", arg);\
+	return NULL;\
+}
+
 #define PyGLM_MAKE_GLM_FUNC_N_V__tfF(NAME)\
 static PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
@@ -35762,6 +35792,11 @@ silence(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
+// UNSTABLE EXTENSIONS
+
+PyGLM_MAKE_GLM_FUNC_V3__tfF(polar)
+PyGLM_MAKE_GLM_FUNC_V2__tfF(euclidean)
+
 //static PyObject*
 //test(PyObject* self, PyObject* arg) {
 //	return PyFloat_FromDouble(glm::clamp(0.1, 0.0, 0.2));
@@ -36130,6 +36165,11 @@ static PyMethodDef glmmethods[] = {
 	{ "next_float", (PyCFunction)next_float_, METH_VARARGS, "next_float(x[, ULPs]) -> float or vecn\nReturn the next ULP value(s) after the input value(s)." },
 	{ "prev_float", (PyCFunction)prev_float_, METH_VARARGS, "prev_float(x[, ULPs]) -> float or vecn\nReturn the previous ULP value(s) before the input value(s)." },
 	{ "float_distance", (PyCFunction)float_distance_, METH_VARARGS, "float_distance(x, y) -> ivecn or i64vecn\nReturn the distance in the number of ULP between 2 single-precision floating-point scalars." },
+
+	// UNSTABLE EXTENSIONS
+	// polar_coordinates
+	{ "polar", (PyCFunction)polar_, METH_O, "polar(v) -> vec3\nConvert Euclidean to Polar coordinates, x is the xz distance, y, the latitude and z the longitude." },
+	{ "euclidean", (PyCFunction)euclidean_, METH_O, "euclidean(v) -> vec3\nConvert Polar to Euclidean coordinates." },
 
 	// PyGLM functions
 	{ "silence", (PyCFunction)silence, METH_O, "silence(ID) -> None\nSilence a PyGLM warning (or all using 0)." },

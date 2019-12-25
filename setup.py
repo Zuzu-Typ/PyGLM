@@ -20,13 +20,8 @@ module1 = Extension('glm',
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description_list = f.readlines()
-
-    long_description = ""
-
-    for line in long_description_list:
-        long_description += line
+with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
     long_description = long_description.replace("\r", "")
 
 setup(
@@ -39,6 +34,7 @@ setup(
 
     description='OpenGL Mathematics library for Python',
     long_description=long_description,
+    long_description_content_type='text/markdown',
 
     # The project's main homepage.
     url='https://github.com/Zuzu-Typ/PyGLM',
