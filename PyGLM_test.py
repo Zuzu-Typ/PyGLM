@@ -1015,7 +1015,7 @@ for args in gen_args("NN_VV__fF"):
     fassert(glm.float_distance, args)
 #/ulp #
 ##/EXTENSIONS ##
-
+    
 ## UNSTABLE EXTENSIONS ##
 # polar_coordinates #
 for args in gen_args("V3__fF"):
@@ -1025,5 +1025,5 @@ for args in gen_args("V2__fF"):
     fassert(glm.euclidean, args)
 #/polar_coordinates #
 ##/UNSTABLE EXTENSIONS ##
-
+    
 print("Finished tests in {:.3g}s".format(time.time()-start_time))
