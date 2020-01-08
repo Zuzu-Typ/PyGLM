@@ -1,7 +1,6 @@
 include LICENSE
 include COPYING
 include README.md
-include GLM_LICENSE
 include setup.py
 include setup.cfg
 recursive-include glm *
