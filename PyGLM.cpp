@@ -16974,15 +16974,15 @@ vec_getbuffer(vec<L, T>* self, Py_buffer* view, int flags) {
 	view->itemsize = sizeof(T);
 	view->format = (std::is_same<T, float>::value) ?	const_cast<char*>("f") : \
 		(std::is_same <T, double>::value) ?				const_cast<char*>("d") : \
-		(std::is_same <T, std::int8_t>::value) ?		const_cast<char*>("c") : \
-		(std::is_same <T, std::uint8_t>::value) ?		const_cast<char*>("b") : \
+		(std::is_same <T, std::int8_t>::value) ?		const_cast<char*>("b") : \
+		(std::is_same <T, std::uint8_t>::value) ?		const_cast<char*>("B") : \
 		(std::is_same <T, std::int16_t>::value) ?		const_cast<char*>("h") : \
 		(std::is_same <T, std::uint16_t>::value) ?		const_cast<char*>("H") : \
 		(std::is_same <T, std::int32_t>::value) ?		const_cast<char*>("i") : \
 		(std::is_same <T, std::uint32_t>::value) ?		const_cast<char*>("I") : \
-		(std::is_same <T, std::int64_t>::value) ?		const_cast<char*>("L") : \
-		(std::is_same <T, std::uint64_t>::value) ?		const_cast<char*>("K") : \
-		(std::is_same <T, bool>::value) ?				const_cast<char*>("p") : NULL;
+		(std::is_same <T, std::int64_t>::value) ?		const_cast<char*>("q") : \
+		(std::is_same <T, std::uint64_t>::value) ?		const_cast<char*>("Q") : \
+		(std::is_same <T, bool>::value) ?				const_cast<char*>("?") : NULL;
 	view->ndim = 1;
 	view->shape = (Py_ssize_t*)malloc(sizeof(Py_ssize_t));
 	if (view->shape != NULL) {
