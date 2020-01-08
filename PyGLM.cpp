@@ -16980,8 +16980,8 @@ vec_getbuffer(vec<L, T>* self, Py_buffer* view, int flags) {
 		(std::is_same <T, std::uint16_t>::value) ?		const_cast<char*>("H") : \
 		(std::is_same <T, std::int32_t>::value) ?		const_cast<char*>("i") : \
 		(std::is_same <T, std::uint32_t>::value) ?		const_cast<char*>("I") : \
-		(std::is_same <T, std::int64_t>::value) ?		const_cast<char*>("l") : \
-		(std::is_same <T, std::uint64_t>::value) ?		const_cast<char*>("L") : \
+		(std::is_same <T, std::int64_t>::value) ?		const_cast<char*>("q") : \
+		(std::is_same <T, std::uint64_t>::value) ?		const_cast<char*>("Q") : \
 		(std::is_same <T, bool>::value) ?				const_cast<char*>("?") : NULL;
 	view->ndim = 1;
 	view->shape = (Py_ssize_t*)malloc(sizeof(Py_ssize_t));
