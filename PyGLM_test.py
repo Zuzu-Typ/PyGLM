@@ -462,8 +462,116 @@ for obj in gen_obj("V_M_Q"):
 #/iter #
 
 # buffer protocol #
-for type_ in vector_types + matrix_types + quat_types:
-    fassert(type_, (fassert(bytes, (type_(),)),))
+def check_buffer_protocol(type_, shape, format):
+    obj = type_()
+    memview = memoryview(obj)
+    assert shape == memview.shape
+    assert format == memview.format
+
+for t, s, f in (
+    (glm.vec1, (1,), "f"),
+    (glm.vec2, (2,), "f"),
+    (glm.vec3, (3,), "f"),
+    (glm.vec4, (4,), "f"),
+    
+    (glm.dvec1, (1,), "d"),
+    (glm.dvec2, (2,), "d"),
+    (glm.dvec3, (3,), "d"),
+    (glm.dvec4, (4,), "d"),
+
+    (glm.ivec1, (1,), "i"),
+    (glm.ivec2, (2,), "i"),
+    (glm.ivec3, (3,), "i"),
+    (glm.ivec4, (4,), "i"),
+
+    (glm.uvec1, (1,), "I"),
+    (glm.uvec2, (2,), "I"),
+    (glm.uvec3, (3,), "I"),
+    (glm.uvec4, (4,), "I"),
+    
+    (glm.i8vec1, (1,), "b"),
+    (glm.i8vec2, (2,), "b"),
+    (glm.i8vec3, (3,), "b"),
+    (glm.i8vec4, (4,), "b"),
+    
+    (glm.u8vec1, (1,), "B"),
+    (glm.u8vec2, (2,), "B"),
+    (glm.u8vec3, (3,), "B"),
+    (glm.u8vec4, (4,), "B"),
+    
+    (glm.i16vec1, (1,), "h"),
+    (glm.i16vec2, (2,), "h"),
+    (glm.i16vec3, (3,), "h"),
+    (glm.i16vec4, (4,), "h"),
+    
+    (glm.u16vec1, (1,), "H"),
+    (glm.u16vec2, (2,), "H"),
+    (glm.u16vec3, (3,), "H"),
+    (glm.u16vec4, (4,), "H"),
+
+    (glm.i64vec1, (1,), "q"),
+    (glm.i64vec2, (2,), "q"),
+    (glm.i64vec3, (3,), "q"),
+    (glm.i64vec4, (4,), "q"),
+    
+    (glm.u64vec1, (1,), "Q"),
+    (glm.u64vec2, (2,), "Q"),
+    (glm.u64vec3, (3,), "Q"),
+    (glm.u64vec4, (4,), "Q"),
+    
+    (glm.bvec1, (1,), "?"),
+    (glm.bvec2, (2,), "?"),
+    (glm.bvec3, (3,), "?"),
+    (glm.bvec4, (4,), "?"),
+    
+    (glm.mat2x2, (2, 2), "f"),
+    (glm.mat2x3, (2, 3), "f"),
+    (glm.mat2x4, (2, 4), "f"),
+    (glm.mat3x2, (3, 2), "f"),
+    (glm.mat3x3, (3, 3), "f"),
+    (glm.mat3x4, (3, 4), "f"),
+    (glm.mat4x2, (4, 2), "f"),
+    (glm.mat4x3, (4, 3), "f"),
+    (glm.mat4x4, (4, 4), "f"),
+    
+    
+    (glm.dmat2x2, (2, 2), "d"),
+    (glm.dmat2x3, (2, 3), "d"),
+    (glm.dmat2x4, (2, 4), "d"),
+    (glm.dmat3x2, (3, 2), "d"),
+    (glm.dmat3x3, (3, 3), "d"),
+    (glm.dmat3x4, (3, 4), "d"),
+    (glm.dmat4x2, (4, 2), "d"),
+    (glm.dmat4x3, (4, 3), "d"),
+    (glm.dmat4x4, (4, 4), "d"),
+    
+    
+    (glm.imat2x2, (2, 2), "i"),
+    (glm.imat2x3, (2, 3), "i"),
+    (glm.imat2x4, (2, 4), "i"),
+    (glm.imat3x2, (3, 2), "i"),
+    (glm.imat3x3, (3, 3), "i"),
+    (glm.imat3x4, (3, 4), "i"),
+    (glm.imat4x2, (4, 2), "i"),
+    (glm.imat4x3, (4, 3), "i"),
+    (glm.imat4x4, (4, 4), "i"),
+    
+    
+    (glm.umat2x2, (2, 2), "I"),
+    (glm.umat2x3, (2, 3), "I"),
+    (glm.umat2x4, (2, 4), "I"),
+    (glm.umat3x2, (3, 2), "I"),
+    (glm.umat3x3, (3, 3), "I"),
+    (glm.umat3x4, (3, 4), "I"),
+    (glm.umat4x2, (4, 2), "I"),
+    (glm.umat4x3, (4, 3), "I"),
+    (glm.umat4x4, (4, 4), "I"),
+    
+    (glm.quat, (4,), "f"),
+    
+    (glm.dquat, (4,), "d"),
+    ):
+    check_buffer_protocol(t,s,f)
 #/buffer protocol #
 
 # copy module #
