@@ -236,6 +236,24 @@ static int vec_getbuffer(vec<L, T>* self, Py_buffer* view, int flags);
 
 void vec_releasebuffer(PyObject* self, Py_buffer* view);
 
+template<typename T>
+static PyObject* vec1_to_list(vec<1, T>* self, PyObject*);
+template<typename T>
+static PyObject* vec2_to_list(vec<2, T>* self, PyObject*);
+template<typename T>
+static PyObject* vec3_to_list(vec<3, T>* self, PyObject*);
+template<typename T>
+static PyObject* vec4_to_list(vec<4, T>* self, PyObject*);
+
+template<typename T>
+static PyObject* vec1_to_tuple(vec<1, T>* self, PyObject*);
+template<typename T>
+static PyObject* vec2_to_tuple(vec<2, T>* self, PyObject*);
+template<typename T>
+static PyObject* vec3_to_tuple(vec<3, T>* self, PyObject*);
+template<typename T>
+static PyObject* vec4_to_tuple(vec<4, T>* self, PyObject*);
+
 template<int L>
 static Py_ssize_t vec_len(PyObject* self);
 
@@ -382,6 +400,8 @@ static PyMemberDef hfvec1_members[] = {
 static PyMethodDef hfvec1_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec1_to_list<float>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec1_to_tuple<float>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec1BufferMethods = {
@@ -526,6 +546,8 @@ static PyMemberDef hfvec2_members[] = {
 static PyMethodDef hfvec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec2_to_list<float>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec2_to_tuple<float>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec2BufferMethods = {
@@ -671,6 +693,8 @@ static PyMemberDef hfvec3_members[] = {
 static PyMethodDef hfvec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec3_to_list<float>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec3_to_tuple<float>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec3BufferMethods = {
@@ -817,6 +841,8 @@ static PyMemberDef hfvec4_members[] = {
 static PyMethodDef hfvec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec4_to_list<float>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec4_to_tuple<float>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfvec4BufferMethods = {
@@ -961,6 +987,8 @@ static PyMemberDef hdvec1_members[] = {
 static PyMethodDef hdvec1_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec1_to_list<double>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec1_to_tuple<double>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec1BufferMethods = {
@@ -1105,6 +1133,8 @@ static PyMemberDef hdvec2_members[] = {
 static PyMethodDef hdvec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec2_to_list<double>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec2_to_tuple<double>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec2BufferMethods = {
@@ -1250,6 +1280,8 @@ static PyMemberDef hdvec3_members[] = {
 static PyMethodDef hdvec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec3_to_list<double>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec3_to_tuple<double>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec3BufferMethods = {
@@ -1396,6 +1428,8 @@ static PyMemberDef hdvec4_members[] = {
 static PyMethodDef hdvec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec4_to_list<double>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec4_to_tuple<double>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdvec4BufferMethods = {
@@ -1540,6 +1574,8 @@ static PyMemberDef hi8vec1_members[] = {
 static PyMethodDef hi8vec1_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec1_to_list<glm::i8>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec1_to_tuple<glm::i8>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec1BufferMethods = {
@@ -1684,6 +1720,8 @@ static PyMemberDef hi8vec2_members[] = {
 static PyMethodDef hi8vec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec2_to_list<glm::i8>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec2_to_tuple<glm::i8>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec2BufferMethods = {
@@ -1829,6 +1867,8 @@ static PyMemberDef hi8vec3_members[] = {
 static PyMethodDef hi8vec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec3_to_list<glm::i8>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec3_to_tuple<glm::i8>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec3BufferMethods = {
@@ -1975,6 +2015,8 @@ static PyMemberDef hi8vec4_members[] = {
 static PyMethodDef hi8vec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec4_to_list<glm::i8>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec4_to_tuple<glm::i8>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi8vec4BufferMethods = {
@@ -2119,6 +2161,8 @@ static PyMemberDef hi16vec1_members[] = {
 static PyMethodDef hi16vec1_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec1_to_list<glm::i16>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec1_to_tuple<glm::i16>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec1BufferMethods = {
@@ -2263,6 +2307,8 @@ static PyMemberDef hi16vec2_members[] = {
 static PyMethodDef hi16vec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec2_to_list<glm::i16>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec2_to_tuple<glm::i16>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec2BufferMethods = {
@@ -2408,6 +2454,8 @@ static PyMemberDef hi16vec3_members[] = {
 static PyMethodDef hi16vec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec3_to_list<glm::i16>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec3_to_tuple<glm::i16>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec3BufferMethods = {
@@ -2554,6 +2602,8 @@ static PyMemberDef hi16vec4_members[] = {
 static PyMethodDef hi16vec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec4_to_list<glm::i16>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec4_to_tuple<glm::i16>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi16vec4BufferMethods = {
@@ -2698,6 +2748,8 @@ static PyMemberDef hivec1_members[] = {
 static PyMethodDef hivec1_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec1_to_list<glm::i32>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec1_to_tuple<glm::i32>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec1BufferMethods = {
@@ -2842,6 +2894,8 @@ static PyMemberDef hivec2_members[] = {
 static PyMethodDef hivec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec2_to_list<glm::i32>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec2_to_tuple<glm::i32>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec2BufferMethods = {
@@ -2987,6 +3041,8 @@ static PyMemberDef hivec3_members[] = {
 static PyMethodDef hivec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec3_to_list<glm::i32>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec3_to_tuple<glm::i32>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec3BufferMethods = {
@@ -3133,6 +3189,8 @@ static PyMemberDef hivec4_members[] = {
 static PyMethodDef hivec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec4_to_list<glm::i32>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec4_to_tuple<glm::i32>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hivec4BufferMethods = {
@@ -3277,6 +3335,8 @@ static PyMemberDef hi64vec1_members[] = {
 static PyMethodDef hi64vec1_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec1_to_list<glm::i64>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec1_to_tuple<glm::i64>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec1BufferMethods = {
@@ -3421,6 +3481,8 @@ static PyMemberDef hi64vec2_members[] = {
 static PyMethodDef hi64vec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec2_to_list<glm::i64>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec2_to_tuple<glm::i64>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec2BufferMethods = {
@@ -3566,6 +3628,8 @@ static PyMemberDef hi64vec3_members[] = {
 static PyMethodDef hi64vec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec3_to_list<glm::i64>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec3_to_tuple<glm::i64>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec3BufferMethods = {
@@ -3712,6 +3776,8 @@ static PyMemberDef hi64vec4_members[] = {
 static PyMethodDef hi64vec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec4_to_list<glm::i64>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec4_to_tuple<glm::i64>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hi64vec4BufferMethods = {
@@ -3856,6 +3922,8 @@ static PyMemberDef hu8vec1_members[] = {
 static PyMethodDef hu8vec1_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec1_to_list<glm::u8>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec1_to_tuple<glm::u8>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec1BufferMethods = {
@@ -4000,6 +4068,8 @@ static PyMemberDef hu8vec2_members[] = {
 static PyMethodDef hu8vec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec2_to_list<glm::u8>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec2_to_tuple<glm::u8>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec2BufferMethods = {
@@ -4145,6 +4215,8 @@ static PyMemberDef hu8vec3_members[] = {
 static PyMethodDef hu8vec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec3_to_list<glm::u8>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec3_to_tuple<glm::u8>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec3BufferMethods = {
@@ -4291,6 +4363,8 @@ static PyMemberDef hu8vec4_members[] = {
 static PyMethodDef hu8vec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec4_to_list<glm::u8>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec4_to_tuple<glm::u8>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu8vec4BufferMethods = {
@@ -4435,6 +4509,8 @@ static PyMemberDef hu16vec1_members[] = {
 static PyMethodDef hu16vec1_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec1_to_list<glm::u16>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec1_to_tuple<glm::u16>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec1BufferMethods = {
@@ -4579,6 +4655,8 @@ static PyMemberDef hu16vec2_members[] = {
 static PyMethodDef hu16vec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec2_to_list<glm::u16>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec2_to_tuple<glm::u16>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec2BufferMethods = {
@@ -4724,6 +4802,8 @@ static PyMemberDef hu16vec3_members[] = {
 static PyMethodDef hu16vec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec3_to_list<glm::u16>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec3_to_tuple<glm::u16>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec3BufferMethods = {
@@ -4870,6 +4950,8 @@ static PyMemberDef hu16vec4_members[] = {
 static PyMethodDef hu16vec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec4_to_list<glm::u16>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec4_to_tuple<glm::u16>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec4BufferMethods = {
@@ -5014,6 +5096,8 @@ static PyMemberDef huvec1_members[] = {
 static PyMethodDef huvec1_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec1_to_list<glm::u32>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec1_to_tuple<glm::u32>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec1BufferMethods = {
@@ -5158,6 +5242,8 @@ static PyMemberDef huvec2_members[] = {
 static PyMethodDef huvec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec2_to_list<glm::u32>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec2_to_tuple<glm::u32>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec2BufferMethods = {
@@ -5303,6 +5389,8 @@ static PyMemberDef huvec3_members[] = {
 static PyMethodDef huvec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec3_to_list<glm::u32>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec3_to_tuple<glm::u32>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec3BufferMethods = {
@@ -5449,6 +5537,8 @@ static PyMemberDef huvec4_members[] = {
 static PyMethodDef huvec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec4_to_list<glm::u32>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec4_to_tuple<glm::u32>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs huvec4BufferMethods = {
@@ -5593,6 +5683,8 @@ static PyMemberDef hu64vec1_members[] = {
 static PyMethodDef hu64vec1_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec1_to_list<glm::u64>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec1_to_tuple<glm::u64>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec1BufferMethods = {
@@ -5737,6 +5829,8 @@ static PyMemberDef hu64vec2_members[] = {
 static PyMethodDef hu64vec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec2_to_list<glm::u64>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec2_to_tuple<glm::u64>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec2BufferMethods = {
@@ -5882,6 +5976,8 @@ static PyMemberDef hu64vec3_members[] = {
 static PyMethodDef hu64vec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec3_to_list<glm::u64>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec3_to_tuple<glm::u64>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec3BufferMethods = {
@@ -6028,6 +6124,8 @@ static PyMemberDef hu64vec4_members[] = {
 static PyMethodDef hu64vec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec4_to_list<glm::u64>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec4_to_tuple<glm::u64>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu64vec4BufferMethods = {
@@ -6172,6 +6270,8 @@ static PyMemberDef hbvec1_members[] = {
 static PyMethodDef hbvec1_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec1_to_list<bool>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec1_to_tuple<bool>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hbvec1BufferMethods = {
@@ -6280,6 +6380,8 @@ static PyMemberDef hbvec2_members[] = {
 static PyMethodDef hbvec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec2_to_list<bool>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec2_to_tuple<bool>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hbvec2BufferMethods = {
@@ -6389,6 +6491,8 @@ static PyMemberDef hbvec3_members[] = {
 static PyMethodDef hbvec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec3_to_list<bool>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec3_to_tuple<bool>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hbvec3BufferMethods = {
@@ -6499,6 +6603,8 @@ static PyMemberDef hbvec4_members[] = {
 static PyMethodDef hbvec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "to_list", (PyCFunction)vec4_to_list<bool>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)vec4_to_tuple<bool>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hbvec4BufferMethods = {
@@ -17012,6 +17118,150 @@ generic_deepcopy(PyObject* self, PyObject* memo) {
 	return copy;
 }
 
+template<typename T>
+static PyObject*
+vec1_to_list(vec<1, T>* self, PyObject*) {
+	PyObject* out = PyList_New(1);
+	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
+	return out;
+}
+
+template<typename T>
+static PyObject*
+vec2_to_list(vec<2, T>* self, PyObject*) {
+	PyObject* out = PyList_New(2);
+	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
+	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
+	return out;
+}
+
+template<typename T>
+static PyObject*
+vec3_to_list(vec<3, T>* self, PyObject*) {
+	PyObject* out = PyList_New(3);
+	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
+	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
+	PyList_SET_ITEM(out, 2, PyGLM_PyObject_FromNumber<T>(self->super_type.z));
+	return out;
+}
+
+template<typename T>
+static PyObject*
+vec4_to_list(vec<4, T>* self, PyObject*) {
+	PyObject* out = PyList_New(4);
+	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
+	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
+	PyList_SET_ITEM(out, 2, PyGLM_PyObject_FromNumber<T>(self->super_type.z));
+	PyList_SET_ITEM(out, 3, PyGLM_PyObject_FromNumber<T>(self->super_type.w));
+	return out;
+}
+
+template<typename T>
+static PyObject*
+vec1_to_tuple(vec<1, T>* self, PyObject*) {
+	return PyTuple_Pack(1, 
+		PyGLM_PyObject_FromNumber<T>(self->super_type.x));
+}
+
+template<typename T>
+static PyObject*
+vec2_to_tuple(vec<2, T>* self, PyObject*) {
+	return PyTuple_Pack(2, 
+		PyGLM_PyObject_FromNumber<T>(self->super_type.x), 
+		PyGLM_PyObject_FromNumber<T>(self->super_type.y));
+}
+
+template<typename T>
+static PyObject*
+vec3_to_tuple(vec<3, T>* self, PyObject*) {
+	return PyTuple_Pack(3, 
+		PyGLM_PyObject_FromNumber<T>(self->super_type.x), 
+		PyGLM_PyObject_FromNumber<T>(self->super_type.y), 
+		PyGLM_PyObject_FromNumber<T>(self->super_type.z));
+}
+
+template<typename T>
+static PyObject*
+vec4_to_tuple(vec<4, T>* self, PyObject*) {
+	return PyTuple_Pack(4, 
+		PyGLM_PyObject_FromNumber<T>(self->super_type.x), 
+		PyGLM_PyObject_FromNumber<T>(self->super_type.y), 
+		PyGLM_PyObject_FromNumber<T>(self->super_type.z), 
+		PyGLM_PyObject_FromNumber<T>(self->super_type.w));
+}
+
+template<typename T>
+static PyObject*
+mvec1_to_list(mvec<1, T>* self, PyObject*) {
+	PyObject* out = PyList_New(1);
+	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type->x));
+	return out;
+}
+
+template<typename T>
+static PyObject*
+mvec2_to_list(mvec<2, T>* self, PyObject*) {
+	PyObject* out = PyList_New(2);
+	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type->x));
+	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type->y));
+	return out;
+}
+
+template<typename T>
+static PyObject*
+mvec3_to_list(mvec<3, T>* self, PyObject*) {
+	PyObject* out = PyList_New(3);
+	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type->x));
+	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type->y));
+	PyList_SET_ITEM(out, 2, PyGLM_PyObject_FromNumber<T>(self->super_type->z));
+	return out;
+}
+
+template<typename T>
+static PyObject*
+mvec4_to_list(mvec<4, T>* self, PyObject*) {
+	PyObject* out = PyList_New(4);
+	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type->x));
+	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type->y));
+	PyList_SET_ITEM(out, 2, PyGLM_PyObject_FromNumber<T>(self->super_type->z));
+	PyList_SET_ITEM(out, 3, PyGLM_PyObject_FromNumber<T>(self->super_type->w));
+	return out;
+}
+
+template<typename T>
+static PyObject*
+mvec1_to_tuple(mvec<1, T>* self, PyObject*) {
+	return PyTuple_Pack(1,
+		PyGLM_PyObject_FromNumber<T>(self->super_type->x));
+}
+
+template<typename T>
+static PyObject*
+mvec2_to_tuple(mvec<2, T>* self, PyObject*) {
+	return PyTuple_Pack(2,
+		PyGLM_PyObject_FromNumber<T>(self->super_type->x),
+		PyGLM_PyObject_FromNumber<T>(self->super_type->y));
+}
+
+template<typename T>
+static PyObject*
+mvec3_to_tuple(mvec<3, T>* self, PyObject*) {
+	return PyTuple_Pack(3,
+		PyGLM_PyObject_FromNumber<T>(self->super_type->x),
+		PyGLM_PyObject_FromNumber<T>(self->super_type->y),
+		PyGLM_PyObject_FromNumber<T>(self->super_type->z));
+}
+
+template<typename T>
+static PyObject*
+mvec4_to_tuple(mvec<4, T>* self, PyObject*) {
+	return PyTuple_Pack(4,
+		PyGLM_PyObject_FromNumber<T>(self->super_type->x),
+		PyGLM_PyObject_FromNumber<T>(self->super_type->y),
+		PyGLM_PyObject_FromNumber<T>(self->super_type->z),
+		PyGLM_PyObject_FromNumber<T>(self->super_type->w));
+}
+
 template<int L, typename T>
 static PyObject*
 mvec_copy(PyObject* self, PyObject*) {
@@ -20589,6 +20839,91 @@ mat_releasebuffer(PyObject*, Py_buffer* view) {
 	free(view->shape);
 	free(view->strides);
 }
+
+template<int C, int R, typename T>
+static PyObject*
+mat_to_list(mat<C, R, T>* self, PyObject*) {
+	PyObject* out = PyList_New(C);
+	for (int n = 0; n < C; n++) {
+		PyObject* innerList = PyList_New(R);
+		for (int m = 0; m < R; m++) {
+			PyList_SET_ITEM(innerList, m, PyGLM_PyObject_FromNumber<T>(self->super_type[n][m]));
+		}
+		PyList_SET_ITEM(out, n, innerList);
+	}
+	return out;
+}
+
+//template<typename T>
+//static PyObject*
+//vec2_to_list(vec<2, T>* self, PyObject*) {
+//	PyObject* out = PyList_New(2);
+//	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
+//	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
+//	return out;
+//}
+//
+//template<typename T>
+//static PyObject*
+//vec3_to_list(vec<3, T>* self, PyObject*) {
+//	PyObject* out = PyList_New(3);
+//	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
+//	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
+//	PyList_SET_ITEM(out, 2, PyGLM_PyObject_FromNumber<T>(self->super_type.z));
+//	return out;
+//}
+//
+//template<typename T>
+//static PyObject*
+//vec4_to_list(vec<4, T>* self, PyObject*) {
+//	PyObject* out = PyList_New(4);
+//	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
+//	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
+//	PyList_SET_ITEM(out, 2, PyGLM_PyObject_FromNumber<T>(self->super_type.z));
+//	PyList_SET_ITEM(out, 3, PyGLM_PyObject_FromNumber<T>(self->super_type.w));
+//	return out;
+//}
+//
+template<int C, int R, typename T>
+static PyObject*
+mat_to_tuple(mat<C, R, T>* self, PyObject*) {
+	PyObject* out = PyTuple_New(C);
+	for (int n = 0; n < C; n++) {
+		PyObject* innerList = PyTuple_New(R);
+		for (int m = 0; m < R; m++) {
+			PyTuple_SET_ITEM(innerList, m, PyGLM_PyObject_FromNumber<T>(self->super_type[n][m]));
+		}
+		PyTuple_SET_ITEM(out, n, innerList);
+	}
+	return out;
+}
+//
+//template<typename T>
+//static PyObject*
+//vec2_to_tuple(vec<2, T>* self, PyObject*) {
+//	return PyTuple_Pack(2,
+//		PyGLM_PyObject_FromNumber<T>(self->super_type.x),
+//		PyGLM_PyObject_FromNumber<T>(self->super_type.y));
+//}
+//
+//template<typename T>
+//static PyObject*
+//vec3_to_tuple(vec<3, T>* self, PyObject*) {
+//	return PyTuple_Pack(3,
+//		PyGLM_PyObject_FromNumber<T>(self->super_type.x),
+//		PyGLM_PyObject_FromNumber<T>(self->super_type.y),
+//		PyGLM_PyObject_FromNumber<T>(self->super_type.z));
+//}
+//
+//template<typename T>
+//static PyObject*
+//vec4_to_tuple(vec<4, T>* self, PyObject*) {
+//	return PyTuple_Pack(4,
+//		PyGLM_PyObject_FromNumber<T>(self->super_type.x),
+//		PyGLM_PyObject_FromNumber<T>(self->super_type.y),
+//		PyGLM_PyObject_FromNumber<T>(self->super_type.z),
+//		PyGLM_PyObject_FromNumber<T>(self->super_type.w));
+//}
 #pragma endregion 
 
 // type qua
@@ -35797,12 +36132,12 @@ silence(PyObject*, PyObject* arg) {
 PyGLM_MAKE_GLM_FUNC_V3__tfF(polar)
 PyGLM_MAKE_GLM_FUNC_V2__tfF(euclidean)
 
-//static PyObject*
-//test(PyObject* self, PyObject* arg) {
-//	return PyFloat_FromDouble(glm::clamp(0.1, 0.0, 0.2));
-//}
-//#define HAS_TEST
-//#define TEST_FUNC_TYPE METH_NOARGS
+static PyObject*
+test(PyObject* self, PyObject* arg) {
+	return mat_to_tuple((mat<4, 4, float>*)(arg), NULL);
+}
+#define HAS_TEST
+#define TEST_FUNC_TYPE METH_O
 
 static PyMethodDef glmmethods[] = {
 	// DETAIL
