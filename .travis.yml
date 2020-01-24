@@ -19,7 +19,7 @@ matrix:
       language: generic
       before_install:
         - choco install python --version 3.8.0
-        -export PATH="/c/Python38:/c/Python/Scripts:$PATH"
+        - export PATH="/c/Python38:/c/Python/Scripts:$PATH"
 
 install:
   - python -m pip install cibuildwheel==1.1.0
