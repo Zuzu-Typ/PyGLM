@@ -1,4 +1,5 @@
 language: python
+os: linux
 
 env:
   global:
@@ -8,7 +9,7 @@ env:
       - CIBW_MANYLINUX_X86_64_IMAGE=manylinux1
       - CIBW_MANYLINUX_I686_IMAGE=manylinux1
 
-matrix:
+jobs:
   include:
     # linux
     - services: docker
@@ -34,10 +35,11 @@ script:
 
 deploy:
   provider: releases
-  api_key:
+  token:
     secure: "qnEbN/dJwMarCXnw88oOUjQCNAIca6JGx0ndAxUhfbTN4UyQlEijLEH8pH7jzSJMrhx8zhviwoHfF+TChZkpfHwxcvgkGbEDRlEibbnW1mRUXADB2sAXtKVA5YGQGLOKh23TF5je8Rw7HlWx+MX5Za0I2HIePus9xBEEpyUQEC41XoqP6mTgENKEhy/FTKHCv9hPf4vVMZvY1F7ndzUPx5FqdIOQEnpDgyPpFkt2rWq3ZyWVU/+stNHMt8rlVURt7IgomHVLcoIA0IhLm5ugmJ4VhdhMw3MMvMGv5XpT011beOB0VKVVAP81k5QGTmgerrQK5hv3gQb3v6twPuSatRmccQ2HvIlvWHpyVcGMh/jDW2zDhrRuYMIy0a/7Lx9xNBxFeoen7Av8JLNuFOB40X0Dizysk4WXJpN8TSOQ6fhJ1+X1YV981rewVOrAwOFT9o0pPfHFBpz9vpH1ciS5gZzdqBz27n9A+cmTX/NwO0n11lEpgFN7e/NoWnnnAd1rVFXwj4YYalviUHBi4QMGGyno31I66UaqKBqhQAva7etNX5+NZmlWQ/YYZwnhhcmv+BwTlji96cCJFq0DcqkDw0PwqI37rQyyZlB+ekOGzTRbMP1aVMUSyUkkY2RveWLh0+kboEWCLOX2CoRXnTiuPEsYlJw8Au5bgfaPgtnV0f4="
   file_glob: true
   file: wheelhouse/*
-  skip_cleanup: true
+  cleanup: false
   on:
     tags: true
+    all_branches: true
