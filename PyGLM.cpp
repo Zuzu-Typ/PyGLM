@@ -14228,8 +14228,8 @@ static PyMethodDef hdqua_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)qua_length, METH_NOARGS, "returns the length of glm::dquat"},
-	{ "to_list", (PyCFunction)qua_to_list<float>, METH_NOARGS, "Return the components of this quaterion as a list"},
-	{ "to_tuple", (PyCFunction)qua_to_tuple<float>, METH_NOARGS, "Return the components of this quaterion as a tuple"},
+	{ "to_list", (PyCFunction)qua_to_list<double>, METH_NOARGS, "Return the components of this quaterion as a list"},
+	{ "to_tuple", (PyCFunction)qua_to_tuple<double>, METH_NOARGS, "Return the components of this quaterion as a tuple"},
 	{ NULL }
 };
 
