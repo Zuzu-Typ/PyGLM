@@ -1,4 +1,4 @@
-#define PyGLM_VERSION "1.1.5"
+#define PyGLM_VERSION "1.1.6"
 
 #define PyGLM_LICENSE "PyGLM license information:\n"\
 "\n"\
@@ -16666,7 +16666,7 @@ static int vec4_sq_ass_item(vec<4, T> * self, Py_ssize_t index, PyObject * value
 		self->super_type.z = f;
 		return 0;
 	case 3:
-		self->super_type.z = f;
+		self->super_type.w = f;
 		return 0;
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
@@ -17599,7 +17599,7 @@ static int mvec4_sq_ass_item(mvec<4, T> * self, Py_ssize_t index, PyObject * val
 		self->super_type->z = f;
 		return 0;
 	case 3:
-		self->super_type->z = f;
+		self->super_type->w = f;
 		return 0;
 	default:
 		PyErr_SetString(PyExc_IndexError, "index out of range");
