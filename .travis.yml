@@ -5,7 +5,7 @@ env:
       # only 64-bit
       - CIBW_SKIP=cp34-*
       - CIBW_BUILD=cp3?-*
-      - CIBW_TEST_COMMAND="python PyGLM_test.py"
+      - CIBW_TEST_COMMAND="python {project}/PyGLM_test.py"
 
 matrix:
   include:
@@ -14,6 +14,7 @@ matrix:
     # mac
     - os: osx
       language: generic
+      env: MACOSX_DEPLOYMENT_TARGET=10.9
     # windows
     - os: windows
       language: generic
