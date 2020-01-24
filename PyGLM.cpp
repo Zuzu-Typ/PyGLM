@@ -8685,11 +8685,19 @@ static PyObject* matIter_next(matIter<C, R, T> *rgstate);
 template<int C, int R, typename T>
 static PyObject* matIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
 
+template<int C, int R, typename T>
+static PyObject* mat_to_list(mat<C, R, T>* self, PyObject*);
+
+template<int C, int R, typename T>
+static PyObject* mat_to_tuple(mat<C, R, T>* self, PyObject*);
+
 #pragma region float
 static PyMethodDef hfmat2x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x2"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 2, float>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 2, float>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hfmat2x2BufferMethods = {
@@ -8835,6 +8843,8 @@ static PyMethodDef hfmat2x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x3"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 3, float>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 3, float>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hfmat2x3BufferMethods = {
@@ -8980,6 +8990,8 @@ static PyMethodDef hfmat2x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::mat2x4"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 4, float>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 4, float>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hfmat2x4BufferMethods = {
@@ -9125,6 +9137,8 @@ static PyMethodDef hfmat3x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x2"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 2, float>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 2, float>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hfmat3x2BufferMethods = {
@@ -9270,6 +9284,8 @@ static PyMethodDef hfmat3x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x3"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 3, float>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 3, float>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hfmat3x3BufferMethods = {
@@ -9415,6 +9431,8 @@ static PyMethodDef hfmat3x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x4"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 4, float>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 4, float>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hfmat3x4BufferMethods = {
@@ -9560,6 +9578,8 @@ static PyMethodDef hfmat4x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x2"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 2, float>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 2, float>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hfmat4x2BufferMethods = {
@@ -9705,6 +9725,8 @@ static PyMethodDef hfmat4x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x3"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 3, float>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 3, float>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hfmat4x3BufferMethods = {
@@ -9850,6 +9872,8 @@ static PyMethodDef hfmat4x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x4"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 4, float>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 4, float>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hfmat4x4BufferMethods = {
@@ -9996,6 +10020,8 @@ static PyMethodDef hdmat2x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::dmat2x2"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 2, double>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 2, double>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hdmat2x2BufferMethods = {
@@ -10141,6 +10167,8 @@ static PyMethodDef hdmat2x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::dmat2x3"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 3, double>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 3, double>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hdmat2x3BufferMethods = {
@@ -10286,6 +10314,8 @@ static PyMethodDef hdmat2x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::dmat2x4"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 4, double>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 4, double>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hdmat2x4BufferMethods = {
@@ -10431,6 +10461,8 @@ static PyMethodDef hdmat3x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::dmat3x2"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 2, double>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 2, double>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hdmat3x2BufferMethods = {
@@ -10576,6 +10608,8 @@ static PyMethodDef hdmat3x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::dmat3x3"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 3, double>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 3, double>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hdmat3x3BufferMethods = {
@@ -10721,6 +10755,8 @@ static PyMethodDef hdmat3x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::dmat3x4"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 4, double>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 4, double>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hdmat3x4BufferMethods = {
@@ -10866,6 +10902,8 @@ static PyMethodDef hdmat4x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::dmat4x2"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 2, double>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 2, double>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hdmat4x2BufferMethods = {
@@ -11011,6 +11049,8 @@ static PyMethodDef hdmat4x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::dmat4x3"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 3, double>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 3, double>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hdmat4x3BufferMethods = {
@@ -11156,6 +11196,8 @@ static PyMethodDef hdmat4x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::dmat4x4"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 4, double>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 4, double>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs hdmat4x4BufferMethods = {
@@ -11302,6 +11344,8 @@ static PyMethodDef himat2x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::imat2x2"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 2, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 2, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs himat2x2BufferMethods = {
@@ -11447,6 +11491,8 @@ static PyMethodDef himat2x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::imat2x3"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 3, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 3, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs himat2x3BufferMethods = {
@@ -11592,6 +11638,8 @@ static PyMethodDef himat2x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::imat2x4"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 4, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 4, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs himat2x4BufferMethods = {
@@ -11737,6 +11785,8 @@ static PyMethodDef himat3x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::imat3x2"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 2, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 2, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs himat3x2BufferMethods = {
@@ -11882,6 +11932,8 @@ static PyMethodDef himat3x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::imat3x3"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 3, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 3, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs himat3x3BufferMethods = {
@@ -12027,6 +12079,8 @@ static PyMethodDef himat3x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::imat3x4"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 4, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 4, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs himat3x4BufferMethods = {
@@ -12172,6 +12226,8 @@ static PyMethodDef himat4x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::imat4x2"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 2, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 2, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs himat4x2BufferMethods = {
@@ -12317,6 +12373,8 @@ static PyMethodDef himat4x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::imat4x3"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 3, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 3, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs himat4x3BufferMethods = {
@@ -12462,6 +12520,8 @@ static PyMethodDef himat4x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::imat4x4"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 4, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 4, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs himat4x4BufferMethods = {
@@ -12608,6 +12668,8 @@ static PyMethodDef humat2x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::umat2x2"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 2, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 2, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs humat2x2BufferMethods = {
@@ -12753,6 +12815,8 @@ static PyMethodDef humat2x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::umat2x3"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 3, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 3, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs humat2x3BufferMethods = {
@@ -12898,6 +12962,8 @@ static PyMethodDef humat2x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::umat2x4"},
+	{ "to_list", (PyCFunction)mat_to_list<2, 4, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 4, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs humat2x4BufferMethods = {
@@ -13043,6 +13109,8 @@ static PyMethodDef humat3x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::umat3x2"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 2, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 2, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs humat3x2BufferMethods = {
@@ -13188,6 +13256,8 @@ static PyMethodDef humat3x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::umat3x3"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 3, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 3, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs humat3x3BufferMethods = {
@@ -13333,6 +13403,8 @@ static PyMethodDef humat3x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::umat3x4"},
+	{ "to_list", (PyCFunction)mat_to_list<3, 4, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<3, 4, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs humat3x4BufferMethods = {
@@ -13478,6 +13550,8 @@ static PyMethodDef humat4x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::umat4x2"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 2, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 2, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs humat4x2BufferMethods = {
@@ -13623,6 +13697,8 @@ static PyMethodDef humat4x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::umat4x3"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 3, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 3, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs humat4x3BufferMethods = {
@@ -13768,6 +13844,8 @@ static PyMethodDef humat4x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::umat4x4"},
+	{ "to_list", (PyCFunction)mat_to_list<4, 4, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
+	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 4, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }
 };
 static PyBufferProcs humat4x4BufferMethods = {
@@ -13988,11 +14066,19 @@ static PyObject* quaIter_next(quaIter<T> *rgstate);
 template<typename T>
 static PyObject* quaIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
 
+template<typename T>
+static PyObject* qua_to_list(qua<T>* self, PyObject*);
+
+template<typename T>
+static PyObject* qua_to_tuple(qua<T>* self, PyObject*);
+
 #pragma region float
 static PyMethodDef hfqua_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)qua_length, METH_NOARGS, "returns the length of glm::quat"},
+	{ "to_list", (PyCFunction)qua_to_list<float>, METH_NOARGS, "Return the components of this quaterion as a list"},
+	{ "to_tuple", (PyCFunction)qua_to_tuple<float>, METH_NOARGS, "Return the components of this quaterion as a tuple"},
 	{ NULL }
 };
 
@@ -14142,6 +14228,8 @@ static PyMethodDef hdqua_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)qua_length, METH_NOARGS, "returns the length of glm::dquat"},
+	{ "to_list", (PyCFunction)qua_to_list<float>, METH_NOARGS, "Return the components of this quaterion as a list"},
+	{ "to_tuple", (PyCFunction)qua_to_tuple<float>, METH_NOARGS, "Return the components of this quaterion as a tuple"},
 	{ NULL }
 };
 
@@ -20854,36 +20942,6 @@ mat_to_list(mat<C, R, T>* self, PyObject*) {
 	return out;
 }
 
-//template<typename T>
-//static PyObject*
-//vec2_to_list(vec<2, T>* self, PyObject*) {
-//	PyObject* out = PyList_New(2);
-//	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
-//	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
-//	return out;
-//}
-//
-//template<typename T>
-//static PyObject*
-//vec3_to_list(vec<3, T>* self, PyObject*) {
-//	PyObject* out = PyList_New(3);
-//	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
-//	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
-//	PyList_SET_ITEM(out, 2, PyGLM_PyObject_FromNumber<T>(self->super_type.z));
-//	return out;
-//}
-//
-//template<typename T>
-//static PyObject*
-//vec4_to_list(vec<4, T>* self, PyObject*) {
-//	PyObject* out = PyList_New(4);
-//	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
-//	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
-//	PyList_SET_ITEM(out, 2, PyGLM_PyObject_FromNumber<T>(self->super_type.z));
-//	PyList_SET_ITEM(out, 3, PyGLM_PyObject_FromNumber<T>(self->super_type.w));
-//	return out;
-//}
-//
 template<int C, int R, typename T>
 static PyObject*
 mat_to_tuple(mat<C, R, T>* self, PyObject*) {
@@ -20897,33 +20955,6 @@ mat_to_tuple(mat<C, R, T>* self, PyObject*) {
 	}
 	return out;
 }
-//
-//template<typename T>
-//static PyObject*
-//vec2_to_tuple(vec<2, T>* self, PyObject*) {
-//	return PyTuple_Pack(2,
-//		PyGLM_PyObject_FromNumber<T>(self->super_type.x),
-//		PyGLM_PyObject_FromNumber<T>(self->super_type.y));
-//}
-//
-//template<typename T>
-//static PyObject*
-//vec3_to_tuple(vec<3, T>* self, PyObject*) {
-//	return PyTuple_Pack(3,
-//		PyGLM_PyObject_FromNumber<T>(self->super_type.x),
-//		PyGLM_PyObject_FromNumber<T>(self->super_type.y),
-//		PyGLM_PyObject_FromNumber<T>(self->super_type.z));
-//}
-//
-//template<typename T>
-//static PyObject*
-//vec4_to_tuple(vec<4, T>* self, PyObject*) {
-//	return PyTuple_Pack(4,
-//		PyGLM_PyObject_FromNumber<T>(self->super_type.x),
-//		PyGLM_PyObject_FromNumber<T>(self->super_type.y),
-//		PyGLM_PyObject_FromNumber<T>(self->super_type.z),
-//		PyGLM_PyObject_FromNumber<T>(self->super_type.w));
-//}
 #pragma endregion 
 
 // type qua
@@ -21414,6 +21445,27 @@ qua_getbuffer(qua<T>* self, Py_buffer* view, int flags) {
 void
 qua_releasebuffer(PyObject*, Py_buffer* view) {
 	free(view->shape);
+}
+
+template<typename T>
+static PyObject*
+qua_to_list(qua<T>* self, PyObject*) {
+	PyObject* out = PyList_New(4);
+	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
+	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
+	PyList_SET_ITEM(out, 2, PyGLM_PyObject_FromNumber<T>(self->super_type.z));
+	PyList_SET_ITEM(out, 3, PyGLM_PyObject_FromNumber<T>(self->super_type.w));
+	return out;
+}
+
+template<typename T>
+static PyObject*
+qua_to_tuple(qua<T>* self, PyObject*) {
+	return PyTuple_Pack(4,
+		PyGLM_PyObject_FromNumber<T>(self->super_type.x),
+		PyGLM_PyObject_FromNumber<T>(self->super_type.y),
+		PyGLM_PyObject_FromNumber<T>(self->super_type.z),
+		PyGLM_PyObject_FromNumber<T>(self->super_type.w));
 }
 #pragma endregion 
 
@@ -36132,12 +36184,12 @@ silence(PyObject*, PyObject* arg) {
 PyGLM_MAKE_GLM_FUNC_V3__tfF(polar)
 PyGLM_MAKE_GLM_FUNC_V2__tfF(euclidean)
 
-static PyObject*
-test(PyObject* self, PyObject* arg) {
-	return mat_to_tuple((mat<4, 4, float>*)(arg), NULL);
-}
-#define HAS_TEST
-#define TEST_FUNC_TYPE METH_O
+//static PyObject*
+//test(PyObject* self, PyObject* arg) {
+//	return mat_to_tuple((mat<4, 4, float>*)(arg), NULL);
+//}
+//#define HAS_TEST
+//#define TEST_FUNC_TYPE METH_O
 
 static PyMethodDef glmmethods[] = {
 	// DETAIL
