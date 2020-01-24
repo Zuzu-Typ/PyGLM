@@ -36,7 +36,7 @@ deploy:
     secure: TiOzosTUjcMXDzepsVvlG2MljGP88nGisDQ/+Bm57MNUKTS3Rnrev9ES0T081oyP3SWea/o00joSIKJyDbi2Qd4s1E98ZBA4I+ZyBFl+GHslDgj6PqU8kHCtCUzULWSq2iqWso57nR2dQjZ6bf/bO9Jw0Be320kG436ERnx6LXVt8cDDq3rvn3SfrqPSvasyUwJxWdmj5KpGDqsmP5xA5xwK351l6vNWnRjo3roxQVz6mVjcgzklcggX+rL5P6OuQEiKe6UAZ/ucM2MJCVCyfa31wfdpqcbdc5x6GWEDplLjXFU3vBpZJYyL+Xeh5so/v21qFRayI6D55LQd+Fv58tgPCWX67wdr8KRm1p/yG39fOEIszJDHWaVyAOyH+tR7yKqz/DKJPa0SrT47Ru/QLzvmhqoPP86NR6k6D+DS4ymAsC3abFgPOZ0n9Sh3aA6xP3NquQoo7bJDxakApy0RqmD7S1+Bt2AET3f0jxxvy5ToAJgyAQnlac4PN0pJ+C7NUsHLibYWp4IQIK+2n1BTVr7iIOzK4LKn0dciNaLgHNCr/+2JxcqRm3rz2kmbIQwcBdqeQqZdEc/M5nqpuW79xqhNp98cRSG9D0Bx5ESElGPoH6kqqftQbY16uSOiSJOm8vC1lSZlHxiiIgtVV5rnVBn+buU5wmwNjY7Iv+nCpsk=
   file_glob: true
   file: wheelhouse/*
-  cleanup: false
+  skip_cleanup: true
   on:
     repo: aforren1/PyGLM
     tags: true
