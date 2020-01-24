@@ -580,6 +580,26 @@ for args in gen_args("V_M_Q"):
     fassert(copy.deepcopy, args)
 #/copy module #
 
+# to_list #
+for args in gen_args("V_Q"):
+    for arg in args:
+        assert arg.to_list() == [x for x in arg]
+
+for args in gen_args("M"):
+    for arg in args:
+        assert arg.to_list() == [[y for y in x] for x in arg]
+#/to_list #
+
+# to_tuple #
+for args in gen_args("V_Q"):
+    for arg in args:
+        assert arg.to_tuple() == tuple([x for x in arg])
+
+for args in gen_args("M"):
+    for arg in args:
+        assert arg.to_tuple() == tuple([tuple([y for y in x]) for x in arg])
+#/to_tuple #
+
 ## DETAIL ##
 
 # func_packing #
