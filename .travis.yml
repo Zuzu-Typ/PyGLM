@@ -2,7 +2,6 @@ language: python
 
 env:
   global:
-      # only 64-bit
       - CIBW_SKIP=cp34-*
       - CIBW_BUILD=cp3?-*
       - CIBW_TEST_COMMAND="python {project}/PyGLM_test.py"
@@ -16,7 +15,9 @@ matrix:
     # mac
     - os: osx
       language: generic
-      env: MACOSX_DEPLOYMENT_TARGET=10.9
+      env: MACOSX_DEPLOYMENT_TARGET=10.9 # for c++11
+      # the tag is incorrect, impending fix at
+      # https://github.com/joerick/cibuildwheel/pull/156
     # windows
     - os: windows
       language: generic
