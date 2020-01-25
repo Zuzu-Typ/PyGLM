@@ -1,28 +1,43 @@
 language: python
-matrix:
+os: linux
+
+env:
+  global:
+      - CIBW_SKIP=cp34-*
+      - CIBW_BUILD=cp3?-*
+      - CIBW_TEST_COMMAND="python {project}/PyGLM_test.py"
+      - CIBW_MANYLINUX_X86_64_IMAGE=manylinux1
+      - CIBW_MANYLINUX_I686_IMAGE=manylinux1
+
+jobs:
   include:
-    - name: "Python 3.5 on Linux"
-      python: 3.5
-      dist: xenial
-    - name: "Python 3.6 on Linux"
-      python: 3.6
-      dist: xenial
-    - name: "Python 3.7 on Linux"
-      python: 3.7
-      dist: xenial
-    - name: "Python 3.8 on Linux"
-      python: 3.8
-      dist: xenial
-    - name: "Python 3.7 on macOS"
-      os: osx
-      osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
-      language: shell       # 'language: python' is an error on Travis CI macOS
-    - name: "Python 3.8 on Windows"
-      os: windows           # Windows 10.0.17134 N/A Build 17134
-      language: shell       # 'language: python' is an error on Travis CI Windows
-      before_install: choco install python
-      env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
-install: python3 setup.py install || python setup.py install
-# 'python' points to Python 2.7 on macOS but points to Python 3.7 on Linux and Windows
-# 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
-script: python3 PyGLM_test.py || python PyGLM_test.py
+    - services: docker # linux
+    - os: osx
+      language: generic
+      env: MACOSX_DEPLOYMENT_TARGET=10.9 # for c++11
+      # the tag is incorrect, impending fix at
+      # https://github.com/joerick/cibuildwheel/pull/156
+    - os: windows
+      language: generic
+      before_install:
+        - choco install python --version 3.8.0
+        - export PATH="/c/Python38:/c/Python/Scripts:$PATH"
+
+install:
+  - python -m pip install cibuildwheel==1.1.0
+
+script:
+  - python -m cibuildwheel --output-dir ./wheelhouse
+  - ls wheelhouse
+
+deploy:
+  provider: releases
+  token:
+    secure: TiOzosTUjcMXDzepsVvlG2MljGP88nGisDQ/+Bm57MNUKTS3Rnrev9ES0T081oyP3SWea/o00joSIKJyDbi2Qd4s1E98ZBA4I+ZyBFl+GHslDgj6PqU8kHCtCUzULWSq2iqWso57nR2dQjZ6bf/bO9Jw0Be320kG436ERnx6LXVt8cDDq3rvn3SfrqPSvasyUwJxWdmj5KpGDqsmP5xA5xwK351l6vNWnRjo3roxQVz6mVjcgzklcggX+rL5P6OuQEiKe6UAZ/ucM2MJCVCyfa31wfdpqcbdc5x6GWEDplLjXFU3vBpZJYyL+Xeh5so/v21qFRayI6D55LQd+Fv58tgPCWX67wdr8KRm1p/yG39fOEIszJDHWaVyAOyH+tR7yKqz/DKJPa0SrT47Ru/QLzvmhqoPP86NR6k6D+DS4ymAsC3abFgPOZ0n9Sh3aA6xP3NquQoo7bJDxakApy0RqmD7S1+Bt2AET3f0jxxvy5ToAJgyAQnlac4PN0pJ+C7NUsHLibYWp4IQIK+2n1BTVr7iIOzK4LKn0dciNaLgHNCr/+2JxcqRm3rz2kmbIQwcBdqeQqZdEc/M5nqpuW79xqhNp98cRSG9D0Bx5ESElGPoH6kqqftQbY16uSOiSJOm8vC1lSZlHxiiIgtVV5rnVBn+buU5wmwNjY7Iv+nCpsk=
+  file_glob: true
+  file: wheelhouse/*
+  skip_cleanup: true
+  on:
+    repo: aforren1/PyGLM
+    tags: true
+    branch: ci
