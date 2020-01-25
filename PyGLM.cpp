@@ -1,4 +1,4 @@
-#define PyGLM_VERSION "1.1.6"
+#define PyGLM_VERSION "1.1.7"
 
 #define PyGLM_LICENSE "PyGLM license information:\n"\
 "\n"\
