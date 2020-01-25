@@ -31,4 +31,3 @@ deploy:
   on:
     repo: Zuzu-Typ/PyGLM
     tags: true
-    branch: master
