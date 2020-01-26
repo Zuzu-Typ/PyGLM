@@ -7,6 +7,9 @@ env:
   - CIBW_TEST_COMMAND="python {project}/PyGLM_test.py"
   - CIBW_MANYLINUX_X86_64_IMAGE=manylinux1
   - CIBW_MANYLINUX_I686_IMAGE=manylinux1
+  - TWINE_USERNAME=__token__
+  # TWINE_PASSWORD
+  - secure: gI7OeZLn0Xd8Z7Wd9wGoPwwzKVb+AoKD5LA0cCh/DGcWQU3bo79EB8B+gx9I2B+lxXUviQS9K5EhUfs0jof4Mjh7fGuYLFrznbtAqLl9g3lBmHGpFeFqqHzcCSYPcxbPRnuIrgUhQ07RHcZSPWKwFqdpCXajPC3W+i52NZ0DKT9G2c0u9QUigLfjhVC9IJbd7CZaGlFBnNWuRC0FhbDXvJYhNZctEXKXgtBjpAkOQfqfl/l1e51qVTcl1KDK8fLERCOpO9TGwpmfdzkwD7T49z+1Dwev1EfPvu9FLezWTWir9G7HP+LobUZpgnFS87HCbKGFzVvtcLiboyQgRd7iYDYfXImrwiyuLduGsvXFYXI7Dj3QMY8aJ/ochyCQPHnUu55ThasCr4TKHTm8sKDgrsnppiqLlObT/jNi0qhcEoLCxI7nb9tDBKu3NWqRmUOOPy3wUA73dJ/E8vAYlfMJKewzZemSdfddir3Mv+G4ZowZZXtBxRnByrrJUavdEUwmxObq6d1VPMfXcnZ5QxIotIZSzuEHToKy+DhyHxX6ET2jnlrgMBO0nHN11I2v/h4b6Mv6RIzfIVvBhB9JzBdlNFFHFbkvHUXlDkqWRacmpPRxtiHKVXDH7YHGGc1R8EjXn/l/fhTgPMhEXPViE3wnBO5JQyyxULSL47Y5wkEUiaE=
 jobs:
   include:
   - services: docker
@@ -19,10 +22,12 @@ jobs:
     - choco install python --version 3.8.0
     - export PATH="/c/Python38:/c/Python/Scripts:$PATH"
 install:
-- python -m pip install cibuildwheel==1.1.0
+- python -m pip install twine cibuildwheel==1.1.0
 script:
 - python -m cibuildwheel --output-dir ./wheelhouse
 - ls wheelhouse
+after_success:
+  - if [[ $TRAVIS_TAG ]]; then python -m twine upload wheelhouse/*.whl; fi
 deploy:
   provider: releases
   api_key:
