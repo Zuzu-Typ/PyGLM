@@ -13,11 +13,16 @@ from setuptools import setup, find_packages, Extension
 # To use a consistent encoding
 from codecs import open
 from os import path
-    
+
+import re
+
 module1 = Extension('glm',
                     sources = ['PyGLM.cpp'], include_dirs=["glm/"], extra_compile_args=['-std=c++11'])
 
 here = path.abspath(path.dirname(__file__))
+
+with open(path.join(here, "version.h")) as f:
+    __version__ = re.search('"(.*?)"', f.read()).group().strip('"')
 
 # Get the long description from the README file
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
@@ -30,7 +35,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.1.7',
+    version=__version__,
 
     description='OpenGL Mathematics library for Python',
     long_description=long_description,
