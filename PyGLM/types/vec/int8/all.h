@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TYPES_VEC_INT8_ALL_H
+#define TYPES_VEC_INT8_ALL_H
 
 #include "vec1.h"
 
@@ -7,3 +8,5 @@
 #include "vec3.h"
 
 #include "vec4.h"
+
+#endif
