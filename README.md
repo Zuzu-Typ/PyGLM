@@ -90,7 +90,7 @@ The ``` GLM_GTC_bitfield ``` extension,
   
 #### Build options  
 PyGLM can be built from source in a couple of different ways\.  
-In ``` PyGLM.cpp ``` there is a preprocessor option ``` PyGLM_BUILD ``` which is set to ``` PyGLM_DEFAULT ``` by default\.  
+In ``` build_options.h ``` there is a preprocessor option ``` PyGLM_BUILD ``` which is set to ``` PyGLM_DEFAULT ``` by default\.  
 ``` PyGLM_DEFAULT ``` will build all of PyGLM's functions and features\.  
   
 A few other flags exist:  

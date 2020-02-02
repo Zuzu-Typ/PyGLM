@@ -1,0 +1,6 @@
+#pragma once
+
+
+#define PyGLM_FREXP_WARNING 1
+
+int PyGLM_SHOW_WARNINGS = PyGLM_FREXP_WARNING;

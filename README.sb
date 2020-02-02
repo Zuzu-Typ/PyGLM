@@ -88,7 +88,7 @@ The \code \GLM_GTC_bitfield\ code\ extension,
 
 \h4 \Build options\ h4\
 PyGLM can be built from source in a couple of different ways.
-In \code \PyGLM.cpp\ code\ there is a preprocessor option \code \PyGLM_BUILD\ code\ which is set to \code \PyGLM_DEFAULT\ code\ by default.
+In \code \build_options.h\ code\ there is a preprocessor option \code \PyGLM_BUILD\ code\ which is set to \code \PyGLM_DEFAULT\ code\ by default.
 \code \PyGLM_DEFAULT\ code\ will build all of PyGLM's functions and features.
 
 A few other flags exist:

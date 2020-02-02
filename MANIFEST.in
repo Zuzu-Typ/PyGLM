@@ -3,4 +3,8 @@ include COPYING
 include README.md
 include setup.py
 include setup.cfg
+include build_options.h
+include version.h
+include license.h
+recursive-include PyGLM *
 recursive-include glm *
