@@ -2,6 +2,8 @@
 
 #include "../compiler_setup.h"
 
+#include "../types/all.h"
+
 #include "helper_macros.h"
 #include "number_functions.h"
 

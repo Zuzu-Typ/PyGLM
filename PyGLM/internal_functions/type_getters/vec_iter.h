@@ -2,6 +2,8 @@
 
 #include "../../compiler_setup.h"
 
+#include "../../types/all.h"
+
 template<int L, typename T>
 static PyTypeObject* PyGLM_VECITER_TYPE() {
 	if (std::is_same<vecIter<L, T>, vecIter<1, float> >::value) {

@@ -2,6 +2,8 @@
 
 #include "../../compiler_setup.h"
 
+#include "../../types/all.h"
+
 template<int C, int R, typename T>
 static PyTypeObject* PyGLM_MATITER_TYPE() {
 	if (std::is_same<matIter<C, R, T>, matIter<2, 2, float> >::value) {

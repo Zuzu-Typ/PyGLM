@@ -2,6 +2,8 @@
 
 #include "../../compiler_setup.h"
 
+#include "../../types/all.h"
+
 template<int L, typename T>
 static PyTypeObject* PyGLM_MVEC_TYPE() {
 	if (std::is_same<mvec<L, T>, mvec<2, float> >::value) {
