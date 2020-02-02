@@ -1,5 +1,7 @@
 #pragma once
 
+#include "forward_declarations.h"
+
 #include "bool/all.h"
 
 #include "double/all.h"

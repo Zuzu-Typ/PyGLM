@@ -9,7 +9,6 @@
 #define PyGLM_TYPE_QUA 3
 
 // type definitions
-#pragma region type definitions
 struct shape_helper {
 	PyObject_HEAD
 		uint8_t shape;
