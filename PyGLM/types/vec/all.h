@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TYPES_VEC_ALL_H
+#define TYPES_VEC_ALL_H
 
 #include "forward_declarations.h"
 
@@ -23,3 +24,5 @@
 #include "uint32/all.h"
 
 #include "uint64/all.h"
+
+#endif
