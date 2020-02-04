@@ -169,10 +169,10 @@ static bool get_view_format_equal(char* value) {
 	if (v_char == 'd') {
 		return std::is_same<T, double>::value;
 	}
-	if (v_char == 'c') {
+	if (v_char == 'b') {
 		return std::is_same<T, std::int8_t>::value;
 	}
-	if (v_char == 'b') {
+	if (v_char == 'B') {
 		return std::is_same<T, std::uint8_t>::value;
 	}
 	if (v_char == 'h') {
@@ -187,13 +187,13 @@ static bool get_view_format_equal(char* value) {
 	if (v_char == 'I') {
 		return std::is_same<T, std::uint32_t>::value;
 	}
-	if (v_char == 'L') {
+	if (v_char == 'q') {
 		return std::is_same<T, std::int64_t>::value;
 	}
-	if (v_char == 'K') {
+	if (v_char == 'Q') {
 		return std::is_same<T, std::uint64_t>::value;
 	}
-	if (v_char == 'p') {
+	if (v_char == '?') {
 		return std::is_same<T, bool>::value;
 	}
 	return false;
