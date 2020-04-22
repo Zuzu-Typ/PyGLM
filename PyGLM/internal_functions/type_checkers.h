@@ -1,5 +1,9 @@
 #pragma once
 
+#include <climits>
+//#include <functional>
+#include <initializer_list>
+
 #include "../compiler_setup.h"
 
 #include "../types/all.h"
@@ -7,11 +11,3348 @@
 #include "helper_macros.h"
 #include "number_functions.h"
 
+#define PyGLM_UNKNOWN		0x0000000
+#define PyGLM_DT_UNKNOWN	PyGLM_UNKNOWN
+#define PyGLM_DT_FLOAT		0x0000001
+#define PyGLM_DT_DOUBLE		0x0000002
+#define PyGLM_DT_INT		0x0000004
+#define PyGLM_DT_UINT		0x0000008
+#define PyGLM_DT_INT8		0x0000010
+#define PyGLM_DT_UINT8		0x0000020
+#define PyGLM_DT_INT16		0x0000040
+#define PyGLM_DT_UINT16		0x0000080
+#define PyGLM_DT_INT64		0x0000100
+#define PyGLM_DT_UINT64		0x0000200
+#define PyGLM_DT_BOOL		0x0000400
+
+#define PyGLM_DT_float		PyGLM_DT_FLOAT
+#define PyGLM_DT_double		PyGLM_DT_DOUBLE
+#define PyGLM_DT_int32		PyGLM_DT_INT
+#define PyGLM_DT_uint32		PyGLM_DT_UINT
+#define PyGLM_DT_int64		PyGLM_DT_INT64
+#define PyGLM_DT_uint64		PyGLM_DT_UINT64
+#define PyGLM_DT_int16		PyGLM_DT_INT16
+#define PyGLM_DT_uint16		PyGLM_DT_UINT16
+#define PyGLM_DT_int8		PyGLM_DT_INT8
+#define PyGLM_DT_uint8		PyGLM_DT_UINT8
+#define PyGLM_DT_bool		PyGLM_DT_BOOL
+
+#define PyGLM_SHAPE_2x2		0x0000800
+#define PyGLM_SHAPE_2x3		0x0001000
+#define PyGLM_SHAPE_2x4		0x0002000
+#define PyGLM_SHAPE_3x2		0x0004000
+#define PyGLM_SHAPE_3x3		0x0008000
+#define PyGLM_SHAPE_3x4		0x0010000
+#define PyGLM_SHAPE_4x2		0x0020000
+#define PyGLM_SHAPE_4x3		0x0040000
+#define PyGLM_SHAPE_4x4		0x0080000
+
+#define PyGLM_SHAPE_1		0x0100000
+#define PyGLM_SHAPE_2		0x0200000
+#define PyGLM_SHAPE_3		0x0400000
+#define PyGLM_SHAPE_4		0x0800000
+
+#define PyGLM_T_VEC			0x1000000
+#define PyGLM_T_MVEC		0x2000000
+#define PyGLM_T_MAT			0x4000000
+#define PyGLM_T_QUA			0x8000000
+
+#define PyGLM_T_NUMBER		0x10000000
+
+#define PyGLM_T_ANY_VEC	   (PyGLM_T_VEC | PyGLM_T_MVEC)
+#define PyGLM_T_ANY_ARR	   (PyGLM_T_ANY_VEC | PyGLM_T_QUA)
+
+#define PyGLM_SHAPE_SQUARE (PyGLM_SHAPE_2x2 | PyGLM_SHAPE_3x3 | PyGLM_SHAPE_4x4)
+
+#define PyGLM_SHAPE_2xM	   (PyGLM_SHAPE_2x2 | PyGLM_SHAPE_2x3 | PyGLM_SHAPE_2x4)
+#define PyGLM_SHAPE_3xM	   (PyGLM_SHAPE_3x2 | PyGLM_SHAPE_3x3 | PyGLM_SHAPE_3x4)
+#define PyGLM_SHAPE_4xM	   (PyGLM_SHAPE_4x2 | PyGLM_SHAPE_4x3 | PyGLM_SHAPE_4x4)
+
+#define PyGLM_SHAPE_NxM	   (PyGLM_SHAPE_2xM | PyGLM_SHAPE_3xM | PyGLM_SHAPE_4xM)
+
+#define PyGLM_DT_ALL		((1 << 11) - 1)
+#define PyGLM_SHAPE_ALL		(((1 << 13) - 1) << 11)
+#define PyGLM_T_ALL			(((1 << 5) - 1) << 24)
+
+#define PyGLM_ALL (PyGLM_DT_ALL | PyGLM_SHAPE_ALL | PyGLM_T_ALL)
+
+#define PyGLM_SHAPE_GET(C, R) (1 << (11 + (3 * (C-2) + (R-2))))
+
+#define PyGLM_TYPE_GET(T) (PyGLMTypeInfo::getDT<T>())
+
+#define PyGLM_IsPyGLMType(obj) (obj->ob_name)
+
+#define PyGLM_PTI_Compare(a, b) (((a) & (b)) == (b))
+
+#define PyGLM_PTI_Number_Check(pti) (pti.info & PyGLM_T_NUMBER)
+
+#define PyGLM_PTI_Number_T_Check(T, pti) (pti.info & (PyGLM_T_NUMBER | PyGLM_TYPE_GET(T)))
+
+#define PyGLM_PTI_Mat_CRT_Check(C, R, T, pti) (pti.info & (PyGLM_SHAPE_GET(C, R) | PyGLM_TYPE_GET(T) | PyGLM_T_MAT))
+
+#define _SUB_PyGLM_PTI_GET_TYPE(o) ((o->ob_type->tp_dealloc == (destructor)vec_dealloc) ? PyGLM_T_VEC : (o->ob_type->tp_dealloc == (destructor)mat_dealloc) ? PyGLM_T_MAT : (o->ob_type->tp_dealloc == (destructor)qua_dealloc) ? PyGLM_T_QUA : (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) ? PyGLM_T_MVEC : PyGLM_UNKNOWN)
+#define PyGLM_PTI_GET_TYPE(o) _SUB_PyGLM_PTI_GET_TYPE(((PyObject*)o))
+
+//#define PyGLM_PTI_FMat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_FLOAT)
+//#define PyGLM_PTI_DMat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_DOUBLE)
+//#define PyGLM_PTI_IMat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT)
+//#define PyGLM_PTI_UMat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_UINT)
+//#define PyGLM_PTI_I64Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT64)
+//#define PyGLM_PTI_U64Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_UINT64)
+//#define PyGLM_PTI_I16Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT16)
+//#define PyGLM_PTI_U16Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_UINT16)
+//#define PyGLM_PTI_I8Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT8)
+//#define PyGLM_PTI_U8Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_UINT8)
+//#define PyGLM_PTI_BMat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_BOOL)
+//
+//#define PyGLM_PTI_FMat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_FLOAT)
+//#define PyGLM_PTI_DMat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_DOUBLE)
+//#define PyGLM_PTI_IMat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT)
+//#define PyGLM_PTI_UMat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_UINT)
+//#define PyGLM_PTI_I64Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT64)
+//#define PyGLM_PTI_U64Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_UINT64)
+//#define PyGLM_PTI_I16Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT16)
+//#define PyGLM_PTI_U16Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_UINT16)
+//#define PyGLM_PTI_I8Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT8)
+//#define PyGLM_PTI_U8Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_UINT8)
+//#define PyGLM_PTI_BMat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_BOOL)
+//
+//#define PyGLM_PTI_FMat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_FLOAT)
+//#define PyGLM_PTI_DMat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_DOUBLE)
+//#define PyGLM_PTI_IMat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT)
+//#define PyGLM_PTI_UMat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_UINT)
+//#define PyGLM_PTI_I64Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT64)
+//#define PyGLM_PTI_U64Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_UINT64)
+//#define PyGLM_PTI_I16Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT16)
+//#define PyGLM_PTI_U16Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_UINT16)
+//#define PyGLM_PTI_I8Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT8)
+//#define PyGLM_PTI_U8Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_UINT8)
+//#define PyGLM_PTI_BMat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_BOOL)
+//
+//#define PyGLM_PTI_FMat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_FLOAT)
+//#define PyGLM_PTI_DMat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_DOUBLE)
+//#define PyGLM_PTI_IMat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT)
+//#define PyGLM_PTI_UMat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_UINT)
+//#define PyGLM_PTI_I64Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT64)
+//#define PyGLM_PTI_U64Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_UINT64)
+//#define PyGLM_PTI_I16Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT16)
+//#define PyGLM_PTI_U16Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_UINT16)
+//#define PyGLM_PTI_I8Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT8)
+//#define PyGLM_PTI_U8Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_UINT8)
+//#define PyGLM_PTI_BMat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_BOOL)
+//
+//#define PyGLM_PTI_FMat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FLOAT)
+//#define PyGLM_PTI_DMat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_DOUBLE)
+//#define PyGLM_PTI_IMat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT)
+//#define PyGLM_PTI_UMat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_UINT)
+//#define PyGLM_PTI_I64Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT64)
+//#define PyGLM_PTI_U64Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_UINT64)
+//#define PyGLM_PTI_I16Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT16)
+//#define PyGLM_PTI_U16Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_UINT16)
+//#define PyGLM_PTI_I8Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT8)
+//#define PyGLM_PTI_U8Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_UINT8)
+//#define PyGLM_PTI_BMat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_BOOL)
+//
+//#define PyGLM_PTI_FMat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_FLOAT)
+//#define PyGLM_PTI_DMat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_DOUBLE)
+//#define PyGLM_PTI_IMat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT)
+//#define PyGLM_PTI_UMat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_UINT)
+//#define PyGLM_PTI_I64Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT64)
+//#define PyGLM_PTI_U64Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_UINT64)
+//#define PyGLM_PTI_I16Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT16)
+//#define PyGLM_PTI_U16Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_UINT16)
+//#define PyGLM_PTI_I8Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT8)
+//#define PyGLM_PTI_U8Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_UINT8)
+//#define PyGLM_PTI_BMat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_BOOL)
+//
+//#define PyGLM_PTI_FMat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_FLOAT)
+//#define PyGLM_PTI_DMat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_DOUBLE)
+//#define PyGLM_PTI_IMat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT)
+//#define PyGLM_PTI_UMat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_UINT)
+//#define PyGLM_PTI_I64Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT64)
+//#define PyGLM_PTI_U64Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_UINT64)
+//#define PyGLM_PTI_I16Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT16)
+//#define PyGLM_PTI_U16Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_UINT16)
+//#define PyGLM_PTI_I8Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT8)
+//#define PyGLM_PTI_U8Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_UINT8)
+//#define PyGLM_PTI_BMat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_BOOL)
+//
+//#define PyGLM_PTI_FMat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_FLOAT)
+//#define PyGLM_PTI_DMat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_DOUBLE)
+//#define PyGLM_PTI_IMat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT)
+//#define PyGLM_PTI_UMat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_UINT)
+//#define PyGLM_PTI_I64Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT64)
+//#define PyGLM_PTI_U64Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_UINT64)
+//#define PyGLM_PTI_I16Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT16)
+//#define PyGLM_PTI_U16Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_UINT16)
+//#define PyGLM_PTI_I8Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT8)
+//#define PyGLM_PTI_U8Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_UINT8)
+//#define PyGLM_PTI_BMat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_BOOL)
+//
+//#define PyGLM_PTI_FMat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FLOAT)
+//#define PyGLM_PTI_DMat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_DOUBLE)
+//#define PyGLM_PTI_IMat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT)
+//#define PyGLM_PTI_UMat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_UINT)
+//#define PyGLM_PTI_I64Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT64)
+//#define PyGLM_PTI_U64Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_UINT64)
+//#define PyGLM_PTI_I16Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT16)
+//#define PyGLM_PTI_U16Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_UINT16)
+//#define PyGLM_PTI_I8Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT8)
+//#define PyGLM_PTI_U8Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_UINT8)
+//#define PyGLM_PTI_BMat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_BOOL)
+
+
+// necessary forward declarations
+template<int L, typename T>
+static glm::vec<L, T> unpack_vec(PyObject* value);
+
+template<int C, int R, typename T>
+static glm::mat<C, R, T> unpack_mat(PyObject* value);
+
+template<typename T>
+static glm::qua<T> unpack_qua(PyObject* value);
+
+struct PyGLMSingleTypeHolder { // supposed to only hold a single data type
+	enum class DType { NONE, BOOL, INT32, INT64, UINT64, FLOAT, DOUBLE };
+
+	DType dtype;
+
+	void* data;
+
+	PyGLMSingleTypeHolder() {
+		dtype = DType::NONE;
+		data = NULL;
+	}
+
+	PyGLMSingleTypeHolder(PyObject* o) {
+		if (PyBool_Check(o)) {
+			dtype = DType::BOOL;
+			data = malloc(sizeof(bool));
+			*((bool*)data) = (o == Py_True) ? true : false;
+		}
+		else if (PyFloat_Check(o)) {
+			double value = PyFloat_AS_DOUBLE(o);
+			if (value > FLT_MAX || value != 0.0 && value < FLT_MIN && value > - FLT_MIN || value < - FLT_MAX) { // value doesn't fit in float
+				dtype = DType::DOUBLE;
+				data = malloc(sizeof(double));
+				*((double*)data) = value;
+			}
+			else {
+				dtype = DType::FLOAT;
+				data = malloc(sizeof(float));
+				*((float*)data) = static_cast<float>(value);
+			}
+		}
+		else if (PyLong_Check(o)) {
+			int overflow;
+			long asLong = PyLong_AsLongAndOverflow(o, &overflow);
+			if (overflow != 0) {
+				long long asLongLong = PyLong_AsLongLongAndOverflow(o, &overflow);
+				if (overflow != 0) {
+					unsigned long long asUnsignedLongLong = PyLong_AsUnsignedLongLongMask(o);
+					dtype = DType::UINT64;
+					data = malloc(sizeof(unsigned long long));
+					*((unsigned long long*)data) = asUnsignedLongLong;
+				}
+				else {
+					dtype = DType::INT64;
+					data = malloc(sizeof(long long));
+					*((long long*)data) = asLongLong;
+				}
+			}
+			else {
+				dtype = DType::INT32;
+				data = malloc(sizeof(long));
+				*((long*)data) = asLong;
+			}
+		}
+		else {
+			dtype = DType::NONE;
+			data = NULL;
+		}
+	}
+
+	static int getMostImportantType(int accepted_types, std::initializer_list<DType> list) {
+		DType highest_type = DType::NONE;
+
+		for (DType dt : list) {
+			if (highest_type < dt) {
+				highest_type = dt;
+			}
+		}
+
+		if (highest_type == DType::BOOL && (accepted_types & PyGLM_DT_BOOL)) {
+			return PyGLM_DT_BOOL;
+		}
+
+		if (highest_type == DType::DOUBLE && (accepted_types & PyGLM_DT_DOUBLE)) {
+			return PyGLM_DT_DOUBLE;
+		}
+
+		if (accepted_types & PyGLM_DT_FLOAT)
+			return PyGLM_DT_FLOAT;
+
+		if (accepted_types & PyGLM_DT_DOUBLE)
+			return PyGLM_DT_DOUBLE;
+
+		if (highest_type == DType::INT32 && (accepted_types & PyGLM_DT_INT))
+			return PyGLM_DT_INT;
+
+		if (highest_type == DType::INT64 && (accepted_types & PyGLM_DT_INT64))
+			return PyGLM_DT_INT64;
+
+		if (highest_type == DType::UINT64 && (accepted_types & PyGLM_DT_UINT64))
+			return PyGLM_DT_UINT64;
+
+		if (accepted_types & PyGLM_DT_INT)
+			return PyGLM_DT_INT;
+
+		if (accepted_types & PyGLM_DT_INT64)
+			return PyGLM_DT_INT64;
+
+		if (accepted_types & PyGLM_DT_UINT64)
+			return PyGLM_DT_UINT64;
+
+		if (accepted_types & PyGLM_DT_UINT)
+			return PyGLM_DT_UINT;
+
+		if (accepted_types & PyGLM_DT_INT16)
+			return PyGLM_DT_INT16;
+
+		if (accepted_types & PyGLM_DT_UINT16)
+			return PyGLM_DT_UINT16;
+
+		if (accepted_types & PyGLM_DT_INT8)
+			return PyGLM_DT_INT8;
+
+		if (accepted_types & PyGLM_DT_UINT8)
+			return PyGLM_DT_UINT8;
+
+		if (accepted_types & PyGLM_DT_BOOL)
+			return PyGLM_DT_BOOL;
+
+		return 0;
+	}
+
+	double asDouble() {
+		switch (dtype) {
+		case DType::DOUBLE:
+			return *(double*)data;
+		case DType::FLOAT:
+			return static_cast<double>(*(float*)data);
+		case DType::INT32:
+			return static_cast<double>(*(long*)data);
+		case DType::INT64:
+			return static_cast<double>(*(long long*)data);
+		case DType::UINT64:
+			return static_cast<double>(*(unsigned long long*)data);
+		case DType::BOOL:
+			return static_cast<double>(*(bool*)data);
+		default:
+			return 0.0;
+		}
+	}
+
+	float asFloat() {
+		switch (dtype) {
+		case DType::DOUBLE:
+			return static_cast<float>(*(double*)data);
+		case DType::FLOAT:
+			return (*(float*)data);
+		case DType::INT32:
+			return static_cast<float>(*(long*)data);
+		case DType::INT64:
+			return static_cast<float>(*(long long*)data);
+		case DType::UINT64:
+			return static_cast<float>(*(unsigned long long*)data);
+		case DType::BOOL:
+			return static_cast<float>(*(bool*)data);
+		default:
+			return 0.0f;
+		}
+	}
+
+	glm::i64 asInt64() {
+		switch (dtype) {
+		case DType::DOUBLE:
+			return static_cast<glm::i64>(*(double*)data);
+		case DType::FLOAT:
+			return static_cast<glm::i64>(*(float*)data);
+		case DType::INT32:
+			return static_cast<glm::i64>(*(long*)data);
+		case DType::INT64:
+			return static_cast<glm::i64>(*(long long*)data);
+		case DType::UINT64:
+			return static_cast<glm::i64>(*(unsigned long long*)data);
+		case DType::BOOL:
+			return static_cast<glm::i64>(*(bool*)data);
+		default:
+			return 0ll;
+		}
+	}
+
+	glm::u64 asUint64() {
+		switch (dtype) {
+		case DType::DOUBLE:
+			return static_cast<glm::u64>(*(double*)data);
+		case DType::FLOAT:
+			return static_cast<glm::u64>(*(float*)data);
+		case DType::INT32:
+			return static_cast<glm::u64>(*(long*)data);
+		case DType::INT64:
+			return static_cast<glm::u64>(*(long long*)data);
+		case DType::UINT64:
+			return static_cast<glm::u64>(*(unsigned long long*)data);
+		case DType::BOOL:
+			return static_cast<glm::u64>(*(bool*)data);
+		default:
+			return 0ull;
+		}
+	}
+
+	glm::i32 asInt32() {
+		switch (dtype) {
+		case DType::DOUBLE:
+			return static_cast<glm::i32>(*(double*)data);
+		case DType::FLOAT:
+			return static_cast<glm::i32>(*(float*)data);
+		case DType::INT32:
+			return static_cast<glm::i32>(*(long*)data);
+		case DType::INT64:
+			return static_cast<glm::i32>(*(long long*)data);
+		case DType::UINT64:
+			return static_cast<glm::i32>(*(unsigned long long*)data);
+		case DType::BOOL:
+			return static_cast<glm::i32>(*(bool*)data);
+		default:
+			return 0;
+		}
+	}
+
+	glm::u32 asUint32() {
+		switch (dtype) {
+		case DType::DOUBLE:
+			return static_cast<glm::u32>(*(double*)data);
+		case DType::FLOAT:
+			return static_cast<glm::u32>(*(float*)data);
+		case DType::INT32:
+			return static_cast<glm::u32>(*(long*)data);
+		case DType::INT64:
+			return static_cast<glm::u32>(*(long long*)data);
+		case DType::UINT64:
+			return static_cast<glm::u32>(*(unsigned long long*)data);
+		case DType::BOOL:
+			return static_cast<glm::u32>(*(bool*)data);
+		default:
+			return 0u;
+		}
+	}
+
+	glm::i16 asInt16() {
+		switch (dtype) {
+		case DType::DOUBLE:
+			return static_cast<glm::i16>(*(double*)data);
+		case DType::FLOAT:
+			return static_cast<glm::i16>(*(float*)data);
+		case DType::INT32:
+			return static_cast<glm::i16>(*(long*)data);
+		case DType::INT64:
+			return static_cast<glm::i16>(*(long long*)data);
+		case DType::UINT64:
+			return static_cast<glm::i16>(*(unsigned long long*)data);
+		case DType::BOOL:
+			return static_cast<glm::i16>(*(bool*)data);
+		default:
+			return 0;
+		}
+	}
+
+	glm::u16 asUint16() {
+		switch (dtype) {
+		case DType::DOUBLE:
+			return static_cast<glm::u16>(*(double*)data);
+		case DType::FLOAT:
+			return static_cast<glm::u16>(*(float*)data);
+		case DType::INT32:
+			return static_cast<glm::u16>(*(long*)data);
+		case DType::INT64:
+			return static_cast<glm::u16>(*(long long*)data);
+		case DType::UINT64:
+			return static_cast<glm::u16>(*(unsigned long long*)data);
+		case DType::BOOL:
+			return static_cast<glm::u16>(*(bool*)data);
+		default:
+			return 0u;
+		}
+	}
+
+	glm::i8 asInt8() {
+		switch (dtype) {
+		case DType::DOUBLE:
+			return static_cast<glm::i8>(*(double*)data);
+		case DType::FLOAT:
+			return static_cast<glm::i8>(*(float*)data);
+		case DType::INT32:
+			return static_cast<glm::i8>(*(long*)data);
+		case DType::INT64:
+			return static_cast<glm::i8>(*(long long*)data);
+		case DType::UINT64:
+			return static_cast<glm::i8>(*(unsigned long long*)data);
+		case DType::BOOL:
+			return static_cast<glm::i8>(*(bool*)data);
+		default:
+			return 0;
+		}
+	}
+
+	glm::u8 asUint8() {
+		switch (dtype) {
+		case DType::DOUBLE:
+			return static_cast<glm::u8>(*(double*)data);
+		case DType::FLOAT:
+			return static_cast<glm::u8>(*(float*)data);
+		case DType::INT32:
+			return static_cast<glm::u8>(*(long*)data);
+		case DType::INT64:
+			return static_cast<glm::u8>(*(long long*)data);
+		case DType::UINT64:
+			return static_cast<glm::u8>(*(unsigned long long*)data);
+		case DType::BOOL:
+			return static_cast<glm::u8>(*(bool*)data);
+		default:
+			return 0u;
+		}
+	}
+
+	bool asBool() {
+		switch (dtype) {
+		case DType::DOUBLE:
+			return static_cast<bool>(*(double*)data);
+		case DType::FLOAT:
+			return static_cast<bool>(*(float*)data);
+		case DType::INT32:
+			return static_cast<bool>(*(long*)data);
+		case DType::INT64:
+			return static_cast<bool>(*(long long*)data);
+		case DType::UINT64:
+			return static_cast<bool>(*(unsigned long long*)data);
+		case DType::BOOL:
+			return static_cast<bool>(*(bool*)data);
+		default:
+			return false;
+		}
+	}
+};
+
+struct PyGLMTypeInfo {
+	int info	= 0;
+	void* data	= NULL;
+
+	bool needsToBeFreed = false;
+
+	PyGLMTypeInfo() = default;
+
+	PyGLMTypeInfo(int accepted_types, PyObject* obj) {
+
+		//// PyGLM Vec type
+		//if ((accepted_types & PyGLM_T_VEC) && obj->ob_type->tp_dealloc == (destructor)vec_dealloc) {
+		//	const uint8_t &info = ((type_helper*)obj)->info;
+				//
+		//	const uint8_t shape_info = info >> PyGLM_TYPE_INFO_VEC_SHAPE_OFFSET & ((1 << PyGLM_TYPE_INFO_VEC_SHAPE_LENGTH) - 1);
+				//
+		//	const uint8_t type_info = info >> PyGLM_TYPE_INFO_VEC_TYPE_OFFSET & ((1 << PyGLM_TYPE_INFO_VEC_TYPE_LENGTH) - 1);
+				//
+		//	switch (shape_info) {
+		//	case 1: // vec1's
+		//		if (accepted_types & PyGLM_SHAPE_1) {
+		//			switch (type_info) {
+		//			case PyGLM_TYPE_INFO_FLOAT:
+		//				if (accepted_types & PyGLM_DT_FLOAT) {
+		//					glm::vec<1, float> v = unpack_vec<1, float>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FLOAT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<1, float>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_DOUBLE:
+		//				if (accepted_types & PyGLM_DT_DOUBLE) {
+		//					glm::vec<1, double> v = unpack_vec<1, double>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_DOUBLE);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<1, double>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT:
+		//				if (accepted_types & PyGLM_DT_INT) {
+		//					glm::vec<1, int32_t> v = unpack_vec<1, int32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<1, int32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT:
+		//				if (accepted_types & PyGLM_DT_UINT) {
+		//					glm::vec<1, uint32_t> v = unpack_vec<1, uint32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<1, uint32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT8:
+		//				if (accepted_types & PyGLM_DT_INT8) {
+		//					glm::vec<1, int8_t> v = unpack_vec<1, int8_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT8);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<1, int8_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT8:
+		//				if (accepted_types & PyGLM_DT_UINT8) {
+		//					glm::vec<1, uint8_t> v = unpack_vec<1, uint8_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT8);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<1, uint8_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT16:
+		//				if (accepted_types & PyGLM_DT_INT16) {
+		//					glm::vec<1, int16_t> v = unpack_vec<1, int16_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT16);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<1, int16_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT16:
+		//				if (accepted_types & PyGLM_DT_UINT16) {
+		//					glm::vec<1, uint16_t> v = unpack_vec<1, uint16_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT16);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<1, uint16_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT64:
+		//				if (accepted_types & PyGLM_DT_INT64) {
+		//					glm::vec<1, int64_t> v = unpack_vec<1, int64_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT64);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<1, int64_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT64:
+		//				if (accepted_types & PyGLM_DT_UINT64) {
+		//					glm::vec<1, uint64_t> v = unpack_vec<1, uint64_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT64);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<1, uint64_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_BOOL:
+		//				if (accepted_types & PyGLM_DT_BOOL) {
+		//					glm::vec<1, bool> v = unpack_vec<1, bool>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_BOOL);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<1, bool>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			}
+		//		}
+		//		break;
+		//	case 2: // vec2's
+		//		if (accepted_types & PyGLM_SHAPE_2) {
+		//			switch (type_info) {
+		//			case PyGLM_TYPE_INFO_FLOAT:
+		//				if (accepted_types & PyGLM_DT_FLOAT) {
+		//					glm::vec<2, float> v = unpack_vec<2, float>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FLOAT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, float>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_DOUBLE:
+		//				if (accepted_types & PyGLM_DT_DOUBLE) {
+		//					glm::vec<2, double> v = unpack_vec<2, double>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_DOUBLE);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, double>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT:
+		//				if (accepted_types & PyGLM_DT_INT) {
+		//					glm::vec<2, int32_t> v = unpack_vec<2, int32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, int32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT:
+		//				if (accepted_types & PyGLM_DT_UINT) {
+		//					glm::vec<2, uint32_t> v = unpack_vec<2, uint32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, uint32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT8:
+		//				if (accepted_types & PyGLM_DT_INT8) {
+		//					glm::vec<2, int8_t> v = unpack_vec<2, int8_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT8);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, int8_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT8:
+		//				if (accepted_types & PyGLM_DT_UINT8) {
+		//					glm::vec<2, uint8_t> v = unpack_vec<2, uint8_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT8);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, uint8_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT16:
+		//				if (accepted_types & PyGLM_DT_INT16) {
+		//					glm::vec<2, int16_t> v = unpack_vec<2, int16_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT16);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, int16_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT16:
+		//				if (accepted_types & PyGLM_DT_UINT16) {
+		//					glm::vec<2, uint16_t> v = unpack_vec<2, uint16_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT16);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, uint16_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT64:
+		//				if (accepted_types & PyGLM_DT_INT64) {
+		//					glm::vec<2, int64_t> v = unpack_vec<2, int64_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT64);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, int64_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT64:
+		//				if (accepted_types & PyGLM_DT_UINT64) {
+		//					glm::vec<2, uint64_t> v = unpack_vec<2, uint64_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT64);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, uint64_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_BOOL:
+		//				if (accepted_types & PyGLM_DT_BOOL) {
+		//					glm::vec<2, bool> v = unpack_vec<2, bool>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_BOOL);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, bool>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			}
+		//		}
+		//		break;
+		//	case 3: // vec3's
+		//		if (accepted_types & PyGLM_SHAPE_3) {
+		//			switch (type_info) {
+		//			case PyGLM_TYPE_INFO_FLOAT:
+		//				if (accepted_types & PyGLM_DT_FLOAT) {
+		//					glm::vec<3, float> v = unpack_vec<3, float>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, float>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_DOUBLE:
+		//				if (accepted_types & PyGLM_DT_DOUBLE) {
+		//					glm::vec<3, double> v = unpack_vec<3, double>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_DOUBLE);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, double>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT:
+		//				if (accepted_types & PyGLM_DT_INT) {
+		//					glm::vec<3, int32_t> v = unpack_vec<3, int32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, int32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT:
+		//				if (accepted_types & PyGLM_DT_UINT) {
+		//					glm::vec<3, uint32_t> v = unpack_vec<3, uint32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, uint32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT8:
+		//				if (accepted_types & PyGLM_DT_INT8) {
+		//					glm::vec<3, int8_t> v = unpack_vec<3, int8_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT8);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, int8_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT8:
+		//				if (accepted_types & PyGLM_DT_UINT8) {
+		//					glm::vec<3, uint8_t> v = unpack_vec<3, uint8_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT8);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, uint8_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT16:
+		//				if (accepted_types & PyGLM_DT_INT16) {
+		//					glm::vec<3, int16_t> v = unpack_vec<3, int16_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT16);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, int16_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT16:
+		//				if (accepted_types & PyGLM_DT_UINT16) {
+		//					glm::vec<3, uint16_t> v = unpack_vec<3, uint16_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT16);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, uint16_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT64:
+		//				if (accepted_types & PyGLM_DT_INT64) {
+		//					glm::vec<3, int64_t> v = unpack_vec<3, int64_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT64);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, int64_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT64:
+		//				if (accepted_types & PyGLM_DT_UINT64) {
+		//					glm::vec<3, uint64_t> v = unpack_vec<3, uint64_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT64);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, uint64_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_BOOL:
+		//				if (accepted_types & PyGLM_DT_BOOL) {
+		//					glm::vec<3, bool> v = unpack_vec<3, bool>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_BOOL);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, bool>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			}
+		//		}
+		//		break;
+		//	case 4: // vec4's
+		//		if (accepted_types & PyGLM_SHAPE_4) {
+		//			switch (type_info) {
+		//			case PyGLM_TYPE_INFO_FLOAT:
+		//				if (accepted_types & PyGLM_DT_FLOAT) {
+		//					glm::vec<4, float> v = unpack_vec<4, float>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FLOAT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, float>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_DOUBLE:
+		//				if (accepted_types & PyGLM_DT_DOUBLE) {
+		//					glm::vec<4, double> v = unpack_vec<4, double>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_DOUBLE);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, double>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT:
+		//				if (accepted_types & PyGLM_DT_INT) {
+		//					glm::vec<4, int32_t> v = unpack_vec<4, int32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, int32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT:
+		//				if (accepted_types & PyGLM_DT_UINT) {
+		//					glm::vec<4, uint32_t> v = unpack_vec<4, uint32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, uint32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT8:
+		//				if (accepted_types & PyGLM_DT_INT8) {
+		//					glm::vec<4, int8_t> v = unpack_vec<4, int8_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT8);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, int8_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT8:
+		//				if (accepted_types & PyGLM_DT_UINT8) {
+		//					glm::vec<4, uint8_t> v = unpack_vec<4, uint8_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT8);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, uint8_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT16:
+		//				if (accepted_types & PyGLM_DT_INT16) {
+		//					glm::vec<4, int16_t> v = unpack_vec<4, int16_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT16);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, int16_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT16:
+		//				if (accepted_types & PyGLM_DT_UINT16) {
+		//					glm::vec<4, uint16_t> v = unpack_vec<4, uint16_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT16);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, uint16_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT64:
+		//				if (accepted_types & PyGLM_DT_INT64) {
+		//					glm::vec<4, int64_t> v = unpack_vec<4, int64_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT64);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, int64_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT64:
+		//				if (accepted_types & PyGLM_DT_UINT64) {
+		//					glm::vec<4, uint64_t> v = unpack_vec<4, uint64_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT64);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, uint64_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_BOOL:
+		//				if (accepted_types & PyGLM_DT_BOOL) {
+		//					glm::vec<4, bool> v = unpack_vec<4, bool>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_BOOL);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, bool>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			}
+		//		}
+		//		break;
+		//	}
+		//}
+		//// PyGLM mVec type
+		//if ((accepted_types & PyGLM_T_MVEC) && obj->ob_type->tp_dealloc == (destructor)mvec_dealloc) {
+		//	const uint8_t &info = ((type_helper*)obj)->info;
+		//
+		//	const uint8_t shape_info = info >> PyGLM_TYPE_INFO_VEC_SHAPE_OFFSET & ((1 << PyGLM_TYPE_INFO_VEC_SHAPE_LENGTH) - 1);
+		//
+		//	const uint8_t type_info = info >> PyGLM_TYPE_INFO_VEC_TYPE_OFFSET & ((1 << PyGLM_TYPE_INFO_VEC_TYPE_LENGTH) - 1);
+		//
+		//	switch (shape_info) {
+		//	case 2: // mvec2's
+		//		if (accepted_types & PyGLM_SHAPE_2) {
+		//			switch (type_info) {
+		//			case PyGLM_TYPE_INFO_FLOAT:
+		//				if (accepted_types & PyGLM_DT_FLOAT) {
+		//					glm::vec<2, float> v = unpack_vec<2, float>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FLOAT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, float>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_DOUBLE:
+		//				if (accepted_types & PyGLM_DT_DOUBLE) {
+		//					glm::vec<2, double> v = unpack_vec<2, double>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_DOUBLE);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, double>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT:
+		//				if (accepted_types & PyGLM_DT_INT) {
+		//					glm::vec<2, int32_t> v = unpack_vec<2, int32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, int32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT:
+		//				if (accepted_types & PyGLM_DT_UINT) {
+		//					glm::vec<2, uint32_t> v = unpack_vec<2, uint32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<2, uint32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			}
+		//		}
+		//		break;
+		//	case 3: // mvec3's
+		//		if (accepted_types & PyGLM_SHAPE_3) {
+		//			switch (type_info) {
+		//			case PyGLM_TYPE_INFO_FLOAT:
+		//				if (accepted_types & PyGLM_DT_FLOAT) {
+		//					glm::vec<3, float> v = unpack_vec<3, float>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, float>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_DOUBLE:
+		//				if (accepted_types & PyGLM_DT_DOUBLE) {
+		//					glm::vec<3, double> v = unpack_vec<3, double>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_DOUBLE);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, double>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT:
+		//				if (accepted_types & PyGLM_DT_INT) {
+		//					glm::vec<3, int32_t> v = unpack_vec<3, int32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, int32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT:
+		//				if (accepted_types & PyGLM_DT_UINT) {
+		//					glm::vec<3, uint32_t> v = unpack_vec<3, uint32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<3, uint32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			}
+		//		}
+		//		break;
+		//	case 4: // mvec4's
+		//		if (accepted_types & PyGLM_SHAPE_4) {
+		//			switch (type_info) {
+		//			case PyGLM_TYPE_INFO_FLOAT:
+		//				if (accepted_types & PyGLM_DT_FLOAT) {
+		//					glm::vec<4, float> v = unpack_vec<4, float>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FLOAT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, float>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_DOUBLE:
+		//				if (accepted_types & PyGLM_DT_DOUBLE) {
+		//					glm::vec<4, double> v = unpack_vec<4, double>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_DOUBLE);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, double>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_INT:
+		//				if (accepted_types & PyGLM_DT_INT) {
+		//					glm::vec<4, int32_t> v = unpack_vec<4, int32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, int32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			case PyGLM_TYPE_INFO_UINT:
+		//				if (accepted_types & PyGLM_DT_UINT) {
+		//					glm::vec<4, uint32_t> v = unpack_vec<4, uint32_t>(obj);
+		//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT);
+		//					allocate(sizeof(v));
+		//					*((glm::vec<4, uint32_t>*)data) = v;
+		//					return;
+		//				}
+		//				break;
+		//			}
+		//		}
+		//		break;
+		//	}
+		//}
+		//// PyGLM Mat type
+		//if ((accepted_types & PyGLM_T_MAT) && obj->ob_type->tp_dealloc == (destructor)mat_dealloc) {
+		//	const uint8_t &info = ((type_helper*)obj)->info;
+		//
+		//	const uint8_t shape1_info = info >> PyGLM_TYPE_INFO_MAT_SHAPE1_OFFSET & ((1 << PyGLM_TYPE_INFO_MAT_SHAPE1_LENGTH) - 1);
+		//	const uint8_t shape2_info = info >> PyGLM_TYPE_INFO_MAT_SHAPE2_OFFSET & ((1 << PyGLM_TYPE_INFO_MAT_SHAPE2_LENGTH) - 1);
+		//
+		//	const uint8_t type_info = info >> PyGLM_TYPE_INFO_MAT_TYPE_OFFSET & ((1 << PyGLM_TYPE_INFO_MAT_TYPE_LENGTH) - 1);
+		//
+		//	switch (shape1_info) {
+		//	case 2: // mat2xM
+		//		if (accepted_types & PyGLM_SHAPE_2xM) {
+		//			switch (shape2_info) {
+		//			case 2: // mat2x2
+		//				if (accepted_types & PyGLM_SHAPE_2x2) {
+		//					switch (type_info) {
+		//					case PyGLM_TYPE_INFO_FLOAT:
+		//						if (accepted_types & PyGLM_DT_FLOAT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_FLOAT);
+		//							allocate(sizeof(glm::mat<2, 2, float>));
+		//							*((glm::mat<2, 2, float>*)data) = unpack_mat<2, 2, float>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_DOUBLE:
+		//						if (accepted_types & PyGLM_DT_DOUBLE) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_DOUBLE);
+		//							allocate(sizeof(glm::mat<2, 2, double>));
+		//							*((glm::mat<2, 2, double>*)data) = unpack_mat<2, 2, double>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_INT:
+		//						if (accepted_types & PyGLM_DT_INT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT);
+		//							allocate(sizeof(glm::mat<2, 2, int32_t>));
+		//							*((glm::mat<2, 2, int32_t>*)data) = unpack_mat<2, 2, int32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_UINT:
+		//						if (accepted_types & PyGLM_DT_UINT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_UINT);
+		//							allocate(sizeof(glm::mat<2, 2, uint32_t>));
+		//							*((glm::mat<2, 2, uint32_t>*)data) = unpack_mat<2, 2, uint32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					}
+		//				}
+		//				return;
+		//			case 3: // mat2x3
+		//				if (accepted_types & PyGLM_SHAPE_2x3) {
+		//					switch (type_info) {
+		//					case PyGLM_TYPE_INFO_FLOAT:
+		//						if (accepted_types & PyGLM_DT_FLOAT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_FLOAT);
+		//							allocate(sizeof(glm::mat<2, 3, float>));
+		//							*((glm::mat<2, 3, float>*)data) = unpack_mat<2, 3, float>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_DOUBLE:
+		//						if (accepted_types & PyGLM_DT_DOUBLE) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_DOUBLE);
+		//							allocate(sizeof(glm::mat<2, 3, double>));
+		//							*((glm::mat<2, 3, double>*)data) = unpack_mat<2, 3, double>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_INT:
+		//						if (accepted_types & PyGLM_DT_INT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT);
+		//							allocate(sizeof(glm::mat<2, 3, int32_t>));
+		//							*((glm::mat<2, 3, int32_t>*)data) = unpack_mat<2, 3, int32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_UINT:
+		//						if (accepted_types & PyGLM_DT_UINT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_UINT);
+		//							allocate(sizeof(glm::mat<2, 3, uint32_t>));
+		//							*((glm::mat<2, 3, uint32_t>*)data) = unpack_mat<2, 3, uint32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					}
+		//				}
+		//				return;
+		//			case 4: // mat2x4
+		//				if (accepted_types & PyGLM_SHAPE_2x4) {
+		//					switch (type_info) {
+		//					case PyGLM_TYPE_INFO_FLOAT:
+		//						if (accepted_types & PyGLM_DT_FLOAT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_FLOAT);
+		//							allocate(sizeof(glm::mat<2, 4, float>));
+		//							*((glm::mat<2, 4, float>*)data) = unpack_mat<2, 4, float>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_DOUBLE:
+		//						if (accepted_types & PyGLM_DT_DOUBLE) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_DOUBLE);
+		//							allocate(sizeof(glm::mat<2, 4, double>));
+		//							*((glm::mat<2, 4, double>*)data) = unpack_mat<2, 4, double>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_INT:
+		//						if (accepted_types & PyGLM_DT_INT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT);
+		//							allocate(sizeof(glm::mat<2, 4, int32_t>));
+		//							*((glm::mat<2, 4, int32_t>*)data) = unpack_mat<2, 4, int32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_UINT:
+		//						if (accepted_types & PyGLM_DT_UINT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_UINT);
+		//							allocate(sizeof(glm::mat<2, 4, uint32_t>));
+		//							*((glm::mat<2, 4, uint32_t>*)data) = unpack_mat<2, 4, uint32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					}
+		//				}
+		//				return;
+		//			}
+		//		}
+		//		return;
+		//	case 3: // mat3xM
+		//		if (accepted_types & PyGLM_SHAPE_3xM) {
+		//			switch (shape2_info) {
+		//			case 2: // mat3x2
+		//				if (accepted_types & PyGLM_SHAPE_3x2) {
+		//					switch (type_info) {
+		//					case PyGLM_TYPE_INFO_FLOAT:
+		//						if (accepted_types & PyGLM_DT_FLOAT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_FLOAT);
+		//							allocate(sizeof(glm::mat<3, 2, float>));
+		//							*((glm::mat<3, 2, float>*)data) = unpack_mat<3, 2, float>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_DOUBLE:
+		//						if (accepted_types & PyGLM_DT_DOUBLE) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_DOUBLE);
+		//							allocate(sizeof(glm::mat<3, 2, double>));
+		//							*((glm::mat<3, 2, double>*)data) = unpack_mat<3, 2, double>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_INT:
+		//						if (accepted_types & PyGLM_DT_INT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT);
+		//							allocate(sizeof(glm::mat<3, 2, int32_t>));
+		//							*((glm::mat<3, 2, int32_t>*)data) = unpack_mat<3, 2, int32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_UINT:
+		//						if (accepted_types & PyGLM_DT_UINT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_UINT);
+		//							allocate(sizeof(glm::mat<3, 2, uint32_t>));
+		//							*((glm::mat<3, 2, uint32_t>*)data) = unpack_mat<3, 2, uint32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					}
+		//				}
+		//				return;
+		//			case 3: // mat3x3
+		//				if (accepted_types & PyGLM_SHAPE_3x3) {
+		//					switch (type_info) {
+		//					case PyGLM_TYPE_INFO_FLOAT:
+		//						if (accepted_types & PyGLM_DT_FLOAT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FLOAT);
+		//							allocate(sizeof(glm::mat<3, 3, float>));
+		//							*((glm::mat<3, 3, float>*)data) = unpack_mat<3, 3, float>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_DOUBLE:
+		//						if (accepted_types & PyGLM_DT_DOUBLE) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_DOUBLE);
+		//							allocate(sizeof(glm::mat<3, 3, double>));
+		//							*((glm::mat<3, 3, double>*)data) = unpack_mat<3, 3, double>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_INT:
+		//						if (accepted_types & PyGLM_DT_INT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT);
+		//							allocate(sizeof(glm::mat<3, 3, int32_t>));
+		//							*((glm::mat<3, 3, int32_t>*)data) = unpack_mat<3, 3, int32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_UINT:
+		//						if (accepted_types & PyGLM_DT_UINT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_UINT);
+		//							allocate(sizeof(glm::mat<3, 3, uint32_t>));
+		//							*((glm::mat<3, 3, uint32_t>*)data) = unpack_mat<3, 3, uint32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					}
+		//				}
+		//				return;
+		//			case 4: // mat3x4
+		//				if (accepted_types & PyGLM_SHAPE_3x4) {
+		//					switch (type_info) {
+		//					case PyGLM_TYPE_INFO_FLOAT:
+		//						if (accepted_types & PyGLM_DT_FLOAT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_FLOAT);
+		//							allocate(sizeof(glm::mat<3, 4, float>));
+		//							*((glm::mat<3, 4, float>*)data) = unpack_mat<3, 4, float>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_DOUBLE:
+		//						if (accepted_types & PyGLM_DT_DOUBLE) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_DOUBLE);
+		//							allocate(sizeof(glm::mat<3, 4, double>));
+		//							*((glm::mat<3, 4, double>*)data) = unpack_mat<3, 4, double>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_INT:
+		//						if (accepted_types & PyGLM_DT_INT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT);
+		//							allocate(sizeof(glm::mat<3, 4, int32_t>));
+		//							*((glm::mat<3, 4, int32_t>*)data) = unpack_mat<3, 4, int32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_UINT:
+		//						if (accepted_types & PyGLM_DT_UINT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_UINT);
+		//							allocate(sizeof(glm::mat<3, 4, uint32_t>));
+		//							*((glm::mat<3, 4, uint32_t>*)data) = unpack_mat<3, 4, uint32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					}
+		//				}
+		//				return;
+		//			}
+		//		}
+		//		return;
+		//	case 4: // mat4xM
+		//		if (accepted_types & PyGLM_SHAPE_4xM) {
+		//			switch (shape2_info) {
+		//			case 2: // mat4x2
+		//				if (accepted_types & PyGLM_SHAPE_4x2) {
+		//					switch (type_info) {
+		//					case PyGLM_TYPE_INFO_FLOAT:
+		//						if (accepted_types & PyGLM_DT_FLOAT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_FLOAT);
+		//							allocate(sizeof(glm::mat<4, 2, float>));
+		//							*((glm::mat<4, 2, float>*)data) = unpack_mat<4, 2, float>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_DOUBLE:
+		//						if (accepted_types & PyGLM_DT_DOUBLE) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_DOUBLE);
+		//							allocate(sizeof(glm::mat<4, 2, double>));
+		//							*((glm::mat<4, 2, double>*)data) = unpack_mat<4, 2, double>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_INT:
+		//						if (accepted_types & PyGLM_DT_INT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT);
+		//							allocate(sizeof(glm::mat<4, 2, int32_t>));
+		//							*((glm::mat<4, 2, int32_t>*)data) = unpack_mat<4, 2, int32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_UINT:
+		//						if (accepted_types & PyGLM_DT_UINT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_UINT);
+		//							allocate(sizeof(glm::mat<4, 2, uint32_t>));
+		//							*((glm::mat<4, 2, uint32_t>*)data) = unpack_mat<4, 2, uint32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					}
+		//				}
+		//				return;
+		//			case 3: // mat4x3
+		//				if (accepted_types & PyGLM_SHAPE_4x3) {
+		//					switch (type_info) {
+		//					case PyGLM_TYPE_INFO_FLOAT:
+		//						if (accepted_types & PyGLM_DT_FLOAT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_FLOAT);
+		//							allocate(sizeof(glm::mat<4, 3, float>));
+		//							*((glm::mat<4, 3, float>*)data) = unpack_mat<4, 3, float>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_DOUBLE:
+		//						if (accepted_types & PyGLM_DT_DOUBLE) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_DOUBLE);
+		//							allocate(sizeof(glm::mat<4, 3, double>));
+		//							*((glm::mat<4, 3, double>*)data) = unpack_mat<4, 3, double>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_INT:
+		//						if (accepted_types & PyGLM_DT_INT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT);
+		//							allocate(sizeof(glm::mat<4, 3, int32_t>));
+		//							*((glm::mat<4, 3, int32_t>*)data) = unpack_mat<4, 3, int32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_UINT:
+		//						if (accepted_types & PyGLM_DT_UINT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_UINT);
+		//							allocate(sizeof(glm::mat<4, 3, uint32_t>));
+		//							*((glm::mat<4, 3, uint32_t>*)data) = unpack_mat<4, 3, uint32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					}
+		//				}
+		//				return;
+		//			case 4: // mat4x4
+		//				if (accepted_types & PyGLM_SHAPE_4x4) {
+		//					switch (type_info) {
+		//					case PyGLM_TYPE_INFO_FLOAT:
+		//						if (accepted_types & PyGLM_DT_FLOAT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FLOAT);
+		//							allocate(sizeof(glm::mat<4, 4, float>));
+		//							*((glm::mat<4, 4, float>*)data) = unpack_mat<4, 4, float>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_DOUBLE:
+		//						if (accepted_types & PyGLM_DT_DOUBLE) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_DOUBLE);
+		//							allocate(sizeof(glm::mat<4, 4, double>));
+		//							*((glm::mat<4, 4, double>*)data) = unpack_mat<4, 4, double>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_INT:
+		//						if (accepted_types & PyGLM_DT_INT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT);
+		//							allocate(sizeof(glm::mat<4, 4, int32_t>));
+		//							*((glm::mat<4, 4, int32_t>*)data) = unpack_mat<4, 4, int32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					case PyGLM_TYPE_INFO_UINT:
+		//						if (accepted_types & PyGLM_DT_UINT) {
+		//							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_UINT);
+		//							allocate(sizeof(glm::mat<4, 4, uint32_t>));
+		//							*((glm::mat<4, 4, uint32_t>*)data) = unpack_mat<4, 4, uint32_t>(obj);
+		//							return;
+		//						}
+		//						return;
+		//					}
+		//				}
+		//				return;
+		//			}
+		//		}
+		//		return;
+		//	}
+		//}
+		//// PyGLM Qua type
+		//if ((accepted_types & PyGLM_T_QUA) && obj->ob_type->tp_dealloc == (destructor)qua_dealloc) {
+		//	const uint8_t &info = ((type_helper*)obj)->info;
+		//
+		//	const uint8_t shape_info = info >> PyGLM_TYPE_INFO_VEC_SHAPE_OFFSET & ((1 << PyGLM_TYPE_INFO_VEC_SHAPE_LENGTH) - 1);
+		//
+		//	const uint8_t type_info = info >> PyGLM_TYPE_INFO_VEC_TYPE_OFFSET & ((1 << PyGLM_TYPE_INFO_VEC_TYPE_LENGTH) - 1);
+		//
+		//	switch (type_info) {
+		//	case PyGLM_TYPE_INFO_FLOAT:
+		//		if (accepted_types & PyGLM_DT_FLOAT) {
+		//			setInfo(PyGLM_T_QUA | PyGLM_DT_FLOAT);
+		//			allocate(sizeof(glm::qua<float>));
+		//			*((glm::qua<float>*)data) = unpack_qua<float>(obj);
+		//			return;
+		//		}
+		//		return;
+		//	case PyGLM_TYPE_INFO_DOUBLE:
+		//		if (accepted_types & PyGLM_DT_DOUBLE) {
+		//			setInfo(PyGLM_T_QUA | PyGLM_DT_DOUBLE);
+		//			allocate(sizeof(glm::qua<double>));
+		//			*((glm::qua<double>*)data) = unpack_qua<double>(obj);
+		//			return;
+		//		}
+		//		return;
+		//	}
+		//}
+
+#if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
+		if (PyObject_CheckBuffer(obj)) {
+			Py_buffer view;
+			if (PyObject_GetBuffer(obj, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1) {
+				PyBuffer_Release(&view);
+				PyErr_Clear();
+				return;
+			}
+			switch (view.ndim) {
+			case 1: // one dimensional array (vec / qua)
+				if (view.shape == NULL) {
+					PyBuffer_Release(&view);
+					return;
+				}
+				switch (view.shape[0]) {
+				case 1: // vec1's
+					if (!((accepted_types & PyGLM_T_ANY_VEC) && (accepted_types & PyGLM_SHAPE_1)) || view.format == NULL) {
+						PyBuffer_Release(&view);
+						return;
+					}
+					switch (view.format[0]) {
+					case 'f':
+						if (!(accepted_types & PyGLM_DT_FLOAT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FLOAT);
+						break;
+					case 'd':
+						if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_DOUBLE);
+						break;
+					case 'b':
+						if (!(accepted_types & PyGLM_DT_INT8)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT8);
+						break;
+					case 'B':
+						if (!(accepted_types & PyGLM_DT_UINT8)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT8);
+						break;
+					case 'h':
+						if (!(accepted_types & PyGLM_DT_INT16)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT16);
+						break;
+					case 'H':
+						if (!(accepted_types & PyGLM_DT_UINT16)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT16);
+						break;
+					case 'l':
+					case 'i':
+						if (!(accepted_types & PyGLM_DT_INT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT);
+						break;
+					case 'L':
+					case 'I':
+						if (!(accepted_types & PyGLM_DT_UINT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT);
+						break;
+					case 'q':
+						if (!(accepted_types & PyGLM_DT_INT64)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT64);
+						break;
+					case 'Q':
+						if (!(accepted_types & PyGLM_DT_UINT64)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT64);
+						break;
+					case '?':
+						if (!(accepted_types & PyGLM_DT_BOOL)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_BOOL);
+						break;
+					default:
+						PyBuffer_Release(&view);
+						return;
+					}
+					break;
+				case 2: // vec2's
+					if (!((accepted_types & PyGLM_T_ANY_VEC) && (accepted_types & PyGLM_SHAPE_2)) || view.format == NULL) {
+						PyBuffer_Release(&view);
+						return;
+					}
+					switch (view.format[0]) {
+					case 'f':
+						if (!(accepted_types & PyGLM_DT_FLOAT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FLOAT);
+						break;
+					case 'd':
+						if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_DOUBLE);
+						break;
+					case 'b':
+						if (!(accepted_types & PyGLM_DT_INT8)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT8);
+						break;
+					case 'B':
+						if (!(accepted_types & PyGLM_DT_UINT8)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT8);
+						break;
+					case 'h':
+						if (!(accepted_types & PyGLM_DT_INT16)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT16);
+						break;
+					case 'H':
+						if (!(accepted_types & PyGLM_DT_UINT16)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT16);
+						break;
+					case 'l':
+					case 'i':
+						if (!(accepted_types & PyGLM_DT_INT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT);
+						break;
+					case 'L':
+					case 'I':
+						if (!(accepted_types & PyGLM_DT_UINT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT);
+						break;
+					case 'q':
+						if (!(accepted_types & PyGLM_DT_INT64)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT64);
+						break;
+					case 'Q':
+						if (!(accepted_types & PyGLM_DT_UINT64)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT64);
+						break;
+					case '?':
+						if (!(accepted_types & PyGLM_DT_BOOL)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_BOOL);
+						break;
+					default:
+						PyBuffer_Release(&view);
+						return;
+					}
+					break;
+				case 3: // vec3's
+					if (!((accepted_types & PyGLM_T_ANY_VEC) && (accepted_types & PyGLM_SHAPE_3)) || view.format == NULL) {
+						PyBuffer_Release(&view);
+						return;
+					}
+					switch (view.format[0]) {
+					case 'f':
+						if (!(accepted_types & PyGLM_DT_FLOAT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
+						break;
+					case 'd':
+						if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_DOUBLE);
+						break;
+					case 'b':
+						if (!(accepted_types & PyGLM_DT_INT8)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT8);
+						break;
+					case 'B':
+						if (!(accepted_types & PyGLM_DT_UINT8)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT8);
+						break;
+					case 'h':
+						if (!(accepted_types & PyGLM_DT_INT16)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT16);
+						break;
+					case 'H':
+						if (!(accepted_types & PyGLM_DT_UINT16)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT16);
+						break;
+					case 'l':
+					case 'i':
+						if (!(accepted_types & PyGLM_DT_INT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT);
+						break;
+					case 'L':
+					case 'I':
+						if (!(accepted_types & PyGLM_DT_UINT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT);
+						break;
+					case 'q':
+						if (!(accepted_types & PyGLM_DT_INT64)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT64);
+						break;
+					case 'Q':
+						if (!(accepted_types & PyGLM_DT_UINT64)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT64);
+						break;
+					case '?':
+						if (!(accepted_types & PyGLM_DT_BOOL)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_BOOL);
+						break;
+					default:
+						PyBuffer_Release(&view);
+						return;
+					}
+					break;
+				case 4: // vec4's and qua's
+					if (!((accepted_types & PyGLM_T_ANY_VEC) && (accepted_types & PyGLM_SHAPE_4) || (accepted_types & PyGLM_T_QUA)) || view.format == NULL) {
+						PyBuffer_Release(&view);
+						return;
+					}
+					switch (view.format[0]) {
+					case 'f':
+						if (!(accepted_types & PyGLM_DT_FLOAT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						if ((accepted_types & PyGLM_T_ANY_VEC))
+							setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FLOAT);
+						else
+							setInfo(PyGLM_T_QUA | PyGLM_DT_FLOAT);
+						break;
+					case 'd':
+						if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						if ((accepted_types & PyGLM_T_ANY_VEC))
+							setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_DOUBLE);
+						else
+							setInfo(PyGLM_T_QUA | PyGLM_DT_DOUBLE);
+						break;
+					case 'b':
+						if (!(accepted_types & PyGLM_DT_INT8)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT8);
+						break;
+					case 'B':
+						if (!(accepted_types & PyGLM_DT_UINT8)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT8);
+						break;
+					case 'h':
+						if (!(accepted_types & PyGLM_DT_INT16)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT16);
+						break;
+					case 'H':
+						if (!(accepted_types & PyGLM_DT_UINT16)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT16);
+						break;
+					case 'l':
+					case 'i':
+						if (!(accepted_types & PyGLM_DT_INT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT);
+						break;
+					case 'L':
+					case 'I':
+						if (!(accepted_types & PyGLM_DT_UINT)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT);
+						break;
+					case 'q':
+						if (!(accepted_types & PyGLM_DT_INT64)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT64);
+						break;
+					case 'Q':
+						if (!(accepted_types & PyGLM_DT_UINT64)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT64);
+						break;
+					case '?':
+						if (!(accepted_types & PyGLM_DT_BOOL)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_BOOL);
+						break;
+					default:
+						PyBuffer_Release(&view);
+						return;
+					}
+					break;
+				default:
+					PyBuffer_Release(&view);
+					return;
+				}
+				break;
+			case 2: // two dimensional array (mat)
+				if (view.shape == NULL || !(accepted_types & PyGLM_T_MAT)) {
+					PyBuffer_Release(&view);
+					return;
+				}
+				switch (view.shape[0]) {
+				case 2: // mat2xM's
+					if (!(accepted_types & PyGLM_SHAPE_2xM)) {
+						PyBuffer_Release(&view);
+						return;
+					}
+					switch (view.shape[1]) {
+					case 2: // mat2x2's
+						if (!(accepted_types & PyGLM_SHAPE_2x2)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						switch (view.format[0]) {
+						case 'f':
+							if (!(accepted_types & PyGLM_DT_FLOAT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_FLOAT);
+							break;
+						case 'd':
+							if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_DOUBLE);
+							break;
+						case 'l':
+						case 'i':
+							if (!(accepted_types & PyGLM_DT_INT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT);
+							break;
+						case 'L':
+						case 'I':
+							if (!(accepted_types & PyGLM_DT_UINT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_UINT);
+							break;
+						default:
+							PyBuffer_Release(&view);
+							return;
+						}
+						break;
+					case 3: // mat2x3's
+						if (!(accepted_types & PyGLM_SHAPE_2x3)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						switch (view.format[0]) {
+						case 'f':
+							if (!(accepted_types & PyGLM_DT_FLOAT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_FLOAT);
+							break;
+						case 'd':
+							if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_DOUBLE);
+							break;
+						case 'l':
+						case 'i':
+							if (!(accepted_types & PyGLM_DT_INT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT);
+							break;
+						case 'L':
+						case 'I':
+							if (!(accepted_types & PyGLM_DT_UINT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_UINT);
+							break;
+						default:
+							PyBuffer_Release(&view);
+							return;
+						}
+						break;
+					case 4: // mat2x4's
+						if (!(accepted_types & PyGLM_SHAPE_2x4)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						switch (view.format[0]) {
+						case 'f':
+							if (!(accepted_types & PyGLM_DT_FLOAT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_FLOAT);
+							break;
+						case 'd':
+							if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_DOUBLE);
+							break;
+						case 'l':
+						case 'i':
+							if (!(accepted_types & PyGLM_DT_INT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT);
+							break;
+						case 'L':
+						case 'I':
+							if (!(accepted_types & PyGLM_DT_UINT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_UINT);
+							break;
+						default:
+							PyBuffer_Release(&view);
+							return;
+						}
+						break;
+					default:
+						PyBuffer_Release(&view);
+						return;
+					}
+					break;
+				case 3: // mat3xM's
+					if (!(accepted_types & PyGLM_SHAPE_3xM)) {
+						PyBuffer_Release(&view);
+						return;
+					}
+					switch (view.shape[1]) {
+					case 2: // mat3x2's
+						if (!(accepted_types & PyGLM_SHAPE_3x2)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						switch (view.format[0]) {
+						case 'f':
+							if (!(accepted_types & PyGLM_DT_FLOAT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_FLOAT);
+							break;
+						case 'd':
+							if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_DOUBLE);
+							break;
+						case 'l':
+						case 'i':
+							if (!(accepted_types & PyGLM_DT_INT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT);
+							break;
+						case 'L':
+						case 'I':
+							if (!(accepted_types & PyGLM_DT_UINT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_UINT);
+							break;
+						default:
+							PyBuffer_Release(&view);
+							return;
+						}
+						break;
+					case 3: // mat3x3's
+						if (!(accepted_types & PyGLM_SHAPE_3x3)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						switch (view.format[0]) {
+						case 'f':
+							if (!(accepted_types & PyGLM_DT_FLOAT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FLOAT);
+							break;
+						case 'd':
+							if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_DOUBLE);
+							break;
+						case 'l':
+						case 'i':
+							if (!(accepted_types & PyGLM_DT_INT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT);
+							break;
+						case 'L':
+						case 'I':
+							if (!(accepted_types & PyGLM_DT_UINT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_UINT);
+							break;
+						default:
+							PyBuffer_Release(&view);
+							return;
+						}
+						break;
+					case 4: // mat3x4's
+						if (!(accepted_types & PyGLM_SHAPE_3x4)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						switch (view.format[0]) {
+						case 'f':
+							if (!(accepted_types & PyGLM_DT_FLOAT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_FLOAT);
+							break;
+						case 'd':
+							if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_DOUBLE);
+							break;
+						case 'l':
+						case 'i':
+							if (!(accepted_types & PyGLM_DT_INT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT);
+							break;
+						case 'L':
+						case 'I':
+							if (!(accepted_types & PyGLM_DT_UINT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_UINT);
+							break;
+						default:
+							PyBuffer_Release(&view);
+							return;
+						}
+						break;
+					default:
+						PyBuffer_Release(&view);
+						return;
+					}
+					break;
+				case 4: // mat4xM's
+					if (!(accepted_types & PyGLM_SHAPE_4xM)) {
+						PyBuffer_Release(&view);
+						return;
+					}
+					switch (view.shape[1]) {
+					case 2: // mat4x2's
+						if (!(accepted_types & PyGLM_SHAPE_4x2)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						switch (view.format[0]) {
+						case 'f':
+							if (!(accepted_types & PyGLM_DT_FLOAT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_FLOAT);
+							break;
+						case 'd':
+							if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_DOUBLE);
+							break;
+						case 'l':
+						case 'i':
+							if (!(accepted_types & PyGLM_DT_INT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT);
+							break;
+						case 'L':
+						case 'I':
+							if (!(accepted_types & PyGLM_DT_UINT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_UINT);
+							break;
+						default:
+							PyBuffer_Release(&view);
+							return;
+						}
+						break;
+					case 3: // mat4x3's
+						if (!(accepted_types & PyGLM_SHAPE_4x3)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						switch (view.format[0]) {
+						case 'f':
+							if (!(accepted_types & PyGLM_DT_FLOAT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_FLOAT);
+							break;
+						case 'd':
+							if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_DOUBLE);
+							break;
+						case 'l':
+						case 'i':
+							if (!(accepted_types & PyGLM_DT_INT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT);
+							break;
+						case 'L':
+						case 'I':
+							if (!(accepted_types & PyGLM_DT_UINT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_UINT);
+							break;
+						default:
+							PyBuffer_Release(&view);
+							return;
+						}
+						break;
+					case 4: // mat4x4's
+						if (!(accepted_types & PyGLM_SHAPE_4x4)) {
+							PyBuffer_Release(&view);
+							return;
+						}
+						switch (view.format[0]) {
+						case 'f':
+							if (!(accepted_types & PyGLM_DT_FLOAT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FLOAT);
+							break;
+						case 'd':
+							if (!(accepted_types & PyGLM_DT_DOUBLE)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_DOUBLE);
+							break;
+						case 'l':
+						case 'i':
+							if (!(accepted_types & PyGLM_DT_INT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT);
+							break;
+						case 'L':
+						case 'I':
+							if (!(accepted_types & PyGLM_DT_UINT)) {
+								PyBuffer_Release(&view);
+								return;
+							}
+							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_UINT);
+							break;
+						default:
+							PyBuffer_Release(&view);
+							return;
+						}
+						break;
+					default:
+						PyBuffer_Release(&view);
+						return;
+					}
+					break;
+				default:
+					PyBuffer_Release(&view);
+					return;
+				}
+				break;
+			default:
+				PyBuffer_Release(&view);
+				return;
+			}
+			if (view.readonly == 0) {
+				data = view.buf;
+			}
+			else {
+				allocate(sizeof(view.len));
+				memcpy(data, view.buf, sizeof(view.len));
+			}
+			return;
+		} // end of getbuffer checking
+
+		if (PyGLM_TupleOrList_Check(obj)) {
+			Py_ssize_t size = PyGLM_TupleOrList_GET_SIZE(obj);
+			
+			if ((accepted_types & PyGLM_SHAPE_1) && (accepted_types & PyGLM_T_ANY_VEC) && size == 1) { // vec1's
+				PyObject* item1 = PyGLM_TupleOrList_GET_ITEM(obj, 0);
+
+				PyGLMSingleTypeHolder item1Out = PyGLMSingleTypeHolder(item1);
+
+				int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype });
+
+				setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | out_type);
+
+				switch (out_type) {
+				case PyGLM_DT_FLOAT:
+					allocate(sizeof(glm::vec<1, float>));
+					*((glm::vec<1, float>*)data) = glm::vec<1, float>(item1Out.asFloat());
+					return;
+				case PyGLM_DT_DOUBLE:
+					allocate(sizeof(glm::vec<1, double>));
+					*((glm::vec<1, double>*)data) = glm::vec<1, double>(item1Out.asDouble());
+					return;
+				case PyGLM_DT_INT64:
+					allocate(sizeof(glm::vec<1, glm::i64>));
+					*((glm::vec<1, glm::i64>*)data) = glm::vec<1, glm::i64>(item1Out.asInt64());
+					return;
+				case PyGLM_DT_UINT64:
+					allocate(sizeof(glm::vec<1, glm::u64>));
+					*((glm::vec<1, glm::u64>*)data) = glm::vec<1, glm::u64>(item1Out.asUint64());
+					return;
+				case PyGLM_DT_INT:
+					allocate(sizeof(glm::vec<1, glm::i32>));
+					*((glm::vec<1, glm::i32>*)data) = glm::vec<1, glm::i32>(item1Out.asInt32());
+					return;
+				case PyGLM_DT_UINT:
+					allocate(sizeof(glm::vec<1, glm::u32>));
+					*((glm::vec<1, glm::u32>*)data) = glm::vec<1, glm::u32>(item1Out.asUint32());
+					return;
+				case PyGLM_DT_INT16:
+					allocate(sizeof(glm::vec<1, glm::i16>));
+					*((glm::vec<1, glm::i16>*)data) = glm::vec<1, glm::i16>(item1Out.asInt16());
+					return;
+				case PyGLM_DT_UINT16:
+					allocate(sizeof(glm::vec<1, glm::u16>));
+					*((glm::vec<1, glm::u16>*)data) = glm::vec<1, glm::u16>(item1Out.asUint16());
+					return;
+				case PyGLM_DT_INT8:
+					allocate(sizeof(glm::vec<1, glm::i8>));
+					*((glm::vec<1, glm::i8>*)data) = glm::vec<1, glm::i8>(item1Out.asInt8());
+					return;
+				case PyGLM_DT_UINT8:
+					allocate(sizeof(glm::vec<1, glm::u8>));
+					*((glm::vec<1, glm::u8>*)data) = glm::vec<1, glm::u8>(item1Out.asUint8());
+					return;
+				case PyGLM_DT_BOOL:
+					allocate(sizeof(glm::vec<1, bool>));
+					*((glm::vec<1, bool>*)data) = glm::vec<1, bool>(item1Out.asBool());
+					return;
+				}
+			}
+			else if (size == 2) { // vec2's and mat2xM's
+				PyObject* item1 = PyGLM_TupleOrList_GET_ITEM(obj, 0);
+				PyObject* item2 = PyGLM_TupleOrList_GET_ITEM(obj, 1);
+
+				if ((accepted_types & PyGLM_T_MAT) && PyGLM_TupleOrList_Check(item1) && PyGLM_TupleOrList_Check(item2)) {
+					Py_ssize_t innerSize = PyGLM_TupleOrList_GET_SIZE(item1);
+					if (innerSize != PyGLM_TupleOrList_GET_SIZE(item2)) {
+						return;
+					}
+
+					if (innerSize == 2 && (accepted_types & PyGLM_SHAPE_2x2)) { // mat2x2
+						PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+						PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+						PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+						PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+
+						PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+						PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+						PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+						PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+
+						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype });
+
+						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | out_type);
+
+						switch (out_type) {
+						case PyGLM_DT_FLOAT:
+							allocate(sizeof(glm::mat<2, 2, float>));
+							*((glm::mat<2, 2, float>*)data) = glm::mat<2, 2, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat());
+							return;
+						case PyGLM_DT_DOUBLE:
+							allocate(sizeof(glm::mat<2, 2, double>));
+							*((glm::mat<2, 2, double>*)data) = glm::mat<2, 2, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble());
+							return;
+						case PyGLM_DT_INT64:
+							allocate(sizeof(glm::mat<2, 2, glm::i64>));
+							*((glm::mat<2, 2, glm::i64>*)data) = glm::mat<2, 2, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64());
+							return;
+						case PyGLM_DT_UINT64:
+							allocate(sizeof(glm::mat<2, 2, glm::u64>));
+							*((glm::mat<2, 2, glm::u64>*)data) = glm::mat<2, 2, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64());
+							return;
+						case PyGLM_DT_INT:
+							allocate(sizeof(glm::mat<2, 2, glm::i32>));
+							*((glm::mat<2, 2, glm::i32>*)data) = glm::mat<2, 2, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32());
+							return;
+						case PyGLM_DT_UINT:
+							allocate(sizeof(glm::mat<2, 2, glm::u32>));
+							*((glm::mat<2, 2, glm::u32>*)data) = glm::mat<2, 2, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32());
+							return;
+						case PyGLM_DT_INT16:
+							allocate(sizeof(glm::mat<2, 2, glm::i16>));
+							*((glm::mat<2, 2, glm::i16>*)data) = glm::mat<2, 2, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16());
+							return;
+						case PyGLM_DT_UINT16:
+							allocate(sizeof(glm::mat<2, 2, glm::u16>));
+							*((glm::mat<2, 2, glm::u16>*)data) = glm::mat<2, 2, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16());
+							return;
+						case PyGLM_DT_INT8:
+							allocate(sizeof(glm::mat<2, 2, glm::i8>));
+							*((glm::mat<2, 2, glm::i8>*)data) = glm::mat<2, 2, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8());
+							return;
+						case PyGLM_DT_UINT8:
+							allocate(sizeof(glm::mat<2, 2, glm::u8>));
+							*((glm::mat<2, 2, glm::u8>*)data) = glm::mat<2, 2, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8());
+							return;
+						case PyGLM_DT_BOOL:
+							allocate(sizeof(glm::mat<2, 2, bool>));
+							*((glm::mat<2, 2, bool>*)data) = glm::mat<2, 2, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool());
+							return;
+						}
+					}
+					else if (innerSize == 3 && (accepted_types & PyGLM_SHAPE_2x3)) { // mat2x3
+						PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+						PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+						PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+						PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+						PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+						PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+
+						PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+						PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+						PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+						PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+						PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+						PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+
+						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype });
+
+						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | out_type);
+
+						switch (out_type) {
+						case PyGLM_DT_FLOAT:
+							allocate(sizeof(glm::mat<2, 3, float>));
+							*((glm::mat<2, 3, float>*)data) = glm::mat<2, 3, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat());
+							return;
+						case PyGLM_DT_DOUBLE:
+							allocate(sizeof(glm::mat<2, 3, double>));
+							*((glm::mat<2, 3, double>*)data) = glm::mat<2, 3, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble());
+							return;
+						case PyGLM_DT_INT64:
+							allocate(sizeof(glm::mat<2, 3, glm::i64>));
+							*((glm::mat<2, 3, glm::i64>*)data) = glm::mat<2, 3, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64());
+							return;
+						case PyGLM_DT_UINT64:
+							allocate(sizeof(glm::mat<2, 3, glm::u64>));
+							*((glm::mat<2, 3, glm::u64>*)data) = glm::mat<2, 3, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64());
+							return;
+						case PyGLM_DT_INT:
+							allocate(sizeof(glm::mat<2, 3, glm::i32>));
+							*((glm::mat<2, 3, glm::i32>*)data) = glm::mat<2, 3, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32());
+							return;
+						case PyGLM_DT_UINT:
+							allocate(sizeof(glm::mat<2, 3, glm::u32>));
+							*((glm::mat<2, 3, glm::u32>*)data) = glm::mat<2, 3, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32());
+							return;
+						case PyGLM_DT_INT16:
+							allocate(sizeof(glm::mat<2, 3, glm::i16>));
+							*((glm::mat<2, 3, glm::i16>*)data) = glm::mat<2, 3, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16());
+							return;
+						case PyGLM_DT_UINT16:
+							allocate(sizeof(glm::mat<2, 3, glm::u16>));
+							*((glm::mat<2, 3, glm::u16>*)data) = glm::mat<2, 3, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16());
+							return;
+						case PyGLM_DT_INT8:
+							allocate(sizeof(glm::mat<2, 3, glm::i8>));
+							*((glm::mat<2, 3, glm::i8>*)data) = glm::mat<2, 3, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8());
+							return;
+						case PyGLM_DT_UINT8:
+							allocate(sizeof(glm::mat<2, 3, glm::u8>));
+							*((glm::mat<2, 3, glm::u8>*)data) = glm::mat<2, 3, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8());
+							return;
+						case PyGLM_DT_BOOL:
+							allocate(sizeof(glm::mat<2, 3, bool>));
+							*((glm::mat<2, 3, bool>*)data) = glm::mat<2, 3, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool());
+							return;
+						}
+					}
+					else if (innerSize == 4 && (accepted_types & PyGLM_SHAPE_2x4)) { // mat2x4
+						PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+						PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+						PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+						PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item1, 3);
+						PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+						PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+						PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+						PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item2, 3);
+
+						PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+						PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+						PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+						PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+						PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+						PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+						PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+						PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+
+						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype });
+
+						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | out_type);
+
+						switch (out_type) {
+						case PyGLM_DT_FLOAT:
+							allocate(sizeof(glm::mat<2, 4, float>));
+							*((glm::mat<2, 4, float>*)data) = glm::mat<2, 4, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat());
+							return;
+						case PyGLM_DT_DOUBLE:
+							allocate(sizeof(glm::mat<2, 4, double>));
+							*((glm::mat<2, 4, double>*)data) = glm::mat<2, 4, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble());
+							return;
+						case PyGLM_DT_INT64:
+							allocate(sizeof(glm::mat<2, 4, glm::i64>));
+							*((glm::mat<2, 4, glm::i64>*)data) = glm::mat<2, 4, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64());
+							return;
+						case PyGLM_DT_UINT64:
+							allocate(sizeof(glm::mat<2, 4, glm::u64>));
+							*((glm::mat<2, 4, glm::u64>*)data) = glm::mat<2, 4, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64());
+							return;
+						case PyGLM_DT_INT:
+							allocate(sizeof(glm::mat<2, 4, glm::i32>));
+							*((glm::mat<2, 4, glm::i32>*)data) = glm::mat<2, 4, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32());
+							return;
+						case PyGLM_DT_UINT:
+							allocate(sizeof(glm::mat<2, 4, glm::u32>));
+							*((glm::mat<2, 4, glm::u32>*)data) = glm::mat<2, 4, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32());
+							return;
+						case PyGLM_DT_INT16:
+							allocate(sizeof(glm::mat<2, 4, glm::i16>));
+							*((glm::mat<2, 4, glm::i16>*)data) = glm::mat<2, 4, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16());
+							return;
+						case PyGLM_DT_UINT16:
+							allocate(sizeof(glm::mat<2, 4, glm::u16>));
+							*((glm::mat<2, 4, glm::u16>*)data) = glm::mat<2, 4, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16());
+							return;
+						case PyGLM_DT_INT8:
+							allocate(sizeof(glm::mat<2, 4, glm::i8>));
+							*((glm::mat<2, 4, glm::i8>*)data) = glm::mat<2, 4, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8());
+							return;
+						case PyGLM_DT_UINT8:
+							allocate(sizeof(glm::mat<2, 4, glm::u8>));
+							*((glm::mat<2, 4, glm::u8>*)data) = glm::mat<2, 4, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8());
+							return;
+						case PyGLM_DT_BOOL:
+							allocate(sizeof(glm::mat<2, 4, bool>));
+							*((glm::mat<2, 4, bool>*)data) = glm::mat<2, 4, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool());
+							return;
+						}
+					}
+				}
+				if ((accepted_types & PyGLM_SHAPE_2) && (accepted_types & PyGLM_T_ANY_VEC)) {
+					PyGLMSingleTypeHolder item1Out = PyGLMSingleTypeHolder(item1);
+					PyGLMSingleTypeHolder item2Out = PyGLMSingleTypeHolder(item2);
+
+					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype });
+
+					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | out_type);
+
+					switch (out_type) {
+					case PyGLM_DT_FLOAT:
+						allocate(sizeof(glm::vec<2, float>));
+						*((glm::vec<2, float>*)data) = glm::vec<2, float>(item1Out.asFloat(), item2Out.asFloat());
+						return;
+					case PyGLM_DT_DOUBLE:
+						allocate(sizeof(glm::vec<2, double>));
+						*((glm::vec<2, double>*)data) = glm::vec<2, double>(item1Out.asDouble(), item2Out.asDouble());
+						return;
+					case PyGLM_DT_INT64:
+						allocate(sizeof(glm::vec<2, glm::i64>));
+						*((glm::vec<2, glm::i64>*)data) = glm::vec<2, glm::i64>(item1Out.asInt64(), item2Out.asInt64());
+						return;
+					case PyGLM_DT_UINT64:
+						allocate(sizeof(glm::vec<2, glm::u64>));
+						*((glm::vec<2, glm::u64>*)data) = glm::vec<2, glm::u64>(item1Out.asUint64(), item2Out.asUint64());
+						return;
+					case PyGLM_DT_INT:
+						allocate(sizeof(glm::vec<2, glm::i32>));
+						*((glm::vec<2, glm::i32>*)data) = glm::vec<2, glm::i32>(item1Out.asInt32(), item2Out.asInt32());
+						return;
+					case PyGLM_DT_UINT:
+						allocate(sizeof(glm::vec<2, glm::u32>));
+						*((glm::vec<2, glm::u32>*)data) = glm::vec<2, glm::u32>(item1Out.asUint32(), item2Out.asUint32());
+						return;
+					case PyGLM_DT_INT16:
+						allocate(sizeof(glm::vec<2, glm::i16>));
+						*((glm::vec<2, glm::i16>*)data) = glm::vec<2, glm::i16>(item1Out.asInt16(), item2Out.asInt16());
+						return;
+					case PyGLM_DT_UINT16:
+						allocate(sizeof(glm::vec<2, glm::u16>));
+						*((glm::vec<2, glm::u16>*)data) = glm::vec<2, glm::u16>(item1Out.asUint16(), item2Out.asUint16());
+						return;
+					case PyGLM_DT_INT8:
+						allocate(sizeof(glm::vec<2, glm::i8>));
+						*((glm::vec<2, glm::i8>*)data) = glm::vec<2, glm::i8>(item1Out.asInt8(), item2Out.asInt8());
+						return;
+					case PyGLM_DT_UINT8:
+						allocate(sizeof(glm::vec<2, glm::u8>));
+						*((glm::vec<2, glm::u8>*)data) = glm::vec<2, glm::u8>(item1Out.asUint8(), item2Out.asUint8());
+						return;
+					case PyGLM_DT_BOOL:
+						allocate(sizeof(glm::vec<2, bool>));
+						*((glm::vec<2, bool>*)data) = glm::vec<2, bool>(item1Out.asBool(), item2Out.asBool());
+						return;
+					}
+				}
+			}
+			else if (size == 3) { // vec3's and mat3xM's
+				PyObject* item1 = PyGLM_TupleOrList_GET_ITEM(obj, 0);
+				PyObject* item2 = PyGLM_TupleOrList_GET_ITEM(obj, 1);
+				PyObject* item3 = PyGLM_TupleOrList_GET_ITEM(obj, 2);
+
+				if ((accepted_types & PyGLM_T_MAT) && PyGLM_TupleOrList_Check(item1) && PyGLM_TupleOrList_Check(item2) && PyGLM_TupleOrList_Check(item3)) {
+					Py_ssize_t innerSize = PyGLM_TupleOrList_GET_SIZE(item1);
+					if (innerSize != PyGLM_TupleOrList_GET_SIZE(item2) || innerSize != PyGLM_TupleOrList_GET_SIZE(item3)) {
+						return;
+					}
+
+					if (innerSize == 2 && (accepted_types & PyGLM_SHAPE_3x2)) { // mat3x2
+						PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+						PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+						PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+						PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+						PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+						PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+
+						PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+						PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+						PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+						PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+						PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+						PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+
+						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype });
+
+						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | out_type);
+
+						switch (out_type) {
+						case PyGLM_DT_FLOAT:
+							allocate(sizeof(glm::mat<3, 2, float>));
+							*((glm::mat<3, 2, float>*)data) = glm::mat<3, 2, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat());
+							return;
+						case PyGLM_DT_DOUBLE:
+							allocate(sizeof(glm::mat<3, 2, double>));
+							*((glm::mat<3, 2, double>*)data) = glm::mat<3, 2, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble());
+							return;
+						case PyGLM_DT_INT64:
+							allocate(sizeof(glm::mat<3, 2, glm::i64>));
+							*((glm::mat<3, 2, glm::i64>*)data) = glm::mat<3, 2, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64());
+							return;
+						case PyGLM_DT_UINT64:
+							allocate(sizeof(glm::mat<3, 2, glm::u64>));
+							*((glm::mat<3, 2, glm::u64>*)data) = glm::mat<3, 2, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64());
+							return;
+						case PyGLM_DT_INT:
+							allocate(sizeof(glm::mat<3, 2, glm::i32>));
+							*((glm::mat<3, 2, glm::i32>*)data) = glm::mat<3, 2, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32());
+							return;
+						case PyGLM_DT_UINT:
+							allocate(sizeof(glm::mat<3, 2, glm::u32>));
+							*((glm::mat<3, 2, glm::u32>*)data) = glm::mat<3, 2, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32());
+							return;
+						case PyGLM_DT_INT16:
+							allocate(sizeof(glm::mat<3, 2, glm::i16>));
+							*((glm::mat<3, 2, glm::i16>*)data) = glm::mat<3, 2, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16());
+							return;
+						case PyGLM_DT_UINT16:
+							allocate(sizeof(glm::mat<3, 2, glm::u16>));
+							*((glm::mat<3, 2, glm::u16>*)data) = glm::mat<3, 2, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16());
+							return;
+						case PyGLM_DT_INT8:
+							allocate(sizeof(glm::mat<3, 2, glm::i8>));
+							*((glm::mat<3, 2, glm::i8>*)data) = glm::mat<3, 2, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8());
+							return;
+						case PyGLM_DT_UINT8:
+							allocate(sizeof(glm::mat<3, 2, glm::u8>));
+							*((glm::mat<3, 2, glm::u8>*)data) = glm::mat<3, 2, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8());
+							return;
+						case PyGLM_DT_BOOL:
+							allocate(sizeof(glm::mat<3, 2, bool>));
+							*((glm::mat<3, 2, bool>*)data) = glm::mat<3, 2, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool());
+							return;
+						}
+					}
+					else if (innerSize == 3 && (accepted_types & PyGLM_SHAPE_3x3)) { // mat3x3
+						PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+						PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+						PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+						PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+						PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+						PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+						PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+						PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+						PyObject* innerItem9 = PyGLM_TupleOrList_GET_ITEM(item3, 2);
+
+						PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+						PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+						PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+						PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+						PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+						PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+						PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+						PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+						PyGLMSingleTypeHolder innerItem9Out = PyGLMSingleTypeHolder(innerItem9);
+
+						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype });
+
+						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | out_type);
+
+						switch (out_type) {
+						case PyGLM_DT_FLOAT:
+							allocate(sizeof(glm::mat<3, 3, float>));
+							*((glm::mat<3, 3, float>*)data) = glm::mat<3, 3, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat(), innerItem9Out.asFloat());
+							return;
+						case PyGLM_DT_DOUBLE:
+							allocate(sizeof(glm::mat<3, 3, double>));
+							*((glm::mat<3, 3, double>*)data) = glm::mat<3, 3, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble(), innerItem9Out.asDouble());
+							return;
+						case PyGLM_DT_INT64:
+							allocate(sizeof(glm::mat<3, 3, glm::i64>));
+							*((glm::mat<3, 3, glm::i64>*)data) = glm::mat<3, 3, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64(), innerItem9Out.asInt64());
+							return;
+						case PyGLM_DT_UINT64:
+							allocate(sizeof(glm::mat<3, 3, glm::u64>));
+							*((glm::mat<3, 3, glm::u64>*)data) = glm::mat<3, 3, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64(), innerItem9Out.asUint64());
+							return;
+						case PyGLM_DT_INT:
+							allocate(sizeof(glm::mat<3, 3, glm::i32>));
+							*((glm::mat<3, 3, glm::i32>*)data) = glm::mat<3, 3, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32(), innerItem9Out.asInt32());
+							return;
+						case PyGLM_DT_UINT:
+							allocate(sizeof(glm::mat<3, 3, glm::u32>));
+							*((glm::mat<3, 3, glm::u32>*)data) = glm::mat<3, 3, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32(), innerItem9Out.asUint32());
+							return;
+						case PyGLM_DT_INT16:
+							allocate(sizeof(glm::mat<3, 3, glm::i16>));
+							*((glm::mat<3, 3, glm::i16>*)data) = glm::mat<3, 3, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16(), innerItem9Out.asInt16());
+							return;
+						case PyGLM_DT_UINT16:
+							allocate(sizeof(glm::mat<3, 3, glm::u16>));
+							*((glm::mat<3, 3, glm::u16>*)data) = glm::mat<3, 3, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16(), innerItem9Out.asUint16());
+							return;
+						case PyGLM_DT_INT8:
+							allocate(sizeof(glm::mat<3, 3, glm::i8>));
+							*((glm::mat<3, 3, glm::i8>*)data) = glm::mat<3, 3, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8(), innerItem9Out.asInt8());
+							return;
+						case PyGLM_DT_UINT8:
+							allocate(sizeof(glm::mat<3, 3, glm::u8>));
+							*((glm::mat<3, 3, glm::u8>*)data) = glm::mat<3, 3, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8(), innerItem9Out.asUint8());
+							return;
+						case PyGLM_DT_BOOL:
+							allocate(sizeof(glm::mat<3, 3, bool>));
+							*((glm::mat<3, 3, bool>*)data) = glm::mat<3, 3, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool(), innerItem9Out.asBool());
+							return;
+						}
+					}
+					else if (innerSize == 4 && (accepted_types & PyGLM_SHAPE_3x4)) { // mat3x4
+						PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+						PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+						PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+						PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item1, 3);
+						PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+						PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+						PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+						PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item2, 3);
+						PyObject* innerItem9 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+						PyObject* innerItem10 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+						PyObject* innerItem11 = PyGLM_TupleOrList_GET_ITEM(item3, 2);
+						PyObject* innerItem12 = PyGLM_TupleOrList_GET_ITEM(item3, 3);
+
+						PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+						PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+						PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+						PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+						PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+						PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+						PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+						PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+						PyGLMSingleTypeHolder innerItem9Out = PyGLMSingleTypeHolder(innerItem9);
+						PyGLMSingleTypeHolder innerItem10Out = PyGLMSingleTypeHolder(innerItem10);
+						PyGLMSingleTypeHolder innerItem11Out = PyGLMSingleTypeHolder(innerItem11);
+						PyGLMSingleTypeHolder innerItem12Out = PyGLMSingleTypeHolder(innerItem12);
+
+						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype, innerItem10Out.dtype, innerItem11Out.dtype, innerItem12Out.dtype });
+
+						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | out_type);
+
+						switch (out_type) {
+						case PyGLM_DT_FLOAT:
+							allocate(sizeof(glm::mat<3, 4, float>));
+							*((glm::mat<3, 4, float>*)data) = glm::mat<3, 4, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat(), innerItem9Out.asFloat(), innerItem10Out.asFloat(), innerItem11Out.asFloat(), innerItem12Out.asFloat());
+							return;
+						case PyGLM_DT_DOUBLE:
+							allocate(sizeof(glm::mat<3, 4, double>));
+							*((glm::mat<3, 4, double>*)data) = glm::mat<3, 4, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble(), innerItem9Out.asDouble(), innerItem10Out.asDouble(), innerItem11Out.asDouble(), innerItem12Out.asDouble());
+							return;
+						case PyGLM_DT_INT64:
+							allocate(sizeof(glm::mat<3, 4, glm::i64>));
+							*((glm::mat<3, 4, glm::i64>*)data) = glm::mat<3, 4, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64(), innerItem9Out.asInt64(), innerItem10Out.asInt64(), innerItem11Out.asInt64(), innerItem12Out.asInt64());
+							return;
+						case PyGLM_DT_UINT64:
+							allocate(sizeof(glm::mat<3, 4, glm::u64>));
+							*((glm::mat<3, 4, glm::u64>*)data) = glm::mat<3, 4, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64(), innerItem9Out.asUint64(), innerItem10Out.asUint64(), innerItem11Out.asUint64(), innerItem12Out.asUint64());
+							return;
+						case PyGLM_DT_INT:
+							allocate(sizeof(glm::mat<3, 4, glm::i32>));
+							*((glm::mat<3, 4, glm::i32>*)data) = glm::mat<3, 4, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32(), innerItem9Out.asInt32(), innerItem10Out.asInt32(), innerItem11Out.asInt32(), innerItem12Out.asInt32());
+							return;
+						case PyGLM_DT_UINT:
+							allocate(sizeof(glm::mat<3, 4, glm::u32>));
+							*((glm::mat<3, 4, glm::u32>*)data) = glm::mat<3, 4, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32(), innerItem9Out.asUint32(), innerItem10Out.asUint32(), innerItem11Out.asUint32(), innerItem12Out.asUint32());
+							return;
+						case PyGLM_DT_INT16:
+							allocate(sizeof(glm::mat<3, 4, glm::i16>));
+							*((glm::mat<3, 4, glm::i16>*)data) = glm::mat<3, 4, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16(), innerItem9Out.asInt16(), innerItem10Out.asInt16(), innerItem11Out.asInt16(), innerItem12Out.asInt16());
+							return;
+						case PyGLM_DT_UINT16:
+							allocate(sizeof(glm::mat<3, 4, glm::u16>));
+							*((glm::mat<3, 4, glm::u16>*)data) = glm::mat<3, 4, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16(), innerItem9Out.asUint16(), innerItem10Out.asUint16(), innerItem11Out.asUint16(), innerItem12Out.asUint16());
+							return;
+						case PyGLM_DT_INT8:
+							allocate(sizeof(glm::mat<3, 4, glm::i8>));
+							*((glm::mat<3, 4, glm::i8>*)data) = glm::mat<3, 4, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8(), innerItem9Out.asInt8(), innerItem10Out.asInt8(), innerItem11Out.asInt8(), innerItem12Out.asInt8());
+							return;
+						case PyGLM_DT_UINT8:
+							allocate(sizeof(glm::mat<3, 4, glm::u8>));
+							*((glm::mat<3, 4, glm::u8>*)data) = glm::mat<3, 4, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8(), innerItem9Out.asUint8(), innerItem10Out.asUint8(), innerItem11Out.asUint8(), innerItem12Out.asUint8());
+							return;
+						case PyGLM_DT_BOOL:
+							allocate(sizeof(glm::mat<3, 4, bool>));
+							*((glm::mat<3, 4, bool>*)data) = glm::mat<3, 4, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool(), innerItem9Out.asBool(), innerItem10Out.asBool(), innerItem11Out.asBool(), innerItem12Out.asBool());
+							return;
+						}
+					}
+				}
+
+				if ((accepted_types & PyGLM_SHAPE_3) && (accepted_types & PyGLM_T_ANY_VEC)) {
+
+					PyGLMSingleTypeHolder item1Out = PyGLMSingleTypeHolder(item1);
+					PyGLMSingleTypeHolder item2Out = PyGLMSingleTypeHolder(item2);
+					PyGLMSingleTypeHolder item3Out = PyGLMSingleTypeHolder(item3);
+
+					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype, item3Out.dtype });
+
+					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | out_type);
+
+					switch (out_type) {
+					case PyGLM_DT_FLOAT:
+						allocate(sizeof(glm::vec<3, float>));
+						*((glm::vec<3, float>*)data) = glm::vec<3, float>(item1Out.asFloat(), item2Out.asFloat(), item3Out.asFloat());
+						return;
+					case PyGLM_DT_DOUBLE:
+						allocate(sizeof(glm::vec<3, double>));
+						*((glm::vec<3, double>*)data) = glm::vec<3, double>(item1Out.asDouble(), item2Out.asDouble(), item3Out.asDouble());
+						return;
+					case PyGLM_DT_INT64:
+						allocate(sizeof(glm::vec<3, glm::i64>));
+						*((glm::vec<3, glm::i64>*)data) = glm::vec<3, glm::i64>(item1Out.asInt64(), item2Out.asInt64(), item3Out.asInt64());
+						return;
+					case PyGLM_DT_UINT64:
+						allocate(sizeof(glm::vec<3, glm::u64>));
+						*((glm::vec<3, glm::u64>*)data) = glm::vec<3, glm::u64>(item1Out.asUint64(), item2Out.asUint64(), item3Out.asUint64());
+						return;
+					case PyGLM_DT_INT:
+						allocate(sizeof(glm::vec<3, glm::i32>));
+						*((glm::vec<3, glm::i32>*)data) = glm::vec<3, glm::i32>(item1Out.asInt32(), item2Out.asInt32(), item3Out.asInt32());
+						return;
+					case PyGLM_DT_UINT:
+						allocate(sizeof(glm::vec<3, glm::u32>));
+						*((glm::vec<3, glm::u32>*)data) = glm::vec<3, glm::u32>(item1Out.asUint32(), item2Out.asUint32(), item3Out.asUint32());
+						return;
+					case PyGLM_DT_INT16:
+						allocate(sizeof(glm::vec<3, glm::i16>));
+						*((glm::vec<3, glm::i16>*)data) = glm::vec<3, glm::i16>(item1Out.asInt16(), item2Out.asInt16(), item3Out.asInt16());
+						return;
+					case PyGLM_DT_UINT16:
+						allocate(sizeof(glm::vec<3, glm::u16>));
+						*((glm::vec<3, glm::u16>*)data) = glm::vec<3, glm::u16>(item1Out.asUint16(), item2Out.asUint16(), item3Out.asUint16());
+						return;
+					case PyGLM_DT_INT8:
+						allocate(sizeof(glm::vec<3, glm::i8>));
+						*((glm::vec<3, glm::i8>*)data) = glm::vec<3, glm::i8>(item1Out.asInt8(), item2Out.asInt8(), item3Out.asInt8());
+						return;
+					case PyGLM_DT_UINT8:
+						allocate(sizeof(glm::vec<3, glm::u8>));
+						*((glm::vec<3, glm::u8>*)data) = glm::vec<3, glm::u8>(item1Out.asUint8(), item2Out.asUint8(), item3Out.asUint8());
+						return;
+					case PyGLM_DT_BOOL:
+						allocate(sizeof(glm::vec<3, bool>));
+						*((glm::vec<3, bool>*)data) = glm::vec<3, bool>(item1Out.asBool(), item2Out.asBool(), item3Out.asBool());
+						return;
+					}
+				}
+			}
+			else if (size == 4) { // vec4's, mat4xM's and qua's
+				PyObject* item1 = PyGLM_TupleOrList_GET_ITEM(obj, 0);
+				PyObject* item2 = PyGLM_TupleOrList_GET_ITEM(obj, 1);
+				PyObject* item3 = PyGLM_TupleOrList_GET_ITEM(obj, 2);
+				PyObject* item4 = PyGLM_TupleOrList_GET_ITEM(obj, 3);
+
+				if ((accepted_types & PyGLM_T_MAT) && PyGLM_TupleOrList_Check(item1) && PyGLM_TupleOrList_Check(item2) && PyGLM_TupleOrList_Check(item3) && PyGLM_TupleOrList_Check(item4)) {
+					Py_ssize_t innerSize = PyGLM_TupleOrList_GET_SIZE(item1);
+					if (innerSize != PyGLM_TupleOrList_GET_SIZE(item2) || innerSize != PyGLM_TupleOrList_GET_SIZE(item3) || innerSize != PyGLM_TupleOrList_GET_SIZE(item4)) {
+						return;
+					}
+					if (innerSize == 2 && (accepted_types & PyGLM_SHAPE_4x2)) { // mat4x2
+						PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+						PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+						PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+						PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+						PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+						PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+						PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item4, 0);
+						PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item4, 1);
+
+						PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+						PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+						PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+						PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+						PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+						PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+						PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+						PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+
+						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype });
+
+						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | out_type);
+
+						switch (out_type) {
+						case PyGLM_DT_FLOAT:
+							allocate(sizeof(glm::mat<4, 2, float>));
+							*((glm::mat<4, 2, float>*)data) = glm::mat<4, 2, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat());
+							return;
+						case PyGLM_DT_DOUBLE:
+							allocate(sizeof(glm::mat<4, 2, double>));
+							*((glm::mat<4, 2, double>*)data) = glm::mat<4, 2, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble());
+							return;
+						case PyGLM_DT_INT64:
+							allocate(sizeof(glm::mat<4, 2, glm::i64>));
+							*((glm::mat<4, 2, glm::i64>*)data) = glm::mat<4, 2, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64());
+							return;
+						case PyGLM_DT_UINT64:
+							allocate(sizeof(glm::mat<4, 2, glm::u64>));
+							*((glm::mat<4, 2, glm::u64>*)data) = glm::mat<4, 2, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64());
+							return;
+						case PyGLM_DT_INT:
+							allocate(sizeof(glm::mat<4, 2, glm::i32>));
+							*((glm::mat<4, 2, glm::i32>*)data) = glm::mat<4, 2, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32());
+							return;
+						case PyGLM_DT_UINT:
+							allocate(sizeof(glm::mat<4, 2, glm::u32>));
+							*((glm::mat<4, 2, glm::u32>*)data) = glm::mat<4, 2, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32());
+							return;
+						case PyGLM_DT_INT16:
+							allocate(sizeof(glm::mat<4, 2, glm::i16>));
+							*((glm::mat<4, 2, glm::i16>*)data) = glm::mat<4, 2, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16());
+							return;
+						case PyGLM_DT_UINT16:
+							allocate(sizeof(glm::mat<4, 2, glm::u16>));
+							*((glm::mat<4, 2, glm::u16>*)data) = glm::mat<4, 2, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16());
+							return;
+						case PyGLM_DT_INT8:
+							allocate(sizeof(glm::mat<4, 2, glm::i8>));
+							*((glm::mat<4, 2, glm::i8>*)data) = glm::mat<4, 2, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8());
+							return;
+						case PyGLM_DT_UINT8:
+							allocate(sizeof(glm::mat<4, 2, glm::u8>));
+							*((glm::mat<4, 2, glm::u8>*)data) = glm::mat<4, 2, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8());
+							return;
+						case PyGLM_DT_BOOL:
+							allocate(sizeof(glm::mat<4, 2, bool>));
+							*((glm::mat<4, 2, bool>*)data) = glm::mat<4, 2, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool());
+							return;
+						}
+					}
+					else if (innerSize == 3 && (accepted_types & PyGLM_SHAPE_4x3)) { // mat4x3
+						PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+						PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+						PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+						PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+						PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+						PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+						PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+						PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+						PyObject* innerItem9 = PyGLM_TupleOrList_GET_ITEM(item3, 2);
+						PyObject* innerItem10 = PyGLM_TupleOrList_GET_ITEM(item4, 0);
+						PyObject* innerItem11 = PyGLM_TupleOrList_GET_ITEM(item4, 1);
+						PyObject* innerItem12 = PyGLM_TupleOrList_GET_ITEM(item4, 2);
+
+						PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+						PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+						PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+						PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+						PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+						PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+						PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+						PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+						PyGLMSingleTypeHolder innerItem9Out = PyGLMSingleTypeHolder(innerItem9);
+						PyGLMSingleTypeHolder innerItem10Out = PyGLMSingleTypeHolder(innerItem10);
+						PyGLMSingleTypeHolder innerItem11Out = PyGLMSingleTypeHolder(innerItem11);
+						PyGLMSingleTypeHolder innerItem12Out = PyGLMSingleTypeHolder(innerItem12);
+
+						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype, innerItem10Out.dtype, innerItem11Out.dtype, innerItem12Out.dtype });
+
+						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | out_type);
+
+						switch (out_type) {
+						case PyGLM_DT_FLOAT:
+							allocate(sizeof(glm::mat<4, 3, float>));
+							*((glm::mat<4, 3, float>*)data) = glm::mat<4, 3, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat(), innerItem9Out.asFloat(), innerItem10Out.asFloat(), innerItem11Out.asFloat(), innerItem12Out.asFloat());
+							return;
+						case PyGLM_DT_DOUBLE:
+							allocate(sizeof(glm::mat<4, 3, double>));
+							*((glm::mat<4, 3, double>*)data) = glm::mat<4, 3, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble(), innerItem9Out.asDouble(), innerItem10Out.asDouble(), innerItem11Out.asDouble(), innerItem12Out.asDouble());
+							return;
+						case PyGLM_DT_INT64:
+							allocate(sizeof(glm::mat<4, 3, glm::i64>));
+							*((glm::mat<4, 3, glm::i64>*)data) = glm::mat<4, 3, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64(), innerItem9Out.asInt64(), innerItem10Out.asInt64(), innerItem11Out.asInt64(), innerItem12Out.asInt64());
+							return;
+						case PyGLM_DT_UINT64:
+							allocate(sizeof(glm::mat<4, 3, glm::u64>));
+							*((glm::mat<4, 3, glm::u64>*)data) = glm::mat<4, 3, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64(), innerItem9Out.asUint64(), innerItem10Out.asUint64(), innerItem11Out.asUint64(), innerItem12Out.asUint64());
+							return;
+						case PyGLM_DT_INT:
+							allocate(sizeof(glm::mat<4, 3, glm::i32>));
+							*((glm::mat<4, 3, glm::i32>*)data) = glm::mat<4, 3, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32(), innerItem9Out.asInt32(), innerItem10Out.asInt32(), innerItem11Out.asInt32(), innerItem12Out.asInt32());
+							return;
+						case PyGLM_DT_UINT:
+							allocate(sizeof(glm::mat<4, 3, glm::u32>));
+							*((glm::mat<4, 3, glm::u32>*)data) = glm::mat<4, 3, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32(), innerItem9Out.asUint32(), innerItem10Out.asUint32(), innerItem11Out.asUint32(), innerItem12Out.asUint32());
+							return;
+						case PyGLM_DT_INT16:
+							allocate(sizeof(glm::mat<4, 3, glm::i16>));
+							*((glm::mat<4, 3, glm::i16>*)data) = glm::mat<4, 3, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16(), innerItem9Out.asInt16(), innerItem10Out.asInt16(), innerItem11Out.asInt16(), innerItem12Out.asInt16());
+							return;
+						case PyGLM_DT_UINT16:
+							allocate(sizeof(glm::mat<4, 3, glm::u16>));
+							*((glm::mat<4, 3, glm::u16>*)data) = glm::mat<4, 3, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16(), innerItem9Out.asUint16(), innerItem10Out.asUint16(), innerItem11Out.asUint16(), innerItem12Out.asUint16());
+							return;
+						case PyGLM_DT_INT8:
+							allocate(sizeof(glm::mat<4, 3, glm::i8>));
+							*((glm::mat<4, 3, glm::i8>*)data) = glm::mat<4, 3, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8(), innerItem9Out.asInt8(), innerItem10Out.asInt8(), innerItem11Out.asInt8(), innerItem12Out.asInt8());
+							return;
+						case PyGLM_DT_UINT8:
+							allocate(sizeof(glm::mat<4, 3, glm::u8>));
+							*((glm::mat<4, 3, glm::u8>*)data) = glm::mat<4, 3, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8(), innerItem9Out.asUint8(), innerItem10Out.asUint8(), innerItem11Out.asUint8(), innerItem12Out.asUint8());
+							return;
+						case PyGLM_DT_BOOL:
+							allocate(sizeof(glm::mat<4, 3, bool>));
+							*((glm::mat<4, 3, bool>*)data) = glm::mat<4, 3, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool(), innerItem9Out.asBool(), innerItem10Out.asBool(), innerItem11Out.asBool(), innerItem12Out.asBool());
+							return;
+						}
+					}
+					else if (innerSize == 4 && (accepted_types & PyGLM_SHAPE_4x4)) { // mat4x4
+						PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+						PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+						PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+						PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item1, 3);
+						PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+						PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+						PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+						PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item2, 3);
+						PyObject* innerItem9 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+						PyObject* innerItem10 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+						PyObject* innerItem11 = PyGLM_TupleOrList_GET_ITEM(item3, 2);
+						PyObject* innerItem12 = PyGLM_TupleOrList_GET_ITEM(item3, 3);
+						PyObject* innerItem13 = PyGLM_TupleOrList_GET_ITEM(item4, 0);
+						PyObject* innerItem14 = PyGLM_TupleOrList_GET_ITEM(item4, 1);
+						PyObject* innerItem15 = PyGLM_TupleOrList_GET_ITEM(item4, 2);
+						PyObject* innerItem16 = PyGLM_TupleOrList_GET_ITEM(item4, 3);
+
+						PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+						PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+						PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+						PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+						PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+						PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+						PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+						PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+						PyGLMSingleTypeHolder innerItem9Out = PyGLMSingleTypeHolder(innerItem9);
+						PyGLMSingleTypeHolder innerItem10Out = PyGLMSingleTypeHolder(innerItem10);
+						PyGLMSingleTypeHolder innerItem11Out = PyGLMSingleTypeHolder(innerItem11);
+						PyGLMSingleTypeHolder innerItem12Out = PyGLMSingleTypeHolder(innerItem12);
+						PyGLMSingleTypeHolder innerItem13Out = PyGLMSingleTypeHolder(innerItem13);
+						PyGLMSingleTypeHolder innerItem14Out = PyGLMSingleTypeHolder(innerItem14);
+						PyGLMSingleTypeHolder innerItem15Out = PyGLMSingleTypeHolder(innerItem15);
+						PyGLMSingleTypeHolder innerItem16Out = PyGLMSingleTypeHolder(innerItem16);
+
+						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype, innerItem10Out.dtype, innerItem11Out.dtype, innerItem12Out.dtype, innerItem13Out.dtype, innerItem14Out.dtype, innerItem15Out.dtype, innerItem16Out.dtype });
+
+						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | out_type);
+
+						switch (out_type) {
+						case PyGLM_DT_FLOAT:
+							allocate(sizeof(glm::mat<4, 4, float>));
+							*((glm::mat<4, 4, float>*)data) = glm::mat<4, 4, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat(), innerItem9Out.asFloat(), innerItem10Out.asFloat(), innerItem11Out.asFloat(), innerItem12Out.asFloat(), innerItem13Out.asFloat(), innerItem14Out.asFloat(), innerItem15Out.asFloat(), innerItem16Out.asFloat());
+							return;
+						case PyGLM_DT_DOUBLE:
+							allocate(sizeof(glm::mat<4, 4, double>));
+							*((glm::mat<4, 4, double>*)data) = glm::mat<4, 4, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble(), innerItem9Out.asDouble(), innerItem10Out.asDouble(), innerItem11Out.asDouble(), innerItem12Out.asDouble(), innerItem13Out.asDouble(), innerItem14Out.asDouble(), innerItem15Out.asDouble(), innerItem16Out.asDouble());
+							return;
+						case PyGLM_DT_INT64:
+							allocate(sizeof(glm::mat<4, 4, glm::i64>));
+							*((glm::mat<4, 4, glm::i64>*)data) = glm::mat<4, 4, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64(), innerItem9Out.asInt64(), innerItem10Out.asInt64(), innerItem11Out.asInt64(), innerItem12Out.asInt64(), innerItem13Out.asInt64(), innerItem14Out.asInt64(), innerItem15Out.asInt64(), innerItem16Out.asInt64());
+							return;
+						case PyGLM_DT_UINT64:
+							allocate(sizeof(glm::mat<4, 4, glm::u64>));
+							*((glm::mat<4, 4, glm::u64>*)data) = glm::mat<4, 4, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64(), innerItem9Out.asUint64(), innerItem10Out.asUint64(), innerItem11Out.asUint64(), innerItem12Out.asUint64(), innerItem13Out.asUint64(), innerItem14Out.asUint64(), innerItem15Out.asUint64(), innerItem16Out.asUint64());
+							return;
+						case PyGLM_DT_INT:
+							allocate(sizeof(glm::mat<4, 4, glm::i32>));
+							*((glm::mat<4, 4, glm::i32>*)data) = glm::mat<4, 4, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32(), innerItem9Out.asInt32(), innerItem10Out.asInt32(), innerItem11Out.asInt32(), innerItem12Out.asInt32(), innerItem13Out.asInt32(), innerItem14Out.asInt32(), innerItem15Out.asInt32(), innerItem16Out.asInt32());
+							return;
+						case PyGLM_DT_UINT:
+							allocate(sizeof(glm::mat<4, 4, glm::u32>));
+							*((glm::mat<4, 4, glm::u32>*)data) = glm::mat<4, 4, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32(), innerItem9Out.asUint32(), innerItem10Out.asUint32(), innerItem11Out.asUint32(), innerItem12Out.asUint32(), innerItem13Out.asUint32(), innerItem14Out.asUint32(), innerItem15Out.asUint32(), innerItem16Out.asUint32());
+							return;
+						case PyGLM_DT_INT16:
+							allocate(sizeof(glm::mat<4, 4, glm::i16>));
+							*((glm::mat<4, 4, glm::i16>*)data) = glm::mat<4, 4, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16(), innerItem9Out.asInt16(), innerItem10Out.asInt16(), innerItem11Out.asInt16(), innerItem12Out.asInt16(), innerItem13Out.asInt16(), innerItem14Out.asInt16(), innerItem15Out.asInt16(), innerItem16Out.asInt16());
+							return;
+						case PyGLM_DT_UINT16:
+							allocate(sizeof(glm::mat<4, 4, glm::u16>));
+							*((glm::mat<4, 4, glm::u16>*)data) = glm::mat<4, 4, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16(), innerItem9Out.asUint16(), innerItem10Out.asUint16(), innerItem11Out.asUint16(), innerItem12Out.asUint16(), innerItem13Out.asUint16(), innerItem14Out.asUint16(), innerItem15Out.asUint16(), innerItem16Out.asUint16());
+							return;
+						case PyGLM_DT_INT8:
+							allocate(sizeof(glm::mat<4, 4, glm::i8>));
+							*((glm::mat<4, 4, glm::i8>*)data) = glm::mat<4, 4, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8(), innerItem9Out.asInt8(), innerItem10Out.asInt8(), innerItem11Out.asInt8(), innerItem12Out.asInt8(), innerItem13Out.asInt8(), innerItem14Out.asInt8(), innerItem15Out.asInt8(), innerItem16Out.asInt8());
+							return;
+						case PyGLM_DT_UINT8:
+							allocate(sizeof(glm::mat<4, 4, glm::u8>));
+							*((glm::mat<4, 4, glm::u8>*)data) = glm::mat<4, 4, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8(), innerItem9Out.asUint8(), innerItem10Out.asUint8(), innerItem11Out.asUint8(), innerItem12Out.asUint8(), innerItem13Out.asUint8(), innerItem14Out.asUint8(), innerItem15Out.asUint8(), innerItem16Out.asUint8());
+							return;
+						case PyGLM_DT_BOOL:
+							allocate(sizeof(glm::mat<4, 4, bool>));
+							*((glm::mat<4, 4, bool>*)data) = glm::mat<4, 4, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool(), innerItem9Out.asBool(), innerItem10Out.asBool(), innerItem11Out.asBool(), innerItem12Out.asBool(), innerItem13Out.asBool(), innerItem14Out.asBool(), innerItem15Out.asBool(), innerItem16Out.asBool());
+							return;
+						}
+					}
+				}
+
+				if ((accepted_types & PyGLM_SHAPE_4) && (accepted_types & PyGLM_T_ANY_VEC)) {
+
+					PyGLMSingleTypeHolder item1Out = PyGLMSingleTypeHolder(item1);
+					PyGLMSingleTypeHolder item2Out = PyGLMSingleTypeHolder(item2);
+					PyGLMSingleTypeHolder item3Out = PyGLMSingleTypeHolder(item3);
+					PyGLMSingleTypeHolder item4Out = PyGLMSingleTypeHolder(item4);
+
+					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype, item3Out.dtype, item4Out.dtype });
+
+					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | out_type);
+
+					switch (out_type) {
+					case PyGLM_DT_FLOAT:
+						allocate(sizeof(glm::vec<4, float>));
+						*((glm::vec<4, float>*)data) = glm::vec<4, float>(item1Out.asFloat(), item2Out.asFloat(), item3Out.asFloat(), item4Out.asFloat());
+						return;
+					case PyGLM_DT_DOUBLE:
+						allocate(sizeof(glm::vec<4, double>));
+						*((glm::vec<4, double>*)data) = glm::vec<4, double>(item1Out.asDouble(), item2Out.asDouble(), item3Out.asDouble(), item4Out.asDouble());
+						return;
+					case PyGLM_DT_INT64:
+						allocate(sizeof(glm::vec<4, glm::i64>));
+						*((glm::vec<4, glm::i64>*)data) = glm::vec<4, glm::i64>(item1Out.asInt64(), item2Out.asInt64(), item3Out.asInt64(), item4Out.asInt64());
+						return;
+					case PyGLM_DT_UINT64:
+						allocate(sizeof(glm::vec<4, glm::u64>));
+						*((glm::vec<4, glm::u64>*)data) = glm::vec<4, glm::u64>(item1Out.asUint64(), item2Out.asUint64(), item3Out.asUint64(), item4Out.asUint64());
+						return;
+					case PyGLM_DT_INT:
+						allocate(sizeof(glm::vec<4, glm::i32>));
+						*((glm::vec<4, glm::i32>*)data) = glm::vec<4, glm::i32>(item1Out.asInt32(), item2Out.asInt32(), item3Out.asInt32(), item4Out.asInt32());
+						return;
+					case PyGLM_DT_UINT:
+						allocate(sizeof(glm::vec<4, glm::u32>));
+						*((glm::vec<4, glm::u32>*)data) = glm::vec<4, glm::u32>(item1Out.asUint32(), item2Out.asUint32(), item3Out.asUint32(), item4Out.asUint32());
+						return;
+					case PyGLM_DT_INT16:
+						allocate(sizeof(glm::vec<4, glm::i16>));
+						*((glm::vec<4, glm::i16>*)data) = glm::vec<4, glm::i16>(item1Out.asInt16(), item2Out.asInt16(), item3Out.asInt16(), item4Out.asInt16());
+						return;
+					case PyGLM_DT_UINT16:
+						allocate(sizeof(glm::vec<4, glm::u16>));
+						*((glm::vec<4, glm::u16>*)data) = glm::vec<4, glm::u16>(item1Out.asUint16(), item2Out.asUint16(), item3Out.asUint16(), item4Out.asUint16());
+						return;
+					case PyGLM_DT_INT8:
+						allocate(sizeof(glm::vec<4, glm::i8>));
+						*((glm::vec<4, glm::i8>*)data) = glm::vec<4, glm::i8>(item1Out.asInt8(), item2Out.asInt8(), item3Out.asInt8(), item4Out.asInt8());
+						return;
+					case PyGLM_DT_UINT8:
+						allocate(sizeof(glm::vec<4, glm::u8>));
+						*((glm::vec<4, glm::u8>*)data) = glm::vec<4, glm::u8>(item1Out.asUint8(), item2Out.asUint8(), item3Out.asUint8(), item4Out.asUint8());
+						return;
+					case PyGLM_DT_BOOL:
+						allocate(sizeof(glm::vec<4, bool>));
+						*((glm::vec<4, bool>*)data) = glm::vec<4, bool>(item1Out.asBool(), item2Out.asBool(), item3Out.asBool(), item4Out.asBool());
+						return;
+					}
+				}
+
+				if ((accepted_types & PyGLM_T_QUA)) {
+					PyGLMSingleTypeHolder item1Out = PyGLMSingleTypeHolder(item1);
+					PyGLMSingleTypeHolder item2Out = PyGLMSingleTypeHolder(item2);
+					PyGLMSingleTypeHolder item3Out = PyGLMSingleTypeHolder(item3);
+					PyGLMSingleTypeHolder item4Out = PyGLMSingleTypeHolder(item4);
+
+					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype, item3Out.dtype, item4Out.dtype });
+
+					setInfo(PyGLM_T_QUA | out_type);
+
+					switch (out_type) {
+					case PyGLM_DT_FLOAT:
+						allocate(sizeof(glm::qua<float>));
+						*((glm::qua<float>*)data) = glm::qua<float>(item1Out.asFloat(), item2Out.asFloat(), item3Out.asFloat(), item4Out.asFloat());
+						return;
+					case PyGLM_DT_DOUBLE:
+						allocate(sizeof(glm::qua<double>));
+						*((glm::qua<double>*)data) = glm::qua<double>(item1Out.asDouble(), item2Out.asDouble(), item3Out.asDouble(), item4Out.asDouble());
+						return;
+					}
+				}
+			}
+		}
+#endif
+	}
+
+	~PyGLMTypeInfo() {
+		if (needsToBeFreed) 
+			free(data);
+	}
+
+	template<int C, int R, typename T>
+	inline glm::mat<C, R, T> getMat() {
+		return *((glm::mat<C, R, T>*)data);
+	}
+
+	template<int L, typename T>
+	inline glm::vec<L, T> getVec() {
+		return *((glm::vec<L, T>*)data);
+	}
+
+	template<typename T>
+	inline glm::qua<T> getQua() {
+		return *((glm::qua<T>*)data);
+	}
+
+	template<typename T>
+	static const inline int getDT() {
+		if (std::is_same<T, float>::value) {
+			return (PyGLM_DT_FLOAT);
+		}
+		else if (std::is_same<T, double>::value) {
+			return (PyGLM_DT_DOUBLE);
+		}
+		else if (std::is_same<T, glm::i32>::value) {
+			return (PyGLM_DT_INT);
+		}
+		else if (std::is_same<T, glm::u32>::value) {
+			return (PyGLM_DT_UINT);
+		}
+		else if (std::is_same<T, glm::i64>::value) {
+			return (PyGLM_DT_INT64);
+		}
+		else if (std::is_same<T, glm::u64>::value) {
+			return (PyGLM_DT_UINT64);
+		}
+		else if (std::is_same<T, glm::i16>::value) {
+			return (PyGLM_DT_INT16);
+		}
+		else if (std::is_same<T, glm::u16>::value) {
+			return (PyGLM_DT_UINT16);
+		}
+		else if (std::is_same<T, glm::i8>::value) {
+			return (PyGLM_DT_INT8);
+		}
+		else if (std::is_same<T, glm::u8>::value) {
+			return (PyGLM_DT_UINT8);
+		}
+		else if (std::is_same<T, bool>::value) {
+			return (PyGLM_DT_BOOL);
+		}
+		return PyGLM_DT_UNKNOWN;
+	}
+
+private:
+	void allocate(size_t size) {
+		data = malloc(size);
+		needsToBeFreed = true;
+	}
+
+	void setInfo(int info) {
+		this->info = info;
+	}
+};
+
+
 #define _SUB_PyGLM_GET_TYPE(o) ((o->ob_type->tp_dealloc == NULL) ? PyGLM_TYPE_UNKNOWN : (o->ob_type->tp_dealloc == (destructor)vec_dealloc) ? PyGLM_TYPE_VEC : (o->ob_type->tp_dealloc == (destructor)mat_dealloc) ? PyGLM_TYPE_MAT : (o->ob_type->tp_dealloc == (destructor)qua_dealloc) ? PyGLM_TYPE_QUA : (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) ? PyGLM_TYPE_VEC : PyGLM_TYPE_UNKNOWN)
 #define PyGLM_GET_TYPE(o) _SUB_PyGLM_GET_TYPE(((PyObject*)o))
 
-#define PyGLM_VEC_SHAPE_CHECK(o, L) (((shape_helper*)o)->shape == L)
-#define PyGLM_MAT_SHAPE_CHECK(o, C, R) (((shape_helper*)o)->shape == (C + (R << 3)))
+#define PyGLM_VEC_SHAPE_CHECK(o, L) ((((shape_helper*)o)->shape & 0b1111) == L)
+#define PyGLM_MAT_SHAPE_CHECK(o, C, R) ((((shape_helper*)o)->shape & 0b111) == C && (((shape_helper*)o)->shape >> 3 & 0b111) == R)
 
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
 bool PyGLM_Vec1i_Check(PyObject* o) {
@@ -169,10 +3510,10 @@ static bool get_view_format_equal(char* value) {
 	if (v_char == 'd') {
 		return std::is_same<T, double>::value;
 	}
-	if (v_char == 'c') {
+	if (v_char == 'b') {
 		return std::is_same<T, std::int8_t>::value;
 	}
-	if (v_char == 'b') {
+	if (v_char == 'B') {
 		return std::is_same<T, std::uint8_t>::value;
 	}
 	if (v_char == 'h') {
@@ -187,13 +3528,13 @@ static bool get_view_format_equal(char* value) {
 	if (v_char == 'I') {
 		return std::is_same<T, std::uint32_t>::value;
 	}
-	if (v_char == 'L') {
+	if (v_char == 'q') {
 		return std::is_same<T, std::int64_t>::value;
 	}
-	if (v_char == 'K') {
+	if (v_char == 'Q') {
 		return std::is_same<T, std::uint64_t>::value;
 	}
-	if (v_char == 'p') {
+	if (v_char == '?') {
 		return std::is_same<T, bool>::value;
 	}
 	return false;
@@ -227,13 +3568,1571 @@ static bool PyGLM_Vecb_Check(int L, PyObject* o) {
 	return true;
 }
 
-#define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && (PyGLM_Vecb_Check<T>(L, (PyObject*)o))))
+enum SourceType {NONE, NORMAL, MVEC, PTI};
+
+PyGLMTypeInfo PTI0;
+SourceType sourceType0;
+
+#define PyGLM_Vec_PTI_CheckN(L, T, o, N) (PTI ## N = PyGLMTypeInfo(PyGLM_T_ANY_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_ ## T,o), sourceType ## N = PTI, PTI ## N.info == (PyGLM_T_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_ ## T))
+
+#define PyGLM_Vec_CheckN(L, T, o, N) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) && (sourceType ## N = NORMAL)) || (Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() && (sourceType ## N = MVEC)) || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && PyGLM_Vec_PTI_CheckN(L, T, o, N))
+
+#define PyGLM_Vec_Check(L, T, o) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>()))) || (Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>()) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && (PyGLM_Vecb_Check<T>(L, (PyObject*)o))))
 
 #define PyGLM_Vec_Check_IgnoreType(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_VEC && PyGLM_VEC_SHAPE_CHECK(o, L))) && ((PyGLM_Vecb_Check<T>(L, (PyObject*)o)) || (PyGLM_Veci_Check(L, o)))))
 
+#define PyGLM_Vec_PTI_GetN(L, T, N) PTI ## N.getVec<L, T>()
+
+
+#define PyGLM_Qua_PTI_CheckN(T, o, N) (PTI ## N = PyGLMTypeInfo(PyGLM_T_QUA | PyGLM_DT_ ## T,o), sourceType ## N = PTI, PTI ## N.info == (PyGLM_T_QUA | PyGLM_DT_ ## T))
+
+#define PyGLM_Qua_CheckN(T, o, N) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())) && (sourceType ## N = NORMAL)) || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && PyGLM_Qua_PTI_CheckN(T, o, N))
+
 #define PyGLM_Qua_Check(T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_QUA)) && PyGLM_Vecb_Check<T>(4, (PyObject*)o)))
 
+#define PyGLM_Qua_PTI_GetN(T, N) PTI ## N.getQua<T>()
+
+
+#define PyGLM_Mat_PTI_CheckN(C, R, DT, o, N) (PTI ## N = PyGLMTypeInfo(PyGLM_T_MAT | PyGLM_SHAPE_ ## C ## x ## R | DT,o), sourceType ## N = PTI, PTI ## N.info == (PyGLM_T_MAT | PyGLM_SHAPE_ ## C ## x ## R | DT))
+
+#define PyGLM_Mat_CheckN(C, R, T, o, N) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) && (sourceType ## N = NORMAL)) || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && PyGLM_Mat_PTI_CheckN(C, R, PTI##N.getDT<T>(), o, N))
+
 #define PyGLM_Mat_Check(C, R, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_MAT && PyGLM_MAT_SHAPE_CHECK(o, C, R))) && PyGLM_Matb_Check<T>(C, R, (PyObject*)o)))
+
+#define PyGLM_Mat_PTI_GetN(C, R, T, N) PTI ## N.getMat<C, R, T>()
+
+
+//enum SourceType {
+//	UNKNOWN, PyGLM_TYPE, LIST_OR_TUPLE, BUFFER_PROTOCOL, NONE
+//};
+
+//union TargetType {
+//	// numbers
+//	double d;
+//	float f;
+//	glm::i64 i64;
+//	glm::u64 u64;
+//	glm::i32 i;
+//	glm::u32 u;
+//	glm::i16 i16;
+//	glm::u16 u16;
+//	glm::i8 i8;
+//	glm::u8 u8;
+//	bool b;
+//
+//	// vectors
+//	// vec1
+//	glm::vec1 floatvec1;
+//	glm::dvec1 doublevec1;
+//	glm::i64vec1 int64vec1;
+//	glm::u64vec1 uint64vec1;
+//	glm::ivec1 int32vec1;
+//	glm::uvec1 uint32vec1;
+//	glm::i16vec1 int16vec1;
+//	glm::u16vec1 uint16vec1;
+//	glm::i8vec1 int8vec1;
+//	glm::u8vec1 uint8vec1;
+//	glm::bvec1 boolvec1;
+//
+//	// vec2
+//	glm::vec2 floatvec2;
+//	glm::dvec2 doublevec2;
+//	glm::i64vec2 int64vec2;
+//	glm::u64vec2 uint64vec2;
+//	glm::ivec2 int32vec2;
+//	glm::uvec2 uint32vec2;
+//	glm::i16vec2 int16vec2;
+//	glm::u16vec2 uint16vec2;
+//	glm::i8vec2 int8vec2;
+//	glm::u8vec2 uint8vec2;
+//	glm::bvec2 boolvec2;
+//
+//	// vec3
+//	glm::vec3 floatvec3;
+//	glm::dvec3 doublevec3;
+//	glm::i64vec3 int64vec3;
+//	glm::u64vec3 uint64vec3;
+//	glm::ivec3 int32vec3;
+//	glm::uvec3 uint32vec3;
+//	glm::i16vec3 int16vec3;
+//	glm::u16vec3 uint16vec3;
+//	glm::i8vec3 int8vec3;
+//	glm::u8vec3 uint8vec3;
+//	glm::bvec3 boolvec3;
+//
+//	// vec4
+//	glm::vec4 floatvec4;
+//	glm::dvec4 doublevec4;
+//	glm::i64vec4 int64vec4;
+//	glm::u64vec4 uint64vec4;
+//	glm::ivec4 int32vec4;
+//	glm::uvec4 uint32vec4;
+//	glm::i16vec4 int16vec4;
+//	glm::u16vec4 uint16vec4;
+//	glm::i8vec4 int8vec4;
+//	glm::u8vec4 uint8vec4;
+//	glm::bvec4 boolvec4;
+//
+//	// matrices
+//	// mat2x2
+//	glm::mat2x2 floatmat2x2;
+//	glm::dmat2x2 doublemat2x2;
+//	glm::imat2x2 int32mat2x2;
+//	glm::umat2x2 uint32mat2x2;
+//
+//	// mat2x3
+//	glm::mat2x3 floatmat2x3;
+//	glm::dmat2x3 doublemat2x3;
+//	glm::imat2x3 int32mat2x3;
+//	glm::umat2x3 uint32mat2x3;
+//
+//	// mat2x4
+//	glm::mat2x4 floatmat2x4;
+//	glm::dmat2x4 doublemat2x4;
+//	glm::imat2x4 int32mat2x4;
+//	glm::umat2x4 uint32mat2x4;
+//
+//	// mat3x2
+//	glm::mat3x2 floatmat3x2;
+//	glm::dmat3x2 doublemat3x2;
+//	glm::imat3x2 int32mat3x2;
+//	glm::umat3x2 uint32mat3x2;
+//
+//	// mat3x3
+//	glm::mat3x3 floatmat3x3;
+//	glm::dmat3x3 doublemat3x3;
+//	glm::imat3x3 int32mat3x3;
+//	glm::umat3x3 uint32mat3x3;
+//
+//	// mat3x4
+//	glm::mat3x4 floatmat3x4;
+//	glm::dmat3x4 doublemat3x4;
+//	glm::imat3x4 int32mat3x4;
+//	glm::umat3x4 uint32mat3x4;
+//
+//
+//	// mat4x2
+//	glm::mat4x2 floatmat4x2;
+//	glm::dmat4x2 doublemat4x2;
+//	glm::imat4x2 int32mat4x2;
+//	glm::umat4x2 uint32mat4x2;
+//
+//	// mat4x3
+//	glm::mat4x3 floatmat4x3;
+//	glm::dmat4x3 doublemat4x3;
+//	glm::imat4x3 int32mat4x3;
+//	glm::umat4x3 uint32mat4x3;
+//
+//	// mat4x4
+//	glm::mat4x4 floatmat4x4;
+//	glm::dmat4x4 doublemat4x4;
+//	glm::imat4x4 int32mat4x4;
+//	glm::umat4x4 uint32mat4x4;
+//
+//	// quaternions
+//	glm::quat floatquat;
+//	glm::dquat doublequat;
+//};
+//
+//SourceType tcSourceType0;
+//
+//TargetType tcData0;
+//
+//int tcTargetType0;
+//int tcTargetDT0;
+//int tcTargetShape0;
+//
+//void PyGLM_Init_Check0() {
+//	tcSourceType0 = SourceType::UNKNOWN;
+//	tcTargetType0 = tcTargetDT0 = tcTargetShape0 = 0;
+//}
+//
+//#define PyGLM_Mat_Check_Simple(C, R, T, o) (Py_TYPE(o) == (UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())))
+//
+//#define PyGLM_Store_Mat0(C, R, T, m) (tcData0.T ## mat ## C ## x ## R = m)
+//#define PyGLM_Mat_Check0(C, R, T, o) (PyGLM_Mat_Check_Simple(C, R, T, o)) ? (PyGLM_Store_Mat0(C, R, T, UNBRACKET (((mat<C, R, T>*)o)->super_type)), true) : \
+//( (tcSourceType0 == SourceType::UNKNOWN) ? PyGLM_DetermineAndStoreType<2, 2, float>(o) : NULL, (tcTargetType0 == PyGLM_T_MAT && tcTargetDT0 == PyGLM_DT_ ## T && tcTargetShape0 == PyGLM_SHAPE_ ## C ## x ## R))
+//
+//template<int C, int R, typename T>
+//bool PyGLM_DetermineAndStoreType(PyObject* obj) {
+//#if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
+//	if (PyObject_CheckBuffer(obj)) {
+//		Py_buffer view;
+//		if (PyObject_GetBuffer(obj, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1) {
+//			PyBuffer_Release(&view);
+//			PyErr_Clear();
+//			return;
+//		}
+//		switch (view.ndim) {
+//		case 1: // one dimensional array (vec / qua)
+//			if (view.shape == NULL) {
+//				PyBuffer_Release(&view);
+//				return;
+//			}
+//			switch (view.shape[0]) {
+//			case 1: // vec1's
+//				switch (view.format[0]) {
+//				case 'f':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FLOAT);
+//					break;
+//				case 'd':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_DOUBLE);
+//					break;
+//				case 'b':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT8);
+//					break;
+//				case 'B':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT8);
+//					break;
+//				case 'h':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT16);
+//					break;
+//				case 'H':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT16);
+//					break;
+//				case 'l':
+//				case 'i':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT);
+//					break;
+//				case 'L':
+//				case 'I':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT);
+//					break;
+//				case 'q':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT64);
+//					break;
+//				case 'Q':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT64);
+//					break;
+//				case '?':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_BOOL);
+//					break;
+//				default:
+//					PyBuffer_Release(&view);
+//					return;
+//				}
+//				break;
+//			case 2: // vec2's
+//				switch (view.format[0]) {
+//				case 'f':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FLOAT);
+//					break;
+//				case 'd':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_DOUBLE);
+//					break;
+//				case 'b':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT8);
+//					break;
+//				case 'B':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT8);
+//					break;
+//				case 'h':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT16);
+//					break;
+//				case 'H':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT16);
+//					break;
+//				case 'l':
+//				case 'i':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT);
+//					break;
+//				case 'L':
+//				case 'I':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT);
+//					break;
+//				case 'q':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT64);
+//					break;
+//				case 'Q':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT64);
+//					break;
+//				case '?':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_BOOL);
+//					break;
+//				default:
+//					PyBuffer_Release(&view);
+//					return;
+//				}
+//				break;
+//			case 3: // vec3's
+//				switch (view.format[0]) {
+//				case 'f':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
+//					break;
+//				case 'd':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_DOUBLE);
+//					break;
+//				case 'b':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT8);
+//					break;
+//				case 'B':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT8);
+//					break;
+//				case 'h':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT16);
+//					break;
+//				case 'H':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT16);
+//					break;
+//				case 'l':
+//				case 'i':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT);
+//					break;
+//				case 'L':
+//				case 'I':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT);
+//					break;
+//				case 'q':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT64);
+//					break;
+//				case 'Q':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT64);
+//					break;
+//				case '?':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_BOOL);
+//					break;
+//				default:
+//					PyBuffer_Release(&view);
+//					return;
+//				}
+//				break;
+//			case 4: // vec4's and qua's
+//				switch (view.format[0]) {
+//				case 'f':
+//					if ((accepted_types & PyGLM_T_ANY_VEC))
+//						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FLOAT);
+//					else
+//						setInfo(PyGLM_T_QUA | PyGLM_DT_FLOAT);
+//					break;
+//				case 'd':
+//					if ((accepted_types & PyGLM_T_ANY_VEC))
+//						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_DOUBLE);
+//					else
+//						setInfo(PyGLM_T_QUA | PyGLM_DT_DOUBLE);
+//					break;
+//				case 'b':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT8);
+//					break;
+//				case 'B':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT8);
+//					break;
+//				case 'h':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT16);
+//					break;
+//				case 'H':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT16);
+//					break;
+//				case 'l':
+//				case 'i':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT);
+//					break;
+//				case 'L':
+//				case 'I':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT);
+//					break;
+//				case 'q':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT64);
+//					break;
+//				case 'Q':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT64);
+//					break;
+//				case '?':
+//					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_BOOL);
+//					break;
+//				default:
+//					PyBuffer_Release(&view);
+//					return;
+//				}
+//				break;
+//			default:
+//				PyBuffer_Release(&view);
+//				return;
+//			}
+//			break;
+//		case 2: // two dimensional array (mat)
+//			if (view.shape == NULL) {
+//				PyBuffer_Release(&view);
+//				return;
+//			}
+//			switch (view.shape[0]) {
+//			case 2: // mat2xM's
+//				switch (view.shape[1]) {
+//				case 2: // mat2x2's
+//					switch (view.format[0]) {
+//					case 'f':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_FLOAT);
+//						break;
+//					case 'd':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_DOUBLE);
+//						break;
+//					case 'l':
+//					case 'i':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT);
+//						break;
+//					case 'L':
+//					case 'I':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_UINT);
+//						break;
+//					default:
+//						PyBuffer_Release(&view);
+//						return;
+//					}
+//					break;
+//				case 3: // mat2x3's
+//					switch (view.format[0]) {
+//					case 'f':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_FLOAT);
+//						break;
+//					case 'd':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_DOUBLE);
+//						break;
+//					case 'l':
+//					case 'i':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT);
+//						break;
+//					case 'L':
+//					case 'I':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_UINT);
+//						break;
+//					default:
+//						PyBuffer_Release(&view);
+//						return;
+//					}
+//					break;
+//				case 4: // mat2x4's
+//					switch (view.format[0]) {
+//					case 'f':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_FLOAT);
+//						break;
+//					case 'd':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_DOUBLE);
+//						break;
+//					case 'l':
+//					case 'i':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT);
+//						break;
+//					case 'L':
+//					case 'I':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_UINT);
+//						break;
+//					default:
+//						PyBuffer_Release(&view);
+//						return;
+//					}
+//					break;
+//				default:
+//					PyBuffer_Release(&view);
+//					return;
+//				}
+//				break;
+//			case 3: // mat3xM's
+//				switch (view.shape[1]) {
+//				case 2: // mat3x2's
+//					switch (view.format[0]) {
+//					case 'f':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_FLOAT);
+//						break;
+//					case 'd':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_DOUBLE);
+//						break;
+//					case 'l':
+//					case 'i':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT);
+//						break;
+//					case 'L':
+//					case 'I':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_UINT);
+//						break;
+//					default:
+//						PyBuffer_Release(&view);
+//						return;
+//					}
+//					break;
+//				case 3: // mat3x3's
+//					switch (view.format[0]) {
+//					case 'f':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FLOAT);
+//						break;
+//					case 'd':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_DOUBLE);
+//						break;
+//					case 'l':
+//					case 'i':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT);
+//						break;
+//					case 'L':
+//					case 'I':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_UINT);
+//						break;
+//					default:
+//						PyBuffer_Release(&view);
+//						return;
+//					}
+//					break;
+//				case 4: // mat3x4's
+//					switch (view.format[0]) {
+//					case 'f':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_FLOAT);
+//						break;
+//					case 'd':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_DOUBLE);
+//						break;
+//					case 'l':
+//					case 'i':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT);
+//						break;
+//					case 'L':
+//					case 'I':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_UINT);
+//						break;
+//					default:
+//						PyBuffer_Release(&view);
+//						return;
+//					}
+//					break;
+//				default:
+//					PyBuffer_Release(&view);
+//					return;
+//				}
+//				break;
+//			case 4: // mat4xM's
+//				switch (view.shape[1]) {
+//				case 2: // mat4x2's
+//					switch (view.format[0]) {
+//					case 'f':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_FLOAT);
+//						break;
+//					case 'd':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_DOUBLE);
+//						break;
+//					case 'l':
+//					case 'i':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT);
+//						break;
+//					case 'L':
+//					case 'I':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_UINT);
+//						break;
+//					default:
+//						PyBuffer_Release(&view);
+//						return;
+//					}
+//					break;
+//				case 3: // mat4x3's
+//					switch (view.format[0]) {
+//					case 'f':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_FLOAT);
+//						break;
+//					case 'd':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_DOUBLE);
+//						break;
+//					case 'l':
+//					case 'i':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT);
+//						break;
+//					case 'L':
+//					case 'I':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_UINT);
+//						break;
+//					default:
+//						PyBuffer_Release(&view);
+//						return;
+//					}
+//					break;
+//				case 4: // mat4x4's
+//					switch (view.format[0]) {
+//					case 'f':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FLOAT);
+//						break;
+//					case 'd':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_DOUBLE);
+//						break;
+//					case 'l':
+//					case 'i':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT);
+//						break;
+//					case 'L':
+//					case 'I':
+//						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_UINT);
+//						break;
+//					default:
+//						PyBuffer_Release(&view);
+//						return;
+//					}
+//					break;
+//				default:
+//					PyBuffer_Release(&view);
+//					return;
+//				}
+//				break;
+//			default:
+//				PyBuffer_Release(&view);
+//				return;
+//			}
+//			break;
+//		default:
+//			PyBuffer_Release(&view);
+//			return;
+//		}
+//		if (view.readonly == 0) {
+//			data = view.buf;
+//		}
+//		else {
+//			allocate(sizeof(view.len));
+//			memcpy(data, view.buf, sizeof(view.len));
+//		}
+//		return;
+//	} // end of getbuffer checking
+//
+//	if (PyGLM_TupleOrList_Check(obj)) {
+//		Py_ssize_t size = PyGLM_TupleOrList_GET_SIZE(obj);
+//
+//		if (size == 1) { // vec1's
+//			PyObject* item1 = PyGLM_TupleOrList_GET_ITEM(obj, 0);
+//
+//			PyGLMSingleTypeHolder item1Out = PyGLMSingleTypeHolder(item1);
+//
+//			int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype });
+//
+//			setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | out_type);
+//
+//			switch (out_type) {
+//			case PyGLM_DT_FLOAT:
+//				allocate(sizeof(glm::vec<1, float>));
+//				*((glm::vec<1, float>*)data) = glm::vec<1, float>(item1Out.asFloat());
+//				return;
+//			case PyGLM_DT_DOUBLE:
+//				allocate(sizeof(glm::vec<1, double>));
+//				*((glm::vec<1, double>*)data) = glm::vec<1, double>(item1Out.asDouble());
+//				return;
+//			case PyGLM_DT_INT64:
+//				allocate(sizeof(glm::vec<1, glm::i64>));
+//				*((glm::vec<1, glm::i64>*)data) = glm::vec<1, glm::i64>(item1Out.asInt64());
+//				return;
+//			case PyGLM_DT_UINT64:
+//				allocate(sizeof(glm::vec<1, glm::u64>));
+//				*((glm::vec<1, glm::u64>*)data) = glm::vec<1, glm::u64>(item1Out.asUint64());
+//				return;
+//			case PyGLM_DT_INT:
+//				allocate(sizeof(glm::vec<1, glm::i32>));
+//				*((glm::vec<1, glm::i32>*)data) = glm::vec<1, glm::i32>(item1Out.asInt32());
+//				return;
+//			case PyGLM_DT_UINT:
+//				allocate(sizeof(glm::vec<1, glm::u32>));
+//				*((glm::vec<1, glm::u32>*)data) = glm::vec<1, glm::u32>(item1Out.asUint32());
+//				return;
+//			case PyGLM_DT_INT16:
+//				allocate(sizeof(glm::vec<1, glm::i16>));
+//				*((glm::vec<1, glm::i16>*)data) = glm::vec<1, glm::i16>(item1Out.asInt16());
+//				return;
+//			case PyGLM_DT_UINT16:
+//				allocate(sizeof(glm::vec<1, glm::u16>));
+//				*((glm::vec<1, glm::u16>*)data) = glm::vec<1, glm::u16>(item1Out.asUint16());
+//				return;
+//			case PyGLM_DT_INT8:
+//				allocate(sizeof(glm::vec<1, glm::i8>));
+//				*((glm::vec<1, glm::i8>*)data) = glm::vec<1, glm::i8>(item1Out.asInt8());
+//				return;
+//			case PyGLM_DT_UINT8:
+//				allocate(sizeof(glm::vec<1, glm::u8>));
+//				*((glm::vec<1, glm::u8>*)data) = glm::vec<1, glm::u8>(item1Out.asUint8());
+//				return;
+//			case PyGLM_DT_BOOL:
+//				allocate(sizeof(glm::vec<1, bool>));
+//				*((glm::vec<1, bool>*)data) = glm::vec<1, bool>(item1Out.asBool());
+//				return;
+//			}
+//		}
+//		else if (size == 2) { // vec2's and mat2xM's
+//			PyObject* item1 = PyGLM_TupleOrList_GET_ITEM(obj, 0);
+//			PyObject* item2 = PyGLM_TupleOrList_GET_ITEM(obj, 1);
+//
+//			if ((accepted_types & PyGLM_T_MAT) && PyGLM_TupleOrList_Check(item1) && PyGLM_TupleOrList_Check(item2)) {
+//				Py_ssize_t innerSize = PyGLM_TupleOrList_GET_SIZE(item1);
+//				if (innerSize != PyGLM_TupleOrList_GET_SIZE(item2)) {
+//					return;
+//				}
+//
+//				if (innerSize == 2 && (accepted_types & PyGLM_SHAPE_2x2)) { // mat2x2
+//					PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+//					PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+//					PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+//					PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+//
+//					PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+//					PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+//					PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+//					PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+//
+//					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype });
+//
+//					setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | out_type);
+//
+//					switch (out_type) {
+//					case PyGLM_DT_FLOAT:
+//						allocate(sizeof(glm::mat<2, 2, float>));
+//						*((glm::mat<2, 2, float>*)data) = glm::mat<2, 2, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat());
+//						return;
+//					case PyGLM_DT_DOUBLE:
+//						allocate(sizeof(glm::mat<2, 2, double>));
+//						*((glm::mat<2, 2, double>*)data) = glm::mat<2, 2, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble());
+//						return;
+//					case PyGLM_DT_INT64:
+//						allocate(sizeof(glm::mat<2, 2, glm::i64>));
+//						*((glm::mat<2, 2, glm::i64>*)data) = glm::mat<2, 2, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64());
+//						return;
+//					case PyGLM_DT_UINT64:
+//						allocate(sizeof(glm::mat<2, 2, glm::u64>));
+//						*((glm::mat<2, 2, glm::u64>*)data) = glm::mat<2, 2, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64());
+//						return;
+//					case PyGLM_DT_INT:
+//						allocate(sizeof(glm::mat<2, 2, glm::i32>));
+//						*((glm::mat<2, 2, glm::i32>*)data) = glm::mat<2, 2, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32());
+//						return;
+//					case PyGLM_DT_UINT:
+//						allocate(sizeof(glm::mat<2, 2, glm::u32>));
+//						*((glm::mat<2, 2, glm::u32>*)data) = glm::mat<2, 2, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32());
+//						return;
+//					case PyGLM_DT_INT16:
+//						allocate(sizeof(glm::mat<2, 2, glm::i16>));
+//						*((glm::mat<2, 2, glm::i16>*)data) = glm::mat<2, 2, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16());
+//						return;
+//					case PyGLM_DT_UINT16:
+//						allocate(sizeof(glm::mat<2, 2, glm::u16>));
+//						*((glm::mat<2, 2, glm::u16>*)data) = glm::mat<2, 2, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16());
+//						return;
+//					case PyGLM_DT_INT8:
+//						allocate(sizeof(glm::mat<2, 2, glm::i8>));
+//						*((glm::mat<2, 2, glm::i8>*)data) = glm::mat<2, 2, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8());
+//						return;
+//					case PyGLM_DT_UINT8:
+//						allocate(sizeof(glm::mat<2, 2, glm::u8>));
+//						*((glm::mat<2, 2, glm::u8>*)data) = glm::mat<2, 2, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8());
+//						return;
+//					case PyGLM_DT_BOOL:
+//						allocate(sizeof(glm::mat<2, 2, bool>));
+//						*((glm::mat<2, 2, bool>*)data) = glm::mat<2, 2, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool());
+//						return;
+//					}
+//				}
+//				else if (innerSize == 3 && (accepted_types & PyGLM_SHAPE_2x3)) { // mat2x3
+//					PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+//					PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+//					PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+//					PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+//					PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+//					PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+//
+//					PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+//					PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+//					PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+//					PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+//					PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+//					PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+//
+//					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype });
+//
+//					setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | out_type);
+//
+//					switch (out_type) {
+//					case PyGLM_DT_FLOAT:
+//						allocate(sizeof(glm::mat<2, 3, float>));
+//						*((glm::mat<2, 3, float>*)data) = glm::mat<2, 3, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat());
+//						return;
+//					case PyGLM_DT_DOUBLE:
+//						allocate(sizeof(glm::mat<2, 3, double>));
+//						*((glm::mat<2, 3, double>*)data) = glm::mat<2, 3, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble());
+//						return;
+//					case PyGLM_DT_INT64:
+//						allocate(sizeof(glm::mat<2, 3, glm::i64>));
+//						*((glm::mat<2, 3, glm::i64>*)data) = glm::mat<2, 3, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64());
+//						return;
+//					case PyGLM_DT_UINT64:
+//						allocate(sizeof(glm::mat<2, 3, glm::u64>));
+//						*((glm::mat<2, 3, glm::u64>*)data) = glm::mat<2, 3, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64());
+//						return;
+//					case PyGLM_DT_INT:
+//						allocate(sizeof(glm::mat<2, 3, glm::i32>));
+//						*((glm::mat<2, 3, glm::i32>*)data) = glm::mat<2, 3, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32());
+//						return;
+//					case PyGLM_DT_UINT:
+//						allocate(sizeof(glm::mat<2, 3, glm::u32>));
+//						*((glm::mat<2, 3, glm::u32>*)data) = glm::mat<2, 3, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32());
+//						return;
+//					case PyGLM_DT_INT16:
+//						allocate(sizeof(glm::mat<2, 3, glm::i16>));
+//						*((glm::mat<2, 3, glm::i16>*)data) = glm::mat<2, 3, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16());
+//						return;
+//					case PyGLM_DT_UINT16:
+//						allocate(sizeof(glm::mat<2, 3, glm::u16>));
+//						*((glm::mat<2, 3, glm::u16>*)data) = glm::mat<2, 3, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16());
+//						return;
+//					case PyGLM_DT_INT8:
+//						allocate(sizeof(glm::mat<2, 3, glm::i8>));
+//						*((glm::mat<2, 3, glm::i8>*)data) = glm::mat<2, 3, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8());
+//						return;
+//					case PyGLM_DT_UINT8:
+//						allocate(sizeof(glm::mat<2, 3, glm::u8>));
+//						*((glm::mat<2, 3, glm::u8>*)data) = glm::mat<2, 3, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8());
+//						return;
+//					case PyGLM_DT_BOOL:
+//						allocate(sizeof(glm::mat<2, 3, bool>));
+//						*((glm::mat<2, 3, bool>*)data) = glm::mat<2, 3, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool());
+//						return;
+//					}
+//				}
+//				else if (innerSize == 4 && (accepted_types & PyGLM_SHAPE_2x4)) { // mat2x4
+//					PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+//					PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+//					PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+//					PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item1, 3);
+//					PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+//					PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+//					PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+//					PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item2, 3);
+//
+//					PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+//					PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+//					PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+//					PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+//					PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+//					PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+//					PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+//					PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+//
+//					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype });
+//
+//					setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | out_type);
+//
+//					switch (out_type) {
+//					case PyGLM_DT_FLOAT:
+//						allocate(sizeof(glm::mat<2, 4, float>));
+//						*((glm::mat<2, 4, float>*)data) = glm::mat<2, 4, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat());
+//						return;
+//					case PyGLM_DT_DOUBLE:
+//						allocate(sizeof(glm::mat<2, 4, double>));
+//						*((glm::mat<2, 4, double>*)data) = glm::mat<2, 4, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble());
+//						return;
+//					case PyGLM_DT_INT64:
+//						allocate(sizeof(glm::mat<2, 4, glm::i64>));
+//						*((glm::mat<2, 4, glm::i64>*)data) = glm::mat<2, 4, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64());
+//						return;
+//					case PyGLM_DT_UINT64:
+//						allocate(sizeof(glm::mat<2, 4, glm::u64>));
+//						*((glm::mat<2, 4, glm::u64>*)data) = glm::mat<2, 4, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64());
+//						return;
+//					case PyGLM_DT_INT:
+//						allocate(sizeof(glm::mat<2, 4, glm::i32>));
+//						*((glm::mat<2, 4, glm::i32>*)data) = glm::mat<2, 4, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32());
+//						return;
+//					case PyGLM_DT_UINT:
+//						allocate(sizeof(glm::mat<2, 4, glm::u32>));
+//						*((glm::mat<2, 4, glm::u32>*)data) = glm::mat<2, 4, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32());
+//						return;
+//					case PyGLM_DT_INT16:
+//						allocate(sizeof(glm::mat<2, 4, glm::i16>));
+//						*((glm::mat<2, 4, glm::i16>*)data) = glm::mat<2, 4, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16());
+//						return;
+//					case PyGLM_DT_UINT16:
+//						allocate(sizeof(glm::mat<2, 4, glm::u16>));
+//						*((glm::mat<2, 4, glm::u16>*)data) = glm::mat<2, 4, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16());
+//						return;
+//					case PyGLM_DT_INT8:
+//						allocate(sizeof(glm::mat<2, 4, glm::i8>));
+//						*((glm::mat<2, 4, glm::i8>*)data) = glm::mat<2, 4, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8());
+//						return;
+//					case PyGLM_DT_UINT8:
+//						allocate(sizeof(glm::mat<2, 4, glm::u8>));
+//						*((glm::mat<2, 4, glm::u8>*)data) = glm::mat<2, 4, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8());
+//						return;
+//					case PyGLM_DT_BOOL:
+//						allocate(sizeof(glm::mat<2, 4, bool>));
+//						*((glm::mat<2, 4, bool>*)data) = glm::mat<2, 4, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool());
+//						return;
+//					}
+//				}
+//			}
+//			if ((accepted_types & PyGLM_SHAPE_2) && (accepted_types & PyGLM_T_ANY_VEC)) {
+//				PyGLMSingleTypeHolder item1Out = PyGLMSingleTypeHolder(item1);
+//				PyGLMSingleTypeHolder item2Out = PyGLMSingleTypeHolder(item2);
+//
+//				int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype });
+//
+//				setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | out_type);
+//
+//				switch (out_type) {
+//				case PyGLM_DT_FLOAT:
+//					allocate(sizeof(glm::vec<2, float>));
+//					*((glm::vec<2, float>*)data) = glm::vec<2, float>(item1Out.asFloat(), item2Out.asFloat());
+//					return;
+//				case PyGLM_DT_DOUBLE:
+//					allocate(sizeof(glm::vec<2, double>));
+//					*((glm::vec<2, double>*)data) = glm::vec<2, double>(item1Out.asDouble(), item2Out.asDouble());
+//					return;
+//				case PyGLM_DT_INT64:
+//					allocate(sizeof(glm::vec<2, glm::i64>));
+//					*((glm::vec<2, glm::i64>*)data) = glm::vec<2, glm::i64>(item1Out.asInt64(), item2Out.asInt64());
+//					return;
+//				case PyGLM_DT_UINT64:
+//					allocate(sizeof(glm::vec<2, glm::u64>));
+//					*((glm::vec<2, glm::u64>*)data) = glm::vec<2, glm::u64>(item1Out.asUint64(), item2Out.asUint64());
+//					return;
+//				case PyGLM_DT_INT:
+//					allocate(sizeof(glm::vec<2, glm::i32>));
+//					*((glm::vec<2, glm::i32>*)data) = glm::vec<2, glm::i32>(item1Out.asInt32(), item2Out.asInt32());
+//					return;
+//				case PyGLM_DT_UINT:
+//					allocate(sizeof(glm::vec<2, glm::u32>));
+//					*((glm::vec<2, glm::u32>*)data) = glm::vec<2, glm::u32>(item1Out.asUint32(), item2Out.asUint32());
+//					return;
+//				case PyGLM_DT_INT16:
+//					allocate(sizeof(glm::vec<2, glm::i16>));
+//					*((glm::vec<2, glm::i16>*)data) = glm::vec<2, glm::i16>(item1Out.asInt16(), item2Out.asInt16());
+//					return;
+//				case PyGLM_DT_UINT16:
+//					allocate(sizeof(glm::vec<2, glm::u16>));
+//					*((glm::vec<2, glm::u16>*)data) = glm::vec<2, glm::u16>(item1Out.asUint16(), item2Out.asUint16());
+//					return;
+//				case PyGLM_DT_INT8:
+//					allocate(sizeof(glm::vec<2, glm::i8>));
+//					*((glm::vec<2, glm::i8>*)data) = glm::vec<2, glm::i8>(item1Out.asInt8(), item2Out.asInt8());
+//					return;
+//				case PyGLM_DT_UINT8:
+//					allocate(sizeof(glm::vec<2, glm::u8>));
+//					*((glm::vec<2, glm::u8>*)data) = glm::vec<2, glm::u8>(item1Out.asUint8(), item2Out.asUint8());
+//					return;
+//				case PyGLM_DT_BOOL:
+//					allocate(sizeof(glm::vec<2, bool>));
+//					*((glm::vec<2, bool>*)data) = glm::vec<2, bool>(item1Out.asBool(), item2Out.asBool());
+//					return;
+//				}
+//			}
+//		}
+//		else if (size == 3) { // vec3's and mat3xM's
+//			PyObject* item1 = PyGLM_TupleOrList_GET_ITEM(obj, 0);
+//			PyObject* item2 = PyGLM_TupleOrList_GET_ITEM(obj, 1);
+//			PyObject* item3 = PyGLM_TupleOrList_GET_ITEM(obj, 2);
+//
+//			if ((accepted_types & PyGLM_T_MAT) && PyGLM_TupleOrList_Check(item1) && PyGLM_TupleOrList_Check(item2) && PyGLM_TupleOrList_Check(item3)) {
+//				Py_ssize_t innerSize = PyGLM_TupleOrList_GET_SIZE(item1);
+//				if (innerSize != PyGLM_TupleOrList_GET_SIZE(item2) || innerSize != PyGLM_TupleOrList_GET_SIZE(item3)) {
+//					return;
+//				}
+//
+//				if (innerSize == 2 && (accepted_types & PyGLM_SHAPE_3x2)) { // mat3x2
+//					PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+//					PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+//					PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+//					PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+//					PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+//					PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+//
+//					PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+//					PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+//					PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+//					PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+//					PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+//					PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+//
+//					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype });
+//
+//					setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | out_type);
+//
+//					switch (out_type) {
+//					case PyGLM_DT_FLOAT:
+//						allocate(sizeof(glm::mat<3, 2, float>));
+//						*((glm::mat<3, 2, float>*)data) = glm::mat<3, 2, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat());
+//						return;
+//					case PyGLM_DT_DOUBLE:
+//						allocate(sizeof(glm::mat<3, 2, double>));
+//						*((glm::mat<3, 2, double>*)data) = glm::mat<3, 2, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble());
+//						return;
+//					case PyGLM_DT_INT64:
+//						allocate(sizeof(glm::mat<3, 2, glm::i64>));
+//						*((glm::mat<3, 2, glm::i64>*)data) = glm::mat<3, 2, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64());
+//						return;
+//					case PyGLM_DT_UINT64:
+//						allocate(sizeof(glm::mat<3, 2, glm::u64>));
+//						*((glm::mat<3, 2, glm::u64>*)data) = glm::mat<3, 2, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64());
+//						return;
+//					case PyGLM_DT_INT:
+//						allocate(sizeof(glm::mat<3, 2, glm::i32>));
+//						*((glm::mat<3, 2, glm::i32>*)data) = glm::mat<3, 2, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32());
+//						return;
+//					case PyGLM_DT_UINT:
+//						allocate(sizeof(glm::mat<3, 2, glm::u32>));
+//						*((glm::mat<3, 2, glm::u32>*)data) = glm::mat<3, 2, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32());
+//						return;
+//					case PyGLM_DT_INT16:
+//						allocate(sizeof(glm::mat<3, 2, glm::i16>));
+//						*((glm::mat<3, 2, glm::i16>*)data) = glm::mat<3, 2, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16());
+//						return;
+//					case PyGLM_DT_UINT16:
+//						allocate(sizeof(glm::mat<3, 2, glm::u16>));
+//						*((glm::mat<3, 2, glm::u16>*)data) = glm::mat<3, 2, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16());
+//						return;
+//					case PyGLM_DT_INT8:
+//						allocate(sizeof(glm::mat<3, 2, glm::i8>));
+//						*((glm::mat<3, 2, glm::i8>*)data) = glm::mat<3, 2, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8());
+//						return;
+//					case PyGLM_DT_UINT8:
+//						allocate(sizeof(glm::mat<3, 2, glm::u8>));
+//						*((glm::mat<3, 2, glm::u8>*)data) = glm::mat<3, 2, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8());
+//						return;
+//					case PyGLM_DT_BOOL:
+//						allocate(sizeof(glm::mat<3, 2, bool>));
+//						*((glm::mat<3, 2, bool>*)data) = glm::mat<3, 2, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool());
+//						return;
+//					}
+//				}
+//				else if (innerSize == 3 && (accepted_types & PyGLM_SHAPE_3x3)) { // mat3x3
+//					PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+//					PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+//					PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+//					PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+//					PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+//					PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+//					PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+//					PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+//					PyObject* innerItem9 = PyGLM_TupleOrList_GET_ITEM(item3, 2);
+//
+//					PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+//					PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+//					PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+//					PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+//					PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+//					PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+//					PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+//					PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+//					PyGLMSingleTypeHolder innerItem9Out = PyGLMSingleTypeHolder(innerItem9);
+//
+//					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype });
+//
+//					setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | out_type);
+//
+//					switch (out_type) {
+//					case PyGLM_DT_FLOAT:
+//						allocate(sizeof(glm::mat<3, 3, float>));
+//						*((glm::mat<3, 3, float>*)data) = glm::mat<3, 3, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat(), innerItem9Out.asFloat());
+//						return;
+//					case PyGLM_DT_DOUBLE:
+//						allocate(sizeof(glm::mat<3, 3, double>));
+//						*((glm::mat<3, 3, double>*)data) = glm::mat<3, 3, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble(), innerItem9Out.asDouble());
+//						return;
+//					case PyGLM_DT_INT64:
+//						allocate(sizeof(glm::mat<3, 3, glm::i64>));
+//						*((glm::mat<3, 3, glm::i64>*)data) = glm::mat<3, 3, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64(), innerItem9Out.asInt64());
+//						return;
+//					case PyGLM_DT_UINT64:
+//						allocate(sizeof(glm::mat<3, 3, glm::u64>));
+//						*((glm::mat<3, 3, glm::u64>*)data) = glm::mat<3, 3, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64(), innerItem9Out.asUint64());
+//						return;
+//					case PyGLM_DT_INT:
+//						allocate(sizeof(glm::mat<3, 3, glm::i32>));
+//						*((glm::mat<3, 3, glm::i32>*)data) = glm::mat<3, 3, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32(), innerItem9Out.asInt32());
+//						return;
+//					case PyGLM_DT_UINT:
+//						allocate(sizeof(glm::mat<3, 3, glm::u32>));
+//						*((glm::mat<3, 3, glm::u32>*)data) = glm::mat<3, 3, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32(), innerItem9Out.asUint32());
+//						return;
+//					case PyGLM_DT_INT16:
+//						allocate(sizeof(glm::mat<3, 3, glm::i16>));
+//						*((glm::mat<3, 3, glm::i16>*)data) = glm::mat<3, 3, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16(), innerItem9Out.asInt16());
+//						return;
+//					case PyGLM_DT_UINT16:
+//						allocate(sizeof(glm::mat<3, 3, glm::u16>));
+//						*((glm::mat<3, 3, glm::u16>*)data) = glm::mat<3, 3, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16(), innerItem9Out.asUint16());
+//						return;
+//					case PyGLM_DT_INT8:
+//						allocate(sizeof(glm::mat<3, 3, glm::i8>));
+//						*((glm::mat<3, 3, glm::i8>*)data) = glm::mat<3, 3, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8(), innerItem9Out.asInt8());
+//						return;
+//					case PyGLM_DT_UINT8:
+//						allocate(sizeof(glm::mat<3, 3, glm::u8>));
+//						*((glm::mat<3, 3, glm::u8>*)data) = glm::mat<3, 3, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8(), innerItem9Out.asUint8());
+//						return;
+//					case PyGLM_DT_BOOL:
+//						allocate(sizeof(glm::mat<3, 3, bool>));
+//						*((glm::mat<3, 3, bool>*)data) = glm::mat<3, 3, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool(), innerItem9Out.asBool());
+//						return;
+//					}
+//				}
+//				else if (innerSize == 4 && (accepted_types & PyGLM_SHAPE_3x4)) { // mat3x4
+//					PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+//					PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+//					PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+//					PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item1, 3);
+//					PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+//					PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+//					PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+//					PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item2, 3);
+//					PyObject* innerItem9 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+//					PyObject* innerItem10 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+//					PyObject* innerItem11 = PyGLM_TupleOrList_GET_ITEM(item3, 2);
+//					PyObject* innerItem12 = PyGLM_TupleOrList_GET_ITEM(item3, 3);
+//
+//					PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+//					PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+//					PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+//					PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+//					PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+//					PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+//					PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+//					PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+//					PyGLMSingleTypeHolder innerItem9Out = PyGLMSingleTypeHolder(innerItem9);
+//					PyGLMSingleTypeHolder innerItem10Out = PyGLMSingleTypeHolder(innerItem10);
+//					PyGLMSingleTypeHolder innerItem11Out = PyGLMSingleTypeHolder(innerItem11);
+//					PyGLMSingleTypeHolder innerItem12Out = PyGLMSingleTypeHolder(innerItem12);
+//
+//					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype, innerItem10Out.dtype, innerItem11Out.dtype, innerItem12Out.dtype });
+//
+//					setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | out_type);
+//
+//					switch (out_type) {
+//					case PyGLM_DT_FLOAT:
+//						allocate(sizeof(glm::mat<3, 4, float>));
+//						*((glm::mat<3, 4, float>*)data) = glm::mat<3, 4, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat(), innerItem9Out.asFloat(), innerItem10Out.asFloat(), innerItem11Out.asFloat(), innerItem12Out.asFloat());
+//						return;
+//					case PyGLM_DT_DOUBLE:
+//						allocate(sizeof(glm::mat<3, 4, double>));
+//						*((glm::mat<3, 4, double>*)data) = glm::mat<3, 4, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble(), innerItem9Out.asDouble(), innerItem10Out.asDouble(), innerItem11Out.asDouble(), innerItem12Out.asDouble());
+//						return;
+//					case PyGLM_DT_INT64:
+//						allocate(sizeof(glm::mat<3, 4, glm::i64>));
+//						*((glm::mat<3, 4, glm::i64>*)data) = glm::mat<3, 4, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64(), innerItem9Out.asInt64(), innerItem10Out.asInt64(), innerItem11Out.asInt64(), innerItem12Out.asInt64());
+//						return;
+//					case PyGLM_DT_UINT64:
+//						allocate(sizeof(glm::mat<3, 4, glm::u64>));
+//						*((glm::mat<3, 4, glm::u64>*)data) = glm::mat<3, 4, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64(), innerItem9Out.asUint64(), innerItem10Out.asUint64(), innerItem11Out.asUint64(), innerItem12Out.asUint64());
+//						return;
+//					case PyGLM_DT_INT:
+//						allocate(sizeof(glm::mat<3, 4, glm::i32>));
+//						*((glm::mat<3, 4, glm::i32>*)data) = glm::mat<3, 4, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32(), innerItem9Out.asInt32(), innerItem10Out.asInt32(), innerItem11Out.asInt32(), innerItem12Out.asInt32());
+//						return;
+//					case PyGLM_DT_UINT:
+//						allocate(sizeof(glm::mat<3, 4, glm::u32>));
+//						*((glm::mat<3, 4, glm::u32>*)data) = glm::mat<3, 4, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32(), innerItem9Out.asUint32(), innerItem10Out.asUint32(), innerItem11Out.asUint32(), innerItem12Out.asUint32());
+//						return;
+//					case PyGLM_DT_INT16:
+//						allocate(sizeof(glm::mat<3, 4, glm::i16>));
+//						*((glm::mat<3, 4, glm::i16>*)data) = glm::mat<3, 4, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16(), innerItem9Out.asInt16(), innerItem10Out.asInt16(), innerItem11Out.asInt16(), innerItem12Out.asInt16());
+//						return;
+//					case PyGLM_DT_UINT16:
+//						allocate(sizeof(glm::mat<3, 4, glm::u16>));
+//						*((glm::mat<3, 4, glm::u16>*)data) = glm::mat<3, 4, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16(), innerItem9Out.asUint16(), innerItem10Out.asUint16(), innerItem11Out.asUint16(), innerItem12Out.asUint16());
+//						return;
+//					case PyGLM_DT_INT8:
+//						allocate(sizeof(glm::mat<3, 4, glm::i8>));
+//						*((glm::mat<3, 4, glm::i8>*)data) = glm::mat<3, 4, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8(), innerItem9Out.asInt8(), innerItem10Out.asInt8(), innerItem11Out.asInt8(), innerItem12Out.asInt8());
+//						return;
+//					case PyGLM_DT_UINT8:
+//						allocate(sizeof(glm::mat<3, 4, glm::u8>));
+//						*((glm::mat<3, 4, glm::u8>*)data) = glm::mat<3, 4, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8(), innerItem9Out.asUint8(), innerItem10Out.asUint8(), innerItem11Out.asUint8(), innerItem12Out.asUint8());
+//						return;
+//					case PyGLM_DT_BOOL:
+//						allocate(sizeof(glm::mat<3, 4, bool>));
+//						*((glm::mat<3, 4, bool>*)data) = glm::mat<3, 4, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool(), innerItem9Out.asBool(), innerItem10Out.asBool(), innerItem11Out.asBool(), innerItem12Out.asBool());
+//						return;
+//					}
+//				}
+//			}
+//
+//			if ((accepted_types & PyGLM_SHAPE_3) && (accepted_types & PyGLM_T_ANY_VEC)) {
+//
+//				PyGLMSingleTypeHolder item1Out = PyGLMSingleTypeHolder(item1);
+//				PyGLMSingleTypeHolder item2Out = PyGLMSingleTypeHolder(item2);
+//				PyGLMSingleTypeHolder item3Out = PyGLMSingleTypeHolder(item3);
+//
+//				int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype, item3Out.dtype });
+//
+//				setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | out_type);
+//
+//				switch (out_type) {
+//				case PyGLM_DT_FLOAT:
+//					allocate(sizeof(glm::vec<3, float>));
+//					*((glm::vec<3, float>*)data) = glm::vec<3, float>(item1Out.asFloat(), item2Out.asFloat(), item3Out.asFloat());
+//					return;
+//				case PyGLM_DT_DOUBLE:
+//					allocate(sizeof(glm::vec<3, double>));
+//					*((glm::vec<3, double>*)data) = glm::vec<3, double>(item1Out.asDouble(), item2Out.asDouble(), item3Out.asDouble());
+//					return;
+//				case PyGLM_DT_INT64:
+//					allocate(sizeof(glm::vec<3, glm::i64>));
+//					*((glm::vec<3, glm::i64>*)data) = glm::vec<3, glm::i64>(item1Out.asInt64(), item2Out.asInt64(), item3Out.asInt64());
+//					return;
+//				case PyGLM_DT_UINT64:
+//					allocate(sizeof(glm::vec<3, glm::u64>));
+//					*((glm::vec<3, glm::u64>*)data) = glm::vec<3, glm::u64>(item1Out.asUint64(), item2Out.asUint64(), item3Out.asUint64());
+//					return;
+//				case PyGLM_DT_INT:
+//					allocate(sizeof(glm::vec<3, glm::i32>));
+//					*((glm::vec<3, glm::i32>*)data) = glm::vec<3, glm::i32>(item1Out.asInt32(), item2Out.asInt32(), item3Out.asInt32());
+//					return;
+//				case PyGLM_DT_UINT:
+//					allocate(sizeof(glm::vec<3, glm::u32>));
+//					*((glm::vec<3, glm::u32>*)data) = glm::vec<3, glm::u32>(item1Out.asUint32(), item2Out.asUint32(), item3Out.asUint32());
+//					return;
+//				case PyGLM_DT_INT16:
+//					allocate(sizeof(glm::vec<3, glm::i16>));
+//					*((glm::vec<3, glm::i16>*)data) = glm::vec<3, glm::i16>(item1Out.asInt16(), item2Out.asInt16(), item3Out.asInt16());
+//					return;
+//				case PyGLM_DT_UINT16:
+//					allocate(sizeof(glm::vec<3, glm::u16>));
+//					*((glm::vec<3, glm::u16>*)data) = glm::vec<3, glm::u16>(item1Out.asUint16(), item2Out.asUint16(), item3Out.asUint16());
+//					return;
+//				case PyGLM_DT_INT8:
+//					allocate(sizeof(glm::vec<3, glm::i8>));
+//					*((glm::vec<3, glm::i8>*)data) = glm::vec<3, glm::i8>(item1Out.asInt8(), item2Out.asInt8(), item3Out.asInt8());
+//					return;
+//				case PyGLM_DT_UINT8:
+//					allocate(sizeof(glm::vec<3, glm::u8>));
+//					*((glm::vec<3, glm::u8>*)data) = glm::vec<3, glm::u8>(item1Out.asUint8(), item2Out.asUint8(), item3Out.asUint8());
+//					return;
+//				case PyGLM_DT_BOOL:
+//					allocate(sizeof(glm::vec<3, bool>));
+//					*((glm::vec<3, bool>*)data) = glm::vec<3, bool>(item1Out.asBool(), item2Out.asBool(), item3Out.asBool());
+//					return;
+//				}
+//			}
+//		}
+//		else if (size == 4) { // vec4's, mat4xM's and qua's
+//			PyObject* item1 = PyGLM_TupleOrList_GET_ITEM(obj, 0);
+//			PyObject* item2 = PyGLM_TupleOrList_GET_ITEM(obj, 1);
+//			PyObject* item3 = PyGLM_TupleOrList_GET_ITEM(obj, 2);
+//			PyObject* item4 = PyGLM_TupleOrList_GET_ITEM(obj, 3);
+//
+//			if ((accepted_types & PyGLM_T_MAT) && PyGLM_TupleOrList_Check(item1) && PyGLM_TupleOrList_Check(item2) && PyGLM_TupleOrList_Check(item3) && PyGLM_TupleOrList_Check(item4)) {
+//				Py_ssize_t innerSize = PyGLM_TupleOrList_GET_SIZE(item1);
+//				if (innerSize != PyGLM_TupleOrList_GET_SIZE(item2) || innerSize != PyGLM_TupleOrList_GET_SIZE(item3) || innerSize != PyGLM_TupleOrList_GET_SIZE(item4)) {
+//					return;
+//				}
+//				if (innerSize == 2 && (accepted_types & PyGLM_SHAPE_4x2)) { // mat4x2
+//					PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+//					PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+//					PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+//					PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+//					PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+//					PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+//					PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item4, 0);
+//					PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item4, 1);
+//
+//					PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+//					PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+//					PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+//					PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+//					PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+//					PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+//					PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+//					PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+//
+//					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype });
+//
+//					setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | out_type);
+//
+//					switch (out_type) {
+//					case PyGLM_DT_FLOAT:
+//						allocate(sizeof(glm::mat<4, 2, float>));
+//						*((glm::mat<4, 2, float>*)data) = glm::mat<4, 2, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat());
+//						return;
+//					case PyGLM_DT_DOUBLE:
+//						allocate(sizeof(glm::mat<4, 2, double>));
+//						*((glm::mat<4, 2, double>*)data) = glm::mat<4, 2, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble());
+//						return;
+//					case PyGLM_DT_INT64:
+//						allocate(sizeof(glm::mat<4, 2, glm::i64>));
+//						*((glm::mat<4, 2, glm::i64>*)data) = glm::mat<4, 2, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64());
+//						return;
+//					case PyGLM_DT_UINT64:
+//						allocate(sizeof(glm::mat<4, 2, glm::u64>));
+//						*((glm::mat<4, 2, glm::u64>*)data) = glm::mat<4, 2, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64());
+//						return;
+//					case PyGLM_DT_INT:
+//						allocate(sizeof(glm::mat<4, 2, glm::i32>));
+//						*((glm::mat<4, 2, glm::i32>*)data) = glm::mat<4, 2, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32());
+//						return;
+//					case PyGLM_DT_UINT:
+//						allocate(sizeof(glm::mat<4, 2, glm::u32>));
+//						*((glm::mat<4, 2, glm::u32>*)data) = glm::mat<4, 2, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32());
+//						return;
+//					case PyGLM_DT_INT16:
+//						allocate(sizeof(glm::mat<4, 2, glm::i16>));
+//						*((glm::mat<4, 2, glm::i16>*)data) = glm::mat<4, 2, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16());
+//						return;
+//					case PyGLM_DT_UINT16:
+//						allocate(sizeof(glm::mat<4, 2, glm::u16>));
+//						*((glm::mat<4, 2, glm::u16>*)data) = glm::mat<4, 2, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16());
+//						return;
+//					case PyGLM_DT_INT8:
+//						allocate(sizeof(glm::mat<4, 2, glm::i8>));
+//						*((glm::mat<4, 2, glm::i8>*)data) = glm::mat<4, 2, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8());
+//						return;
+//					case PyGLM_DT_UINT8:
+//						allocate(sizeof(glm::mat<4, 2, glm::u8>));
+//						*((glm::mat<4, 2, glm::u8>*)data) = glm::mat<4, 2, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8());
+//						return;
+//					case PyGLM_DT_BOOL:
+//						allocate(sizeof(glm::mat<4, 2, bool>));
+//						*((glm::mat<4, 2, bool>*)data) = glm::mat<4, 2, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool());
+//						return;
+//					}
+//				}
+//				else if (innerSize == 3 && (accepted_types & PyGLM_SHAPE_4x3)) { // mat4x3
+//					PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+//					PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+//					PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+//					PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+//					PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+//					PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+//					PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+//					PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+//					PyObject* innerItem9 = PyGLM_TupleOrList_GET_ITEM(item3, 2);
+//					PyObject* innerItem10 = PyGLM_TupleOrList_GET_ITEM(item4, 0);
+//					PyObject* innerItem11 = PyGLM_TupleOrList_GET_ITEM(item4, 1);
+//					PyObject* innerItem12 = PyGLM_TupleOrList_GET_ITEM(item4, 2);
+//
+//					PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+//					PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+//					PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+//					PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+//					PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+//					PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+//					PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+//					PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+//					PyGLMSingleTypeHolder innerItem9Out = PyGLMSingleTypeHolder(innerItem9);
+//					PyGLMSingleTypeHolder innerItem10Out = PyGLMSingleTypeHolder(innerItem10);
+//					PyGLMSingleTypeHolder innerItem11Out = PyGLMSingleTypeHolder(innerItem11);
+//					PyGLMSingleTypeHolder innerItem12Out = PyGLMSingleTypeHolder(innerItem12);
+//
+//					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype, innerItem10Out.dtype, innerItem11Out.dtype, innerItem12Out.dtype });
+//
+//					setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | out_type);
+//
+//					switch (out_type) {
+//					case PyGLM_DT_FLOAT:
+//						allocate(sizeof(glm::mat<4, 3, float>));
+//						*((glm::mat<4, 3, float>*)data) = glm::mat<4, 3, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat(), innerItem9Out.asFloat(), innerItem10Out.asFloat(), innerItem11Out.asFloat(), innerItem12Out.asFloat());
+//						return;
+//					case PyGLM_DT_DOUBLE:
+//						allocate(sizeof(glm::mat<4, 3, double>));
+//						*((glm::mat<4, 3, double>*)data) = glm::mat<4, 3, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble(), innerItem9Out.asDouble(), innerItem10Out.asDouble(), innerItem11Out.asDouble(), innerItem12Out.asDouble());
+//						return;
+//					case PyGLM_DT_INT64:
+//						allocate(sizeof(glm::mat<4, 3, glm::i64>));
+//						*((glm::mat<4, 3, glm::i64>*)data) = glm::mat<4, 3, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64(), innerItem9Out.asInt64(), innerItem10Out.asInt64(), innerItem11Out.asInt64(), innerItem12Out.asInt64());
+//						return;
+//					case PyGLM_DT_UINT64:
+//						allocate(sizeof(glm::mat<4, 3, glm::u64>));
+//						*((glm::mat<4, 3, glm::u64>*)data) = glm::mat<4, 3, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64(), innerItem9Out.asUint64(), innerItem10Out.asUint64(), innerItem11Out.asUint64(), innerItem12Out.asUint64());
+//						return;
+//					case PyGLM_DT_INT:
+//						allocate(sizeof(glm::mat<4, 3, glm::i32>));
+//						*((glm::mat<4, 3, glm::i32>*)data) = glm::mat<4, 3, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32(), innerItem9Out.asInt32(), innerItem10Out.asInt32(), innerItem11Out.asInt32(), innerItem12Out.asInt32());
+//						return;
+//					case PyGLM_DT_UINT:
+//						allocate(sizeof(glm::mat<4, 3, glm::u32>));
+//						*((glm::mat<4, 3, glm::u32>*)data) = glm::mat<4, 3, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32(), innerItem9Out.asUint32(), innerItem10Out.asUint32(), innerItem11Out.asUint32(), innerItem12Out.asUint32());
+//						return;
+//					case PyGLM_DT_INT16:
+//						allocate(sizeof(glm::mat<4, 3, glm::i16>));
+//						*((glm::mat<4, 3, glm::i16>*)data) = glm::mat<4, 3, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16(), innerItem9Out.asInt16(), innerItem10Out.asInt16(), innerItem11Out.asInt16(), innerItem12Out.asInt16());
+//						return;
+//					case PyGLM_DT_UINT16:
+//						allocate(sizeof(glm::mat<4, 3, glm::u16>));
+//						*((glm::mat<4, 3, glm::u16>*)data) = glm::mat<4, 3, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16(), innerItem9Out.asUint16(), innerItem10Out.asUint16(), innerItem11Out.asUint16(), innerItem12Out.asUint16());
+//						return;
+//					case PyGLM_DT_INT8:
+//						allocate(sizeof(glm::mat<4, 3, glm::i8>));
+//						*((glm::mat<4, 3, glm::i8>*)data) = glm::mat<4, 3, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8(), innerItem9Out.asInt8(), innerItem10Out.asInt8(), innerItem11Out.asInt8(), innerItem12Out.asInt8());
+//						return;
+//					case PyGLM_DT_UINT8:
+//						allocate(sizeof(glm::mat<4, 3, glm::u8>));
+//						*((glm::mat<4, 3, glm::u8>*)data) = glm::mat<4, 3, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8(), innerItem9Out.asUint8(), innerItem10Out.asUint8(), innerItem11Out.asUint8(), innerItem12Out.asUint8());
+//						return;
+//					case PyGLM_DT_BOOL:
+//						allocate(sizeof(glm::mat<4, 3, bool>));
+//						*((glm::mat<4, 3, bool>*)data) = glm::mat<4, 3, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool(), innerItem9Out.asBool(), innerItem10Out.asBool(), innerItem11Out.asBool(), innerItem12Out.asBool());
+//						return;
+//					}
+//				}
+//				else if (innerSize == 4 && (accepted_types & PyGLM_SHAPE_4x4)) { // mat4x4
+//					PyObject* innerItem1 = PyGLM_TupleOrList_GET_ITEM(item1, 0);
+//					PyObject* innerItem2 = PyGLM_TupleOrList_GET_ITEM(item1, 1);
+//					PyObject* innerItem3 = PyGLM_TupleOrList_GET_ITEM(item1, 2);
+//					PyObject* innerItem4 = PyGLM_TupleOrList_GET_ITEM(item1, 3);
+//					PyObject* innerItem5 = PyGLM_TupleOrList_GET_ITEM(item2, 0);
+//					PyObject* innerItem6 = PyGLM_TupleOrList_GET_ITEM(item2, 1);
+//					PyObject* innerItem7 = PyGLM_TupleOrList_GET_ITEM(item2, 2);
+//					PyObject* innerItem8 = PyGLM_TupleOrList_GET_ITEM(item2, 3);
+//					PyObject* innerItem9 = PyGLM_TupleOrList_GET_ITEM(item3, 0);
+//					PyObject* innerItem10 = PyGLM_TupleOrList_GET_ITEM(item3, 1);
+//					PyObject* innerItem11 = PyGLM_TupleOrList_GET_ITEM(item3, 2);
+//					PyObject* innerItem12 = PyGLM_TupleOrList_GET_ITEM(item3, 3);
+//					PyObject* innerItem13 = PyGLM_TupleOrList_GET_ITEM(item4, 0);
+//					PyObject* innerItem14 = PyGLM_TupleOrList_GET_ITEM(item4, 1);
+//					PyObject* innerItem15 = PyGLM_TupleOrList_GET_ITEM(item4, 2);
+//					PyObject* innerItem16 = PyGLM_TupleOrList_GET_ITEM(item4, 3);
+//
+//					PyGLMSingleTypeHolder innerItem1Out = PyGLMSingleTypeHolder(innerItem1);
+//					PyGLMSingleTypeHolder innerItem2Out = PyGLMSingleTypeHolder(innerItem2);
+//					PyGLMSingleTypeHolder innerItem3Out = PyGLMSingleTypeHolder(innerItem3);
+//					PyGLMSingleTypeHolder innerItem4Out = PyGLMSingleTypeHolder(innerItem4);
+//					PyGLMSingleTypeHolder innerItem5Out = PyGLMSingleTypeHolder(innerItem5);
+//					PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
+//					PyGLMSingleTypeHolder innerItem7Out = PyGLMSingleTypeHolder(innerItem7);
+//					PyGLMSingleTypeHolder innerItem8Out = PyGLMSingleTypeHolder(innerItem8);
+//					PyGLMSingleTypeHolder innerItem9Out = PyGLMSingleTypeHolder(innerItem9);
+//					PyGLMSingleTypeHolder innerItem10Out = PyGLMSingleTypeHolder(innerItem10);
+//					PyGLMSingleTypeHolder innerItem11Out = PyGLMSingleTypeHolder(innerItem11);
+//					PyGLMSingleTypeHolder innerItem12Out = PyGLMSingleTypeHolder(innerItem12);
+//					PyGLMSingleTypeHolder innerItem13Out = PyGLMSingleTypeHolder(innerItem13);
+//					PyGLMSingleTypeHolder innerItem14Out = PyGLMSingleTypeHolder(innerItem14);
+//					PyGLMSingleTypeHolder innerItem15Out = PyGLMSingleTypeHolder(innerItem15);
+//					PyGLMSingleTypeHolder innerItem16Out = PyGLMSingleTypeHolder(innerItem16);
+//
+//					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype, innerItem10Out.dtype, innerItem11Out.dtype, innerItem12Out.dtype, innerItem13Out.dtype, innerItem14Out.dtype, innerItem15Out.dtype, innerItem16Out.dtype });
+//
+//					setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | out_type);
+//
+//					switch (out_type) {
+//					case PyGLM_DT_FLOAT:
+//						allocate(sizeof(glm::mat<4, 4, float>));
+//						*((glm::mat<4, 4, float>*)data) = glm::mat<4, 4, float>(innerItem1Out.asFloat(), innerItem2Out.asFloat(), innerItem3Out.asFloat(), innerItem4Out.asFloat(), innerItem5Out.asFloat(), innerItem6Out.asFloat(), innerItem7Out.asFloat(), innerItem8Out.asFloat(), innerItem9Out.asFloat(), innerItem10Out.asFloat(), innerItem11Out.asFloat(), innerItem12Out.asFloat(), innerItem13Out.asFloat(), innerItem14Out.asFloat(), innerItem15Out.asFloat(), innerItem16Out.asFloat());
+//						return;
+//					case PyGLM_DT_DOUBLE:
+//						allocate(sizeof(glm::mat<4, 4, double>));
+//						*((glm::mat<4, 4, double>*)data) = glm::mat<4, 4, double>(innerItem1Out.asDouble(), innerItem2Out.asDouble(), innerItem3Out.asDouble(), innerItem4Out.asDouble(), innerItem5Out.asDouble(), innerItem6Out.asDouble(), innerItem7Out.asDouble(), innerItem8Out.asDouble(), innerItem9Out.asDouble(), innerItem10Out.asDouble(), innerItem11Out.asDouble(), innerItem12Out.asDouble(), innerItem13Out.asDouble(), innerItem14Out.asDouble(), innerItem15Out.asDouble(), innerItem16Out.asDouble());
+//						return;
+//					case PyGLM_DT_INT64:
+//						allocate(sizeof(glm::mat<4, 4, glm::i64>));
+//						*((glm::mat<4, 4, glm::i64>*)data) = glm::mat<4, 4, glm::i64>(innerItem1Out.asInt64(), innerItem2Out.asInt64(), innerItem3Out.asInt64(), innerItem4Out.asInt64(), innerItem5Out.asInt64(), innerItem6Out.asInt64(), innerItem7Out.asInt64(), innerItem8Out.asInt64(), innerItem9Out.asInt64(), innerItem10Out.asInt64(), innerItem11Out.asInt64(), innerItem12Out.asInt64(), innerItem13Out.asInt64(), innerItem14Out.asInt64(), innerItem15Out.asInt64(), innerItem16Out.asInt64());
+//						return;
+//					case PyGLM_DT_UINT64:
+//						allocate(sizeof(glm::mat<4, 4, glm::u64>));
+//						*((glm::mat<4, 4, glm::u64>*)data) = glm::mat<4, 4, glm::u64>(innerItem1Out.asUint64(), innerItem2Out.asUint64(), innerItem3Out.asUint64(), innerItem4Out.asUint64(), innerItem5Out.asUint64(), innerItem6Out.asUint64(), innerItem7Out.asUint64(), innerItem8Out.asUint64(), innerItem9Out.asUint64(), innerItem10Out.asUint64(), innerItem11Out.asUint64(), innerItem12Out.asUint64(), innerItem13Out.asUint64(), innerItem14Out.asUint64(), innerItem15Out.asUint64(), innerItem16Out.asUint64());
+//						return;
+//					case PyGLM_DT_INT:
+//						allocate(sizeof(glm::mat<4, 4, glm::i32>));
+//						*((glm::mat<4, 4, glm::i32>*)data) = glm::mat<4, 4, glm::i32>(innerItem1Out.asInt32(), innerItem2Out.asInt32(), innerItem3Out.asInt32(), innerItem4Out.asInt32(), innerItem5Out.asInt32(), innerItem6Out.asInt32(), innerItem7Out.asInt32(), innerItem8Out.asInt32(), innerItem9Out.asInt32(), innerItem10Out.asInt32(), innerItem11Out.asInt32(), innerItem12Out.asInt32(), innerItem13Out.asInt32(), innerItem14Out.asInt32(), innerItem15Out.asInt32(), innerItem16Out.asInt32());
+//						return;
+//					case PyGLM_DT_UINT:
+//						allocate(sizeof(glm::mat<4, 4, glm::u32>));
+//						*((glm::mat<4, 4, glm::u32>*)data) = glm::mat<4, 4, glm::u32>(innerItem1Out.asUint32(), innerItem2Out.asUint32(), innerItem3Out.asUint32(), innerItem4Out.asUint32(), innerItem5Out.asUint32(), innerItem6Out.asUint32(), innerItem7Out.asUint32(), innerItem8Out.asUint32(), innerItem9Out.asUint32(), innerItem10Out.asUint32(), innerItem11Out.asUint32(), innerItem12Out.asUint32(), innerItem13Out.asUint32(), innerItem14Out.asUint32(), innerItem15Out.asUint32(), innerItem16Out.asUint32());
+//						return;
+//					case PyGLM_DT_INT16:
+//						allocate(sizeof(glm::mat<4, 4, glm::i16>));
+//						*((glm::mat<4, 4, glm::i16>*)data) = glm::mat<4, 4, glm::i16>(innerItem1Out.asInt16(), innerItem2Out.asInt16(), innerItem3Out.asInt16(), innerItem4Out.asInt16(), innerItem5Out.asInt16(), innerItem6Out.asInt16(), innerItem7Out.asInt16(), innerItem8Out.asInt16(), innerItem9Out.asInt16(), innerItem10Out.asInt16(), innerItem11Out.asInt16(), innerItem12Out.asInt16(), innerItem13Out.asInt16(), innerItem14Out.asInt16(), innerItem15Out.asInt16(), innerItem16Out.asInt16());
+//						return;
+//					case PyGLM_DT_UINT16:
+//						allocate(sizeof(glm::mat<4, 4, glm::u16>));
+//						*((glm::mat<4, 4, glm::u16>*)data) = glm::mat<4, 4, glm::u16>(innerItem1Out.asUint16(), innerItem2Out.asUint16(), innerItem3Out.asUint16(), innerItem4Out.asUint16(), innerItem5Out.asUint16(), innerItem6Out.asUint16(), innerItem7Out.asUint16(), innerItem8Out.asUint16(), innerItem9Out.asUint16(), innerItem10Out.asUint16(), innerItem11Out.asUint16(), innerItem12Out.asUint16(), innerItem13Out.asUint16(), innerItem14Out.asUint16(), innerItem15Out.asUint16(), innerItem16Out.asUint16());
+//						return;
+//					case PyGLM_DT_INT8:
+//						allocate(sizeof(glm::mat<4, 4, glm::i8>));
+//						*((glm::mat<4, 4, glm::i8>*)data) = glm::mat<4, 4, glm::i8>(innerItem1Out.asInt8(), innerItem2Out.asInt8(), innerItem3Out.asInt8(), innerItem4Out.asInt8(), innerItem5Out.asInt8(), innerItem6Out.asInt8(), innerItem7Out.asInt8(), innerItem8Out.asInt8(), innerItem9Out.asInt8(), innerItem10Out.asInt8(), innerItem11Out.asInt8(), innerItem12Out.asInt8(), innerItem13Out.asInt8(), innerItem14Out.asInt8(), innerItem15Out.asInt8(), innerItem16Out.asInt8());
+//						return;
+//					case PyGLM_DT_UINT8:
+//						allocate(sizeof(glm::mat<4, 4, glm::u8>));
+//						*((glm::mat<4, 4, glm::u8>*)data) = glm::mat<4, 4, glm::u8>(innerItem1Out.asUint8(), innerItem2Out.asUint8(), innerItem3Out.asUint8(), innerItem4Out.asUint8(), innerItem5Out.asUint8(), innerItem6Out.asUint8(), innerItem7Out.asUint8(), innerItem8Out.asUint8(), innerItem9Out.asUint8(), innerItem10Out.asUint8(), innerItem11Out.asUint8(), innerItem12Out.asUint8(), innerItem13Out.asUint8(), innerItem14Out.asUint8(), innerItem15Out.asUint8(), innerItem16Out.asUint8());
+//						return;
+//					case PyGLM_DT_BOOL:
+//						allocate(sizeof(glm::mat<4, 4, bool>));
+//						*((glm::mat<4, 4, bool>*)data) = glm::mat<4, 4, bool>(innerItem1Out.asBool(), innerItem2Out.asBool(), innerItem3Out.asBool(), innerItem4Out.asBool(), innerItem5Out.asBool(), innerItem6Out.asBool(), innerItem7Out.asBool(), innerItem8Out.asBool(), innerItem9Out.asBool(), innerItem10Out.asBool(), innerItem11Out.asBool(), innerItem12Out.asBool(), innerItem13Out.asBool(), innerItem14Out.asBool(), innerItem15Out.asBool(), innerItem16Out.asBool());
+//						return;
+//					}
+//				}
+//			}
+//
+//			if ((accepted_types & PyGLM_SHAPE_4) && (accepted_types & PyGLM_T_ANY_VEC)) {
+//
+//				PyGLMSingleTypeHolder item1Out = PyGLMSingleTypeHolder(item1);
+//				PyGLMSingleTypeHolder item2Out = PyGLMSingleTypeHolder(item2);
+//				PyGLMSingleTypeHolder item3Out = PyGLMSingleTypeHolder(item3);
+//				PyGLMSingleTypeHolder item4Out = PyGLMSingleTypeHolder(item4);
+//
+//				int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype, item3Out.dtype, item4Out.dtype });
+//
+//				setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | out_type);
+//
+//				switch (out_type) {
+//				case PyGLM_DT_FLOAT:
+//					allocate(sizeof(glm::vec<4, float>));
+//					*((glm::vec<4, float>*)data) = glm::vec<4, float>(item1Out.asFloat(), item2Out.asFloat(), item3Out.asFloat(), item4Out.asFloat());
+//					return;
+//				case PyGLM_DT_DOUBLE:
+//					allocate(sizeof(glm::vec<4, double>));
+//					*((glm::vec<4, double>*)data) = glm::vec<4, double>(item1Out.asDouble(), item2Out.asDouble(), item3Out.asDouble(), item4Out.asDouble());
+//					return;
+//				case PyGLM_DT_INT64:
+//					allocate(sizeof(glm::vec<4, glm::i64>));
+//					*((glm::vec<4, glm::i64>*)data) = glm::vec<4, glm::i64>(item1Out.asInt64(), item2Out.asInt64(), item3Out.asInt64(), item4Out.asInt64());
+//					return;
+//				case PyGLM_DT_UINT64:
+//					allocate(sizeof(glm::vec<4, glm::u64>));
+//					*((glm::vec<4, glm::u64>*)data) = glm::vec<4, glm::u64>(item1Out.asUint64(), item2Out.asUint64(), item3Out.asUint64(), item4Out.asUint64());
+//					return;
+//				case PyGLM_DT_INT:
+//					allocate(sizeof(glm::vec<4, glm::i32>));
+//					*((glm::vec<4, glm::i32>*)data) = glm::vec<4, glm::i32>(item1Out.asInt32(), item2Out.asInt32(), item3Out.asInt32(), item4Out.asInt32());
+//					return;
+//				case PyGLM_DT_UINT:
+//					allocate(sizeof(glm::vec<4, glm::u32>));
+//					*((glm::vec<4, glm::u32>*)data) = glm::vec<4, glm::u32>(item1Out.asUint32(), item2Out.asUint32(), item3Out.asUint32(), item4Out.asUint32());
+//					return;
+//				case PyGLM_DT_INT16:
+//					allocate(sizeof(glm::vec<4, glm::i16>));
+//					*((glm::vec<4, glm::i16>*)data) = glm::vec<4, glm::i16>(item1Out.asInt16(), item2Out.asInt16(), item3Out.asInt16(), item4Out.asInt16());
+//					return;
+//				case PyGLM_DT_UINT16:
+//					allocate(sizeof(glm::vec<4, glm::u16>));
+//					*((glm::vec<4, glm::u16>*)data) = glm::vec<4, glm::u16>(item1Out.asUint16(), item2Out.asUint16(), item3Out.asUint16(), item4Out.asUint16());
+//					return;
+//				case PyGLM_DT_INT8:
+//					allocate(sizeof(glm::vec<4, glm::i8>));
+//					*((glm::vec<4, glm::i8>*)data) = glm::vec<4, glm::i8>(item1Out.asInt8(), item2Out.asInt8(), item3Out.asInt8(), item4Out.asInt8());
+//					return;
+//				case PyGLM_DT_UINT8:
+//					allocate(sizeof(glm::vec<4, glm::u8>));
+//					*((glm::vec<4, glm::u8>*)data) = glm::vec<4, glm::u8>(item1Out.asUint8(), item2Out.asUint8(), item3Out.asUint8(), item4Out.asUint8());
+//					return;
+//				case PyGLM_DT_BOOL:
+//					allocate(sizeof(glm::vec<4, bool>));
+//					*((glm::vec<4, bool>*)data) = glm::vec<4, bool>(item1Out.asBool(), item2Out.asBool(), item3Out.asBool(), item4Out.asBool());
+//					return;
+//				}
+//			}
+//
+//			if ((accepted_types & PyGLM_T_QUA)) {
+//				PyGLMSingleTypeHolder item1Out = PyGLMSingleTypeHolder(item1);
+//				PyGLMSingleTypeHolder item2Out = PyGLMSingleTypeHolder(item2);
+//				PyGLMSingleTypeHolder item3Out = PyGLMSingleTypeHolder(item3);
+//				PyGLMSingleTypeHolder item4Out = PyGLMSingleTypeHolder(item4);
+//
+//				int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype, item3Out.dtype, item4Out.dtype });
+//
+//				setInfo(PyGLM_T_QUA | out_type);
+//
+//				switch (out_type) {
+//				case PyGLM_DT_FLOAT:
+//					allocate(sizeof(glm::qua<float>));
+//					*((glm::qua<float>*)data) = glm::qua<float>(item1Out.asFloat(), item2Out.asFloat(), item3Out.asFloat(), item4Out.asFloat());
+//					return;
+//				case PyGLM_DT_DOUBLE:
+//					allocate(sizeof(glm::qua<double>));
+//					*((glm::qua<double>*)data) = glm::qua<double>(item1Out.asDouble(), item2Out.asDouble(), item3Out.asDouble(), item4Out.asDouble());
+//					return;
+//				}
+//			}
+//		}
+//	}
+//#endif
+//}
+
+int test() {
+	PyObject* o;
+	PyGLM_Vec_CheckN(2, float, o, 0);
+	PyGLM_Qua_CheckN(float, o, 0);
+	PyGLM_Mat_CheckN(2, 2, float, o, 0);
+}
 
 #else
 #define PyGLM_Vec_Check(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>())
@@ -244,3 +5143,5 @@ static bool PyGLM_Vecb_Check(int L, PyObject* o) {
 
 #define PyGLM_Mat_Check(C, R, T, o) PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>()))
 #endif
+
+#include "unpackers.h"

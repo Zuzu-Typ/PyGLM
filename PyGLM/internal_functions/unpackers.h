@@ -6,6 +6,8 @@
 
 #include "helper_macros.h"
 
+#include "type_checkers.h"
+
 template<typename T>
 static bool unpack_vec(PyObject* value, glm::vec<1, T>& out) {
 	if (PyObject_TypeCheck(value, UNBRACKET(PyGLM_VEC_TYPE<1, T>()))) {
@@ -255,6 +257,8 @@ static bool unpack_mat(PyObject* value, glm::mat<C, R, T>& out) {
 #endif
 	return false;
 }
+
+#define unpack_matN(C, R, T, o, N) (sourceType ## N == NORMAL) ? (((UNBRACKET(mat<C,R,T>*)) o)->super_type) : PTI ## N.getMat<C,R,T>()
 
 template<int C, int R, typename T>
 static glm::mat<C, R, T> unpack_mat(PyObject* value) {

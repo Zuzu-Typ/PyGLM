@@ -42,13 +42,22 @@ silence(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
+static PyObject*
+_get_type_info(PyObject*, PyObject* args) {
+	PyObject *arg1, *arg2;
+	PyGLM_Arg_Unpack_2O(args, "_get_type_info", arg1, arg2);
+	PyGLMTypeInfo pti(PyGLM_Number_AsLong(arg1), arg2);
+	return PyLong_FromLong(pti.info);
+}
 
-//static PyObject*
-//test(PyObject* self, PyObject* arg) {
-//	return mat_to_tuple((mat<4, 4, float>*)(arg), NULL);
-//}
-//#define HAS_TEST
-//#define TEST_FUNC_TYPE METH_O
+static PyObject*
+test(PyObject* self, PyObject* arg) {
+	PyGLMTypeInfo pti(PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLMTypeInfo::getDT<float>(), arg);
+	//return pack(*((glm::mat<4,4, float>*)pti.data));
+	return PyLong_FromLong(pti.info);
+}
+#define HAS_TEST
+#define TEST_FUNC_TYPE METH_O
 
 static PyMethodDef glmmethods[] = {
 	// DETAIL
@@ -128,6 +137,7 @@ static PyMethodDef glmmethods[] = {
 
 	// PyGLM functions
 	{ "silence", (PyCFunction)silence, METH_O, "silence(ID) -> None\nSilence a PyGLM warning (or all using 0)." },
+	{ "_get_type_info", (PyCFunction)_get_type_info, METH_VARARGS, "_get_type_info(accepted_types, object) -> None\nAn internal testing funtion to check wether or not the type checking works correctly." },
 #ifdef HAS_TEST
 	{"test", (PyCFunction)test, TEST_FUNC_TYPE, ""},
 #endif

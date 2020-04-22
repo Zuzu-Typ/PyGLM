@@ -22,6 +22,9 @@ qua_new(PyTypeObject *type, PyObject *, PyObject *)
 {
 	qua<T> *self = (qua<T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
+		constexpr uint8_t info_type = get_type_helper_type<T>();
+		constexpr uint8_t info = 4 | (info_type << PyGLM_TYPE_INFO_VEC_TYPE_OFFSET);
+		self->info = info;
 		self->super_type = glm::qua<T>();
 	}
 

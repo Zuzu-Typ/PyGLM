@@ -18,7 +18,9 @@ vec_new(PyTypeObject *type, PyObject *, PyObject *)
 {
 	vec<L, T> *self = (vec<L, T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
-		self->shape = L;
+		constexpr uint8_t info_type = get_type_helper_type<T>();
+		constexpr uint8_t info = L | (info_type << PyGLM_TYPE_INFO_VEC_TYPE_OFFSET);
+		self->info = info;
 		self->super_type = glm::vec<L, T>();
 	}
 
