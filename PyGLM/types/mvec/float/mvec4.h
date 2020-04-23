@@ -77,7 +77,7 @@ static PyTypeObject hfmvec4Type = {
 	0,                         /* tp_call */
 	(reprfunc)mvec4_str<float>,                         /* tp_str */
 	(getattrofunc)mvec_getattr<4, float>,                         /* tp_getattro */
-	(setattrofunc)mvec4_setattr<float>,                         /* tp_setattro */
+	(setattrofunc)mvec_setattr<4, float>,                         /* tp_setattro */
 	&hfmvec4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */

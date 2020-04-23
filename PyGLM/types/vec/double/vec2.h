@@ -84,7 +84,7 @@ static PyTypeObject hdvec2Type = {
 	0,                         /* tp_call */
 	(reprfunc)vec2_str<double>,                         /* tp_str */
 	(getattrofunc)vec_getattr<2, double>,                         /* tp_getattro */
-	0,                         /* tp_setattro */
+	(setattrofunc)vec_setattr<2, double>,                         /* tp_setattro */
 	&hdvec2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */

@@ -83,7 +83,7 @@ static PyTypeObject hfvec1Type = {
 	0,                         /* tp_call */
 	(reprfunc)vec1_str<float>,                         /* tp_str */
 	(getattrofunc)vec_getattr<1, float>,                         /* tp_getattro */
-	0,                         /* tp_setattro */
+	(setattrofunc)vec_setattr<1, float>,                         /* tp_setattro */
 	&hfvec1BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
