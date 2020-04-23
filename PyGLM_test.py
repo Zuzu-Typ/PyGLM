@@ -422,39 +422,11 @@ for obj in gen_obj("V_M_Q__iqsuIQSU"):
 # mod #
 for obj in gen_obj("V__fF"):
     fassert(obj.__mod__, (1,))
-
-for obj in gen_obj("V__iqsuIQSU"):
-    try:
-        obj.__mod__(type(obj)(0))
-        fail(obj)
-    except ZeroDivisionError:
-        pass
-
-for obj in gen_obj("V_M_Q__iqsuIQSU"):
-    try:
-        obj.__mod__(0)
-        fail(obj)
-    except ZeroDivisionError:
-        pass
 #/mod #
 
 # floordiv #
 for obj in gen_obj("V__fF"):
     fassert(obj.__floordiv__, (1,))
-
-for obj in gen_obj("V__iqsuIQSU"):
-    try:
-        obj.__floordiv__(type(obj)(0))
-        fail(obj)
-    except ZeroDivisionError:
-        pass
-
-for obj in gen_obj("V_M_Q__iqsuIQSU"):
-    try:
-        obj.__floordiv__(0)
-        fail(obj)
-    except ZeroDivisionError:
-        pass
 #/floordiv #
 
 # divmod #
@@ -801,9 +773,11 @@ for args in gen_args("N_V__fF"):
 for args in gen_args("NN_VV_VN__fF"):
     fassert(glm.mod, args)
 
-for args in gen_args("NN_VV_VN_NNN_VVV_NNNN_VVVV__fF"):
+for args in gen_args("NN_VV_VN_NNN_VVV_NNNN_VVVV__fFiqsuIQSU"):
     fassert(glm.min, args)
     fassert(glm.max, args)
+
+for args in gen_args("NN_VV_VN_NNN_VVV_NNNN_VVVV__fF"):
     fassert(glm.fmin, args)
     fassert(glm.fmax, args)
 
@@ -1280,6 +1254,11 @@ for args in gen_args("V3V3_V3__fF"):
 for args in gen_args("#uV3V3Ni_V3Ni__fF"):
     fassert(glm.lxNorm, args)
 #/norm #
+
+# matrix_decompose #
+for args in gen_args("M44V3QV3V3V4__fF"):
+    fassert(glm.decompose, args)
+#/matrix_decompose #
 ##/UNSTABLE EXTENSIONS ##
     
 print("Finished tests in {:.3g}s".format(time.time()-start_time))
