@@ -109,6 +109,9 @@ static PyMethodDef glmmethods[] = {
 	// norm
 	NORM_METHODS,
 
+	// decompose
+	DECOMPOSE_METHODS,
+
 	// PyGLM functions
 	{ "silence", (PyCFunction)silence, METH_O, "silence(ID) -> None\nSilence a PyGLM warning (or all using 0)." },
 #ifdef HAS_TEST
