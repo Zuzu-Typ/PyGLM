@@ -1171,10 +1171,25 @@ static PyObject *
 matsq_div(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar
+		for (int c = 0; c < C; c++) {
+			for (int r = 0; r < R; r++) {
+				if (((mat<C, R, T>*)obj2)->super_type[c][r] == 0) {
+					PyGLM_ZERO_DIVISION_ERROR_T(T);
+				}
+			}
+		}
 		return pack_mat<C, R, T>(PyGLM_Number_FromPyObject<T>(obj1) / ((mat<C, R, T>*)obj2)->super_type);
 	}
 
 	if (PyGLM_Vec_Check(R, T, obj1)) { // obj1 is a col_type
+		for (int c = 0; c < C; c++) {
+			for (int r = 0; r < R; r++) {
+				if (((mat<C, R, T>*)obj2)->super_type[c][r] == 0) {
+					PyGLM_ZERO_DIVISION_ERROR_T(T);
+				}
+			}
+		}
+
 		glm::vec<R, T> o;
 		unpack_vec(obj1, o);
 
@@ -1189,12 +1204,22 @@ matsq_div(PyObject *obj1, PyObject *obj2)
 	}
 
 	if (PyGLM_Number_Check(obj2)) { // obj2 is a scalar
-		return pack_mat(o / PyGLM_Number_FromPyObject<T>(obj2));
+		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
+		if (o2 == (T)0) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
+		return pack_mat(o / o2);
 	}
 
 	if (PyGLM_Vec_Check(C, T, obj2)) { // obj2 is a row_type
 		glm::vec<C, T> o2;
 		unpack_vec(obj2, o2);
+
+		for (int c = 0; c < C; c++) {
+			if (o2[c] == 0) {
+				PyGLM_ZERO_DIVISION_ERROR_T(T);
+			}
+		}
 
 		return pack_vec(o / o2);
 	}
@@ -1202,6 +1227,14 @@ matsq_div(PyObject *obj1, PyObject *obj2)
 	if (PyGLM_Mat_Check(C, R, T, obj2)) {
 		glm::mat<C, R, T> o2;
 		unpack_mat<C, R, T>(obj2, o2);
+
+		for (int c = 0; c < C; c++) {
+			for (int r = 0; r < R; r++) {
+				if (((mat<C, R, T>*)obj2)->super_type[c][r] == 0) {
+					PyGLM_ZERO_DIVISION_ERROR_T(T);
+				}
+			}
+		}
 
 		return pack_mat(o / o2);
 	}
@@ -1213,6 +1246,13 @@ static PyObject *
 mat_div(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar
+		for (int c = 0; c < C; c++) {
+			for (int r = 0; r < R; r++) {
+				if (((mat<C, R, T>*)obj2)->super_type[c][r] == 0) {
+					PyGLM_ZERO_DIVISION_ERROR_T(T);
+				}
+			}
+		}
 		return pack_mat(PyGLM_Number_FromPyObject<T>(obj1) / ((mat<C, R, T>*)obj2)->super_type);
 	}
 
@@ -1224,7 +1264,11 @@ mat_div(PyObject *obj1, PyObject *obj2)
 	}
 
 	if (PyGLM_Number_Check(obj2)) { // obj2 is a scalar
-		return pack_mat(o / PyGLM_Number_FromPyObject<T>(obj2));
+		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
+		if (o2 == (T)0) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
+		return pack_mat(o / o2);
 	}
 	Py_RETURN_NOTIMPLEMENTED;
 }

@@ -395,6 +395,9 @@ static PyObject *
 vec_div(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
+		if (!glm::all((glm::vec<L, bool>)(((vec<L, T>*)obj2)->super_type))) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) / ((vec<L, T>*)obj2)->super_type);
 	}
 
@@ -406,13 +409,21 @@ vec_div(PyObject *obj1, PyObject *obj2)
 	}
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
-		return pack_vec<L, T>(o / PyGLM_Number_FromPyObject<T>(obj2));
+		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
+		if (o2 == (T)0) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
+		return pack_vec<L, T>(o / o2);
 	}
 
 	glm::vec<L, T> o2;
 
 	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
+	}
+
+	if (!glm::all((glm::vec<L, bool>)o2)) {
+		PyGLM_ZERO_DIVISION_ERROR_T(T);
 	}
 
 	// obj1 and obj2 can be interpreted as a vec
@@ -424,6 +435,9 @@ static PyObject *
 vec_mod(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
+		if (!glm::all((glm::vec<L, bool>)(((vec<L, T>*)obj2)->super_type))) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
 		return pack_vec<L, T>(glm::mod(glm::vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1)), ((vec<L, T>*)obj2)->super_type));
 	}
 
@@ -435,13 +449,21 @@ vec_mod(PyObject *obj1, PyObject *obj2)
 	}
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
-		return pack_vec<L, T>(glm::mod(o, glm::vec<L, T>(PyGLM_Number_FromPyObject<T>(obj2))));
+		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
+		if (o2 == (T)0) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
+		return pack_vec<L, T>(glm::mod(o, glm::vec<L, T>(o2)));
 	}
 
 	glm::vec<L, T> o2;
 
 	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
+	}
+
+	if (!glm::all((glm::vec<L, bool>)o2)) {
+		PyGLM_ZERO_DIVISION_ERROR_T(T);
 	}
 
 	// obj1 and obj2 can be interpreted as a vec
@@ -453,6 +475,9 @@ static PyObject *
 vec_floordiv(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
+		if (!glm::all((glm::vec<L, bool>)(((vec<L, T>*)obj2)->super_type))) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
 		return pack_vec<L, T>(floor(PyGLM_Number_FromPyObject<T>(obj1) / ((vec<L, T>*)obj2)->super_type));
 	}
 
@@ -464,13 +489,21 @@ vec_floordiv(PyObject *obj1, PyObject *obj2)
 	}
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
-		return pack_vec<L, T>(floor(o / PyGLM_Number_FromPyObject<T>(obj2)));
+		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
+		if (o2 == (T)0) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
+		return pack_vec<L, T>(floor(o / o2));
 	}
 
 	glm::vec<L, T> o2;
 
 	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
+	}
+
+	if (!glm::all((glm::vec<L, bool>)o2)) {
+		PyGLM_ZERO_DIVISION_ERROR_T(T);
 	}
 
 	// obj1 and obj2 can be interpreted as a vec

@@ -22,26 +22,6 @@
 // PyGLM FUNCTIONS
 #include "PyGLM/functions/all.h"
 
-static PyObject*
-silence(PyObject*, PyObject* arg) {
-	if (PyLong_Check(arg)) {
-		int warning_id = static_cast<int>(PyLong_AS_LONG(arg));
-		if (warning_id < 0 || warning_id > 1) {
-			PyErr_SetString(PyExc_ValueError, "the specified warning does not exist.");
-			return NULL;
-		}
-		if (warning_id == 0) {
-			PyGLM_SHOW_WARNINGS = 0;
-		}
-		else {
-			PyGLM_SHOW_WARNINGS = PyGLM_SHOW_WARNINGS ^ warning_id;
-		}
-		Py_RETURN_NONE;
-	}
-	PyGLM_TYPEERROR_O("silence() requires an integer as it's argument, not ", arg);
-	return NULL;
-}
-
 
 //static PyObject*
 //test(PyObject* self, PyObject* arg) {
@@ -125,6 +105,9 @@ static PyMethodDef glmmethods[] = {
 	// UNSTABLE EXTENSIONS
 	// polar_coordinates
 	POLAR_COORDINATES_METHODS,
+
+	// norm
+	NORM_METHODS,
 
 	// PyGLM functions
 	{ "silence", (PyCFunction)silence, METH_O, "silence(ID) -> None\nSilence a PyGLM warning (or all using 0)." },

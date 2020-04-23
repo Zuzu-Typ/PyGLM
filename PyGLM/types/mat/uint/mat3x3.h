@@ -32,7 +32,7 @@ static PyMappingMethods humat3x3MapMethods = {
 	(objobjargproc)mat3x3_mp_ass_item<glm::u32>, // mp_ass_subscript
 };
 static PyNumberMethods humat3x3NumMethods = {
-	(binaryfunc)mat_add<3, 3, glm::u32>, //nb_add
+	(binaryfunc)matsq_add<3, 3, glm::u32>, //nb_add
 	(binaryfunc)matsq_sub<3, 3, glm::u32>, //nb_subtract
 	(binaryfunc)mat_mul<3, 3, glm::u32>, //nb_multiply
 	0, //nb_remainder
@@ -51,8 +51,8 @@ static PyNumberMethods humat3x3NumMethods = {
 	0, //nb_int
 	0, //nb_reserved
 	0, //nb_glm::u32
-	(binaryfunc)mat_iadd<3, 3, glm::u32>, //nb_inplace_add
-	(binaryfunc)mat_isub<3, 3, glm::u32>, //nb_inplace_subtract
+	(binaryfunc)matsq_iadd<3, 3, glm::u32>, //nb_inplace_add
+	(binaryfunc)matsq_isub<3, 3, glm::u32>, //nb_inplace_subtract
 	(binaryfunc)mat_imul<3, 3, glm::u32>, //nb_inplace_multiply
 	0, //nb_inplace_remainder
 	0, //nb_inplace_power

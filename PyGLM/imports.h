@@ -57,6 +57,7 @@
 
 // Unstable extensions
 #include <glm/gtx/polar_coordinates.hpp>
+#include <glm/gtx/norm.hpp>
 
 #endif
 
