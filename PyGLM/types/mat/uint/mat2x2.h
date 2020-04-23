@@ -32,7 +32,7 @@ static PyMappingMethods humat2x2MapMethods = {
 	(objobjargproc)mat2x2_mp_ass_item<glm::u32>, // mp_ass_subscript
 };
 static PyNumberMethods humat2x2NumMethods = {
-	(binaryfunc)mat_add<2, 2, glm::u32>, //nb_add
+	(binaryfunc)matsq_add<2, 2, glm::u32>, //nb_add
 	(binaryfunc)matsq_sub<2, 2, glm::u32>, //nb_subtract
 	(binaryfunc)mat_mul<2, 2, glm::u32>, //nb_multiply
 	0, //nb_remainder
@@ -51,8 +51,8 @@ static PyNumberMethods humat2x2NumMethods = {
 	0, //nb_int
 	0, //nb_reserved
 	0, //nb_glm::u32
-	(binaryfunc)mat_iadd<2, 2, glm::u32>, //nb_inplace_add
-	(binaryfunc)mat_isub<2, 2, glm::u32>, //nb_inplace_subtract
+	(binaryfunc)matsq_iadd<2, 2, glm::u32>, //nb_inplace_add
+	(binaryfunc)matsq_isub<2, 2, glm::u32>, //nb_inplace_subtract
 	(binaryfunc)mat_imul<2, 2, glm::u32>, //nb_inplace_multiply
 	0, //nb_inplace_remainder
 	0, //nb_inplace_power

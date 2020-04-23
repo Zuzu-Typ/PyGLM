@@ -2,6 +2,73 @@ import glm, sys, random, time, copy
 
 glm.silence(0)
 
+## type checking definitions ##
+PyGLM_DT_UNKNOWN	= 0x0000000
+PyGLM_DT_FLOAT		= 0x0000001
+PyGLM_DT_DOUBLE		= 0x0000002
+PyGLM_DT_INT		= 0x0000004
+PyGLM_DT_UINT		= 0x0000008
+PyGLM_DT_INT8		= 0x0000010
+PyGLM_DT_UINT8		= 0x0000020
+PyGLM_DT_INT16		= 0x0000040
+PyGLM_DT_UINT16		= 0x0000080
+PyGLM_DT_INT64		= 0x0000100
+PyGLM_DT_UINT64		= 0x0000200
+PyGLM_DT_BOOL		= 0x0000400
+
+PyGLM_SHAPE_2x2		= 0x0000800
+PyGLM_SHAPE_2x3		= 0x0001000
+PyGLM_SHAPE_2x4		= 0x0002000
+PyGLM_SHAPE_3x2		= 0x0004000
+PyGLM_SHAPE_3x3		= 0x0008000
+PyGLM_SHAPE_3x4		= 0x0010000
+PyGLM_SHAPE_4x2		= 0x0020000
+PyGLM_SHAPE_4x3		= 0x0040000
+PyGLM_SHAPE_4x4		= 0x0080000
+
+PyGLM_SHAPE_1		= 0x0100000
+PyGLM_SHAPE_2		= 0x0200000
+PyGLM_SHAPE_3		= 0x0400000
+PyGLM_SHAPE_4		= 0x0800000
+
+PyGLM_T_VEC			= 0x1000000
+PyGLM_T_MVEC		= 0x2000000
+PyGLM_T_MAT			= 0x4000000
+PyGLM_T_QUA			= 0x8000000
+
+PyGLM_T_NUMBER		= 0x10000000
+
+PyGLM_T_ANY_VEC	    = (PyGLM_T_VEC | PyGLM_T_MVEC)
+PyGLM_T_ANY_ARR	    = (PyGLM_T_ANY_VEC | PyGLM_T_QUA)
+
+PyGLM_SHAPE_SQUARE  = (PyGLM_SHAPE_2x2 | PyGLM_SHAPE_3x3 | PyGLM_SHAPE_4x4)
+
+PyGLM_SHAPE_2xM	    = (PyGLM_SHAPE_2x2 | PyGLM_SHAPE_2x3 | PyGLM_SHAPE_2x4)
+PyGLM_SHAPE_3xM	    = (PyGLM_SHAPE_3x2 | PyGLM_SHAPE_3x3 | PyGLM_SHAPE_3x4)
+PyGLM_SHAPE_4xM	    = (PyGLM_SHAPE_4x2 | PyGLM_SHAPE_4x3 | PyGLM_SHAPE_4x4)
+
+PyGLM_DT_ALL	    = ((1 << 11) - 1)
+PyGLM_SHAPE_ALL		= (((1 << 13) - 1) << 11)
+PyGLM_T_ALL			= (((1 << 5) - 1) << 24)
+
+PyGLM_ALL           = (PyGLM_DT_ALL | PyGLM_SHAPE_ALL | PyGLM_T_ALL)
+##/type checking definitions ##
+
+#def get_info(num):
+#    glob = globals()
+#    vars_ = [x for x in glob if x.startswith("PyGLM_") and not "ANY" in x and not "xM" in x and not "ALL" in x and not "SQUARE" in x]
+#    out = []
+#    for var in vars_:
+#        if (glob[var] & num):
+#            out.append(var)
+
+#    return ", ".join(out)
+
+#def get_info_of(obj):
+#    return get_info(glm._get_type_info(PyGLM_ALL, obj))
+
+#gio = get_info_of
+
 print("Testing PyGLM...")
 start_time = time.time()
 
@@ -260,6 +327,8 @@ def fassert(func, args):
     except:
         raise FAssertionError("{} raised {} with {}".format(func, sys.exc_info()[1], repr(args)))
 
+def fail(*args):
+    raise FAssertionError("Failed with " + str(args)) 
 # Specific #
 assert isinstance(glm.version, str)
 assert isinstance(glm.license, str)
@@ -334,6 +403,20 @@ for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
 # div #
 for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
     fassert(obj.__truediv__, (1,))
+
+for obj in gen_obj("V__iqsuIQSU"):
+    try:
+        obj.__truediv__(type(obj)(0))
+        fail(obj)
+    except ZeroDivisionError:
+        pass
+
+for obj in gen_obj("V_M_Q__iqsuIQSU"):
+    try:
+        obj.__truediv__(0)
+        fail(obj)
+    except ZeroDivisionError:
+        pass
 #/div #
 
 # mod #
@@ -690,9 +773,11 @@ for args in gen_args("N_V__fF"):
 for args in gen_args("NN_VV_VN__fF"):
     fassert(glm.mod, args)
 
-for args in gen_args("NN_VV_VN_NNN_VVV_NNNN_VVVV__fF"):
+for args in gen_args("NN_VV_VN_NNN_VVV_NNNN_VVVV__fFiqsuIQSU"):
     fassert(glm.min, args)
     fassert(glm.max, args)
+
+for args in gen_args("NN_VV_VN_NNN_VVV_NNNN_VVVV__fF"):
     fassert(glm.fmin, args)
     fassert(glm.fmax, args)
 
@@ -1152,6 +1237,28 @@ for args in gen_args("V3__fF"):
 for args in gen_args("V2__fF"):
     fassert(glm.euclidean, args)
 #/polar_coordinates #
+
+# norm #
+for args in gen_args("VV__fF"):
+    fassert(glm.distance2, args)
+
+for args in gen_args("V_N__fF"):
+    fassert(glm.length2, args)
+
+for args in gen_args("V3V3_V3__fF"):
+    fassert(glm.l1Norm, args)
+
+for args in gen_args("V3V3_V3__fF"):
+    fassert(glm.l2Norm, args)
+
+for args in gen_args("#uV3V3Ni_V3Ni__fF"):
+    fassert(glm.lxNorm, args)
+#/norm #
+
+# matrix_decompose #
+for args in gen_args("M44V3QV3V3V4__fF"):
+    fassert(glm.decompose, args)
+#/matrix_decompose #
 ##/UNSTABLE EXTENSIONS ##
     
 print("Finished tests in {:.3g}s".format(time.time()-start_time))

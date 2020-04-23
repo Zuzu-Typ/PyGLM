@@ -84,7 +84,7 @@ static PyTypeObject hi8vec2Type = {
 	0,                         /* tp_call */
 	(reprfunc)vec2_str<glm::i8>,                         /* tp_str */
 	(getattrofunc)vec_getattr<2, glm::i8>,                         /* tp_getattro */
-	0,                         /* tp_setattro */
+	(setattrofunc)vec_setattr<2, glm::i8>,                         /* tp_setattro */
 	&hi8vec2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */

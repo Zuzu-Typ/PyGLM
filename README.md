@@ -36,7 +36,7 @@ There is no need to import anything but **glm**, as it already contains the enti
 Please make sure to **include the license for GLM** in your project when you use PyGLM\!  
 \(this also includes **binary distributions**, e\.g\. \*\.exe\)  
   
-You can do so by copying either the ``` COPYING ``` or ``` GLM_LICENSE ``` file \(or their contents\) to your project\.  
+You can do so by copying the ``` COPYING ``` file \(or it's contents\) to your project\.  
 #### Differences to glm  
 Instead of using double colons \(**::**\) for namespaces, periods \(**\.**\) are used, so  
 ``` glm::vec2 ``` becomes ``` glm.vec2 ```\.  
@@ -83,7 +83,7 @@ Please refer to the source \(in Python: **\*\.\_\_doc\_\_**\) and [GLM manuals](
   
 #### Unsupported functions  
 Aside from the unstable extensions,  
-PyGLM doesn't support the following extensions and methods, due to compatibility issues:  
+PyGLM doesn't support the following extensions and methods, due to compatability issues:  
 The ``` GLM_GTC_bitfield ``` extension,  
 ``` glm::log2 ``` from GLM\_GTC\_integer\.  
 ``` glm::packUnorm ``` and ``` glm::packSnorm ``` from GLM\_GTC\_packing\.  

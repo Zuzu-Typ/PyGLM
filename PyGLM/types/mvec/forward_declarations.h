@@ -99,12 +99,8 @@ static PyObject* mvec4_str(mvec<4, T>* self);
 template<int L, typename T>
 static PyObject* mvec_getattr(PyObject* obj, PyObject* name);
 
-template<typename T>
-static int mvec2_setattr(mvec<2, T>* obj, PyObject* name, PyObject* value);
-template<typename T>
-static int mvec3_setattr(mvec<3, T>* obj, PyObject* name, PyObject* value);
-template<typename T>
-static int mvec4_setattr(mvec<4, T>* obj, PyObject* name, PyObject* value);
+template<int L, typename T>
+static int mvec_setattr(PyObject* obj, PyObject* name, PyObject* value);
 
 template<int L, typename T>
 static PyObject* mvec_richcompare(mvec<L, T>* self, PyObject* other, int comp_type);
