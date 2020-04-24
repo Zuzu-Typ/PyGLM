@@ -33,9 +33,14 @@ _get_type_info(PyObject*, PyObject* args) {
 
 static PyObject*
 test(PyObject* self, PyObject* arg) {
-	PyGLMTypeInfo pti(PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLMTypeInfo::getDT<float>(), arg);
-	//return pack(*((glm::mat<4,4, float>*)pti.data));
-	return PyLong_FromLong(pti.info);
+	PyGLM_PTI_InitN(0, arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
+	if (PyGLM_Vec_PTI_CheckN(0, 3, float, arg)) {
+		Py_RETURN_TRUE;
+	}
+	//PyGLMTypeInfo pti(PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLMTypeInfo::getDT<float>(), arg);
+	////return pack(*((glm::mat<4,4, float>*)pti.data));
+	//return PyLong_FromLong(pti.info);
+	Py_RETURN_FALSE;
 }
 #define HAS_TEST
 #define TEST_FUNC_TYPE METH_O

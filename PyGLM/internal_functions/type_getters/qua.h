@@ -5,7 +5,7 @@
 #include "../../types/all.h"
 
 template<typename T>
-static PyTypeObject* PyGLM_QUA_TYPE() {
+static constexpr PyTypeObject* PyGLM_QUA_TYPE() {
 	if (std::is_same<qua<T>, qua<float> >::value) {
 		return (PyTypeObject*)&hfquaType;
 	}

@@ -70,6 +70,8 @@
 
 #define PyGLM_SHAPE_NxM	   (PyGLM_SHAPE_2xM | PyGLM_SHAPE_3xM | PyGLM_SHAPE_4xM)
 
+#define PyGLM_DT_MAT_ALL   (PyGLM_DT_FLOAT | PyGLM_DT_DOUBLE | PyGLM_DT_INT | PyGLM_DT_UINT)
+
 #define PyGLM_DT_ALL		((1 << 11) - 1)
 #define PyGLM_SHAPE_ALL		(((1 << 13) - 1) << 11)
 #define PyGLM_T_ALL			(((1 << 5) - 1) << 24)
@@ -550,6 +552,10 @@ struct PyGLMTypeInfo {
 
 	bool needsToBeFreed = false;
 
+	bool isVec = false;
+	bool isMat = false;
+	bool isQua = false;
+
 	PyGLMTypeInfo() = default;
 
 	PyGLMTypeInfo(int accepted_types, PyObject* obj) {
@@ -557,11 +563,11 @@ struct PyGLMTypeInfo {
 		//// PyGLM Vec type
 		//if ((accepted_types & PyGLM_T_VEC) && obj->ob_type->tp_dealloc == (destructor)vec_dealloc) {
 		//	const uint8_t &info = ((type_helper*)obj)->info;
-				//
+		//		
 		//	const uint8_t shape_info = info >> PyGLM_TYPE_INFO_VEC_SHAPE_OFFSET & ((1 << PyGLM_TYPE_INFO_VEC_SHAPE_LENGTH) - 1);
-				//
+		//		
 		//	const uint8_t type_info = info >> PyGLM_TYPE_INFO_VEC_TYPE_OFFSET & ((1 << PyGLM_TYPE_INFO_VEC_TYPE_LENGTH) - 1);
-				//
+		//		
 		//	switch (shape_info) {
 		//	case 1: // vec1's
 		//		if (accepted_types & PyGLM_SHAPE_1) {
@@ -3344,6 +3350,12 @@ private:
 
 	void setInfo(int info) {
 		this->info = info;
+
+		this->isVec = (info & (PyGLM_T_ANY_VEC));
+
+		this->isMat = (info & (PyGLM_T_MAT));
+
+		this->isQua = (info & (PyGLM_T_QUA));
 	}
 };
 
@@ -3568,39 +3580,136 @@ static bool PyGLM_Vecb_Check(int L, PyObject* o) {
 	return true;
 }
 
-enum SourceType {NONE, NORMAL, MVEC, PTI};
+enum SourceType {NONE, PyGLM_VEC, PyGLM_MVEC, PyGLM_MAT, PyGLM_QUA, PTI};
+
+template<typename T>
+constexpr int get_PTI_type() {
+	return (
+			(std::is_same<T, double>::value) ? PyGLM_DT_DOUBLE :
+			(std::is_same<T, float>::value) ? PyGLM_DT_FLOAT :
+			(std::is_same<T, int32>::value) ? PyGLM_DT_INT :
+			(std::is_same<T, uint32>::value) ? PyGLM_DT_UINT :
+			(std::is_same<T, int64>::value) ? PyGLM_DT_INT64 :
+			(std::is_same<T, uint64>::value) ? PyGLM_DT_UINT64 :
+			(std::is_same<T, int16>::value) ? PyGLM_DT_INT16 :
+			(std::is_same<T, uint16>::value) ? PyGLM_DT_UINT16 :
+			(std::is_same<T, int8>::value) ? PyGLM_DT_INT8 :
+			(std::is_same<T, uint8>::value) ? PyGLM_DT_UINT8 :
+			PyGLM_DT_BOOL
+		);
+}
+
+template<int L, typename T>
+constexpr int get_vec_PTI_info() {
+	return PyGLM_T_VEC |
+		(
+			(L == 1) ? PyGLM_SHAPE_1 :
+			(L == 2) ? PyGLM_SHAPE_2 :
+			(L == 3) ? PyGLM_SHAPE_3 :
+			PyGLM_SHAPE_4
+		) |
+		get_PTI_type<T>();
+}
+
+template<int C, int R, typename T>
+constexpr int get_mat_PTI_info() {
+	return PyGLM_T_MAT |
+		(
+			(C == 2) ? 
+			(
+				(R == 2) ? PyGLM_SHAPE_2x2 :
+				(R == 3) ? PyGLM_SHAPE_2x3 :
+				PyGLM_SHAPE_2x4
+			) :
+			(C == 3) ?
+			(
+				(R == 2) ? PyGLM_SHAPE_3x2 :
+				(R == 3) ? PyGLM_SHAPE_3x3 :
+				PyGLM_SHAPE_3x4
+			) :
+			(
+				(R == 2) ? PyGLM_SHAPE_4x2 :
+				(R == 3) ? PyGLM_SHAPE_4x3 :
+				PyGLM_SHAPE_4x4
+			)
+		) |
+		get_PTI_type<T>();
+}
+
+template<typename T>
+constexpr int get_qua_PTI_info() {
+	return PyGLM_T_QUA |
+		get_PTI_type<T>();
+}
 
 PyGLMTypeInfo PTI0;
 SourceType sourceType0;
 
-#define PyGLM_Vec_PTI_CheckN(L, T, o, N) (PTI ## N = PyGLMTypeInfo(PyGLM_T_ANY_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_ ## T,o), sourceType ## N = PTI, PTI ## N.info == (PyGLM_T_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_ ## T))
+#define PyGLM_Vec_CheckExact(L, T, o) ((Py_TYPE(o) == UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || (Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>()))
 
-#define PyGLM_Vec_CheckN(L, T, o, N) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) && (sourceType ## N = NORMAL)) || (Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() && (sourceType ## N = MVEC)) || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && PyGLM_Vec_PTI_CheckN(L, T, o, N))
+#define PyGLM_Mat_CheckExact(C, R, T, o) (Py_TYPE(o) == UNBRACKET (PyGLM_MAT_TYPE<C, R, T>()))
+
+#define PyGLM_Qua_CheckExact(T, o) (Py_TYPE(o) == UNBRACKET (PyGLM_QUA_TYPE<T>()))
+
+#define PyGLM_PTI_InitN(N, o, accepted_types) if (o->ob_type->tp_dealloc == (destructor)vec_dealloc){sourceType ## N = PyGLM_VEC;}\
+	else if (o->ob_type->tp_dealloc == (destructor)mat_dealloc) { sourceType ## N = PyGLM_MAT;} \
+	else if (o->ob_type->tp_dealloc == (destructor)qua_dealloc) { sourceType ## N = PyGLM_QUA; }\
+	else if (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) { sourceType ## N = PyGLM_MVEC; }\
+	else { PTI ## N = PyGLMTypeInfo(accepted_types, o); if (PTI ## N.info == 0) sourceType ## N = NONE; else sourceType ## N = PTI;}
+
+#define PyGLM_PTI_Init0(o, accepted_types) PyGLM_PTI_InitN(0, o, accepted_types)
+
+#define PyGLM_PTI_IsVec(N) (sourceType ## N == PyGLM_VEC || sourceType ## N == PyGLM_MVEC || sourceType ## N == PTI && PTI ## N.isVec)
+
+#define PyGLM_PTI_IsMat(N) (sourceType ## N == PyGLM_MAT || sourceType ## N == PTI && PTI ## N.isMat)
+
+#define PyGLM_PTI_IsQua(N) (sourceType ## N == PyGLM_QUA || sourceType ## N == PTI && PTI ## N.isQua)
+
+#define PyGLM_PTI_IsNone(N) (sourceType ## N == NONE)
+
+#define PyGLM_PTI_GetDT(T) (get_qua_PTI_info<T>())
+
+#define PyGLM_Vec_PTI_CheckN(N, L, T, o) (PyGLM_Vec_CheckExact(L, T, o) || sourceType ## N == PTI && PTI ## N.info == get_vec_PTI_info<L, T>())
+
+#define PyGLM_Vec_PTI_Check0(L, T, o) PyGLM_Vec_PTI_CheckN(0, L, T, o)
+
+#define PyGLM_Mat_PTI_CheckN(N, C, R, T, o) (PyGLM_Mat_CheckExact(C, R, T, o) || sourceType ## N == PTI && PTI ## N.info == get_mat_PTI_info<C, R, T>())
+
+#define PyGLM_Mat_PTI_Check0(C, R, T, o) PyGLM_Mat_PTI_CheckN(0, C, R, T, o)
+
+#define PyGLM_Qua_PTI_CheckN(N, T, o) (PyGLM_Qua_CheckExact(T, o) || sourceType ## N == PTI && PTI ## N.info == get_qua_PTI_info<T>())
+
+#define PyGLM_Qua_PTI_Check0(T, o) PyGLM_Qua_PTI_CheckN(0, T, o)
+
+//#define PyGLM_Vec_PTI_CheckN(L, T, o, N) (PTI ## N = PyGLMTypeInfo(PyGLM_T_ANY_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_ ## T,o), sourceType ## N = PTI, PTI ## N.info == (PyGLM_T_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_ ## T))
+
+//#define PyGLM_Vec_CheckN(L, T, o, N) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) && (sourceType ## N = NORMAL)) || (Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() && (sourceType ## N = MVEC)) || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && PyGLM_Vec_PTI_CheckN(L, T, o, N))
 
 #define PyGLM_Vec_Check(L, T, o) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>()))) || (Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>()) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && (PyGLM_Vecb_Check<T>(L, (PyObject*)o))))
 
 #define PyGLM_Vec_Check_IgnoreType(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_VEC && PyGLM_VEC_SHAPE_CHECK(o, L))) && ((PyGLM_Vecb_Check<T>(L, (PyObject*)o)) || (PyGLM_Veci_Check(L, o)))))
 
-#define PyGLM_Vec_PTI_GetN(L, T, N) PTI ## N.getVec<L, T>()
+#define PyGLM_Vec_PTI_GetN(N, L, T, o) ((sourceType ## N == PyGLM_VEC) ? ((vec<L,T>*)o)->super_type : (sourceType ## N == PyGLM_MVEC) ? *((mvec<L,T>*)o)->super_type : PTI ## N.getVec<L, T>())
+#define PyGLM_Vec_PTI_Get0(L, T, o) PyGLM_Vec_PTI_GetN(0, L, T, o)
 
-
-#define PyGLM_Qua_PTI_CheckN(T, o, N) (PTI ## N = PyGLMTypeInfo(PyGLM_T_QUA | PyGLM_DT_ ## T,o), sourceType ## N = PTI, PTI ## N.info == (PyGLM_T_QUA | PyGLM_DT_ ## T))
+//#define PyGLM_Qua_PTI_CheckN(T, o, N) (PTI ## N = PyGLMTypeInfo(PyGLM_T_QUA | PyGLM_DT_ ## T,o), sourceType ## N = PTI, PTI ## N.info == (PyGLM_T_QUA | PyGLM_DT_ ## T))
 
 #define PyGLM_Qua_CheckN(T, o, N) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())) && (sourceType ## N = NORMAL)) || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && PyGLM_Qua_PTI_CheckN(T, o, N))
 
 #define PyGLM_Qua_Check(T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_QUA)) && PyGLM_Vecb_Check<T>(4, (PyObject*)o)))
 
-#define PyGLM_Qua_PTI_GetN(T, N) PTI ## N.getQua<T>()
+#define PyGLM_Qua_PTI_GetN(N, T, o) ((sourceType ## N == PTI) ? PTI ## N.getQua<T>() : ((qua<T>*)o)->super_type)
 
 
-#define PyGLM_Mat_PTI_CheckN(C, R, DT, o, N) (PTI ## N = PyGLMTypeInfo(PyGLM_T_MAT | PyGLM_SHAPE_ ## C ## x ## R | DT,o), sourceType ## N = PTI, PTI ## N.info == (PyGLM_T_MAT | PyGLM_SHAPE_ ## C ## x ## R | DT))
+//#define PyGLM_Mat_PTI_CheckN(C, R, DT, o, N) (PTI ## N = PyGLMTypeInfo(PyGLM_T_MAT | PyGLM_SHAPE_ ## C ## x ## R | DT,o), sourceType ## N = PTI, PTI ## N.info == (PyGLM_T_MAT | PyGLM_SHAPE_ ## C ## x ## R | DT))
 
 #define PyGLM_Mat_CheckN(C, R, T, o, N) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) && (sourceType ## N = NORMAL)) || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && PyGLM_Mat_PTI_CheckN(C, R, PTI##N.getDT<T>(), o, N))
 
 #define PyGLM_Mat_Check(C, R, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_MAT && PyGLM_MAT_SHAPE_CHECK(o, C, R))) && PyGLM_Matb_Check<T>(C, R, (PyObject*)o)))
 
-#define PyGLM_Mat_PTI_GetN(C, R, T, N) PTI ## N.getMat<C, R, T>()
+#define PyGLM_Mat_PTI_GetN(N, C, R, T, o) ((sourceType ## N == PTI) ? PTI ## N.getMat<C, R, T>() : ((mat<C, R, T>*)o)->super_type)
 
+#define PyGLM_Mat_PTI_Get0(C, R, T, o) PyGLM_Mat_PTI_GetN(0, C, R, T, o)
 
 //enum SourceType {
 //	UNKNOWN, PyGLM_TYPE, LIST_OR_TUPLE, BUFFER_PROTOCOL, NONE
@@ -5129,9 +5238,10 @@ SourceType sourceType0;
 
 int test() {
 	PyObject* o;
-	PyGLM_Vec_CheckN(2, float, o, 0);
-	PyGLM_Qua_CheckN(float, o, 0);
-	PyGLM_Mat_CheckN(2, 2, float, o, 0);
+	return 0;
+	//PyGLM_Vec_CheckN(2, float, o, 0);
+	//PyGLM_Qua_CheckN(float, o, 0);
+	//PyGLM_Mat_CheckN(2, 2, float, o, 0);
 }
 
 #else

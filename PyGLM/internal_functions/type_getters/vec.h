@@ -5,7 +5,7 @@
 #include "../../types/all.h"
 
 template<int L, typename T>
-static PyTypeObject* PyGLM_VEC_TYPE() {
+static constexpr PyTypeObject* PyGLM_VEC_TYPE() {
 	if (std::is_same<vec<L, T>, vec<1, float> >::value) {
 		return (PyTypeObject*)&hfvec1Type;
 	}
