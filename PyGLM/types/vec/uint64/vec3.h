@@ -85,7 +85,7 @@ static PyTypeObject hu64vec3Type = {
 	0,                         /* tp_call */
 	(reprfunc)vec3_str<glm::u64>,                         /* tp_str */
 	(getattrofunc)vec_getattr<3, glm::u64>,                         /* tp_getattro */
-	0,                         /* tp_setattro */
+	(setattrofunc)vec_setattr<3, glm::u64>,                         /* tp_setattro */
 	&hu64vec3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */

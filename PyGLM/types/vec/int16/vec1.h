@@ -83,7 +83,7 @@ static PyTypeObject hi16vec1Type = {
 	0,                         /* tp_call */
 	(reprfunc)vec1_str<glm::i16>,                         /* tp_str */
 	(getattrofunc)vec_getattr<1, glm::i16>,                         /* tp_getattro */
-	0,                         /* tp_setattro */
+	(setattrofunc)vec_setattr<1, glm::i16>,                         /* tp_setattro */
 	&hi16vec1BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */

@@ -77,7 +77,7 @@ static PyTypeObject himvec3Type = {
 	0,                         /* tp_call */
 	(reprfunc)mvec3_str<glm::i32>,                         /* tp_str */
 	(getattrofunc)mvec_getattr<3, glm::i32>,                         /* tp_getattro */
-	(setattrofunc)mvec3_setattr<glm::i32>,                         /* tp_setattro */
+	(setattrofunc)mvec_setattr<3, glm::i32>,                         /* tp_setattro */
 	&himvec3BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */

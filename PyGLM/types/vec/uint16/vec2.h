@@ -84,7 +84,7 @@ static PyTypeObject hu16vec2Type = {
 	0,                         /* tp_call */
 	(reprfunc)vec2_str<glm::u16>,                         /* tp_str */
 	(getattrofunc)vec_getattr<2, glm::u16>,                         /* tp_getattro */
-	0,                         /* tp_setattro */
+	(setattrofunc)vec_setattr<2, glm::u16>,                         /* tp_setattro */
 	&hu16vec2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */

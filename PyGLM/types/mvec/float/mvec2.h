@@ -77,7 +77,7 @@ static PyTypeObject hfmvec2Type = {
 	0,                         /* tp_call */
 	(reprfunc)mvec2_str<float>,                         /* tp_str */
 	(getattrofunc)mvec_getattr<2, float>,                         /* tp_getattro */
-	(setattrofunc)mvec2_setattr<float>,                         /* tp_setattro */
+	(setattrofunc)mvec_setattr<2, float>,                         /* tp_setattro */
 	&hfmvec2BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */

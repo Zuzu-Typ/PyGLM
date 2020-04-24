@@ -125,6 +125,8 @@ static PyObject* vec4_repr(vec<4, T>* self);
 
 template<int L, typename T>
 static PyObject* vec_getattr(PyObject* obj, PyObject* name);
+template<int L, typename T>
+static int vec_setattr(PyObject* obj, PyObject* name, PyObject* value);
 
 template<int L, typename T>
 static PyObject* vec_richcompare(vec<L, T>* self, PyObject* other, int comp_type);

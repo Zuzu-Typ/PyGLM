@@ -77,7 +77,7 @@ static PyTypeObject hdmvec4Type = {
 	0,                         /* tp_call */
 	(reprfunc)mvec4_str<double>,                         /* tp_str */
 	(getattrofunc)mvec_getattr<4, double>,                         /* tp_getattro */
-	(setattrofunc)mvec4_setattr<double>,                         /* tp_setattro */
+	(setattrofunc)mvec_setattr<4, double>,                         /* tp_setattro */
 	&hdmvec4BufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */

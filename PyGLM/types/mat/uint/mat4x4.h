@@ -32,7 +32,7 @@ static PyMappingMethods humat4x4MapMethods = {
 	(objobjargproc)mat4x4_mp_ass_item<glm::u32>, // mp_ass_subscript
 };
 static PyNumberMethods humat4x4NumMethods = {
-	(binaryfunc)mat_add<4, 4, glm::u32>, //nb_add
+	(binaryfunc)matsq_add<4, 4, glm::u32>, //nb_add
 	(binaryfunc)matsq_sub<4, 4, glm::u32>, //nb_subtract
 	(binaryfunc)mat_mul<4, 4, glm::u32>, //nb_multiply
 	0, //nb_remainder
@@ -51,8 +51,8 @@ static PyNumberMethods humat4x4NumMethods = {
 	0, //nb_int
 	0, //nb_reserved
 	0, //nb_glm::u32
-	(binaryfunc)mat_iadd<4, 4, glm::u32>, //nb_inplace_add
-	(binaryfunc)mat_isub<4, 4, glm::u32>, //nb_inplace_subtract
+	(binaryfunc)matsq_iadd<4, 4, glm::u32>, //nb_inplace_add
+	(binaryfunc)matsq_isub<4, 4, glm::u32>, //nb_inplace_subtract
 	(binaryfunc)mat_imul<4, 4, glm::u32>, //nb_inplace_multiply
 	0, //nb_inplace_remainder
 	0, //nb_inplace_power

@@ -128,6 +128,9 @@ static PyObject *
 mvec_div(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
+		if (!glm::all((glm::vec<L, bool>)(((mvec<L, T>*)obj2)->super_type))) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) / *((mvec<L, T>*)obj2)->super_type);
 	}
 
@@ -139,13 +142,21 @@ mvec_div(PyObject *obj1, PyObject *obj2)
 	}
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
-		return pack_vec<L, T>(o / PyGLM_Number_FromPyObject<T>(obj2));
+		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
+		if (o2 == (T)0) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
+		return pack_vec<L, T>(o / o2);
 	}
 
 	glm::vec<L, T> o2;
 
 	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
+	}
+
+	if (!glm::all((glm::vec<L, bool>)o2)) {
+		PyGLM_ZERO_DIVISION_ERROR_T(T);
 	}
 
 	// obj1 and obj2 can be interpreted as a mvec
@@ -157,6 +168,9 @@ static PyObject *
 mvec_mod(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
+		if (!glm::all((glm::vec<L, bool>)(((mvec<L, T>*)obj2)->super_type))) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
 		return pack_vec<L, T>(glm::mod(glm::vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1)), *((mvec<L, T>*)obj2)->super_type));
 	}
 
@@ -168,13 +182,21 @@ mvec_mod(PyObject *obj1, PyObject *obj2)
 	}
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
-		return pack_vec<L, T>(glm::mod(o, glm::vec<L, T>(PyGLM_Number_FromPyObject<T>(obj2))));
+		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
+		if (o2 == (T)0) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
+		return pack_vec<L, T>(glm::mod(o, glm::vec<L, T>(o2)));
 	}
 
 	glm::vec<L, T> o2;
 
 	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
+	}
+
+	if (!glm::all((glm::vec<L, bool>)o2)) {
+		PyGLM_ZERO_DIVISION_ERROR_T(T);
 	}
 
 	// obj1 and obj2 can be interpreted as a mvec
@@ -186,6 +208,9 @@ static PyObject *
 mvec_floordiv(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
+		if (!glm::all((glm::vec<L, bool>)(((mvec<L, T>*)obj2)->super_type))) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
 		return pack_vec<L, T>(floor(PyGLM_Number_FromPyObject<T>(obj1) / *((mvec<L, T>*)obj2)->super_type));
 	}
 
@@ -197,13 +222,21 @@ mvec_floordiv(PyObject *obj1, PyObject *obj2)
 	}
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
-		return pack_vec<L, T>(floor(o / PyGLM_Number_FromPyObject<T>(obj2)));
+		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
+		if (o2 == (T)0) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
+		return pack_vec<L, T>(floor(o / o2));
 	}
 
 	glm::vec<L, T> o2;
 
 	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
+	}
+
+	if (!glm::all((glm::vec<L, bool>)o2)) {
+		PyGLM_ZERO_DIVISION_ERROR_T(T);
 	}
 
 	// obj1 and obj2 can be interpreted as a mvec
@@ -691,6 +724,70 @@ static bool unswizzle_mvec(mvec<4, T> * self, char c, T& out) {
 	return false;
 }
 
+template<typename T>
+static T& unswizzle2_mvec(mvec<1, T> * self, char c, bool& success) {
+	if (c == 'x' || c == 'r' || c == 's') {
+		success = success && true;
+		return self->super_type->x;
+	}
+	success = false;
+	return self->super_type->x;
+}
+
+template<typename T>
+static T& unswizzle2_mvec(mvec<2, T> * self, char c, bool& success) {
+	if (c == 'x' || c == 'r' || c == 's') {
+		success = success && true;
+		return self->super_type->x;
+	}
+	if (c == 'y' || c == 'g' || c == 't') {
+		success = success && true;
+		return self->super_type->y;
+	}
+	success = false;
+	return self->super_type->x;
+}
+
+template<typename T>
+static T& unswizzle2_mvec(mvec<3, T> * self, char c, bool& success) {
+	if (c == 'x' || c == 'r' || c == 's') {
+		success = success && true;
+		return self->super_type->x;
+	}
+	if (c == 'y' || c == 'g' || c == 't') {
+		success = success && true;
+		return self->super_type->y;
+	}
+	if (c == 'z' || c == 'b' || c == 'q') {
+		success = success && true;
+		return self->super_type->z;
+	}
+	success = false;
+	return self->super_type->x;
+}
+
+template<typename T>
+static T& unswizzle2_mvec(mvec<4, T> * self, char c, bool& success) {
+	if (c == 'x' || c == 'r' || c == 's') {
+		success = success && true;
+		return self->super_type->x;
+	}
+	if (c == 'y' || c == 'g' || c == 't') {
+		success = success && true;
+		return self->super_type->y;
+	}
+	if (c == 'z' || c == 'b' || c == 'q') {
+		success = success && true;
+		return self->super_type->z;
+	}
+	if (c == 'w' || c == 'a' || c == 'p') {
+		success = success && true;
+		return self->super_type->w;
+	}
+	success = false;
+	return self->super_type->x;
+}
+
 //template<int L, typename T>
 //static bool unswizzle_mvec(mvec<L, T>* self, char c, T& out) {
 //	if (L == 2) {
@@ -743,68 +840,74 @@ static PyObject * mvec_getattr(PyObject * obj, PyObject * name) {
 	return PyObject_GenericGetAttr(obj, name);
 }
 
-template<typename T>
-static int mvec2_setattr(mvec<2, T>* obj, PyObject* name, PyObject* value) {
-	const char * name_as_ccp = PyGLM_String_AsString(name);
+template<int L, typename T>
+static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
+	if (value == NULL) {
+		PyErr_SetString(PyExc_NotImplementedError, "deleting components is not permitted.");
+		return -1;
+	}
+
+	char * name_as_ccp = PyGLM_String_AsString(name);
 	size_t len = strlen(name_as_ccp);
-	if (!PyGLM_Number_Check(value) || len != 1) {
-		return PyObject_GenericSetAttr((PyObject*)obj, name, value);
+
+	if (len == 1 && PyGLM_Vec_Check(1, T, value)) {
+		glm::vec<1, T> v = unpack_vec<1, T>(value);
+		bool success = true;
+		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
+		if (success) {
+			x = v.x;
+			return 0;
+		}
 	}
-	if (name_as_ccp[0] == 'x') {
-		obj->super_type->x = PyGLM_Number_FromPyObject<T>(value);
-		return 0;
+	else if (len == 1 && PyGLM_Number_Check(value)) {
+		T v = PyGLM_Number_FromPyObject<T>(value);
+		bool success = true;
+		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
+		if (success) {
+			x = v;
+			return 0;
+		}
 	}
-	if (name_as_ccp[0] == 'y') {
-		obj->super_type->y = PyGLM_Number_FromPyObject<T>(value);
-		return 0;
+	else if (len == 2 && PyGLM_Vec_Check(2, T, value)) {
+		glm::vec<2, T> v = unpack_vec<2, T>(value);
+		bool success = true;
+		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
+		T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
+		if (success) {
+			x = v.x;
+			y = v.y;
+			return 0;
+		}
 	}
-	return PyObject_GenericSetAttr((PyObject*)obj, name, value);
-}
-template<typename T>
-static int mvec3_setattr(mvec<3, T>* obj, PyObject* name, PyObject* value) {
-	const char * name_as_ccp = PyGLM_String_AsString(name);
-	size_t len = strlen(name_as_ccp);
-	if (!PyGLM_Number_Check(value) || len != 1) {
-		return PyObject_GenericSetAttr((PyObject*)obj, name, value);
+	else if (len == 3 && PyGLM_Vec_Check(3, T, value)) {
+		glm::vec<3, T> v = unpack_vec<3, T>(value);
+		bool success = true;
+		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
+		T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
+		T& z = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[2], success);
+		if (success) {
+			x = v.x;
+			y = v.y;
+			z = v.z;
+			return 0;
+		}
 	}
-	if (name_as_ccp[0] == 'x') {
-		obj->super_type->x = PyGLM_Number_FromPyObject<T>(value);
-		return 0;
+	else if (len == 4 && PyGLM_Vec_Check(4, T, value)) {
+		glm::vec<4, T> v = unpack_vec<4, T>(value);
+		bool success = true;
+		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
+		T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
+		T& z = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[2], success);
+		T& w = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[3], success);
+		if (success) {
+			x = v.x;
+			y = v.y;
+			z = v.z;
+			w = v.w;
+			return 0;
+		}
 	}
-	if (name_as_ccp[0] == 'y') {
-		obj->super_type->y = PyGLM_Number_FromPyObject<T>(value);
-		return 0;
-	}
-	if (name_as_ccp[0] == 'z') {
-		obj->super_type->z = PyGLM_Number_FromPyObject<T>(value);
-		return 0;
-	}
-	return PyObject_GenericSetAttr((PyObject*)obj, name, value);
-}
-template<typename T>
-static int mvec4_setattr(mvec<4, T>* obj, PyObject* name, PyObject* value) {
-	const char * name_as_ccp = PyGLM_String_AsString(name);
-	size_t len = strlen(name_as_ccp);
-	if (!PyGLM_Number_Check(value) || len != 1) {
-		return PyObject_GenericSetAttr((PyObject*)obj, name, value);
-	}
-	if (name_as_ccp[0] == 'x') {
-		obj->super_type->x = PyGLM_Number_FromPyObject<T>(value);
-		return 0;
-	}
-	if (name_as_ccp[0] == 'y') {
-		obj->super_type->y = PyGLM_Number_FromPyObject<T>(value);
-		return 0;
-	}
-	if (name_as_ccp[0] == 'z') {
-		obj->super_type->z = PyGLM_Number_FromPyObject<T>(value);
-		return 0;
-	}
-	if (name_as_ccp[0] == 'w') {
-		obj->super_type->w = PyGLM_Number_FromPyObject<T>(value);
-		return 0;
-	}
-	return PyObject_GenericSetAttr((PyObject*)obj, name, value);
+	return PyObject_GenericSetAttr(obj, name, value);
 }
 
 // iterator

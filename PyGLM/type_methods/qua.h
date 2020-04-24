@@ -230,7 +230,11 @@ qua_div(PyObject *obj1, PyObject *obj2)
 	}
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
-		return pack_qua<T>(o / PyGLM_Number_FromPyObject<T>(obj2));
+		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
+		if (o2 == (T)0) {
+			PyGLM_ZERO_DIVISION_ERROR_T(T);
+		}
+		return pack_qua<T>(o / o2);
 	}
 
 	Py_RETURN_NOTIMPLEMENTED;

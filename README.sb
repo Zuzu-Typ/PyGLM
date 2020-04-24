@@ -34,7 +34,7 @@ There is no need to import anything but \b \glm\ b\, as it already contains the 
 Please make sure to \b \include the license for GLM\ b\ in your project when you use PyGLM!
 (this also includes \b \binary distributions\ b\, e.g. *.exe)
 
-You can do so by copying either the \code \COPYING\ code\ or \code \GLM_LICENSE\ code\ file (or their contents) to your project.
+You can do so by copying the \code \COPYING\ code\ file (or it's contents) to your project.
 \h4 \Differences to glm\ h4\
 Instead of using double colons (\b \::\ b\) for namespaces, periods (\b \.\ b\) are used, so
 \code \glm::vec2\ code\ becomes \code \glm.vec2\ code\.
@@ -81,7 +81,7 @@ Please refer to the source (in Python: \b \*.__doc__\ b\) and \url https://githu
 
 \h4 \Unsupported functions\ h4\
 Aside from the unstable extensions,
-PyGLM doesn't support the following extensions and methods, due to compatibility issues:
+PyGLM doesn't support the following extensions and methods, due to compatability issues:
 The \code \GLM_GTC_bitfield\ code\ extension,
 \code \glm::log2\ code\ from GLM_GTC_integer.
 \code \glm::packUnorm\ code\ and \code \glm::packSnorm\ code\ from GLM_GTC_packing.
