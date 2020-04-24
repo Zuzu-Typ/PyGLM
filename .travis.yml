@@ -17,7 +17,7 @@ jobs:
     language: generic
     env: MACOSX_DEPLOYMENT_TARGET=10.9
   - os: windows
-    language: generic
+    language: bash
     before_install:
     - choco install python --version 3.8.0
     - export PATH="/c/Python38:/c/Python/Scripts:$PATH"
