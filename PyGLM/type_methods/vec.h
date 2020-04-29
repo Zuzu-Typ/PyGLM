@@ -135,63 +135,63 @@ vec2_init(vec<2, T> *self, PyObject *args, PyObject *kwds)
 				return 0;
 			}
 
-			PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_PTI_GetDT(T));
-			if (PyGLM_Vec_PTI_Check0(2, T, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, T, arg);
+			PyGLM_PTI_Init0(arg1, PyGLM_T_ANY_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_PTI_GetDT(T));
+			if (PyGLM_Vec_PTI_Check0(2, T, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, T, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(3, T, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, T, arg);
+			if (PyGLM_Vec_PTI_Check0(3, T, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, T, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, T, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, T, arg);
+			if (PyGLM_Vec_PTI_Check0(4, T, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, T, arg1);
 				return 0;
 			}
 
-			PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_2 | PyGLM_DT_ALL);
-			if (PyGLM_Vec_PTI_Check0(2, float, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, float, arg);
+			PyGLM_PTI_Init0(arg1, PyGLM_T_ANY_VEC | PyGLM_SHAPE_2 | PyGLM_DT_ALL);
+			if (PyGLM_Vec_PTI_Check0(2, float, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, float, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(2, double, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, double, arg);
+			if (PyGLM_Vec_PTI_Check0(2, double, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, double, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(2, int32, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, int32, arg);
+			if (PyGLM_Vec_PTI_Check0(2, int32, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, int32, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(2, uint32, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, uint32, arg);
+			if (PyGLM_Vec_PTI_Check0(2, uint32, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, uint32, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(2, int64, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, int64, arg);
+			if (PyGLM_Vec_PTI_Check0(2, int64, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, int64, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(2, uint64, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, uint64, arg);
+			if (PyGLM_Vec_PTI_Check0(2, uint64, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, uint64, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(2, int16, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, int16, arg);
+			if (PyGLM_Vec_PTI_Check0(2, int16, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, int16, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(2, uint16, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, uint16, arg);
+			if (PyGLM_Vec_PTI_Check0(2, uint16, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, uint16, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(2, int8, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, int8, arg);
+			if (PyGLM_Vec_PTI_Check0(2, int8, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, int8, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(2, uint8, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, uint8, arg);
+			if (PyGLM_Vec_PTI_Check0(2, uint8, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, uint8, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(2, bool, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(2, bool, arg);
+			if (PyGLM_Vec_PTI_Check0(2, bool, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(2, bool, arg1);
 				return 0;
 			}
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for vec()");
@@ -227,59 +227,59 @@ vec3_init(vec<3, T> *self, PyObject *args, PyObject *kwds)
 				return 0;
 			}
 
-			PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_PTI_GetDT(T));
-			if (PyGLM_Vec_PTI_Check0(3, T, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, T, arg);
+			PyGLM_PTI_Init0(arg1, PyGLM_T_ANY_VEC | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_PTI_GetDT(T));
+			if (PyGLM_Vec_PTI_Check0(3, T, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, T, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, T, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, T, arg);
+			if (PyGLM_Vec_PTI_Check0(4, T, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, T, arg1);
 				return 0;
 			}
 
-			PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_3 | PyGLM_DT_ALL);
-			if (PyGLM_Vec_PTI_Check0(3, float, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, float, arg);
+			PyGLM_PTI_Init0(arg1, PyGLM_T_ANY_VEC | PyGLM_SHAPE_3 | PyGLM_DT_ALL);
+			if (PyGLM_Vec_PTI_Check0(3, float, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, float, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(3, double, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, double, arg);
+			if (PyGLM_Vec_PTI_Check0(3, double, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, double, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(3, int32, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, int32, arg);
+			if (PyGLM_Vec_PTI_Check0(3, int32, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, int32, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(3, uint32, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, uint32, arg);
+			if (PyGLM_Vec_PTI_Check0(3, uint32, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, uint32, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(3, int64, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, int64, arg);
+			if (PyGLM_Vec_PTI_Check0(3, int64, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, int64, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(3, uint64, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, uint64, arg);
+			if (PyGLM_Vec_PTI_Check0(3, uint64, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, uint64, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(3, int16, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, int16, arg);
+			if (PyGLM_Vec_PTI_Check0(3, int16, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, int16, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(3, uint16, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, uint16, arg);
+			if (PyGLM_Vec_PTI_Check0(3, uint16, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, uint16, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(3, int8, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, int8, arg);
+			if (PyGLM_Vec_PTI_Check0(3, int8, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, int8, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(3, uint8, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, uint8, arg);
+			if (PyGLM_Vec_PTI_Check0(3, uint8, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, uint8, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(3, bool, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(3, bool, arg);
+			if (PyGLM_Vec_PTI_Check0(3, bool, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(3, bool, arg1);
 				return 0;
 			}
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for vec3()");
@@ -338,55 +338,55 @@ vec4_init(vec<4, T> *self, PyObject *args, PyObject *kwds)
 				return 0;
 			}
 
-			PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_4 | PyGLM_PTI_GetDT(T));
-			if (PyGLM_Vec_PTI_Check0(4, T, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, T, arg);
+			PyGLM_PTI_Init0(arg1, PyGLM_T_ANY_VEC | PyGLM_SHAPE_4 | PyGLM_PTI_GetDT(T));
+			if (PyGLM_Vec_PTI_Check0(4, T, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, T, arg1);
 				return 0;
 			}
 
-			PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_4 | PyGLM_DT_ALL);
-			if (PyGLM_Vec_PTI_Check0(4, float, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, float, arg);
+			PyGLM_PTI_Init0(arg1, PyGLM_T_ANY_VEC | PyGLM_SHAPE_4 | PyGLM_DT_ALL);
+			if (PyGLM_Vec_PTI_Check0(4, float, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, float, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, double, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, double, arg);
+			if (PyGLM_Vec_PTI_Check0(4, double, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, double, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, int32, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, int32, arg);
+			if (PyGLM_Vec_PTI_Check0(4, int32, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, int32, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, uint32, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, uint32, arg);
+			if (PyGLM_Vec_PTI_Check0(4, uint32, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, uint32, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, int64, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, int64, arg);
+			if (PyGLM_Vec_PTI_Check0(4, int64, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, int64, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, uint64, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, uint64, arg);
+			if (PyGLM_Vec_PTI_Check0(4, uint64, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, uint64, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, int16, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, int16, arg);
+			if (PyGLM_Vec_PTI_Check0(4, int16, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, int16, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, uint16, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, uint16, arg);
+			if (PyGLM_Vec_PTI_Check0(4, uint16, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, uint16, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, int8, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, int8, arg);
+			if (PyGLM_Vec_PTI_Check0(4, int8, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, int8, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, uint8, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, uint8, arg);
+			if (PyGLM_Vec_PTI_Check0(4, uint8, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, uint8, arg1);
 				return 0;
 			}
-			if (PyGLM_Vec_PTI_Check0(4, bool, arg)) {
-				self->super_type = PyGLM_Vec_PTI_Get0(4, bool, arg);
+			if (PyGLM_Vec_PTI_Check0(4, bool, arg1)) {
+				self->super_type = PyGLM_Vec_PTI_Get0(4, bool, arg1);
 				return 0;
 			}
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for vec4()");

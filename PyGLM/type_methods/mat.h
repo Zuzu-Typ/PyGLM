@@ -14,7 +14,7 @@ static PyObject* mat_length(PyObject *, PyObject*) {
 static void
 mat_dealloc(PyObject* self)
 {
-	Py_TYPE(self)->tp_free(self);
+	if (((type_helper*)self)->info != 0) Py_TYPE(self)->tp_free(self);
 }
 
 template<int C, int R, typename T>

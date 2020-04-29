@@ -13,7 +13,7 @@ static PyObject* qua_length(PyObject*, PyObject*) {
 static void
 qua_dealloc(PyObject* self)
 {
-	Py_TYPE(self)->tp_free(self);
+	if (((type_helper*)self)->info > 0) Py_TYPE(self)->tp_free(self);
 }
 
 template<typename T>
@@ -48,33 +48,22 @@ qua_init(qua<T> *self, PyObject *args, PyObject *kwds)
 			return 0;
 		}
 		if (arg2 == NULL) {
-			if (PyGLM_Qua_Check(T, arg1)) {
-				glm::qua<T> o;
-				if (unpack_qua(arg1, o)) {
-					self->super_type = o;
-					return 0;
-				}
+			PyGLM_PTI_Init0(arg1, PyGLM_T_ALL | PyGLM_SHAPE_3 | PyGLM_SHAPE_3x3 | PyGLM_SHAPE_4x4 | PyGLM_PTI_GetDT(T));
+			if (PyGLM_Qua_PTI_Check0(T, arg1)) {
+				self->super_type = PyGLM_Qua_PTI_Get0(T, arg1);
+				return 0;
 			}
-			else if (PyGLM_Vec_Check(3, T, arg1)) {
-				glm::vec<3, T> o;
-				if (unpack_vec(arg1, o)) {
-					self->super_type = glm::qua<T>(o);
-					return 0;
-				}
+			else if (PyGLM_Vec_PTI_Check0(3, T, arg1)) {
+				self->super_type = glm::qua<T>(PyGLM_Vec_PTI_Get0(3, T, arg1));
+				return 0;
 			}
-			else if (PyGLM_Mat_Check(3, 3, T, arg1)) {
-				glm::mat<3, 3, T> o;
-				if (unpack_mat(arg1, o)) {
-					self->super_type = glm::qua<T>(o);
-					return 0;
-				}
+			else if (PyGLM_Mat_PTI_Check0(3, 3, T, arg1)) {
+				self->super_type = glm::qua<T>(PyGLM_Mat_PTI_Get0(3, 3, T, arg1));
+				return 0;
 			}
-			else if (PyGLM_Mat_Check(4, 4, T, arg1)) {
-				glm::mat<4, 4, T> o;
-				if (unpack_mat(arg1, o)) {
-					self->super_type = glm::qua<T>(o);
-					return 0;
-				}
+			else if (PyGLM_Mat_PTI_Check0(4, 4, T, arg1)) {
+				self->super_type = glm::qua<T>(PyGLM_Mat_PTI_Get0(4, 4, T, arg1));
+				return 0;
 			}
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for quat()");
 			return -1;
