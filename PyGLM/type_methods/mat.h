@@ -1679,9 +1679,9 @@ static PyObject *
 mat2x2_repr(mat<2, 2, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 60 + strlen(name) - 4;
+	size_t required_space = 65 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g | %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g ), ( %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1692,9 +1692,9 @@ static PyObject *
 mat2x3_repr(mat<2, 3, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 88 + strlen(name) - 4;
+	size_t required_space = 93 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g | %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1705,9 +1705,9 @@ static PyObject *
 mat2x4_repr(mat<2, 4, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 116 + strlen(name) - 4;
+	size_t required_space = 121 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1718,9 +1718,9 @@ static PyObject *
 mat3x2_repr(mat<3, 2, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 89 + strlen(name) - 4;
+	size_t required_space = 97 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g | %.6g, %.6g | %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g ), ( %.6g, %.6g ), ( %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1731,9 +1731,9 @@ static PyObject *
 mat3x3_repr(mat<3, 3, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 131 + strlen(name) - 4;
+	size_t required_space = 139 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g | %.6g, %.6g, %.6g | %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1744,9 +1744,9 @@ static PyObject *
 mat3x4_repr(mat<3, 4, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 173 + strlen(name) - 4;
+	size_t required_space = 181 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1757,9 +1757,9 @@ static PyObject *
 mat4x2_repr(mat<4, 2, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 118 + strlen(name) - 4;
+	size_t required_space = 129 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g | %.6g, %.6g | %.6g, %.6g | %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[3][0], (double)self->super_type[3][1]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g ), ( %.6g, %.6g ), ( %.6g, %.6g ), ( %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[3][0], (double)self->super_type[3][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1770,9 +1770,9 @@ static PyObject *
 mat4x3_repr(mat<4, 3, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 174 + strlen(name) - 4;
+	size_t required_space = 185 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g | %.6g, %.6g, %.6g | %.6g, %.6g, %.6g | %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1783,9 +1783,9 @@ static PyObject *
 mat4x4_repr(mat<4, 4, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 230 + strlen(name) - 4;
+	size_t required_space = 241 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2], (double)self->super_type[3][3]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2], (double)self->super_type[3][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;

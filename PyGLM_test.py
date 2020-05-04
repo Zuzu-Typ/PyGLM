@@ -382,6 +382,11 @@ for args in gen_args("#u-_V3_M33_M44_NV3_V3V3_NNNN_Q__f"): # need support for co
 for args in gen_args("#u-_V3_M33_M44_NV3_V3V3_NNNN_Q__F"): # need support for conversion constructors
     fassert(glm.dquat, args)
 
+# repr #
+for T in vector_types + matrix_types + quat_types:
+    fassert(lambda o: eval(repr(o), {a : getattr(glm, a) for a in dir(glm)}), (T(),))
+#/repr #
+
 # neg #
 for obj in gen_obj("V_M_Q__fFiqsu"):
     fassert(obj.__neg__, ())
@@ -668,6 +673,30 @@ for t, s, f in (
     ):
     check_buffer_protocol(t,s,f)
 #/buffer protocol #
+
+# lists and tuples #
+for tp, arg in (
+    (glm.vec1, (1,)),
+    (glm.vec2, (1, 2,)),
+    (glm.vec3, (1, 2, 3,)),
+    (glm.vec4, (1, 2, 3, 4)),
+    (glm.vec1, [1]),
+    (glm.vec2, [1, 2]),
+    (glm.vec3, [1, 2, 3]),
+    (glm.vec4, [1, 2, 3, 4]),
+    (glm.mat2x2, ((1, 2), (3, 4))),
+    (glm.mat2x3, ((1, 2, 3), (4, 5, 6))),
+    (glm.mat2x4, ((1, 2, 3, 4), (5, 6, 7, 8))),
+    (glm.mat3x2, ((1, 2), (3, 4), (5, 6))),
+    (glm.mat3x3, ((1, 2, 3), (4, 5, 6), (7, 8, 9))),
+    (glm.mat3x4, ((1, 2, 3, 4), (5, 6, 7, 8), (9, 10, 11, 12))),
+    (glm.mat4x2, ((1, 2), (3, 4), (5, 6), (7, 8))),
+    (glm.mat4x3, ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))),
+    (glm.mat4x4, ((1, 2, 3, 4), (5, 6, 7, 8), (9, 10, 11, 12), (13, 14, 15, 16))),
+    (glm.quat, (1, 2, 3, 4)),
+    ):
+    fassert(tp, [arg]);
+#/lists and tuples #
 
 # copy module #
 for args in gen_args("V_M_Q"):
