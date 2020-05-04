@@ -106,115 +106,6 @@
 #define _SUB_PyGLM_PTI_GET_TYPE(o) ((o->ob_type->tp_dealloc == (destructor)vec_dealloc) ? PyGLM_T_VEC : (o->ob_type->tp_dealloc == (destructor)mat_dealloc) ? PyGLM_T_MAT : (o->ob_type->tp_dealloc == (destructor)qua_dealloc) ? PyGLM_T_QUA : (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) ? PyGLM_T_MVEC : PyGLM_UNKNOWN)
 #define PyGLM_PTI_GET_TYPE(o) _SUB_PyGLM_PTI_GET_TYPE(((PyObject*)o))
 
-//#define PyGLM_PTI_FMat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_FLOAT)
-//#define PyGLM_PTI_DMat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_DOUBLE)
-//#define PyGLM_PTI_IMat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT)
-//#define PyGLM_PTI_UMat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_UINT)
-//#define PyGLM_PTI_I64Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT64)
-//#define PyGLM_PTI_U64Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_UINT64)
-//#define PyGLM_PTI_I16Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT16)
-//#define PyGLM_PTI_U16Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_UINT16)
-//#define PyGLM_PTI_I8Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT8)
-//#define PyGLM_PTI_U8Mat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_UINT8)
-//#define PyGLM_PTI_BMat2x2 (PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_BOOL)
-//
-//#define PyGLM_PTI_FMat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_FLOAT)
-//#define PyGLM_PTI_DMat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_DOUBLE)
-//#define PyGLM_PTI_IMat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT)
-//#define PyGLM_PTI_UMat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_UINT)
-//#define PyGLM_PTI_I64Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT64)
-//#define PyGLM_PTI_U64Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_UINT64)
-//#define PyGLM_PTI_I16Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT16)
-//#define PyGLM_PTI_U16Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_UINT16)
-//#define PyGLM_PTI_I8Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT8)
-//#define PyGLM_PTI_U8Mat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_UINT8)
-//#define PyGLM_PTI_BMat2x3 (PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_BOOL)
-//
-//#define PyGLM_PTI_FMat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_FLOAT)
-//#define PyGLM_PTI_DMat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_DOUBLE)
-//#define PyGLM_PTI_IMat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT)
-//#define PyGLM_PTI_UMat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_UINT)
-//#define PyGLM_PTI_I64Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT64)
-//#define PyGLM_PTI_U64Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_UINT64)
-//#define PyGLM_PTI_I16Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT16)
-//#define PyGLM_PTI_U16Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_UINT16)
-//#define PyGLM_PTI_I8Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT8)
-//#define PyGLM_PTI_U8Mat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_UINT8)
-//#define PyGLM_PTI_BMat2x4 (PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_BOOL)
-//
-//#define PyGLM_PTI_FMat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_FLOAT)
-//#define PyGLM_PTI_DMat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_DOUBLE)
-//#define PyGLM_PTI_IMat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT)
-//#define PyGLM_PTI_UMat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_UINT)
-//#define PyGLM_PTI_I64Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT64)
-//#define PyGLM_PTI_U64Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_UINT64)
-//#define PyGLM_PTI_I16Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT16)
-//#define PyGLM_PTI_U16Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_UINT16)
-//#define PyGLM_PTI_I8Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT8)
-//#define PyGLM_PTI_U8Mat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_UINT8)
-//#define PyGLM_PTI_BMat3x2 (PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_BOOL)
-//
-//#define PyGLM_PTI_FMat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FLOAT)
-//#define PyGLM_PTI_DMat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_DOUBLE)
-//#define PyGLM_PTI_IMat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT)
-//#define PyGLM_PTI_UMat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_UINT)
-//#define PyGLM_PTI_I64Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT64)
-//#define PyGLM_PTI_U64Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_UINT64)
-//#define PyGLM_PTI_I16Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT16)
-//#define PyGLM_PTI_U16Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_UINT16)
-//#define PyGLM_PTI_I8Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT8)
-//#define PyGLM_PTI_U8Mat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_UINT8)
-//#define PyGLM_PTI_BMat3x3 (PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_BOOL)
-//
-//#define PyGLM_PTI_FMat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_FLOAT)
-//#define PyGLM_PTI_DMat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_DOUBLE)
-//#define PyGLM_PTI_IMat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT)
-//#define PyGLM_PTI_UMat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_UINT)
-//#define PyGLM_PTI_I64Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT64)
-//#define PyGLM_PTI_U64Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_UINT64)
-//#define PyGLM_PTI_I16Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT16)
-//#define PyGLM_PTI_U16Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_UINT16)
-//#define PyGLM_PTI_I8Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT8)
-//#define PyGLM_PTI_U8Mat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_UINT8)
-//#define PyGLM_PTI_BMat3x4 (PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_BOOL)
-//
-//#define PyGLM_PTI_FMat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_FLOAT)
-//#define PyGLM_PTI_DMat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_DOUBLE)
-//#define PyGLM_PTI_IMat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT)
-//#define PyGLM_PTI_UMat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_UINT)
-//#define PyGLM_PTI_I64Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT64)
-//#define PyGLM_PTI_U64Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_UINT64)
-//#define PyGLM_PTI_I16Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT16)
-//#define PyGLM_PTI_U16Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_UINT16)
-//#define PyGLM_PTI_I8Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT8)
-//#define PyGLM_PTI_U8Mat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_UINT8)
-//#define PyGLM_PTI_BMat4x2 (PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_BOOL)
-//
-//#define PyGLM_PTI_FMat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_FLOAT)
-//#define PyGLM_PTI_DMat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_DOUBLE)
-//#define PyGLM_PTI_IMat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT)
-//#define PyGLM_PTI_UMat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_UINT)
-//#define PyGLM_PTI_I64Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT64)
-//#define PyGLM_PTI_U64Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_UINT64)
-//#define PyGLM_PTI_I16Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT16)
-//#define PyGLM_PTI_U16Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_UINT16)
-//#define PyGLM_PTI_I8Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT8)
-//#define PyGLM_PTI_U8Mat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_UINT8)
-//#define PyGLM_PTI_BMat4x3 (PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_BOOL)
-//
-//#define PyGLM_PTI_FMat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FLOAT)
-//#define PyGLM_PTI_DMat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_DOUBLE)
-//#define PyGLM_PTI_IMat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT)
-//#define PyGLM_PTI_UMat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_UINT)
-//#define PyGLM_PTI_I64Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT64)
-//#define PyGLM_PTI_U64Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_UINT64)
-//#define PyGLM_PTI_I16Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT16)
-//#define PyGLM_PTI_U16Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_UINT16)
-//#define PyGLM_PTI_I8Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT8)
-//#define PyGLM_PTI_U8Mat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_UINT8)
-//#define PyGLM_PTI_BMat4x4 (PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_BOOL)
-
-
 // necessary forward declarations
 template<int L, typename T>
 static glm::vec<L, T> unpack_vec(PyObject* value);
@@ -245,7 +136,7 @@ struct PyGLMSingleTypeHolder { // supposed to only hold a single data type
 		}
 		else if (PyFloat_Check(o)) {
 			double value = PyFloat_AS_DOUBLE(o);
-			if (value > FLT_MAX || value != 0.0 && value < FLT_MIN && value > - FLT_MIN || value < - FLT_MAX) { // value doesn't fit in float
+			if (value > FLT_MAX || (value != 0.0 && value < FLT_MIN && value > - FLT_MIN) || value < - FLT_MAX) { // value doesn't fit in float
 				dtype = DType::DOUBLE;
 				data = malloc(sizeof(double));
 				*((double*)data) = value;
@@ -857,7 +748,7 @@ struct PyGLMTypeInfo {
 					}
 					break;
 				case 4: // vec4's and qua's
-					if (!((accepted_types & PyGLM_T_ANY_VEC) && (accepted_types & PyGLM_SHAPE_4) || (accepted_types & PyGLM_T_QUA)) || view.format == NULL) {
+					if (!(((accepted_types & PyGLM_T_ANY_VEC) && (accepted_types & PyGLM_SHAPE_4)) || (accepted_types & PyGLM_T_QUA)) || view.format == NULL) {
 						PyBuffer_Release(&view);
 						return;
 					}

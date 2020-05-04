@@ -1518,34 +1518,3 @@ NAME##_(PyObject*, PyObject* args) {\
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for " #NAME "(): ", arg1, arg2);\
 	return NULL;\
 }
-
-//#define PyGLM_MAKE_GLM_FUNC_V__tfF(NAME)\
-//static PyObject*\
-//NAME##_(PyObject*, PyObject* arg) {\
-//	if (PyGLM_Vec_Check(1, float, arg)) {\
-//		return pack(glm::NAME(unpack_vec<1, float>(arg)));\
-//	}\
-//	if (PyGLM_Vec_Check(1, double, arg)) {\
-//		return pack(glm::NAME(unpack_vec<1, double>(arg)));\
-//	}\
-//	if (PyGLM_Vec_Check(2, float, arg)) {\
-//		return pack(glm::NAME(unpack_vec<2, float>(arg)));\
-//	}\
-//	if (PyGLM_Vec_Check(2, double, arg)) {\
-//		return pack(glm::NAME(unpack_vec<2, double>(arg)));\
-//	}\
-//	if (PyGLM_Vec_Check(3, float, arg)) {\
-//		return pack(glm::NAME(unpack_vec<3, float>(arg)));\
-//	}\
-//	if (PyGLM_Vec_Check(3, double, arg)) {\
-//		return pack(glm::NAME(unpack_vec<3, double>(arg)));\
-//	}\
-//	if (PyGLM_Vec_Check(4, float, arg)) {\
-//		return pack(glm::NAME(unpack_vec<4, float>(arg)));\
-//	}\
-//	if (PyGLM_Vec_Check(4, double, arg)) {\
-//		return pack(glm::NAME(unpack_vec<4, double>(arg)));\
-//	}\
-//	PyGLM_TYPEERROR_O("invalid argument type(s) for " #NAME "(): ", arg);\
-//	return NULL;\
-//}

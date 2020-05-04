@@ -6,11 +6,7 @@
 
 template<typename T>
 static constexpr PyTypeObject* PyGLM_QUA_TYPE() {
-	if (std::is_same<qua<T>, qua<float> >::value) {
-		return (PyTypeObject*)&hfquaType;
-	}
-	if (std::is_same<qua<T>, qua<double> >::value) {
-		return (PyTypeObject*)&hdquaType;
-	}
-	return (PyTypeObject*)0;
+	return (std::is_same<qua<T>, qua<float> >::value) ? (PyTypeObject*)&hfquaType :
+		(std::is_same<qua<T>, qua<double> >::value) ? (PyTypeObject*)&hdquaType :
+		(PyTypeObject*)0;
 }
