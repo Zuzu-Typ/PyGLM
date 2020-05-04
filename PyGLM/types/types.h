@@ -81,30 +81,18 @@ typedef uint64_t	uint64;
 
 template<typename T>
 constexpr uint8_t get_type_helper_type() {
-	if (std::is_same<float, T>::value)
-		return PyGLM_TYPE_INFO_FLOAT;
-	if (std::is_same<double, T>::value)
-		return PyGLM_TYPE_INFO_DOUBLE;
-	if (std::is_same<int32_t, T>::value)
-		return PyGLM_TYPE_INFO_INT;
-	if (std::is_same<uint32_t, T>::value)
-		return PyGLM_TYPE_INFO_UINT;
-	if (std::is_same<int8_t, T>::value)
-		return PyGLM_TYPE_INFO_INT8;
-	if (std::is_same<uint8_t, T>::value)
-		return PyGLM_TYPE_INFO_UINT8;
-	if (std::is_same<int16_t, T>::value)
-		return PyGLM_TYPE_INFO_INT16;
-	if (std::is_same<uint16_t, T>::value)
-		return PyGLM_TYPE_INFO_UINT16;
-	if (std::is_same<int64_t, T>::value)
-		return PyGLM_TYPE_INFO_INT64;
-	if (std::is_same<uint64_t, T>::value)
-		return PyGLM_TYPE_INFO_UINT64;
-	if (std::is_same<bool, T>::value)
-		return PyGLM_TYPE_INFO_BOOL;
-
-	return PyGLM_TYPE_INFO_UNKNOWN;
+	return (std::is_same<float, T>::value) ? PyGLM_TYPE_INFO_FLOAT :
+		(std::is_same<double, T>::value) ? PyGLM_TYPE_INFO_DOUBLE :
+		(std::is_same<int32, T>::value) ? PyGLM_TYPE_INFO_INT :
+		(std::is_same<uint32, T>::value) ? PyGLM_TYPE_INFO_UINT :
+		(std::is_same<int8, T>::value) ? PyGLM_TYPE_INFO_INT8 :
+		(std::is_same<uint8, T>::value) ? PyGLM_TYPE_INFO_UINT8 :
+		(std::is_same<int16, T>::value) ? PyGLM_TYPE_INFO_INT16 :
+		(std::is_same<uint16, T>::value) ? PyGLM_TYPE_INFO_UINT16 :
+		(std::is_same<int64, T>::value) ? PyGLM_TYPE_INFO_INT64 :
+		(std::is_same<uint64, T>::value) ? PyGLM_TYPE_INFO_UINT64 :
+		(std::is_same<bool, T>::value) ? PyGLM_TYPE_INFO_BOOL :
+		PyGLM_TYPE_INFO_UNKNOWN;
 }
 
 struct shape_helper {
