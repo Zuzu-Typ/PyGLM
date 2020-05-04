@@ -9,6 +9,7 @@
 static void
 mvec_dealloc(PyObject* self)
 {
+	PySys_WriteStdout("Freeing mvec");
 	Py_XDECREF(((mvec_helper*)self)->master);
 	self->ob_type->tp_free(self);
 }
@@ -936,6 +937,7 @@ template<int L, typename T>
 static void
 mvecIter_dealloc(mvecIter<L, T> *rgstate)
 {
+	PySys_WriteStdout("Freeing mvecIter");
 	Py_XDECREF(rgstate->sequence);
 	Py_TYPE(rgstate)->tp_free(rgstate);
 }

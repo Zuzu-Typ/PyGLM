@@ -32,7 +32,7 @@ _get_type_info(PyObject*, PyObject* args) {
 }
 
 static PyObject*
-test(PyObject* self, PyObject* arg) {
+test(PyObject*, PyObject* arg) {
 	PyGLM_PTI_InitN(0, arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
 	if (PyGLM_Vec_PTI_CheckN(0, 3, float, arg)) {
 		Py_RETURN_TRUE;
@@ -139,6 +139,7 @@ static PyMethodDef glmmethods[] = {
 #endif
 
 static void glm_clear(PyObject*) {
+	PySys_WriteStdout("Clearing GLM");
 	Py_XDECREF(ctypes_float_p);
 	Py_XDECREF(ctypes_double_p);
 	Py_XDECREF(ctypes_int64_p);

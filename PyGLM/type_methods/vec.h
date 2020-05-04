@@ -9,6 +9,7 @@
 static void
 vec_dealloc(PyObject* self)
 {
+	PySys_WriteStdout("Freeing vec");
 	Py_TYPE(self)->tp_free(self);
 }
 
@@ -1496,6 +1497,7 @@ template<int L, typename T>
 static void
 vecIter_dealloc(vecIter<L, T> *rgstate)
 {
+	PySys_WriteStdout("Freeing vecIter");
 	Py_XDECREF(rgstate->sequence);
 	Py_TYPE(rgstate)->tp_free(rgstate);
 }
