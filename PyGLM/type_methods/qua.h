@@ -13,7 +13,6 @@ static PyObject* qua_length(PyObject*, PyObject*) {
 static void
 qua_dealloc(PyObject* self)
 {
-	PySys_WriteStdout("Freeing qua");
 	if (((type_helper*)self)->info > 0) Py_TYPE(self)->tp_free(self);
 }
 
@@ -503,7 +502,6 @@ qua_getbuffer(qua<T>* self, Py_buffer* view, int flags) {
 
 void
 qua_releasebuffer(PyObject*, Py_buffer* view) {
-	PySys_WriteStdout("Freeing quaIter");
 	free(view->shape);
 }
 

@@ -14,7 +14,6 @@ static PyObject* mat_length(PyObject *, PyObject*) {
 static void
 mat_dealloc(PyObject* self)
 {
-	PySys_WriteStdout("Freeing mat");
 	if (((type_helper*)self)->info != 0) Py_TYPE(self)->tp_free(self);
 }
 
@@ -2669,7 +2668,6 @@ template<int C, int R, typename T>
 static void
 matIter_dealloc(matIter<C, R, T> *rgstate)
 {
-	PySys_WriteStdout("Freeing matIter");
 	Py_XDECREF(rgstate->sequence);
 	Py_TYPE(rgstate)->tp_free(rgstate);
 }

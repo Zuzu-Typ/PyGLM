@@ -155,6 +155,7 @@ static void glm_clear(PyObject*) {
 	Py_XDECREF(ctypes_void_p);
 	Py_XDECREF(PyGLM_VERSION_STRING);
 	Py_XDECREF(PyGLM_LICENSE_STRING);
+	PySys_WriteStdout("D");
 }
 
 static PyModuleDef glmmodule = {
