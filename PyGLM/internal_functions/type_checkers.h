@@ -121,29 +121,38 @@ struct PyGLMSingleTypeHolder { // supposed to only hold a single data type
 
 	DType dtype;
 
-	void* data;
+	void* data = NULL;
+
+	bool needsToBeFreed = false;
+
+
+	~PyGLMSingleTypeHolder() {
+		if (needsToBeFreed) {
+			free(data);
+			needsToBeFreed = false;
+		}
+	}
 
 	PyGLMSingleTypeHolder() {
 		dtype = DType::NONE;
-		data = NULL;
 	}
 
 	PyGLMSingleTypeHolder(PyObject* o) {
 		if (PyBool_Check(o)) {
 			dtype = DType::BOOL;
-			data = malloc(sizeof(bool));
+			allocate(sizeof(bool));
 			*((bool*)data) = (o == Py_True) ? true : false;
 		}
 		else if (PyFloat_Check(o)) {
 			double value = PyFloat_AS_DOUBLE(o);
 			if (value > FLT_MAX || (value != 0.0 && value < FLT_MIN && value > - FLT_MIN) || value < - FLT_MAX) { // value doesn't fit in float
 				dtype = DType::DOUBLE;
-				data = malloc(sizeof(double));
+				allocate(sizeof(double));
 				*((double*)data) = value;
 			}
 			else {
 				dtype = DType::FLOAT;
-				data = malloc(sizeof(float));
+				allocate(sizeof(float));
 				*((float*)data) = static_cast<float>(value);
 			}
 		}
@@ -155,24 +164,23 @@ struct PyGLMSingleTypeHolder { // supposed to only hold a single data type
 				if (overflow != 0) {
 					unsigned long long asUnsignedLongLong = PyLong_AsUnsignedLongLongMask(o);
 					dtype = DType::UINT64;
-					data = malloc(sizeof(unsigned long long));
+					allocate(sizeof(unsigned long long));
 					*((unsigned long long*)data) = asUnsignedLongLong;
 				}
 				else {
 					dtype = DType::INT64;
-					data = malloc(sizeof(long long));
+					allocate(sizeof(long long));
 					*((long long*)data) = asLongLong;
 				}
 			}
 			else {
 				dtype = DType::INT32;
-				data = malloc(sizeof(long));
+				allocate(sizeof(long));
 				*((long*)data) = asLong;
 			}
 		}
 		else {
 			dtype = DType::NONE;
-			data = NULL;
 		}
 	}
 
@@ -445,6 +453,12 @@ struct PyGLMSingleTypeHolder { // supposed to only hold a single data type
 		default:
 			return false;
 		}
+	}
+
+private:
+	void allocate(size_t size) {
+		data = malloc(size);
+		needsToBeFreed = true;
 	}
 };
 
@@ -2219,8 +2233,10 @@ struct PyGLMTypeInfo {
 	}
 
 	~PyGLMTypeInfo() {
-		if (needsToBeFreed) 
+		if (needsToBeFreed) {
 			free(data);
+			needsToBeFreed = false;
+		}
 	}
 
 	template<int C, int R, typename T>
@@ -2236,44 +2252,6 @@ struct PyGLMTypeInfo {
 	template<typename T>
 	inline glm::qua<T> getQua() {
 		return *((glm::qua<T>*)data);
-	}
-
-	template<typename T>
-	static const inline int getDT() {
-		if (std::is_same<T, float>::value) {
-			return (PyGLM_DT_FLOAT);
-		}
-		else if (std::is_same<T, double>::value) {
-			return (PyGLM_DT_DOUBLE);
-		}
-		else if (std::is_same<T, glm::i32>::value) {
-			return (PyGLM_DT_INT);
-		}
-		else if (std::is_same<T, glm::u32>::value) {
-			return (PyGLM_DT_UINT);
-		}
-		else if (std::is_same<T, glm::i64>::value) {
-			return (PyGLM_DT_INT64);
-		}
-		else if (std::is_same<T, glm::u64>::value) {
-			return (PyGLM_DT_UINT64);
-		}
-		else if (std::is_same<T, glm::i16>::value) {
-			return (PyGLM_DT_INT16);
-		}
-		else if (std::is_same<T, glm::u16>::value) {
-			return (PyGLM_DT_UINT16);
-		}
-		else if (std::is_same<T, glm::i8>::value) {
-			return (PyGLM_DT_INT8);
-		}
-		else if (std::is_same<T, glm::u8>::value) {
-			return (PyGLM_DT_UINT8);
-		}
-		else if (std::is_same<T, bool>::value) {
-			return (PyGLM_DT_BOOL);
-		}
-		return PyGLM_DT_UNKNOWN;
 	}
 
 private:
