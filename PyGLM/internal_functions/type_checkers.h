@@ -2271,7 +2271,6 @@ private:
 	}
 };
 
-
 #define _SUB_PyGLM_GET_TYPE(o) ((o->ob_type->tp_dealloc == NULL) ? PyGLM_TYPE_UNKNOWN : (o->ob_type->tp_dealloc == (destructor)vec_dealloc) ? PyGLM_TYPE_VEC : (o->ob_type->tp_dealloc == (destructor)mat_dealloc) ? PyGLM_TYPE_MAT : (o->ob_type->tp_dealloc == (destructor)qua_dealloc) ? PyGLM_TYPE_QUA : (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) ? PyGLM_TYPE_VEC : PyGLM_TYPE_UNKNOWN)
 #define PyGLM_GET_TYPE(o) _SUB_PyGLM_GET_TYPE(((PyObject*)o))
 
@@ -2285,152 +2284,6 @@ private:
 #define PyGLM_Qua_CheckExact(T, o) (Py_TYPE(o) == UNBRACKET (PyGLM_QUA_TYPE<T>()))
 
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
-bool PyGLM_Vec1i_Check(PyObject* o) {
-	if (!PyObject_IterCheck(o)) {
-		return false;
-	}
-	if (PyTuple_Check(o)) {
-		if (Py_SIZE(o) == 1 && PyGLM_Number_Check(PyTuple_GET_ITEM(o, 0))) {
-			return true;
-		}
-		return false;
-	}
-	if (PyObject_Length(o) != 1) {
-		return false;
-	}
-
-	PyObject* iterator = PyObject_GetIter(o);
-
-	PyObject* value0 = PyIter_Next(iterator);
-
-	Py_DECREF(iterator);
-
-	if (value0 == NULL || !PyGLM_Number_Check(value0)) {
-		Py_XDECREF(value0);
-
-		return false;
-	}
-	Py_DECREF(value0);
-
-	return true;
-}
-
-bool PyGLM_Vec2i_Check(PyObject* o) {
-	if (!PyObject_IterCheck(o)) {
-		return false;
-	}
-	if (PyTuple_Check(o)) {
-		if (Py_SIZE(o) == 2 && PyGLM_Number_Check(PyTuple_GET_ITEM(o, 0)) && PyGLM_Number_Check(PyTuple_GET_ITEM(o, 1))) {
-			return true;
-		}
-		return false;
-	}
-	if (PyObject_Length(o) != 2) {
-		return false;
-	}
-
-	PyObject* iterator = PyObject_GetIter(o);
-
-	PyObject* value0 = PyIter_Next(iterator);
-	PyObject* value1 = PyIter_Next(iterator);
-
-	Py_DECREF(iterator);
-
-	if (value0 == NULL || !PyGLM_Number_Check(value0) || value1 == NULL || !PyGLM_Number_Check(value1)) {
-		Py_XDECREF(value0);
-		Py_XDECREF(value1);
-
-		return false;
-	}
-	Py_DECREF(value0);
-	Py_DECREF(value1);
-
-	return true;
-}
-
-bool PyGLM_Vec3i_Check(PyObject* o) {
-	if (!PyObject_IterCheck(o)) {
-		return false;
-	}
-	if (PyTuple_Check(o)) {
-		if (Py_SIZE(o) == 3 && PyGLM_Number_Check(PyTuple_GET_ITEM(o, 0)) && PyGLM_Number_Check(PyTuple_GET_ITEM(o, 1)) && PyGLM_Number_Check(PyTuple_GET_ITEM(o, 2))) {
-			return true;
-		}
-		return false;
-	}
-	if (PyObject_Length(o) != 3) {
-		return false;
-	}
-
-	PyObject* iterator = PyObject_GetIter(o);
-
-	PyObject* value0 = PyIter_Next(iterator);
-	PyObject* value1 = PyIter_Next(iterator);
-	PyObject* value2 = PyIter_Next(iterator);
-
-
-	Py_DECREF(iterator);
-
-
-	if (value0 == NULL || !PyGLM_Number_Check(value0) || value1 == NULL || !PyGLM_Number_Check(value1) || value2 == NULL || !PyGLM_Number_Check(value2)) {
-
-		Py_XDECREF(value0);
-		Py_XDECREF(value1);
-		Py_XDECREF(value2);
-
-		return false;
-	}
-	Py_DECREF(value0);
-	Py_DECREF(value1);
-	Py_DECREF(value2);
-
-	return true;
-}
-
-bool PyGLM_Vec4i_Check(PyObject* o) {
-	if (!PyObject_IterCheck(o)) {
-		return false;
-	}
-	if (PyTuple_Check(o)) {
-		if (Py_SIZE(o) == 4 && PyGLM_Number_Check(PyTuple_GET_ITEM(o, 0)) && PyGLM_Number_Check(PyTuple_GET_ITEM(o, 1)) && PyGLM_Number_Check(PyTuple_GET_ITEM(o, 2)) && PyGLM_Number_Check(PyTuple_GET_ITEM(o, 3))) {
-			return true;
-		}
-		return false;
-	}
-	if (PyObject_Length(o) != 4) {
-		return false;
-	}
-
-	PyObject* iterator = PyObject_GetIter(o);
-
-	PyObject* value0 = PyIter_Next(iterator);
-	PyObject* value1 = PyIter_Next(iterator);
-	PyObject* value2 = PyIter_Next(iterator);
-	PyObject* value3 = PyIter_Next(iterator);
-
-
-	Py_DECREF(iterator);
-
-
-	if (value0 == NULL || !PyGLM_Number_Check(value0) || value1 == NULL || !PyGLM_Number_Check(value1) || value2 == NULL || !PyGLM_Number_Check(value2) || value3 == NULL || !PyGLM_Number_Check(value3)) {
-
-		Py_XDECREF(value0);
-		Py_XDECREF(value1);
-		Py_XDECREF(value2);
-		Py_XDECREF(value3);
-
-		return false;
-	}
-	Py_DECREF(value0);
-	Py_DECREF(value1);
-	Py_DECREF(value2);
-	Py_DECREF(value3);
-
-	return true;
-}
-
-#define PyGLM_Veci_Check(L, o) ((L == 1) ? PyGLM_Vec1i_Check(o) : (L == 2) ? PyGLM_Vec2i_Check(o) : (L == 3) ? PyGLM_Vec3i_Check(o) : PyGLM_Vec4i_Check(o))
-
 template<typename T>
 static bool get_view_format_equal(char* value) {
 	char& v_char = value[0];
@@ -2468,34 +2321,6 @@ static bool get_view_format_equal(char* value) {
 		return std::is_same<T, bool>::value;
 	}
 	return false;
-}
-
-template<typename T>
-static bool PyGLM_Matb_Check(int C, int R, PyObject* o) {
-	if (!PyObject_CheckBuffer(o)) {
-		return false;
-	}
-	Py_buffer view;
-	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (((view.ndim != 2 || view.shape[0] != static_cast<Py_ssize_t>(C) || view.shape[1] != static_cast<Py_ssize_t>(R) || !get_view_format_equal<T>(view.format)) && (view.ndim != 1 || view.shape[0] != static_cast<Py_ssize_t>(C * R * sizeof(T)) || view.format[0] != 'B')))) {
-		PyBuffer_Release(&view);
-		return false;
-	}
-	PyBuffer_Release(&view);
-	return true;
-}
-
-template<typename T>
-static bool PyGLM_Vecb_Check(int L, PyObject* o) {
-	if (!PyObject_CheckBuffer(o)) {
-		return false;
-	}
-	Py_buffer view;
-	if (PyObject_GetBuffer(o, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1 || (view.ndim != 1 || ((view.shape[0] != static_cast<Py_ssize_t>(L) || !get_view_format_equal<T>(view.format)) && (view.shape[0] != static_cast<Py_ssize_t>(L * sizeof(T)) || view.format[0] != 'B')))) {
-		PyBuffer_Release(&view);
-		return false;
-	}
-	PyBuffer_Release(&view);
-	return true;
 }
 
 enum SourceType {NONE, PyGLM_VEC, PyGLM_MVEC, PyGLM_MAT, PyGLM_QUA, PTI};
@@ -2636,9 +2461,9 @@ bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
 
 //#define PyGLM_Vec_CheckN(L, T, o, N) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) && (sourceType ## N = NORMAL)) || (Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() && (sourceType ## N = MVEC)) || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && PyGLM_Vec_PTI_CheckN(L, T, o, N))
 
-#define PyGLM_Vec_Check(L, T, o) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>()))) || (Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>()) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && (PyGLM_Vecb_Check<T>(L, (PyObject*)o))))
+#define PyGLM_Vec_Check PyGLM_Vec_CheckExact
 
-#define PyGLM_Vec_Check_IgnoreType(L, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_VEC_TYPE<L, T>())) || Py_TYPE(o) == PyGLM_MVEC_TYPE<L, T>() || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_VEC && PyGLM_VEC_SHAPE_CHECK(o, L))) && ((PyGLM_Vecb_Check<T>(L, (PyObject*)o)) || (PyGLM_Veci_Check(L, o)))))
+#define PyGLM_Vec_Check_IgnoreType PyGLM_Vec_CheckExact
 
 #define PyGLM_Vec_PTI_GetN(N, L, T, o)  ((PyGLM_PTI_DEBUG_EQ(N, o) sourceType ## N == PyGLM_VEC) ? ((vec<L,T>*)o)->super_type : (sourceType ## N == PyGLM_MVEC) ? *((mvec<L,T>*)o)->super_type : PTI ## N.getVec<L, T>())
 
@@ -2647,7 +2472,7 @@ bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
 
 #define PyGLM_Qua_CheckN(T, o, N) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())) && (sourceType ## N = NORMAL)) || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && PyGLM_Qua_PTI_CheckN(T, o, N))
 
-#define PyGLM_Qua_Check(T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_QUA_TYPE<T>())) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_QUA)) && PyGLM_Vecb_Check<T>(4, (PyObject*)o)))
+#define PyGLM_Qua_Check PyGLM_Qua_CheckExact
 
 #define PyGLM_Qua_PTI_GetN(N, T, o) ((PyGLM_PTI_DEBUG_EQ(N, o) sourceType ## N == PTI) ? PTI ## N.getQua<T>() : ((qua<T>*)o)->super_type)
 
@@ -2656,7 +2481,7 @@ bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
 
 #define PyGLM_Mat_CheckN(C, R, T, o, N) ((PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) && (sourceType ## N = NORMAL)) || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN) && PyGLM_Mat_PTI_CheckN(C, R, PTI##N.getDT<T>(), o, N))
 
-#define PyGLM_Mat_Check(C, R, T, o) (PyObject_TypeCheck(o, UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) || ((PyGLM_GET_TYPE(o) == PyGLM_TYPE_UNKNOWN || (PyGLM_GET_TYPE(o) == PyGLM_TYPE_MAT && PyGLM_MAT_SHAPE_CHECK(o, C, R))) && PyGLM_Matb_Check<T>(C, R, (PyObject*)o)))
+#define PyGLM_Mat_Check PyGLM_Mat_CheckExact
 
 #define PyGLM_Mat_PTI_GetN(N, C, R, T, o) ((PyGLM_PTI_DEBUG_EQ(N, o) sourceType ## N == PTI) ? PTI ## N.getMat<C, R, T>() : ((mat<C, R, T>*)o)->super_type) 
 

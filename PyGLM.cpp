@@ -139,7 +139,6 @@ static PyMethodDef glmmethods[] = {
 #endif
 
 static void glm_clear(PyObject*) {
-	PySys_WriteStdout("Clearing GLM");
 	Py_XDECREF(ctypes_float_p);
 	Py_XDECREF(ctypes_double_p);
 	Py_XDECREF(ctypes_int64_p);
@@ -155,7 +154,10 @@ static void glm_clear(PyObject*) {
 	Py_XDECREF(ctypes_void_p);
 	Py_XDECREF(PyGLM_VERSION_STRING);
 	Py_XDECREF(PyGLM_LICENSE_STRING);
-	PySys_WriteStdout("D");
+	PTI0 = PyGLMTypeInfo();
+	PTI1 = PyGLMTypeInfo();
+	PTI2 = PyGLMTypeInfo();
+	PTI3 = PyGLMTypeInfo();
 }
 
 static PyModuleDef glmmodule = {
