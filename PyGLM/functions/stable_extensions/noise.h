@@ -16,32 +16,32 @@ perlin_(PyObject*, PyObject* args) {
 	if (arg2 != NULL) {
 		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_FD);
 		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_FD);
-		if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2)) {
+		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
 			PyGLM_Vec_PTI_Assign0(2, float);
 			PyGLM_Vec_PTI_Assign1(2, float);
 			return pack(glm::perlin(o, o2));
 		}
-		if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {
+		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
 			PyGLM_Vec_PTI_Assign0(3, float);
 			PyGLM_Vec_PTI_Assign1(3, float);
 			return pack(glm::perlin(o, o2));
 		}
-		if (PyGLM_Vec_Check(4, float, arg1) && PyGLM_Vec_Check(4, float, arg2)) {
+		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2)) {
 			PyGLM_Vec_PTI_Assign0(4, float);
 			PyGLM_Vec_PTI_Assign1(4, float);
 			return pack(glm::perlin(o, o2));
 		}
-		if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2)) {
+		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
 			PyGLM_Vec_PTI_Assign0(2, double);
 			PyGLM_Vec_PTI_Assign1(2, double);
 			return pack(glm::perlin(o, o2));
 		}
-		if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {
+		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
 			PyGLM_Vec_PTI_Assign0(3, double);
 			PyGLM_Vec_PTI_Assign1(3, double);
 			return pack(glm::perlin(o, o2));
 		}
-		if (PyGLM_Vec_Check(4, double, arg1) && PyGLM_Vec_Check(4, double, arg2)) {
+		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2)) {
 			PyGLM_Vec_PTI_Assign0(4, double);
 			PyGLM_Vec_PTI_Assign1(4, double);
 			return pack(glm::perlin(o, o2));
@@ -49,27 +49,27 @@ perlin_(PyObject*, PyObject* args) {
 	}
 	else {
 		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_FD);
-		if (PyGLM_Vec_Check(2, float, arg1)) {
+		if (PyGLM_Vec_PTI_Check0(2, float, arg1)) {
 			PyGLM_Vec_PTI_Assign0(2, float);
 			return pack(glm::perlin(o));
 		}
-		if (PyGLM_Vec_Check(3, float, arg1)) {
+		if (PyGLM_Vec_PTI_Check0(3, float, arg1)) {
 			PyGLM_Vec_PTI_Assign0(3, float);
 			return pack(glm::perlin(o));
 		}
-		if (PyGLM_Vec_Check(4, float, arg1)) {
+		if (PyGLM_Vec_PTI_Check0(4, float, arg1)) {
 			PyGLM_Vec_PTI_Assign0(4, float);
 			return pack(glm::perlin(o));
 		}
-		if (PyGLM_Vec_Check(2, double, arg1)) {
+		if (PyGLM_Vec_PTI_Check0(2, double, arg1)) {
 			PyGLM_Vec_PTI_Assign0(2, double);
 			return pack(glm::perlin(o));
 		}
-		if (PyGLM_Vec_Check(3, double, arg1)) {
+		if (PyGLM_Vec_PTI_Check0(3, double, arg1)) {
 			PyGLM_Vec_PTI_Assign0(3, double);
 			return pack(glm::perlin(o));
 		}
-		if (PyGLM_Vec_Check(4, double, arg1)) {
+		if (PyGLM_Vec_PTI_Check0(4, double, arg1)) {
 			PyGLM_Vec_PTI_Assign0(4, double);
 			return pack(glm::perlin(o));
 		}
@@ -81,27 +81,27 @@ perlin_(PyObject*, PyObject* args) {
 static PyObject*
 simplex_(PyObject*, PyObject* arg) {
 	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_FD);
-	if (PyGLM_Vec_Check(2, float, arg)) {
+	if (PyGLM_Vec_PTI_Check0(2, float, arg)) {
 		PyGLM_Vec_PTI_Assign(2, float);
 		return pack(glm::simplex(o));
 	}
-	if (PyGLM_Vec_Check(3, float, arg)) {
+	if (PyGLM_Vec_PTI_Check0(3, float, arg)) {
 		PyGLM_Vec_PTI_Assign(3, float);
 		return pack(glm::simplex(o));
 	}
-	if (PyGLM_Vec_Check(4, float, arg)) {
+	if (PyGLM_Vec_PTI_Check0(4, float, arg)) {
 		PyGLM_Vec_PTI_Assign(4, float);
 		return pack(glm::simplex(o));
 	}
-	if (PyGLM_Vec_Check(2, double, arg)) {
+	if (PyGLM_Vec_PTI_Check0(2, double, arg)) {
 		PyGLM_Vec_PTI_Assign(2, double);
 		return pack(glm::simplex(o));
 	}
-	if (PyGLM_Vec_Check(3, double, arg)) {
+	if (PyGLM_Vec_PTI_Check0(3, double, arg)) {
 		PyGLM_Vec_PTI_Assign(3, double);
 		return pack(glm::simplex(o));
 	}
-	if (PyGLM_Vec_Check(4, double, arg)) {
+	if (PyGLM_Vec_PTI_Check0(4, double, arg)) {
 		PyGLM_Vec_PTI_Assign(4, double);
 		return pack(glm::simplex(o));
 	}
