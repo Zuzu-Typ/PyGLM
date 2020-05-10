@@ -23,7 +23,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
 			glm::vec<2, float> x = PyGLM_Vec_PTI_Get2(2, float, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_2xM | PyGLM_DT_FLOAT);
-			if (PyGLM_Mat_Check(2, 2, float, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 2, float, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -31,7 +31,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<2, 2, float> m = PyGLM_Mat_PTI_Get0(2, 2, float, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(2, 3, float, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 3, float, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -39,7 +39,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<2, 3, float> m = PyGLM_Mat_PTI_Get0(2, 3, float, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(2, 4, float, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 4, float, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -51,7 +51,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
 			glm::vec<3, float> x = PyGLM_Vec_PTI_Get2(3, float, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3xM | PyGLM_DT_FLOAT);
-			if (PyGLM_Mat_Check(3, 2, float, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 2, float, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -59,7 +59,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<3, 2, float> m = PyGLM_Mat_PTI_Get0(3, 2, float, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(3, 3, float, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 3, float, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -67,7 +67,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<3, 3, float> m = PyGLM_Mat_PTI_Get0(3, 3, float, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(3, 4, float, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 4, float, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -79,7 +79,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
 			glm::vec<4, float> x = PyGLM_Vec_PTI_Get2(4, float, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_4xM | PyGLM_DT_FLOAT);
-			if (PyGLM_Mat_Check(4, 2, float, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 2, float, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -87,7 +87,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<4, 2, float> m = PyGLM_Mat_PTI_Get0(4, 2, float, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(4, 3, float, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 3, float, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -95,7 +95,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<4, 3, float> m = PyGLM_Mat_PTI_Get0(4, 3, float, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(4, 4, float, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 4, float, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -107,7 +107,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
 			glm::vec<2, double> x = PyGLM_Vec_PTI_Get2(2, double, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_2xM | PyGLM_DT_DOUBLE);
-			if (PyGLM_Mat_Check(2, 2, double, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 2, double, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -115,7 +115,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<2, 2, double> m = PyGLM_Mat_PTI_Get0(2, 2, double, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(2, 3, double, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 3, double, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -123,7 +123,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<2, 3, double> m = PyGLM_Mat_PTI_Get0(2, 3, double, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(2, 4, double, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 4, double, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -135,7 +135,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
 			glm::vec<3, double> x = PyGLM_Vec_PTI_Get2(3, double, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3xM | PyGLM_DT_DOUBLE);
-			if (PyGLM_Mat_Check(3, 2, double, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 2, double, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -143,7 +143,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<3, 2, double> m = PyGLM_Mat_PTI_Get0(3, 2, double, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(3, 3, double, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 3, double, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -151,7 +151,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<3, 3, double> m = PyGLM_Mat_PTI_Get0(3, 3, double, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(3, 4, double, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 4, double, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -163,7 +163,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
 			glm::vec<4, double> x = PyGLM_Vec_PTI_Get2(4, double, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_4xM | PyGLM_DT_DOUBLE);
-			if (PyGLM_Mat_Check(4, 2, double, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 2, double, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -171,7 +171,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<4, 2, double> m = PyGLM_Mat_PTI_Get0(4, 2, double, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(4, 3, double, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 3, double, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -179,7 +179,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<4, 3, double> m = PyGLM_Mat_PTI_Get0(4, 3, double, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(4, 4, double, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 4, double, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -191,7 +191,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(2, int, arg3)) {
 			glm::vec<2, int> x = PyGLM_Vec_PTI_Get2(2, int, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_2xM | PyGLM_DT_INT);
-			if (PyGLM_Mat_Check(2, 2, int, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 2, int, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -199,7 +199,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<2, 2, int> m = PyGLM_Mat_PTI_Get0(2, 2, int, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(2, 3, int, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 3, int, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -207,7 +207,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<2, 3, int> m = PyGLM_Mat_PTI_Get0(2, 3, int, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(2, 4, int, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 4, int, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -219,7 +219,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(3, int, arg3)) {
 			glm::vec<3, int> x = PyGLM_Vec_PTI_Get2(3, int, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3xM | PyGLM_DT_INT);
-			if (PyGLM_Mat_Check(3, 2, int, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 2, int, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -227,7 +227,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<3, 2, int> m = PyGLM_Mat_PTI_Get0(3, 2, int, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(3, 3, int, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 3, int, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -235,7 +235,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<3, 3, int> m = PyGLM_Mat_PTI_Get0(3, 3, int, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(3, 4, int, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 4, int, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -247,7 +247,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(4, int, arg3)) {
 			glm::vec<4, int> x = PyGLM_Vec_PTI_Get2(4, int, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_4xM | PyGLM_DT_INT);
-			if (PyGLM_Mat_Check(4, 2, int, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 2, int, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -255,7 +255,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<4, 2, int> m = PyGLM_Mat_PTI_Get0(4, 2, int, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(4, 3, int, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 3, int, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -263,7 +263,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<4, 3, int> m = PyGLM_Mat_PTI_Get0(4, 3, int, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(4, 4, int, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 4, int, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -275,7 +275,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(2, glm::uint, arg3)) {
 			glm::vec<2, uint32> x = PyGLM_Vec_PTI_Get2(2, uint32, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_2xM | PyGLM_DT_UINT);
-			if (PyGLM_Mat_Check(2, 2, glm::uint, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 2, glm::uint, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -283,7 +283,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<2, 2, uint32> m = PyGLM_Mat_PTI_Get0(2, 2, uint32, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(2, 3, glm::uint, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 3, glm::uint, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -291,7 +291,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<2, 3, uint32> m = PyGLM_Mat_PTI_Get0(2, 3, uint32, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(2, 4, glm::uint, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(2, 4, glm::uint, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -303,7 +303,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(3, glm::uint, arg3)) {
 			glm::vec<3, uint32> x = PyGLM_Vec_PTI_Get2(3, uint32, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3xM | PyGLM_DT_UINT);
-			if (PyGLM_Mat_Check(3, 2, glm::uint, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 2, glm::uint, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -311,7 +311,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<3, 2, uint32> m = PyGLM_Mat_PTI_Get0(3, 2, uint32, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(3, 3, glm::uint, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 3, glm::uint, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -319,7 +319,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<3, 3, uint32> m = PyGLM_Mat_PTI_Get0(3, 3, uint32, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(3, 4, glm::uint, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(3, 4, glm::uint, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -331,7 +331,7 @@ row_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check2(4, glm::uint, arg3)) {
 			glm::vec<4, uint32> x = PyGLM_Vec_PTI_Get2(4, uint32, arg3);
 			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_4xM | PyGLM_DT_UINT);
-			if (PyGLM_Mat_Check(4, 2, glm::uint, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 2, glm::uint, arg1)) {
 				if (index > 1) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -339,7 +339,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<4, 2, uint32> m = PyGLM_Mat_PTI_Get0(4, 2, uint32, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(4, 3, glm::uint, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 3, glm::uint, arg1)) {
 				if (index > 2) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;
@@ -347,7 +347,7 @@ row_(PyObject*, PyObject* args) {
 				glm::mat<4, 3, uint32> m = PyGLM_Mat_PTI_Get0(4, 3, uint32, arg1);
 				return pack(glm::row(m, index, x));
 			}
-			if (PyGLM_Mat_Check(4, 4, glm::uint, arg1)) {
+			if (PyGLM_Mat_PTI_Check0(4, 4, glm::uint, arg1)) {
 				if (index > 3) {
 					PyErr_SetString(PyExc_IndexError, "index out of range");
 					return NULL;

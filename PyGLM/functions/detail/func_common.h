@@ -3599,7 +3599,6 @@ smoothstep_(PyObject*, PyObject* args) {
 	}
 	if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
 		glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-		unpack_vec(arg3, o3);
 		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), o3));
 		}

@@ -2425,6 +2425,14 @@ bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
 
 #define PyGLM_PTI_DEBUG_EQ(N, o) ((ARGUSED = true) && PyGLM_PTI_DEBUG_EQ_FUNC(o, ARG##N)) ||
 #define PyGLM_PTI_DEBUG_SC(N, o) PyGLM_PTI_DEBUG_EQ_FUNC(o, ARG##N)
+
+#define PyGLM_PTI_IsVec(N) ((ARGUSED = true) && (sourceType ## N == PyGLM_VEC || sourceType ## N == PyGLM_MVEC || sourceType ## N == PTI && PTI ## N.isVec))
+
+#define PyGLM_PTI_IsMat(N) ((ARGUSED = true) && (sourceType ## N == PyGLM_MAT || sourceType ## N == PTI && PTI ## N.isMat))
+
+#define PyGLM_PTI_IsQua(N) ((ARGUSED = true) && (sourceType ## N == PyGLM_QUA || sourceType ## N == PTI && PTI ## N.isQua))
+
+#define PyGLM_PTI_IsNone(N) ((ARGUSED = true) && sourceType ## N == NONE)
 #else
 #define PyGLM_PTI_InitN(N, o, accepted_types) if (o->ob_type->tp_dealloc == (destructor)vec_dealloc){sourceType ## N = PyGLM_VEC;}\
 	else if (o->ob_type->tp_dealloc == (destructor)mat_dealloc) { sourceType ## N = PyGLM_MAT;} \
@@ -2434,9 +2442,6 @@ bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
 
 #define PyGLM_PTI_DEBUG_EQ(N, o)
 #define PyGLM_PTI_DEBUG_SC(N, o)
-#endif
-
-
 
 #define PyGLM_PTI_IsVec(N) (sourceType ## N == PyGLM_VEC || sourceType ## N == PyGLM_MVEC || sourceType ## N == PTI && PTI ## N.isVec)
 
@@ -2445,8 +2450,9 @@ bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
 #define PyGLM_PTI_IsQua(N) (sourceType ## N == PyGLM_QUA || sourceType ## N == PTI && PTI ## N.isQua)
 
 #define PyGLM_PTI_IsNone(N) (sourceType ## N == NONE)
+#endif
 
-#define PyGLM_PTI_GetDT(T) (get_qua_PTI_info<T>())
+#define PyGLM_PTI_GetDT(T) (get_PTI_type<T>())
 
 
 #define PyGLM_Vec_PTI_CheckN(N, L, T, o) (PyGLM_PTI_DEBUG_EQ(N, o) PyGLM_Vec_CheckExact(L, T, o) || sourceType ## N == PTI && PTI ## N.info == get_vec_PTI_info<L, T>())
@@ -2499,7 +2505,8 @@ SourceType sourceType3;
 #define PyGLM_PTI_InitN(N, o, accepted_types) if (o->ob_type->tp_dealloc == (destructor)vec_dealloc){sourceType ## N = PyGLM_VEC;}\
 	else if (o->ob_type->tp_dealloc == (destructor)mat_dealloc) { sourceType ## N = PyGLM_MAT;} \
 	else if (o->ob_type->tp_dealloc == (destructor)qua_dealloc) { sourceType ## N = PyGLM_QUA; }\
-	else if (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) { sourceType ## N = PyGLM_MVEC; }
+	else if (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) { sourceType ## N = PyGLM_MVEC; }\
+	else sourceType ## N = NONE;
 
 
 #define PyGLM_Vec_PTI_CheckN(N, L, T, o) PyGLM_Vec_CheckExact(L, T, o)

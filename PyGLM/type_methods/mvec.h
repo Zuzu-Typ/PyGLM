@@ -44,22 +44,26 @@ mvec_add(PyObject *obj1, PyObject *obj2)
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) + *(((mvec<L, T>*)obj2)->super_type));
 	}
 
-	glm::vec<L, T> o;
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm.vec' and ", obj1);
 		return NULL;
 	}
+
+	glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		return pack_vec<L, T>(o + PyGLM_Number_FromPyObject<T>(obj2));
 	}
 
-	glm::vec<L, T> o2;
+	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
 
 	// obj1 and obj2 can be interpreted as a mvec
 	return pack_vec<L, T>(o + o2);
@@ -73,22 +77,26 @@ mvec_sub(PyObject *obj1, PyObject *obj2)
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) - *((mvec<L, T>*)obj2)->super_type);
 	}
 
-	glm::vec<L, T> o;
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm.vec' and ", obj1);
 		return NULL;
 	}
+
+	glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		return pack_vec<L, T>(o - PyGLM_Number_FromPyObject<T>(obj2));
 	}
 
-	glm::vec<L, T> o2;
+	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
 
 	// obj1 and obj2 can be interpreted as a mvec
 	return pack_vec<L, T>(o - o2);
@@ -102,22 +110,26 @@ mvec_mul(PyObject *obj1, PyObject *obj2)
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) * *((mvec<L, T>*)obj2)->super_type);
 	}
 
-	glm::vec<L, T> o;
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for *: 'glm.vec' and ", obj1);
 		return NULL;
 	}
+
+	glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		return pack_vec<L, T>(o * PyGLM_Number_FromPyObject<T>(obj2));
 	}
 
-	glm::vec<L, T> o2;
+	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
 
 	// obj1 and obj2 can be interpreted as a mvec
 	return pack_vec<L, T>(o * o2);
@@ -134,12 +146,14 @@ mvec_div(PyObject *obj1, PyObject *obj2)
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) / *((mvec<L, T>*)obj2)->super_type);
 	}
 
-	glm::vec<L, T> o;
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for /: 'glm.vec' and ", obj1);
 		return NULL;
 	}
+
+	glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
@@ -149,11 +163,13 @@ mvec_div(PyObject *obj1, PyObject *obj2)
 		return pack_vec<L, T>(o / o2);
 	}
 
-	glm::vec<L, T> o2;
+	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
 
 	if (!glm::all((glm::vec<L, bool>)o2)) {
 		PyGLM_ZERO_DIVISION_ERROR_T(T);
@@ -174,12 +190,14 @@ mvec_mod(PyObject *obj1, PyObject *obj2)
 		return pack_vec<L, T>(glm::mod(glm::vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1)), *((mvec<L, T>*)obj2)->super_type));
 	}
 
-	glm::vec<L, T> o;
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for %: 'glm.vec' and ", obj1);
 		return NULL;
 	}
+
+	glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
@@ -189,11 +207,13 @@ mvec_mod(PyObject *obj1, PyObject *obj2)
 		return pack_vec<L, T>(glm::mod(o, glm::vec<L, T>(o2)));
 	}
 
-	glm::vec<L, T> o2;
+	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
 
 	if (!glm::all((glm::vec<L, bool>)o2)) {
 		PyGLM_ZERO_DIVISION_ERROR_T(T);
@@ -214,12 +234,14 @@ mvec_floordiv(PyObject *obj1, PyObject *obj2)
 		return pack_vec<L, T>(floor(PyGLM_Number_FromPyObject<T>(obj1) / *((mvec<L, T>*)obj2)->super_type));
 	}
 
-	glm::vec<L, T> o;
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for //: 'glm.vec' and ", obj1);
 		return NULL;
 	}
+
+	glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
@@ -229,11 +251,13 @@ mvec_floordiv(PyObject *obj1, PyObject *obj2)
 		return pack_vec<L, T>(floor(o / o2));
 	}
 
-	glm::vec<L, T> o2;
+	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
 
 	if (!glm::all((glm::vec<L, bool>)o2)) {
 		PyGLM_ZERO_DIVISION_ERROR_T(T);
@@ -274,22 +298,26 @@ mvec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 			return pack_vec<L, T>(glm::mod(glm::pow(glm::vec<L, T>(f), *((mvec<L, T>*)obj2)->super_type), glm::vec<L, T>(f2)));
 		}
 
-		glm::vec<L, T> o3;
+		PyGLM_PTI_Init2(obj3, (get_vec_PTI_info<L, T>()));
 
-		if (!unpack_vec(obj3, o3)) {
+		if (PyGLM_PTI_IsNone(2)) {
 			PyGLM_TYPEERROR_O("unsupported operand type(s) for **: ", obj3);
 			return NULL;
 		}
 
+		glm::vec<L, T> o3 = PyGLM_Vec_PTI_Get2(L, T, obj3);
+
 		return pack_vec<L, T>(glm::mod(glm::pow(glm::vec<L, T>(f), *((mvec<L, T>*)obj2)->super_type), o3));
 	}
 
-	glm::vec<L, T> o;
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for **: 'glm.vec' and ", obj1);
 		return NULL;
 	}
+
+	glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		T f = PyGLM_Number_FromPyObject<T>(obj2);
@@ -303,23 +331,25 @@ mvec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 			return pack_vec<L, T>(glm::mod(glm::pow(o, glm::vec<L, T>(f)), glm::vec<L, T>(f2)));
 		}
 
-		glm::vec<L, T> o3;
+		PyGLM_PTI_Init2(obj3, (get_vec_PTI_info<L, T>()));
 
-		if (!unpack_vec(obj3, o3)) {
+		if (PyGLM_PTI_IsNone(2)) {
 			PyGLM_TYPEERROR_O("unsupported operand type(s) for **: ", obj3);
 			return NULL;
 		}
 
+		glm::vec<L, T> o3 = PyGLM_Vec_PTI_Get2(L, T, obj3);
+
 		return pack_vec<L, T>(glm::mod(glm::pow(o, glm::vec<L, T>(f)), o3));
 	}
 
-	glm::vec<L, T> o2;
+	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
 	}
 
-
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj2);
 
 	// obj1 and obj2 can be interpreted as a mvec
 	if (obj3 == Py_None) {
@@ -331,12 +361,14 @@ mvec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 		return pack_vec<L, T>(glm::mod(glm::pow(o, o2), glm::vec<L, T>(f2)));
 	}
 
-	glm::vec<L, T> o3;
+	PyGLM_PTI_Init2(obj3, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(obj3, o3)) {
+	if (PyGLM_PTI_IsNone(2)) {
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for **: ", obj3);
 		return NULL;
 	}
+
+	glm::vec<L, T> o3 = PyGLM_Vec_PTI_Get2(L, T, obj3);
 
 	return pack_vec<L, T>(glm::mod(glm::pow(o, o2), o3));
 }
@@ -635,9 +667,9 @@ static int mvec_contains(mvec<L, T> * self, PyObject * value) {
 
 template<int L, typename T>
 static PyObject * mvec_richcompare(mvec<L, T> * self, PyObject * other, int comp_type) {
-	glm::vec<L, T> o2;
+	PyGLM_PTI_Init1(other, (get_vec_PTI_info<L, T>()));
 
-	if (!unpack_vec(other, o2)) {
+	if (PyGLM_PTI_IsNone(1)) {
 		if (comp_type == Py_EQ) {
 			Py_RETURN_FALSE;
 		}
@@ -646,6 +678,8 @@ static PyObject * mvec_richcompare(mvec<L, T> * self, PyObject * other, int comp
 		}
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, other);
 
 	switch (comp_type) {
 	case Py_EQ:
@@ -850,8 +884,10 @@ static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 	char * name_as_ccp = PyGLM_String_AsString(name);
 	size_t len = strlen(name_as_ccp);
 
-	if (len == 1 && PyGLM_Vec_Check(1, T, value)) {
-		glm::vec<1, T> v = unpack_vec<1, T>(value);
+	PyGLM_PTI_Init0(value, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_PTI_GetDT(T))
+
+	if (len == 1 && PyGLM_Vec_PTI_Check0(1, T, value)) {
+		glm::vec<1, T> v = PyGLM_Vec_PTI_Get0(1, T, value);
 		bool success = true;
 		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
 		if (success) {
@@ -868,8 +904,8 @@ static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 			return 0;
 		}
 	}
-	else if (len == 2 && PyGLM_Vec_Check(2, T, value)) {
-		glm::vec<2, T> v = unpack_vec<2, T>(value);
+	else if (len == 2 && PyGLM_Vec_PTI_Check0(2, T, value)) {
+		glm::vec<2, T> v = PyGLM_Vec_PTI_Get0(2, T, value);
 		bool success = true;
 		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
 		T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
@@ -879,8 +915,8 @@ static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 			return 0;
 		}
 	}
-	else if (len == 3 && PyGLM_Vec_Check(3, T, value)) {
-		glm::vec<3, T> v = unpack_vec<3, T>(value);
+	else if (len == 3 && PyGLM_Vec_PTI_Check0(3, T, value)) {
+		glm::vec<3, T> v = PyGLM_Vec_PTI_Get0(3, T, value);
 		bool success = true;
 		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
 		T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
@@ -892,8 +928,8 @@ static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 			return 0;
 		}
 	}
-	else if (len == 4 && PyGLM_Vec_Check(4, T, value)) {
-		glm::vec<4, T> v = unpack_vec<4, T>(value);
+	else if (len == 4 && PyGLM_Vec_PTI_Check0(4, T, value)) {
+		glm::vec<4, T> v = PyGLM_Vec_PTI_Get0(4, T, value);
 		bool success = true;
 		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
 		T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);

@@ -644,103 +644,103 @@ equal(PyObject*, PyObject* args) {
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
 
-		if (PyGLM_Mat_Check(2, 2, float, arg1) && PyGLM_Mat_Check(2, 2, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 2, float, arg1) && PyGLM_Mat_PTI_Check1(2, 2, float, arg2)) {
 			glm::mat<2, 2, float> o = PyGLM_Mat_PTI_Get0(2, 2, float, arg1);
 			glm::mat<2, 2, float> o2 = PyGLM_Mat_PTI_Get1(2, 2, float, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(2, 2, double, arg1) && PyGLM_Mat_Check(2, 2, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 2, double, arg1) && PyGLM_Mat_PTI_Check1(2, 2, double, arg2)) {
 			glm::mat<2, 2, double> o = PyGLM_Mat_PTI_Get0(2, 2, double, arg1);
 			glm::mat<2, 2, double> o2 = PyGLM_Mat_PTI_Get1(2, 2, double, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(2, 3, float, arg1) && PyGLM_Mat_Check(2, 3, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 3, float, arg1) && PyGLM_Mat_PTI_Check1(2, 3, float, arg2)) {
 			glm::mat<2, 3, float> o = PyGLM_Mat_PTI_Get0(2, 3, float, arg1);
 			glm::mat<2, 3, float> o2 = PyGLM_Mat_PTI_Get1(2, 3, float, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(2, 3, double, arg1) && PyGLM_Mat_Check(2, 3, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 3, double, arg1) && PyGLM_Mat_PTI_Check1(2, 3, double, arg2)) {
 			glm::mat<2, 3, double> o = PyGLM_Mat_PTI_Get0(2, 3, double, arg1);
 			glm::mat<2, 3, double> o2 = PyGLM_Mat_PTI_Get1(2, 3, double, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(2, 4, float, arg1) && PyGLM_Mat_Check(2, 4, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 4, float, arg1) && PyGLM_Mat_PTI_Check1(2, 4, float, arg2)) {
 			glm::mat<2, 4, float> o = PyGLM_Mat_PTI_Get0(2, 4, float, arg1);
 			glm::mat<2, 4, float> o2 = PyGLM_Mat_PTI_Get1(2, 4, float, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(2, 4, double, arg1) && PyGLM_Mat_Check(2, 4, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 4, double, arg1) && PyGLM_Mat_PTI_Check1(2, 4, double, arg2)) {
 			glm::mat<2, 4, double> o = PyGLM_Mat_PTI_Get0(2, 4, double, arg1);
 			glm::mat<2, 4, double> o2 = PyGLM_Mat_PTI_Get1(2, 4, double, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 2, float, arg1) && PyGLM_Mat_Check(3, 2, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 2, float, arg1) && PyGLM_Mat_PTI_Check1(3, 2, float, arg2)) {
 			glm::mat<3, 2, float> o = PyGLM_Mat_PTI_Get0(3, 2, float, arg1);
 			glm::mat<3, 2, float> o2 = PyGLM_Mat_PTI_Get1(3, 2, float, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 2, double, arg1) && PyGLM_Mat_Check(3, 2, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 2, double, arg1) && PyGLM_Mat_PTI_Check1(3, 2, double, arg2)) {
 			glm::mat<3, 2, double> o = PyGLM_Mat_PTI_Get0(3, 2, double, arg1);
 			glm::mat<3, 2, double> o2 = PyGLM_Mat_PTI_Get1(3, 2, double, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 3, float, arg1) && PyGLM_Mat_Check(3, 3, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 3, float, arg1) && PyGLM_Mat_PTI_Check1(3, 3, float, arg2)) {
 			glm::mat<3, 3, float> o = PyGLM_Mat_PTI_Get0(3, 3, float, arg1);
 			glm::mat<3, 3, float> o2 = PyGLM_Mat_PTI_Get1(3, 3, float, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 3, double, arg1) && PyGLM_Mat_Check(3, 3, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 3, double, arg1) && PyGLM_Mat_PTI_Check1(3, 3, double, arg2)) {
 			glm::mat<3, 3, double> o = PyGLM_Mat_PTI_Get0(3, 3, double, arg1);
 			glm::mat<3, 3, double> o2 = PyGLM_Mat_PTI_Get1(3, 3, double, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 4, float, arg1) && PyGLM_Mat_Check(3, 4, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 4, float, arg1) && PyGLM_Mat_PTI_Check1(3, 4, float, arg2)) {
 			glm::mat<3, 4, float> o = PyGLM_Mat_PTI_Get0(3, 4, float, arg1);
 			glm::mat<3, 4, float> o2 = PyGLM_Mat_PTI_Get1(3, 4, float, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 4, double, arg1) && PyGLM_Mat_Check(3, 4, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 4, double, arg1) && PyGLM_Mat_PTI_Check1(3, 4, double, arg2)) {
 			glm::mat<3, 4, double> o = PyGLM_Mat_PTI_Get0(3, 4, double, arg1);
 			glm::mat<3, 4, double> o2 = PyGLM_Mat_PTI_Get1(3, 4, double, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 2, float, arg1) && PyGLM_Mat_Check(4, 2, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 2, float, arg1) && PyGLM_Mat_PTI_Check1(4, 2, float, arg2)) {
 			glm::mat<4, 2, float> o = PyGLM_Mat_PTI_Get0(4, 2, float, arg1);
 			glm::mat<4, 2, float> o2 = PyGLM_Mat_PTI_Get1(4, 2, float, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 2, double, arg1) && PyGLM_Mat_Check(4, 2, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 2, double, arg1) && PyGLM_Mat_PTI_Check1(4, 2, double, arg2)) {
 			glm::mat<4, 2, double> o = PyGLM_Mat_PTI_Get0(4, 2, double, arg1);
 			glm::mat<4, 2, double> o2 = PyGLM_Mat_PTI_Get1(4, 2, double, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 3, float, arg1) && PyGLM_Mat_Check(4, 3, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 3, float, arg1) && PyGLM_Mat_PTI_Check1(4, 3, float, arg2)) {
 			glm::mat<4, 3, float> o = PyGLM_Mat_PTI_Get0(4, 3, float, arg1);
 			glm::mat<4, 3, float> o2 = PyGLM_Mat_PTI_Get1(4, 3, float, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 3, double, arg1) && PyGLM_Mat_Check(4, 3, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 3, double, arg1) && PyGLM_Mat_PTI_Check1(4, 3, double, arg2)) {
 			glm::mat<4, 3, double> o = PyGLM_Mat_PTI_Get0(4, 3, double, arg1);
 			glm::mat<4, 3, double> o2 = PyGLM_Mat_PTI_Get1(4, 3, double, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 4, float, arg1) && PyGLM_Mat_Check(4, 4, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 4, float, arg1) && PyGLM_Mat_PTI_Check1(4, 4, float, arg2)) {
 			glm::mat<4, 4, float> o = PyGLM_Mat_PTI_Get0(4, 4, float, arg1);
 			glm::mat<4, 4, float> o2 = PyGLM_Mat_PTI_Get1(4, 4, float, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 4, double, arg1) && PyGLM_Mat_Check(4, 4, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 4, double, arg1) && PyGLM_Mat_PTI_Check1(4, 4, double, arg2)) {
 			glm::mat<4, 4, double> o = PyGLM_Mat_PTI_Get0(4, 4, double, arg1);
 			glm::mat<4, 4, double> o2 = PyGLM_Mat_PTI_Get1(4, 4, double, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
 
-		if (PyGLM_Qua_Check(float, arg1) && PyGLM_Qua_Check(float, arg2)) {
+		if (PyGLM_Qua_PTI_Check0(float, arg1) && PyGLM_Qua_PTI_Check1(float, arg2)) {
 			glm::qua<float> o = PyGLM_Qua_PTI_Get0(float, arg1);
 			glm::qua<float> o2 = PyGLM_Qua_PTI_Get1(float, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Qua_Check(double, arg1) && PyGLM_Qua_Check(double, arg2)) {
+		if (PyGLM_Qua_PTI_Check0(double, arg1) && PyGLM_Qua_PTI_Check1(double, arg2)) {
 			glm::qua<double> o = PyGLM_Qua_PTI_Get0(double, arg1);
 			glm::qua<double> o2 = PyGLM_Qua_PTI_Get1(double, arg2);
 			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
@@ -1708,103 +1708,103 @@ notEqual(PyObject*, PyObject* args) {
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
 
-		if (PyGLM_Mat_Check(2, 2, float, arg1) && PyGLM_Mat_Check(2, 2, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 2, float, arg1) && PyGLM_Mat_PTI_Check1(2, 2, float, arg2)) {
 			glm::mat<2, 2, float> o = PyGLM_Mat_PTI_Get0(2, 2, float, arg1);
 			glm::mat<2, 2, float> o2 = PyGLM_Mat_PTI_Get1(2, 2, float, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(2, 2, double, arg1) && PyGLM_Mat_Check(2, 2, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 2, double, arg1) && PyGLM_Mat_PTI_Check1(2, 2, double, arg2)) {
 			glm::mat<2, 2, double> o = PyGLM_Mat_PTI_Get0(2, 2, double, arg1);
 			glm::mat<2, 2, double> o2 = PyGLM_Mat_PTI_Get1(2, 2, double, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(2, 3, float, arg1) && PyGLM_Mat_Check(2, 3, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 3, float, arg1) && PyGLM_Mat_PTI_Check1(2, 3, float, arg2)) {
 			glm::mat<2, 3, float> o = PyGLM_Mat_PTI_Get0(2, 3, float, arg1);
 			glm::mat<2, 3, float> o2 = PyGLM_Mat_PTI_Get1(2, 3, float, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(2, 3, double, arg1) && PyGLM_Mat_Check(2, 3, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 3, double, arg1) && PyGLM_Mat_PTI_Check1(2, 3, double, arg2)) {
 			glm::mat<2, 3, double> o = PyGLM_Mat_PTI_Get0(2, 3, double, arg1);
 			glm::mat<2, 3, double> o2 = PyGLM_Mat_PTI_Get1(2, 3, double, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(2, 4, float, arg1) && PyGLM_Mat_Check(2, 4, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 4, float, arg1) && PyGLM_Mat_PTI_Check1(2, 4, float, arg2)) {
 			glm::mat<2, 4, float> o = PyGLM_Mat_PTI_Get0(2, 4, float, arg1);
 			glm::mat<2, 4, float> o2 = PyGLM_Mat_PTI_Get1(2, 4, float, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(2, 4, double, arg1) && PyGLM_Mat_Check(2, 4, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(2, 4, double, arg1) && PyGLM_Mat_PTI_Check1(2, 4, double, arg2)) {
 			glm::mat<2, 4, double> o = PyGLM_Mat_PTI_Get0(2, 4, double, arg1);
 			glm::mat<2, 4, double> o2 = PyGLM_Mat_PTI_Get1(2, 4, double, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 2, float, arg1) && PyGLM_Mat_Check(3, 2, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 2, float, arg1) && PyGLM_Mat_PTI_Check1(3, 2, float, arg2)) {
 			glm::mat<3, 2, float> o = PyGLM_Mat_PTI_Get0(3, 2, float, arg1);
 			glm::mat<3, 2, float> o2 = PyGLM_Mat_PTI_Get1(3, 2, float, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 2, double, arg1) && PyGLM_Mat_Check(3, 2, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 2, double, arg1) && PyGLM_Mat_PTI_Check1(3, 2, double, arg2)) {
 			glm::mat<3, 2, double> o = PyGLM_Mat_PTI_Get0(3, 2, double, arg1);
 			glm::mat<3, 2, double> o2 = PyGLM_Mat_PTI_Get1(3, 2, double, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 3, float, arg1) && PyGLM_Mat_Check(3, 3, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 3, float, arg1) && PyGLM_Mat_PTI_Check1(3, 3, float, arg2)) {
 			glm::mat<3, 3, float> o = PyGLM_Mat_PTI_Get0(3, 3, float, arg1);
 			glm::mat<3, 3, float> o2 = PyGLM_Mat_PTI_Get1(3, 3, float, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 3, double, arg1) && PyGLM_Mat_Check(3, 3, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 3, double, arg1) && PyGLM_Mat_PTI_Check1(3, 3, double, arg2)) {
 			glm::mat<3, 3, double> o = PyGLM_Mat_PTI_Get0(3, 3, double, arg1);
 			glm::mat<3, 3, double> o2 = PyGLM_Mat_PTI_Get1(3, 3, double, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 4, float, arg1) && PyGLM_Mat_Check(3, 4, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 4, float, arg1) && PyGLM_Mat_PTI_Check1(3, 4, float, arg2)) {
 			glm::mat<3, 4, float> o = PyGLM_Mat_PTI_Get0(3, 4, float, arg1);
 			glm::mat<3, 4, float> o2 = PyGLM_Mat_PTI_Get1(3, 4, float, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(3, 4, double, arg1) && PyGLM_Mat_Check(3, 4, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(3, 4, double, arg1) && PyGLM_Mat_PTI_Check1(3, 4, double, arg2)) {
 			glm::mat<3, 4, double> o = PyGLM_Mat_PTI_Get0(3, 4, double, arg1);
 			glm::mat<3, 4, double> o2 = PyGLM_Mat_PTI_Get1(3, 4, double, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 2, float, arg1) && PyGLM_Mat_Check(4, 2, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 2, float, arg1) && PyGLM_Mat_PTI_Check1(4, 2, float, arg2)) {
 			glm::mat<4, 2, float> o = PyGLM_Mat_PTI_Get0(4, 2, float, arg1);
 			glm::mat<4, 2, float> o2 = PyGLM_Mat_PTI_Get1(4, 2, float, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 2, double, arg1) && PyGLM_Mat_Check(4, 2, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 2, double, arg1) && PyGLM_Mat_PTI_Check1(4, 2, double, arg2)) {
 			glm::mat<4, 2, double> o = PyGLM_Mat_PTI_Get0(4, 2, double, arg1);
 			glm::mat<4, 2, double> o2 = PyGLM_Mat_PTI_Get1(4, 2, double, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 3, float, arg1) && PyGLM_Mat_Check(4, 3, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 3, float, arg1) && PyGLM_Mat_PTI_Check1(4, 3, float, arg2)) {
 			glm::mat<4, 3, float> o = PyGLM_Mat_PTI_Get0(4, 3, float, arg1);
 			glm::mat<4, 3, float> o2 = PyGLM_Mat_PTI_Get1(4, 3, float, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 3, double, arg1) && PyGLM_Mat_Check(4, 3, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 3, double, arg1) && PyGLM_Mat_PTI_Check1(4, 3, double, arg2)) {
 			glm::mat<4, 3, double> o = PyGLM_Mat_PTI_Get0(4, 3, double, arg1);
 			glm::mat<4, 3, double> o2 = PyGLM_Mat_PTI_Get1(4, 3, double, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 4, float, arg1) && PyGLM_Mat_Check(4, 4, float, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 4, float, arg1) && PyGLM_Mat_PTI_Check1(4, 4, float, arg2)) {
 			glm::mat<4, 4, float> o = PyGLM_Mat_PTI_Get0(4, 4, float, arg1);
 			glm::mat<4, 4, float> o2 = PyGLM_Mat_PTI_Get1(4, 4, float, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Mat_Check(4, 4, double, arg1) && PyGLM_Mat_Check(4, 4, double, arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 4, double, arg1) && PyGLM_Mat_PTI_Check1(4, 4, double, arg2)) {
 			glm::mat<4, 4, double> o = PyGLM_Mat_PTI_Get0(4, 4, double, arg1);
 			glm::mat<4, 4, double> o2 = PyGLM_Mat_PTI_Get1(4, 4, double, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
 		}
 
-		if (PyGLM_Qua_Check(float, arg1) && PyGLM_Qua_Check(float, arg2)) {
+		if (PyGLM_Qua_PTI_Check0(float, arg1) && PyGLM_Qua_PTI_Check1(float, arg2)) {
 			glm::qua<float> o = PyGLM_Qua_PTI_Get0(float, arg1);
 			glm::qua<float> o2 = PyGLM_Qua_PTI_Get1(float, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
 		}
-		if (PyGLM_Qua_Check(double, arg1) && PyGLM_Qua_Check(double, arg2)) {
+		if (PyGLM_Qua_PTI_Check0(double, arg1) && PyGLM_Qua_PTI_Check1(double, arg2)) {
 			glm::qua<double> o = PyGLM_Qua_PTI_Get0(double, arg1);
 			glm::qua<double> o2 = PyGLM_Qua_PTI_Get1(double, arg2);
 			return pack(glm::notEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));

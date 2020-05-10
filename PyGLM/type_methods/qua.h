@@ -70,24 +70,23 @@ qua_init(qua<T> *self, PyObject *args, PyObject *kwds)
 		}
 		if (arg3 == NULL) {
 			if (PyGLM_Number_Check(arg1)) {
-				glm::vec<3, T> o;
-				if (!unpack_vec(arg2, o)) {
+				PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<3, T>()));
+				if (PyGLM_PTI_IsNone(1)) {
 					PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for quat()");
 					return -1;
 				}
+				glm::vec<3, T> o = PyGLM_Vec_PTI_Get1(3, T, arg2);
 				self->super_type = glm::qua<T>(PyGLM_Number_FromPyObject<T>(arg1), o);
 				return 0;
 			}
-			glm::vec<3, T> o;
-			if (!unpack_vec(arg1, o)) {
+			PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<3, T>()));
+			PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<3, T>()));
+			if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1)) {
 				PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for quat()");
 				return -1;
 			}
-			glm::vec<3, T> o2;
-			if (!unpack_vec(arg2, o2)) {
-				PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for quat()");
-				return -1;
-			}
+			PyGLM_Vec_PTI_Assign0(3, T);
+			PyGLM_Vec_PTI_Assign1(3, T);
 			self->super_type = glm::qua<T>(o, o2);
 			return 0;
 		}
@@ -124,18 +123,21 @@ template<typename T>
 static PyObject *
 qua_add(PyObject *obj1, PyObject *obj2)
 {
-	glm::qua<T> o;
+	PyGLM_PTI_Init0(obj1, (get_qua_PTI_info<T>()));
 
-	if (!unpack_qua(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm.qua' and ", obj1);
 		return NULL;
 	}
 
-	glm::qua<T> o2;
+	PyGLM_PTI_Init1(obj2, (get_qua_PTI_info<T>()));
 
-	if (!unpack_qua(obj2, o2)) { // obj1 is self, obj2 is something else
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::qua<T> o = PyGLM_Qua_PTI_Get0(T, obj1);
+	glm::qua<T> o2 = PyGLM_Qua_PTI_Get1(T, obj2);
 
 	// obj1 and obj2 can be interpreted as a qua
 	return pack_qua<T>(o + o2);
@@ -145,18 +147,21 @@ template<typename T>
 static PyObject *
 qua_sub(PyObject *obj1, PyObject *obj2)
 {
-	glm::qua<T> o;
+	PyGLM_PTI_Init0(obj1, (get_qua_PTI_info<T>()));
 
-	if (!unpack_qua(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm.qua' and ", obj1);
 		return NULL;
 	}
 
-	glm::qua<T> o2;
+	PyGLM_PTI_Init1(obj2, (get_qua_PTI_info<T>()));
 
-	if (!unpack_qua(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::qua<T> o = PyGLM_Qua_PTI_Get0(T, obj1);
+	glm::qua<T> o2 = PyGLM_Qua_PTI_Get1(T, obj2);
 
 	// obj1 and obj2 can be interpreted as a qua
 	return pack_qua<T>(o - o2);
@@ -170,38 +175,42 @@ qua_mul(PyObject *obj1, PyObject *obj2)
 		return pack_qua<T>(PyGLM_Number_FromPyObject<T>(obj1) * ((qua<T>*)obj2)->super_type);
 	}
 
-	if (PyGLM_Vec_Check(3, T, obj1)) {
-		return pack_vec<3, T>(unpack_vec<3, T>(obj1) * ((qua<T>*)obj2)->super_type);
+	PyGLM_PTI_Init0(obj1, PyGLM_T_QUA | PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_PTI_GetDT(T));
+
+	if (PyGLM_Vec_PTI_Check0(3, T, obj1)) {
+		return pack_vec<3, T>(PyGLM_Vec_PTI_Get0(3, T, obj1) * ((qua<T>*)obj2)->super_type);
 	}
 
-	if (PyGLM_Vec_Check(4, T, obj1)) {
-		return pack_vec<4, T>(unpack_vec<4, T>(obj1) * ((qua<T>*)obj2)->super_type);
+	if (PyGLM_Vec_PTI_Check0(4, T, obj1)) {
+		return pack_vec<4, T>(PyGLM_Vec_PTI_Get0(4, T, obj1) * ((qua<T>*)obj2)->super_type);
 	}
 
-	glm::qua<T> o;
-
-	if (!unpack_qua(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for *: 'glm.qua' and ", obj1);
 		return NULL;
 	}
+
+	glm::qua<T> o = PyGLM_Qua_PTI_Get0(T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		return pack_qua<T>(o * PyGLM_Number_FromPyObject<T>(obj2));
 	}
 
-	if (PyGLM_Vec_Check(3, T, obj2)) {
-		return pack_vec<3, T>(o * unpack_vec<3, T>(obj2));
+	PyGLM_PTI_Init1(obj2, PyGLM_T_QUA | PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_PTI_GetDT(T));
+
+	if (PyGLM_Vec_PTI_Check1(3, T, obj2)) {
+		return pack_vec<3, T>(o * PyGLM_Vec_PTI_Get1(3, T, obj2));
 	}
 
-	if (PyGLM_Vec_Check(4, T, obj2)) {
-		return pack_vec<4, T>(o * unpack_vec<4, T>(obj2));
+	if (PyGLM_Vec_PTI_Check1(4, T, obj2)) {
+		return pack_vec<4, T>(o * PyGLM_Vec_PTI_Get1(4, T, obj2));
 	}
 
-	glm::qua<T> o2;
-
-	if (!unpack_qua(obj2, o2)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else (maybe it knows how to do the operation)
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::qua<T> o2 = PyGLM_Qua_PTI_Get1(T, obj2);
 
 	// obj1 and obj2 can be interpreted as a qua
 	return pack_qua<T>(o * o2);
@@ -211,12 +220,14 @@ template<typename T>
 static PyObject *
 qua_div(PyObject *obj1, PyObject *obj2)
 {
-	glm::qua<T> o;
+	PyGLM_PTI_Init0(obj1, (get_qua_PTI_info<T>()));
 
-	if (!unpack_qua(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for /: 'glm.qua' and ", obj1);
 		return NULL;
 	}
+
+	glm::qua<T> o = PyGLM_Qua_PTI_Get0(T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
@@ -373,9 +384,9 @@ static int qua_contains(qua<T> * self, PyObject * value) {
 
 template<typename T>
 static PyObject * qua_richcompare(qua<T> * self, PyObject * other, int comp_type) {
-	glm::qua<T> o2;
+	PyGLM_PTI_Init1(other, (get_qua_PTI_info<T>()));
 
-	if (!unpack_qua(other, o2)) {
+	if (PyGLM_PTI_IsNone(1)) {
 		if (comp_type == Py_EQ) {
 			Py_RETURN_FALSE;
 		}
@@ -384,6 +395,8 @@ static PyObject * qua_richcompare(qua<T> * self, PyObject * other, int comp_type
 		}
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::qua<T> o2 = PyGLM_Qua_PTI_Get1(T, other);
 
 	switch (comp_type) {
 	case Py_EQ:
