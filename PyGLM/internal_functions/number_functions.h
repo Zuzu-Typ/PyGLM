@@ -2,20 +2,7 @@
 
 #include "../compiler_setup.h"
 
-bool PyGLM_Number_Check(PyObject* arg) {
-	if (PyFloat_Check(arg) || PyLong_Check(arg) || PyBool_Check(arg)) {
-		return true;
-	}
-	if (arg->ob_type->tp_as_number != NULL && arg->ob_type->tp_as_number->nb_float != NULL) {
-		PyObject* temp = PyNumber_Float(arg);
-		if (temp != NULL) {
-			Py_DECREF(temp);
-			return true;
-		}
-		PyErr_Clear();
-	}
-	return false;
-}
+#define PyGLM_Number_Check(arg) (PyFloat_Check(arg) || PyLong_Check(arg) || PyBool_Check(arg))
 
 double PyGLM_Number_AsDouble(PyObject* arg) {
 	if (PyFloat_Check(arg)) {
