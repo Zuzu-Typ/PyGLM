@@ -13,7 +13,9 @@ pack_vec(glm::vec<L, T> value) {
 	vec<L, T>* out = (vec<L, T>*)vecType->tp_alloc(vecType, 0);
 
 	if (out != NULL) {
-		out->shape = L;
+		constexpr uint8_t info_type = get_type_helper_type<T>();
+		constexpr uint8_t info = L | (info_type << PyGLM_TYPE_INFO_VEC_TYPE_OFFSET);
+		out->info = info;
 		out->super_type = value;
 	}
 
@@ -27,7 +29,9 @@ pack_mvec(glm::vec<L, T>* value, PyObject* master) {
 	mvec<L, T>* out = (mvec<L, T>*)mvecType->tp_alloc(mvecType, 0);
 
 	if (out != NULL) {
-		out->shape = L;
+		constexpr uint8_t info_type = get_type_helper_type<T>();
+		constexpr uint8_t info = L | (info_type << PyGLM_TYPE_INFO_VEC_TYPE_OFFSET);
+		out->info = info;
 		out->super_type = value;
 		out->master = master;
 		Py_INCREF(master);
@@ -43,7 +47,9 @@ pack_mat(glm::mat<C, R, T> value) {
 	mat<C, R, T>* out = (mat<C, R, T>*)matType->tp_alloc(matType, 0);
 
 	if (out != NULL) {
-		out->shape = C + (R << 3);
+		constexpr uint8_t info_type = get_type_helper_type<T>();
+		constexpr uint8_t info = (uint8_t)((C << PyGLM_TYPE_INFO_MAT_SHAPE1_OFFSET) | (R << PyGLM_TYPE_INFO_MAT_SHAPE2_OFFSET) | (info_type << PyGLM_TYPE_INFO_MAT_TYPE_OFFSET));
+		out->info = info;
 		out->super_type = value;
 	}
 
@@ -57,6 +63,9 @@ pack_qua(glm::qua<T> value) {
 	qua<T>* out = (qua<T>*)quaType->tp_alloc(quaType, 0);
 
 	if (out != NULL) {
+		constexpr uint8_t info_type = get_type_helper_type<T>();
+		constexpr uint8_t info = 4 | (info_type << PyGLM_TYPE_INFO_VEC_TYPE_OFFSET);
+		out->info = info;
 		out->super_type = value;
 	}
 

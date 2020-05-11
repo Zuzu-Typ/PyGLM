@@ -132,41 +132,29 @@ static PyObject*
 rotate_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3;
 	PyGLM_Arg_Unpack_3O(args, "rotate", arg1, arg2, arg3);
-	if (PyGLM_Mat_Check(4, 4, float, arg1)) {
-		glm::mat4x4 m;
-		glm::vec3 axis;
-		if (!unpack_mat(arg1, m) || !PyGLM_Number_Check(arg2) || !unpack_vec(arg3, axis)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for rotate()");
-			return NULL;
+	if (PyGLM_Number_Check(arg2)) {
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_T_QUA | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);
+		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);
+		if (PyGLM_Mat_PTI_Check0(4, 4, float, arg1) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
+			glm::mat4x4 m = PyGLM_Mat_PTI_Get0(4, 4, float, arg1);
+			glm::vec3 axis = PyGLM_Vec_PTI_Get2(3, float, arg3);
+			return pack(glm::rotate(m, PyGLM_Number_FromPyObject<float>(arg2), axis));
 		}
-		return pack(glm::rotate(m, PyGLM_Number_FromPyObject<float>(arg2), axis));
-	}
-	if (PyGLM_Mat_Check(4, 4, double, arg1)) {
-		glm::dmat4x4 m;
-		glm::dvec3 axis;
-		if (!unpack_mat(arg1, m) || !PyGLM_Number_Check(arg2) || !unpack_vec(arg3, axis)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for rotate()");
-			return NULL;
+		if (PyGLM_Mat_PTI_Check0(4, 4, double, arg1) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
+			glm::dmat4x4 m = PyGLM_Mat_PTI_Get0(4, 4, double, arg1);
+			glm::dvec3 axis = PyGLM_Vec_PTI_Get2(3, double, arg3);
+			return pack(glm::rotate(m, PyGLM_Number_FromPyObject<double>(arg2), axis));
 		}
-		return pack(glm::rotate(m, PyGLM_Number_FromPyObject<double>(arg2), axis));
-	}
-	if (PyGLM_Qua_Check(float, arg1)) {
-		glm::quat q;
-		glm::vec3 axis;
-		if (!unpack_qua(arg1, q) || !PyGLM_Number_Check(arg2) || !unpack_vec(arg3, axis)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for rotate()");
-			return NULL;
+		if (PyGLM_Qua_PTI_Check0(float, arg1) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
+			glm::quat q = PyGLM_Qua_PTI_Get0(float, arg1);
+			glm::vec3 axis = PyGLM_Vec_PTI_Get2(3, float, arg3);
+			return pack_qua(glm::rotate(q, PyGLM_Number_FromPyObject<float>(arg2), axis));
 		}
-		return pack_qua(glm::rotate(q, PyGLM_Number_FromPyObject<float>(arg2), axis));
-	}
-	if (PyGLM_Qua_Check(double, arg1)) {
-		glm::dquat q;
-		glm::dvec3 axis;
-		if (!unpack_qua(arg1, q) || !PyGLM_Number_Check(arg2) || !unpack_vec(arg3, axis)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for rotate()");
-			return NULL;
+		if (PyGLM_Qua_PTI_Check0(double, arg1) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
+			glm::dquat q = PyGLM_Qua_PTI_Get0(float, arg1);
+			glm::dvec3 axis = PyGLM_Vec_PTI_Get2(3, double, arg3);
+			return pack_qua(glm::rotate(q, PyGLM_Number_FromPyObject<double>(arg2), axis));
 		}
-		return pack_qua(glm::rotate(q, PyGLM_Number_FromPyObject<double>(arg2), axis));
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for rotate()");
 	return NULL;
@@ -176,23 +164,19 @@ static PyObject*
 rotate_slow_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3;
 	PyGLM_Arg_Unpack_3O(args, "rotate_slow", arg1, arg2, arg3);
-	if (PyGLM_Mat_Check(4, 4, float, arg1)) {
-		glm::mat<4, 4, float> m;
-		glm::vec<3, float> axis;
-		if (!unpack_mat(arg1, m) || !PyGLM_Number_Check(arg2) || !unpack_vec(arg3, axis)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for rotate_slow()");
-			return NULL;
+	PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);
+	PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);
+	if (PyGLM_Number_Check(arg2)) {
+		if (PyGLM_Mat_PTI_Check0(4, 4, float, arg1) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
+			glm::mat<4, 4, float> m = PyGLM_Mat_PTI_Get0(4, 4, float, arg1);
+			glm::vec<3, float> axis = PyGLM_Vec_PTI_Get2(3, float, arg3);
+			return pack(glm::rotate_slow(m, PyGLM_Number_FromPyObject<float>(arg2), axis));
 		}
-		return pack(glm::rotate_slow(m, PyGLM_Number_FromPyObject<float>(arg2), axis));
-	}
-	if (PyGLM_Mat_Check(4, 4, double, arg1)) {
-		glm::mat<4, 4, double> m;
-		glm::vec<3, double> axis;
-		if (!unpack_mat(arg1, m) || !PyGLM_Number_Check(arg2) || !unpack_vec(arg3, axis)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for rotate_slow()");
-			return NULL;
+		if (PyGLM_Mat_PTI_Check0(4, 4, double, arg1) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
+			glm::mat<4, 4, double> m = PyGLM_Mat_PTI_Get0(4, 4, double, arg1);
+			glm::vec<3, double> axis = PyGLM_Vec_PTI_Get2(3, double, arg3);
+			return pack(glm::rotate_slow(m, PyGLM_Number_FromPyObject<double>(arg2), axis));
 		}
-		return pack(glm::rotate_slow(m, PyGLM_Number_FromPyObject<double>(arg2), axis));
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for rotate_slow()");
 	return NULL;
@@ -413,24 +397,23 @@ static PyObject*
 pickMatrix_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3;
 	PyGLM_Arg_Unpack_3O(args, "pickMatrix", arg1, arg2, arg3);
-	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2) && PyGLM_Vec_Check(4, float, arg3)) {
-		glm::vec2 o, o2;
-		glm::vec4 o3;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		unpack_vec(arg3, o3);
+	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD);
+	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD);
+	PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD);
+	if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3)) {
+		PyGLM_Vec_PTI_Assign0(2, float);
+		PyGLM_Vec_PTI_Assign1(2, float);
+		PyGLM_Vec_PTI_Assign2(4, float);
 		if (!(o.x > 0.0f && o.y > 0.0f)) {
 			PyErr_SetString(PyExc_ValueError, "delta has to be greater than 0 for pickMatrix()");
 			return NULL;
 		}
 		return pack(glm::pickMatrix(o, o2, o3));
 	}
-	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2) && PyGLM_Vec_Check(4, double, arg3)) {
-		glm::dvec2 o, o2;
-		glm::dvec4 o3;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
-		unpack_vec(arg3, o3);
+	if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3)) {
+		PyGLM_Vec_PTI_Assign0(2, double);
+		PyGLM_Vec_PTI_Assign1(2, double);
+		PyGLM_Vec_PTI_Assign2(4, double);
 		if (!(o.x > 0.0 && o.y > 0.0)) {
 			PyErr_SetString(PyExc_ValueError, "delta has to be greater than 0 for pickMatrix()");
 			return NULL;

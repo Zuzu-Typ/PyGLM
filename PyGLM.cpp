@@ -23,12 +23,27 @@
 #include "PyGLM/functions/all.h"
 
 
-//static PyObject*
-//test(PyObject* self, PyObject* arg) {
-//	return mat_to_tuple((mat<4, 4, float>*)(arg), NULL);
-//}
-//#define HAS_TEST
-//#define TEST_FUNC_TYPE METH_O
+static PyObject*
+_get_type_info(PyObject*, PyObject* args) {
+	PyObject *arg1, *arg2;
+	PyGLM_Arg_Unpack_2O(args, "_get_type_info", arg1, arg2);
+	PyGLMTypeInfo pti(PyGLM_Number_AsLong(arg1), arg2);
+	return PyLong_FromLong(pti.info);
+}
+
+static PyObject*
+test(PyObject*, PyObject* arg) {
+	PyGLM_PTI_InitN(0, arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
+	if (PyGLM_Vec_PTI_CheckN(0, 3, float, arg)) {
+		Py_RETURN_TRUE;
+	}
+	//PyGLMTypeInfo pti(PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLMTypeInfo::getDT<float>(), arg);
+	////return pack(*((glm::mat<4,4, float>*)pti.data));
+	//return PyLong_FromLong(pti.info);
+	Py_RETURN_FALSE;
+}
+#define HAS_TEST
+#define TEST_FUNC_TYPE METH_O
 
 static PyMethodDef glmmethods[] = {
 	// DETAIL
@@ -114,6 +129,7 @@ static PyMethodDef glmmethods[] = {
 
 	// PyGLM functions
 	{ "silence", (PyCFunction)silence, METH_O, "silence(ID) -> None\nSilence a PyGLM warning (or all using 0)." },
+	{ "_get_type_info", (PyCFunction)_get_type_info, METH_VARARGS, "_get_type_info(accepted_types, object) -> None\nAn internal testing funtion to check wether or not the type checking works correctly." },
 #ifdef HAS_TEST
 	{"test", (PyCFunction)test, TEST_FUNC_TYPE, ""},
 #endif
@@ -123,6 +139,7 @@ static PyMethodDef glmmethods[] = {
 #endif
 
 static void glm_clear(PyObject*) {
+#if !(PyGLM_NO_FUNCTIONS & PyGLM_BUILD)
 	Py_XDECREF(ctypes_float_p);
 	Py_XDECREF(ctypes_double_p);
 	Py_XDECREF(ctypes_int64_p);
@@ -136,8 +153,15 @@ static void glm_clear(PyObject*) {
 	Py_XDECREF(ctypes_bool_p);
 	Py_XDECREF(ctypes_cast);
 	Py_XDECREF(ctypes_void_p);
+#endif
 	Py_XDECREF(PyGLM_VERSION_STRING);
 	Py_XDECREF(PyGLM_LICENSE_STRING);
+#if !(PyGLM_NO_ITER_TYPECHECKING & PyGLM_BUILD)
+	PTI0 = PyGLMTypeInfo();
+	PTI1 = PyGLMTypeInfo();
+	PTI2 = PyGLMTypeInfo();
+	PTI3 = PyGLMTypeInfo();
+#endif
 }
 
 static PyModuleDef glmmodule = {

@@ -14,7 +14,7 @@ static PyObject* mat_length(PyObject *, PyObject*) {
 static void
 mat_dealloc(PyObject* self)
 {
-	Py_TYPE(self)->tp_free(self);
+	if (((type_helper*)self)->info != 0) Py_TYPE(self)->tp_free(self);
 }
 
 template<int C, int R, typename T>
@@ -23,7 +23,9 @@ mat_new(PyTypeObject *type, PyObject *, PyObject *)
 {
 	mat<C, R, T> *self = (mat<C, R, T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
-		self->shape = C + (R << 3);
+		constexpr uint8_t info_type = get_type_helper_type<T>();
+		constexpr uint8_t info = (uint8_t)((C << PyGLM_TYPE_INFO_MAT_SHAPE1_OFFSET) | (R << PyGLM_TYPE_INFO_MAT_SHAPE2_OFFSET) | (info_type << PyGLM_TYPE_INFO_MAT_TYPE_OFFSET));
+		self->info = info;
 		self->super_type = glm::mat<C, R, T>();
 	}
 	return (PyObject *)self;
@@ -51,43 +53,64 @@ mat2x2_init(mat<2, 2, T> *self, PyObject *args, PyObject *)
 
 	if (arg2 == NULL) {
 		if (PyGLM_Number_Check(arg1)) {
-			self->super_type = glm::mat<2, 2, T>(PyGLM_Number_FromPyObject<T>(arg1));
+			self->super_type = glm::mat<2,2,T>(PyGLM_Number_FromPyObject<T>(arg1));
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 2, T, arg1)) {
-			self->super_type = unpack_mat<2, 2, T>(arg1);
+
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_NxM | PyGLM_PTI_GetDT(T));
+		if (PyGLM_Mat_PTI_Check0(2, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 3, T, arg1)) {
-			self->super_type = unpack_mat<2, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 4, T, arg1)) {
-			self->super_type = unpack_mat<2, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 2, T, arg1)) {
-			self->super_type = unpack_mat<3, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 3, T, arg1)) {
-			self->super_type = unpack_mat<3, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 4, T, arg1)) {
-			self->super_type = unpack_mat<3, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 2, T, arg1)) {
-			self->super_type = unpack_mat<4, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 3, T, arg1)) {
-			self->super_type = unpack_mat<4, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 4, T, arg1)) {
-			self->super_type = unpack_mat<4, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, T, arg1);
+			return 0;
+		}
+
+		// mat2x2s with different data types
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_MAT_ALL); 
+		if (PyGLM_Mat_PTI_Check0(2, 2, float, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, float, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(2, 2, double, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, double, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(2, 2, int32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, int32, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(2, 2, uint32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, uint32, arg1);
 			return 0;
 		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat2x2()");
@@ -95,16 +118,14 @@ mat2x2_init(mat<2, 2, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg3 == NULL) {
-		glm::vec<2, T> o;
-		if (!unpack_vec(arg1, o)) {
+		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<2, T>()));
+		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<2, T>()));
+		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat2x2()");
 			return -1;
 		}
-		glm::vec<2, T> o2;
-		if (!unpack_vec(arg2, o2)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat2x2()");
-			return -1;
-		}
+		PyGLM_Vec_PTI_Assign0(2, T);
+		PyGLM_Vec_PTI_Assign1(2, T);
 		self->super_type = glm::mat<2, 2, T>(o, o2);
 		return 0;
 	}
@@ -148,40 +169,60 @@ mat2x3_init(mat<2, 3, T> *self, PyObject *args, PyObject *)
 			self->super_type = glm::mat<2, 3, T>(PyGLM_Number_FromPyObject<T>(arg1));
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 2, T, arg1)) {
-			self->super_type = unpack_mat<2, 2, T>(arg1);
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_NxM | PyGLM_PTI_GetDT(T));
+		if (PyGLM_Mat_PTI_Check0(2, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 3, T, arg1)) {
-			self->super_type = unpack_mat<2, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 4, T, arg1)) {
-			self->super_type = unpack_mat<2, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 2, T, arg1)) {
-			self->super_type = unpack_mat<3, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 3, T, arg1)) {
-			self->super_type = unpack_mat<3, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 4, T, arg1)) {
-			self->super_type = unpack_mat<3, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 2, T, arg1)) {
-			self->super_type = unpack_mat<4, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 3, T, arg1)) {
-			self->super_type = unpack_mat<4, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 4, T, arg1)) {
-			self->super_type = unpack_mat<4, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, T, arg1);
+			return 0;
+		}
+
+		// mat2x3s with different data types
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_MAT_ALL);
+		if (PyGLM_Mat_PTI_Check0(2, 3, float, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, float, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(2, 3, double, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, double, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(2, 3, int32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, int32, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(2, 3, uint32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, uint32, arg1);
 			return 0;
 		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat2x3()");
@@ -189,16 +230,14 @@ mat2x3_init(mat<2, 3, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg3 == NULL) {
-		glm::vec<3, T> o;
-		if (!unpack_vec(arg1, o)) {
+		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<3, T>()));
+		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<3, T>()));
+		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat2x3()");
 			return -1;
 		}
-		glm::vec<3, T> o2;
-		if (!unpack_vec(arg2, o2)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat2x3()");
-			return -1;
-		}
+		PyGLM_Vec_PTI_Assign0(3, T);
+		PyGLM_Vec_PTI_Assign1(3, T);
 		self->super_type = glm::mat<2, 3, T>(o, o2);
 		return 0;
 	}
@@ -244,40 +283,60 @@ mat2x4_init(mat<2, 4, T> *self, PyObject *args, PyObject *)
 			self->super_type = glm::mat<2, 4, T>(PyGLM_Number_FromPyObject<T>(arg1));
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 2, T, arg1)) {
-			self->super_type = unpack_mat<2, 2, T>(arg1);
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_NxM | PyGLM_PTI_GetDT(T));
+		if (PyGLM_Mat_PTI_Check0(2, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 3, T, arg1)) {
-			self->super_type = unpack_mat<2, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 4, T, arg1)) {
-			self->super_type = unpack_mat<2, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 2, T, arg1)) {
-			self->super_type = unpack_mat<3, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 3, T, arg1)) {
-			self->super_type = unpack_mat<3, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 4, T, arg1)) {
-			self->super_type = unpack_mat<3, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 2, T, arg1)) {
-			self->super_type = unpack_mat<4, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 3, T, arg1)) {
-			self->super_type = unpack_mat<4, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 4, T, arg1)) {
-			self->super_type = unpack_mat<4, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, T, arg1);
+			return 0;
+		}
+
+		// mat2x4s with different data types
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_MAT_ALL);
+		if (PyGLM_Mat_PTI_Check0(2, 4, float, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, float, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(2, 4, double, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, double, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(2, 4, int32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, int32, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(2, 4, uint32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, uint32, arg1);
 			return 0;
 		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat2x4()");
@@ -285,16 +344,14 @@ mat2x4_init(mat<2, 4, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg3 == NULL) {
-		glm::vec<4, T> o;
-		if (!unpack_vec(arg1, o)) {
+		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<4, T>()));
+		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<4, T>()));
+		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat2x4()");
 			return -1;
 		}
-		glm::vec<4, T> o2;
-		if (!unpack_vec(arg2, o2)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat2x4()");
-			return -1;
-		}
+		PyGLM_Vec_PTI_Assign0(4, T);
+		PyGLM_Vec_PTI_Assign1(4, T);
 		self->super_type = glm::mat<2, 4, T>(o, o2);
 		return 0;
 	}
@@ -338,40 +395,60 @@ mat3x2_init(mat<3, 2, T> *self, PyObject *args, PyObject *)
 			self->super_type = glm::mat<3, 2, T>(PyGLM_Number_FromPyObject<T>(arg1));
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 2, T, arg1)) {
-			self->super_type = unpack_mat<2, 2, T>(arg1);
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_NxM | PyGLM_PTI_GetDT(T));
+		if (PyGLM_Mat_PTI_Check0(2, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 3, T, arg1)) {
-			self->super_type = unpack_mat<2, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 4, T, arg1)) {
-			self->super_type = unpack_mat<2, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 2, T, arg1)) {
-			self->super_type = unpack_mat<3, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 3, T, arg1)) {
-			self->super_type = unpack_mat<3, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 4, T, arg1)) {
-			self->super_type = unpack_mat<3, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 2, T, arg1)) {
-			self->super_type = unpack_mat<4, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 3, T, arg1)) {
-			self->super_type = unpack_mat<4, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 4, T, arg1)) {
-			self->super_type = unpack_mat<4, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, T, arg1);
+			return 0;
+		}
+
+		// mat3x2s with different data types
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_MAT_ALL);
+		if (PyGLM_Mat_PTI_Check0(3, 2, float, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, float, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(3, 2, double, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, double, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(3, 2, int32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, int32, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(3, 2, uint32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, uint32, arg1);
 			return 0;
 		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x2()");
@@ -384,21 +461,16 @@ mat3x2_init(mat<3, 2, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg4 == NULL) {
-		glm::vec<2, T> o;
-		if (!unpack_vec(arg1, o)) {
+		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<2, T>()));
+		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<2, T>()));
+		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<2, T>()));
+		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1) || PyGLM_PTI_IsNone(2)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x2()");
 			return -1;
 		}
-		glm::vec<2, T> o2;
-		if (!unpack_vec(arg2, o2)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x2()");
-			return -1;
-		}
-		glm::vec<2, T> o3;
-		if (!unpack_vec(arg3, o3)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x2()");
-			return -1;
-		}
+		PyGLM_Vec_PTI_Assign0(2, T);
+		PyGLM_Vec_PTI_Assign1(2, T);
+		PyGLM_Vec_PTI_Assign2(2, T);
 		self->super_type = glm::mat<3, 2, T>(o, o2, o3);
 		return 0;
 	}
@@ -445,40 +517,60 @@ mat3x3_init(mat<3, 3, T> *self, PyObject *args, PyObject *)
 			self->super_type = glm::mat<3, 3, T>(PyGLM_Number_FromPyObject<T>(arg1));
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 2, T, arg1)) {
-			self->super_type = unpack_mat<2, 2, T>(arg1);
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_NxM | PyGLM_PTI_GetDT(T));
+		if (PyGLM_Mat_PTI_Check0(2, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 3, T, arg1)) {
-			self->super_type = unpack_mat<2, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 4, T, arg1)) {
-			self->super_type = unpack_mat<2, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 2, T, arg1)) {
-			self->super_type = unpack_mat<3, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 3, T, arg1)) {
-			self->super_type = unpack_mat<3, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 4, T, arg1)) {
-			self->super_type = unpack_mat<3, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 2, T, arg1)) {
-			self->super_type = unpack_mat<4, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 3, T, arg1)) {
-			self->super_type = unpack_mat<4, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 4, T, arg1)) {
-			self->super_type = unpack_mat<4, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, T, arg1);
+			return 0;
+		}
+
+		// mat3x3s with different data types
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_MAT_ALL);
+		if (PyGLM_Mat_PTI_Check0(3, 3, float, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, float, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(3, 3, double, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, double, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(3, 3, int32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, int32, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(3, 3, uint32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, uint32, arg1);
 			return 0;
 		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x3()");
@@ -491,21 +583,16 @@ mat3x3_init(mat<3, 3, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg4 == NULL) {
-		glm::vec<3, T> o;
-		if (!unpack_vec(arg1, o)) {
+		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<3, T>()));
+		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<3, T>()));
+		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<3, T>()));
+		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1) || PyGLM_PTI_IsNone(2)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x3()");
 			return -1;
 		}
-		glm::vec<3, T> o2;
-		if (!unpack_vec(arg2, o2)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x3()");
-			return -1;
-		}
-		glm::vec<3, T> o3;
-		if (!unpack_vec(arg3, o3)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x3()");
-			return -1;
-		}
+		PyGLM_Vec_PTI_Assign0(3, T);
+		PyGLM_Vec_PTI_Assign1(3, T);
+		PyGLM_Vec_PTI_Assign2(3, T);
 		self->super_type = glm::mat<3, 3, T>(o, o2, o3);
 		return 0;
 	}
@@ -555,40 +642,60 @@ mat3x4_init(mat<3, 4, T> *self, PyObject *args, PyObject *)
 			self->super_type = glm::mat<3, 4, T>(PyGLM_Number_FromPyObject<T>(arg1));
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 2, T, arg1)) {
-			self->super_type = unpack_mat<2, 2, T>(arg1);
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_NxM | PyGLM_PTI_GetDT(T));
+		if (PyGLM_Mat_PTI_Check0(2, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 3, T, arg1)) {
-			self->super_type = unpack_mat<2, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 4, T, arg1)) {
-			self->super_type = unpack_mat<2, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 2, T, arg1)) {
-			self->super_type = unpack_mat<3, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 3, T, arg1)) {
-			self->super_type = unpack_mat<3, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 4, T, arg1)) {
-			self->super_type = unpack_mat<3, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 2, T, arg1)) {
-			self->super_type = unpack_mat<4, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 3, T, arg1)) {
-			self->super_type = unpack_mat<4, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 4, T, arg1)) {
-			self->super_type = unpack_mat<4, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, T, arg1);
+			return 0;
+		}
+
+		// mat3x4s with different data types
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_MAT_ALL);
+		if (PyGLM_Mat_PTI_Check0(3, 4, float, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, float, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(3, 4, double, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, double, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(3, 4, int32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, int32, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(3, 4, uint32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, uint32, arg1);
 			return 0;
 		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x4()");
@@ -601,21 +708,16 @@ mat3x4_init(mat<3, 4, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg4 == NULL) {
-		glm::vec<4, T> o;
-		if (!unpack_vec(arg1, o)) {
+		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<4, T>()));
+		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<4, T>()));
+		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<4, T>()));
+		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1) || PyGLM_PTI_IsNone(2)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x4()");
 			return -1;
 		}
-		glm::vec<4, T> o2;
-		if (!unpack_vec(arg2, o2)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x4()");
-			return -1;
-		}
-		glm::vec<4, T> o3;
-		if (!unpack_vec(arg3, o3)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x4()");
-			return -1;
-		}
+		PyGLM_Vec_PTI_Assign0(4, T);
+		PyGLM_Vec_PTI_Assign1(4, T);
+		PyGLM_Vec_PTI_Assign2(4, T);
 		self->super_type = glm::mat<3, 4, T>(o, o2, o3);
 		return 0;
 	}
@@ -661,40 +763,60 @@ mat4x2_init(mat<4, 2, T> *self, PyObject *args, PyObject *)
 			self->super_type = glm::mat<4, 2, T>(PyGLM_Number_FromPyObject<T>(arg1));
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 2, T, arg1)) {
-			self->super_type = unpack_mat<2, 2, T>(arg1);
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_NxM | PyGLM_PTI_GetDT(T));
+		if (PyGLM_Mat_PTI_Check0(2, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 3, T, arg1)) {
-			self->super_type = unpack_mat<2, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 4, T, arg1)) {
-			self->super_type = unpack_mat<2, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 2, T, arg1)) {
-			self->super_type = unpack_mat<3, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 3, T, arg1)) {
-			self->super_type = unpack_mat<3, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 4, T, arg1)) {
-			self->super_type = unpack_mat<3, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 2, T, arg1)) {
-			self->super_type = unpack_mat<4, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 3, T, arg1)) {
-			self->super_type = unpack_mat<4, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 4, T, arg1)) {
-			self->super_type = unpack_mat<4, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, T, arg1);
+			return 0;
+		}
+
+		// mat4x2s with different data types
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_MAT_ALL);
+		if (PyGLM_Mat_PTI_Check0(4, 2, float, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, float, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(4, 2, double, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, double, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(4, 2, int32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, int32, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(4, 2, uint32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, uint32, arg1);
 			return 0;
 		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x2()");
@@ -707,26 +829,18 @@ mat4x2_init(mat<4, 2, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg5 == NULL) {
-		glm::vec<2, T> o;
-		if (!unpack_vec(arg1, o)) {
+		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<2, T>()));
+		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<2, T>()));
+		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<2, T>()));
+		PyGLM_PTI_Init3(arg4, (get_vec_PTI_info<2, T>()));
+		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1) || PyGLM_PTI_IsNone(2) || PyGLM_PTI_IsNone(3)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x2()");
 			return -1;
 		}
-		glm::vec<2, T> o2;
-		if (!unpack_vec(arg2, o2)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x2()");
-			return -1;
-		}
-		glm::vec<2, T> o3;
-		if (!unpack_vec(arg3, o3)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x2()");
-			return -1;
-		}
-		glm::vec<2, T> o4;
-		if (!unpack_vec(arg4, o4)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x2()");
-			return -1;
-		}
+		PyGLM_Vec_PTI_Assign0(2, T);
+		PyGLM_Vec_PTI_Assign1(2, T);
+		PyGLM_Vec_PTI_Assign2(2, T);
+		PyGLM_Vec_PTI_Assign3(2, T);
 		self->super_type = glm::mat<4, 2, T>(o, o2, o3, o4);
 		return 0;
 	}
@@ -776,40 +890,60 @@ mat4x3_init(mat<4, 3, T> *self, PyObject *args, PyObject *)
 			self->super_type = glm::mat<4, 3, T>(PyGLM_Number_FromPyObject<T>(arg1));
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 2, T, arg1)) {
-			self->super_type = unpack_mat<2, 2, T>(arg1);
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_NxM | PyGLM_PTI_GetDT(T));
+		if (PyGLM_Mat_PTI_Check0(2, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 3, T, arg1)) {
-			self->super_type = unpack_mat<2, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 4, T, arg1)) {
-			self->super_type = unpack_mat<2, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 2, T, arg1)) {
-			self->super_type = unpack_mat<3, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 3, T, arg1)) {
-			self->super_type = unpack_mat<3, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 4, T, arg1)) {
-			self->super_type = unpack_mat<3, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 2, T, arg1)) {
-			self->super_type = unpack_mat<4, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 3, T, arg1)) {
-			self->super_type = unpack_mat<4, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 4, T, arg1)) {
-			self->super_type = unpack_mat<4, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, T, arg1);
+			return 0;
+		}
+
+		// mat4x3s with different data types
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_MAT_ALL);
+		if (PyGLM_Mat_PTI_Check0(4, 3, float, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, float, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(4, 3, double, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, double, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(4, 3, int32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, int32, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(4, 3, uint32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, uint32, arg1);
 			return 0;
 		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x3()");
@@ -822,26 +956,18 @@ mat4x3_init(mat<4, 3, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg5 == NULL) {
-		glm::vec<3, T> o;
-		if (!unpack_vec(arg1, o)) {
+		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<3, T>()));
+		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<3, T>()));
+		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<3, T>()));
+		PyGLM_PTI_Init3(arg4, (get_vec_PTI_info<3, T>()));
+		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1) || PyGLM_PTI_IsNone(2) || PyGLM_PTI_IsNone(3)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x3()");
 			return -1;
 		}
-		glm::vec<3, T> o2;
-		if (!unpack_vec(arg2, o2)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x3()");
-			return -1;
-		}
-		glm::vec<3, T> o3;
-		if (!unpack_vec(arg3, o3)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x3()");
-			return -1;
-		}
-		glm::vec<3, T> o4;
-		if (!unpack_vec(arg4, o4)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x3()");
-			return -1;
-		}
+		PyGLM_Vec_PTI_Assign0(3, T);
+		PyGLM_Vec_PTI_Assign1(3, T);
+		PyGLM_Vec_PTI_Assign2(3, T);
+		PyGLM_Vec_PTI_Assign3(3, T);
 		self->super_type = glm::mat<4, 3, T>(o, o2, o3, o4);
 		return 0;
 	}
@@ -895,40 +1021,60 @@ mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 			self->super_type = glm::mat<4, 4, T>(PyGLM_Number_FromPyObject<T>(arg1));
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 2, T, arg1)) {
-			self->super_type = unpack_mat<2, 2, T>(arg1);
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_NxM | PyGLM_PTI_GetDT(T));
+		if (PyGLM_Mat_PTI_Check0(2, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 3, T, arg1)) {
-			self->super_type = unpack_mat<2, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(2, 4, T, arg1)) {
-			self->super_type = unpack_mat<2, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(2, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(2, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 2, T, arg1)) {
-			self->super_type = unpack_mat<3, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 3, T, arg1)) {
-			self->super_type = unpack_mat<3, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(3, 4, T, arg1)) {
-			self->super_type = unpack_mat<3, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(3, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(3, 4, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 2, T, arg1)) {
-			self->super_type = unpack_mat<4, 2, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 2, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 2, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 3, T, arg1)) {
-			self->super_type = unpack_mat<4, 3, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 3, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 3, T, arg1);
 			return 0;
 		}
-		if (PyGLM_Mat_Check(4, 4, T, arg1)) {
-			self->super_type = unpack_mat<4, 4, T>(arg1);
+		if (PyGLM_Mat_PTI_Check0(4, 4, T, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, T, arg1);
+			return 0;
+		}
+
+		// mat4x4s with different data types
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_MAT_ALL);
+		if (PyGLM_Mat_PTI_Check0(4, 4, float, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, float, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(4, 4, double, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, double, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(4, 4, int32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, int32, arg1);
+			return 0;
+		}
+		if (PyGLM_Mat_PTI_Check0(4, 4, uint32, arg1)) {
+			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, uint32, arg1);
 			return 0;
 		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x4()");
@@ -941,26 +1087,18 @@ mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg5 == NULL) {
-		glm::vec<4, T> o;
-		if (!unpack_vec(arg1, o)) {
+		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<4, T>()));
+		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<4, T>()));
+		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<4, T>()));
+		PyGLM_PTI_Init3(arg4, (get_vec_PTI_info<4, T>()));
+		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1) || PyGLM_PTI_IsNone(2) || PyGLM_PTI_IsNone(3)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x4()");
 			return -1;
 		}
-		glm::vec<4, T> o2;
-		if (!unpack_vec(arg2, o2)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x4()");
-			return -1;
-		}
-		glm::vec<4, T> o3;
-		if (!unpack_vec(arg3, o3)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x4()");
-			return -1;
-		}
-		glm::vec<4, T> o4;
-		if (!unpack_vec(arg4, o4)) {
-			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x4()");
-			return -1;
-		}
+		PyGLM_Vec_PTI_Assign0(4, T);
+		PyGLM_Vec_PTI_Assign1(4, T);
+		PyGLM_Vec_PTI_Assign2(4, T);
+		PyGLM_Vec_PTI_Assign3(4, T);
 		self->super_type = glm::mat<4, 4, T>(o, o2, o3, o4);
 		return 0;
 	}
@@ -1009,22 +1147,26 @@ matsq_add(PyObject *obj1, PyObject *obj2)
 		return pack_mat<C, R, T>(PyGLM_Number_FromPyObject<T>(obj1) + (((mat<C, R, T>*)obj2)->super_type));
 	}
 
-	glm::mat<C, R, T> o;
+	PyGLM_PTI_Init0(obj1, (get_mat_PTI_info<C, R, T>()));
 
-	if (!unpack_mat(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm.mat' and ", obj1);
 		return NULL;
 	}
+
+	glm::mat<C, R, T> o = PyGLM_Mat_PTI_Get0(C, R, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		return pack_mat<C, R, T>(o + PyGLM_Number_FromPyObject<T>(obj2));
 	}
 
-	glm::mat<C, R, T> o2;
+	PyGLM_PTI_Init1(obj2, (get_mat_PTI_info<C, R, T>()));
 
-	if (!unpack_mat(obj2, o2)) { // obj1 is self, obj2 is something else
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::mat<C, R, T> o2 = PyGLM_Mat_PTI_Get1(C, R, T, obj2);
 
 	// obj1 and obj2 can be interpreted as a vec
 	return pack_mat<C, R, T>(o + o2);
@@ -1034,22 +1176,26 @@ template<int C, int R, typename T>
 static PyObject *
 mat_add(PyObject *obj1, PyObject *obj2)
 {
-	glm::mat<C, R, T> o;
+	PyGLM_PTI_Init0(obj1, (get_mat_PTI_info<C, R, T>()));
 
-	if (!unpack_mat(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm.mat' and ", obj1);
 		return NULL;
 	}
+
+	glm::mat<C, R, T> o = PyGLM_Mat_PTI_Get0(C, R, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		return pack_mat<C, R, T>(o + PyGLM_Number_FromPyObject<T>(obj2));
 	}
 
-	glm::mat<C, R, T> o2;
+	PyGLM_PTI_Init1(obj2, (get_mat_PTI_info<C, R, T>()));
 
-	if (!unpack_mat(obj2, o2)) { // obj1 is self, obj2 is something else
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::mat<C, R, T> o2 = PyGLM_Mat_PTI_Get1(C, R, T, obj2);
 
 	// obj1 and obj2 can be interpreted as a vec
 	return pack_mat<C, R, T>(o + o2);
@@ -1063,22 +1209,26 @@ matsq_sub(PyObject *obj1, PyObject *obj2)
 		return pack_mat<C, R, T>(PyGLM_Number_FromPyObject<T>(obj1) - (((mat<C, R, T>*)obj2)->super_type));
 	}
 
-	glm::mat<C, R, T> o;
+	PyGLM_PTI_Init0(obj1, (get_mat_PTI_info<C, R, T>()));
 
-	if (!unpack_mat(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm.mat' and ", obj1);
 		return NULL;
 	}
+
+	glm::mat<C, R, T> o = PyGLM_Mat_PTI_Get0(C, R, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		return pack_mat<C, R, T>(o - PyGLM_Number_FromPyObject<T>(obj2));
 	}
 
-	glm::mat<C, R, T> o2;
+	PyGLM_PTI_Init1(obj2, (get_mat_PTI_info<C, R, T>()));
 
-	if (!unpack_mat(obj2, o2)) { // obj1 is self, obj2 is something else
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::mat<C, R, T> o2 = PyGLM_Mat_PTI_Get1(C, R, T, obj2);
 
 	// obj1 and obj2 can be interpreted as a vec
 	return pack_mat<C, R, T>(o - o2);
@@ -1088,22 +1238,26 @@ template<int C, int R, typename T>
 static PyObject *
 mat_sub(PyObject *obj1, PyObject *obj2)
 {
-	glm::mat<C, R, T> o;
+	PyGLM_PTI_Init0(obj1, (get_mat_PTI_info<C, R, T>()));
 
-	if (!unpack_mat(obj1, o)) { // obj1 is not supported.
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
 		PyGLM_TYPEERROR_O("unsupported operand type(s) for -: 'glm.mat' and ", obj1);
 		return NULL;
 	}
+
+	glm::mat<C, R, T> o = PyGLM_Mat_PTI_Get0(C, R, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
 		return pack_mat<C, R, T>(o - PyGLM_Number_FromPyObject<T>(obj2));
 	}
 
-	glm::mat<C, R, T> o2;
+	PyGLM_PTI_Init1(obj2, (get_mat_PTI_info<C, R, T>()));
 
-	if (!unpack_mat(obj2, o2)) { // obj1 is self, obj2 is something else
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::mat<C, R, T> o2 = PyGLM_Mat_PTI_Get1(C, R, T, obj2);
 
 	// obj1 and obj2 can be interpreted as a vec
 	return pack_mat<C, R, T>(o - o2);
@@ -1117,48 +1271,46 @@ mat_mul(PyObject *obj1, PyObject *obj2)
 		return pack_mat(PyGLM_Number_FromPyObject<T>(obj1) * ((mat<C, R, T>*)obj2)->super_type);
 	}
 
-	if (PyGLM_Vec_Check(R, T, obj1)) { // obj1 is a col_type
-		glm::vec<R, T> o;
-		unpack_vec(obj1, o);
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<R, T>()) | (get_mat_PTI_info<C, R, T>()));
+	if (PyGLM_Vec_PTI_Check0(R, T, obj1)) { // obj1 is a col_type
+		glm::vec<R, T> o = PyGLM_Vec_PTI_Get0(R, T, obj1);
 
 		return pack_vec(o * ((mat<C, R, T>*)obj2)->super_type);
 	}
 
-	glm::mat<C, R, T> o;
-
-	if (!unpack_mat<C, R, T>(obj1, o)) { // obj1 can't be interpreted as mat<C, R, T>
+	if (!PyGLM_Mat_PTI_Check0(C, R, T, obj1)) { // obj1 can't be interpreted as mat<C, R, T>
 		PyGLM_TYPEERROR_2O("unsupported operand type(s) for *: ", obj1, obj2);
 		return NULL;
 	}
+
+	glm::mat<C, R, T> o = PyGLM_Mat_PTI_Get0(C, R, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj2 is a scalar
 		return pack_mat(o * PyGLM_Number_FromPyObject<T>(obj2));
 	}
 
-	if (PyGLM_Vec_Check(C, T, obj2)) { // obj2 is a row_type
-		glm::vec<C, T> o2;
-		unpack_vec(obj2, o2);
+	PyGLM_PTI_Init0(obj2, (get_vec_PTI_info<C, T>()) | (get_mat_PTI_info<2, C, T>()) | (get_mat_PTI_info<3, C, T>()) | (get_mat_PTI_info<4, C, T>()))
+
+	if (PyGLM_Vec_PTI_Check0(C, T, obj2)) { // obj2 is a row_type
+		glm::vec<C, T> o2 = PyGLM_Vec_PTI_Get0(C, T, obj2);
 
 		return pack_vec(o * o2);
 	}
 
-	if (PyGLM_Mat_Check(2, C, T, obj2)) {
-		glm::mat<2, C, T> o2;
-		unpack_mat<2, C, T>(obj2, o2);
+	if (PyGLM_Mat_PTI_Check0(2, C, T, obj2)) {
+		glm::mat<2, C, T> o2 = PyGLM_Mat_PTI_Get0(2, C, T, obj2);
 
 		return pack_mat(o * o2);
 	}
 
-	if (PyGLM_Mat_Check(3, C, T, obj2)) {
-		glm::mat<3, C, T> o2;
-		unpack_mat<3, C, T>(obj2, o2);
+	if (PyGLM_Mat_PTI_Check0(3, C, T, obj2)) {
+		glm::mat<3, C, T> o2 = PyGLM_Mat_PTI_Get0(3, C, T, obj2);
 
 		return pack_mat(o * o2);
 	}
 
-	if (PyGLM_Mat_Check(4, C, T, obj2)) {
-		glm::mat<4, C, T> o2;
-		unpack_mat<4, C, T>(obj2, o2);
+	if (PyGLM_Mat_PTI_Check0(4, C, T, obj2)) {
+		glm::mat<4, C, T> o2 = PyGLM_Mat_PTI_Get0(4, C, T, obj2);
 
 		return pack_mat(o * o2);
 	}
@@ -1181,7 +1333,8 @@ matsq_div(PyObject *obj1, PyObject *obj2)
 		return pack_mat<C, R, T>(PyGLM_Number_FromPyObject<T>(obj1) / ((mat<C, R, T>*)obj2)->super_type);
 	}
 
-	if (PyGLM_Vec_Check(R, T, obj1)) { // obj1 is a col_type
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<R, T>() || get_mat_PTI_info<C, R, T>()));
+	if (PyGLM_Vec_PTI_Check0(R, T, obj1)) { // obj1 is a col_type
 		for (int c = 0; c < C; c++) {
 			for (int r = 0; r < R; r++) {
 				if (((mat<C, R, T>*)obj2)->super_type[c][r] == 0) {
@@ -1190,18 +1343,17 @@ matsq_div(PyObject *obj1, PyObject *obj2)
 			}
 		}
 
-		glm::vec<R, T> o;
-		unpack_vec(obj1, o);
+		glm::vec<R, T> o = PyGLM_Vec_PTI_Get0(R, T, obj1);
 
 		return pack_vec(o / ((mat<C, R, T>*)obj2)->super_type);
 	}
 
-	glm::mat<C, R, T> o;
-
-	if (!unpack_mat<C, R, T>(obj1, o)) { // obj1 can't be interpreted as mat<C, R, T>
+	if (!PyGLM_Mat_PTI_Check0(C, R, T, obj1)) { // obj1 can't be interpreted as mat<C, R, T>
 		PyGLM_TYPEERROR_2O("unsupported operand type(s) for /: ", obj1, obj2);
 		return NULL;
 	}
+
+	glm::mat<C, R, T> o = PyGLM_Mat_PTI_Get0(C, R, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj2 is a scalar
 		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
@@ -1211,9 +1363,10 @@ matsq_div(PyObject *obj1, PyObject *obj2)
 		return pack_mat(o / o2);
 	}
 
-	if (PyGLM_Vec_Check(C, T, obj2)) { // obj2 is a row_type
-		glm::vec<C, T> o2;
-		unpack_vec(obj2, o2);
+	PyGLM_PTI_Init1(obj1, (get_vec_PTI_info<C, T>() || get_mat_PTI_info<C, R, T>()));
+
+	if (PyGLM_Vec_PTI_Check1(C, T, obj2)) { // obj2 is a row_type
+		glm::vec<C, T> o2 = PyGLM_Vec_PTI_Get1(C, T, obj2);
 
 		for (int c = 0; c < C; c++) {
 			if (o2[c] == 0) {
@@ -1224,9 +1377,8 @@ matsq_div(PyObject *obj1, PyObject *obj2)
 		return pack_vec(o / o2);
 	}
 
-	if (PyGLM_Mat_Check(C, R, T, obj2)) {
-		glm::mat<C, R, T> o2;
-		unpack_mat<C, R, T>(obj2, o2);
+	if (PyGLM_Mat_PTI_Check1(C, R, T, obj2)) {
+		glm::mat<C, R, T> o2 = PyGLM_Mat_PTI_Get1(C, R, T, obj2);
 
 		for (int c = 0; c < C; c++) {
 			for (int r = 0; r < R; r++) {
@@ -1256,12 +1408,14 @@ mat_div(PyObject *obj1, PyObject *obj2)
 		return pack_mat(PyGLM_Number_FromPyObject<T>(obj1) / ((mat<C, R, T>*)obj2)->super_type);
 	}
 
-	glm::mat<C, R, T> o;
+	PyGLM_PTI_Init0(obj1, (get_mat_PTI_info<C, R, T>()));
 
-	if (!unpack_mat<C, R, T>(obj1, o)) { // obj1 can't be interpreted as mat<C, R, T>
+	if (!PyGLM_Mat_PTI_Check0(C, R, T, obj1)) { // obj1 can't be interpreted as mat<C, R, T>
 		PyGLM_TYPEERROR_2O("unsupported operand type(s) for /: ", obj1, obj2);
 		return NULL;
 	}
+
+	glm::mat<C, R, T> o = PyGLM_Mat_PTI_Get0(C, R, T, obj1);
 
 	if (PyGLM_Number_Check(obj2)) { // obj2 is a scalar
 		T o2 = PyGLM_Number_FromPyObject<T>(obj2);
@@ -1496,9 +1650,9 @@ static PyObject *
 mat2x2_repr(mat<2, 2, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 60 + strlen(name) - 4;
+	size_t required_space = 65 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g | %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g ), ( %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1509,9 +1663,9 @@ static PyObject *
 mat2x3_repr(mat<2, 3, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 88 + strlen(name) - 4;
+	size_t required_space = 93 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g | %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1522,9 +1676,9 @@ static PyObject *
 mat2x4_repr(mat<2, 4, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 116 + strlen(name) - 4;
+	size_t required_space = 121 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1535,9 +1689,9 @@ static PyObject *
 mat3x2_repr(mat<3, 2, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 89 + strlen(name) - 4;
+	size_t required_space = 97 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g | %.6g, %.6g | %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g ), ( %.6g, %.6g ), ( %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1548,9 +1702,9 @@ static PyObject *
 mat3x3_repr(mat<3, 3, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 131 + strlen(name) - 4;
+	size_t required_space = 139 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g | %.6g, %.6g, %.6g | %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1561,9 +1715,9 @@ static PyObject *
 mat3x4_repr(mat<3, 4, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 173 + strlen(name) - 4;
+	size_t required_space = 181 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1574,9 +1728,9 @@ static PyObject *
 mat4x2_repr(mat<4, 2, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 118 + strlen(name) - 4;
+	size_t required_space = 129 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g | %.6g, %.6g | %.6g, %.6g | %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[3][0], (double)self->super_type[3][1]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g ), ( %.6g, %.6g ), ( %.6g, %.6g ), ( %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[3][0], (double)self->super_type[3][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1587,9 +1741,9 @@ static PyObject *
 mat4x3_repr(mat<4, 3, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 174 + strlen(name) - 4;
+	size_t required_space = 185 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g | %.6g, %.6g, %.6g | %.6g, %.6g, %.6g | %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1600,9 +1754,9 @@ static PyObject *
 mat4x4_repr(mat<4, 4, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 230 + strlen(name) - 4;
+	size_t required_space = 241 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g | %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2], (double)self->super_type[3][3]);
+	snprintf(out, required_space, "%s(( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ), ( %.6g, %.6g, %.6g, %.6g ))", &name[4], (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2], (double)self->super_type[3][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -1926,12 +2080,14 @@ static int mat2x2_mp_ass_item(mat<2, 2, T> * self, PyObject* key, PyObject * val
 		return -1;
 	}
 	if (PyGLM_Number_Check(key)) {
-		glm::vec<2, T> o;
-
-		if (!unpack_vec(value, o)) {
+		
+		PyGLM_PTI_Init0(value, (get_vec_PTI_info<2, T>()));
+		if (!PyGLM_Vec_PTI_Check0(2, T, value)) {
 			PyGLM_TYPEERROR_O("expected vec2, got ", value);
 			return -1;
 		}
+
+		glm::vec<2, T> o = PyGLM_Vec_PTI_Get0(2, T, value);
 
 		long index = PyGLM_Number_AsLong(key);
 
@@ -1979,12 +2135,14 @@ static int mat2x3_mp_ass_item(mat<2, 3, T> * self, PyObject* key, PyObject * val
 		return -1;
 	}
 	if (PyGLM_Number_Check(key)) {
-		glm::vec<3, T> o;
-
-		if (!unpack_vec(value, o)) {
+		
+		PyGLM_PTI_Init0(value, (get_vec_PTI_info<3, T>()))
+		if (!PyGLM_Vec_PTI_Check0(3, T, value)) {
 			PyGLM_TYPEERROR_O("expected vec3, got ", value);
 			return -1;
 		}
+
+		glm::vec<3, T> o = PyGLM_Vec_PTI_Get0(3, T, value);
 
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2032,12 +2190,14 @@ static int mat2x4_mp_ass_item(mat<2, 4, T> * self, PyObject* key, PyObject * val
 		return -1;
 	}
 	if (PyGLM_Number_Check(key)) {
-		glm::vec<4, T> o;
-
-		if (!unpack_vec(value, o)) {
+		
+		PyGLM_PTI_Init0(value, (get_vec_PTI_info<4, T>()));
+		if (!PyGLM_Vec_PTI_Check0(4, T, value)) {
 			PyGLM_TYPEERROR_O("expected vec4, got ", value);
 			return -1;
 		}
+
+		glm::vec<4, T> o = PyGLM_Vec_PTI_Get0(4, T, value);
 
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2085,12 +2245,14 @@ static int mat3x2_mp_ass_item(mat<3, 2, T> * self, PyObject* key, PyObject * val
 		return -1;
 	}
 	if (PyGLM_Number_Check(key)) {
-		glm::vec<2, T> o;
-
-		if (!unpack_vec(value, o)) {
+		
+		PyGLM_PTI_Init0(value, (get_vec_PTI_info<2, T>()));
+		if (!PyGLM_Vec_PTI_Check0(2, T, value)) {
 			PyGLM_TYPEERROR_O("expected vec2, got ", value);
 			return -1;
 		}
+
+		glm::vec<2, T> o = PyGLM_Vec_PTI_Get0(2, T, value);
 
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2138,12 +2300,14 @@ static int mat3x3_mp_ass_item(mat<3, 3, T> * self, PyObject* key, PyObject * val
 		return -1;
 	}
 	if (PyGLM_Number_Check(key)) {
-		glm::vec<3, T> o;
-
-		if (!unpack_vec(value, o)) {
+		
+		PyGLM_PTI_Init0(value, (get_vec_PTI_info<3, T>()));
+		if (!PyGLM_Vec_PTI_Check0(3, T, value)) {
 			PyGLM_TYPEERROR_O("expected vec3, got ", value);
 			return -1;
 		}
+
+		glm::vec<3, T> o = PyGLM_Vec_PTI_Get0(3, T, value);
 
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2191,12 +2355,14 @@ static int mat3x4_mp_ass_item(mat<3, 4, T> * self, PyObject* key, PyObject * val
 		return -1;
 	}
 	if (PyGLM_Number_Check(key)) {
-		glm::vec<4, T> o;
-
-		if (!unpack_vec(value, o)) {
+		
+		PyGLM_PTI_Init0(value, (get_vec_PTI_info<4, T>()))
+		if (!PyGLM_Vec_PTI_Check0(4, T, value)) {
 			PyGLM_TYPEERROR_O("expected vec4, got ", value);
 			return -1;
 		}
+
+		glm::vec<4, T> o = PyGLM_Vec_PTI_Get0(4, T, value);
 
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2244,12 +2410,14 @@ static int mat4x2_mp_ass_item(mat<4, 2, T> * self, PyObject* key, PyObject * val
 		return -1;
 	}
 	if (PyGLM_Number_Check(key)) {
-		glm::vec<2, T> o;
-
-		if (!unpack_vec(value, o)) {
+		
+		PyGLM_PTI_Init0(value, (get_vec_PTI_info<2, T>()));
+		if (!PyGLM_Vec_PTI_Check0(2, T, value)) {
 			PyGLM_TYPEERROR_O("expected vec2, got ", value);
 			return -1;
 		}
+
+		glm::vec<2, T> o = PyGLM_Vec_PTI_Get0(2, T, value);
 
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2297,12 +2465,14 @@ static int mat4x3_mp_ass_item(mat<4, 3, T> * self, PyObject* key, PyObject * val
 		return -1;
 	}
 	if (PyGLM_Number_Check(key)) {
-		glm::vec<3, T> o;
-
-		if (!unpack_vec(value, o)) {
+		
+		PyGLM_PTI_Init0(value, (get_vec_PTI_info<3, T>()));
+		if (!PyGLM_Vec_PTI_Check0(3, T, value)) {
 			PyGLM_TYPEERROR_O("expected vec3, got ", value);
 			return -1;
 		}
+
+		glm::vec<3, T> o = PyGLM_Vec_PTI_Get0(3, T, value);
 
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2350,12 +2520,14 @@ static int mat4x4_mp_ass_item(mat<4, 4, T> * self, PyObject* key, PyObject * val
 		return -1;
 	}
 	if (PyGLM_Number_Check(key)) {
-		glm::vec<4, T> o;
-
-		if (!unpack_vec(value, o)) {
+		
+		PyGLM_PTI_Init0(value, (get_vec_PTI_info<4, T>()));
+		if (!PyGLM_Vec_PTI_Check0(4, T, value)) {
 			PyGLM_TYPEERROR_O("expected vec4, got ", value);
 			return -1;
 		}
+
+		glm::vec<4, T> o = PyGLM_Vec_PTI_Get0(4, T, value);
 
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2411,9 +2583,9 @@ static int mat_contains(mat<C, R, T> * self, PyObject * value) {
 		}
 		return (int)contains;
 	}
-	if (PyGLM_Vec_Check(R, T, value)) {
-		glm::vec<R, T> o;
-		unpack_vec(value, o);
+	PyGLM_PTI_Init0(value, (get_vec_PTI_info<R, T>()));
+	if (PyGLM_Vec_PTI_Check0(R, T, value)) {
+		glm::vec<R, T> o = PyGLM_Vec_PTI_Get0(R, T, value);
 		for (int n = 0; n < C; n++) {
 			bool contains = true;
 			for (int m = 0; m < R; m++) {
@@ -2433,9 +2605,9 @@ static int mat_contains(mat<C, R, T> * self, PyObject * value) {
 
 template<int C, int R, typename T>
 static PyObject * mat_richcompare(mat<C, R, T> * self, PyObject * other, int comp_type) {
-	glm::mat<C, R, T> o2;
+	PyGLM_PTI_Init1(other, (get_mat_PTI_info<C, R, T>()));
 
-	if (!unpack_mat(other, o2)) {
+	if (PyGLM_PTI_IsNone(1)) {
 		if (comp_type == Py_EQ) {
 			Py_RETURN_FALSE;
 		}
@@ -2444,6 +2616,8 @@ static PyObject * mat_richcompare(mat<C, R, T> * self, PyObject * other, int com
 		}
 		Py_RETURN_NOTIMPLEMENTED;
 	}
+
+	glm::mat<C, R, T> o2 = PyGLM_Mat_PTI_Get1(C, R, T, other);
 
 	switch (comp_type) {
 	case Py_EQ:

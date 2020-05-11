@@ -341,26 +341,38 @@ for args in gen_args("#u-_N"): # need to add support for _V1_V2_V3_V4
         fassert(T, args)
 
 ## vec2
-for args in gen_args("#u-_N_NN_V2_V3_V4"):
+for args in gen_args("#u-_N_NN_V2"):
     for T in vector_length_dict[2]:
         fassert(T, args)
 
+for args in gen_args("#uV2V3_V2V4"):
+    fassert(type(args[0]), args[1:])
+
 ## vec3
-for args in gen_args("#u-_N_NNN_NV2_V2N_V3_V4"):
+for args in gen_args("#u-_N_NNN_V3"):
     for T in vector_length_dict[3]:
         fassert(T, args)
 
+for args in gen_args("#uV3V4_V3NV2_V3V2N"):
+    fassert(type(args[0]), args[1:])
+
 ## vec4
-for args in gen_args("#u-_N_NNNN_V2NN_NV2N_NNV2_NV3_V3N_V4"):
+for args in gen_args("#u-_N_NNNN_V4"):
     for T in vector_length_dict[4]:
         fassert(T, args)
+
+for args in gen_args("#uV4V2NN_V4NV2N_V4NNV2_V4NV3_V4V3N"):
+    fassert(type(args[0]), args[1:])
 
 ## mat
 for C in range(2, 5):
     for R in range(2, 5):
-        for args in gen_args("#u-_N_" + "N"*(C*R) + "_" + "V{R}".format(R=R)*C): # need support for _M
+        for args in gen_args("#u-_N_" + "N"*(C*R) + "_M{C}{R}__fFiI".format(C=C, R=R)): # need support for _M
             for T in matrix_length_dict[(C,R)]:
                 fassert(T, args)
+
+        for args in gen_args("#uM{C}{R}".format(C=C, R=R) + "V{R}".format(R=R)*C + "_" + "_".join(["M{C}{R}M{c}{r}".format(C=C, R=R, c=c, r=r) for c in range(2, 5) for r in range(2,5)]) + "__fFiI"):
+            fassert(type(args[0]), args[1:])
 
 ## quat
 for args in gen_args("#u-_V3_M33_M44_NV3_V3V3_NNNN_Q__f"): # need support for conversion constructors
@@ -369,6 +381,11 @@ for args in gen_args("#u-_V3_M33_M44_NV3_V3V3_NNNN_Q__f"): # need support for co
 ## dquat
 for args in gen_args("#u-_V3_M33_M44_NV3_V3V3_NNNN_Q__F"): # need support for conversion constructors
     fassert(glm.dquat, args)
+
+# repr #
+for T in vector_types + matrix_types + quat_types:
+    fassert(lambda o: eval(repr(o), {a : getattr(glm, a) for a in dir(glm)}), (T(),))
+#/repr #
 
 # neg #
 for obj in gen_obj("V_M_Q__fFiqsu"):
@@ -656,6 +673,30 @@ for t, s, f in (
     ):
     check_buffer_protocol(t,s,f)
 #/buffer protocol #
+
+# lists and tuples #
+for tp, arg in (
+    (glm.vec1, (1,)),
+    (glm.vec2, (1, 2,)),
+    (glm.vec3, (1, 2, 3,)),
+    (glm.vec4, (1, 2, 3, 4)),
+    (glm.vec1, [1]),
+    (glm.vec2, [1, 2]),
+    (glm.vec3, [1, 2, 3]),
+    (glm.vec4, [1, 2, 3, 4]),
+    (glm.mat2x2, ((1, 2), (3, 4))),
+    (glm.mat2x3, ((1, 2, 3), (4, 5, 6))),
+    (glm.mat2x4, ((1, 2, 3, 4), (5, 6, 7, 8))),
+    (glm.mat3x2, ((1, 2), (3, 4), (5, 6))),
+    (glm.mat3x3, ((1, 2, 3), (4, 5, 6), (7, 8, 9))),
+    (glm.mat3x4, ((1, 2, 3, 4), (5, 6, 7, 8), (9, 10, 11, 12))),
+    (glm.mat4x2, ((1, 2), (3, 4), (5, 6), (7, 8))),
+    (glm.mat4x3, ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))),
+    (glm.mat4x4, ((1, 2, 3, 4), (5, 6, 7, 8), (9, 10, 11, 12), (13, 14, 15, 16))),
+    (glm.quat, (1, 2, 3, 4)),
+    ):
+    fassert(tp, [arg]);
+#/lists and tuples #
 
 # copy module #
 for args in gen_args("V_M_Q"):

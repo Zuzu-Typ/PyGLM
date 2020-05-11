@@ -6,11 +6,7 @@
 
 template<typename T>
 static PyTypeObject* PyGLM_QUAITER_TYPE() {
-	if (std::is_same<quaIter<T>, quaIter<float> >::value) {
-		return (PyTypeObject*)&hfquaIterType;
-	}
-	if (std::is_same<quaIter<T>, quaIter<double> >::value) {
-		return (PyTypeObject*)&hdquaIterType;
-	}
-	return (PyTypeObject*)0;
+	return (std::is_same<quaIter<T>, quaIter<float> >::value) ? (PyTypeObject*)&hfquaIterType :
+		(std::is_same<quaIter<T>, quaIter<double> >::value) ? (PyTypeObject*)&hdquaIterType :
+		(PyTypeObject*)0;
 }

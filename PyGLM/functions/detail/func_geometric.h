@@ -17,29 +17,26 @@ static PyObject*
 cross_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2;
 	PyGLM_Arg_Unpack_2O(args, "cross", arg1, arg2);
-
-	if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {
-		glm::vec3 o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
+	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_T_QUA | PyGLM_SHAPE_3 | PyGLM_DT_FD);
+	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_T_QUA | PyGLM_SHAPE_3 | PyGLM_DT_FD);
+	if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
+		glm::vec<3, float> o = PyGLM_Vec_PTI_Get0(3, float, arg1);
+		glm::vec<3, float> o2 = PyGLM_Vec_PTI_Get1(3, float, arg2);
 		return pack(glm::cross(o, o2));
 	}
-	if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {
-		glm::dvec3 o, o2;
-		unpack_vec(arg1, o);
-		unpack_vec(arg2, o2);
+	if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
+		glm::vec<3, double> o = PyGLM_Vec_PTI_Get0(3, double, arg1);
+		glm::vec<3, double> o2 = PyGLM_Vec_PTI_Get1(3, double, arg2);
 		return pack(glm::cross(o, o2));
 	}
-	if (PyGLM_Qua_Check(float, arg1) && PyGLM_Qua_Check(float, arg2)) {
-		glm::quat o, o2;
-		unpack_qua(arg1, o);
-		unpack_qua(arg2, o2);
+	if (PyGLM_Qua_PTI_Check0(float, arg1) && PyGLM_Qua_PTI_Check1(float, arg2)) {
+		glm::qua<float> o = PyGLM_Qua_PTI_Get0(float, arg1);
+		glm::qua<float> o2 = PyGLM_Qua_PTI_Get1(float, arg2);
 		return pack(glm::cross(o, o2));
 	}
-	if (PyGLM_Qua_Check(double, arg1) && PyGLM_Qua_Check(double, arg2)) {
-		glm::quat o, o2;
-		unpack_qua(arg1, o);
-		unpack_qua(arg2, o2);
+	if (PyGLM_Qua_PTI_Check0(double, arg1) && PyGLM_Qua_PTI_Check1(double, arg2)) {
+		glm::qua<double> o = PyGLM_Qua_PTI_Get0(double, arg1);
+		glm::qua<double> o2 = PyGLM_Qua_PTI_Get1(double, arg2);
 		return pack(glm::cross(o, o2));
 	}
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for cross(): ", arg1, arg2);

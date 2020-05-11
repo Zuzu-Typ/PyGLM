@@ -13,3 +13,11 @@
 #define PyGLM_TypeCheck(op, tp) (Py_TYPE(op) == tp) 
 
 #define PyGLM_String_AsString(name) PyBytes_AsString(PyUnicode_AsASCIIString(name));
+
+#define PyGLM_FITS_IN_FLOAT(value) ((FLT_MAX >= value && value >= FLT_MIN) || (-FLT_MIN >= value && value >= -FLT_MAX))
+
+#define PyGLM_TupleOrList_Check(op) PyType_FastSubclass(Py_TYPE(op), (Py_TPFLAGS_TUPLE_SUBCLASS | Py_TPFLAGS_LIST_SUBCLASS))
+
+#define PyGLM_TupleOrList_GET_SIZE(op) Py_SIZE(op)
+
+#define PyGLM_TupleOrList_GET_ITEM(op, i) ((PyTuple_Check(op)) ? (((PyTupleObject *)(op))->ob_item[i]) : (((PyListObject *)(op))->ob_item[i]))
