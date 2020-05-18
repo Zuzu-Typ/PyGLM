@@ -418,12 +418,19 @@ for T in vector_types + matrix_types + quat_types:
 arr = glm.array(glm.vec4(*[-1.23457e+06]*4), glm.vec4(*[-7.65432e+06]*4))
 arr2 = glm.array(glm.quat(*[-1.23457e+06]*4), glm.quat(*[-7.65432e+06]*4))
 arr3 = glm.array(glm.mat4(*[-1.23457e+06]*16), glm.mat4(*[-7.65432e+06]*16))
-assert eval(repr(arr)) == arr, arr
-assert eval(repr(arr2)) == arr2, arr2
-assert eval(repr(arr3)) == arr3, arr3
+assert repr(arr), arr
+assert repr(arr2), arr2
+assert repr(arr3), arr3
 assert str(arr), arr
 assert str(arr2), arr2
 assert str(arr3), arr3
+
+arr = glm.array(glm.vec4(*[1]*4), glm.vec4(*[2]*4))
+arr2 = glm.array(glm.quat(*[1]*4), glm.quat(*[2]*4))
+arr3 = glm.array(glm.mat4(*[1]*16), glm.mat4(*[2]*16))
+assert eval(repr(arr)) == arr, arr
+assert eval(repr(arr2)) == arr2, arr2
+assert eval(repr(arr3)) == arr3, arr3
 #/repr #
 
 # neg #
