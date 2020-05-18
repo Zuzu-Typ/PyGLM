@@ -387,12 +387,13 @@ for args in gen_args("V_M_Q_VV_MM_QQ_VVV_MMM_QQQ"):
     fassert(glm.array, args)
 
 arr = glm.array(glm.mat4(), glm.mat4(2))
+assert len(arr) == 2, arr
 assert arr.typecode == "f", arr
 assert arr.dtype == "float32", arr
 assert arr.dt_size == 4, arr
-assert arr.itemsize == 4 * 4 * 4, arr
+assert arr.itemsize == arr.dt_size * 4 * 4, arr
 assert arr.ptr, arr
-assert arr.nbytes == 4 * 4 * 4 * 2, arr
+assert arr.nbytes == arr.itemsize * len(arr), arr
 assert arr.element_type == glm.mat4, arr
 
 # repr #
