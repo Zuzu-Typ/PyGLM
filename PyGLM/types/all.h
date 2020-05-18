@@ -11,3 +11,5 @@
 #include "qua/all.h"
 
 #include "vec/all.h"
+
+#include "glmArray/glmArray.h"

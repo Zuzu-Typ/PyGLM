@@ -382,6 +382,19 @@ for args in gen_args("#u-_V3_M33_M44_NV3_V3V3_NNNN_Q__f"): # need support for co
 for args in gen_args("#u-_V3_M33_M44_NV3_V3V3_NNNN_Q__F"): # need support for conversion constructors
     fassert(glm.dquat, args)
 
+## array
+for args in gen_args("V_M_Q_VV_MM_QQ_VVV_MMM_QQQ"):
+    fassert(glm.array, args)
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+assert arr.typecode == "f", arr
+assert arr.dtype == "float32", arr
+assert arr.dt_size == 4, arr
+assert arr.itemsize == 4 * 4 * 4, arr
+assert arr.ptr, arr
+assert arr.nbytes == 4 * 4 * 4 * 2, arr
+assert arr.element_type == glm.mat4, arr
+
 # repr #
 for T in vector_types + matrix_types + quat_types:
     fassert(lambda o: eval(repr(o), {a : getattr(glm, a) for a in dir(glm)}), (T(),))
@@ -405,6 +418,10 @@ for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
 # add #
 for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
     fassert(obj.__add__, (obj,))
+
+arr = glm.array(glm.mat4())
+fassert(arr.__add__, (arr,))
+fassert((arr+arr).__add__, (arr,))
 #/add #
 
 # sub #
@@ -415,6 +432,10 @@ for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
 # mul #
 for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
     fassert(obj.__mul__, (1,))
+
+arr = glm.array(glm.mat4())
+fassert(arr.__mul__, (3,))
+fassert((arr*4).__mul__, (2,))
 #/mul #
 
 # div #
@@ -460,6 +481,10 @@ for obj in gen_obj("V__fF"):
 # iadd #
 for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
     fassert(obj.__iadd__, (obj,))
+    
+arr = glm.array(glm.mat4())
+fassert(arr.__iadd__, (arr,))
+fassert(arr.__iadd__, (arr,))
 #/iadd #
 
 # isub #
@@ -470,6 +495,10 @@ for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
 # imul #
 for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
     fassert(obj.__imul__, (1,))
+
+arr = glm.array(glm.mat4())
+fassert(arr.__imul__, (3,))
+fassert(arr.__imul__, (3,))
 #/imul #
 
 # idiv #
@@ -505,29 +534,50 @@ for obj in gen_obj("V_M_Q"):
 # len #
 for obj in gen_obj("V_M_Q"):
     assert len(obj), obj
+
+arr = glm.array(glm.mat4())
+arr2 = arr + arr
+assert len(arr) == 1, arr
+assert len(arr2) == 2, arr2
 #/len #
 
 # getitem #
 for obj in gen_obj("V_M_Q"):
     for i in range(len(obj)):
         assert obj[i] != None, obj
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+assert arr[0] == glm.mat4(), arr
+assert arr[1] == glm.mat4(2) == arr[-1], arr
 #/getitem #
 
 # setitem #
 for obj in gen_obj("V_M_Q"):
     for i in range(len(obj)):
         fassert(obj.__setitem__,(i, obj[i]))
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+arr[0] = glm.mat4(3)
+assert arr[0] == glm.mat4(3), arr
 #/setitem #
 
 # contains #
 for obj in gen_obj("V_M_Q"):
     assert obj[0] in obj, obj
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+assert glm.mat4(2) in arr and not glm.mat4(3) in arr, arr
 #/contains #
 
 # Richcompare #
 ## EQ
 for obj in gen_obj("V_M_Q"):
     assert obj == type(obj)(obj), obj
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+arr2 = glm.array(glm.mat4(), glm.mat4(2))
+arr3 = glm.array(glm.mat4(), glm.mat4(2), glm.mat4(0))
+assert arr == arr2 and not arr == arr3, (arr, arr2, arr3)
 
 ## NE
 for obj in gen_obj("#uV_M__fFiqsuIQSU"):
@@ -538,6 +588,11 @@ for obj in gen_obj("V_M__B"):
 
 for obj in gen_obj("Q"):
     assert obj != (1,0,0,0)
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+arr2 = glm.array(glm.mat4(), glm.mat4(2))
+arr3 = glm.array(glm.mat4(), glm.mat4(2), glm.mat4(0))
+assert not arr != arr2 and arr != arr3, (arr, arr2, arr3)
 
 ## LT
 for obj in gen_obj("#uV__fFiqsuIQSU"):
@@ -559,6 +614,9 @@ for obj in gen_obj("#uV__fFiqsuIQSU"):
 # iter #
 for obj in gen_obj("V_M_Q"):
     fassert(iter, (obj,))
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+assert list(arr) == arr.to_list(), arr
 #/iter #
 
 # buffer protocol #
@@ -672,6 +730,10 @@ for t, s, f in (
     (glm.dquat, (4,), "d"),
     ):
     check_buffer_protocol(t,s,f)
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+mv = memoryview(arr)
+assert glm.array(mv) == arr, arr
 #/buffer protocol #
 
 # lists and tuples #
@@ -702,6 +764,10 @@ for tp, arg in (
 for args in gen_args("V_M_Q"):
     fassert(copy.copy, args)
     fassert(copy.deepcopy, args)
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+assert copy.copy(arr) == arr, arr
+assert copy.deepcopy(arr) == arr, arr
 #/copy module #
 
 # to_list #
@@ -712,6 +778,9 @@ for args in gen_args("V_Q"):
 for args in gen_args("M"):
     for arg in args:
         assert arg.to_list() == [[y for y in x] for x in arg]
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+assert arr.to_list() == [glm.mat4(), glm.mat4(2)]
 #/to_list #
 
 # to_tuple #
@@ -722,6 +791,9 @@ for args in gen_args("V_Q"):
 for args in gen_args("M"):
     for arg in args:
         assert arg.to_tuple() == tuple([tuple([y for y in x]) for x in arg])
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+assert arr.to_tuple() == (glm.mat4(), glm.mat4(2))
 #/to_tuple #
 
 ## DETAIL ##

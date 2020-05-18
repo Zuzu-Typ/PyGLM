@@ -7,3 +7,5 @@
 #include "mat.h"
 
 #include "qua.h"
+
+#include "glmArray.h"
