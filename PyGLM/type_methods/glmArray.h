@@ -424,15 +424,15 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 			view->strides = NULL;
 		}
 	}
-	else {
+	else if (self->glmType == PyGLM_TYPE_VEC) {
 		const int L = self->getShape();
 
 		view->ndim = 2;
 		if (flags & PyBUF_ND) {
 			view->shape = (Py_ssize_t*)malloc(2 * sizeof(Py_ssize_t));
 			if (view->shape != NULL) {
-				view->shape[0] = L;
-				view->shape[1] = self->dtSize;
+				view->shape[0] = self->itemCount;
+				view->shape[1] = L;
 			}
 		}
 		else {
@@ -442,6 +442,29 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 			view->strides = (Py_ssize_t*)malloc(2 * sizeof(Py_ssize_t));
 			if (view->strides != NULL) {
 				view->strides[0] = L * self->dtSize;
+				view->strides[1] = self->dtSize;
+			}
+		}
+		else {
+			view->strides = NULL;
+		}
+	}
+	else if (self->glmType == PyGLM_TYPE_QUA) {
+		view->ndim = 2;
+		if (flags & PyBUF_ND) {
+			view->shape = (Py_ssize_t*)malloc(2 * sizeof(Py_ssize_t));
+			if (view->shape != NULL) {
+				view->shape[0] = self->itemCount;
+				view->shape[1] = 4;
+			}
+		}
+		else {
+			view->shape = NULL;
+		}
+		if ((flags & PyBUF_STRIDES) == PyBUF_STRIDES) {
+			view->strides = (Py_ssize_t*)malloc(2 * sizeof(Py_ssize_t));
+			if (view->strides != NULL) {
+				view->strides[0] = 4 * self->dtSize;
 				view->strides[1] = self->dtSize;
 			}
 		}
@@ -663,6 +686,56 @@ glmArray_str_vec(glmArray* self) {
 
 template<typename T>
 static PyObject*
+glmArray_repr_vec(glmArray* self) {
+	const int L = self->getShape();
+
+	const char*& subtypeName = self->subtype->tp_name;
+
+	const uint64 arrayNameLength = strlen(glmArrayType.tp_name);
+	const uint64 subtypeNameLength = strlen(subtypeName);
+
+	const uint64 itemSize = (subtypeNameLength + 2 + 12 + (L - 1) * (12 + 2));
+	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize * self->itemCount;
+
+	char* out = (char*)malloc(outLength * sizeof(char));
+	if (out == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "out of memory");
+		return NULL;
+	}
+	char* currentIndex = out;
+
+	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", glmArrayType.tp_name);
+	currentIndex += arrayNameLength + 1;
+
+	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+		T* values = &((T*)self->data)[itemIndex * L];
+		snprintf(currentIndex, subtypeNameLength + 1 + 12 + 1, "%s(%g", subtypeName, static_cast<double>(values[0]));
+		currentIndex += strlen(currentIndex);
+
+		for (ssize_t valueIndex = 1; valueIndex < L; valueIndex++) {
+			snprintf(currentIndex, 2 + 12 + 1, ", %g", static_cast<double>(values[valueIndex]));
+			currentIndex += strlen(currentIndex);
+		}
+
+		if (itemIndex < self->itemCount - 1) {
+			snprintf(currentIndex, 3 + 1, "), ");
+			currentIndex += 3;
+		}
+		else {
+			snprintf(currentIndex, 1 + 1, ")");
+			currentIndex += 1;
+		}
+	}
+
+	snprintf(currentIndex, 1 + 1, ")");
+
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject*
 glmArray_str_mat(glmArray* self) {
 	const int C = self->getShape(0);
 	const int R = self->getShape(1);
@@ -712,6 +785,71 @@ glmArray_str_mat(glmArray* self) {
 
 template<typename T>
 static PyObject*
+glmArray_repr_mat(glmArray* self) {
+	const int C = self->getShape(0);
+	const int R = self->getShape(1);
+
+	const char*& subtypeName = self->subtype->tp_name;
+
+	const uint64 arrayNameLength = strlen(glmArrayType.tp_name);
+	const uint64 subtypeNameLength = strlen(subtypeName);
+
+	const uint64 subItemSize = (2 + 12 + (R - 1) * (12 + 2));
+	const uint64 itemSize = subtypeNameLength + 2 + subItemSize  + (subItemSize + 2) * C;
+	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize * self->itemCount;
+
+	char* out = (char*)malloc(outLength * sizeof(char));
+	if (out == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "out of memory");
+		return NULL;
+	}
+	char* currentIndex = out;
+
+	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", glmArrayType.tp_name);
+	currentIndex += arrayNameLength + 1;
+	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+		snprintf(currentIndex, subtypeNameLength + 1 + 1, "%s(", subtypeName);
+		currentIndex += subtypeNameLength + 1;
+
+		for (ssize_t columnIndex = 0; columnIndex < C; columnIndex++) {
+			T* values = &((T*)self->data)[itemIndex * (C * R) + columnIndex * R];
+			snprintf(currentIndex, 1 + 12 + 1, "(%g", static_cast<double>(values[0]));
+			currentIndex += strlen(currentIndex);
+
+			for (ssize_t valueIndex = 1; valueIndex < R; valueIndex++) {
+				snprintf(currentIndex, 2 + 12 + 1, ", %g", static_cast<double>(values[valueIndex]));
+				currentIndex += strlen(currentIndex);
+			}
+
+			if (columnIndex < C - 1) {
+				snprintf(currentIndex, 3 + 1, "), ");
+				currentIndex += 3;
+			}
+			else {
+				snprintf(currentIndex, 1 + 1, ")");
+				currentIndex += 1;
+			}
+		}
+
+		if (itemIndex < self->itemCount - 1) {
+			snprintf(currentIndex, 3 + 1, "), ");
+			currentIndex += 3;
+		}
+		else {
+			snprintf(currentIndex, 1 + 1, ")");
+			currentIndex += 1;
+		}
+	}
+
+	snprintf(currentIndex, 1 + 1, ")");
+
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject*
 glmArray_str_qua(glmArray* self) {
 	uint64 itemSize = (13 + 12 * 4);
 	uint64 outLength = 1 + 3 + itemSize * self->itemCount;
@@ -737,6 +875,55 @@ glmArray_str_qua(glmArray* self) {
 	}
 
 	snprintf(currentIndex, 1 + 1, "]");
+
+	PyObject* po = PyUnicode_FromString(out);
+	free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject*
+glmArray_repr_qua(glmArray* self) {
+	const char*& subtypeName = self->subtype->tp_name;
+
+	const uint64 arrayNameLength = strlen(glmArrayType.tp_name);
+	const uint64 subtypeNameLength = strlen(subtypeName);
+
+	const uint64 itemSize = (subtypeNameLength + 8 + 12 * 4);
+	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize * self->itemCount;
+
+	char* out = (char*)malloc(outLength * sizeof(char));
+	if (out == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "out of memory");
+		return NULL;
+	}
+	char* currentIndex = out;
+
+	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", glmArrayType.tp_name);
+	currentIndex += arrayNameLength + 1;
+
+	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+		T* values = &((T*)self->data)[itemIndex * 4];
+		if (itemIndex < self->itemCount - 1) {
+			snprintf(currentIndex, itemSize + 2 + 1, "%s(%g, %g, %g, %g), ",
+				subtypeName,
+				static_cast<double>(values[0]),
+				static_cast<double>(values[1]),
+				static_cast<double>(values[2]),
+				static_cast<double>(values[3]));
+		}
+		else {
+			snprintf(currentIndex, itemSize + 1, "%s(%g, %g, %g, %g)",
+				subtypeName,
+				static_cast<double>(values[0]),
+				static_cast<double>(values[1]),
+				static_cast<double>(values[2]),
+				static_cast<double>(values[3]));
+		}
+		currentIndex += strlen(currentIndex);
+	}
+
+	snprintf(currentIndex, 1 + 1, ")");
 
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
@@ -792,6 +979,62 @@ glmArray_str(glmArray* self) {
 			return glmArray_str_qua<float>(self);
 		case 'd':
 			return glmArray_str_qua<double>(self);
+		default:
+			return NULL;
+		}
+	default:
+		return NULL;
+	}
+}
+
+static PyObject* glmArray_repr(glmArray* self) {
+	switch (self->glmType) {
+	case PyGLM_TYPE_VEC:
+		switch (self->format) {
+		case 'f':
+			return glmArray_repr_vec<float>(self);
+		case 'd':
+			return glmArray_repr_vec<double>(self);
+		case 'i':
+			return glmArray_repr_vec<int32>(self);
+		case 'I':
+			return glmArray_repr_vec<uint32>(self);
+		case 'b':
+			return glmArray_repr_vec<int8>(self);
+		case 'B':
+			return glmArray_repr_vec<uint8>(self);
+		case 'h':
+			return glmArray_repr_vec<int16>(self);
+		case 'H':
+			return glmArray_repr_vec<uint16>(self);
+		case 'q':
+			return glmArray_repr_vec<int64>(self);
+		case 'Q':
+			return glmArray_repr_vec<uint64>(self);
+		case '?':
+			return glmArray_repr_vec<bool>(self);
+		default:
+			return NULL;
+		}
+	case PyGLM_TYPE_MAT:
+		switch (self->format) {
+		case 'f':
+			return glmArray_repr_mat<float>(self);
+		case 'd':
+			return glmArray_repr_mat<double>(self);
+		case 'i':
+			return glmArray_repr_mat<int32>(self);
+		case 'I':
+			return glmArray_repr_mat<uint32>(self);
+		default:
+			return NULL;
+		}
+	case PyGLM_TYPE_QUA:
+		switch (self->format) {
+		case 'f':
+			return glmArray_repr_qua<float>(self);
+		case 'd':
+			return glmArray_repr_qua<double>(self);
 		default:
 			return NULL;
 		}

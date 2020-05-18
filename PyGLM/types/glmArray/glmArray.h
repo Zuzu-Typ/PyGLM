@@ -48,7 +48,7 @@ static PyTypeObject glmArrayType = {
 	0,                         /* tp_getattr */
 	0,                         /* tp_setattr */
 	0,                         /* tp_reserved */
-	(reprfunc)glmArray_str,                         /* tp_repr */
+	(reprfunc)glmArray_repr,                         /* tp_repr */
 	0,             /* tp_as_number */
 	&glmArraySeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */

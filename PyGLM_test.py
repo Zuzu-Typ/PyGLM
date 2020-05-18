@@ -386,6 +386,21 @@ for args in gen_args("#u-_V3_M33_M44_NV3_V3V3_NNNN_Q__F"): # need support for co
 for args in gen_args("V_M_Q_VV_MM_QQ_VVV_MMM_QQQ"):
     fassert(glm.array, args)
 
+assert glm.array([glm.vec4() for x in range(10)])
+assert glm.array(tuple([glm.vec4() for x in range(10)]))
+assert glm.array({x : glm.vec4() for x in range(10)}.values())
+assert glm.array(memoryview(glm.array([glm.vec4() for x in range(10)])))
+
+assert glm.array([glm.quat() for x in range(10)])
+assert glm.array(tuple([glm.quat() for x in range(10)]))
+assert glm.array({x : glm.quat() for x in range(10)}.values())
+assert glm.array(memoryview(glm.array([glm.quat() for x in range(10)])))
+
+assert glm.array([glm.mat4() for x in range(10)])
+assert glm.array(tuple([glm.mat4() for x in range(10)]))
+assert glm.array({x : glm.mat4() for x in range(10)}.values())
+assert glm.array(memoryview(glm.array([glm.mat4() for x in range(10)])))
+
 arr = glm.array(glm.mat4(), glm.mat4(2))
 assert len(arr) == 2, arr
 assert arr.typecode == "f", arr
@@ -399,6 +414,16 @@ assert arr.element_type == glm.mat4, arr
 # repr #
 for T in vector_types + matrix_types + quat_types:
     fassert(lambda o: eval(repr(o), {a : getattr(glm, a) for a in dir(glm)}), (T(),))
+
+arr = glm.array(glm.vec4(*[-1.23457e+06]*4), glm.vec4(*[-7.65432e+06]*4))
+arr2 = glm.array(glm.quat(*[-1.23457e+06]*4), glm.quat(*[-7.65432e+06]*4))
+arr3 = glm.array(glm.mat4(*[-1.23457e+06]*16), glm.mat4(*[-7.65432e+06]*16))
+assert eval(repr(arr)) == arr, arr
+assert eval(repr(arr2)) == arr2, arr2
+assert eval(repr(arr3)) == arr3, arr3
+assert str(arr), arr
+assert str(arr2), arr2
+assert str(arr3), arr3
 #/repr #
 
 # neg #
