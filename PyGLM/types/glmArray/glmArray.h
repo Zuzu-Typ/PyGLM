@@ -3,7 +3,7 @@
 #include "forward_declarations.h"
 
 static PyMemberDef glmArray_members[] = {
-	{ "nbytes", T_ULONGLONG, offsetof(glmArray, nBytes), 1, "Total combined bytecount of all elements" },
+	{ "nbytes", T_PYSSIZET, offsetof(glmArray, nBytes), 1, "Total combined bytecount of all elements" },
 	{ "typecode", T_CHAR, offsetof(glmArray, format), 1, "The typecode character of the underlying format" },
 	{ "element_type", T_OBJECT, offsetof(glmArray, subtype), 1, "Type class of the contained elements" },
 	{ "itemsize", T_PYSSIZET, offsetof(glmArray, itemSize), 1, "The size of one array item in bytes " },
