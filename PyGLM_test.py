@@ -428,9 +428,9 @@ assert str(arr3), arr3
 arr = glm.array(glm.vec4(*[1]*4), glm.vec4(*[2]*4))
 arr2 = glm.array(glm.quat(*[1]*4), glm.quat(*[2]*4))
 arr3 = glm.array(glm.mat4(*[1]*16), glm.mat4(*[2]*16))
-assert eval(repr(arr)) == arr, (arr, repr(arr))
-assert eval(repr(arr2)) == arr2, (arr2, repr(arr2))
-assert eval(repr(arr3)) == arr3, (arr3, repr(arr3))
+assert eval(repr(arr)) == arr, (arr, repr(arr), eval(repr(arr)))
+assert eval(repr(arr2)) == arr2, (arr2, repr(arr2), eval(repr(arr2)))
+assert eval(repr(arr3)) == arr3, (arr3, repr(arr3), eval(repr(arr3)))
 #/repr #
 
 # neg #
