@@ -2166,7 +2166,7 @@ struct PyGLMTypeInfo {
 	}
 
 	template<int L, typename T>
-	inline glm::vec<L, T> getVec() {
+	glm::vec<L, T> getVec() {
 		return *((glm::vec<L, T>*)data);
 	}
 

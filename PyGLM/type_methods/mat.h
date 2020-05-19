@@ -1092,7 +1092,7 @@ mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<4, T>()));
 		PyGLM_PTI_Init3(arg4, (get_vec_PTI_info<4, T>()));
 		PySys_WriteStdout("ST0: %d\nST1: %d\nST2: %d\nST3: %d\n", sourceType0, sourceType1, sourceType2, sourceType3);
-		PySys_WriteStdout("PTI0: (info: %d, isVec: %d)\nPTI1: (info: %d, isVec: %d)\nPTI2: (info: %d, isVec: %d)\nPTI3: (info: %d, isVec: %d)\n", PTI0.info, PTI0.isVec, PTI1.info, PTI1.isVec, PTI2.info, PTI2.isVec, PTI3.info, PTI3.isVec);
+		PySys_WriteStdout("PTI0: (data: %p, info: %d, isVec: %d)\nPTI1: (data: %p, info: %d, isVec: %d)\nPTI2: (data: %p, info: %d, isVec: %d)\nPTI3: (data: %p, info: %d, isVec: %d)\n", PTI0.data, PTI0.info, PTI0.isVec, PTI1.data, PTI1.info, PTI1.isVec, PTI2.data, PTI2.info, PTI2.isVec, PTI3.data, PTI3.info, PTI3.isVec);
 		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1) || PyGLM_PTI_IsNone(2) || PyGLM_PTI_IsNone(3)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x4()");
 			return -1;
