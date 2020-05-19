@@ -415,7 +415,7 @@ assert arr.element_type == glm.mat4, arr
 for T in vector_types + matrix_types + quat_types:
     fassert(lambda o: eval(repr(o), {a : getattr(glm, a) for a in dir(glm)}), (T(),))
 
-assert False, (glm.vec1((1,)), glm.vec4((1,2,3,4)), glm.mat2(((1,2),(3,4))), glm.mat4x4((1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1)))
+assert False, (glm.umat4x4((1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1)), glm.imat4x4((1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1)), glm.dmat4x4((1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1)), glm.mat4x4((1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1)))
 
 arr = glm.array(glm.vec4(*[-1.23457e+06]*4), glm.vec4(*[-7.65432e+06]*4))
 arr2 = glm.array(glm.quat(*[-1.23457e+06]*4), glm.quat(*[-7.65432e+06]*4))
