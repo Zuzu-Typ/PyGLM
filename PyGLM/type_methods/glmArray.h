@@ -1345,6 +1345,7 @@ if (self->data == NULL) {\
 	return -1;\
 }\
 memcpy(self->data, view.buf, self->nBytes);\
+PyBuffer_Release(&view);\
 return 0
 
 #define GLM_ARRAY_INIT_IF_IS_MAT_BUFFER(T) self->dtSize = sizeof(T);\
@@ -1359,6 +1360,7 @@ if (self->data == NULL) {\
 	return -1;\
 }\
 memcpy(self->data, view.buf, self->nBytes);\
+PyBuffer_Release(&view);\
 return 0
 
 static int 
@@ -1506,7 +1508,6 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 		if (PyObject_CheckBuffer(firstElement)) {
 			Py_buffer view;
 			if (PyObject_GetBuffer(firstElement, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1) {
-				PyGLM_TYPEERROR_O("invalid argument type ", firstElement);
 				PyBuffer_Release(&view);
 				return -1;
 			}
