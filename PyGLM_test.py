@@ -412,8 +412,6 @@ assert arr.nbytes == arr.itemsize * len(arr), arr
 assert arr.element_type == glm.mat4, arr
 
 # repr #
-assert False, (glm.umat4x4((1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1)), glm.imat4x4((1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1)), glm.dmat4x4((1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1)), glm.mat4x4((1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1)))
-
 for T in vector_types + matrix_types + quat_types:
     fassert(lambda o: eval(repr(o), {a : getattr(glm, a) for a in dir(glm)}), (T(),))
 
