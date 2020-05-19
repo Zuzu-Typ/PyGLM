@@ -1097,11 +1097,22 @@ mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x4()");
 			return -1;
 		}
+		if (sourceType0 == PTI) {
+			PySys_WriteStdout("p0: %f, %f, %f, %f\n", (double)PTI0.getVec<4, T>().x, (double)PTI0.getVec<4, T>().y, (double)PTI0.getVec<4, T>().z, (double)PTI0.getVec<4, T>().w);
+			PySys_WriteStdout("p1: %f, %f, %f, %f\n", (double)PTI1.getVec<4, T>().x, (double)PTI1.getVec<4, T>().y, (double)PTI1.getVec<4, T>().z, (double)PTI1.getVec<4, T>().w);
+			PySys_WriteStdout("p2: %f, %f, %f, %f\n", (double)PTI2.getVec<4, T>().x, (double)PTI2.getVec<4, T>().y, (double)PTI2.getVec<4, T>().z, (double)PTI2.getVec<4, T>().w);
+			PySys_WriteStdout("p3: %f, %f, %f, %f\n", (double)PTI3.getVec<4, T>().x, (double)PTI3.getVec<4, T>().y, (double)PTI3.getVec<4, T>().z, (double)PTI3.getVec<4, T>().w);
+		}
+
 		PyGLM_Vec_PTI_Assign0(4, T);
 		PyGLM_Vec_PTI_Assign1(4, T);
 		PyGLM_Vec_PTI_Assign2(4, T);
 		PyGLM_Vec_PTI_Assign3(4, T);
 		self->super_type = glm::mat<4, 4, T>(o, o2, o3, o4);
+		PySys_WriteStdout("o: %f, %f, %f, %f\n", o.x, o.y, o.z, o.w);
+		PySys_WriteStdout("o2: %f, %f, %f, %f\n", o2.x, o2.y, o2.z, o2.w);
+		PySys_WriteStdout("o3: %f, %f, %f, %f\n", o3.x, o3.y, o3.z, o3.w);
+		PySys_WriteStdout("o4: %f, %f, %f, %f\n", o4.x, o4.y, o4.z, o4.w);
 		return 0;
 	}
 
