@@ -1091,17 +1091,10 @@ mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<4, T>()));
 		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<4, T>()));
 		PyGLM_PTI_Init3(arg4, (get_vec_PTI_info<4, T>()));
-		PySys_WriteStdout("ST0: %d\nST1: %d\nST2: %d\nST3: %d\n", sourceType0, sourceType1, sourceType2, sourceType3);
-		PySys_WriteStdout("PTI0: (data: %p, info: %d, isVec: %d)\nPTI1: (data: %p, info: %d, isVec: %d)\nPTI2: (data: %p, info: %d, isVec: %d)\nPTI3: (data: %p, info: %d, isVec: %d)\n", PTI0.data, PTI0.info, PTI0.isVec, PTI1.data, PTI1.info, PTI1.isVec, PTI2.data, PTI2.info, PTI2.isVec, PTI3.data, PTI3.info, PTI3.isVec);
+		
 		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1) || PyGLM_PTI_IsNone(2) || PyGLM_PTI_IsNone(3)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x4()");
 			return -1;
-		}
-		if (sourceType0 == PTI) {
-			PySys_WriteStdout("p0: %f, %f, %f, %f\n", (double)PTI0.getVec<4, T>().x, (double)PTI0.getVec<4, T>().y, (double)PTI0.getVec<4, T>().z, (double)PTI0.getVec<4, T>().w);
-			PySys_WriteStdout("p1: %f, %f, %f, %f\n", (double)PTI1.getVec<4, T>().x, (double)PTI1.getVec<4, T>().y, (double)PTI1.getVec<4, T>().z, (double)PTI1.getVec<4, T>().w);
-			PySys_WriteStdout("p2: %f, %f, %f, %f\n", (double)PTI2.getVec<4, T>().x, (double)PTI2.getVec<4, T>().y, (double)PTI2.getVec<4, T>().z, (double)PTI2.getVec<4, T>().w);
-			PySys_WriteStdout("p3: %f, %f, %f, %f\n", (double)PTI3.getVec<4, T>().x, (double)PTI3.getVec<4, T>().y, (double)PTI3.getVec<4, T>().z, (double)PTI3.getVec<4, T>().w);
 		}
 
 		PyGLM_Vec_PTI_Assign0(4, T);
@@ -1109,10 +1102,6 @@ mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 		PyGLM_Vec_PTI_Assign2(4, T);
 		PyGLM_Vec_PTI_Assign3(4, T);
 		self->super_type = glm::mat<4, 4, T>(o, o2, o3, o4);
-		PySys_WriteStdout("o: %f, %f, %f, %f\n", (double)o.x, (double)o.y, (double)o.z, (double)o.w);
-		PySys_WriteStdout("o2: %f, %f, %f, %f\n", (double)o2.x, (double)o2.y, (double)o2.z, (double)o2.w);
-		PySys_WriteStdout("o3: %f, %f, %f, %f\n", (double)o3.x, (double)o3.y, (double)o3.z, (double)o3.w);
-		PySys_WriteStdout("o4: %f, %f, %f, %f\n", (double)o4.x, (double)o4.y, (double)o4.z, (double)o4.w);
 		return 0;
 	}
 

@@ -2090,7 +2090,6 @@ struct PyGLMTypeInfo {
 					case PyGLM_DT_FLOAT:
 						allocate(sizeof(glm::vec<4, float>));
 						*((glm::vec<4, float>*)data) = glm::vec<4, float>(item1Out.asFloat(), item2Out.asFloat(), item3Out.asFloat(), item4Out.asFloat());
-						PySys_WriteStdout("%f, %f, %f, %f\n", ((glm::vec<4, float>*)data)->x, ((glm::vec<4, float>*)data)->y, ((glm::vec<4, float>*)data)->z, ((glm::vec<4, float>*)data)->w);
 						return;
 					case PyGLM_DT_DOUBLE:
 						allocate(sizeof(glm::vec<4, double>));
@@ -2160,13 +2159,6 @@ struct PyGLMTypeInfo {
 		}
 #endif
 	}
-
-	//~PyGLMTypeInfo() {
-	//	if (needsToBeFreed) {
-	//		free(data);
-	//		needsToBeFreed = false;
-	//	}
-	//}
 
 	template<int C, int R, typename T>
 	inline glm::mat<C, R, T> getMat() {
