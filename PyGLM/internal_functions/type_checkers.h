@@ -384,9 +384,9 @@ private:
 
 struct PyGLMTypeInfo {
 	int info	= 0;
-	void* data	= NULL;
+	uint8 dataArray[128]; // maximum of 4 * 4 * 8 = 128 bytes of data
 
-	bool needsToBeFreed = false;
+	void* data = &dataArray;
 
 	bool isVec = false;
 	bool isMat = false;
@@ -395,6 +395,14 @@ struct PyGLMTypeInfo {
 	PyGLMTypeInfo() = default;
 
 	PyGLMTypeInfo(int accepted_types, PyObject* obj) {
+		init(accepted_types, obj);
+	}
+
+	void init(int accepted_types, PyObject* obj) {
+		isVec = false;
+		isMat = false;
+		isQua = false;
+		info = 0;
 
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
 		if (PyObject_CheckBuffer(obj)) {
@@ -2153,12 +2161,12 @@ struct PyGLMTypeInfo {
 #endif
 	}
 
-	~PyGLMTypeInfo() {
-		if (needsToBeFreed) {
-			free(data);
-			needsToBeFreed = false;
-		}
-	}
+	//~PyGLMTypeInfo() {
+	//	if (needsToBeFreed) {
+	//		free(data);
+	//		needsToBeFreed = false;
+	//	}
+	//}
 
 	template<int C, int R, typename T>
 	inline glm::mat<C, R, T> getMat() {
@@ -2166,7 +2174,7 @@ struct PyGLMTypeInfo {
 	}
 
 	template<int L, typename T>
-	glm::vec<L, T> getVec() {
+	inline glm::vec<L, T> getVec() {
 		return *((glm::vec<L, T>*)data);
 	}
 
@@ -2177,8 +2185,7 @@ struct PyGLMTypeInfo {
 
 private:
 	void allocate(size_t size) {
-		data = malloc(size);
-		needsToBeFreed = true;
+		assert(size <= 128);
 	}
 
 	void setInfo(int info) {
@@ -2359,7 +2366,7 @@ bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
 	else if (o->ob_type->tp_dealloc == (destructor)mat_dealloc) { sourceType ## N = PyGLM_MAT;} \
 	else if (o->ob_type->tp_dealloc == (destructor)qua_dealloc) { sourceType ## N = PyGLM_QUA; }\
 	else if (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) { sourceType ## N = PyGLM_MVEC; }\
-	else { PTI ## N = PyGLMTypeInfo(accepted_types, o); if (PTI ## N.info == 0) sourceType ## N = NONE; else sourceType ## N = PTI;}
+	else { PTI ## N.init(accepted_types, o); if (PTI ## N.info == 0) sourceType ## N = NONE; else sourceType ## N = PTI;}
 
 #define PyGLM_PTI_DEBUG_EQ(N, o)
 #define PyGLM_PTI_DEBUG_SC(N, o)

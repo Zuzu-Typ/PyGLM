@@ -1109,10 +1109,10 @@ mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 		PyGLM_Vec_PTI_Assign2(4, T);
 		PyGLM_Vec_PTI_Assign3(4, T);
 		self->super_type = glm::mat<4, 4, T>(o, o2, o3, o4);
-		PySys_WriteStdout("o: %f, %f, %f, %f\n", o.x, o.y, o.z, o.w);
-		PySys_WriteStdout("o2: %f, %f, %f, %f\n", o2.x, o2.y, o2.z, o2.w);
-		PySys_WriteStdout("o3: %f, %f, %f, %f\n", o3.x, o3.y, o3.z, o3.w);
-		PySys_WriteStdout("o4: %f, %f, %f, %f\n", o4.x, o4.y, o4.z, o4.w);
+		PySys_WriteStdout("o: %f, %f, %f, %f\n", (double)o.x, (double)o.y, (double)o.z, (double)o.w);
+		PySys_WriteStdout("o2: %f, %f, %f, %f\n", (double)o2.x, (double)o2.y, (double)o2.z, (double)o2.w);
+		PySys_WriteStdout("o3: %f, %f, %f, %f\n", (double)o3.x, (double)o3.y, (double)o3.z, (double)o3.w);
+		PySys_WriteStdout("o4: %f, %f, %f, %f\n", (double)o4.x, (double)o4.y, (double)o4.z, (double)o4.w);
 		return 0;
 	}
 
