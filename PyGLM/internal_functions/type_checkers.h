@@ -2078,6 +2078,8 @@ struct PyGLMTypeInfo {
 
 					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | out_type);
 
+					PySys_WriteStdout("DType: %d\n", out_type);
+
 					switch (out_type) {
 					case PyGLM_DT_FLOAT:
 						allocate(sizeof(glm::vec<4, float>));
