@@ -652,7 +652,7 @@ NAME##_(PyObject*, PyObject* args) {\
 	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);\
 	PyGLM_PTI_Init1(arg2, PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);\
 	PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);\
-	PyGLM_PTI_Init3(arg4, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);\
+	PyGLM_PTI_Init3(arg4, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD);\
 	if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Mat_PTI_Check1(4, 4, float, arg2) && PyGLM_Mat_PTI_Check2(4, 4, float, arg3) && PyGLM_Vec_PTI_Check3(4, float, arg4)) {\
 		return pack(glm::NAME(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Mat_PTI_Get1(4, 4, float, arg2), PyGLM_Mat_PTI_Get2(4, 4, float, arg3), PyGLM_Vec_PTI_Get3(4, float, arg4)));\
 	}\
@@ -937,8 +937,8 @@ NAME##_(PyObject*, PyObject* args) {\
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {\
 		return pack(glm::NAME(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
 	}\
-	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I);\
-	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I);\
+	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);\
+	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);\
 	if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {\
 		return pack(glm::NAME(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2)));\
 	}\

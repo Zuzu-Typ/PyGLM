@@ -415,7 +415,7 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 		if ((flags & PyBUF_STRIDES) == PyBUF_STRIDES) {
 			view->strides = (Py_ssize_t*)malloc(3 * sizeof(Py_ssize_t));
 			if (view->strides != NULL) {
-				view->strides[0] = C * R * self->dtSize;
+				view->strides[0] =  self->dtSize * C * R;
 				view->strides[1] = R * self->dtSize;
 				view->strides[2] = self->dtSize;
 			}
@@ -651,7 +651,7 @@ glmArray_str_vec(glmArray* self) {
 	const int L = self->getShape();
 
 	uint64 itemSize = (7 + 12 + (L - 1) * (12 + 2));
-	uint64 outLength = 1 + 3 + itemSize * self->itemCount;
+	uint64 outLength = 1 + 3 + self->itemCount * itemSize;
 
 	char* out = (char*)malloc(outLength * sizeof(char));
 	if (out == NULL) {
@@ -689,13 +689,15 @@ static PyObject*
 glmArray_repr_vec(glmArray* self) {
 	const int L = self->getShape();
 
-	const char*& subtypeName = self->subtype->tp_name;
+	const char* subtypeName = self->subtype->tp_name + 4;
 
-	const uint64 arrayNameLength = strlen(glmArrayType.tp_name);
+	const char* arrayTypeName = glmArrayType.tp_name + 4;
+
+	const uint64 arrayNameLength = strlen(arrayTypeName);
 	const uint64 subtypeNameLength = strlen(subtypeName);
 
 	const uint64 itemSize = (subtypeNameLength + 2 + 12 + (L - 1) * (12 + 2));
-	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize * self->itemCount;
+	const uint64 outLength = 1 + arrayNameLength + 2 + self->itemCount * itemSize;
 
 	char* out = (char*)malloc(outLength * sizeof(char));
 	if (out == NULL) {
@@ -704,7 +706,7 @@ glmArray_repr_vec(glmArray* self) {
 	}
 	char* currentIndex = out;
 
-	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", glmArrayType.tp_name);
+	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", arrayTypeName);
 	currentIndex += arrayNameLength + 1;
 
 	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
@@ -789,9 +791,11 @@ glmArray_repr_mat(glmArray* self) {
 	const int C = self->getShape(0);
 	const int R = self->getShape(1);
 
-	const char*& subtypeName = self->subtype->tp_name;
+	const char* subtypeName = self->subtype->tp_name + 4;
 
-	const uint64 arrayNameLength = strlen(glmArrayType.tp_name);
+	const char* arrayTypeName = glmArrayType.tp_name + 4;
+
+	const uint64 arrayNameLength = strlen(arrayTypeName);
 	const uint64 subtypeNameLength = strlen(subtypeName);
 
 	const uint64 subItemSize = (2 + 12 + (R - 1) * (12 + 2));
@@ -805,7 +809,7 @@ glmArray_repr_mat(glmArray* self) {
 	}
 	char* currentIndex = out;
 
-	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", glmArrayType.tp_name);
+	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", arrayTypeName);
 	currentIndex += arrayNameLength + 1;
 	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
 		snprintf(currentIndex, subtypeNameLength + 1 + 1, "%s(", subtypeName);
@@ -884,9 +888,11 @@ glmArray_str_qua(glmArray* self) {
 template<typename T>
 static PyObject*
 glmArray_repr_qua(glmArray* self) {
-	const char*& subtypeName = self->subtype->tp_name;
+	const char* subtypeName = self->subtype->tp_name + 4;
 
-	const uint64 arrayNameLength = strlen(glmArrayType.tp_name);
+	const char* arrayTypeName = glmArrayType.tp_name + 4;
+
+	const uint64 arrayNameLength = strlen(arrayTypeName);
 	const uint64 subtypeNameLength = strlen(subtypeName);
 
 	const uint64 itemSize = (subtypeNameLength + 8 + 12 * 4);
@@ -899,7 +905,7 @@ glmArray_repr_qua(glmArray* self) {
 	}
 	char* currentIndex = out;
 
-	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", glmArrayType.tp_name);
+	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", arrayTypeName);
 	currentIndex += arrayNameLength + 1;
 
 	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {

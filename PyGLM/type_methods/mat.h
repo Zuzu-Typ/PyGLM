@@ -1335,7 +1335,7 @@ matsq_div(PyObject *obj1, PyObject *obj2)
 		return pack_mat<C, R, T>(PyGLM_Number_FromPyObject<T>(obj1) / ((mat<C, R, T>*)obj2)->super_type);
 	}
 
-	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<R, T>() || get_mat_PTI_info<C, R, T>()));
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<R, T>() | get_mat_PTI_info<C, R, T>()));
 	if (PyGLM_Vec_PTI_Check0(R, T, obj1)) { // obj1 is a col_type
 		for (int c = 0; c < C; c++) {
 			for (int r = 0; r < R; r++) {
@@ -1365,7 +1365,7 @@ matsq_div(PyObject *obj1, PyObject *obj2)
 		return pack_mat(o / o2);
 	}
 
-	PyGLM_PTI_Init1(obj1, (get_vec_PTI_info<C, T>() || get_mat_PTI_info<C, R, T>()));
+	PyGLM_PTI_Init1(obj1, (get_vec_PTI_info<C, T>() | get_mat_PTI_info<C, R, T>()));
 
 	if (PyGLM_Vec_PTI_Check1(C, T, obj2)) { // obj2 is a row_type
 		glm::vec<C, T> o2 = PyGLM_Vec_PTI_Get1(C, T, obj2);

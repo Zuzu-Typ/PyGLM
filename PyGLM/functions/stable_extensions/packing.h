@@ -121,7 +121,7 @@ packInt2x8_(PyObject*, PyObject* arg) {
 
 static PyObject*
 packInt4x8_(PyObject*, PyObject* arg) {
-	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT8);
+	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT8);
 	if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg)) {
 		PyGLM_Vec_PTI_Assign(4, int8);
 		return PyLong_FromLong((long)glm::packInt4x8(o));
