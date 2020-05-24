@@ -697,7 +697,7 @@ glmArray_repr_vec(glmArray* self) {
 	const uint64 subtypeNameLength = strlen(subtypeName);
 
 	const uint64 itemSize = (subtypeNameLength + 2 + 12 + (L - 1) * (12 + 2));
-	const uint64 outLength = 1 + arrayNameLength + 2 + self->itemCount * itemSize;
+	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize + (itemSize + 2) * (self->itemCount - 1);
 
 	char* out = (char*)malloc(outLength * sizeof(char));
 	if (out == NULL) {
@@ -799,8 +799,8 @@ glmArray_repr_mat(glmArray* self) {
 	const uint64 subtypeNameLength = strlen(subtypeName);
 
 	const uint64 subItemSize = (2 + 12 + (R - 1) * (12 + 2));
-	const uint64 itemSize = subtypeNameLength + 2 + subItemSize  + (subItemSize + 2) * C;
-	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize * self->itemCount;
+	const uint64 itemSize = subtypeNameLength + 2 + subItemSize  + (subItemSize + 2) * (C - 1);
+	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize + (2 + itemSize) * (self->itemCount - 1);
 
 	char* out = (char*)malloc(outLength * sizeof(char));
 	if (out == NULL) {
@@ -896,7 +896,7 @@ glmArray_repr_qua(glmArray* self) {
 	const uint64 subtypeNameLength = strlen(subtypeName);
 
 	const uint64 itemSize = (subtypeNameLength + 8 + 12 * 4);
-	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize * self->itemCount;
+	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize + (itemSize + 2) * (self->itemCount - 1);
 
 	char* out = (char*)malloc(outLength * sizeof(char));
 	if (out == NULL) {
