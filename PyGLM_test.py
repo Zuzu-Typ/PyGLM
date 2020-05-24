@@ -412,8 +412,9 @@ assert arr.nbytes == arr.itemsize * len(arr), arr
 assert arr.element_type == glm.mat4, arr
 
 # repr #
+glm_locals = {a : getattr(glm, a) for a in dir(glm)}
 for T in vector_types + matrix_types + quat_types:
-    fassert(lambda o: eval(repr(o), {a : getattr(glm, a) for a in dir(glm)}), (T(),))
+    fassert(lambda o: eval(repr(o), glm_locals), (T(),))
 
 arr = glm.array(glm.vec4(*[-1.23457e+06]*4), glm.vec4(*[-7.65432e+06]*4))
 arr2 = glm.array(glm.quat(*[-1.23457e+06]*4), glm.quat(*[-7.65432e+06]*4))
@@ -428,9 +429,9 @@ assert str(arr3), arr3
 arr = glm.array(glm.vec4(*[1]*4), glm.vec4(*[2]*4))
 arr2 = glm.array(glm.quat(*[1]*4), glm.quat(*[2]*4))
 arr3 = glm.array(glm.mat4(*[1]*16), glm.mat4(*[2]*16))
-assert eval(repr(arr)) == arr, (arr, repr(arr), eval(repr(arr)))
-assert eval(repr(arr2)) == arr2, (arr2, repr(arr2), eval(repr(arr2)))
-assert eval(repr(arr3)) == arr3, (arr3, repr(arr3), eval(repr(arr3)))
+assert eval(repr(arr), glm_locals) == arr, (arr, repr(arr), eval(repr(arr), glm_locals))
+assert eval(repr(arr2), glm_locals) == arr2, (arr2, repr(arr2), eval(repr(arr2), glm_locals))
+assert eval(repr(arr3), glm_locals) == arr3, (arr3, repr(arr3), eval(repr(arr3), glm_locals))
 #/repr #
 
 # neg #
