@@ -23,27 +23,27 @@
 #include "PyGLM/functions/all.h"
 
 
-static PyObject*
-_get_type_info(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2;
-	PyGLM_Arg_Unpack_2O(args, "_get_type_info", arg1, arg2);
-	PyGLMTypeInfo pti(PyGLM_Number_AsLong(arg1), arg2);
-	return PyLong_FromLong(pti.info);
-}
-
-static PyObject*
-test(PyObject*, PyObject* arg) {
-	PyGLM_PTI_InitN(0, arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
-	if (PyGLM_Vec_PTI_CheckN(0, 3, float, arg)) {
-		Py_RETURN_TRUE;
-	}
-	//PyGLMTypeInfo pti(PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLMTypeInfo::getDT<float>(), arg);
-	////return pack(*((glm::mat<4,4, float>*)pti.data));
-	//return PyLong_FromLong(pti.info);
-	Py_RETURN_FALSE;
-}
-#define HAS_TEST
-#define TEST_FUNC_TYPE METH_O
+//static PyObject*
+//_get_type_info(PyObject*, PyObject* args) {
+//	PyObject *arg1, *arg2;
+//	PyGLM_Arg_Unpack_2O(args, "_get_type_info", arg1, arg2);
+//	PyGLMTypeInfo pti(PyGLM_Number_AsLong(arg1), arg2);
+//	return PyLong_FromLong(pti.info);
+//}
+//
+//static PyObject*
+//test(PyObject*, PyObject* arg) {
+//	PyGLM_PTI_InitN(0, arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
+//	if (PyGLM_Vec_PTI_CheckN(0, 3, float, arg)) {
+//		Py_RETURN_TRUE;
+//	}
+//	//PyGLMTypeInfo pti(PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLMTypeInfo::getDT<float>(), arg);
+//	////return pack(*((glm::mat<4,4, float>*)pti.data));
+//	//return PyLong_FromLong(pti.info);
+//	Py_RETURN_FALSE;
+//}
+//#define HAS_TEST
+//#define TEST_FUNC_TYPE METH_O
 
 static PyMethodDef glmmethods[] = {
 	// DETAIL
@@ -129,7 +129,7 @@ static PyMethodDef glmmethods[] = {
 
 	// PyGLM functions
 	{ "silence", (PyCFunction)silence, METH_O, "silence(ID) -> None\nSilence a PyGLM warning (or all using 0)." },
-	{ "_get_type_info", (PyCFunction)_get_type_info, METH_VARARGS, "_get_type_info(accepted_types, object) -> None\nAn internal testing funtion to check wether or not the type checking works correctly." },
+	//{ "_get_type_info", (PyCFunction)_get_type_info, METH_VARARGS, "_get_type_info(accepted_types, object) -> None\nAn internal testing funtion to check wether or not the type checking works correctly." },
 #ifdef HAS_TEST
 	{"test", (PyCFunction)test, TEST_FUNC_TYPE, ""},
 #endif
@@ -339,7 +339,8 @@ extern "C" {
 			|| PyType_Ready(&humat4x3Type) < 0 || PyType_Ready(&humat4x3IterType) < 0
 			|| PyType_Ready(&humat4x4Type) < 0 || PyType_Ready(&humat4x4IterType) < 0
 			|| PyType_Ready(&hfquaType) < 0 || PyType_Ready(&hfquaIterType) < 0
-			|| PyType_Ready(&hdquaType) < 0 || PyType_Ready(&hdquaIterType) < 0)
+			|| PyType_Ready(&hdquaType) < 0 || PyType_Ready(&hdquaIterType) < 0
+			|| PyType_Ready(&glmArrayType) < 0 || PyType_Ready(&glmArrayIterType) < 0)
 			return NULL;
 
 		module_glm = PyModule_Create(&glmmodule);
@@ -748,6 +749,10 @@ extern "C" {
 		PyModule_AddObject(module_glm, "bvec3", (PyObject *)&hbvec3Type);
 		Py_INCREF(&hbvec4Type);
 		PyModule_AddObject(module_glm, "bvec4", (PyObject *)&hbvec4Type);
+
+
+		Py_INCREF(&glmArrayType);
+		PyModule_AddObject(module_glm, "array", (PyObject*)&glmArrayType);
 
 		PyGLM_VERSION_STRING = PyUnicode_FromString("PyGLM (" PyGLM_BUILD_STRING ") version " PyGLM_VERSION);
 		Py_INCREF(PyGLM_VERSION_STRING);

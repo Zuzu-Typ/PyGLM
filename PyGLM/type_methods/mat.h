@@ -1091,10 +1091,12 @@ mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<4, T>()));
 		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<4, T>()));
 		PyGLM_PTI_Init3(arg4, (get_vec_PTI_info<4, T>()));
+		
 		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1) || PyGLM_PTI_IsNone(2) || PyGLM_PTI_IsNone(3)) {
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x4()");
 			return -1;
 		}
+
 		PyGLM_Vec_PTI_Assign0(4, T);
 		PyGLM_Vec_PTI_Assign1(4, T);
 		PyGLM_Vec_PTI_Assign2(4, T);
@@ -1333,7 +1335,7 @@ matsq_div(PyObject *obj1, PyObject *obj2)
 		return pack_mat<C, R, T>(PyGLM_Number_FromPyObject<T>(obj1) / ((mat<C, R, T>*)obj2)->super_type);
 	}
 
-	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<R, T>() || get_mat_PTI_info<C, R, T>()));
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<R, T>() | get_mat_PTI_info<C, R, T>()));
 	if (PyGLM_Vec_PTI_Check0(R, T, obj1)) { // obj1 is a col_type
 		for (int c = 0; c < C; c++) {
 			for (int r = 0; r < R; r++) {
@@ -1363,7 +1365,7 @@ matsq_div(PyObject *obj1, PyObject *obj2)
 		return pack_mat(o / o2);
 	}
 
-	PyGLM_PTI_Init1(obj1, (get_vec_PTI_info<C, T>() || get_mat_PTI_info<C, R, T>()));
+	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<C, T>() | get_mat_PTI_info<C, R, T>()));
 
 	if (PyGLM_Vec_PTI_Check1(C, T, obj2)) { // obj2 is a row_type
 		glm::vec<C, T> o2 = PyGLM_Vec_PTI_Get1(C, T, obj2);
