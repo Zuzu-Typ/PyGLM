@@ -181,6 +181,7 @@ extern "C" {
 	PyMODINIT_FUNC
 		PyInit_glm(void)
 	{
+		std::setlocale(LC_ALL, "en_US.UTF-8");
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 		PyObject* mainmod = PyImport_AddModule("__main__");
 		PyObject* maindict = PyModule_GetDict(mainmod);
