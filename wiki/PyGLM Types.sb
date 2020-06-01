@@ -1,0 +1,49 @@
+\b\PyGLM\b\ brings a couple of types with it.
+
+These types represent either \b\vectors\b\, \b\matrices\b\ or \b\quaternions\b\.
+
+\lo \
+\-\ A \b\vector\b\ usually is an array of \b\1 to 4 numbers\b\ that serve as \b\positions\b\ or \b\directions\b\ in a 
+1 to 4 dimensional coordinate system (respectively).
+They support a lot of operations necessary in \b\linear algebra\b\.  
+Vector types are expressed as \b\glm.vecN\b\ (\i\N\i\ being the length).  
+For example a \b\2D\b\ vector would be expressed as \code\glm.vec2\code\.
+
+\-\ A \b\matrix\b\ is a \b\2 dimensional array\b\ of numbers ranging from \b\2x2\b\ (4 numbers) to \b\4x4\b\ (16 numbers).  
+They aid in a lot of complex vector manipulations.  
+Matrix types are expressed as \b\glm.matNxM\b\ (\i\N\i\ being the columns and \i\M\i\ being the rows).
+So a \b\4x4\b\ matrix would be \code\glm.mat4x4\code\, or \code\glm.mat4\code\ for short (because \i\N\i\ and \i\M\i\ are equal).
+Note: \i\Yes, columns and rows are not in the correct mathematical order - this is a flaw of glm.\i\
+
+\-\ A \b\quaternion\b\ is an \b\array of 4 numbers\b\ that can be used for complex vector manipulations.  
+Quaternions are simply expressed as \b\glm.quat\b\.
+\ lo\
+All of these types use \b\32-bit floating point numbers\b\ to store their values.  
+PyGLM does however provide \b\other data types\b\.  
+For \b \all of the aforementioned\ b\:
+\table \
+Data type		\-\ Description						\-\ Prefix
+\b\double\b\ 	\-\ 64-bit floating point number 	\-\ \code\d\code\ or \code\f64\code\
+\b\float\b\ 	\-\ 32-bit floating point number 	\-\ \code\f\code\ or \code\f32\code\ or none
+\ table\
+
+Additionally for \b \matrices\ b\ and \b \vectors\ b\:
+\table \
+Data type		\-\ Description						\-\ Prefix
+\b\int\b\ 		\-\ 32-bit signed integer 			\-\ \code\i\code\ or \code\i32\code\
+\b\uint\b\ 		\-\ 32-bit unsigned integer 		\-\ \code\u\code\ or \code\u32\code\  
+\ table\
+
+And additionally for \b\vectors\b\:
+\table \
+Data type		\-\ Description						\-\ Prefix
+\b\int64\b\ 	\-\ 64-bit signed integer 			\-\ \code\i64\code\
+\b\int16\b\ 	\-\ 16-bit signed integer 			\-\ \code\i16\code\
+\b\int8\b\ 		\-\ 8-bit signed integer 			\-\ \code\i8\code\
+\b\uint64\b\ 	\-\ 64-bit unsigned integer 		\-\ \code\u64\code\
+\b\uint16\b\ 	\-\ 16-bit unsigned integer 		\-\ \code\u16\code\
+\b\uint8\b\ 	\-\ 8-bit unsigned integer 			\-\ \code\u8\code\
+\b\bool\b\ 		\-\ boolean values 					\-\ \code\b\code\
+\ table\
+
+If for example you want to use a \b\2D int64\b\ vector, the type you want to use would be \code\glm.i64vec2\code\.

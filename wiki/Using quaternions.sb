@@ -1,0 +1,239 @@
+\lo \
+\-\ \url #Initialization \Initialization\ url\\list switch\
+\--\ \url #initialization-with-no-arguments \with no arguments\ url\
+\--\ \url #Initializing-all-components-with-numbers \all components with numbers\ url\
+\--\ \url #Copying-a-quaternion \copying a quaternion\ url\
+\--\ \url #Initializing-quaternions-with-vectors \with vectors\ url\
+\--\ \url #Constructing-vectors-from-other-vectors-and-numbers \with vectors and numbers\ url\
+\--\ \url #lists-and-other-iterables \Lists (and other iterables)\ url\
+\--\ \url #objects-that-support-the-buffer-protocol-numpy-bytes \Buffer protocol (numpy, bytes)\ url\\list switch\
+\-\ \url #Members \Members\ url\
+\-\ \url #Methods \Methods\ url\\list switch\
+\--\ \url #the-copy-protocol \The copy protocol\ url\
+\--\ \url #to-list--tuple \To list / tuple\ url\\list switch\
+\-\ \url #Operators \Operators\ url\\list switch\
+\--\ \url #add--operator \add\ url\
+\--\ \url #sub--operator \sub\ url\
+\--\ \url #mul--operator \mul\ url\
+\--\ \url #div--operator \div\ url\
+\--\ \url #mod--operator \mod\ url\
+\--\ \url #floordiv--operator \floordiv\ url\
+\--\ \url #divmod \divmod\ url\
+\--\ \url #pow--operator \pow\ url\
+\--\ \url #len \len\ url\
+\--\ \url #getitem-and-setitem--operator \getitem and setitem\ url\
+\--\ \url #contains-in-operator \contains\ url\
+\--\ \url #richcompare-eg--operator \richcompare\ url\
+\--\ \url #iter \iter\ url\
+\ list\
+\h2\Initialization\h2\
+There are a few different ways of constructing a quaternion.  
+\h4\Initialization with no arguments\h4\
+Initializing a quaternion without any additional arguments will set the scalar part (\code\w\code\) to 1 and the vector parts (\code\x, y, z\code\) to 0 (of the respective type).  
+Example:
+\code Python \
+glm.quat() # returns quaternion (1 + 0i + 0j + 0k)
+\code\
+\h4\Initializing all components with numbers\h4\
+A quaternion can be initialized with 4 numbers, which will be copied (or may be converted) to their components.  
+Example:
+\code Python \
+glm.quat(1, 2, 3, 4) # returns quaternion (1 + 2i + 3j + 4k)
+\code\
+Note: For some reason the creator of glm decided to express quaternions as \code\(xi + yj + zk + w)\code\ or \code\(x, y, z, w)\code\ respectively.
+Thus, the string representation of quaternions is also in this order. I might change this in the future.
+\h4\Copying a quaternion\h4\
+A copy of a quaternion can be obtained by initializing a quaternion with another instance of a quaternion.  
+I.e. \code\glm.quat(glm.quat(1, 2, 3, 4))\code\ returns quaternion \code\(2i + 3j + 4k + 1)\code\  
+This is what's known as the copy constructor.
+\h4\Initializing quaternions with vectors\h4\
+\h5\Initialization with a scalar and a vector\h5\
+You can initialize the scalar part (\code\w\code\) of the quaternion with a number and the vector part (\code\x, y, z\code\) with a \code\vec3\code\ (or \code\dvec3\code\ respectively).
+Example:
+\code Python \
+glm.quat(1, glm.vec3(2, 3, 4)) # returns quaternion (1 + 2i + 3j + 4k)
+\ code\
+\h4\Constructing quaternions from two vec3s\h4\
+You can construct a quaternion from two length 3 vectors, which will return a rotation quaternion, that equals the rotation around an orthagonal axis between first direction to the other.
+Example:
+\code Python \
+>>> a = vec3(1, -2, 3)
+>>> b = vec3(-4, 5, -6)
+>>> q = quat(a, b) # rotation from b to a
+>>> b_rot = b * q
+>>> print(normalize(a))
+vec3(  0.267261, -0.534522,  0.801784 )
+>>> print(normalize(b_rot))
+vec3(  0.267261, -0.534523,  0.801784 ) # there may be a few rounding differences
+\ code\
+\h4\Constructing quaternions from euler angles\h4\
+You can create a quaternion from a single \code\vec3\code\, containing 3 angles known as euler angles.
+They have the following structure: \code\vec3(pitch, yaw, roll)\code\, where each angle is a radian value.
+Example:
+\code Python \
+>>> euler_angles = radians(vec3(10, 20, 30))
+>>> q = quat(euler_angles)
+>>> degrees(pitch(q))
+9.999998855319275
+>>> degrees(yaw(q))
+20.000001125733135
+>>> degrees(roll(q))
+30.000000834826057
+\ code\
+\h4\Converting a mat3 or mat4 to a quaternion\h4\
+You can initialize a quaternion with a mat3x3 (or mat4x4, which will be converted to a mat3x3), to get a quaternion with the same rotational effect.
+\h3\Lists (and other iterables)\h3\
+Instead of using vectors to initialize vectors, you can also use lists and other iterables.  
+e.g. \code\glm.vec2([1, 2])\code\ returns vector \code\(1.0, 2.0)\code\  
+or \code\glm.vec3((3, 4), 5)\code\ returns vector \code\(3.0, 4.0, 5.0)\code\  
+(if you do not need this functionality, you might want to use PyGLM_FAST - see Building PyGLM)
+
+\h3\Objects that support the buffer protocol (numpy, bytes)\h3\
+A few objects in Python support a functionality called the buffer protocol.  
+One such example would be the Python \code\bytes\code\ type or \code\numpy.array\code\.  
+PyGLM also supports this protocol and thus can be converted to or from any other object that supports it, granted it's in a fitting format.  
+e.g. \code\bytes(glm.u8vec2(1,2))\code\ returns \code\b'\\x01\\x02'\code\  
+and \code\glm.u8vec2(b'\\x01\\x02')\code\ returns an 8-bit unsigned integer vector \code\(1, 2)\code\
+
+or \code\glm.vec3(numpy.array([4,5,6]))\code\ returns vector \code\(4.0, 5.0, 6.0)\code\  
+and \code\numpy.array(glm.vec3(4, 5, 6))\code\ returns \code\array([4., 5., 6.], dtype=float32)\code\  
+
+Note: objects that use the buffer protocol \i\may\i\ request a reference instead of a copy of the object, meaning that if you change the 'copy', you'll also change the original.  
+
+(if you do not need this functionality, you might want to use PyGLM_FAST - see Building PyGLM)
+
+\h2\Members\h2\
+A vector has a member for each of it's values.  
+\code\vec1\code\ has members: \code\(x)\code\  
+\code\vec2\code\ has members: \code\(x, y)\code\  
+\code\vec3\code\ has members: \code\(x, y, z)\code\  
+\code\vec4\code\ has members: \code\(x, y, z, w)\code\  
+
+Using swizzling, you can also construct vectors from up to four members:
+\code Python \
+v  = vec4(1, 2, 3, 4)
+v2 = v.xy             # returns vec2(1, 2)
+v3 = v.zw             # returns vec2(3, 4)
+v4 = v.xxxw           # returns vec4(1, 1, 1, 4)
+\ code\
+
+\h2\Methods\h2\
+Any vector type implements the following methods:
+
+\h3\The copy protocol\h3\
+Vectors support the copy protocol (see \url https://docs.python.org/3/library/copy.html \here\ url\).  
+You can use \code\copy.copy(<vector>)\code\ or \code\copy.deepcopy(<vector>)\code\ to get a copy of a vector.
+
+\h3\To list / tuple\h3\
+Any vector type has a \code\to_list()\code\ and a \code\to_tuple()\code\ function, which return's the vector's data represented as a list or tuple respectively.
+
+\h2\Operators\h2\
+Vector types support a \i\lot\i\ of operators.
+\h3\add (\code\+\code\ operator)\h3\
+Vectors support addition with other vectors and numbers.  
+\code Python \
+sum1 = vec2(1, 2) + vec2(4, 0) # returns vec2(5, 2)
+sum2 = vec2(1, 2) + 4          # returns vec2(5, 6)
+\ code\
+\h3\sub (\code\-\code\ operator)\h3\
+Vectors support subtraction with other vectors and numbers.  
+\code Python \
+diff1 = vec2(1, 2) - vec2(4, 0) # returns vec2(-3,  2)
+diff2 = vec2(1, 2) - 4          # returns vec2(-3, -2)
+\ code\
+\h3\mul (\code\*\code\ operator)\h3\
+Vectors support multiplication with other vectors and numbers.  
+\code Python \
+prod1 = vec2(1, 2) * vec2(4, 0) # returns vec2(4, 0)
+prod2 = vec2(1, 2) * 4          # returns vec2(4, 8)
+\ code\
+\h3\div (\code\/\code\ operator)\h3\
+Vectors support division with other vectors and numbers.  
+\code Python \
+quot1 = vec2(1, 2) / vec2(4, 0.5) # returns vec2(0.25, 4  )
+quot2 = vec2(1, 2) / 4            # returns vec2(0.25, 0.5)
+\ code\
+\h3\mod (\code\%\code\ operator)\h3\
+Vectors support modulo operations with other vectors and numbers.  
+\code Python \
+mod1 = vec2(1, 2) % vec2(4, 2) # returns vec2(1, 0)
+mod2 = vec2(1, 2) % 4            # returns vec2(1, 2)
+\ code\
+\h3\floordiv (\code\//\code\ operator)\h3\
+Vectors support floored division with other vectors and numbers.  
+\code Python \
+fquot1 = vec2(1, 2) // vec2(4, 0.5) # returns vec2(0, 4)
+fquot2 = vec2(1, 2) // 4            # returns vec2(0, 0)
+\ code\
+\h3\divmod\h3\
+Vectors support combined floor division and modulo operations with other vectors and numbers.  
+\code Python \
+divmod1 = divmod(vec2(1, 2), vec2(4, 2)) # returns (vec2(0, 1), vec2(1, 0))
+divmod2 = divmod(vec2(1, 2), 4)          # returns (vec2(0, 0), vec2(1, 2))
+\ code\
+\h3\pow (\code\**\code\ operator)\h3\
+Vectors support pow operations with other vectors and numbers.  
+\code Python \
+pow1 = vec2(1, 2) ** vec2(4, 2) # returns vec2(1,  4)
+pow2 = vec2(1, 2) ** 4          # returns vec2(1, 16)
+\ code\
+\h3\len\h3\
+The length of a vector can be queried using \code\len()\code\.
+\code Python \
+vec_length = len(vec2()) # returns 2
+\ code\
+\h3\getitem and setitem (\code\[]\code\ operator)\h3\
+You can get the values of a vector using indices.
+\code Python \
+v = vec2(1, 2)
+print(v[0]) # prints 1.0
+print(v[1]) # prints 2.0
+\ code\
+Likewise you can set the values.
+\code Python \
+v    = vec2(1, 2)
+v[0] = 9
+print(v.x) # prints 9.0
+\ code\
+\h3\contains (\code\in\code\ operator)\h3\
+You can query wether or not a value is contained by a vector using the \code\in\code\ operator.
+\code Python \
+v     = vec2(1, 2)
+true  = 2    in v
+false = 2.01 in v
+\ code\
+\h3\richcompare (e.g. \code\==\code\ operator)\h3\
+You can compare vectors using the richcompare operators:
+\code Python \
+vec2(1, 2) == vec2(1, 2)    # True
+vec2(1, 2) == vec2(2, 2)    # False
+vec2(1, 2) == vec3(1, 2, 3) # False
+
+vec2(1, 2) != vec2(1, 2)    # False
+vec2(1, 2) != vec2(2, 2)    # True
+vec2(1, 2) != vec3(1, 2, 3) # True
+
+vec2(1, 2) < vec2(5, 5)     # vec2(1, 1)
+vec2(1, 2) < vec2(2, 2)     # vec2(1, 0)
+vec2(1, 2) < vec2(0, 0)     # vec2(0, 0)
+
+vec2(1, 2) <= vec2(5, 5)    # vec2(1, 1)
+vec2(1, 2) <= vec2(2, 2)    # vec2(1, 1)
+vec2(1, 2) <= vec2(0, 0)    # vec2(0, 0)
+
+vec2(1, 2) > vec2(5, 5)     # vec2(0, 0)
+vec2(1, 2) > vec2(2, 2)     # vec2(0, 0)
+vec2(1, 2) > vec2(0, 0)     # vec2(1, 1)
+
+vec2(1, 2) >= vec2(5, 5)    # vec2(0, 0)
+vec2(1, 2) >= vec2(2, 2)    # vec2(0, 1)
+vec2(1, 2) >= vec2(0, 0)    # vec2(1, 1)
+\ code\
+\h3\iter\h3\
+You can generate an iterable from vectors using \code\iter()\code\.
+\code Python \
+v  = vec2(1, 2)
+it = iter(v)
+print(next(it)) # prints 1.0
+print(next(it)) # prints 2.0
+\ code\
