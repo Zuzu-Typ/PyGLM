@@ -8,9 +8,12 @@
 #include <cstdlib>
 #include <type_traits>
 #include <stdint.h>
+#include <clocale>
 
 #define GLM_FORCE_CTOR_INIT
 #define GLM_ENABLE_EXPERIMENTAL
+
+#define GLM_FORCE_QUAT_DATA_WXYZ
 
 #include <glm/glm.hpp>
 

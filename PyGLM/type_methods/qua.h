@@ -35,7 +35,7 @@ template<typename T>
 static int
 qua_init(qua<T> *self, PyObject *args, PyObject *kwds)
 {
-	const char *kwlist[] = { "x", "y", "z", "w", NULL };
+	const char *kwlist[] = { "w", "x", "y", "z", NULL };
 
 	PyObject * arg1 = NULL;
 	PyObject * arg2 = NULL;
@@ -314,7 +314,7 @@ qua_str(qua<T>* self)
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
 	size_t required_space = 59 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
+	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type.w, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -327,7 +327,7 @@ qua_repr(qua<T>* self)
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
 	size_t required_space = 59 + strlen(name) - 4;
 	char * out = (char*)malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type.w, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
 	PyObject* po = PyUnicode_FromString(out);
 	free(out);
 	return po;
@@ -522,10 +522,10 @@ template<typename T>
 static PyObject*
 qua_to_list(qua<T>* self, PyObject*) {
 	PyObject* out = PyList_New(4);
-	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
-	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
-	PyList_SET_ITEM(out, 2, PyGLM_PyObject_FromNumber<T>(self->super_type.z));
-	PyList_SET_ITEM(out, 3, PyGLM_PyObject_FromNumber<T>(self->super_type.w));
+	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.w));
+	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
+	PyList_SET_ITEM(out, 2, PyGLM_PyObject_FromNumber<T>(self->super_type.y));
+	PyList_SET_ITEM(out, 3, PyGLM_PyObject_FromNumber<T>(self->super_type.z));
 	return out;
 }
 
@@ -533,8 +533,8 @@ template<typename T>
 static PyObject*
 qua_to_tuple(qua<T>* self, PyObject*) {
 	return PyTuple_Pack(4,
+		PyGLM_PyObject_FromNumber<T>(self->super_type.w),
 		PyGLM_PyObject_FromNumber<T>(self->super_type.x),
 		PyGLM_PyObject_FromNumber<T>(self->super_type.y),
-		PyGLM_PyObject_FromNumber<T>(self->super_type.z),
-		PyGLM_PyObject_FromNumber<T>(self->super_type.w));
+		PyGLM_PyObject_FromNumber<T>(self->super_type.z));
 }
