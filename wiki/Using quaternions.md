@@ -5,23 +5,25 @@
     *  [with no arguments](#initialization-with-no-arguments)  
     *  [all components with numbers](#Initializing-all-components-with-numbers)  
     *  [copying a quaternion](#Copying-a-quaternion)  
+    *  [converting a quaternion](#Converting-a-quaternion)  
     *  [with vectors](#Initializing-quaternions-with-vectors)  
-    *  [with vectors and numbers](#Constructing-vectors-from-other-vectors-and-numbers)  
-    *  [Lists \(and other iterables\)](#lists-and-other-iterables)  
-    *  [Buffer protocol \(numpy, bytes\)](#objects-that-support-the-buffer-protocol-numpy-bytes)  
+        *  [scalar and vector](#Initialization-with-a-scalar-and-a-vector)  
+        *  [two vec3s](#Constructing-quaternions-from-two-vec3s)  
+        *  [euler angles](#Constructing-quaternions-from-euler-angles)  
+    *  [conversion from mat3 or mat4](#Converting-a-mat3-or-mat4-to-a-quaternion)  
+    *  [lists \(and other iterables\)](#lists-and-other-iterables)  
+    *  [buffer protocol \(numpy, bytes\)](#objects-that-support-the-buffer-protocol-numpy-bytes)  
 2.  [Members](#Members)  
 3.  [Methods](#Methods)  
     *  [The copy protocol](#the-copy-protocol)  
-    *  [To list / tuple](#to-list--tuple)  
 4.  [Operators](#Operators)  
     *  [add](#add--operator)  
     *  [sub](#sub--operator)  
     *  [mul](#mul--operator)  
+        *  [quat \* quat](#quat--quat)  
+        *  [quat \* scalar](#quat--scalar)  
+        *  [quat \* vec](#quat--vec)  
     *  [div](#div--operator)  
-    *  [mod](#mod--operator)  
-    *  [floordiv](#floordiv--operator)  
-    *  [divmod](#divmod)  
-    *  [pow](#pow--operator)  
     *  [len](#len)  
     *  [getitem and setitem](#getitem-and-setitem--operator)  
     *  [contains](#contains-in-operator)  
@@ -34,188 +36,211 @@ There are a few different ways of constructing a quaternion\.&nbsp;&nbsp;
 Initializing a quaternion without any additional arguments will set the scalar part \(``` w ```\) to 1 and the vector parts \(``` x, y, z ```\) to 0 \(of the respective type\)\.&nbsp;&nbsp;  
 Example:  
 ``` Python
-glm.quat() # returns quaternion (1 + 0i + 0j + 0k)
+quat() # returns quaternion (1 + 0i + 0j + 0k), where i, j and k are imaginary numbers
  ```  
+*Note: The component order of quaternions were inconsistent in PyGLM versions prior to 2\.0\.0\.*  
 #### Initializing all components with numbers  
 A quaternion can be initialized with 4 numbers, which will be copied \(or may be converted\) to their components\.&nbsp;&nbsp;  
 Example:  
 ``` Python
-glm.quat(1, 2, 3, 4) # returns quaternion (1 + 2i + 3j + 4k)
+quat(1, 2, 3, 4) # returns quaternion (1 + 2i + 3j + 4k)
  ```  
-Note: For some reason the creator of glm decided to express quaternions as ``` (xi + yj + zk + w) ``` or ``` (x, y, z, w) ``` respectively\.  
-Thus, the string representation of quaternions is also in this order\. I might change this in the future\.  
 #### Copying a quaternion  
 A copy of a quaternion can be obtained by initializing a quaternion with another instance of a quaternion\.&nbsp;&nbsp;  
-I\.e\. ``` glm.quat(glm.quat(1, 2, 3, 4)) ``` returns quaternion ``` (2i + 3j + 4k + 1) ```&nbsp;&nbsp;  
+I\.e\. ``` quat(quat(1, 2, 3, 4)) ``` returns quaternion ``` (1 + 2i + 3j + 4k) ```&nbsp;&nbsp;  
 This is what's known as the copy constructor\.  
+#### Converting a quaternion  
+To convert a quaternion from one data type to another, the target data type can simply be initialized with the source\.  
+``` Python
+>>> quat(dquat(1, 2, 3, 4))
+quat( 1, 2, 3, 4 )
+ ```  
+*Note: This feature may not be available in PyGLM versions prior to 2\.0\.0*  
 #### Initializing quaternions with vectors  
 ##### Initialization with a scalar and a vector  
 You can initialize the scalar part \(``` w ```\) of the quaternion with a number and the vector part \(``` x, y, z ```\) with a ``` vec3 ``` \(or ``` dvec3 ``` respectively\)\.  
 Example:  
 ``` Python
-glm.quat(1, glm.vec3(2, 3, 4)) # returns quaternion (1 + 2i + 3j + 4k)
+quat(1, vec3(2, 3, 4)) # returns quaternion (1 + 2i + 3j + 4k)
  ```  
-i\.e\. ``` glm.vec1(glm.vec3(1, 2, 3)) ``` returns vector ``` (1.0) ```&nbsp;&nbsp;  
-likewise ``` glm.vec2(glm.vec4(5, 6, 7, 8)) ``` returns vector ``` (5.0, 6.0) ```  
-#### Constructing vectors from other vectors and numbers  
-As long as you don't use any ``` vec1 ```s in your equation, you can construct any vector from a combination of vectors and / or numbers if their sum equals the length of the target vector\.&nbsp;&nbsp;  
-i\.e\. ``` glm.vec4(glm.vec2(1, 2), 3, 4) ``` returns vector ``` (1.0, 2.0, 3.0, 4.0) ```&nbsp;&nbsp;  
-likewise ``` glm.vec3(5, glm.vec2(4, 3)) ``` returns vector ``` (5.0, 4.0, 3.0) ```&nbsp;&nbsp;  
+##### Constructing quaternions from two vec3s  
+You can construct a quaternion from two length 3 vectors, which will return a rotation quaternion, that equals the rotation around an orthagonal axis between first direction to the other\.  
+Example:  
+``` Python
+>>> a = vec3(1, -2, 3)
+>>> b = vec3(-4, 5, -6)
+>>> q = quat(a, b) # rotation from b to a
+>>> b_rot = b * q
+>>> print(normalize(a))
+vec3(  0.267261, -0.534522,  0.801784 )
+>>> print(normalize(b_rot))
+vec3(  0.267261, -0.534523,  0.801784 ) # there may be a few rounding differences
+ ```  
+##### Constructing quaternions from euler angles  
+You can create a quaternion from a single ``` vec3 ```, containing 3 angles known as euler angles\.  
+They have the following structure: ``` vec3(pitch, yaw, roll) ```, where each angle is a radian value\.  
   
-but ``` glm.vec2(glm.vec1(1), 2) ``` doesn't work\.&nbsp;&nbsp;  
-``` glm.vec3(glm.vec2(1, 2), glm.vec2(3, 4)) ``` also doesn't work\.  
+* Pitch is the rotation arount the X\-axis  
+* Yaw is the rotation arount the Y\-axis  
+* Roll is the rotation arount the Z\-axis  
+  
+Example:  
+``` Python
+>>> euler_angles = radians(vec3(10, 20, 30))
+>>> q = quat(euler_angles)
+>>> degrees(pitch(q))
+9.999998855319275
+>>> degrees(yaw(q))
+20.000001125733135
+>>> degrees(roll(q))
+30.000000834826057
+ ```  
+#### Converting a mat3 or mat4 to a quaternion  
+You can initialize a quaternion with a mat3x3 \(or mat4x4, which will be converted to a mat3x3\), to get a quaternion with the same rotational effect\.  
 ### Lists \(and other iterables\)  
-Instead of using vectors to initialize vectors, you can also use lists and other iterables\.&nbsp;&nbsp;  
-e\.g\. ``` glm.vec2([1, 2]) ``` returns vector ``` (1.0, 2.0) ```&nbsp;&nbsp;  
-or ``` glm.vec3((3, 4), 5) ``` returns vector ``` (3.0, 4.0, 5.0) ```&nbsp;&nbsp;  
-\(if you do not need this functionality, you might want to use PyGLM\_FAST \- see Building PyGLM\)  
+Instead of using quaternions, vectors or matrices to initialize vectors, you can also use lists and other iterables\.&nbsp;&nbsp;  
+In most cases, ``` (1, 2, 3) ``` will be interpreted as a ``` vec3(1, 2, 3) ``` of a fitting type\.  
+``` (1, 2, 3, 4) ``` may be interpreted as a ``` vec4(1, 2, 3, 4) ``` or a ``` quat(1, 2, 3, 4) ```, depending on the circumstances \- though usually the vector representation is preferred\.  
+``` ((1, 2), (3, 4)) ``` will be interpreted as a ``` mat2(1, 2, 3, 4) ```\.  
+  
+*Note: This feature may not be supported on PyGLM versions prior to 2\.0\.0, so please handle with care\.*  
   
 ### Objects that support the buffer protocol \(numpy, bytes\)  
 A few objects in Python support a functionality called the buffer protocol\.&nbsp;&nbsp;  
 One such example would be the Python ``` bytes ``` type or ``` numpy.array ```\.&nbsp;&nbsp;  
 PyGLM also supports this protocol and thus can be converted to or from any other object that supports it, granted it's in a fitting format\.&nbsp;&nbsp;  
-e\.g\. ``` bytes(glm.u8vec2(1,2)) ``` returns ``` b'\x01\x02' ```&nbsp;&nbsp;  
-and ``` glm.u8vec2(b'\x01\x02') ``` returns an 8\-bit unsigned integer vector ``` (1, 2) ```  
+E\.g\. ``` numpy.array(glm.quat(1, 2, 3, 4)) ``` returns ``` array([1., 2., 3., 4.], dtype=float32) ```&nbsp;&nbsp;  
+and ``` glm.quat(numpy.array([1., 2., 3., 4.], dtype="float32")) ``` returns ``` quat(1, 2, 3, 4) ```\.  
   
-or ``` glm.vec3(numpy.array([4,5,6])) ``` returns vector ``` (4.0, 5.0, 6.0) ```&nbsp;&nbsp;  
-and ``` numpy.array(glm.vec3(4, 5, 6)) ``` returns ``` array([4., 5., 6.], dtype=float32) ```&nbsp;&nbsp;  
-  
-Note: objects that use the buffer protocol *may* request a reference instead of a copy of the object, meaning that if you change the 'copy', you'll also change the original\.&nbsp;&nbsp;  
-  
-\(if you do not need this functionality, you might want to use PyGLM\_FAST \- see Building PyGLM\)  
+*Note: objects that use the buffer protocol may request a reference instead of a copy of the object, meaning that if you change the 'copy', you'll also change the original\.*&nbsp;&nbsp;  
   
 ## Members  
-A vector has a member for each of it's values\.&nbsp;&nbsp;  
-``` vec1 ``` has members: ``` (x) ```&nbsp;&nbsp;  
-``` vec2 ``` has members: ``` (x, y) ```&nbsp;&nbsp;  
-``` vec3 ``` has members: ``` (x, y, z) ```&nbsp;&nbsp;  
-``` vec4 ``` has members: ``` (x, y, z, w) ```&nbsp;&nbsp;  
+A quaternion has a member for each of it's components\.&nbsp;&nbsp;  
+
+Member|Description
+-|-
+w|The scalar part
+x|The first vector part
+y|The second vector part
+z|The last vector part
   
-Using swizzling, you can also construct vectors from up to four members:  
-``` Python
-v  = vec4(1, 2, 3, 4)
-v2 = v.xy             # returns vec2(1, 2)
-v3 = v.zw             # returns vec2(3, 4)
-v4 = v.xxxw           # returns vec4(1, 1, 1, 4)
- ```  
+  
+Quaternions do not support swizzling\.  
   
 ## Methods  
-Any vector type implements the following methods:  
+Any quaternion type implements the following methods:  
+  
+
+Method|Description
+-|-
+to\_list|Returns a list containing each component of the quaternion
+to\_tuple|Returns a tuple containing each component of the quaternion
+  
   
 ### The copy protocol  
-Vectors support the copy protocol \(see [here](https://docs.python.org/3/library/copy.html)\)\.&nbsp;&nbsp;  
-You can use ``` copy.copy(<vector>) ``` or ``` copy.deepcopy(<vector>) ``` to get a copy of a vector\.  
-  
-### To list / tuple  
-Any vector type has a ``` to_list() ``` and a ``` to_tuple() ``` function, which return's the vector's data represented as a list or tuple respectively\.  
+Quaternions support the copy protocol \(see [here](https://docs.python.org/3/library/copy.html)\)\.&nbsp;&nbsp;  
+You can use ``` copy.copy(<quat>) ``` or ``` copy.deepcopy(<quat>) ``` to get a copy of a quaternion\.  
   
 ## Operators  
-Vector types support a *lot* of operators\.  
+Quaternions support a bunch of operators\.  
 ### add \(``` + ``` operator\)  
-Vectors support addition with other vectors and numbers\.&nbsp;&nbsp;  
+Quaternions support component\-wise addition with other quaternions\.&nbsp;&nbsp;  
 ``` Python
-sum1 = vec2(1, 2) + vec2(4, 0) # returns vec2(5, 2)
-sum2 = vec2(1, 2) + 4          # returns vec2(5, 6)
+sum = quat(1, 2, 3, 4) + quat(5, 6, 7, 8) # returns quat(6, 8, 10, 12)
  ```  
 ### sub \(``` - ``` operator\)  
-Vectors support subtraction with other vectors and numbers\.&nbsp;&nbsp;  
+Quaternions support component\-wise subtraction with other quaternions\.&nbsp;&nbsp;  
 ``` Python
-diff1 = vec2(1, 2) - vec2(4, 0) # returns vec2(-3,  2)
-diff2 = vec2(1, 2) - 4          # returns vec2(-3, -2)
+diff = quat(1, 2, 3, 4) + quat(5, 6, 7, 8) # returns quat(-4, -4, -4, -4)
  ```  
 ### mul \(``` * ``` operator\)  
-Vectors support multiplication with other vectors and numbers\.&nbsp;&nbsp;  
+Quaternions support multiplication with other quaternions, vectors and scalars\.&nbsp;&nbsp;  
+  
+##### quat \* quat  
+Multiplying two quaternions will return their cross product\.  
+The cross product of ``` quat(s1, v1) ``` and ``` quat(s2, v2) ``` \(with v1 and v2 being length 3 vectors\) is defined as:  
 ``` Python
-prod1 = vec2(1, 2) * vec2(4, 0) # returns vec2(4, 0)
-prod2 = vec2(1, 2) * 4          # returns vec2(4, 8)
+quat(
+	s1 * s2 - dot(v1, v2),
+	s1 * v2 + s2 * v1 + cross(v1, v2)
+)
+ ```  
+Example:  
+``` Python
+>>> quat(1, 2, 3, 4) * quat(5, 6, 7, 8)
+quat( -60, 12, 30, 24 )
+>>> cross(quat(1, 2, 3, 4), quat(5, 6, 7, 8))
+quat( -60, 12, 30, 24 )
+ ```  
+  
+##### quat \* scalar  
+Multiplying a quaternion with a scalar will scale each component by the given number\.  
+``` Python
+>>> quat(1, 2, 3, 4) * 2
+quat( 2, 4, 6, 8 )
+ ```  
+  
+##### quat \* vec  
+Multiplying a quaternion by a vector \(vec3 or vec4\) will return a rotated vector\.  
+If the vector is on the left side of the equasion, the result will be a vector rotated by the inverse of the quaternion\.  
+``` Python
+>>> q = quat(radians(vec3(0,90,0))) # yaw = 90°
+>>> v = vec3(1,0,0)
+>>> q * v
+vec3( 5.96046e-08, 0, -1 )
+>>> v * q
+vec3( -1.19209e-07, 0, 1 )
  ```  
 ### div \(``` / ``` operator\)  
-Vectors support division with other vectors and numbers\.&nbsp;&nbsp;  
+Quaternions support component wise, right handside division with scalars \(numbers\)\.&nbsp;&nbsp;  
 ``` Python
-quot1 = vec2(1, 2) / vec2(4, 0.5) # returns vec2(0.25, 4  )
-quot2 = vec2(1, 2) / 4            # returns vec2(0.25, 0.5)
- ```  
-### mod \(``` % ``` operator\)  
-Vectors support modulo operations with other vectors and numbers\.&nbsp;&nbsp;  
-``` Python
-mod1 = vec2(1, 2) % vec2(4, 2) # returns vec2(1, 0)
-mod2 = vec2(1, 2) % 4            # returns vec2(1, 2)
- ```  
-### floordiv \(``` // ``` operator\)  
-Vectors support floored division with other vectors and numbers\.&nbsp;&nbsp;  
-``` Python
-fquot1 = vec2(1, 2) // vec2(4, 0.5) # returns vec2(0, 4)
-fquot2 = vec2(1, 2) // 4            # returns vec2(0, 0)
- ```  
-### divmod  
-Vectors support combined floor division and modulo operations with other vectors and numbers\.&nbsp;&nbsp;  
-``` Python
-divmod1 = divmod(vec2(1, 2), vec2(4, 2)) # returns (vec2(0, 1), vec2(1, 0))
-divmod2 = divmod(vec2(1, 2), 4)          # returns (vec2(0, 0), vec2(1, 2))
- ```  
-### pow \(``` ** ``` operator\)  
-Vectors support pow operations with other vectors and numbers\.&nbsp;&nbsp;  
-``` Python
-pow1 = vec2(1, 2) ** vec2(4, 2) # returns vec2(1,  4)
-pow2 = vec2(1, 2) ** 4          # returns vec2(1, 16)
+quot1 = quat(1, 2, 3, 4) / 2 # returns quat(0.5, 1, 1.5, 2)
  ```  
 ### len  
-The length of a vector can be queried using ``` len() ```\.  
+The length of a quaternion \(always 4\) can be queried using ``` len() ```\.  
 ``` Python
-vec_length = len(vec2()) # returns 2
+quat_length = len(quat()) # returns 4
  ```  
 ### getitem and setitem \(``` [] ``` operator\)  
-You can get the values of a vector using indices\.  
+You can get the values of a quaternion using indices\.  
 ``` Python
-v = vec2(1, 2)
-print(v[0]) # prints 1.0
-print(v[1]) # prints 2.0
+q = quat(1, 2, 3, 4)
+print(q[0]) # prints 1.0
+print(q[1]) # prints 2.0
+print(q[2]) # prints 3.0
+print(q[3]) # prints 4.0
  ```  
 Likewise you can set the values\.  
 ``` Python
-v    = vec2(1, 2)
-v[0] = 9
-print(v.x) # prints 9.0
+q    = quat(1, 2, 3, 4)
+q[0] = 9
+print(q.w) # prints 9.0
  ```  
 ### contains \(``` in ``` operator\)  
-You can query wether or not a value is contained by a vector using the ``` in ``` operator\.  
+You can query wether or not a value is contained by a quaternion using the ``` in ``` operator\.  
 ``` Python
-v     = vec2(1, 2)
-true  = 2    in v
-false = 2.01 in v
+q     = quat(1, 2, 3, 4)
+true  = 2    in q
+false = 2.01 in q
  ```  
 ### richcompare \(e\.g\. ``` == ``` operator\)  
-You can compare vectors using the richcompare operators:  
+You can compare quaternions using the equality richcompare operators:  
 ``` Python
-vec2(1, 2) == vec2(1, 2)    # True
-vec2(1, 2) == vec2(2, 2)    # False
-vec2(1, 2) == vec3(1, 2, 3) # False
+quat(1, 0, 0, 0) == quat()            # True
+quat(1, 2, 3, 4) == dquat(1, 2, 3, 4) # False
+quat(1, 2, 3, 4) == vec4(1, 2, 3, 4)  # False
 
 vec2(1, 2) != vec2(1, 2)    # False
 vec2(1, 2) != vec2(2, 2)    # True
 vec2(1, 2) != vec3(1, 2, 3) # True
-
-vec2(1, 2) < vec2(5, 5)     # vec2(1, 1)
-vec2(1, 2) < vec2(2, 2)     # vec2(1, 0)
-vec2(1, 2) < vec2(0, 0)     # vec2(0, 0)
-
-vec2(1, 2) <= vec2(5, 5)    # vec2(1, 1)
-vec2(1, 2) <= vec2(2, 2)    # vec2(1, 1)
-vec2(1, 2) <= vec2(0, 0)    # vec2(0, 0)
-
-vec2(1, 2) > vec2(5, 5)     # vec2(0, 0)
-vec2(1, 2) > vec2(2, 2)     # vec2(0, 0)
-vec2(1, 2) > vec2(0, 0)     # vec2(1, 1)
-
-vec2(1, 2) >= vec2(5, 5)    # vec2(0, 0)
-vec2(1, 2) >= vec2(2, 2)    # vec2(0, 1)
-vec2(1, 2) >= vec2(0, 0)    # vec2(1, 1)
  ```  
 ### iter  
-You can generate an iterable from vectors using ``` iter() ```\.  
+You can generate an iterable from quaternions using ``` iter() ```\.  
 ``` Python
-v  = vec2(1, 2)
-it = iter(v)
+q  = quat(1, 2, 3, 4)
+it = iter(q)
 print(next(it)) # prints 1.0
 print(next(it)) # prints 2.0
+print(next(it)) # prints 3.0
+print(next(it)) # prints 4.0
  ```

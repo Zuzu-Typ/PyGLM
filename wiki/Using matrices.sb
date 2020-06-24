@@ -164,7 +164,6 @@ It is also accepted by most functions:
 [   -2 |    1 ]
 [  1.5 | -0.5 ]
 \ code\ 
-(if you do not need this functionality, you may consider using PyGLM_FAST - see Building PyGLM)
 
 \h3 \Objects that support the buffer protocol (numpy, bytes)\ h3\
 A few objects in Python support a functionality called the buffer protocol.  
@@ -186,9 +185,7 @@ Examples:
 [ 0 | 0 | 0 | 1 ]
 \ code\
 
-Note: objects that use the buffer protocol \i\may\i\ request a reference instead of a copy of the object, meaning that if you change the 'copy', you'll also change the original.  
-
-(if you do not need this functionality, you may consider using PyGLM_FAST - see Building PyGLM)
+\i\Note: objects that use the buffer protocol may request a reference instead of a copy of the object, meaning that if you change the 'copy', you'll also change the original.\i\
 
 \h2 \Methods\ h2\
 Any matrix type implements the following methods:

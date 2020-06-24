@@ -63,7 +63,6 @@ but ``` glm.vec2(glm.vec1(1), 2) ``` doesn't work\.&nbsp;&nbsp;
 Instead of using vectors to initialize vectors, you can also use lists and other iterables\.&nbsp;&nbsp;  
 e\.g\. ``` glm.vec2([1, 2]) ``` returns vector ``` (1.0, 2.0) ```&nbsp;&nbsp;  
 or ``` glm.vec3((3, 4), 5) ``` returns vector ``` (3.0, 4.0, 5.0) ```&nbsp;&nbsp;  
-\(if you do not need this functionality, you might want to use PyGLM\_FAST \- see Building PyGLM\)  
   
 ### Objects that support the buffer protocol \(numpy, bytes\)  
 A few objects in Python support a functionality called the buffer protocol\.&nbsp;&nbsp;  
@@ -75,9 +74,7 @@ and ``` glm.u8vec2(b'\x01\x02') ``` returns an 8\-bit unsigned integer vector ``
 or ``` glm.vec3(numpy.array([4,5,6])) ``` returns vector ``` (4.0, 5.0, 6.0) ```&nbsp;&nbsp;  
 and ``` numpy.array(glm.vec3(4, 5, 6)) ``` returns ``` array([4., 5., 6.], dtype=float32) ```&nbsp;&nbsp;  
   
-Note: objects that use the buffer protocol *may* request a reference instead of a copy of the object, meaning that if you change the 'copy', you'll also change the original\.&nbsp;&nbsp;  
-  
-\(if you do not need this functionality, you might want to use PyGLM\_FAST \- see Building PyGLM\)  
+*Note: objects that use the buffer protocol *may* request a reference instead of a copy of the object, meaning that if you change the 'copy', you'll also change the original\.*  
   
 ## Members  
 A vector has a member for each of it's values\.&nbsp;&nbsp;  

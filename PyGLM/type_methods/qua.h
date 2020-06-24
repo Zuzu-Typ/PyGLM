@@ -65,6 +65,15 @@ qua_init(qua<T> *self, PyObject *args, PyObject *kwds)
 				self->super_type = glm::qua<T>(PyGLM_Mat_PTI_Get0(4, 4, T, arg1));
 				return 0;
 			}
+			PyGLM_PTI_Init0(arg1, PyGLM_T_QUA | PyGLM_DT_ALL);
+			if (PyGLM_Qua_PTI_Check0(float, arg1)) {
+				self->super_type = PyGLM_Qua_PTI_Get0(float, arg1);
+				return 0;
+			}
+			else if (PyGLM_Qua_PTI_Check0(double, arg1)) {
+				self->super_type = PyGLM_Qua_PTI_Get0(double, arg1);
+				return 0;
+			}
 			PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for quat()");
 			return -1;
 		}

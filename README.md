@@ -7,8 +7,10 @@
   
 **PyGLM** is a Python extension written in **C\+\+**\.   
 By using [GLM by G\-Truc](https://glm.g-truc.net) under the hood, it manages to bring **glm's features** to Python\.&nbsp;&nbsp;  
-Some features are unsupported \(such as unstable extensions\) \- Please see \[*Unsupported Functions*\] below\.  
+Some features are unsupported \(such as most unstable extensions\) \- Please see [Unsupported Functions](#unsupported-functions) below\.  
 If you encounter any issues or want to request a feature, please create an issue on the [issue tracker](https://github.com/Zuzu-Typ/PyGLM/issues)\.  
+  
+**For a \(barely\) complete reference, please take a look at the [wiki](https://github.com/Zuzu-Typ/PyGLM/wiki)**\.  
   
 ## Tiny Documentation  
 ### Why PyGLM?  
@@ -22,8 +24,9 @@ At the same time, it has **great performance**, being between **2x and 15x as fa
 running **Python 3**\.5 or higher\. \(Prior versions of Python \- such as Python 2 \- were supported up to PyGLM version 0\.4\.8b1\)  
   
 It can be installed from the [PyPI](https://pypi.python.org/pypi/PyGLM) using [pip](https://pip.pypa.io/en/stable/):  
-``` 
-pip install pyglm
+``` batch
+pip install PyGLM
+# please make sure to install "PyGLM" and not "glm", which is a different module
  ```  
 And finally imported and used:  
 ``` python
@@ -48,6 +51,7 @@ PyGLM is also capable of interpreting iterables \(such as tuples\) as vectors, s
 ``` python
 result = glm.vec2(1) * (2, 3)
  ```  
+*Note: This feature might not or only partially be available in PyGLM versions prior to 2\.0\.0*  
   
 PyGLM doesn't support precision qualifiers\. All types use the default precision \(``` packed_highp ```\)\.  
   
@@ -78,27 +82,12 @@ and return \(in this case\) a 2 component vector of the pointers underlying type
 ``` glm.silence(ID) ``` can be used to silence specific warnings\.  
 Supplying an id of 0 will silence all warnings\.  
   
-There is currently no documentation for PyGLM\.  
-Please refer to the source \(in Python: **\*\.\_\_doc\_\_**\) and [GLM manuals](https://github.com/g-truc/glm/blob/master/manual.md), [references](https://glm.g-truc.net/0.9.9/api/modules.html) and [tutorials](https://learnopengl.com/)\.  
-  
 #### Unsupported functions  
-Aside from the unstable extensions,  
+Aside from most of the unstable extensions,  
 PyGLM doesn't support the following extensions and methods, due to compatability issues:  
 The ``` GLM_GTC_bitfield ``` extension,  
 ``` glm::log2 ``` from GLM\_GTC\_integer\.  
 ``` glm::packUnorm ``` and ``` glm::packSnorm ``` from GLM\_GTC\_packing\.  
-  
-#### Build options  
-PyGLM can be built from source in a couple of different ways\.  
-In ``` build_options.h ``` there is a preprocessor option ``` PyGLM_BUILD ``` which is set to ``` PyGLM_DEFAULT ``` by default\.  
-``` PyGLM_DEFAULT ``` will build all of PyGLM's functions and features\.  
-  
-A few other flags exist:  
-``` PyGLM_FAST ``` removes PyGLM's iterable and GetBuffer checking, thus making it incompatible with tuples, numpy arrays and bytes objects while increasing overall performance\.  
-  
-``` PyGLM_NO_FUNCTIONS ``` removes all of the functions of glm and only builds the bare types\.  
-  
-``` PyGLM_MINIMAL ``` combines ``` PyGLM_FAST ``` and ``` PyGLM_NO_FUNCTIONS ```\.  
   
 ### Example  
 ``` Python

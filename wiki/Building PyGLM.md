@@ -13,7 +13,7 @@ Although compilation should work with any C\+\+ compiler, the only ones official
 *  [GCC](https://gcc.gnu.org/) \(GNU Compiler Collection\) mostly for Linux   
 &nbsp;&nbsp;``` sudo apt install gcc ``` \(probably\)  
 *  [Clang](https://clang.llvm.org/get_started.html) default Mac OS X compiler   
-&nbsp;&nbsp;Should already be [installed](https://www.ics.uci.edu/~pattis/common/handouts/macclion/clang.html)\.  
+&nbsp;&nbsp;Should already be installed\.  
   
 That should be all there is to it\.  
   

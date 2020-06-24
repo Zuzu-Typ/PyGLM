@@ -11,7 +11,7 @@ Although compilation should work with any C++ compiler, the only ones officially
 \-\ \url https://gcc.gnu.org/ \GCC\ url\ (GNU Compiler Collection) mostly for Linux 
   \code \sudo apt install gcc\ code\ (probably)
 \-\ \url https://clang.llvm.org/get_started.html \Clang\ url\ default Mac OS X compiler 
-  Should already be \url https://www.ics.uci.edu/~pattis/common/handouts/macclion/clang.html \installed\ url\.
+  Should already be installed.
 \ lu\
 That should be all there is to it.
 

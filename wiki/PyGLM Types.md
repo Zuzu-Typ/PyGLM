@@ -15,10 +15,12 @@ For example a **2D** vector would be expressed as ``` glm.vec2 ```\.
 They aid in a lot of complex vector manipulations\.&nbsp;&nbsp;  
 Matrix types are expressed as **glm\.matNxM** \(*N* being the columns and *M* being the rows\)\.  
 So a **4x4** matrix would be ``` glm.mat4x4 ```, or ``` glm.mat4 ``` for short \(because *N* and *M* are equal\)\.  
-Note: *Yes, columns and rows are not in the correct mathematical order \- this is a flaw of glm\.*  
+*Note: Yes, columns and rows are not in the natural order \- this is a flaw of glm\.*  
   
-3.  A **quaternion** is an **array of 4 numbers** that can be used for complex vector manipulations\.&nbsp;&nbsp;  
-Quaternions are simply expressed as **glm\.quat**\.  
+3.  A **quaternion** is an **array of 4 numbers** that can be used for complex vector manipulations\.   
+They are made up of a scalar part ``` (w) ``` and a vector part ``` (x, y, z) ``` and are sometimes displayed as   
+``` (w + x*i + y*j + z*k) ```, where ``` i ```, ``` j ``` and ``` k ``` are imaginary numbers\.  
+Quaternion types are simply expressed as ``` glm.quat ```\.  
   
 All of these types use **32\-bit floating point numbers** to store their values\.&nbsp;&nbsp;  
 PyGLM does however provide **other data types**\.&nbsp;&nbsp;  
