@@ -2433,11 +2433,11 @@ bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
 #define PyGLM_PTI_DEBUG_EQ(N, o)
 #define PyGLM_PTI_DEBUG_SC(N, o)
 
-#define PyGLM_PTI_IsVec(N) (sourceType ## N == PyGLM_VEC || sourceType ## N == PyGLM_MVEC || sourceType ## N == PTI && PTI ## N.isVec)
+#define PyGLM_PTI_IsVec(N) (sourceType ## N == PyGLM_VEC || sourceType ## N == PyGLM_MVEC || (sourceType ## N == PTI && PTI ## N.isVec))
 
-#define PyGLM_PTI_IsMat(N) (sourceType ## N == PyGLM_MAT || sourceType ## N == PTI && PTI ## N.isMat)
+#define PyGLM_PTI_IsMat(N) (sourceType ## N == PyGLM_MAT || (sourceType ## N == PTI && PTI ## N.isMat))
 
-#define PyGLM_PTI_IsQua(N) (sourceType ## N == PyGLM_QUA || sourceType ## N == PTI && PTI ## N.isQua)
+#define PyGLM_PTI_IsQua(N) (sourceType ## N == PyGLM_QUA || (sourceType ## N == PTI && PTI ## N.isQua))
 
 #define PyGLM_PTI_IsNone(N) (sourceType ## N == NONE)
 #endif
