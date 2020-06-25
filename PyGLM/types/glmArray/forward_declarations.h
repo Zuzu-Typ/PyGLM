@@ -47,10 +47,6 @@ static PyObject* glmArray_str(glmArray* self);
 
 static PyObject* glmArray_repr(glmArray* self);
 
-static PyObject* glmArray_getattr(PyObject* obj, PyObject* name);
-
-static int glmArray_setattr(PyObject* obj, PyObject* name, PyObject* value);
-
 
 static PyObject* glmArray_richcompare(glmArray* self, PyObject* other, int comp_type);
 

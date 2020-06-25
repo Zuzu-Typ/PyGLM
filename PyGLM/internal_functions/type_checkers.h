@@ -2433,11 +2433,11 @@ bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
 #define PyGLM_PTI_DEBUG_EQ(N, o)
 #define PyGLM_PTI_DEBUG_SC(N, o)
 
-#define PyGLM_PTI_IsVec(N) (sourceType ## N == PyGLM_VEC || sourceType ## N == PyGLM_MVEC || sourceType ## N == PTI && PTI ## N.isVec)
+#define PyGLM_PTI_IsVec(N) (sourceType ## N == PyGLM_VEC || sourceType ## N == PyGLM_MVEC || (sourceType ## N == PTI && PTI ## N.isVec))
 
-#define PyGLM_PTI_IsMat(N) (sourceType ## N == PyGLM_MAT || sourceType ## N == PTI && PTI ## N.isMat)
+#define PyGLM_PTI_IsMat(N) (sourceType ## N == PyGLM_MAT || (sourceType ## N == PTI && PTI ## N.isMat))
 
-#define PyGLM_PTI_IsQua(N) (sourceType ## N == PyGLM_QUA || sourceType ## N == PTI && PTI ## N.isQua)
+#define PyGLM_PTI_IsQua(N) (sourceType ## N == PyGLM_QUA || (sourceType ## N == PTI && PTI ## N.isQua))
 
 #define PyGLM_PTI_IsNone(N) (sourceType ## N == NONE)
 #endif
@@ -2456,11 +2456,11 @@ inline bool assertAndReturn(bool expr) {
 
 #define PyGLM_Qua_PTI_CheckN(N, T, o) (PyGLM_PTI_DEBUG_EQ(N, o) PyGLM_Qua_CheckExact(T, o) && assertAndReturn(sourceType ## N == PyGLM_QUA) || sourceType ## N == PTI && PTI ## N.info == get_qua_PTI_info<T>())
 #else
-#define PyGLM_Vec_PTI_CheckN(N, L, T, o) (PyGLM_PTI_DEBUG_EQ(N, o) PyGLM_Vec_CheckExact(L, T, o) || sourceType ## N == PTI && PTI ## N.info == get_vec_PTI_info<L, T>())
+#define PyGLM_Vec_PTI_CheckN(N, L, T, o) (PyGLM_PTI_DEBUG_EQ(N, o) PyGLM_Vec_CheckExact(L, T, o) ||( sourceType ## N == PTI && PTI ## N.info == get_vec_PTI_info<L, T>()))
 
-#define PyGLM_Mat_PTI_CheckN(N, C, R, T, o) (PyGLM_PTI_DEBUG_EQ(N, o) PyGLM_Mat_CheckExact(C, R, T, o) || sourceType ## N == PTI && PTI ## N.info == get_mat_PTI_info<C, R, T>())
+#define PyGLM_Mat_PTI_CheckN(N, C, R, T, o) (PyGLM_PTI_DEBUG_EQ(N, o) PyGLM_Mat_CheckExact(C, R, T, o) || (sourceType ## N == PTI && PTI ## N.info == get_mat_PTI_info<C, R, T>()))
 
-#define PyGLM_Qua_PTI_CheckN(N, T, o) (PyGLM_PTI_DEBUG_EQ(N, o) PyGLM_Qua_CheckExact(T, o) || sourceType ## N == PTI && PTI ## N.info == get_qua_PTI_info<T>())
+#define PyGLM_Qua_PTI_CheckN(N, T, o) (PyGLM_PTI_DEBUG_EQ(N, o) PyGLM_Qua_CheckExact(T, o) || (sourceType ## N == PTI && PTI ## N.info == get_qua_PTI_info<T>()))
 #endif
 
 //#define PyGLM_Vec_PTI_CheckN(L, T, o, N) (PTI ## N = PyGLMTypeInfo(PyGLM_T_ANY_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_ ## T,o), sourceType ## N = PTI, PTI ## N.info == (PyGLM_T_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_ ## T))

@@ -192,7 +192,7 @@ return 0;
 int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
 	if (index >= self->itemCount) {
 		PyErr_SetString(PyExc_IndexError, "index out of range");
-		return NULL;
+		return -1;
 	}
 	if (index < 0) {
 		return glmArray_set(self, self->itemCount + index, value);
@@ -272,7 +272,7 @@ int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
 			return -1;
 		}
 	}
-	return NULL;
+	return -1;
 }
 
 #define GLM_ARRAY_GET_IF_IS_MAT(T) switch (self->shape[0]) {\
@@ -685,7 +685,7 @@ glmArray_mp_ass_subscript(glmArray* self, PyObject* key, PyObject* value) {
 	if (PySlice_Check(key)) {
 		Py_ssize_t start, stop, step, slicelength;
 		if (PySlice_GetIndicesEx(key, self->itemCount, &start, &stop, &step, &slicelength) < 0) {
-			return NULL;
+			return -1;
 		}
 
 		if (value == NULL) {
@@ -1160,25 +1160,6 @@ static PyObject* glmArray_repr(glmArray* self) {
 	default:
 		return NULL;
 	}
-}
-
-static PyObject* 
-glmArray_getattr(PyObject* obj, PyObject* name) {
-	char* name_as_ccp = PyGLM_String_AsString(name);
-	if (strcmp(name_as_ccp, "ptr") == 0) {
-		return PyGLM_CtypesVoidP_FromVoidP(((glmArray*)obj)->data);
-	}
-	return PyObject_GenericGetAttr(obj, name);
-}
-
-static int 
-glmArray_setattr(PyObject* obj, PyObject* name, PyObject* value) {
-	char* name_as_ccp = PyGLM_String_AsString(name);
-	if (strcmp(name_as_ccp, "ptr") == 0) {
-		PyErr_SetString(PyExc_AttributeError, "readonly attribute");
-		return -1;
-	}
-	return PyObject_GenericSetAttr(obj, name, value);
 }
 
 
