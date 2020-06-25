@@ -33,6 +33,10 @@ static PyObject* glmArray_sq_item(glmArray * self, Py_ssize_t index);
 static int glmArray_sq_ass_item(glmArray * self, Py_ssize_t index, PyObject * value);
 
 
+static PyObject* glmArray_mp_subscript(glmArray* self, PyObject* key);
+
+static int glmArray_mp_ass_subscript(glmArray* self, PyObject* key, PyObject* value);
+
 static int glmArray_contains(glmArray * self, PyObject * value);
 
 static void glmArray_dealloc(glmArray* self);

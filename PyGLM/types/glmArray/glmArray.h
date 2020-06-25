@@ -8,6 +8,8 @@ static PyMemberDef glmArray_members[] = {
 	{ "element_type", T_OBJECT, offsetof(glmArray, subtype), 1, "Type class of the contained elements" },
 	{ "itemsize", T_PYSSIZET, offsetof(glmArray, itemSize), 1, "The size of one array item in bytes " },
 	{ "dt_size", T_PYSSIZET, offsetof(glmArray, dtSize), 1, "The size of each single component of the elements in bytes (size of data type)" },
+	{ "address", T_ULONGLONG, offsetof(glmArray, data), 1, "The memory address where this array stores it's data" },
+	{ "length", T_PYSSIZET, offsetof(glmArray, itemCount), 1, "The count of elements contained by this array" },
 	{ NULL }  /* Sentinel */
 };
 static PyGetSetDef glmArray_getSet[] = {
@@ -38,6 +40,11 @@ static PySequenceMethods glmArraySeqMethods = {
 	(binaryfunc)glmArray_inplace_concat, // sq_inplace_concat
 	(ssizeargfunc)glmArray_inplace_repeat, // sq_inplace_repeat
 };
+static PyMappingMethods glmArrayMapMethods = {
+	(lenfunc)glmArray_len,
+	(binaryfunc)glmArray_mp_subscript,
+	(objobjargproc)glmArray_mp_ass_subscript,
+};
 static PyTypeObject glmArrayType = {
 	PyObject_HEAD_INIT(NULL)
 	"glm.array",             /* tp_name */
@@ -51,7 +58,7 @@ static PyTypeObject glmArrayType = {
 	(reprfunc)glmArray_repr,                         /* tp_repr */
 	0,             /* tp_as_number */
 	&glmArraySeqMethods,                         /* tp_as_sequence */
-	0,                         /* tp_as_mapping */
+	&glmArrayMapMethods,                         /* tp_as_mapping */
 	0,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)glmArray_str,                         /* tp_str */
@@ -60,7 +67,7 @@ static PyTypeObject glmArrayType = {
 	&glmArrayBufferMethods,                         /* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT |
 	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"glmArray( <glmArray compatible type(s)> )\nAn in-place copy of glm types.",           /* tp_doc */
+	"array( <array compatible type(s)> )\nAn in-place copy of glm types.",           /* tp_doc */
 	0,                         /* tp_traverse */
 	0,                         /* tp_clear */
 	(richcmpfunc)glmArray_richcompare,                         /* tp_richcompare */
