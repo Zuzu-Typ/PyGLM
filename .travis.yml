@@ -22,7 +22,7 @@ jobs:
     - choco install python --version 3.8.0
     - export PATH="/c/Python38:/c/Python/Scripts:$PATH"
 install:
-- python -m pip install twine cibuildwheel==1.1.0
+- python -m pip install twine cibuildwheel
 script:
 - python -m cibuildwheel --output-dir ./wheelhouse
 - ls wheelhouse
