@@ -1,20 +1,40 @@
-language: python            # this works for Linux but is an error on macOS or Windows
+language: python
+os: linux
+env:
+  global:
+  - CIBW_SKIP=cp34-*
+  - CIBW_BUILD=cp3?-*
+  - CIBW_TEST_COMMAND="python {project}/PyGLM_test.py"
+  - CIBW_MANYLINUX_X86_64_IMAGE=manylinux1
+  - CIBW_MANYLINUX_I686_IMAGE=manylinux1
+  - TWINE_USERNAME=__token__
+  # TWINE_PASSWORD
+  - secure: gI7OeZLn0Xd8Z7Wd9wGoPwwzKVb+AoKD5LA0cCh/DGcWQU3bo79EB8B+gx9I2B+lxXUviQS9K5EhUfs0jof4Mjh7fGuYLFrznbtAqLl9g3lBmHGpFeFqqHzcCSYPcxbPRnuIrgUhQ07RHcZSPWKwFqdpCXajPC3W+i52NZ0DKT9G2c0u9QUigLfjhVC9IJbd7CZaGlFBnNWuRC0FhbDXvJYhNZctEXKXgtBjpAkOQfqfl/l1e51qVTcl1KDK8fLERCOpO9TGwpmfdzkwD7T49z+1Dwev1EfPvu9FLezWTWir9G7HP+LobUZpgnFS87HCbKGFzVvtcLiboyQgRd7iYDYfXImrwiyuLduGsvXFYXI7Dj3QMY8aJ/ochyCQPHnUu55ThasCr4TKHTm8sKDgrsnppiqLlObT/jNi0qhcEoLCxI7nb9tDBKu3NWqRmUOOPy3wUA73dJ/E8vAYlfMJKewzZemSdfddir3Mv+G4ZowZZXtBxRnByrrJUavdEUwmxObq6d1VPMfXcnZ5QxIotIZSzuEHToKy+DhyHxX6ET2jnlrgMBO0nHN11I2v/h4b6Mv6RIzfIVvBhB9JzBdlNFFHFbkvHUXlDkqWRacmpPRxtiHKVXDH7YHGGc1R8EjXn/l/fhTgPMhEXPViE3wnBO5JQyyxULSL47Y5wkEUiaE=
 jobs:
   include:
-    - name: "Python 3.8.0 on Xenial Linux"
-      python: 3.8           # this works for Linux but is ignored on macOS or Windows
-    - name: "Python 3.7.4 on macOS"
-      os: osx
-      osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
-      language: shell       # 'language: python' is an error on Travis CI macOS
-    - name: "Python 3.8.0 on Windows"
-      os: windows           # Windows 10.0.17134 N/A Build 17134
-      language: shell       # 'language: python' is an error on Travis CI Windows
-      before_install:
-        - choco install python --version 3.8.0
-        - python -m pip install --upgrade pip
-      env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
-install: python3 setup.py install || python setup.py install
-# 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
-# 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
-script: python3 PyGLM_test.py || python PyGLM_test.py
+  - services: docker
+  - os: osx
+    language: generic
+    env: MACOSX_DEPLOYMENT_TARGET=10.9
+  - os: windows
+    language: bash
+    before_install:
+    - choco install python --version 3.8.0
+    - export PATH="/c/Python38:/c/Python/Scripts:$PATH"
+install:
+- python -m pip install twine cibuildwheel
+script:
+- python -m cibuildwheel --output-dir ./wheelhouse
+- ls wheelhouse
+after_success:
+  - if [[ $TRAVIS_TAG ]]; then python -m twine upload wheelhouse/*.whl; fi
+deploy:
+  provider: releases
+  api_key:
+    secure: g0cssC2Sa20/D5R4yGVtupsAPMhO1RyQumBG3F/Nf6i6tRemGFZEemIOpbLxDg8z4RZz2lTaTMtqLiba3tTl/T+fCDnAY4sTpDa17YhAN/reqesNlYLn6OfqMHCC0re4exXDYO+o4NnP3qlKwzkKTzgJSnB7zkmfiLi0C4OHsudEVpshJZTnlaN2/afbkvaimYU4M0nsIjdBPW2g+wOvneCLYOiRNvGq26R1tT3Mt/IK9UIyT9ASrqODgHPvTZ7DSMpfYRgNs2+J2GDCv/Dq6M4BS6LaxIwevLcarQVqJgIp+t0eGwQIwh2Rn+QYQzDH1KgLcuUKvqphyrB2MyQfMgZnLhEZStwkRUFC+1WaOKtYZbAME8LT4FcICz3gXiRpSA2y5SF0OQnSvanQ/l86xQZ3NEMWRHFb6uax3w24VK+vohd3BEc1bmCBk4aElmf6cYkgELZaxtXF+MSYCXQkPSds77hp1z9XyZaII9AWK7f6MxJJa7QNs3nI+KOt6AA2ej+coxefM1j9X0B/h46fKMm/cY8FhCyZxLktjQ9FCIXOYqXpfTj0qwqe0wCNjWZOboC/Nfs669pRPEutBuC0oBXWEJ1ZBr/l2nlQywVjR7N7fSm9DNj+xIZA6rmrHP/dkj6hEHL2IvQ6DAGYATqR+97E+JwU8EAh8WasoMTJCeg=
+  file: wheelhouse/*
+  file_glob: true
+  skip_cleanup: true
+  on:
+    repo: Zuzu-Typ/PyGLM
+    tags: true
