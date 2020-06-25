@@ -700,7 +700,7 @@ struct PyGLMTypeInfo {
 							PyBuffer_Release(&view);
 							return;
 						}
-						if ((accepted_types & PyGLM_T_ANY_VEC))
+						if (((accepted_types & PyGLM_T_ANY_VEC) && (accepted_types & PyGLM_SHAPE_4)))
 							setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FLOAT);
 						else
 							setInfo(PyGLM_T_QUA | PyGLM_DT_FLOAT);
@@ -710,7 +710,7 @@ struct PyGLMTypeInfo {
 							PyBuffer_Release(&view);
 							return;
 						}
-						if ((accepted_types & PyGLM_T_ANY_VEC))
+						if (((accepted_types & PyGLM_T_ANY_VEC) && (accepted_types & PyGLM_SHAPE_4)))
 							setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_DOUBLE);
 						else
 							setInfo(PyGLM_T_QUA | PyGLM_DT_DOUBLE);
