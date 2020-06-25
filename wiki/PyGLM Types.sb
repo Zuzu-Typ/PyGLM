@@ -1,6 +1,6 @@
 \b\PyGLM\b\ brings a couple of types with it.
 
-These types represent either \b\vectors\b\, \b\matrices\b\ or \b\quaternions\b\.
+These types represent either \b\vectors\b\, \b\matrices\b\ or \b\quaternions\b\ or an \b\array\b\ containing the aforementioned.
 
 \lo \
 \-\ A \b\vector\b\ usually is an array of \b\1 to 4 numbers\b\ that serve as \b\positions\b\ or \b\directions\b\ in a 
@@ -13,13 +13,20 @@ For example a \b\2D\b\ vector would be expressed as \code\glm.vec2\code\.
 They aid in a lot of complex vector manipulations.  
 Matrix types are expressed as \b\glm.matNxM\b\ (\i\N\i\ being the columns and \i\M\i\ being the rows).
 So a \b\4x4\b\ matrix would be \code\glm.mat4x4\code\, or \code\glm.mat4\code\ for short (because \i\N\i\ and \i\M\i\ are equal).
-\i\Note: Yes, columns and rows are not in the natural order - this is a flaw of glm.\i\
+Note: \i\Yes, columns and rows are not in the natural order - this is a flaw of glm.\i\
 
 \-\ A \b\quaternion\b\ is an \b\array of 4 numbers\b\ that can be used for complex vector manipulations. 
 They are made up of a scalar part \code\(w)\code\ and a vector part \code\(x, y, z)\code\ and are sometimes displayed as 
 \code\(w + x*i + y*j + z*k)\code\, where \code\i\code\, \code\j\code\ and \code\k\code\ are imaginary numbers.
 Quaternion types are simply expressed as \code\glm.quat\code\.
+
+\-\A PyGLM \b\array\b\ (\code\glm.array\code\) is a simple way of storing a copy of multiple instances of one of the aforementioned types.
+This array can then be used to \b\transfer that data over to external C functions\b\, such as \code\glBufferData\code\ from PyOpenGL.
+Although PyGLM's arrays are a lot simpler than NumPy arrays, they're \b\quite a bit faster\b\.
 \ lo\
+
+\b\The following section is devoted to vectors, matrices and quaternions only.\b\
+
 All of these types use \b\32-bit floating point numbers\b\ to store their values.  
 PyGLM does however provide \b\other data types\b\.  
 For \b \all of the aforementioned\ b\:

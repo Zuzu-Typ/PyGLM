@@ -192,10 +192,30 @@ return 0;
 int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
 	if (index >= self->itemCount) {
 		PyErr_SetString(PyExc_IndexError, "index out of range");
-		return NULL;
+		return -1;
 	}
 	if (index < 0) {
-		return glmArray_set(self, self->itemCount - index, value);
+		return glmArray_set(self, self->itemCount + index, value);
+	}
+	if (value == NULL) {
+		void* tempDataCopy = malloc(self->nBytes);
+		if (tempDataCopy == NULL) {
+			PyErr_SetString(PyExc_MemoryError, "out of memory");
+			return -1;
+		}
+
+		memcpy(tempDataCopy, self->data, self->nBytes);
+
+		ssize_t outItemCount = (self->itemCount - 1);
+
+		self->data = realloc(self->data, outItemCount * self->itemSize);
+
+		memcpy(self->data, tempDataCopy, index * self->itemSize);
+		memcpy(((char*)self->data) + index * self->itemSize, ((char*)tempDataCopy) + (index + 1) * self->itemSize, (self->itemCount - index - 1) * self->itemSize);
+
+		self->itemCount = outItemCount;
+		self->nBytes = outItemCount * self->itemSize;
+		return 0;
 	}
 	if (self->glmType == PyGLM_TYPE_VEC) {
 		switch (self->format) {
@@ -252,7 +272,7 @@ int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
 			return -1;
 		}
 	}
-	return NULL;
+	return -1;
 }
 
 #define GLM_ARRAY_GET_IF_IS_MAT(T) switch (self->shape[0]) {\
@@ -314,7 +334,7 @@ PyObject* glmArray_get(glmArray* self, ssize_t index) {
 		return NULL;
 	}
 	if (index < 0) {
-		return glmArray_get(self, self->itemCount - index);
+		return glmArray_get(self, self->itemCount + index);
 	}
 	if (self->glmType == PyGLM_TYPE_VEC) {
 		switch (self->format) {
@@ -620,6 +640,99 @@ glmArray_sq_ass_item(glmArray* self, Py_ssize_t index, PyObject* value) {
 	return glmArray_set(self, index, value);
 }
 
+static PyObject*
+glmArray_mp_subscript(glmArray* self, PyObject* key) {
+	if (PyLong_Check(key)) {
+		return glmArray_get(self, PyLong_AsSsize_t(key));
+	}
+	if (PySlice_Check(key)) {
+		Py_ssize_t start, stop, step, slicelength;
+		if (PySlice_GetIndicesEx(key, self->itemCount, &start, &stop, &step, &slicelength) < 0) {
+			return NULL;
+		}
+		glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
+		PyGLM_ASSERT((out != NULL), "generated array was NULL. (maybe we're out of memory?)");
+
+		out->dtSize = self->dtSize;
+		out->format = self->format;
+		out->glmType = self->glmType;
+		out->itemCount = slicelength;
+		out->itemSize = self->itemSize;
+		out->nBytes = slicelength * self->itemSize;
+		memcpy(out->shape, self->shape, sizeof(out->shape));
+		out->subtype = self->subtype;
+
+		out->data = malloc(out->nBytes);
+		if (out->data == NULL) {
+			PyErr_SetString(PyExc_MemoryError, "out of memory");
+			return NULL;
+		}
+		Py_ssize_t outIndex = 0;
+		for (Py_ssize_t i = start; i < stop; i += step) {
+			memcpy(((char*)out->data) + (outIndex++ * self->itemSize), ((char*)self->data) + (i * self->itemSize), self->itemSize);
+		}
+		return (PyObject*)out;
+	}
+	PyGLM_TYPEERROR_O("invalid operand type for []: ", key);
+	return NULL;
+}
+
+static int
+glmArray_mp_ass_subscript(glmArray* self, PyObject* key, PyObject* value) {
+	if (PyLong_Check(key)) {
+		return glmArray_set(self, PyLong_AsSsize_t(key), value);
+	}
+	if (PySlice_Check(key)) {
+		Py_ssize_t start, stop, step, slicelength;
+		if (PySlice_GetIndicesEx(key, self->itemCount, &start, &stop, &step, &slicelength) < 0) {
+			return -1;
+		}
+
+		if (value == NULL) {
+			void* tempDataCopy = malloc(self->nBytes);
+			if (tempDataCopy == NULL) {
+				PyErr_SetString(PyExc_MemoryError, "out of memory");
+				return -1;
+			}
+
+			memcpy(tempDataCopy, self->data, self->nBytes);
+
+			ssize_t outItemCount = (self->itemCount - slicelength);
+
+			self->data = realloc(self->data, outItemCount * self->itemSize);
+
+			Py_ssize_t outIndex = 0;
+			for (Py_ssize_t i = 0; i < self->itemCount; i++) {
+				if (i < start || i >= stop || (i - start) % step != 0)
+					memcpy(((char*)self->data) + (outIndex++ * self->itemSize), ((char*)tempDataCopy) + (i * self->itemSize), self->itemSize);
+			}
+			self->itemCount = outItemCount;
+			self->nBytes = outItemCount * self->itemSize;
+			return 0;
+		}
+
+		if (!PyObject_TypeCheck(value, &glmArrayType)) {
+			PyGLM_TYPEERROR_O("invalid operand type for []=: ", value);
+			return -1;
+		}
+		glmArray* valueArr = (glmArray*)value;
+		if (valueArr->itemCount != slicelength) {
+			PyErr_SetString(PyExc_ValueError, "array and slice don't have the same length");
+			return -1;
+		}
+		if (valueArr->subtype != self->subtype) {
+			PyErr_SetString(PyExc_ValueError, "incompatible array data types");
+			return -1;
+		}
+		Py_ssize_t inValueIndex = 0;
+		for (Py_ssize_t i = start; i < stop; i += step) {
+			memcpy(((char*)self->data) + (i * self->itemSize), ((char*)valueArr->data) + (inValueIndex++ * self->itemSize), self->itemSize);
+		}
+		return 0;
+	}
+	PyGLM_TYPEERROR_O("invalid operand type for []: ", key);
+	return -1;
+}
 
 static int 
 glmArray_contains(glmArray* self, PyObject* value) {
@@ -1047,25 +1160,6 @@ static PyObject* glmArray_repr(glmArray* self) {
 	default:
 		return NULL;
 	}
-}
-
-static PyObject* 
-glmArray_getattr(PyObject* obj, PyObject* name) {
-	char* name_as_ccp = PyGLM_String_AsString(name);
-	if (strcmp(name_as_ccp, "ptr") == 0) {
-		return PyGLM_CtypesVoidP_FromVoidP(((glmArray*)obj)->data);
-	}
-	return PyObject_GenericGetAttr(obj, name);
-}
-
-static int 
-glmArray_setattr(PyObject* obj, PyObject* name, PyObject* value) {
-	char* name_as_ccp = PyGLM_String_AsString(name);
-	if (strcmp(name_as_ccp, "ptr") == 0) {
-		PyErr_SetString(PyExc_AttributeError, "readonly attribute");
-		return -1;
-	}
-	return PyObject_GenericSetAttr(obj, name, value);
 }
 
 

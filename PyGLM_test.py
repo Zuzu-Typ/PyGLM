@@ -583,6 +583,12 @@ for obj in gen_obj("V_M_Q"):
 arr = glm.array(glm.mat4(), glm.mat4(2))
 assert arr[0] == glm.mat4(), arr
 assert arr[1] == glm.mat4(2) == arr[-1], arr
+
+arr = glm.array(*glm.mat4())
+assert arr[:] == arr, arr
+assert arr[1:] == glm.array(glm.vec4(0,1,0,0),glm.vec4(0,0,1,0),glm.vec4(0,0,0,1)), arr
+assert arr[::2] == glm.array(glm.vec4(1,0,0,0),glm.vec4(0,0,1,0)), arr
+assert arr[1::2] == glm.array(glm.vec4(0,1,0,0),glm.vec4(0,0,0,1)), arr
 #/getitem #
 
 # setitem #
@@ -593,6 +599,14 @@ for obj in gen_obj("V_M_Q"):
 arr = glm.array(glm.mat4(), glm.mat4(2))
 arr[0] = glm.mat4(3)
 assert arr[0] == glm.mat4(3), arr
+del arr[0]
+assert arr == glm.array(glm.mat4(2)), arr
+
+arr = glm.array(*glm.mat4())
+del arr[::2]
+assert arr == glm.array(glm.vec4(0,1,0,0),glm.vec4(0,0,0,1)), arr
+arr[:] = glm.array(glm.vec4(), glm.vec4(2))
+assert arr == glm.array(glm.vec4(), glm.vec4(2)), arr
 #/setitem #
 
 # contains #
