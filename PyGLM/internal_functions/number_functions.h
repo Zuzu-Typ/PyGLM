@@ -2,7 +2,21 @@
 
 #include "../compiler_setup.h"
 
-#define PyGLM_Number_Check(arg) (PyFloat_Check(arg) || PyLong_Check(arg) || PyBool_Check(arg))
+#define PyGLM_Number_Check(arg) (PyFloat_Check(arg) || PyLong_Check(arg) || PyBool_Check(arg) || PyNumber_Check(arg))
+
+PyObject* PyGLM_GetNumber(PyObject* arg) {
+	if (arg->ob_type->tp_as_number->nb_float != NULL) {
+		return PyNumber_Float(arg);
+	}
+	if (arg->ob_type->tp_as_number->nb_int != NULL) {
+		return PyNumber_Long(arg);
+	}
+	if (arg->ob_type->tp_as_number->nb_index != NULL) {
+		return PyNumber_Index(arg);
+	}
+	PyErr_SetString(PyExc_Exception, "invalid getnumber request (this should not occur)");
+	return NULL;
+}
 
 double PyGLM_Number_AsDouble(PyObject* arg) {
 	if (PyFloat_Check(arg)) {
@@ -14,10 +28,11 @@ double PyGLM_Number_AsDouble(PyObject* arg) {
 	if (PyBool_Check(arg)) {
 		return (arg == Py_True) ? 1.0 : 0.0;
 	}
-	PyObject* arg_as_float = PyNumber_Float(arg);
-	double out = PyFloat_AS_DOUBLE(arg_as_float);
-	Py_DECREF(arg_as_float);
-	return out;
+	if (PyNumber_Check(arg)) {
+		return PyGLM_Number_AsDouble(PyGLM_GetNumber(arg));
+	}
+	PyErr_SetString(PyExc_Exception, "supplied argument is not a number (this should not occur)");
+	return -1.0;
 }
 
 long PyGLM_Number_AsLong(PyObject* arg) {
@@ -30,10 +45,11 @@ long PyGLM_Number_AsLong(PyObject* arg) {
 	if (PyBool_Check(arg)) {
 		return (arg == Py_True) ? 1 : 0;
 	}
-	PyObject* arg_as_long = PyNumber_Long(arg);
-	long out = PyLong_AS_LONG(arg_as_long);
-	Py_DECREF(arg_as_long);
-	return out;
+	if (PyNumber_Check(arg)) {
+		return PyGLM_Number_AsLong(PyGLM_GetNumber(arg));
+	}
+	PyErr_SetString(PyExc_Exception, "supplied argument is not a number (this should not occur)");
+	return -1l;
 }
 
 unsigned long PyGLM_Number_AsUnsignedLong(PyObject* arg) {
@@ -46,10 +62,11 @@ unsigned long PyGLM_Number_AsUnsignedLong(PyObject* arg) {
 	if (PyBool_Check(arg)) {
 		return (arg == Py_True) ? 1UL : 0UL;
 	}
-	PyObject* arg_as_long = PyNumber_Long(arg);
-	unsigned long out = PyLong_AsUnsignedLong(arg_as_long);
-	Py_DECREF(arg_as_long);
-	return out;
+	if (PyNumber_Check(arg)) {
+		return PyGLM_Number_AsUnsignedLong(PyGLM_GetNumber(arg));
+	}
+	PyErr_SetString(PyExc_Exception, "supplied argument is not a number (this should not occur)");
+	return (unsigned long) - 1l;
 }
 
 long long PyGLM_Number_AsLongLong(PyObject* arg) {
@@ -62,10 +79,11 @@ long long PyGLM_Number_AsLongLong(PyObject* arg) {
 	if (PyBool_Check(arg)) {
 		return (arg == Py_True) ? 1LL : 0LL;
 	}
-	PyObject* arg_as_long = PyNumber_Long(arg);
-	long long out = PyLong_AsLongLong(arg_as_long);
-	Py_DECREF(arg_as_long);
-	return out;
+	if (PyNumber_Check(arg)) {
+		return PyGLM_Number_AsLongLong(PyGLM_GetNumber(arg));
+	}
+	PyErr_SetString(PyExc_Exception, "supplied argument is not a number (this should not occur)");
+	return -1ll;
 }
 
 unsigned long long PyGLM_Number_AsUnsignedLongLong(PyObject* arg) {
@@ -78,10 +96,11 @@ unsigned long long PyGLM_Number_AsUnsignedLongLong(PyObject* arg) {
 	if (PyBool_Check(arg)) {
 		return (arg == Py_True) ? 1ull : 0ull;
 	}
-	PyObject* arg_as_long = PyNumber_Long(arg);
-	unsigned long long out = PyLong_AsUnsignedLongLong(arg_as_long);
-	Py_DECREF(arg_as_long);
-	return out;
+	if (PyNumber_Check(arg)) {
+		return PyGLM_Number_AsUnsignedLongLong(PyGLM_GetNumber(arg));
+	}
+	PyErr_SetString(PyExc_Exception, "supplied argument is not a number (this should not occur)");
+	return (unsigned long long)-1ll;
 }
 
 bool PyGLM_Number_AsBool(PyObject* arg) {
@@ -94,10 +113,11 @@ bool PyGLM_Number_AsBool(PyObject* arg) {
 	if (PyFloat_Check(arg)) {
 		return (bool)PyFloat_AS_DOUBLE(arg);
 	}
-	PyObject* arg_as_bool = PyNumber_Long(arg);
-	bool out = (bool)PyLong_AS_LONG(arg_as_bool);
-	Py_DECREF(arg_as_bool);
-	return out;
+	if (PyNumber_Check(arg)) {
+		return PyGLM_Number_AsBool(PyGLM_GetNumber(arg));
+	}
+	PyErr_SetString(PyExc_Exception, "supplied argument is not a number (this should not occur)");
+	return false;
 }
 
 float PyGLM_Number_AsFloat(PyObject* arg) {
@@ -110,10 +130,11 @@ float PyGLM_Number_AsFloat(PyObject* arg) {
 	if (PyBool_Check(arg)) {
 		return (arg == Py_True) ? 1.f : 0.f;
 	}
-	PyObject* arg_as_float = PyNumber_Float(arg);
-	float out = (float)PyFloat_AS_DOUBLE(arg_as_float);
-	Py_DECREF(arg_as_float);
-	return out;
+	if (PyNumber_Check(arg)) {
+		return PyGLM_Number_AsFloat(PyGLM_GetNumber(arg));
+	}
+	PyErr_SetString(PyExc_Exception, "supplied argument is not a number (this should not occur)");
+	return -1.0f;
 }
 
 template<typename T>
@@ -139,6 +160,7 @@ static T PyGLM_Number_FromPyObject(PyObject* value) {
 	else if (std::is_same<T, bool>::value) {
 		return (T)PyGLM_Number_AsBool(value);
 	}
+	PyErr_SetString(PyExc_Exception, "supplied argument is not a number (this should not occur)");
 	return (T)0;
 }
 
