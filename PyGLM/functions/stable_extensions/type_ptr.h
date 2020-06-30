@@ -254,6 +254,9 @@ sizeof_(PyObject*, PyObject* arg) {
 	if (PyGLM_Mat_Check(4, 4, glm::uint, arg) || arg == (PyObject*)&humat4x4Type) {
 		return PyLong_FromLong(sizeof(glm::mat<4, 4, glm::uint>));
 	}
+	if (PyObject_TypeCheck(arg, &glmArrayType)) {
+		return PyLong_FromSsize_t(((glmArray*)arg)->nBytes);
+	}
 	PyGLM_TYPEERROR_O("sizeof() requires the argument to be a glm type, not ", arg);
 	return NULL;
 }
@@ -472,6 +475,9 @@ value_ptr_(PyObject*, PyObject* arg) {
 	}
 	if (Py_TYPE(arg) == &humat4x4Type) {
 		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 4, glm::uint>*)arg)->super_type));
+	}
+	if (Py_TYPE(arg) == &glmArrayType) {
+		return PyGLM_ToCtypesP(((glmArray*)arg)->data);
 	}
 	PyGLM_TYPEERROR_O("value_ptr() requires the argument to be a glm type, not ", arg);
 	return NULL;

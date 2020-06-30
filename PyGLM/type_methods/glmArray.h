@@ -1612,6 +1612,10 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 				return -1;
 			}
 			if (view.ndim == 2) {
+				if (view.shape[1] < 1 || view.shape[1] > 4) {
+					PyErr_SetString(PyExc_ValueError, "invalid buffer shape");
+					return -1;
+				}
 				self->itemCount = view.shape[0];
 				int L = static_cast<int>(view.shape[1]);
 				self->shape[0] = static_cast<uint8>(L);
@@ -1651,6 +1655,10 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 				}
 			}
 			else if (view.ndim == 3) {
+				if (view.shape[1] < 2 || view.shape[1] > 4 || view.shape[2] < 2 || view.shape[2] > 4) {
+					PyErr_SetString(PyExc_ValueError, "invalid buffer shape");
+					return -1;
+				}
 				self->itemCount = view.shape[0];
 				int R = static_cast<int>(view.shape[1]);
 				int C = static_cast<int>(view.shape[2]);
