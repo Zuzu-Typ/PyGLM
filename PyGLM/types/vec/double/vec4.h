@@ -82,7 +82,7 @@ static PyTypeObject hdvec4Type = {
 	&hdvec4NumMethods,             /* tp_as_number */
 	&hdvec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)vec_hash<4, double>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)vec4_str<double>,                         /* tp_str */
 	(getattrofunc)vec_getattr<4, double>,                         /* tp_getattro */

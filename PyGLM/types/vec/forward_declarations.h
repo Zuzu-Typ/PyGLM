@@ -160,3 +160,6 @@ static PyObject* vec4Iter_next(vecIter<4, T> *rgstate);
 
 template<int L, typename T>
 static PyObject* vecIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
+
+template<int L, typename T>
+static Py_hash_t vec_hash(vec<L, T>* self, PyObject*);

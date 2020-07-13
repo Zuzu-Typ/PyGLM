@@ -62,6 +62,7 @@
 #include <glm/gtx/polar_coordinates.hpp>
 #include <glm/gtx/norm.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtx/hash.hpp>
 
 #endif
 

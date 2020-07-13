@@ -73,7 +73,7 @@ static PyTypeObject himvec4Type = {
 	&himvec4NumMethods,             /* tp_as_number */
 	&himvec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)mvec_hash<4, glm::i32>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)mvec4_str<glm::i32>,                         /* tp_str */
 	(getattrofunc)mvec_getattr<4, glm::i32>,                         /* tp_getattro */

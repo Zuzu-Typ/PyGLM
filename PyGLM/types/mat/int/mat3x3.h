@@ -81,7 +81,7 @@ static PyTypeObject himat3x3Type = {
 	&himat3x3NumMethods,             /* tp_as_number */
 	&himat3x3SeqMethods,                         /* tp_as_sequence */
 	&himat3x3MapMethods,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)mat_hash<3, 3, glm::i32>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)mat3x3_str<glm::i32>,                         /* tp_str */
 	0,                         /* tp_getattro */

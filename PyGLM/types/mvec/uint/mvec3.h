@@ -73,7 +73,7 @@ static PyTypeObject humvec3Type = {
 	&humvec3NumMethods,             /* tp_as_number */
 	&humvec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)mvec_hash<3, glm::u32>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)mvec3_str<glm::u32>,                         /* tp_str */
 	(getattrofunc)mvec_getattr<3, glm::u32>,                         /* tp_getattro */

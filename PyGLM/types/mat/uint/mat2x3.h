@@ -81,7 +81,7 @@ static PyTypeObject humat2x3Type = {
 	&humat2x3NumMethods,             /* tp_as_number */
 	&humat2x3SeqMethods,                         /* tp_as_sequence */
 	&humat2x3MapMethods,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)mat_hash<2, 3, glm::u32>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)mat2x3_str<glm::u32>,                         /* tp_str */
 	0,                         /* tp_getattro */

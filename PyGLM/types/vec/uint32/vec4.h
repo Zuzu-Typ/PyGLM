@@ -82,7 +82,7 @@ static PyTypeObject huvec4Type = {
 	&huvec4NumMethods,             /* tp_as_number */
 	&huvec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)vec_hash<4, glm::u32>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)vec4_str<glm::u32>,                         /* tp_str */
 	(getattrofunc)vec_getattr<4, glm::u32>,                         /* tp_getattro */

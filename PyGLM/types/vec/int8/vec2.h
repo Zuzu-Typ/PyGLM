@@ -80,7 +80,7 @@ static PyTypeObject hi8vec2Type = {
 	&hi8vec2NumMethods,             /* tp_as_number */
 	&hi8vec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)vec_hash<2, glm::i8>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)vec2_str<glm::i8>,                         /* tp_str */
 	(getattrofunc)vec_getattr<2, glm::i8>,                         /* tp_getattro */

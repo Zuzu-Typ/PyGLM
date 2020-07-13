@@ -81,7 +81,7 @@ static PyTypeObject hu16vec3Type = {
 	&hu16vec3NumMethods,             /* tp_as_number */
 	&hu16vec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)vec_hash<3, glm::u16>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)vec3_str<glm::u16>,                         /* tp_str */
 	(getattrofunc)vec_getattr<3, glm::u16>,                         /* tp_getattro */

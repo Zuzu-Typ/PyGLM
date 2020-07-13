@@ -79,7 +79,7 @@ static PyTypeObject hfvec1Type = {
 	&hfvec1NumMethods,             /* tp_as_number */
 	&hfvec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)vec_hash<1, float>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)vec1_str<float>,                         /* tp_str */
 	(getattrofunc)vec_getattr<1, float>,                         /* tp_getattro */
