@@ -12,6 +12,16 @@ env:
   - secure: gI7OeZLn0Xd8Z7Wd9wGoPwwzKVb+AoKD5LA0cCh/DGcWQU3bo79EB8B+gx9I2B+lxXUviQS9K5EhUfs0jof4Mjh7fGuYLFrznbtAqLl9g3lBmHGpFeFqqHzcCSYPcxbPRnuIrgUhQ07RHcZSPWKwFqdpCXajPC3W+i52NZ0DKT9G2c0u9QUigLfjhVC9IJbd7CZaGlFBnNWuRC0FhbDXvJYhNZctEXKXgtBjpAkOQfqfl/l1e51qVTcl1KDK8fLERCOpO9TGwpmfdzkwD7T49z+1Dwev1EfPvu9FLezWTWir9G7HP+LobUZpgnFS87HCbKGFzVvtcLiboyQgRd7iYDYfXImrwiyuLduGsvXFYXI7Dj3QMY8aJ/ochyCQPHnUu55ThasCr4TKHTm8sKDgrsnppiqLlObT/jNi0qhcEoLCxI7nb9tDBKu3NWqRmUOOPy3wUA73dJ/E8vAYlfMJKewzZemSdfddir3Mv+G4ZowZZXtBxRnByrrJUavdEUwmxObq6d1VPMfXcnZ5QxIotIZSzuEHToKy+DhyHxX6ET2jnlrgMBO0nHN11I2v/h4b6Mv6RIzfIVvBhB9JzBdlNFFHFbkvHUXlDkqWRacmpPRxtiHKVXDH7YHGGc1R8EjXn/l/fhTgPMhEXPViE3wnBO5JQyyxULSL47Y5wkEUiaE=
 jobs:
   include:
+  - stage: test
+  - os: osx
+    language: generic
+    env: MACOSX_DEPLOYMENT_TARGET=10.9
+  - os: windows
+    language: bash
+    before_install:
+    - choco install python --version 3.8.0
+    - export PATH="/c/Python38:/c/Python/Scripts:$PATH"
+  - stage: deploy
   - services: docker
   - os: osx
     language: generic
