@@ -82,7 +82,7 @@ static PyTypeObject hi64vec4Type = {
 	&hi64vec4NumMethods,             /* tp_as_number */
 	&hi64vec4SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)vec_hash<4, glm::i64>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)vec4_str<glm::i64>,                         /* tp_str */
 	(getattrofunc)vec_getattr<4, glm::i64>,                         /* tp_getattro */

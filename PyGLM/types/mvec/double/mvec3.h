@@ -73,7 +73,7 @@ static PyTypeObject hdmvec3Type = {
 	&hdmvec3NumMethods,             /* tp_as_number */
 	&hdmvec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)mvec_hash<3, double>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)mvec3_str<double>,                         /* tp_str */
 	(getattrofunc)mvec_getattr<3, double>,                         /* tp_getattro */

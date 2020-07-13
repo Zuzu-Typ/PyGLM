@@ -81,7 +81,7 @@ static PyTypeObject himat2x3Type = {
 	&himat2x3NumMethods,             /* tp_as_number */
 	&himat2x3SeqMethods,                         /* tp_as_sequence */
 	&himat2x3MapMethods,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)mat_hash<2, 3, glm::i32>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)mat2x3_str<glm::i32>,                         /* tp_str */
 	0,                         /* tp_getattro */

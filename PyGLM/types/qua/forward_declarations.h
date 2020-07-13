@@ -80,6 +80,9 @@ template<typename T>
 static PyObject* quaIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
 
 template<typename T>
+static Py_hash_t qua_hash(qua<T>* self, PyObject*);
+
+template<typename T>
 static PyObject* qua_to_list(qua<T>* self, PyObject*);
 
 template<typename T>

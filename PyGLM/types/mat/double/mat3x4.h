@@ -81,7 +81,7 @@ static PyTypeObject hdmat3x4Type = {
 	&hdmat3x4NumMethods,             /* tp_as_number */
 	&hdmat3x4SeqMethods,                         /* tp_as_sequence */
 	&hdmat3x4MapMethods,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)mat_hash<3, 4, double>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)mat3x4_str<double>,                         /* tp_str */
 	0,                         /* tp_getattro */

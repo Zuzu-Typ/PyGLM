@@ -79,7 +79,7 @@ static PyTypeObject hu64vec1Type = {
 	&hu64vec1NumMethods,             /* tp_as_number */
 	&hu64vec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)vec_hash<1, glm::u64>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)vec1_str<glm::u64>,                         /* tp_str */
 	(getattrofunc)vec_getattr<1, glm::u64>,                         /* tp_getattro */

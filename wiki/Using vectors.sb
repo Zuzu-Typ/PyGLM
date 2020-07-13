@@ -26,6 +26,7 @@
 \--\ \url #contains-in-operator \contains\ url\
 \--\ \url #richcompare-eg--operator \richcompare\ url\
 \--\ \url #iter \iter\ url\
+\--\ \url #hash\hash\url\
 \ list\
 \h2\Initialization\h2\
 There are dozens of ways of constructing a vector.  
@@ -209,3 +210,18 @@ it = iter(v)
 print(next(it)) # prints 1.0
 print(next(it)) # prints 2.0
 \ code\
+
+\h3\hash\h3\
+You can generate a hash value for vectors using \code\hash()\code\
+Example:
+\code Python\
+>>> v = vec2()
+>>> hash(v)
+-1952026010959490761
+>>> v2 = vec2(1, 2)
+>>> hash(v2)
+8639716006723752019
+>>> v3 = v2 * 0
+>>> hash(v3)
+-1952026010959490761
+\code\

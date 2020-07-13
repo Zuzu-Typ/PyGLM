@@ -81,7 +81,7 @@ static PyTypeObject hfmat2x4Type = {
 	&hfmat2x4NumMethods,             /* tp_as_number */
 	&hfmat2x4SeqMethods,                         /* tp_as_sequence */
 	&hfmat2x4MapMethods,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)mat_hash<2, 4, float>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)mat2x4_str<float>,                         /* tp_str */
 	0,                         /* tp_getattro */

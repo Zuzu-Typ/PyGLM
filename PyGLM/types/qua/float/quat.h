@@ -84,7 +84,7 @@ static PyTypeObject hfquaType = {
 	&hfquaNumMethods,             /* tp_as_number */
 	&hfquaSeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)qua_hash<float>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)qua_str<float>,                         /* tp_str */
 	0,                         /* tp_getattro */

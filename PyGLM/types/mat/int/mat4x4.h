@@ -81,7 +81,7 @@ static PyTypeObject himat4x4Type = {
 	&himat4x4NumMethods,             /* tp_as_number */
 	&himat4x4SeqMethods,                         /* tp_as_sequence */
 	&himat4x4MapMethods,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)mat_hash<4, 4, glm::i32>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)mat4x4_str<glm::i32>,                         /* tp_str */
 	0,                         /* tp_getattro */

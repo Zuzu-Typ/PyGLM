@@ -10,7 +10,7 @@
 "--------------------------------------------------------------------------------\n"\
 "Copyright (c) 2005 G-Truc Creation\n"\
 "\n"\
-"Permission is hereby granted, free of charge, to any person obtaining a copy\n"\
+"Permission is hereby granted, PyMem_Free of charge, to any person obtaining a copy\n"\
 "of this software and associated documentation files (the \"Software\"), to deal\n"\
 "in the Software without restriction, including without limitation the rights\n"\
 "to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n"\

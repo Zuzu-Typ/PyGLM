@@ -198,7 +198,7 @@ int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
 		return glmArray_set(self, self->itemCount + index, value);
 	}
 	if (value == NULL) {
-		void* tempDataCopy = malloc(self->nBytes);
+		void* tempDataCopy = PyMem_Malloc(self->nBytes);
 		if (tempDataCopy == NULL) {
 			PyErr_SetString(PyExc_MemoryError, "out of memory");
 			return -1;
@@ -208,7 +208,7 @@ int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
 
 		ssize_t outItemCount = (self->itemCount - 1);
 
-		self->data = realloc(self->data, outItemCount * self->itemSize);
+		self->data = PyMem_Realloc(self->data, outItemCount * self->itemSize);
 
 		memcpy(self->data, tempDataCopy, index * self->itemSize);
 		memcpy(((char*)self->data) + index * self->itemSize, ((char*)tempDataCopy) + (index + 1) * self->itemSize, (self->itemCount - index - 1) * self->itemSize);
@@ -409,7 +409,7 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 	view->readonly = 0;
 	view->itemsize = self->dtSize;
 	if (flags & PyBUF_FORMAT) {
-		view->format = (char*)malloc(sizeof(char)*2);
+		view->format = (char*)PyMem_Malloc(sizeof(char)*2);
 		view->format[0] = self->format;
 		view->format[1] = '\x00';
 	}
@@ -422,7 +422,7 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 
 		view->ndim = 3;
 		if (flags & PyBUF_ND) {
-			view->shape = (Py_ssize_t*)malloc(3 * sizeof(Py_ssize_t));
+			view->shape = (Py_ssize_t*)PyMem_Malloc(3 * sizeof(Py_ssize_t));
 			if (view->shape != NULL) {
 				view->shape[0] = self->itemCount;
 				view->shape[1] = C;
@@ -433,7 +433,7 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 			view->shape = NULL;
 		}
 		if ((flags & PyBUF_STRIDES) == PyBUF_STRIDES) {
-			view->strides = (Py_ssize_t*)malloc(3 * sizeof(Py_ssize_t));
+			view->strides = (Py_ssize_t*)PyMem_Malloc(3 * sizeof(Py_ssize_t));
 			if (view->strides != NULL) {
 				view->strides[0] =  self->dtSize * C * R;
 				view->strides[1] = R * self->dtSize;
@@ -449,7 +449,7 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 
 		view->ndim = 2;
 		if (flags & PyBUF_ND) {
-			view->shape = (Py_ssize_t*)malloc(2 * sizeof(Py_ssize_t));
+			view->shape = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
 			if (view->shape != NULL) {
 				view->shape[0] = self->itemCount;
 				view->shape[1] = L;
@@ -459,7 +459,7 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 			view->shape = NULL;
 		}
 		if ((flags & PyBUF_STRIDES) == PyBUF_STRIDES) {
-			view->strides = (Py_ssize_t*)malloc(2 * sizeof(Py_ssize_t));
+			view->strides = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
 			if (view->strides != NULL) {
 				view->strides[0] = L * self->dtSize;
 				view->strides[1] = self->dtSize;
@@ -472,7 +472,7 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 	else if (self->glmType == PyGLM_TYPE_QUA) {
 		view->ndim = 2;
 		if (flags & PyBUF_ND) {
-			view->shape = (Py_ssize_t*)malloc(2 * sizeof(Py_ssize_t));
+			view->shape = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
 			if (view->shape != NULL) {
 				view->shape[0] = self->itemCount;
 				view->shape[1] = 4;
@@ -482,7 +482,7 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 			view->shape = NULL;
 		}
 		if ((flags & PyBUF_STRIDES) == PyBUF_STRIDES) {
-			view->strides = (Py_ssize_t*)malloc(2 * sizeof(Py_ssize_t));
+			view->strides = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
 			if (view->strides != NULL) {
 				view->strides[0] = 4 * self->dtSize;
 				view->strides[1] = self->dtSize;
@@ -501,9 +501,9 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 
 void 
 glmArray_releasebuffer(PyObject* self, Py_buffer* view) {
-	free(view->shape);
-	free(view->strides);
-	free(view->format);
+	PyMem_Free(view->shape);
+	PyMem_Free(view->strides);
+	PyMem_Free(view->format);
 }
 
 
@@ -565,7 +565,7 @@ static PyObject* glmArray_concat(PyObject* obj1, PyObject* obj2) {
 	memcpy(out->shape, arr1->shape, sizeof(out->shape));
 	out->subtype = arr1->subtype;
 
-	out->data = malloc(out->nBytes);
+	out->data = PyMem_Malloc(out->nBytes);
 	if (out->data == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "out of memory");
 		return NULL;
@@ -589,7 +589,7 @@ static PyObject* glmArray_repeat(glmArray* self, Py_ssize_t count) {
 	memcpy(out->shape, self->shape, sizeof(out->shape));
 	out->subtype = self->subtype;
 
-	out->data = malloc(out->nBytes);
+	out->data = PyMem_Malloc(out->nBytes);
 	if (out->data == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "out of memory");
 		return NULL;
@@ -608,7 +608,7 @@ static PyObject* glmArray_inplace_concat(glmArray* self, PyObject* obj) {
 	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	memcpy(((char*)self) + PyGLM_ARRAY_OFFSET, ((char*)temp) + PyGLM_ARRAY_OFFSET, PyGLM_ARRAY_SIZE - sizeof(self->data));
-	self->data = malloc(self->nBytes);
+	self->data = PyMem_Malloc(self->nBytes);
 	memcpy(self->data, temp->data, self->nBytes);
 
 	Py_DECREF(temp);
@@ -622,7 +622,7 @@ static PyObject* glmArray_inplace_repeat(glmArray* self, Py_ssize_t count) {
 	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	memcpy(((char*)self) + PyGLM_ARRAY_OFFSET, ((char*)temp) + PyGLM_ARRAY_OFFSET, PyGLM_ARRAY_SIZE - sizeof(self->data));
-	self->data = malloc(self->nBytes);
+	self->data = PyMem_Malloc(self->nBytes);
 	memcpy(self->data, temp->data, self->nBytes);
 
 	Py_DECREF(temp);
@@ -662,7 +662,7 @@ glmArray_mp_subscript(glmArray* self, PyObject* key) {
 		memcpy(out->shape, self->shape, sizeof(out->shape));
 		out->subtype = self->subtype;
 
-		out->data = malloc(out->nBytes);
+		out->data = PyMem_Malloc(out->nBytes);
 		if (out->data == NULL) {
 			PyErr_SetString(PyExc_MemoryError, "out of memory");
 			return NULL;
@@ -689,7 +689,7 @@ glmArray_mp_ass_subscript(glmArray* self, PyObject* key, PyObject* value) {
 		}
 
 		if (value == NULL) {
-			void* tempDataCopy = malloc(self->nBytes);
+			void* tempDataCopy = PyMem_Malloc(self->nBytes);
 			if (tempDataCopy == NULL) {
 				PyErr_SetString(PyExc_MemoryError, "out of memory");
 				return -1;
@@ -699,7 +699,7 @@ glmArray_mp_ass_subscript(glmArray* self, PyObject* key, PyObject* value) {
 
 			ssize_t outItemCount = (self->itemCount - slicelength);
 
-			self->data = realloc(self->data, outItemCount * self->itemSize);
+			self->data = PyMem_Realloc(self->data, outItemCount * self->itemSize);
 
 			Py_ssize_t outIndex = 0;
 			for (Py_ssize_t i = 0; i < self->itemCount; i++) {
@@ -753,7 +753,7 @@ glmArray_contains(glmArray* self, PyObject* value) {
 
 static void 
 glmArray_dealloc(glmArray* self) {
-	free(self->data);
+	PyMem_Free(self->data);
 	self->data = NULL;
 	Py_TYPE(self)->tp_free(self);
 }
@@ -766,7 +766,7 @@ glmArray_str_vec(glmArray* self) {
 	uint64 itemSize = (7 + 12 + (L - 1) * (12 + 2));
 	uint64 outLength = 1 + 3 + self->itemCount * itemSize;
 
-	char* out = (char*)malloc(outLength * sizeof(char));
+	char* out = (char*)PyMem_Malloc(outLength * sizeof(char));
 	if (out == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "out of memory");
 		return NULL;
@@ -793,7 +793,7 @@ glmArray_str_vec(glmArray* self) {
 	snprintf(currentIndex, 1 + 1, "]");
 
 	PyObject* po = PyUnicode_FromString(out);
-	free(out);
+	PyMem_Free(out);
 	return po;
 }
 
@@ -812,7 +812,7 @@ glmArray_repr_vec(glmArray* self) {
 	const uint64 itemSize = (subtypeNameLength + 2 + 12 + (L - 1) * (12 + 2));
 	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize + (itemSize + 2) * (self->itemCount - 1);
 
-	char* out = (char*)malloc(outLength * sizeof(char));
+	char* out = (char*)PyMem_Malloc(outLength * sizeof(char));
 	if (out == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "out of memory");
 		return NULL;
@@ -845,7 +845,7 @@ glmArray_repr_vec(glmArray* self) {
 	snprintf(currentIndex, 1 + 1, ")");
 
 	PyObject* po = PyUnicode_FromString(out);
-	free(out);
+	PyMem_Free(out);
 	return po;
 }
 
@@ -859,7 +859,7 @@ glmArray_str_mat(glmArray* self) {
 	uint64 itemSize = 7 + subItemSize * C;
 	uint64 outLength = 1 + 3 + itemSize * self->itemCount;
 
-	char* out = (char*)malloc(outLength * sizeof(char));
+	char* out = (char*)PyMem_Malloc(outLength * sizeof(char));
 	if (out == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "out of memory");
 		return NULL;
@@ -894,7 +894,7 @@ glmArray_str_mat(glmArray* self) {
 	snprintf(currentIndex, 1 + 1, "]");
 
 	PyObject* po = PyUnicode_FromString(out);
-	free(out);
+	PyMem_Free(out);
 	return po;
 }
 
@@ -915,7 +915,7 @@ glmArray_repr_mat(glmArray* self) {
 	const uint64 itemSize = subtypeNameLength + 2 + subItemSize  + (subItemSize + 2) * (C - 1);
 	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize + (2 + itemSize) * (self->itemCount - 1);
 
-	char* out = (char*)malloc(outLength * sizeof(char));
+	char* out = (char*)PyMem_Malloc(outLength * sizeof(char));
 	if (out == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "out of memory");
 		return NULL;
@@ -961,7 +961,7 @@ glmArray_repr_mat(glmArray* self) {
 	snprintf(currentIndex, 1 + 1, ")");
 
 	PyObject* po = PyUnicode_FromString(out);
-	free(out);
+	PyMem_Free(out);
 	return po;
 }
 
@@ -971,7 +971,7 @@ glmArray_str_qua(glmArray* self) {
 	uint64 itemSize = (13 + 12 * 4);
 	uint64 outLength = 1 + 3 + itemSize * self->itemCount;
 
-	char* out = (char*)malloc(outLength * sizeof(char));
+	char* out = (char*)PyMem_Malloc(outLength * sizeof(char));
 	if (out == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "out of memory");
 		return NULL;
@@ -994,7 +994,7 @@ glmArray_str_qua(glmArray* self) {
 	snprintf(currentIndex, 1 + 1, "]");
 
 	PyObject* po = PyUnicode_FromString(out);
-	free(out);
+	PyMem_Free(out);
 	return po;
 }
 
@@ -1011,7 +1011,7 @@ glmArray_repr_qua(glmArray* self) {
 	const uint64 itemSize = (subtypeNameLength + 8 + 12 * 4);
 	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize + (itemSize + 2) * (self->itemCount - 1);
 
-	char* out = (char*)malloc(outLength * sizeof(char));
+	char* out = (char*)PyMem_Malloc(outLength * sizeof(char));
 	if (out == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "out of memory");
 		return NULL;
@@ -1045,7 +1045,7 @@ glmArray_repr_qua(glmArray* self) {
 	snprintf(currentIndex, 1 + 1, ")");
 
 	PyObject* po = PyUnicode_FromString(out);
-	free(out);
+	PyMem_Free(out);
 	return po;
 }
 
@@ -1215,7 +1215,7 @@ glmArray_init_mat_iter(glmArray* self, PyObject* firstElement, PyObject* iterato
 	self->shape[0] = C;
 	self->shape[1] = R;
 	self->format = get_format_specifier<T>();
-	self->data = malloc(self->nBytes);
+	self->data = PyMem_Malloc(self->nBytes);
 
 	if (self->data == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "array creation failed");
@@ -1255,7 +1255,7 @@ glmArray_init_vec_iter(glmArray* self, PyObject* firstElement, PyObject* iterato
 	self->glmType = PyGLM_TYPE_VEC;
 	self->shape[0] = L;
 	self->format = get_format_specifier<T>();
-	self->data = malloc(self->nBytes);
+	self->data = PyMem_Malloc(self->nBytes);
 
 	if (self->data == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "array creation failed");
@@ -1307,7 +1307,7 @@ glmArray_init_qua_iter(glmArray* self, PyObject* firstElement, PyObject* iterato
 	self->subtype = PyGLM_QUA_TYPE<T>();
 	self->glmType = PyGLM_TYPE_QUA;
 	self->format = get_format_specifier<T>();
-	self->data = malloc(self->nBytes);
+	self->data = PyMem_Malloc(self->nBytes);
 
 	if (self->data == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "array creation failed");
@@ -1348,7 +1348,7 @@ glmArray_init_mat_tuple_or_list(glmArray* self, PyObject* args, Py_ssize_t argCo
 	self->shape[0] = C;
 	self->shape[1] = R;
 	self->format = get_format_specifier<T>();
-	self->data = malloc(self->nBytes);
+	self->data = PyMem_Malloc(self->nBytes);
 
 	if (self->data == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "array creation failed");
@@ -1380,7 +1380,7 @@ glmArray_init_vec_tuple_or_list(glmArray* self, PyObject* args, Py_ssize_t argCo
 	self->glmType = PyGLM_TYPE_VEC;
 	self->shape[0] = L;
 	self->format = get_format_specifier<T>();
-	self->data = malloc(self->nBytes);
+	self->data = PyMem_Malloc(self->nBytes);
 
 	if (self->data == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "array creation failed");
@@ -1416,7 +1416,7 @@ glmArray_init_qua_tuple_or_list(glmArray* self, PyObject* args, Py_ssize_t argCo
 	self->subtype = PyGLM_QUA_TYPE<T>();
 	self->glmType = PyGLM_TYPE_QUA;
 	self->format = get_format_specifier<T>();
-	self->data = malloc(self->nBytes);
+	self->data = PyMem_Malloc(self->nBytes);
 
 	if (self->data == NULL) {
 		PyErr_SetString(PyExc_MemoryError, "array creation failed");
@@ -1439,7 +1439,7 @@ glmArray_init_qua_tuple_or_list(glmArray* self, PyObject* args, Py_ssize_t argCo
 self->itemSize = L * self->dtSize;\
 self->nBytes = self->itemSize * self->itemCount;\
 self->subtype = (L == 1) ? PyGLM_VEC_TYPE<1, T>() : (L == 2) ? PyGLM_VEC_TYPE<2, T>() : (L == 3) ? PyGLM_VEC_TYPE<3, T>() : PyGLM_VEC_TYPE<4, T>();\
-self->data = malloc(self->nBytes);\
+self->data = PyMem_Malloc(self->nBytes);\
 if (self->data == NULL) {\
 	PyErr_SetString(PyExc_MemoryError, "out of memory");\
 	return -1;\
@@ -1454,7 +1454,7 @@ self->nBytes = self->itemSize * self->itemCount;\
 self->subtype = (C == 2) ? (R == 2) ? PyGLM_MAT_TYPE<2, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<2, 3, T>() : PyGLM_MAT_TYPE<2, 4, T>() :\
 (C == 3) ? (R == 2) ? PyGLM_MAT_TYPE<3, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<3, 3, T>() : PyGLM_MAT_TYPE<3, 4, T>() :\
 (R == 2) ? PyGLM_MAT_TYPE<4, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<4, 3, T>() : PyGLM_MAT_TYPE<4, 4, T>();\
-self->data = malloc(self->nBytes);\
+self->data = PyMem_Malloc(self->nBytes);\
 if (self->data == NULL) {\
 	PyErr_SetString(PyExc_MemoryError, "out of memory");\
 	return -1;\
@@ -1590,7 +1590,7 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 			self->nBytes = other->nBytes;
 			self->subtype = other->subtype;
 			self->format = other->format;
-			self->data = malloc(self->nBytes);
+			self->data = PyMem_Malloc(self->nBytes);
 			if (self->data == NULL) {
 				PyErr_SetString(PyExc_MemoryError, "array creation failed");
 				return -1;
@@ -1853,4 +1853,316 @@ glmArrayIter_new(PyTypeObject* type, PyObject* args, PyObject* kwargs) {
 	rgstate->seq_index = 0;
 
 	return (PyObject*)rgstate;
+}
+
+template<int L, typename T>
+static Py_hash_t
+array_hash_vec(glm::vec<L, T>* data, ssize_t count) {
+	std::hash<glm::vec<L, T>> hasher;
+
+	size_t seed = 0;
+
+	for (ssize_t i = 0; i < count; i++) {
+		glm::detail::hash_combine(seed, hasher(data[i]));
+	}
+
+	return seed;
+}
+
+template<int C, int R, typename T>
+static Py_hash_t
+array_hash_mat(glm::mat<C, R, T>* data, ssize_t count) {
+	std::hash<glm::mat<C, R, T>> hasher;
+
+	size_t seed = 0;
+
+	for (ssize_t i = 0; i < count; i++) {
+		glm::detail::hash_combine(seed, hasher(data[i]));
+	}
+
+	return seed;
+}
+
+template<typename T>
+static Py_hash_t
+array_hash_qua(glm::qua<T>* data, ssize_t count) {
+	std::hash<glm::qua<T>> hasher;
+
+	size_t seed = 0;
+
+	for (ssize_t i = 0; i < count; i++) {
+		glm::detail::hash_combine(seed, hasher(data[i]));
+	}
+
+	return seed;
+}
+
+static Py_hash_t
+array_hash(glmArray* self, PyObject*) {
+	uint8& glmType = self->glmType;
+	PyTypeObject*& subtype = self->subtype;
+
+	if (glmType == PyGLM_TYPE_VEC) {
+		if (subtype == PyGLM_VEC_TYPE<1, float>())
+			return array_hash_vec<1, float>(reinterpret_cast<glm::vec<1, float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<2, float>())
+			return array_hash_vec<2, float>(reinterpret_cast<glm::vec<2, float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<3, float>())
+			return array_hash_vec<3, float>(reinterpret_cast<glm::vec<3, float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<4, float>())
+			return array_hash_vec<4, float>(reinterpret_cast<glm::vec<4, float>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_VEC_TYPE<1, double>())
+			return array_hash_vec<1, double>(reinterpret_cast<glm::vec<1, double>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<2, double>())
+			return array_hash_vec<2, double>(reinterpret_cast<glm::vec<2, double>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<3, double>())
+			return array_hash_vec<3, double>(reinterpret_cast<glm::vec<3, double>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<4, double>())
+			return array_hash_vec<4, double>(reinterpret_cast<glm::vec<4, double>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_VEC_TYPE<1, int32>())
+			return array_hash_vec<1, int32>(reinterpret_cast<glm::vec<1, int32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<2, int32>())
+			return array_hash_vec<2, int32>(reinterpret_cast<glm::vec<2, int32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<3, int32>())
+			return array_hash_vec<3, int32>(reinterpret_cast<glm::vec<3, int32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<4, int32>())
+			return array_hash_vec<4, int32>(reinterpret_cast<glm::vec<4, int32>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_VEC_TYPE<1, uint32>())
+			return array_hash_vec<1, uint32>(reinterpret_cast<glm::vec<1, uint32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<2, uint32>())
+			return array_hash_vec<2, uint32>(reinterpret_cast<glm::vec<2, uint32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<3, uint32>())
+			return array_hash_vec<3, uint32>(reinterpret_cast<glm::vec<3, uint32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<4, uint32>())
+			return array_hash_vec<4, uint32>(reinterpret_cast<glm::vec<4, uint32>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_VEC_TYPE<1, int64>())
+			return array_hash_vec<1, int64>(reinterpret_cast<glm::vec<1, int64>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<2, int64>())
+			return array_hash_vec<2, int64>(reinterpret_cast<glm::vec<2, int64>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<3, int64>())
+			return array_hash_vec<3, int64>(reinterpret_cast<glm::vec<3, int64>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<4, int64>())
+			return array_hash_vec<4, int64>(reinterpret_cast<glm::vec<4, int64>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_VEC_TYPE<1, uint64>())
+			return array_hash_vec<1, uint64>(reinterpret_cast<glm::vec<1, uint64>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<2, uint64>())
+			return array_hash_vec<2, uint64>(reinterpret_cast<glm::vec<2, uint64>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<3, uint64>())
+			return array_hash_vec<3, uint64>(reinterpret_cast<glm::vec<3, uint64>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<4, uint64>())
+			return array_hash_vec<4, uint64>(reinterpret_cast<glm::vec<4, uint64>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_VEC_TYPE<1, int16>())
+			return array_hash_vec<1, int16>(reinterpret_cast<glm::vec<1, int16>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<2, int16>())
+			return array_hash_vec<2, int16>(reinterpret_cast<glm::vec<2, int16>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<3, int16>())
+			return array_hash_vec<3, int16>(reinterpret_cast<glm::vec<3, int16>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<4, int16>())
+			return array_hash_vec<4, int16>(reinterpret_cast<glm::vec<4, int16>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_VEC_TYPE<1, uint16>())
+			return array_hash_vec<1, uint16>(reinterpret_cast<glm::vec<1, uint16>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<2, uint16>())
+			return array_hash_vec<2, uint16>(reinterpret_cast<glm::vec<2, uint16>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<3, uint16>())
+			return array_hash_vec<3, uint16>(reinterpret_cast<glm::vec<3, uint16>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<4, uint16>())
+			return array_hash_vec<4, uint16>(reinterpret_cast<glm::vec<4, uint16>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_VEC_TYPE<1, int8>())
+			return array_hash_vec<1, int8>(reinterpret_cast<glm::vec<1, int8>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<2, int8>())
+			return array_hash_vec<2, int8>(reinterpret_cast<glm::vec<2, int8>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<3, int8>())
+			return array_hash_vec<3, int8>(reinterpret_cast<glm::vec<3, int8>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<4, int8>())
+			return array_hash_vec<4, int8>(reinterpret_cast<glm::vec<4, int8>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_VEC_TYPE<1, uint8>())
+			return array_hash_vec<1, uint8>(reinterpret_cast<glm::vec<1, uint8>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<2, uint8>())
+			return array_hash_vec<2, uint8>(reinterpret_cast<glm::vec<2, uint8>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<3, uint8>())
+			return array_hash_vec<3, uint8>(reinterpret_cast<glm::vec<3, uint8>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<4, uint8>())
+			return array_hash_vec<4, uint8>(reinterpret_cast<glm::vec<4, uint8>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_VEC_TYPE<1, bool>())
+			return array_hash_vec<1, bool>(reinterpret_cast<glm::vec<1, bool>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<2, bool>())
+			return array_hash_vec<2, bool>(reinterpret_cast<glm::vec<2, bool>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<3, bool>())
+			return array_hash_vec<3, bool>(reinterpret_cast<glm::vec<3, bool>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_VEC_TYPE<4, bool>())
+			return array_hash_vec<4, bool>(reinterpret_cast<glm::vec<4, bool>*>(self->data), self->itemCount);
+	}
+	if (glmType == PyGLM_TYPE_MAT) {
+		if (subtype == PyGLM_MAT_TYPE<2, 2, float>())
+			return array_hash_mat<2, 2, float>(reinterpret_cast<glm::mat<2, 2, float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<2, 3, float>())
+			return array_hash_mat<2, 3, float>(reinterpret_cast<glm::mat<2, 3, float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<2, 4, float>())
+			return array_hash_mat<2, 4, float>(reinterpret_cast<glm::mat<2, 4, float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 2, float>())
+			return array_hash_mat<3, 2, float>(reinterpret_cast<glm::mat<3, 2, float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 3, float>())
+			return array_hash_mat<3, 3, float>(reinterpret_cast<glm::mat<3, 3, float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 4, float>())
+			return array_hash_mat<3, 4, float>(reinterpret_cast<glm::mat<3, 4, float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 2, float>())
+			return array_hash_mat<4, 2, float>(reinterpret_cast<glm::mat<4, 2, float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 3, float>())
+			return array_hash_mat<4, 3, float>(reinterpret_cast<glm::mat<4, 3, float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 4, float>())
+			return array_hash_mat<4, 4, float>(reinterpret_cast<glm::mat<4, 4, float>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_MAT_TYPE<2, 2, double>())
+			return array_hash_mat<2, 2, double>(reinterpret_cast<glm::mat<2, 2, double>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<2, 3, double>())
+			return array_hash_mat<2, 3, double>(reinterpret_cast<glm::mat<2, 3, double>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<2, 4, double>())
+			return array_hash_mat<2, 4, double>(reinterpret_cast<glm::mat<2, 4, double>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 2, double>())
+			return array_hash_mat<3, 2, double>(reinterpret_cast<glm::mat<3, 2, double>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 3, double>())
+			return array_hash_mat<3, 3, double>(reinterpret_cast<glm::mat<3, 3, double>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 4, double>())
+			return array_hash_mat<3, 4, double>(reinterpret_cast<glm::mat<3, 4, double>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 2, double>())
+			return array_hash_mat<4, 2, double>(reinterpret_cast<glm::mat<4, 2, double>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 3, double>())
+			return array_hash_mat<4, 3, double>(reinterpret_cast<glm::mat<4, 3, double>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 4, double>())
+			return array_hash_mat<4, 4, double>(reinterpret_cast<glm::mat<4, 4, double>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_MAT_TYPE<2, 2, int32>())
+			return array_hash_mat<2, 2, int32>(reinterpret_cast<glm::mat<2, 2, int32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<2, 3, int32>())
+			return array_hash_mat<2, 3, int32>(reinterpret_cast<glm::mat<2, 3, int32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<2, 4, int32>())
+			return array_hash_mat<2, 4, int32>(reinterpret_cast<glm::mat<2, 4, int32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 2, int32>())
+			return array_hash_mat<3, 2, int32>(reinterpret_cast<glm::mat<3, 2, int32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 3, int32>())
+			return array_hash_mat<3, 3, int32>(reinterpret_cast<glm::mat<3, 3, int32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 4, int32>())
+			return array_hash_mat<3, 4, int32>(reinterpret_cast<glm::mat<3, 4, int32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 2, int32>())
+			return array_hash_mat<4, 2, int32>(reinterpret_cast<glm::mat<4, 2, int32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 3, int32>())
+			return array_hash_mat<4, 3, int32>(reinterpret_cast<glm::mat<4, 3, int32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 4, int32>())
+			return array_hash_mat<4, 4, int32>(reinterpret_cast<glm::mat<4, 4, int32>*>(self->data), self->itemCount);
+
+
+		if (subtype == PyGLM_MAT_TYPE<2, 2, uint32>())
+			return array_hash_mat<2, 2, uint32>(reinterpret_cast<glm::mat<2, 2, uint32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<2, 3, uint32>())
+			return array_hash_mat<2, 3, uint32>(reinterpret_cast<glm::mat<2, 3, uint32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<2, 4, uint32>())
+			return array_hash_mat<2, 4, uint32>(reinterpret_cast<glm::mat<2, 4, uint32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 2, uint32>())
+			return array_hash_mat<3, 2, uint32>(reinterpret_cast<glm::mat<3, 2, uint32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 3, uint32>())
+			return array_hash_mat<3, 3, uint32>(reinterpret_cast<glm::mat<3, 3, uint32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<3, 4, uint32>())
+			return array_hash_mat<3, 4, uint32>(reinterpret_cast<glm::mat<3, 4, uint32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 2, uint32>())
+			return array_hash_mat<4, 2, uint32>(reinterpret_cast<glm::mat<4, 2, uint32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 3, uint32>())
+			return array_hash_mat<4, 3, uint32>(reinterpret_cast<glm::mat<4, 3, uint32>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_MAT_TYPE<4, 4, uint32>())
+			return array_hash_mat<4, 4, uint32>(reinterpret_cast<glm::mat<4, 4, uint32>*>(self->data), self->itemCount);
+	}
+	if (glmType == PyGLM_TYPE_QUA) {
+		if (subtype == PyGLM_QUA_TYPE<float>())
+			return array_hash_qua<float>(reinterpret_cast<glm::qua<float>*>(self->data), self->itemCount);
+
+		if (subtype == PyGLM_QUA_TYPE<double>())
+			return array_hash_qua<double>(reinterpret_cast<glm::qua<double>*>(self->data), self->itemCount);
+	}
+	return -1;
 }

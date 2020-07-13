@@ -322,10 +322,10 @@ qua_str(qua<T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
 	size_t required_space = 59 + strlen(name) - 4;
-	char * out = (char*)malloc((required_space) * sizeof(char));
+	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
 	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type.w, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
 	PyObject* po = PyUnicode_FromString(out);
-	free(out);
+	PyMem_Free(out);
 	return po;
 }
 
@@ -335,10 +335,10 @@ qua_repr(qua<T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
 	size_t required_space = 59 + strlen(name) - 4;
-	char * out = (char*)malloc((required_space) * sizeof(char));
+	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
 	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type.w, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
 	PyObject* po = PyUnicode_FromString(out);
-	free(out);
+	PyMem_Free(out);
 	return po;
 }
 
@@ -502,7 +502,7 @@ qua_getbuffer(qua<T>* self, Py_buffer* view, int flags) {
 	}
 	view->ndim = 1;
 	if (flags & PyBUF_ND) {
-		view->shape = (Py_ssize_t*)malloc(sizeof(Py_ssize_t));
+		view->shape = (Py_ssize_t*)PyMem_Malloc(sizeof(Py_ssize_t));
 		if (view->shape != NULL) {
 			view->shape[0] = 4;
 		}
@@ -524,7 +524,14 @@ qua_getbuffer(qua<T>* self, Py_buffer* view, int flags) {
 
 void
 qua_releasebuffer(PyObject*, Py_buffer* view) {
-	free(view->shape);
+	PyMem_Free(view->shape);
+}
+
+template<typename T>
+static Py_hash_t
+qua_hash(qua<T>* self, PyObject*) {
+	std::hash<glm::qua<T>> hasher;
+	return hasher(self->super_type);
 }
 
 template<typename T>

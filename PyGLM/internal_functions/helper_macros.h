@@ -22,4 +22,4 @@
 
 #define PyGLM_TupleOrList_GET_ITEM(op, i) ((PyTuple_Check(op)) ? (((PyTupleObject *)(op))->ob_item[i]) : (((PyListObject *)(op))->ob_item[i]))
 
-#define PyGLM_free(ptr) free(ptr); ptr = NULL;
+#define PyGLM_free(ptr) PyMem_Free(ptr); ptr = NULL;

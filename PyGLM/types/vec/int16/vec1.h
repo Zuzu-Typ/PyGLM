@@ -79,7 +79,7 @@ static PyTypeObject hi16vec1Type = {
 	&hi16vec1NumMethods,             /* tp_as_number */
 	&hi16vec1SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)vec_hash<1, glm::i16>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)vec1_str<glm::i16>,                         /* tp_str */
 	(getattrofunc)vec_getattr<1, glm::i16>,                         /* tp_getattro */

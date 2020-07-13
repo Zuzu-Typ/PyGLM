@@ -487,10 +487,10 @@ mvec2_str(mvec<2, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
 	size_t required_space = 32 + strlen(name) - 4;
-	char * out = (char*)malloc((required_space) * sizeof(char));
+	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
 	snprintf(out, required_space, "%s( %12.6g, %12.6g )", &name[4], (double)self->super_type->x, (double)self->super_type->y);
 	PyObject* po = PyUnicode_FromString(out);
-	free(out);
+	PyMem_Free(out);
 	return po;
 }
 
@@ -500,10 +500,10 @@ mvec3_str(mvec<3, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
 	size_t required_space = 46 + strlen(name) - 4;
-	char * out = (char*)malloc((required_space) * sizeof(char));
+	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
 	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type->x, (double)self->super_type->y, (double)self->super_type->z);
 	PyObject* po = PyUnicode_FromString(out);
-	free(out);
+	PyMem_Free(out);
 	return po;
 }
 
@@ -513,10 +513,10 @@ mvec4_str(mvec<4, T>* self)
 {
 	const char* name = ((PyObject*)self)->ob_type->tp_name;
 	size_t required_space = 60 + strlen(name) - 4;
-	char * out = (char*)malloc((required_space) * sizeof(char));
+	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
 	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type->x, (double)self->super_type->y, (double)self->super_type->z, (double)self->super_type->w);
 	PyObject* po = PyUnicode_FromString(out);
-	free(out);
+	PyMem_Free(out);
 	return po;
 }
 
@@ -1074,7 +1074,7 @@ mvec_getbuffer(mvec<L, T>* self, Py_buffer* view, int flags) {
 	}
 	view->ndim = 1;
 	if (flags & PyBUF_ND) {
-		view->shape = (Py_ssize_t*)malloc(sizeof(Py_ssize_t));
+		view->shape = (Py_ssize_t*)PyMem_Malloc(sizeof(Py_ssize_t));
 		if (view->shape != NULL) {
 			view->shape[0] = L;
 		}
@@ -1096,7 +1096,14 @@ mvec_getbuffer(mvec<L, T>* self, Py_buffer* view, int flags) {
 
 void
 mvec_releasebuffer(PyObject*, Py_buffer* view) {
-	free(view->shape);
+	PyMem_Free(view->shape);
+}
+
+template<int L, typename T>
+static Py_hash_t
+mvec_hash(mvec<L, T>* self, PyObject*) {
+	std::hash<glm::vec<L, T>> hasher;
+	return hasher(*self->super_type);
 }
 
 template<typename T>

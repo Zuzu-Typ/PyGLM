@@ -48,7 +48,7 @@ struct PyGLMSingleTypeHolder { // supposed to only hold a single data type
 
 	~PyGLMSingleTypeHolder() {
 		if (needsToBeFreed) {
-			free(data);
+			PyMem_Free(data);
 			needsToBeFreed = false;
 		}
 	}
@@ -377,7 +377,7 @@ struct PyGLMSingleTypeHolder { // supposed to only hold a single data type
 
 private:
 	void allocate(size_t size) {
-		data = malloc(size);
+		data = PyMem_Malloc(size);
 		needsToBeFreed = true;
 	}
 };

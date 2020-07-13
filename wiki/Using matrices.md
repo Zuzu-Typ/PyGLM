@@ -22,6 +22,7 @@
     *  [contains](#contains-in-operator)  
     *  [richcompare](#richcompare-eg--operator)  
     *  [iter](#iter)  
+    *  [hash](#hash)  
   
 ## Initialization  
 Matrices can be constructed in quite a few different ways\.  
@@ -393,4 +394,16 @@ m  = mat2(1, 2, 3, 4)
 it = iter(m)
 print(next(it)) # prints mvec2(1, 2)
 print(next(it)) # prints mvec2(3, 4)
+ ```  
+  
+### hash  
+You can generate a hash value for matrices using ``` hash() ```  
+Example:  
+``` Python
+>>> m = mat2()
+>>> hash(m)
+-8340327414932306126
+>>> m2 = mat2(1, 2, 3, 4)
+>>> hash(m2)
+2533527020982565631
  ```

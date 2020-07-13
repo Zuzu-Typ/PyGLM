@@ -23,6 +23,7 @@ It's mainly intended to \b\provide a way of passing multiple glm type instances\
 \--\\url #str\str\url\
 \--\\url #repr\repr\url\
 \--\\url #iter\iter\url\
+\--\\url #hash\hash\url\
 \list\
 
 \h2\About arrays\h2\
@@ -150,7 +151,7 @@ array(vec1(8), vec1(9))
 Slices have the following syntax: \code\start_index : stop_index : optional_step\code\, meaning you start at \code\start\code\ and go \code\step\code\ steps until you've reached or passed \code\stop\code\ (exclusive) or the greatest possible index.
 
 
-\h3\contains (\code\in\code\ operator\h3\
+\h3\contains (\code\in\code\ operator)\h3\
 You can check wether or not an element is present in the array using the \code\in\code\ operator.
 \code Python\
 >>> arr = array(vec2(1, 2), vec2(3, 4))
@@ -219,4 +220,19 @@ vec2( 1, 2 )
 
 >>> next(it)
 vec2( 3, 4 )
+\code\
+
+\h3\hash\h3\
+You can generate a hash value for arrays using \code\hash()\code\
+Example:
+\code Python\
+>>> arr = array(vec3(1), vec3(2), vec3(3), vec3(4))
+>>> hash(arr)
+-2624592468369027458
+>>> arr2 = array(vec3(1), vec3(2), vec3(3))
+>>> hash(arr2)
+9163283608357050393
+>>> arr3 = arr2 + array(vec3(4))
+>>> hash(arr3)
+-2624592468369027458
 \code\

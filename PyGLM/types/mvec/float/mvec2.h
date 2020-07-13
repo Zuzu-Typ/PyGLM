@@ -73,7 +73,7 @@ static PyTypeObject hfmvec2Type = {
 	&hfmvec2NumMethods,             /* tp_as_number */
 	&hfmvec2SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)mvec_hash<2, float>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)mvec2_str<float>,                         /* tp_str */
 	(getattrofunc)mvec_getattr<2, float>,                         /* tp_getattro */

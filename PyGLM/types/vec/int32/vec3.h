@@ -81,7 +81,7 @@ static PyTypeObject hivec3Type = {
 	&hivec3NumMethods,             /* tp_as_number */
 	&hivec3SeqMethods,                         /* tp_as_sequence */
 	0,                         /* tp_as_mapping */
-	0,                         /* tp_hash  */
+	(hashfunc)vec_hash<3, glm::i32>,                         /* tp_hash  */
 	0,                         /* tp_call */
 	(reprfunc)vec3_str<glm::i32>,                         /* tp_str */
 	(getattrofunc)vec_getattr<3, glm::i32>,                         /* tp_getattro */
