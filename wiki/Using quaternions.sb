@@ -27,6 +27,7 @@
 \--\ \url #contains-in-operator \contains\ url\
 \--\ \url #richcompare-eg--operator \richcompare\ url\
 \--\ \url #iter \iter\ url\
+\--\ \url #hash\hash\url\
 \ list\
 \h2\Initialization\h2\
 There are a few different ways of constructing a quaternion.  
@@ -240,3 +241,15 @@ print(next(it)) # prints 2.0
 print(next(it)) # prints 3.0
 print(next(it)) # prints 4.0
 \ code\
+
+\h3\hash\h3\
+You can generate a hash value for quaternions using \code\hash()\code\
+Example:
+\code Python\
+>>> q = quat()
+>>> hash(q)
+4797573974374731128
+>>> q2 = quat(1, 2, 3, 4)
+>>> hash(q2)
+8060046874292968317
+\code\

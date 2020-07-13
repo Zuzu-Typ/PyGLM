@@ -25,6 +25,7 @@ It's mainly intended to **provide a way of passing multiple glm type instances**
     * [str](#str)  
     * [repr](#repr)  
     * [iter](#iter)  
+    * [hash](#hash)  
   
   
 ## About arrays  
@@ -153,7 +154,7 @@ array(vec1(8), vec1(9))
 Slices have the following syntax: ``` start_index : stop_index : optional_step ```, meaning you start at ``` start ``` and go ``` step ``` steps until you've reached or passed ``` stop ``` \(exclusive\) or the greatest possible index\.  
   
   
-### contains \(``` in ``` operator  
+### contains \(``` in ``` operator\)  
 You can check wether or not an element is present in the array using the ``` in ``` operator\.  
 ``` Python
 >>> arr = array(vec2(1, 2), vec2(3, 4))
@@ -223,3 +224,18 @@ vec2( 1, 2 )
 >>> next(it)
 vec2( 3, 4 )
  ```  
+  
+### hash  
+You can generate a hash value for arrays using ``` hash() ```  
+Example:  
+``` Python
+>>> arr = array(vec3(1), vec3(2), vec3(3), vec3(4))
+>>> hash(arr)
+-2624592468369027458
+>>> arr2 = array(vec3(1), vec3(2), vec3(3))
+>>> hash(arr2)
+9163283608357050393
+>>> arr3 = arr2 + array(vec3(4))
+>>> hash(arr3)
+-2624592468369027458
+ ```

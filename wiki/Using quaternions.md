@@ -29,6 +29,7 @@
     *  [contains](#contains-in-operator)  
     *  [richcompare](#richcompare-eg--operator)  
     *  [iter](#iter)  
+    *  [hash](#hash)  
   
 ## Initialization  
 There are a few different ways of constructing a quaternion\.&nbsp;&nbsp;  
@@ -243,4 +244,16 @@ print(next(it)) # prints 1.0
 print(next(it)) # prints 2.0
 print(next(it)) # prints 3.0
 print(next(it)) # prints 4.0
+ ```  
+  
+### hash  
+You can generate a hash value for quaternions using ``` hash() ```  
+Example:  
+``` Python
+>>> q = quat()
+>>> hash(q)
+4797573974374731128
+>>> q2 = quat(1, 2, 3, 4)
+>>> hash(q2)
+8060046874292968317
  ```

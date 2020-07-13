@@ -28,6 +28,7 @@
     *  [contains](#contains-in-operator)  
     *  [richcompare](#richcompare-eg--operator)  
     *  [iter](#iter)  
+    *  [hash](#hash)  
   
 ## Initialization  
 There are dozens of ways of constructing a vector\.&nbsp;&nbsp;  
@@ -210,4 +211,19 @@ v  = vec2(1, 2)
 it = iter(v)
 print(next(it)) # prints 1.0
 print(next(it)) # prints 2.0
+ ```  
+  
+### hash  
+You can generate a hash value for vectors using ``` hash() ```  
+Example:  
+``` Python
+>>> v = vec2()
+>>> hash(v)
+-1952026010959490761
+>>> v2 = vec2(1, 2)
+>>> hash(v2)
+8639716006723752019
+>>> v3 = v2 * 0
+>>> hash(v3)
+-1952026010959490761
  ```
