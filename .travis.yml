@@ -13,6 +13,8 @@ env:
 jobs:
   include:
   - stage: test
+    script:
+    - python setup.py bdist_wheel
   - os: osx
     language: generic
     env: MACOSX_DEPLOYMENT_TARGET=10.9
@@ -22,6 +24,9 @@ jobs:
     - choco install python --version 3.8.0
     - export PATH="/c/Python38:/c/Python/Scripts:$PATH"
   - stage: deploy
+    script:
+    - python -m cibuildwheel --output-dir ./wheelhouse
+    - ls wheelhouse
   - services: docker
   - os: osx
     language: generic
@@ -33,9 +38,7 @@ jobs:
     - export PATH="/c/Python38:/c/Python/Scripts:$PATH"
 install:
 - python -m pip install twine cibuildwheel
-script:
-- python -m cibuildwheel --output-dir ./wheelhouse
-- ls wheelhouse
+
 after_success:
   - if [[ $TRAVIS_TAG ]]; then python -m twine upload wheelhouse/*.whl; fi
 deploy:
