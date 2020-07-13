@@ -667,6 +667,14 @@ arr = glm.array(glm.mat4(), glm.mat4(2))
 assert list(arr) == arr.to_list(), arr
 #/iter #
 
+# hash #
+for obj in gen_obj("V_M_Q"):
+    fassert(hash, (obj,))
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+assert hash(arr), arr
+#/hash #
+
 # buffer protocol #
 def check_buffer_protocol(type_, shape, format):
     obj = type_()
