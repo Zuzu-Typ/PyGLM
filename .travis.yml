@@ -19,6 +19,7 @@ install:
 
 script:
   - python3 setup.py install
+  - python3 PyGLM_test.py
   
 stages:
   - test
@@ -29,12 +30,12 @@ stages:
 jobs:
   include:
   - os: windows
-    language: bash
+    language: shell
     name: Test on Windows
     
   - os: osx
-    language: generic
-    env: MACOSX_DEPLOYMENT_TARGET=10.9
+    language: shell
+    name: Test on MacOS
     
   - stage: deploy
     services: docker
@@ -46,8 +47,7 @@ jobs:
       if [[ $TRAVIS_TAG ]]; then python -m twine upload --skip-existing wheelhouse/*.whl; fi
   - stage: deploy
     os: osx
-    language: generic
-    env: MACOSX_DEPLOYMENT_TARGET=10.9
+    language: shell
     install: python3 -m pip install twine cibuildwheel 
     script:
     - python -m cibuildwheel --output-dir ./wheelhouse
@@ -57,7 +57,7 @@ jobs:
   
   - stage: deploy
     os: windows
-    language: bash
+    language: shell
     install: python3 -m pip install twine cibuildwheel 
     script:
     - python -m cibuildwheel --output-dir ./wheelhouse
