@@ -2,8 +2,6 @@
 
 #include "../compiler_setup.h"
 
-#define PyGLM_Number_Check(arg) (PyFloat_Check(arg) || PyLong_Check(arg) || PyBool_Check(arg) || PyNumber_Check(arg))
-
 PyObject* PyGLM_GetNumber(PyObject* arg) {
 	if (arg->ob_type->tp_as_number->nb_float != NULL) {
 		return PyNumber_Float(arg);
@@ -17,6 +15,21 @@ PyObject* PyGLM_GetNumber(PyObject* arg) {
 	PyErr_SetString(PyExc_Exception, "invalid getnumber request (this should not occur)");
 	return NULL;
 }
+
+bool PyGLM_TestNumber(PyObject* arg) {
+	PyObject* num = PyGLM_GetNumber(arg);
+
+	if (num == NULL) {
+		PyErr_Clear();
+		return false;
+	}
+	Py_DECREF(num);
+	return true;
+}
+
+#define PyGLM_COULD_BE_NUMBER(arg) (Py_TYPE(arg)->tp_as_number != NULL && (arg->ob_type->tp_as_number->nb_index != NULL || arg->ob_type->tp_as_number->nb_int != NULL || arg->ob_type->tp_as_number->nb_float != NULL))
+
+#define PyGLM_Number_Check(arg) (PyFloat_Check(arg) || PyLong_Check(arg) || PyBool_Check(arg) || (PyGLM_COULD_BE_NUMBER(arg) &&PyGLM_TestNumber(arg)))
 
 double PyGLM_Number_AsDouble(PyObject* arg) {
 	if (PyFloat_Check(arg)) {
