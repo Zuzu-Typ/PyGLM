@@ -1866,6 +1866,10 @@ array_hash_vec(glm::vec<L, T>* data, ssize_t count) {
 		glm::detail::hash_combine(seed, hasher(data[i]));
 	}
 
+	if (seed == -1) {
+		return -2;
+	}
+
 	return seed;
 }
 

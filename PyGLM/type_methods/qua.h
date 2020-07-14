@@ -561,7 +561,11 @@ template<typename T>
 static Py_hash_t
 qua_hash(qua<T>* self, PyObject*) {
 	std::hash<glm::qua<T>> hasher;
-	return hasher(self->super_type);
+	Py_hash_t out = (Py_hash_t)hasher(self->super_type);
+	if (out == -1) {
+		return -2;
+	}
+	return out;
 }
 
 template<typename T>

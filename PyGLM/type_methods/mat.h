@@ -2784,7 +2784,11 @@ template<int C, int R, typename T>
 static Py_hash_t
 mat_hash(mat<C, R, T>* self, PyObject*) {
 	std::hash<glm::mat<C, R, T>> hasher;
-	return hasher(self->super_type);
+	Py_hash_t out = (Py_hash_t)hasher(self->super_type);
+	if (out == -1) {
+		return -2;
+	}
+	return out;
 }
 
 template<int C, int R, typename T>
