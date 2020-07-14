@@ -18,6 +18,7 @@
 \--\ \url #add--operator \add\ url\
 \--\ \url #sub--operator \sub\ url\
 \--\ \url #mul--operator \mul\ url\
+\--\ \url #matmul--operator \matmul\ url\
 \---\ \url #quat--quat \quat * quat\ url\
 \---\ \url #quat--scalar \quat * scalar\ url\
 \---\ \url #quat--vec \quat * vec\ url\
@@ -188,6 +189,9 @@ vec3( 5.96046e-08, 0, -1 )
 >>> v * q
 vec3( -1.19209e-07, 0, 1 )
 \code\
+\h3 \matmul (\code\@\code\ operator)\ h3\
+Has the same effects as the \code\*\code\ operator, but with the arguments switched.
+I.e. \code\a * b == b @ a\code\
 \h3\div (\code\/\code\ operator)\h3\
 Quaternions support component wise, right handside division with scalars (numbers).  
 \code Python \

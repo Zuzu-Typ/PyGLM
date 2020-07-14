@@ -16,6 +16,7 @@
     *  [add](#add--operator)  
     *  [sub](#sub--operator)  
     *  [mul](#mul--operator)  
+    *  [matmul](#matmul--operator)  
     *  [div](#div--operator)  
     *  [len](#len)  
     *  [getitem and setitem](#getitem-and-setitem--operator)  
@@ -312,6 +313,20 @@ result = mat2x4(
 		)
 	)
  ```   
+### matmul \(``` @ ``` operator\)  
+Has the same effects as the ``` * ``` operator, but with the arguments switched\.  
+``` Python
+>>> m23 = mat2x3(1, 2, 3, 4, 5, 6)
+>>> m32 = mat3x2(1, 2, 3, 4, 5, 6)
+>>> m23 * m32
+mat3x3(( 9, 12, 15 ), ( 19, 26, 33 ), ( 29, 40, 51 ))
+>>> m23 @ m32
+mat2x2(( 22, 28 ), ( 49, 64 ))
+>>> m32 * m23
+mat2x2(( 22, 28 ), ( 49, 64 ))
+>>> m32 @ m23
+mat3x3(( 9, 12, 15 ), ( 19, 26, 33 ), ( 29, 40, 51 ))
+ ```  
 ### div \(``` / ``` operator\)  
 Matrices support division with numbers, vectors and other matrices\.&nbsp;&nbsp;  
 ``` Python
