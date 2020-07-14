@@ -58,6 +58,8 @@ static PyNumberMethods hfmvec4NumMethods = {
 	(binaryfunc)mvec_ifloordiv<4, float>, //nb_inplace_floor_divide
 	(binaryfunc)mvec_idiv<4, float>, //nb_inplace_true_divide
 	0, //nb_index
+	(binaryfunc)mvec_matmul, //nb_matrix_multiply
+	(binaryfunc)mvec_imatmul<4, float>, //nb_inplace_matrix_multiply
 };
 static PyTypeObject hfmvec4Type = {
 	PyObject_HEAD_INIT(NULL)

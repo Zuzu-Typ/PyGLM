@@ -78,6 +78,8 @@ static PyObject * mat_pos(mat<C, R, T> *obj);
 template<int C, int R, typename T>
 static PyObject * mat_abs(mat<C, R, T> *obj);
 
+static PyObject* mat_matmul(PyObject* obj1, PyObject* obj2);
+
 template<int C, int R, typename T>
 static PyObject * matsq_iadd(mat<C, R, T>* self, PyObject *obj);
 
@@ -104,6 +106,9 @@ static PyObject * matsq_idiv(mat<C, R, T>* self, PyObject *obj);
 
 template<int C, int R, typename T>
 static PyObject * mat_idiv(mat<C, R, T>* self, PyObject *obj);
+
+template<int C, int R, typename T>
+static PyObject* mat_imatmul(mat<C, R, T>* self, PyObject* obj);
 
 static void mat_dealloc(PyObject* self);
 

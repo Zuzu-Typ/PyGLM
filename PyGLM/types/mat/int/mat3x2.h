@@ -66,6 +66,8 @@ static PyNumberMethods himat3x2NumMethods = {
 	0, //nb_inplace_floor_divide
 	(binaryfunc)mat_idiv<3, 2, glm::i32>, //nb_inplace_true_divide
 	0, //nb_index
+	(binaryfunc)mat_matmul, //nb_matrix_multiply
+	(binaryfunc)mat_imatmul<3, 2, glm::i32>, //nb_inplace_matrix_multiply
 };
 static PyTypeObject himat3x2Type = {
 	PyObject_HEAD_INIT(NULL)

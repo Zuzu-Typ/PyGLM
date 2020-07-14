@@ -1429,6 +1429,16 @@ mat_div(PyObject *obj1, PyObject *obj2)
 	Py_RETURN_NOTIMPLEMENTED;
 }
 
+static PyObject*
+mat_matmul(PyObject* obj1, PyObject* obj2)
+{
+	PyObject* out = PyNumber_Multiply(obj2, obj1);
+	if (out == NULL) {
+		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
+	}
+	return out;
+}
+
 // inplace
 // binaryfunc
 template<int C, int R, typename T>
@@ -1546,6 +1556,25 @@ mat_idiv(mat<C, R, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+template<int C, int R, typename T>
+static PyObject*
+mat_imatmul(mat<C, R, T>* self, PyObject* obj)
+{
+	mat<C, R, T>* temp = (mat<C, R, T>*)mat_matmul((PyObject*)self, obj);
+
+	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
+
+	if (!PyGLM_Mat_Check(C, R, T, temp)) {
+		Py_DECREF(temp);
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+
+	self->super_type = temp->super_type;
+
+	Py_DECREF(temp);
+	Py_INCREF(self);
+	return (PyObject*)self;
+}
 
 
 template<typename T>

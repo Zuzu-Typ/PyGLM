@@ -66,6 +66,8 @@ static PyNumberMethods humat3x3NumMethods = {
 	0, //nb_inplace_floor_divide
 	(binaryfunc)mat_idiv<3, 3, glm::u32>, //nb_inplace_true_divide
 	0, //nb_index
+	(binaryfunc)mat_matmul, //nb_matrix_multiply
+	(binaryfunc)mat_imatmul<3, 3, glm::u32>, //nb_inplace_matrix_multiply
 };
 static PyTypeObject humat3x3Type = {
 	PyObject_HEAD_INIT(NULL)

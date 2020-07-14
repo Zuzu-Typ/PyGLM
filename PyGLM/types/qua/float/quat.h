@@ -69,6 +69,8 @@ static PyNumberMethods hfquaNumMethods = {
 	0, //nb_inplace_floor_divide
 	(binaryfunc)qua_idiv<float>, //nb_inplace_true_divide
 	0, //nb_index
+	(binaryfunc)qua_matmul, //nb_matrix_multiply
+	(binaryfunc)qua_imatmul<double>, //nb_inplace_matrix_multiply
 };
 static PyTypeObject hfquaType = {
 	PyObject_HEAD_INIT(NULL)

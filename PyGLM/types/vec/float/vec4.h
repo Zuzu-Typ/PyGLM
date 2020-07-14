@@ -67,6 +67,8 @@ static PyNumberMethods hfvec4NumMethods = {
 	(binaryfunc)vec_ifloordiv<4, float>, //nb_inplace_floor_divide
 	(binaryfunc)vec_idiv<4, float>, //nb_inplace_true_divide
 	0, //nb_index
+	(binaryfunc)vec_matmul, //nb_matrix_multiply
+	(binaryfunc)vec_imatmul<4, float>, //nb_inplace_matrix_multiply
 };
 static PyTypeObject hfvec4Type = {
 	PyObject_HEAD_INIT(NULL)
