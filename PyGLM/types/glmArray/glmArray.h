@@ -3,18 +3,18 @@
 #include "forward_declarations.h"
 
 static PyMemberDef glmArray_members[] = {
-	{ "nbytes", T_PYSSIZET, offsetof(glmArray, nBytes), 1, "Total combined bytecount of all elements" },
-	{ "typecode", T_CHAR, offsetof(glmArray, format), 1, "The typecode character of the underlying format" },
-	{ "element_type", T_OBJECT, offsetof(glmArray, subtype), 1, "Type class of the contained elements" },
-	{ "itemsize", T_PYSSIZET, offsetof(glmArray, itemSize), 1, "The size of one array item in bytes " },
-	{ "dt_size", T_PYSSIZET, offsetof(glmArray, dtSize), 1, "The size of each single component of the elements in bytes (size of data type)" },
-	{ "address", T_ULONGLONG, offsetof(glmArray, data), 1, "The memory address where this array stores it's data" },
-	{ "length", T_PYSSIZET, offsetof(glmArray, itemCount), 1, "The count of elements contained by this array" },
+	{ (char*)"nbytes", T_PYSSIZET, offsetof(glmArray, nBytes), 1, (char*)"Total combined bytecount of all elements" },
+	{ (char*)"typecode", T_CHAR, offsetof(glmArray, format), 1, (char*)"The typecode character of the underlying format" },
+	{ (char*)"element_type", T_OBJECT, offsetof(glmArray, subtype), 1, (char*)"Type class of the contained elements" },
+	{ (char*)"itemsize", T_PYSSIZET, offsetof(glmArray, itemSize), 1, (char*)"The size of one array item in bytes " },
+	{ (char*)"dt_size", T_PYSSIZET, offsetof(glmArray, dtSize), 1, (char*)"The size of each single component of the elements in bytes (size of data type)" },
+	{ (char*)"address", T_ULONGLONG, offsetof(glmArray, data), 1, (char*)"The memory address where this array stores it's data" },
+	{ (char*)"length", T_PYSSIZET, offsetof(glmArray, itemCount), 1, (char*)"The count of elements contained by this array" },
 	{ NULL }  /* Sentinel */
 };
 static PyGetSetDef glmArray_getSet[] = {
-	{ "ptr", (getter)glmArray_getPtr, NULL, "A ctypes pointer that points to the content of this array", NULL },
-	{ "dtype", (getter)glmArray_getDtype, NULL, "A numpy-like data type string", NULL },
+	{ (char*)"ptr", (getter)glmArray_getPtr, NULL, (char*)"A ctypes pointer that points to the content of this array", NULL },
+	{ (char*)"dtype", (getter)glmArray_getDtype, NULL, (char*)"A numpy-like data type string", NULL },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef glmArray_methods[] = {
