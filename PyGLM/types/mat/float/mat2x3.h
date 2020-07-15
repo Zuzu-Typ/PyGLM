@@ -66,6 +66,8 @@ static PyNumberMethods hfmat2x3NumMethods = {
 	0, //nb_inplace_floor_divide
 	(binaryfunc)mat_idiv<2, 3, float>, //nb_inplace_true_divide
 	0, //nb_index
+	(binaryfunc)mat_matmul, //nb_matrix_multiply
+	(binaryfunc)mat_imatmul<2, 3, float>, //nb_inplace_matrix_multiply
 };
 static PyTypeObject hfmat2x3Type = {
 	PyObject_HEAD_INIT(NULL)

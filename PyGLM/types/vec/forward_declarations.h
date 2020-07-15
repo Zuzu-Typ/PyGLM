@@ -76,6 +76,8 @@ static PyObject * vec_pos(vec<L, T> *obj);
 template<int L, typename T>
 static PyObject * vec_abs(vec<L, T> *obj);
 
+static PyObject* vec_matmul(PyObject* obj1, PyObject* obj2);
+
 template<int L, typename T>
 static PyObject * vec_iadd(vec<L, T>* self, PyObject *obj);
 
@@ -102,6 +104,9 @@ static PyObject * vec_ifloordiv(vec<L, T>* self, PyObject *obj);
 
 template<int L, typename T>
 static PyObject * vec_idiv(vec<L, T>* self, PyObject *obj);
+
+template<int L, typename T>
+static PyObject* vec_imatmul(vec<L, T>* self, PyObject* obj);
 
 static void vec_dealloc(PyObject* self);
 

@@ -67,6 +67,8 @@ static PyNumberMethods hivec4NumMethods = {
 	0, //nb_inplace_floor_divide
 	(binaryfunc)vec_idiv<4, glm::i32>, //nb_inplace_true_divide
 	0, //nb_index
+	(binaryfunc)vec_matmul, //nb_matrix_multiply
+	(binaryfunc)vec_imatmul<4, glm::i32>, //nb_inplace_matrix_multiply
 };
 static PyTypeObject hivec4Type = {
 	PyObject_HEAD_INIT(NULL)

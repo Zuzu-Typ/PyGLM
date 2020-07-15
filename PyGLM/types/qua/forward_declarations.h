@@ -35,6 +35,8 @@ static PyObject * qua_neg(qua<T> *obj);
 template<typename T>
 static PyObject * qua_pos(qua<T> *obj);
 
+static PyObject* qua_matmul(PyObject* obj1, PyObject* obj2);
+
 template<typename T>
 static PyObject * qua_iadd(qua<T>* self, PyObject *obj);
 
@@ -49,6 +51,9 @@ static PyObject * qua_div(PyObject *obj1, PyObject *obj2);
 
 template<typename T>
 static PyObject * qua_idiv(qua<T>* self, PyObject *obj);
+
+template<typename T>
+static PyObject* qua_imatmul(qua<T>* self, PyObject* obj);
 
 static void qua_dealloc(PyObject* self);
 

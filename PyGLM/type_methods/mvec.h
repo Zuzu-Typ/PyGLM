@@ -373,6 +373,16 @@ mvec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 	return pack_vec<L, T>(glm::mod(glm::pow(o, o2), o3));
 }
 
+static PyObject*
+mvec_matmul(PyObject* obj1, PyObject* obj2)
+{
+	PyObject* out = PyNumber_Multiply(obj2, obj1);
+	if (out == NULL) {
+		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
+	}
+	return out;
+}
+
 // inplace
 // binaryfunc
 template<int L, typename T>
@@ -459,6 +469,26 @@ mvec_ifloordiv(mvec<L, T> *self, PyObject *obj)
 	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 
 	*self->super_type = temp->super_type;
+
+	Py_DECREF(temp);
+	Py_INCREF(self);
+	return (PyObject*)self;
+}
+
+template<int L, typename T>
+static PyObject*
+mvec_imatmul(mvec<L, T>* self, PyObject* obj)
+{
+	mvec<L, T>* temp = (mvec<L, T>*)mvec_matmul((PyObject*)self, obj);
+
+	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
+
+	if (!PyGLM_Vec_Check(L, T, temp)) {
+		Py_DECREF(temp);
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+
+	self->super_type = temp->super_type;
 
 	Py_DECREF(temp);
 	Py_INCREF(self);
@@ -1103,7 +1133,11 @@ template<int L, typename T>
 static Py_hash_t
 mvec_hash(mvec<L, T>* self, PyObject*) {
 	std::hash<glm::vec<L, T>> hasher;
-	return hasher(*self->super_type);
+	Py_hash_t out = (Py_hash_t)hasher(*self->super_type);
+	if (out == -1) {
+		return -2;
+	}
+	return out;
 }
 
 template<typename T>

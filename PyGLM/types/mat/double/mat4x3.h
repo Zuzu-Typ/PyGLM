@@ -66,6 +66,8 @@ static PyNumberMethods hdmat4x3NumMethods = {
 	0, //nb_inplace_floor_divide
 	(binaryfunc)mat_idiv<4, 3, double>, //nb_inplace_true_divide
 	0, //nb_index
+	(binaryfunc)mat_matmul, //nb_matrix_multiply
+	(binaryfunc)mat_imatmul<4, 3, double>, //nb_inplace_matrix_multiply
 };
 static PyTypeObject hdmat4x3Type = {
 	PyObject_HEAD_INIT(NULL)

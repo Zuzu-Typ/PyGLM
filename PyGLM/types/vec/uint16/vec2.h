@@ -65,6 +65,8 @@ static PyNumberMethods hu16vec2NumMethods = {
 	0, //nb_inplace_floor_divide
 	(binaryfunc)vec_idiv<2, glm::u16>, //nb_inplace_true_divide
 	0, //nb_index
+	(binaryfunc)vec_matmul, //nb_matrix_multiply
+	(binaryfunc)vec_imatmul<2, glm::u16>, //nb_inplace_matrix_multiply
 };
 static PyTypeObject hu16vec2Type = {
 	PyObject_HEAD_INIT(NULL)

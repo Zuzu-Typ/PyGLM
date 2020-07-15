@@ -65,6 +65,8 @@ static PyNumberMethods huvec2NumMethods = {
 	0, //nb_inplace_floor_divide
 	(binaryfunc)vec_idiv<2, glm::u32>, //nb_inplace_true_divide
 	0, //nb_index
+	(binaryfunc)vec_matmul, //nb_matrix_multiply
+	(binaryfunc)vec_imatmul<2, glm::u32>, //nb_inplace_matrix_multiply
 };
 static PyTypeObject huvec2Type = {
 	PyObject_HEAD_INIT(NULL)

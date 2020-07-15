@@ -16,6 +16,7 @@
 \--\ \url #add--operator \add\ url\
 \--\ \url #sub--operator \sub\ url\
 \--\ \url #mul--operator \mul\ url\
+\--\ \url #matmul--operator \matmul\ url\
 \--\ \url #div--operator \div\ url\
 \--\ \url #mod--operator \mod\ url\
 \--\ \url #floordiv--operator \floordiv\ url\
@@ -120,6 +121,9 @@ Vectors support multiplication with other vectors and numbers.
 prod1 = vec2(1, 2) * vec2(4, 0) # returns vec2(4, 0)
 prod2 = vec2(1, 2) * 4          # returns vec2(4, 8)
 \ code\
+\h3 \matmul (\code\@\code\ operator)\ h3\
+Has the same effects as the \code\*\code\ operator, but with the arguments switched.
+I.e. \code\a * b == b @ a\code\
 \h3\div (\code\/\code\ operator)\h3\
 Vectors support division with other vectors and numbers.  
 \code Python \

@@ -249,6 +249,16 @@ qua_div(PyObject *obj1, PyObject *obj2)
 	Py_RETURN_NOTIMPLEMENTED;
 }
 
+static PyObject*
+qua_matmul(PyObject* obj1, PyObject* obj2)
+{
+	PyObject* out = PyNumber_Multiply(obj2, obj1);
+	if (out == NULL) {
+		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
+	}
+	return out;
+}
+
 // inplace
 // binaryfunc
 template<typename T>
@@ -308,6 +318,26 @@ qua_idiv(qua<T> *self, PyObject *obj)
 	qua<T> * temp = (qua<T>*)qua_div<T>((PyObject*)self, obj);
 
 	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
+
+	self->super_type = temp->super_type;
+
+	Py_DECREF(temp);
+	Py_INCREF(self);
+	return (PyObject*)self;
+}
+
+template<typename T>
+static PyObject*
+qua_imatmul(qua<T>* self, PyObject* obj)
+{
+	qua<T>* temp = (qua<T>*)qua_matmul((PyObject*)self, obj);
+
+	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
+
+	if (!PyGLM_Qua_Check(T, temp)) {
+		Py_DECREF(temp);
+		Py_RETURN_NOTIMPLEMENTED;
+	}
 
 	self->super_type = temp->super_type;
 
@@ -531,7 +561,11 @@ template<typename T>
 static Py_hash_t
 qua_hash(qua<T>* self, PyObject*) {
 	std::hash<glm::qua<T>> hasher;
-	return hasher(self->super_type);
+	Py_hash_t out = (Py_hash_t)hasher(self->super_type);
+	if (out == -1) {
+		return -2;
+	}
+	return out;
 }
 
 template<typename T>

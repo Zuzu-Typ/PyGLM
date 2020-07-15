@@ -18,6 +18,7 @@
     *  [add](#add--operator)  
     *  [sub](#sub--operator)  
     *  [mul](#mul--operator)  
+    *  [matmul](#matmul--operator)  
     *  [div](#div--operator)  
     *  [mod](#mod--operator)  
     *  [floordiv](#floordiv--operator)  
@@ -122,6 +123,9 @@ Vectors support multiplication with other vectors and numbers\.&nbsp;&nbsp;
 prod1 = vec2(1, 2) * vec2(4, 0) # returns vec2(4, 0)
 prod2 = vec2(1, 2) * 4          # returns vec2(4, 8)
  ```  
+### matmul \(``` @ ``` operator\)  
+Has the same effects as the ``` * ``` operator, but with the arguments switched\.  
+I\.e\. ``` a * b == b @ a ```  
 ### div \(``` / ``` operator\)  
 Vectors support division with other vectors and numbers\.&nbsp;&nbsp;  
 ``` Python

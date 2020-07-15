@@ -58,6 +58,8 @@ static PyNumberMethods humvec4NumMethods = {
 	0, //nb_inplace_floor_divide
 	(binaryfunc)mvec_idiv<4, glm::u32>, //nb_inplace_true_divide
 	0, //nb_index
+	(binaryfunc)mvec_matmul, //nb_matrix_multiply
+	(binaryfunc)mvec_imatmul<4, glm::u32>, //nb_inplace_matrix_multiply
 };
 static PyTypeObject humvec4Type = {
 	PyObject_HEAD_INIT(NULL)

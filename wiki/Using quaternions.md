@@ -20,6 +20,7 @@
     *  [add](#add--operator)  
     *  [sub](#sub--operator)  
     *  [mul](#mul--operator)  
+    *  [matmul](#matmul--operator)  
         *  [quat \* quat](#quat--quat)  
         *  [quat \* scalar](#quat--scalar)  
         *  [quat \* vec](#quat--vec)  
@@ -192,6 +193,9 @@ vec3( 5.96046e-08, 0, -1 )
 >>> v * q
 vec3( -1.19209e-07, 0, 1 )
  ```  
+### matmul \(``` @ ``` operator\)  
+Has the same effects as the ``` * ``` operator, but with the arguments switched\.  
+I\.e\. ``` a * b == b @ a ```  
 ### div \(``` / ``` operator\)  
 Quaternions support component wise, right handside division with scalars \(numbers\)\.&nbsp;&nbsp;  
 ``` Python
