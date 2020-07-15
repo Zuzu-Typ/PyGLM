@@ -44,7 +44,7 @@ jobs:
     - python3 -m cibuildwheel --output-dir ./wheelhouse
     - ls wheelhouse
     after_success: |
-      if [[ $TRAVIS_TAG ]]; then python -m twine upload --skip-existing wheelhouse/*.whl; fi
+      if [[ $TRAVIS_TAG ]]; then python3 -m twine upload --skip-existing wheelhouse/*.whl; fi
   - stage: deploy
     os: osx
     language: shell
@@ -53,7 +53,7 @@ jobs:
     - python3 -m cibuildwheel --output-dir ./wheelhouse
     - ls wheelhouse
     after_success: |
-      if [[ $TRAVIS_TAG ]]; then python -m twine upload --skip-existing wheelhouse/*.whl; fi
+      if [[ $TRAVIS_TAG ]]; then python3 -m twine upload --skip-existing wheelhouse/*.whl; fi
   
   - stage: deploy
     os: windows
@@ -63,7 +63,7 @@ jobs:
     - python3 -m cibuildwheel --output-dir ./wheelhouse
     - ls wheelhouse
     after_success: |
-      if [[ $TRAVIS_TAG ]]; then python -m twine upload --skip-existing wheelhouse/*.whl; fi
+      if [[ $TRAVIS_TAG ]]; then python3 -m twine upload --skip-existing wheelhouse/*.whl; fi
 
 deploy:
   provider: releases
