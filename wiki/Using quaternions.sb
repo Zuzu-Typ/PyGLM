@@ -18,10 +18,10 @@
 \--\ \url #add--operator \add\ url\
 \--\ \url #sub--operator \sub\ url\
 \--\ \url #mul--operator \mul\ url\
-\--\ \url #matmul--operator \matmul\ url\
 \---\ \url #quat--quat \quat * quat\ url\
 \---\ \url #quat--scalar \quat * scalar\ url\
 \---\ \url #quat--vec \quat * vec\ url\
+\--\ \url #matmul--operator \matmul\ url\
 \--\ \url #div--operator \div\ url\
 \--\ \url #len \len\ url\
 \--\ \url #getitem-and-setitem--operator \getitem and setitem\ url\
