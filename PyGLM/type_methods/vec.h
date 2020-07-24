@@ -1489,24 +1489,22 @@ static int vec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 			return 0;
 		}
 	}
-	else if (len == 1 && PyGLM_Number_Check(value)) {
-		T v = PyGLM_Number_FromPyObject<T>(value);
-		bool success = true;
-		T& x = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[0], success);
-		if (success) {
-			x = v;
-			return 0;
-		}
-	}
 	else if (PyGLM_Number_Check(value)) {
 		T v = PyGLM_Number_FromPyObject<T>(value);
 		bool success = true;
+		if (len == 1) {
+			T& x = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[0], success);
+			if (success) {
+				x = v;
+				return 0;
+			}
+		}
 		if (len == 2) {
 			T& x = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[0], success);
 			T& y = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[1], success);
 			if (success) {
-				x = x;
-				y = y;
+				x = v;
+				y = v;
 				return 0;
 			}
 		}
