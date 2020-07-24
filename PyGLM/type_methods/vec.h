@@ -1498,6 +1498,43 @@ static int vec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 			return 0;
 		}
 	}
+	else if (PyGLM_Number_Check(value)) {
+		T v = PyGLM_Number_FromPyObject<T>(value);
+		bool success = true;
+		if (len == 2) {
+			T& x = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[0], success);
+			T& y = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[1], success);
+			if (success) {
+				x = x;
+				y = y;
+				return 0;
+			}
+		}
+		else if (len == 3) {
+			T& x = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[0], success);
+			T& y = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[1], success);
+			T& z = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[2], success);
+			if (success) {
+				x = v;
+				y = v;
+				z = v;
+				return 0;
+			}
+		}
+		else if (len == 4) {
+			T& x = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[0], success);
+			T& y = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[1], success);
+			T& z = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[2], success);
+			T& w = unswizzle2_vec((vec<L, T> *)obj, name_as_ccp[3], success);
+			if (success) {
+				x = v;
+				y = v;
+				z = v;
+				w = v;
+				return 0;
+			}
+		}
+	}
 	else if (len == 2 && PyGLM_Vec_PTI_Check0(2, T, value)) {
 		glm::vec<2, T> v = PyGLM_Vec_PTI_Get0(2, T, value);
 		bool success = true;
