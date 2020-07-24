@@ -935,7 +935,7 @@ static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 				return 0;
 			}
 		}
-		if (len == 2) {
+		else if (len == 2) {
 			T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
 			T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
 			if (success) {
