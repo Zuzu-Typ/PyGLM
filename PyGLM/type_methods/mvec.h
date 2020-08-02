@@ -914,30 +914,19 @@ static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 	char * name_as_ccp = PyGLM_String_AsString(name);
 	size_t len = strlen(name_as_ccp);
 
-	PyGLM_PTI_Init0(value, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_PTI_GetDT(T))
-
-	if (len == 1 && PyGLM_Vec_PTI_Check0(1, T, value)) {
-		glm::vec<1, T> v = PyGLM_Vec_PTI_Get0(1, T, value);
-		bool success = true;
-		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
-		if (success) {
-			x = v.x;
-			return 0;
-		}
-	}
-	else if (PyGLM_Number_Check(value)) {
+	if (PyGLM_Number_Check(value)) {
 		T v = PyGLM_Number_FromPyObject<T>(value);
 		bool success = true;
 		if (len == 1) {
-			T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
+			T& x = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[0], success);
 			if (success) {
 				x = v;
 				return 0;
 			}
 		}
 		else if (len == 2) {
-			T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
-			T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
+			T& x = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[0], success);
+			T& y = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[1], success);
 			if (success) {
 				x = v;
 				y = v;
@@ -945,9 +934,9 @@ static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 			}
 		}
 		else if (len == 3) {
-			T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
-			T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
-			T& z = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[2], success);
+			T& x = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[0], success);
+			T& y = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[1], success);
+			T& z = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[2], success);
 			if (success) {
 				x = v;
 				y = v;
@@ -956,10 +945,10 @@ static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 			}
 		}
 		else if (len == 4) {
-			T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
-			T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
-			T& z = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[2], success);
-			T& w = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[3], success);
+			T& x = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[0], success);
+			T& y = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[1], success);
+			T& z = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[2], success);
+			T& w = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[3], success);
 			if (success) {
 				x = v;
 				y = v;
@@ -969,45 +958,58 @@ static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 			}
 		}
 	}
-	else if (len == 2 && PyGLM_Vec_PTI_Check0(2, T, value)) {
-		glm::vec<2, T> v = PyGLM_Vec_PTI_Get0(2, T, value);
-		bool success = true;
-		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
-		T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
-		if (success) {
-			x = v.x;
-			y = v.y;
-			return 0;
+	else {
+		PyGLM_PTI_Init0(value, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_PTI_GetDT(T));
+		if (len == 1 && PyGLM_Vec_PTI_Check0(1, T, value)) {
+			glm::vec<1, T> v = PyGLM_Vec_PTI_Get0(1, T, value);
+			bool success = true;
+			T& x = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[0], success);
+			if (success) {
+				x = v.x;
+				return 0;
+			}
+		}
+		else if (len == 2 && PyGLM_Vec_PTI_Check0(2, T, value)) {
+			glm::vec<2, T> v = PyGLM_Vec_PTI_Get0(2, T, value);
+			bool success = true;
+			T& x = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[0], success);
+			T& y = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[1], success);
+			if (success) {
+				x = v.x;
+				y = v.y;
+				return 0;
+			}
+		}
+		else if (len == 3 && PyGLM_Vec_PTI_Check0(3, T, value)) {
+			glm::vec<3, T> v = PyGLM_Vec_PTI_Get0(3, T, value);
+			bool success = true;
+			T& x = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[0], success);
+			T& y = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[1], success);
+			T& z = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[2], success);
+			if (success) {
+				x = v.x;
+				y = v.y;
+				z = v.z;
+				return 0;
+			}
+		}
+		else if (len == 4 && PyGLM_Vec_PTI_Check0(4, T, value)) {
+			glm::vec<4, T> v = PyGLM_Vec_PTI_Get0(4, T, value);
+			bool success = true;
+			T& x = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[0], success);
+			T& y = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[1], success);
+			T& z = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[2], success);
+			T& w = unswizzle2_mvec((mvec<L, T>*)obj, name_as_ccp[3], success);
+			if (success) {
+				x = v.x;
+				y = v.y;
+				z = v.z;
+				w = v.w;
+				return 0;
+			}
 		}
 	}
-	else if (len == 3 && PyGLM_Vec_PTI_Check0(3, T, value)) {
-		glm::vec<3, T> v = PyGLM_Vec_PTI_Get0(3, T, value);
-		bool success = true;
-		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
-		T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
-		T& z = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[2], success);
-		if (success) {
-			x = v.x;
-			y = v.y;
-			z = v.z;
-			return 0;
-		}
-	}
-	else if (len == 4 && PyGLM_Vec_PTI_Check0(4, T, value)) {
-		glm::vec<4, T> v = PyGLM_Vec_PTI_Get0(4, T, value);
-		bool success = true;
-		T& x = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[0], success);
-		T& y = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[1], success);
-		T& z = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[2], success);
-		T& w = unswizzle2_mvec((mvec<L, T> *)obj, name_as_ccp[3], success);
-		if (success) {
-			x = v.x;
-			y = v.y;
-			z = v.z;
-			w = v.w;
-			return 0;
-		}
-	}
+	
 	return PyObject_GenericSetAttr(obj, name, value);
 }
 
