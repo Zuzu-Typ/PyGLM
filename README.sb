@@ -11,6 +11,7 @@ If you encounter any issues or want to request a feature, please create an issue
 \b\For a (barely) complete reference, please take a look at the \url https://github.com/Zuzu-Typ/PyGLM/wiki \wiki\ url\\b\.
 
 \h2 \Tiny Documentation\ h2\
+\h3 \\url https://github.com/Zuzu-Typ/PyGLM/wiki#faq \FAQ\ url\\ h3\
 \h3 \Why PyGLM?\ h3\
 Besides the obvious - being mostly compatible with \b \GLM\ b\ - PyGLM offers a variety of features for \b \vector\ b\ and \b \matrix manipulation\ b\.
 It has a lot of possible use cases, including \b \3D-Graphics\ b\ (OpenGL, DirectX, ...), \b \Physics\ b\ and more.
