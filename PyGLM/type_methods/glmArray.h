@@ -526,6 +526,44 @@ glmArray_to_tuple(glmArray* self, PyObject*) {
 	return out;
 }
 
+static PyObject*
+glmArray_getstate(glmArray* self, PyObject*) {
+	return PyTuple_Pack(10,
+		glmArray_to_tuple(self, NULL),
+		PyGLM_PyObject_FromNumber<ssize_t>(self->dtSize),
+		PyGLM_PyObject_FromNumber<char>(self->format),
+		PyGLM_PyObject_FromNumber<uint8>(self->glmType),
+		PyGLM_PyObject_FromNumber<ssize_t>(self->itemCount),
+		PyGLM_PyObject_FromNumber<ssize_t>(self->itemSize),
+		PyGLM_PyObject_FromNumber<ssize_t>(self->nBytes),
+		PyGLM_PyObject_FromNumber<uint8>(self->shape[0]),
+		PyGLM_PyObject_FromNumber<uint8>(self->shape[1]),
+		self->subtype
+		);
+}
+
+static PyObject*
+glmArray_setstate(glmArray* self, PyObject* state) {
+	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 10, "Invalid state. Expected length 10 tuple.");
+	PyObject* dataTuple = PyTuple_GET_ITEM(state, 0);
+	self->dtSize = PyGLM_Number_FromPyObject<ssize_t>(PyTuple_GET_ITEM(state, 1));
+	self->format = PyGLM_Number_FromPyObject<char>(PyTuple_GET_ITEM(state, 2));
+	self->glmType = PyGLM_Number_FromPyObject<uint8>(PyTuple_GET_ITEM(state, 3));
+	self->itemCount = PyGLM_Number_FromPyObject<ssize_t>(PyTuple_GET_ITEM(state, 4));
+	self->itemSize = PyGLM_Number_FromPyObject<ssize_t>(PyTuple_GET_ITEM(state, 5));
+	self->nBytes = PyGLM_Number_FromPyObject<ssize_t>(PyTuple_GET_ITEM(state, 6));
+	self->shape[0] = PyGLM_Number_FromPyObject<uint8>(PyTuple_GET_ITEM(state, 7));
+	self->shape[1] = PyGLM_Number_FromPyObject<uint8>(PyTuple_GET_ITEM(state, 8));
+	self->subtype = (PyTypeObject*)PyTuple_GET_ITEM(state, 9);
+
+	self->data = PyMem_MALLOC(self->nBytes);
+
+	for (ssize_t i = 0; i < self->itemCount; i++) {
+		glmArray_set(self, i, PyTuple_GET_ITEM(dataTuple, i));
+	}
+	Py_RETURN_NONE;
+}
+
 static Py_ssize_t 
 glmArray_len(glmArray* self) { 
 	return self->itemCount;

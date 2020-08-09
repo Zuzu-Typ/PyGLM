@@ -6,6 +6,8 @@ static PyMethodDef hfmat4x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::mat4x2"},
+	{ "__getstate__", (PyCFunction)mat_to_tuple<4, 2, float>, METH_NOARGS, "Returns a picklable state of this object"},
+	{ "__setstate__", (PyCFunction)mat_setstate<4, 2, float>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)mat_to_list<4, 2, float>, METH_NOARGS, "Return the components of this matrix as a nested list"},
 	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 2, float>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }

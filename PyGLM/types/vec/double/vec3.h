@@ -11,6 +11,8 @@ static PyMemberDef hdvec3_members[] = {
 static PyMethodDef hdvec3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "__getstate__", (PyCFunction)vec3_to_tuple<double>, METH_NOARGS, "Returns a picklable state of this object"},
+	{ "__setstate__", (PyCFunction)vec3_setstate<double>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)vec3_to_list<double>, METH_NOARGS, "Return the components of this vector as a list"},
 	{ "to_tuple", (PyCFunction)vec3_to_tuple<double>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */

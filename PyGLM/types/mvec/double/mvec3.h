@@ -5,6 +5,10 @@
 static PyMethodDef hdmvec3_methods[] = {
 	{ "__copy__", (PyCFunction)mvec_copy<3, double>, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<3, double>, METH_O, "Create a (deep)copy of this instance"},
+	{ "__getstate__", (PyCFunction)mvec3_to_tuple<double>, METH_NOARGS, "Returns a picklable state of this object"},
+	{ "__setstate__", (PyCFunction)mvec3_setstate<double>, METH_O, "Restores a state that was previously acquired"},
+	{ "to_list", (PyCFunction)mvec3_to_list<double>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)mvec3_to_tuple<double>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdmvec3BufferMethods = {
@@ -100,7 +104,7 @@ static PyTypeObject hdmvec3Type = {
 	0,                         /* tp_dictoffset */
 	0,      /* tp_init */
 	0,                         /* tp_alloc */
-	0,                 /* tp_new */
+	(newfunc)mvec_new<3, double>,                 /* tp_new */
 };
 static PyTypeObject hdmvec3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)

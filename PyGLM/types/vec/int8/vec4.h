@@ -12,6 +12,8 @@ static PyMemberDef hi8vec4_members[] = {
 static PyMethodDef hi8vec4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "__getstate__", (PyCFunction)vec4_to_tuple<glm::i8>, METH_NOARGS, "Returns a picklable state of this object"},
+	{ "__setstate__", (PyCFunction)vec4_setstate<glm::i8>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)vec4_to_list<glm::i8>, METH_NOARGS, "Return the components of this vector as a list"},
 	{ "to_tuple", (PyCFunction)vec4_to_tuple<glm::i8>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */

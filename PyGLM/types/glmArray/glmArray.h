@@ -20,6 +20,8 @@ static PyGetSetDef glmArray_getSet[] = {
 static PyMethodDef glmArray_methods[] = {
 	{ "__copy__",		(PyCFunction)generic_copy,		METH_NOARGS,	"Create a copy of this instance"				},
 	{ "__deepcopy__",	(PyCFunction)generic_deepcopy,	METH_O,			"Create a (deep)copy of this instance"			},
+	{ "__getstate__", (PyCFunction)glmArray_getstate, METH_NOARGS, "Returns a picklable state of this object"},
+	{ "__setstate__", (PyCFunction)glmArray_setstate, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list",		(PyCFunction)glmArray_to_list,	METH_NOARGS,	"Return the elements of this array as a list"	},
 	{ "to_tuple",		(PyCFunction)glmArray_to_tuple, METH_NOARGS,	"Return the elements of this array as a tuple"	},
 	{ NULL }  /* Sentinel */

@@ -10,6 +10,8 @@ static PyMemberDef hu64vec2_members[] = {
 static PyMethodDef hu64vec2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
+	{ "__getstate__", (PyCFunction)vec2_to_tuple<glm::u64>, METH_NOARGS, "Returns a picklable state of this object"},
+	{ "__setstate__", (PyCFunction)vec2_setstate<glm::u64>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)vec2_to_list<glm::u64>, METH_NOARGS, "Return the components of this vector as a list"},
 	{ "to_tuple", (PyCFunction)vec2_to_tuple<glm::u64>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
