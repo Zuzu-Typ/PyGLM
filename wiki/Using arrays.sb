@@ -13,6 +13,7 @@ It's mainly intended to \b\provide a way of passing multiple glm type instances\
 \-\\url #members\Members\url\
 \-\\url #methods\Methods\url\\list switch\
 \--\\url #the-copy-protocol\The copy protocol\url\
+\--\ \url #pickling \Pickling\ url\
 \--\\url #to-list--tuple\To list / tuple\url\\list switch\
 \-\\url #operators\Operators\url\\list switch\
 \--\\url #concat--operator\concat\url\
@@ -91,6 +92,9 @@ dt_size \-\ int \-\ The size of each single component of the elements in bytes (
 \h3\The copy protocol\h3\
 Arrays support the copy protocol (see \url https://docs.python.org/3/library/copy.html \here\ url\).  
 You can use \code\copy.copy(<array>)\code\ or \code\copy.deepcopy(<array>)\code\ to get a copy of an array.
+
+\h3\Pickling\h3\
+Arrays support \url https://docs.python.org/3/library/pickle.html#module-interface \pickling\url\ (as of PyGLM 2.0.0), which is Python's serialization method.
 
 \h3\To list / tuple\h3\
 Any array has a \code\to_list()\code\ and a \code\to_tuple()\code\ function, which return's the arrays's data represented as a list or tuple respectively.

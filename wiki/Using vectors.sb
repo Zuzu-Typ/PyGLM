@@ -11,6 +11,7 @@
 \-\ \url #Members \Members\ url\
 \-\ \url #Methods \Methods\ url\\list switch\
 \--\ \url #the-copy-protocol \The copy protocol\ url\
+\--\ \url #pickling \Pickling\ url\
 \--\ \url #to-list--tuple \To list / tuple\ url\\list switch\
 \-\ \url #Operators \Operators\ url\\list switch\
 \--\ \url #add--operator \add\ url\
@@ -97,6 +98,9 @@ Any vector type implements the following methods:
 \h3\The copy protocol\h3\
 Vectors support the copy protocol (see \url https://docs.python.org/3/library/copy.html \here\ url\).  
 You can use \code\copy.copy(<vector>)\code\ or \code\copy.deepcopy(<vector>)\code\ to get a copy of a vector.
+
+\h3\Pickling\h3\
+Vectors support \url https://docs.python.org/3/library/pickle.html#module-interface \pickling\url\ (as of PyGLM 2.0.0), which is Python's serialization method.
 
 \h3\To list / tuple\h3\
 Any vector type has a \code\to_list()\code\ and a \code\to_tuple()\code\ function, which return's the vector's data represented as a list or tuple respectively.

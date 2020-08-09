@@ -9,6 +9,7 @@
 \--\ \url #objects-that-support-the-buffer-protocol-numpy-bytes \Buffer protocol (numpy, bytes)\ url\\list switch\
 \-\ \url #Methods \Methods\ url\\list switch\
 \--\ \url #the-copy-protocol \The copy protocol\ url\
+\--\ \url #pickling \Pickling\ url\
 \--\ \url #to-list--tuple \To list / tuple\ url\\list switch\
 \-\ \url #Operators \Operators\ url\\list switch\
 \--\ \url #add--operator \add\ url\
@@ -199,6 +200,9 @@ It will give you the same result as the builtin \code \len(<matrix>)\ code\ meth
 \h3 \The copy protocol\ h3\
 Matrices support the copy protocol (see \url https://docs.python.org/3/library/copy.html \here\ url\).  
 You can use \code\copy.copy(<matrix>)\code\ or \code\copy.deepcopy(<matrix>)\code\ to get a copy of a matrix.
+
+\h3\Pickling\h3\
+Matrices support \url https://docs.python.org/3/library/pickle.html#module-interface \pickling\url\ (as of PyGLM 2.0.0), which is Python's serialization method.
 
 \h3 \To list / tuple\ h3\
 Any matrix type has a \code\to_list()\code\ and a \code\to_tuple()\code\ function, which returns the vector's data represented as a list or tuple respectively.

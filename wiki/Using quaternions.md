@@ -16,6 +16,7 @@
 2.  [Members](#Members)  
 3.  [Methods](#Methods)  
     *  [The copy protocol](#the-copy-protocol)  
+    *  [Pickling](#pickling)  
 4.  [Operators](#Operators)  
     *  [add](#add--operator)  
     *  [sub](#sub--operator)  
@@ -142,6 +143,9 @@ to\_tuple|Returns a tuple containing each component of the quaternion
 ### The copy protocol  
 Quaternions support the copy protocol \(see [here](https://docs.python.org/3/library/copy.html)\)\.&nbsp;&nbsp;  
 You can use ``` copy.copy(<quat>) ``` or ``` copy.deepcopy(<quat>) ``` to get a copy of a quaternion\.  
+  
+### Pickling  
+Quaternions support [pickling](https://docs.python.org/3/library/pickle.html#module-interface) \(as of PyGLM 2\.0\.0\), which is Python's serialization method\.  
   
 ## Operators  
 Quaternions support a bunch of operators\.  
