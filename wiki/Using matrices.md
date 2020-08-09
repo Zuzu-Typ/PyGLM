@@ -11,6 +11,7 @@
     *  [Buffer protocol \(numpy, bytes\)](#objects-that-support-the-buffer-protocol-numpy-bytes)  
 2.  [Methods](#Methods)  
     *  [The copy protocol](#the-copy-protocol)  
+    *  [Pickling](#pickling)  
     *  [To list / tuple](#to-list--tuple)  
 3.  [Operators](#Operators)  
     *  [add](#add--operator)  
@@ -201,6 +202,9 @@ It will give you the same result as the builtin ``` len(<matrix>) ``` method\.
 ### The copy protocol  
 Matrices support the copy protocol \(see [here](https://docs.python.org/3/library/copy.html)\)\.&nbsp;&nbsp;  
 You can use ``` copy.copy(<matrix>) ``` or ``` copy.deepcopy(<matrix>) ``` to get a copy of a matrix\.  
+  
+### Pickling  
+Matrices support [pickling](https://docs.python.org/3/library/pickle.html#module-interface) \(as of PyGLM 2\.0\.0\), which is Python's serialization method\.  
   
 ### To list / tuple  
 Any matrix type has a ``` to_list() ``` and a ``` to_tuple() ``` function, which returns the vector's data represented as a list or tuple respectively\.  

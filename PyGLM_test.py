@@ -512,6 +512,14 @@ for obj in gen_obj("V__fF"):
     fassert(obj.__pow__, (obj, obj))
 #/pow #
 
+# matmul #
+for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    try:
+        obj @ obj
+    except TypeError:
+        pass
+#/matmul #
+
 # iadd #
 for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
     fassert(obj.__iadd__, (obj,))
@@ -554,6 +562,14 @@ for obj in gen_obj("V__fF"):
 for obj in gen_obj("V__fF"):
     fassert(obj.__ipow__, (obj,))
 #/ipow #
+
+# imatmul #
+for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    try:
+        obj @= obj
+    except TypeError:
+        pass
+#/imatmul #
 
 # str #
 for obj in gen_obj("V_M_Q"):
@@ -851,6 +867,20 @@ for args in gen_args("M"):
 arr = glm.array(glm.mat4(), glm.mat4(2))
 assert arr.to_tuple() == (glm.mat4(), glm.mat4(2))
 #/to_tuple #
+
+# pickling #
+from pickle import dumps, loads
+
+for obj in gen_obj("V_Q"):
+    assert loads(dumps(obj)) == obj, obj
+
+for obj in gen_obj("M"):
+    assert loads(dumps(obj)) == obj, obj
+    assert loads(dumps(obj[0])) == obj[0], obj
+
+arr = glm.array(glm.mat4(), glm.mat4(2))
+assert loads(dumps(arr)) == arr
+#/pickling #
 
 ## DETAIL ##
 

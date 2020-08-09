@@ -195,3 +195,6 @@ static PyObject* mat_to_list(mat<C, R, T>* self, PyObject*);
 
 template<int C, int R, typename T>
 static PyObject* mat_to_tuple(mat<C, R, T>* self, PyObject*);
+
+template<int C, int R, typename T>
+static PyObject* mat_setstate(mat<C, R, T>* self, PyObject* state);

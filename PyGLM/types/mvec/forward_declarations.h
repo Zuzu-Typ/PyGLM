@@ -7,6 +7,30 @@ static int mvec_getbuffer(mvec<L, T>* self, Py_buffer* view, int flags);
 
 void mvec_releasebuffer(PyObject* self, Py_buffer* view);
 
+template<typename T>
+static PyObject* mvec2_to_list(mvec<2, T>* self, PyObject*);
+template<typename T>
+static PyObject* mvec3_to_list(mvec<3, T>* self, PyObject*);
+template<typename T>
+static PyObject* mvec4_to_list(mvec<4, T>* self, PyObject*);
+
+template<typename T>
+static PyObject* mvec2_to_tuple(mvec<2, T>* self, PyObject*);
+template<typename T>
+static PyObject* mvec3_to_tuple(mvec<3, T>* self, PyObject*);
+template<typename T>
+static PyObject* mvec4_to_tuple(mvec<4, T>* self, PyObject*);
+
+template<typename T>
+static PyObject* mvec2_setstate(mvec<2, T>* self, PyObject* state);
+template<typename T>
+static PyObject* mvec3_setstate(mvec<3, T>* self, PyObject* state);
+template<typename T>
+static PyObject* mvec4_setstate(mvec<4, T>* self, PyObject* state);
+
+template<int L, typename T>
+static PyObject* mvec_new(PyTypeObject* type, PyObject*, PyObject*);
+
 template<int L>
 static Py_ssize_t mvec_len(PyObject* self);
 

@@ -6,6 +6,8 @@ static PyMethodDef himat2x3_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::imat2x3"},
+	{ "__getstate__", (PyCFunction)mat_to_tuple<2, 3, glm::i32>, METH_NOARGS, "Returns a picklable state of this object"},
+	{ "__setstate__", (PyCFunction)mat_setstate<2, 3, glm::i32>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)mat_to_list<2, 3, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
 	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 3, glm::i32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
 	{ NULL }

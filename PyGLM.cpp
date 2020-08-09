@@ -752,6 +752,34 @@ extern "C" {
 		PyModule_AddObject(module_glm, "bvec4", (PyObject *)&hbvec4Type);
 
 
+		Py_INCREF(&hfmvec2Type);
+		PyModule_AddObject(module_glm, "mvec2", (PyObject*)&hfmvec2Type);
+		Py_INCREF(&hfmvec3Type);
+		PyModule_AddObject(module_glm, "mvec3", (PyObject*)&hfmvec3Type);
+		Py_INCREF(&hfmvec4Type);
+		PyModule_AddObject(module_glm, "mvec4", (PyObject*)&hfmvec4Type);
+
+		Py_INCREF(&hdmvec2Type);
+		PyModule_AddObject(module_glm, "dmvec2", (PyObject*)&hdmvec2Type);
+		Py_INCREF(&hdmvec3Type);
+		PyModule_AddObject(module_glm, "dmvec3", (PyObject*)&hdmvec3Type);
+		Py_INCREF(&hdmvec4Type);
+		PyModule_AddObject(module_glm, "dmvec4", (PyObject*)&hdmvec4Type);
+
+		Py_INCREF(&himvec2Type);
+		PyModule_AddObject(module_glm, "imvec2", (PyObject*)&himvec2Type);
+		Py_INCREF(&himvec3Type);
+		PyModule_AddObject(module_glm, "imvec3", (PyObject*)&himvec3Type);
+		Py_INCREF(&himvec4Type);
+		PyModule_AddObject(module_glm, "imvec4", (PyObject*)&himvec4Type);
+
+		Py_INCREF(&humvec2Type);
+		PyModule_AddObject(module_glm, "umvec2", (PyObject*)&humvec2Type);
+		Py_INCREF(&humvec3Type);
+		PyModule_AddObject(module_glm, "umvec3", (PyObject*)&humvec3Type);
+		Py_INCREF(&humvec4Type);
+		PyModule_AddObject(module_glm, "umvec4", (PyObject*)&humvec4Type);
+
 		Py_INCREF(&glmArrayType);
 		PyModule_AddObject(module_glm, "array", (PyObject*)&glmArrayType);
 

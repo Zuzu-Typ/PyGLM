@@ -25,6 +25,15 @@ static PyObject* vec3_to_tuple(vec<3, T>* self, PyObject*);
 template<typename T>
 static PyObject* vec4_to_tuple(vec<4, T>* self, PyObject*);
 
+template<typename T>
+static PyObject* vec1_setstate(vec<1, T>* self, PyObject* state);
+template<typename T>
+static PyObject* vec2_setstate(vec<2, T>* self, PyObject* state);
+template<typename T>
+static PyObject* vec3_setstate(vec<3, T>* self, PyObject* state);
+template<typename T>
+static PyObject* vec4_setstate(vec<4, T>* self, PyObject* state);
+
 template<int L>
 static Py_ssize_t vec_len(PyObject* self);
 

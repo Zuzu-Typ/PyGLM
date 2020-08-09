@@ -588,3 +588,13 @@ qua_to_tuple(qua<T>* self, PyObject*) {
 		PyGLM_PyObject_FromNumber<T>(self->super_type.y),
 		PyGLM_PyObject_FromNumber<T>(self->super_type.z));
 }
+
+template<typename T>
+static PyObject* qua_setstate(qua<T>* self, PyObject* state) {
+	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 4, "Invalid state. Expected a length 4 tuple.");
+	self->super_type.w = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
+	self->super_type.x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 1));
+	self->super_type.y = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 2));
+	self->super_type.z = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 3));
+	Py_RETURN_NONE;
+}

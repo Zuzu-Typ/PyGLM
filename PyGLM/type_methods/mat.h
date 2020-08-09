@@ -2818,3 +2818,17 @@ mat_to_tuple(mat<C, R, T>* self, PyObject*) {
 	}
 	return out;
 }
+
+template<int C, int R, typename T>
+static PyObject* 
+mat_setstate(mat<C, R, T>* self, PyObject* state) {
+	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == C, "Invalid state.");
+	for (int c = 0; c < C; c++) {
+		PyObject* innerList = PyTuple_GET_ITEM(state, c);
+		PyGLM_ASSERT(PyTuple_CheckExact(innerList) && PyTuple_GET_SIZE(innerList) == R, "Invalid state.");
+		for (int r = 0; r < R; r++) {
+			self->super_type[c][r] = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(innerList, r));
+		}
+	}
+	Py_RETURN_NONE;
+}

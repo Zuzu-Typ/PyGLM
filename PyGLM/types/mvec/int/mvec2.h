@@ -5,6 +5,10 @@
 static PyMethodDef himvec2_methods[] = {
 	{ "__copy__", (PyCFunction)mvec_copy<2, glm::i32>, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<2, glm::i32>, METH_O, "Create a (deep)copy of this instance"},
+	{ "__getstate__", (PyCFunction)mvec2_to_tuple<glm::i32>, METH_NOARGS, "Returns a picklable state of this object"},
+	{ "__setstate__", (PyCFunction)mvec2_setstate<glm::i32>, METH_O, "Restores a state that was previously acquired"},
+	{ "to_list", (PyCFunction)mvec2_to_list<glm::i32>, METH_NOARGS, "Return the components of this vector as a list"},
+	{ "to_tuple", (PyCFunction)mvec2_to_tuple<glm::i32>, METH_NOARGS, "Return the components of this vector as a tuple"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs himvec2BufferMethods = {
@@ -100,7 +104,7 @@ static PyTypeObject himvec2Type = {
 	0,                         /* tp_dictoffset */
 	0,      /* tp_init */
 	0,                         /* tp_alloc */
-	0,                 /* tp_new */
+	(newfunc)mvec_new<2, glm::i32>,                 /* tp_new */
 };
 static PyTypeObject himvec2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)

@@ -13,6 +13,22 @@ mvec_dealloc(PyObject* self)
 	self->ob_type->tp_free(self);
 }
 
+template<int L, typename T>
+static PyObject*
+mvec_new(PyTypeObject* type, PyObject*, PyObject*)
+{
+	mvec<L, T>* self = (mvec<L, T>*)type->tp_alloc(type, 0);
+	if (self != NULL) {
+		constexpr uint8_t info_type = get_type_helper_type<T>();
+		constexpr uint8_t info = L | (info_type << PyGLM_TYPE_INFO_VEC_TYPE_OFFSET);
+		self->info = info;
+		self->master = NULL;
+		self->super_type = NULL;
+	}
+
+	return (PyObject*)self;
+}
+
 // unaryfunc
 template<int L, typename T>
 static PyObject *
@@ -1247,6 +1263,36 @@ mvec4_to_tuple(mvec<4, T>* self, PyObject*) {
 		PyGLM_PyObject_FromNumber<T>(self->super_type->y),
 		PyGLM_PyObject_FromNumber<T>(self->super_type->z),
 		PyGLM_PyObject_FromNumber<T>(self->super_type->w));
+}
+
+template<typename T>
+static PyObject* mvec2_setstate(mvec<2, T>* self, PyObject* state) {
+	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 2, "Invalid state. Expected a length 2 tuple.");
+	self->super_type = (glm::vec<2, T>*)PyMem_MALLOC(sizeof(glm::vec<2, T>));
+	self->super_type->x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
+	self->super_type->y = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 1));
+	Py_RETURN_NONE;
+}
+
+template<typename T>
+static PyObject* mvec3_setstate(mvec<3, T>* self, PyObject* state) {
+	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 3, "Invalid state. Expected a length 3 tuple.");
+	self->super_type = (glm::vec<3, T>*)PyMem_MALLOC(sizeof(glm::vec<3, T>));
+	self->super_type->x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
+	self->super_type->y = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 1));
+	self->super_type->z = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 2));
+	Py_RETURN_NONE;
+}
+
+template<typename T>
+static PyObject* mvec4_setstate(mvec<4, T>* self, PyObject* state) {
+	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 4, "Invalid state. Expected a length 4 tuple.");
+	self->super_type = (glm::vec<4, T>*)PyMem_MALLOC(sizeof(glm::vec<4, T>));
+	self->super_type->x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
+	self->super_type->y = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 1));
+	self->super_type->z = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 2));
+	self->super_type->w = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 3));
+	Py_RETURN_NONE;
 }
 
 template<int L, typename T>

@@ -1843,3 +1843,37 @@ vec4_to_tuple(vec<4, T>* self, PyObject*) {
 		PyGLM_PyObject_FromNumber<T>(self->super_type.z),
 		PyGLM_PyObject_FromNumber<T>(self->super_type.w));
 }
+
+template<typename T>
+static PyObject* vec1_setstate(vec<1, T>* self, PyObject* state) {
+	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 1, "Invalid state. Expected a length 1 tuple.");
+	self->super_type.x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
+	Py_RETURN_NONE;
+}
+
+template<typename T>
+static PyObject* vec2_setstate(vec<2, T>* self, PyObject* state) {
+	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 2, "Invalid state. Expected a length 2 tuple.");
+	self->super_type.x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
+	self->super_type.y = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 1));
+	Py_RETURN_NONE;
+}
+
+template<typename T>
+static PyObject* vec3_setstate(vec<3, T>* self, PyObject* state) {
+	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 3, "Invalid state. Expected a length 3 tuple.");
+	self->super_type.x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
+	self->super_type.y = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 1));
+	self->super_type.z = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 2));
+	Py_RETURN_NONE;
+}
+
+template<typename T>
+static PyObject* vec4_setstate(vec<4, T>* self, PyObject* state) {
+	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 4, "Invalid state. Expected a length 4 tuple.");
+	self->super_type.x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
+	self->super_type.y = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 1));
+	self->super_type.z = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 2));
+	self->super_type.w = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 3));
+	Py_RETURN_NONE;
+}

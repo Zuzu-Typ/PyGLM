@@ -92,3 +92,6 @@ static PyObject* qua_to_list(qua<T>* self, PyObject*);
 
 template<typename T>
 static PyObject* qua_to_tuple(qua<T>* self, PyObject*);
+
+template<typename T>
+static PyObject* qua_setstate(qua<T>* self, PyObject* state);
