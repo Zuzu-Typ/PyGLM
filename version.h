@@ -1,1 +1,1 @@
-#define PyGLM_VERSION "1.99.3"
+#define PyGLM_VERSION "2.0.0a1"
