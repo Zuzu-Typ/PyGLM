@@ -127,5 +127,5 @@ PyDoc_STRVAR(uround_docstr,
 );
 
 #define INTEGER_METHODS \
-{ "iround", (PyCFunction)iround_, METH_O, "iround(x) -> int or ivec\nReturns a value equal to the nearest integer to x." }, \
-{ "uround", (PyCFunction)uround_, METH_O, "uround(x) -> int or uvec\nReturns a value equal to the nearest integer to x." }
+{ "iround", (PyCFunction)iround_, METH_O, iround_docstr }, \
+{ "uround", (PyCFunction)uround_, METH_O, uround_docstr }

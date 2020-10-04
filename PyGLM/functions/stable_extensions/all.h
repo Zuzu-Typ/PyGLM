@@ -12,6 +12,8 @@
 
 #include "matrix_transform.h"
 
+#include "matrix_projection.h"
+
 #include "matrix_clip_space.h"
 
 #include "quaternion.h"

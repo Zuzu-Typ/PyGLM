@@ -1904,11 +1904,11 @@ array_hash_vec(glm::vec<L, T>* data, ssize_t count) {
 		glm::detail::hash_combine(seed, hasher(data[i]));
 	}
 
-	if (seed == -1) {
-		return -2;
+	if (seed == static_cast<size_t>(-1)) {
+		return static_cast<Py_hash_t>(-2);
 	}
 
-	return seed;
+	return  static_cast<Py_hash_t>(seed);
 }
 
 template<int C, int R, typename T>
@@ -1922,7 +1922,11 @@ array_hash_mat(glm::mat<C, R, T>* data, ssize_t count) {
 		glm::detail::hash_combine(seed, hasher(data[i]));
 	}
 
-	return seed;
+	if (seed == static_cast<size_t>(-1)) {
+		return static_cast<Py_hash_t>(-2);
+	}
+
+	return  static_cast<Py_hash_t>(seed);
 }
 
 template<typename T>
@@ -1936,7 +1940,11 @@ array_hash_qua(glm::qua<T>* data, ssize_t count) {
 		glm::detail::hash_combine(seed, hasher(data[i]));
 	}
 
-	return seed;
+	if (seed == static_cast<size_t>(-1)) {
+		return static_cast<Py_hash_t>(-2);
+	}
+
+	return  static_cast<Py_hash_t>(seed);
 }
 
 static Py_hash_t

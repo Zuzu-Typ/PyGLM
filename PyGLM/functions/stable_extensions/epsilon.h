@@ -264,5 +264,5 @@ PyDoc_STRVAR(epsilonNotEqual_docstr,
 );
 
 #define EPSILON_METHODS \
-{ "epsilonEqual", (PyCFunction)epsilonEqual_, METH_VARARGS, "epsilonEqual(x, y, epsilon) -> vecn or quat\nReturns the component-wise comparison of |x - y| < epsilon.\nTrue if this expression is satisfied." }, \
-{ "epsilonNotEqual", (PyCFunction)epsilonNotEqual_, METH_VARARGS, "epsilonNotEqual(x, y, epsilon) -> vecn or quat\nReturns the component-wise comparison of |x - y| >= epsilon.\nTrue if this expression is satisfied." }
+{ "epsilonEqual", (PyCFunction)epsilonEqual_, METH_VARARGS, epsilonEqual_docstr }, \
+{ "epsilonNotEqual", (PyCFunction)epsilonNotEqual_, METH_VARARGS, epsilonNotEqual_docstr }

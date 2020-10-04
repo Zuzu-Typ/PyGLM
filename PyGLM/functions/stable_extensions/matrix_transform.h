@@ -187,43 +187,7 @@ PyGLM_MAKE_GLM_FUNC_M4V3__tfF(scale_slow)
 
 
 
-PyGLM_MAKE_GLM_FUNC_V3M4M4V4__tfF(project)
-PyGLM_MAKE_GLM_FUNC_V3M4M4V4__tfF(projectZO)
-PyGLM_MAKE_GLM_FUNC_V3M4M4V4__tfF(projectNO)
-PyGLM_MAKE_GLM_FUNC_V3M4M4V4__tfF(unProject)
-PyGLM_MAKE_GLM_FUNC_V3M4M4V4__tfF(unProjectZO)
-PyGLM_MAKE_GLM_FUNC_V3M4M4V4__tfF(unProjectNO)
 
-static PyObject*
-pickMatrix_(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2, *arg3;
-	PyGLM_Arg_Unpack_3O(args, "pickMatrix", arg1, arg2, arg3);
-	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD);
-	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD);
-	PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-		PyGLM_Vec_PTI_Assign0(2, float);
-		PyGLM_Vec_PTI_Assign1(2, float);
-		PyGLM_Vec_PTI_Assign2(4, float);
-		if (!(o.x > 0.0f && o.y > 0.0f)) {
-			PyErr_SetString(PyExc_ValueError, "delta has to be greater than 0 for pickMatrix()");
-			return NULL;
-		}
-		return pack(glm::pickMatrix(o, o2, o3));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-		PyGLM_Vec_PTI_Assign0(2, double);
-		PyGLM_Vec_PTI_Assign1(2, double);
-		PyGLM_Vec_PTI_Assign2(4, double);
-		if (!(o.x > 0.0 && o.y > 0.0)) {
-			PyErr_SetString(PyExc_ValueError, "delta has to be greater than 0 for pickMatrix()");
-			return NULL;
-		}
-		return pack(glm::pickMatrix(o, o2, o3));
-	}
-	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for pickMatrix()");
-	return NULL;
-}
 
 PyGLM_MAKE_GLM_FUNC_V3V3V3__tfF(lookAt)
 PyGLM_MAKE_GLM_FUNC_V3V3V3__tfF(lookAtLH)
@@ -267,19 +231,12 @@ PyDoc_STRVAR(scale_slow_docstr,
 );
 
 #define MATRIX_TRANSFORM_METHODS \
-{ "identity", (PyCFunction)identity_, METH_O, "identity(matrix_type) -> matrix\nBuilds an identity matrix." }, \
-{ "translate", (PyCFunction)translate_, METH_VARARGS, "translate(m, v) -> mat4x4\nBuilds a translation 4 * 4 matrix created from a vector of 3 components." }, \
-{ "rotate", (PyCFunction)rotate_, METH_VARARGS, "rotate(m, angle, axis) -> mat4x4 or quat\nBuilds a rotation 4 * 4 matrix created from an axis vector and an angle\nor rotates a quaternion from a vector of 3 components axis and an angle." }, \
-{ "rotate_slow", (PyCFunction)rotate_slow_, METH_VARARGS, "rotate_slow(m, angle, axis) -> mat4x4\nBuilds a rotation 4 * 4 matrix created from an axis vector and an angle." }, \
-{ "scale", (PyCFunction)scale_, METH_VARARGS, "scale(m, v) -> mat4x4\nBuilds a scale 4 * 4 matrix created from 3 scalars." }, \
-{ "scale_slow", (PyCFunction)scale_slow_, METH_VARARGS, "scale_slow(m, v) -> mat4x4\nBuilds a scale 4 * 4 matrix created from 3 scalars." }, \
-{ "project", (PyCFunction)project_, METH_VARARGS, "project(obj, model, proj, viewport) -> vec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" }, \
-{ "projectNO", (PyCFunction)projectNO_, METH_VARARGS, "projectNO(obj, model, proj, viewport) -> vec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" }, \
-{ "projectZO", (PyCFunction)projectZO_, METH_VARARGS, "projectZO(obj, model, proj, viewport) -> vec3\nMap the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" }, \
-{ "unProject", (PyCFunction)unProject_, METH_VARARGS, "unProject(obj, model, proj, viewport) -> vec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" }, \
-{ "unProjectNO", (PyCFunction)unProjectNO_, METH_VARARGS, "unProjectNO(obj, model, proj, viewport) -> vec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively.\n(OpenGL clip volume definition)" }, \
-{ "unProjectZO", (PyCFunction)unProjectZO_, METH_VARARGS, "unProjectZO(obj, model, proj, viewport) -> vec3\nMap the specified window coordinates (win.x, win.y, win.z) into object coordinates.\nThe near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively.\n(Direct3D clip volume definition)" },  \
-{ "pickMatrix", (PyCFunction)pickMatrix_, METH_VARARGS, "pickMatrix(center, delta, viewport) -> mat4x4\nDefine a picking region" }, \
-{ "lookAt", (PyCFunction)lookAt_, METH_VARARGS, "lookAt(eye, center, up) -> mat4x4\nBuild a right handed look at view matrix." }, \
-{ "lookAtRH", (PyCFunction)lookAtRH_, METH_VARARGS, "lookAtRH(eye, center, up) -> mat4x4\nBuild a right handed look at view matrix." }, \
-{ "lookAtLH", (PyCFunction)lookAtLH_, METH_VARARGS, "lookAtLH(eye, center, up) -> mat4x4\nBuild a left handed look at view matrix." }
+{ "identity", (PyCFunction)identity_, METH_O, identity_docstr }, \
+{ "translate", (PyCFunction)translate_, METH_VARARGS, translate_docstr }, \
+{ "rotate", (PyCFunction)rotate_, METH_VARARGS, rotate_docstr }, \
+{ "rotate_slow", (PyCFunction)rotate_slow_, METH_VARARGS, rotate_slow_docstr }, \
+{ "scale", (PyCFunction)scale_, METH_VARARGS, scale_docstr }, \
+{ "scale_slow", (PyCFunction)scale_slow_, METH_VARARGS, scale_slow_docstr }, \
+{ "lookAt", (PyCFunction)lookAt_, METH_VARARGS, lookAt_docstr }, \
+{ "lookAtRH", (PyCFunction)lookAtRH_, METH_VARARGS, lookAtRH_docstr }, \
+{ "lookAtLH", (PyCFunction)lookAtLH_, METH_VARARGS, lookAtLH_docstr }

@@ -90,6 +90,9 @@ static PyMethodDef glmmethods[] = {
 	// matrix_transform
 	MATRIX_TRANSFORM_METHODS,
 
+	// matrix_projection
+	MATRIX_PROJECTION_METHODS,
+
 	// matrix_clip_space
 	MATRIX_CLIP_SPACE_METHODS,
 
