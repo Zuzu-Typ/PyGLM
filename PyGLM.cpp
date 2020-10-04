@@ -90,8 +90,17 @@ static PyMethodDef glmmethods[] = {
 	// matrix_transform
 	MATRIX_TRANSFORM_METHODS,
 
+	// matrix_clip_space
+	MATRIX_CLIP_SPACE_METHODS,
+
 	// quaternion
 	QUATERNION_METHODS,
+
+	// quaternion_common
+	QUATERNION_COMMON_METHODS,
+
+	// quaternion_trigonometric
+	QUATERNION_TRIGONOMETRIC_METHODS,
 
 	// matrix_access
 	MATRIX_ACCESS_METHODS,
@@ -128,7 +137,7 @@ static PyMethodDef glmmethods[] = {
 	DECOMPOSE_METHODS,
 
 	// PyGLM functions
-	{ "silence", (PyCFunction)silence, METH_O, "silence(ID) -> None\nSilence a PyGLM warning (or all using 0)." },
+	{ "silence", (PyCFunction)silence, METH_O, silence_docstr },
 	//{ "_get_type_info", (PyCFunction)_get_type_info, METH_VARARGS, "_get_type_info(accepted_types, object) -> None\nAn internal testing funtion to check wether or not the type checking works correctly." },
 #ifdef HAS_TEST
 	{"test", (PyCFunction)test, TEST_FUNC_TYPE, ""},
@@ -182,7 +191,7 @@ extern "C" {
 		PyInit_glm(void)
 	{
 		std::setlocale(LC_ALL, "en_US.UTF-8");
-#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
+
 		PyObject* mainmod = PyImport_AddModule("__main__");
 		PyObject* maindict = PyModule_GetDict(mainmod);
 		PyObject* ctypes_list = Py_BuildValue("(s, s, s, s, s, s, s, s, s, s, s, s, s, s)", "cast", "c_void_p", "POINTER", "c_float", "c_double", "c_int64", "c_int32", "c_int16", "c_int8", "c_uint64", "c_uint32", "c_uint16", "c_uint8", "c_bool");
@@ -190,60 +199,62 @@ extern "C" {
 		PyObject* ctypes_module = PyImport_ImportModuleEx("ctypes", maindict, maindict, ctypes_list);
 		Py_DECREF(ctypes_list);
 
+		// Don't need to DECREF these, because they're added to glm
+		ctypes_float = PyObject_GetAttrString(ctypes_module, "c_float");
+		ctypes_double = PyObject_GetAttrString(ctypes_module, "c_double");
+		ctypes_int64 = PyObject_GetAttrString(ctypes_module, "c_int64");
+		ctypes_int32 = PyObject_GetAttrString(ctypes_module, "c_int32");
+		ctypes_int16 = PyObject_GetAttrString(ctypes_module, "c_int16");
+		ctypes_int8 = PyObject_GetAttrString(ctypes_module, "c_int8");
+		ctypes_uint64 = PyObject_GetAttrString(ctypes_module, "c_uint64");
+		ctypes_uint32 = PyObject_GetAttrString(ctypes_module, "c_uint32");
+		ctypes_uint16 = PyObject_GetAttrString(ctypes_module, "c_uint16");
+		ctypes_uint8 = PyObject_GetAttrString(ctypes_module, "c_uint8");
+		ctypes_bool = PyObject_GetAttrString(ctypes_module, "c_bool");
+
+#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 		ctypes_cast = PyObject_GetAttrString(ctypes_module, "cast");
 
 		ctypes_void_p = PyObject_GetAttrString(ctypes_module, "c_void_p");
 
 		PyObject* ctypes_POINTER = PyObject_GetAttrString(ctypes_module, "POINTER");
 
-		PyObject* ctypes_float = PyObject_GetAttrString(ctypes_module, "c_float");
 		ctypes_float_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_float, NULL);
-		Py_DECREF(ctypes_float);
+		//Py_DECREF(ctypes_float);
 
-		PyObject* ctypes_double = PyObject_GetAttrString(ctypes_module, "c_double");
 		ctypes_double_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_double, NULL);
-		Py_DECREF(ctypes_double);
+		//Py_DECREF(ctypes_double);
 
-		PyObject* ctypes_int64 = PyObject_GetAttrString(ctypes_module, "c_int64");
 		ctypes_int64_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_int64, NULL);
-		Py_DECREF(ctypes_int64);
+		//Py_DECREF(ctypes_int64);
 
-		PyObject* ctypes_int32 = PyObject_GetAttrString(ctypes_module, "c_int32");
 		ctypes_int32_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_int32, NULL);
-		Py_DECREF(ctypes_int32);
+		//Py_DECREF(ctypes_int32);
 
-		PyObject* ctypes_int16 = PyObject_GetAttrString(ctypes_module, "c_int16");
 		ctypes_int16_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_int16, NULL);
-		Py_DECREF(ctypes_int16);
+		//Py_DECREF(ctypes_int16);
 
-		PyObject* ctypes_int8 = PyObject_GetAttrString(ctypes_module, "c_int8");
 		ctypes_int8_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_int8, NULL);
-		Py_DECREF(ctypes_int8);
+		//Py_DECREF(ctypes_int8);
 
-		PyObject* ctypes_uint64 = PyObject_GetAttrString(ctypes_module, "c_uint64");
 		ctypes_uint64_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_uint64, NULL);
-		Py_DECREF(ctypes_uint64);
+		//Py_DECREF(ctypes_uint64);
 
-		PyObject* ctypes_uint32 = PyObject_GetAttrString(ctypes_module, "c_uint32");
 		ctypes_uint32_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_uint32, NULL);
-		Py_DECREF(ctypes_uint32);
+		//Py_DECREF(ctypes_uint32);
 
-		PyObject* ctypes_uint16 = PyObject_GetAttrString(ctypes_module, "c_uint16");
 		ctypes_uint16_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_uint16, NULL);
-		Py_DECREF(ctypes_uint16);
+		//Py_DECREF(ctypes_uint16);
 
-		PyObject* ctypes_uint8 = PyObject_GetAttrString(ctypes_module, "c_uint8");
 		ctypes_uint8_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_uint8, NULL);
-		Py_DECREF(ctypes_uint8);
+		//Py_DECREF(ctypes_uint8);
 
-		PyObject* ctypes_bool = PyObject_GetAttrString(ctypes_module, "c_bool");
 		ctypes_bool_p = PyObject_CallFunctionObjArgs(ctypes_POINTER, ctypes_bool, NULL);
-		Py_DECREF(ctypes_bool);
+		//Py_DECREF(ctypes_bool);
 
 		Py_DECREF(ctypes_POINTER);
-		Py_DECREF(ctypes_module);
-		
 #endif
+		Py_DECREF(ctypes_module);
 
 		PyObject* module_glm;
 
@@ -357,6 +368,64 @@ extern "C" {
 		Py_INCREF(module_glm);
 		PyModule_AddObject(module_glm, "gtc", module_glm);
 #endif
+
+		// float
+		PyModule_AddObject(module_glm, "c_float", ctypes_float);
+		Py_INCREF(ctypes_float);
+		PyModule_AddObject(module_glm, "float_", ctypes_float);
+		Py_INCREF(ctypes_float);
+		PyModule_AddObject(module_glm, "float32", ctypes_float);
+
+		// double
+		PyModule_AddObject(module_glm, "c_double", ctypes_double);
+		Py_INCREF(ctypes_double);
+		PyModule_AddObject(module_glm, "double", ctypes_double);
+		Py_INCREF(ctypes_double);
+		PyModule_AddObject(module_glm, "float64", ctypes_double);
+
+		// int64
+		PyModule_AddObject(module_glm, "c_int64", ctypes_int64);
+		Py_INCREF(ctypes_int64);
+		PyModule_AddObject(module_glm, "int64", ctypes_int64);
+
+		// int32
+		PyModule_AddObject(module_glm, "c_int32", ctypes_int32);
+		Py_INCREF(ctypes_int32);
+		PyModule_AddObject(module_glm, "int32", ctypes_int32);
+
+		// int16
+		PyModule_AddObject(module_glm, "c_int16", ctypes_int16);
+		Py_INCREF(ctypes_int16);
+		PyModule_AddObject(module_glm, "int16", ctypes_int16);
+
+		// int8
+		PyModule_AddObject(module_glm, "c_int8", ctypes_int8);
+		Py_INCREF(ctypes_int8);
+		PyModule_AddObject(module_glm, "int8", ctypes_int8);
+
+		// uint64
+		PyModule_AddObject(module_glm, "c_uint64", ctypes_uint64);
+		Py_INCREF(ctypes_uint64);
+		PyModule_AddObject(module_glm, "uint64", ctypes_uint64);
+
+		// uint32
+		PyModule_AddObject(module_glm, "c_uint32", ctypes_uint32);
+		Py_INCREF(ctypes_uint32);
+		PyModule_AddObject(module_glm, "uint32", ctypes_uint32);
+
+		// uint16
+		PyModule_AddObject(module_glm, "c_uint16", ctypes_uint16);
+		Py_INCREF(ctypes_uint16);
+		PyModule_AddObject(module_glm, "uint16", ctypes_uint16);
+
+		// uint8
+		PyModule_AddObject(module_glm, "c_uint8", ctypes_uint8);
+		Py_INCREF(ctypes_uint8);
+		PyModule_AddObject(module_glm, "uint8", ctypes_uint8);
+
+		PyModule_AddObject(module_glm, "c_bool", ctypes_bool);
+		Py_INCREF(ctypes_bool);
+		PyModule_AddObject(module_glm, "bool_", ctypes_bool);
 
 		Py_INCREF(&hfvec1Type);
 		PyModule_AddObject(module_glm, "vec1", (PyObject *)&hfvec1Type);

@@ -8,6 +8,11 @@
 
 #include "../function_generator_macros.h"
 
+PyDoc_STRVAR(outerProduct_docstr,
+	"outerProduct(c: vecC, r: vecR) -> matRxC\n"
+	"	Treats the first parameter c as a column vector and the second parameter r as a row vector\n"
+	"	and does a linear algebraic matrix multiply c * r."
+);
 static PyObject*
 outerProduct_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2;
@@ -108,13 +113,36 @@ outerProduct_(PyObject*, PyObject* args) {
 	return NULL;
 }
 
+PyDoc_STRVAR(matrixCompMult_docstr,
+	"matrixCompMult(x: matNxM, y: matNxM) -> matNxM\n"
+	"	Multiply matrix x by matrix y component-wise, i.e., result[i][j] is the scalar product of\n"
+	"	x[i][j] and y[i][j]."
+);
 PyGLM_MAKE_GLM_FUNC_MM__tfF(matrixCompMult)
+
+PyDoc_STRVAR(transpose_docstr,
+	"transpose(x: matNxM) -> matMxN\n"
+	"	Returns the transposed matrix of x."
+);
 PyGLM_MAKE_GLM_FUNC_M__tfF(transpose)
+
+PyDoc_STRVAR(determinant_docstr,
+	"determinant(m: matSxS) -> float\n"
+	"	Return the determinant of a squared matrix."
+);
 PyGLM_MAKE_GLM_FUNC_S__tfF(determinant)
+
+PyDoc_STRVAR(inverse_docstr,
+	"inverse(m: matSxS) -> matSxS\n"
+	"	Return the inverse of a squared matrix.\n"
+	"inverse(q: quat) -> quat\n"
+	"	Return the inverse of a quaternion."
+);
 PyGLM_MAKE_GLM_FUNC_S_Q__tfF(inverse)
 
-#define FUNC_MATRIX_METHODS { "matrixCompMult", (PyCFunction)matrixCompMult_, METH_VARARGS, "matrixCompMult(x, y) -> matnxn\nMultiply matrix x by matrix y component-wise, i.e.,\nresult[i][j] is the scalar product of x[i][j] and y[i][j]." }, \
-{ "outerProduct", (PyCFunction)outerProduct_, METH_VARARGS, "outerProduct(c, r) -> matnxn\nTreats the first parameter c as a column vector\nand the second parameter r as a row vector\nand does a linear algebraic matrix multiply c * r." }, \
-{ "transpose", (PyCFunction)transpose_, METH_O, "transpose(x) -> matnxn\nReturns the transposed matrix of x" }, \
-{ "determinant", (PyCFunction)determinant_, METH_O, "determinant(x) -> float\nReturn the determinant of a squared matrix." }, \
-{ "inverse", (PyCFunction)inverse_, METH_O, "inverse(x) -> matnxn or quat\nReturn the inverse of a squared matrix or quaternion." }
+#define FUNC_MATRIX_METHODS \
+{ "matrixCompMult", (PyCFunction)matrixCompMult_, METH_VARARGS, matrixCompMult_docstr }, \
+{ "outerProduct", (PyCFunction)outerProduct_, METH_VARARGS, outerProduct_docstr }, \
+{ "transpose", (PyCFunction)transpose_, METH_O, transpose_docstr }, \
+{ "determinant", (PyCFunction)determinant_, METH_O, determinant_docstr }, \
+{ "inverse", (PyCFunction)inverse_, METH_O, inverse_docstr }

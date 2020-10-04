@@ -50,5 +50,15 @@ inverseTranspose_(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
-#define MATRIX_INVERSE_METHODS { "affineInverse", (PyCFunction)affineInverse_, METH_O, "affineInverse(m) -> matn\nFast matrix inverse for affine matrix." }, \
-{ "inverseTranspose", (PyCFunction)inverseTranspose_, METH_O, "inverseTranspose(m) -> matn\nCompute the inverse transpose of a matrix." }
+PyDoc_STRVAR(affineInverse_docstr,
+	"affineInverse(m: matSxS) -> matSxS\n"
+	"	Fast matrix inverse for affine matrix."
+);
+PyDoc_STRVAR(inverseTranspose_docstr,
+	"inverseTranspose(m: matSxS) -> matSxS\n"
+	"	Compute the inverse transpose of a matrix."
+);
+
+#define MATRIX_INVERSE_METHODS \
+{ "affineInverse", (PyCFunction)affineInverse_, METH_O, affineInverse_docstr }, \
+{ "inverseTranspose", (PyCFunction)inverseTranspose_, METH_O, inverseTranspose_docstr }

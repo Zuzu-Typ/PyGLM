@@ -16,4 +16,12 @@ decompose_(PyObject*, PyObject* args) {
 	return NULL;
 }
 
-#define DECOMPOSE_METHODS { "decompose", (PyCFunction)decompose_, METH_VARARGS, "decompose(modelMatrix, scale, orientation, translation, skew, perspective) -> bool\nDecomposes a model matrix to translations, rotation and scale components" }
+PyDoc_STRVAR(decompose_docstr,
+	"decompose(modelMatrix: mat4, scale: vec3, orientation: quat, translation: vec3, skew: vec3,\n"
+	"	perspective: vec4) -> bool\n"
+	"	Decomposes a model matrix to translations, rotation and scale components.\n"
+	"	Returns true on success."
+);
+
+#define DECOMPOSE_METHODS \
+{ "decompose", (PyCFunction)decompose_, METH_VARARGS, decompose_docstr }
