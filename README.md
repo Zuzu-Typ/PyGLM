@@ -18,7 +18,7 @@ If you encounter any issues or want to request a feature, please create an issue
 Besides the obvious \- being mostly compatible with **GLM** \- PyGLM offers a variety of features for **vector** and **matrix manipulation**\.  
 It has a lot of possible use cases, including **3D\-Graphics** \(OpenGL, DirectX, \.\.\.\), **Physics** and more\.  
   
-At the same time, it has **great performance**, being between **2x and 15x as fast as numpy\!** \(see end of page\)  
+At the same time, it has **great performance**, being between **1\.2x and 130x as fast as numpy\!** \(see [end of page](#speed-comparison-to-numpy)\)  
 \(*depending on the individual function*\)  
 ### Installation  
 **PyGLM** supports **Windows**, **Linux**, **MacOS** and other operating systems with either x86 \(**32\-bit**\) or x64 \(**64\-bit**\) architecture,   
@@ -112,13 +112,38 @@ vec4(            9,            9,            9,            9 )
   
 ### Speed comparison to numpy  
 ``` 
-How PyGLM's performance roughly compares to NumPy's performance:
-instruction     | np speed (%)  | glm speed (%)
-import          |   4.76        |  100.00
-mat4()          |   9.76        |  100.00
-dot(vec3, vec3) |  28.92        |  100.00
-transpose(mat4) |  25.64        |  100.00
-vec4 * vec4     |  27.89        |  100.00
-mat4 * vec4     |  17.68        |  100.00
-mat4[0]         |  49.99        |  100.00
+The following chart shows the results of running "PyGLM vs NumPy.py".
+Each of the instructions were ran up to 1,000,000 times to get more accurate results.
+
++----------------------------------------+------------+------------+-----------+
+| Description                            | PyGLM time | NumPy time | ratio     |
++----------------------------------------+------------+------------+-----------+
+| import                                 |      0.03s |      0.09s |     3.07x |
++----------------------------------------+------------+------------+-----------+
+| 3 component vector creation            |      0.32s |      0.41s |     1.28x |
++----------------------------------------+------------+------------+-----------+
+| 3 component vector creation with       |            |            |           |
+| custom components                      |      0.38s |      1.43s |     3.74x |
++----------------------------------------+------------+------------+-----------+
+| dot product                            |      0.12s |      1.86s |    15.20x |
++----------------------------------------+------------+------------+-----------+
+| cross product                          |      0.02s |      2.34s |   130.01x |
++----------------------------------------+------------+------------+-----------+
+| L2-Norm of 3 component vector          |      0.08s |      0.47s |     6.28x |
++----------------------------------------+------------+------------+-----------+
+| 4x4 matrix creation                    |      0.27s |      0.42s |     1.53x |
++----------------------------------------+------------+------------+-----------+
+| 4x4 identity matrix creation           |      0.26s |      2.29s |     8.93x |
++----------------------------------------+------------+------------+-----------+
+| 4x4 matrix transposition               |      0.27s |      0.83s |     3.07x |
++----------------------------------------+------------+------------+-----------+
+| 4x4 matrix multiplicative inverse      |      0.25s |      2.87s |    11.61x |
++----------------------------------------+------------+------------+-----------+
+| 3 component vector addition            |      0.33s |      0.71s |     2.15x |
++----------------------------------------+------------+------------+-----------+
+| 4x4 matrix multiplication              |      0.42s |      0.77s |     1.84x |
++----------------------------------------+------------+------------+-----------+
+| 4x4 matrix - 4 component vector        |            |            |           |
+| multiplication                         |      0.37s |      1.48s |     3.97x |
++----------------------------------------+------------+------------+-----------+
  ```
