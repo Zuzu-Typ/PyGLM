@@ -7,6 +7,7 @@ PyGLM_MAKE_GLM_FUNC_VV__tfF(distance2)
 
 PyGLM_MAKE_GLM_FUNC_V3_V3V3__tfF(l1Norm)
 PyGLM_MAKE_GLM_FUNC_V3_V3V3__tfF(l2Norm)
+PyGLM_MAKE_GLM_FUNC_V3_V3V3__tfF(lMaxNorm)
 
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(length2)
 
@@ -79,5 +80,6 @@ PyDoc_STRVAR(lxNorm_docstr,
 { "distance2", (PyCFunction)distance2_, METH_VARARGS, distance2_docstr }, \
 { "l1Norm", (PyCFunction)l1Norm_, METH_VARARGS, l1Norm_docstr }, \
 { "l2Norm", (PyCFunction)l2Norm_, METH_VARARGS, l2Norm_docstr }, \
+{ "lMaxNorm", (PyCFunction)lMaxNorm_, METH_VARARGS, lMaxNorm_docstr }, \
 { "length2", (PyCFunction)length2_, METH_O, length2_docstr }, \
 { "lxNorm", (PyCFunction)lxNorm_, METH_VARARGS, lxNorm_docstr }

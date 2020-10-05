@@ -3,7 +3,7 @@
 #include "../function_generator_macros.h"
 
 //TODO: Fix the supported types (should not be restricted to int)
-PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(isPowerOfTwo);
+//PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(isPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(ceilPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(floorPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(roundPowerOfTwo);

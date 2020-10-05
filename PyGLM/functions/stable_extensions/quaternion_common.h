@@ -47,6 +47,6 @@ PyDoc_STRVAR(slerp_docstr,
 );
 
 #define QUATERNION_COMMON_METHODS \
-{ "lerp", (PyCFunction)lerp_, METH_VARARGS, "lerp(x, y, a) -> quat\nLinear interpolation of two quaternions.\nThe interpolation is oriented." }, \
-{ "slerp", (PyCFunction)slerp_, METH_VARARGS, "slerp(x, y, a) -> quat\nSpherical linear interpolation of two quaternions.\nThe interpolation always take the short path and the rotation is performed at constant speed." }, \
-{ "conjugate", (PyCFunction)conjugate_, METH_O, "conjugate(q) -> quat\nReturns the q conjugate." }
+{ "lerp", (PyCFunction)lerp_, METH_VARARGS, lerp_docstr }, \
+{ "slerp", (PyCFunction)slerp_, METH_VARARGS, slerp_docstr }, \
+{ "conjugate", (PyCFunction)conjugate_, METH_O, conjugate_docstr }
