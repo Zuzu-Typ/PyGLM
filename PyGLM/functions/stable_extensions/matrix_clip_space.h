@@ -210,47 +210,56 @@ tweakedInfinitePerspective_(PyObject*, PyObject* args) {
 }
 
 PyDoc_STRVAR(frustum_docstr,
-	"frustum(left: float, right: float, bottom: float, top: float, near: float, far: float) -> fmat4x4\n"
+	"frustum(left: float, right: float, bottom: float, top: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	See frustumRH_NO."
 );
 PyDoc_STRVAR(frustumLH_docstr,
-	"frustumLH(left: float, right: float, bottom: float, top: float, near: float, far: float) -> fmat4x4\n"
+	"frustumLH(left: float, right: float, bottom: float, top: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	See frustumLH_NO."
 );
 PyDoc_STRVAR(frustumLH_NO_docstr,
-	"frustumLH_NO(left: float, right: float, bottom: float, top: float, near: float, far: float) -> fmat4x4\n"
+	"frustumLH_NO(left: float, right: float, bottom: float, top: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	Creates a left handed frustum matrix. The near and far clip planes correspond to z\n"
 	"	normalized device coordinates of -1 and +1 respectively.\n"
 	"	(OpenGL clip volume definition)"
 );
 PyDoc_STRVAR(frustumLH_ZO_docstr,
-	"frustumLH_ZO(left: float, right: float, bottom: float, top: float, near: float, far: float) -> fmat4x4\n"
+	"frustumLH_ZO(left: float, right: float, bottom: float, top: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	Creates a left handed frustum matrix. The near and far clip planes correspond to z\n"
 	"	normalized device coordinates of 0 and +1 respectively.\n"
 	"	(Direct3D clip volume definition)"
 );
 PyDoc_STRVAR(frustumNO_docstr,
-	"frustumNO(left: float, right: float, bottom: float, top: float, near: float, far: float) -> fmat4x4\n"
+	"frustumNO(left: float, right: float, bottom: float, top: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	See frustumRH_NO."
 );
 PyDoc_STRVAR(frustumRH_docstr,
-	"frustumNO(left: float, right: float, bottom: float, top: float, near: float, far: float) -> fmat4x4\n"
+	"frustumRH(left: float, right: float, bottom: float, top: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	See frustumRH_NO."
 );
 PyDoc_STRVAR(frustumRH_NO_docstr,
-	"frustumRH_NO(left: float, right: float, bottom: float, top: float, near: float, far: float) -> fmat4x4\n"
+	"frustumRH_NO(left: float, right: float, bottom: float, top: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	Creates a right handed frustum matrix. The near and far clip planes correspond to z\n"
 	"	normalized device coordinates of -1 and +1 respectively.\n"
 	"	(OpenGL clip volume definition)"
 );
 PyDoc_STRVAR(frustumRH_ZO_docstr,
-	"frustumRH_ZO(left: float, right: float, bottom: float, top: float, near: float, far: float) -> fmat4x4\n"
+	"frustumRH_ZO(left: float, right: float, bottom: float, top: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	Creates a right handed frustum matrix. The near and far clip planes correspond to z\n"
 	"	normalized device coordinates of 0 and +1 respectively.\n"
 	"	(Direct3D clip volume definition)"
 );
 PyDoc_STRVAR(frustumZO_docstr,
-	"frustumZO(left: float, right: float, bottom: float, top: float, near: float, far: float) -> fmat4x4\n"
+	"frustumZO(left: float, right: float, bottom: float, top: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	See frustumRH_ZO."
 );
 PyDoc_STRVAR(infinitePerspective_docstr,
@@ -270,48 +279,57 @@ PyDoc_STRVAR(infinitePerspectiveRH_docstr,
 PyDoc_STRVAR(ortho_docstr,
 	"ortho(left: float, right: float, bottom: float, top: float) -> fmat4x4\n"
 	"	Creates a matrix for projecting two-dimensional coordinates onto the screen.\n"
-	"ortho(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float) -> fmat4x4\n"
+	"ortho(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float)\n"
+	"	-> fmat4x4\n"
 	"	See orthoRH_NO."
 );
 PyDoc_STRVAR(orthoLH_docstr,
-	"orthoLH(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float) -> fmat4x4\n"
+	"orthoLH(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float)\n"
+	"	-> fmat4x4\n"
 	"	See orthoLH_NO."
 );
 PyDoc_STRVAR(orthoRH_docstr,
-	"orthoRH(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float) -> fmat4x4\n"
+	"orthoRH(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float)\n"
+	"	-> fmat4x4\n"
 	"	See orthoRH_NO."
 );
 PyDoc_STRVAR(orthoZO_docstr,
-	"orthoNO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float) -> fmat4x4\n"
+	"orthoZO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float)\n"
+	"	-> fmat4x4\n"
 	"	See orthoRH_ZO."
 );
 PyDoc_STRVAR(orthoNO_docstr,
-	"orthoNO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float) -> fmat4x4\n"
+	"orthoNO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float)\n"
+	"	-> fmat4x4\n"
 	"	See orthoRH_NO."
 );
 PyDoc_STRVAR(orthoLH_ZO_docstr,
-	"orthoLH_ZO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float) -> fmat4x4\n"
+	"orthoLH_ZO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float)\n"
+	"	-> fmat4x4\n"
 	"	Creates a matrix for an orthographic parallel viewing volume, using left-handed\n"
 	"	coordinates. The nearand far clip planes correspond to z normalized device\n"
 	"	coordinates of 0 and +1 respectively.\n"
 	"	(Direct3D clip volume definition)"
 );
 PyDoc_STRVAR(orthoLH_NO_docstr,
-	"orthoLH_NO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float) -> fmat4x4\n"
+	"orthoLH_NO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float)\n"
+	"	-> fmat4x4\n"
 	"	Creates a matrix for an orthographic parallel viewing volume using left-handed\n"
 	"	coordinates. The nearand far clip planes correspond to z normalized device coordinates of\n"
 	"	-1 and +1 respectively.\n"
 	"	(OpenGL clip volume definition)"
 );
 PyDoc_STRVAR(orthoRH_ZO_docstr,
-	"orthoRH_ZO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float) -> fmat4x4\n"
+	"orthoRH_ZO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float)\n"
+	"	-> fmat4x4\n"
 	"	Creates a matrix for an orthographic parallel viewing volume, using right-handed\n"
 	"	coordinates. The nearand far clip planes correspond to z normalized device\n"
 	"	coordinates of 0 and +1 respectively.\n"
 	"	(Direct3D clip volume definition)"
 );
 PyDoc_STRVAR(orthoRH_NO_docstr,
-	"orthoRH_NO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float) -> fmat4x4\n"
+	"orthoRH_NO(left: float, right: float, bottom: float, top: float, zNear: float, zFar: float)\n"
+	"	-> fmat4x4\n"
 	"	Creates a matrix for an orthographic parallel viewing volume using right-handed\n"
 	"	coordinates. The nearand far clip planes correspond to z normalized device coordinates of\n"
 	"	-1 and +1 respectively.\n"
@@ -382,25 +400,29 @@ PyDoc_STRVAR(perspectiveFovZO_docstr,
 	"	See perspectiveFovRH_ZO."
 );
 PyDoc_STRVAR(perspectiveFovLH_NO_docstr,
-	"perspectiveFovLH_NO(fov: float, width: float, height: float, near: float, far: float) -> fmat4x4\n"
+	"perspectiveFovLH_NO(fov: float, width: float, height: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	Builds a perspective projection matrix based on a field of view using left-handed\n"
 	"	coordinates. The nearand far clip planes correspond to z normalized device coordinates of\n"
 	"	-1 and +1 respectively. (OpenGL clip volume definition)"
 );
 PyDoc_STRVAR(perspectiveFovLH_ZO_docstr,
-	"perspectiveFovLH_ZO(fov: float, width: float, height: float, near: float, far: float) -> fmat4x4\n"
+	"perspectiveFovLH_ZO(fov: float, width: float, height: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	Builds a perspective projection matrix based on a field of view using left-handed\n"
 	"	coordinates. The nearand far clip planes correspond to z normalized device coordinates of\n"
 	"	0 and +1 respectively. (Direct3D clip volume definition)"
 );
 PyDoc_STRVAR(perspectiveFovRH_NO_docstr,
-	"perspectiveFovRH_NO(fov: float, width: float, height: float, near: float, far: float) -> fmat4x4\n"
+	"perspectiveFovRH_NO(fov: float, width: float, height: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	Builds a perspective projection matrix based on a field of view using right-handed\n"
 	"	coordinates. The nearand far clip planes correspond to z normalized device coordinates of\n"
 	"	-1 and +1 respectively. (OpenGL clip volume definition)"
 );
 PyDoc_STRVAR(perspectiveFovRH_ZO_docstr,
-	"perspectiveFovRH_ZO(fov: float, width: float, height: float, near: float, far: float) -> fmat4x4\n"
+	"perspectiveFovRH_ZO(fov: float, width: float, height: float, near: float, far: float)\n"
+	"	-> fmat4x4\n"
 	"	Builds a perspective projection matrix based on a field of view using right-handed\n"
 	"	coordinates. The nearand far clip planes correspond to z normalized device coordinates of\n"
 	"	0 and +1 respectively. (Direct3D clip volume definition)"

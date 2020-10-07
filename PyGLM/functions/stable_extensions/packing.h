@@ -1486,7 +1486,7 @@ PyDoc_STRVAR(packUnorm2x4_docstr,
 	"	values."
 );
 PyDoc_STRVAR(packUnorm2x8_docstr,
-	"packUnorm2x4(v: fvec2) -> int\n"
+	"packUnorm2x8(v: fvec2) -> int\n"
 	"	First, converts each component of the normalized floating-point value v into 8-bit integer\n"
 	"	values. Then, the results are packed into the returned 16 - bit unsigned integer. The\n"
 	"	conversion for component c of v to fixed point is done as follows :\n"
@@ -1495,7 +1495,7 @@ PyDoc_STRVAR(packUnorm2x8_docstr,
 	"	the most significant bits."
 );
 PyDoc_STRVAR(packUnorm3x10_1x2_docstr,
-	"packUnorm2x4(v: fvec4) -> int\n"
+	"packUnorm3x10_1x2(v: fvec4) -> int\n"
 	"	First, converts the first three components of the normalized floating-point value v into\n"
 	"	10-bit unsigned integer values. Then, converts the forth component of the normalized\n"
 	"	floating-point value v into 2-bit signed uninteger values.Then, the results are packed into\n"
@@ -1555,7 +1555,7 @@ PyDoc_STRVAR(unpackHalf1x16_docstr,
 	"	OpenGL Specification, and converting it to 32-bit floating-point values."
 );
 PyDoc_STRVAR(unpackHalf4x16_docstr,
-	"unpackHalf1x16(p: int) -> vec4\n"
+	"unpackHalf4x16(p: int) -> vec4\n"
 	"	Returns a four-component floating-point vector with components obtained by unpacking a\n"
 	"	64-bit unsigned integer into four 16-bit values, interpreting those values as 16-bit\n"
 	"	floating-point numbers according to the OpenGL Specification, and converting them to 32-bit\n"
@@ -1644,7 +1644,7 @@ PyDoc_STRVAR(unpackSnorm4x16_docstr,
 	"	bits of the input; the last component will be extracted from the most significant bits."
 );
 PyDoc_STRVAR(unpackU3x10_1x2_docstr,
-	"unpackSnorm4x16(p: int) -> uvec4\n"
+	"unpackU3x10_1x2(p: int) -> uvec4\n"
 	"	Unpacks a single 32-bit unsigned integer p into three 10-bit and one 2-bit unsigned\n"
 	"	integers. The first component of the returned vector will be extracted from the least\n"
 	"	significant bits of the input; the last component will be extracted from the most\n"

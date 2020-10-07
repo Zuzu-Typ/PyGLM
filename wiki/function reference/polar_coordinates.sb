@@ -1,0 +1,17 @@
+\c\This file was generated using a tool\c\
+\h1\polar_coordinates methods\h1\
+The following methods are all part of the \b\polar_coordinates methods\b\.
+Conversion from Euclidean space to polar space and revert.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #euclidean-function\\b\euclidean\b\ function\url\
+\-\\url #polar-function\\b\polar\b\ function\url\
+\ul\
+\h3\euclidean() function\h3\
+\raw\#### <code>glm.<code>**euclidean**(**polar**: *vec2*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Convert Polar to Euclidean coordinates.
+
+\h3\polar() function\h3\
+\raw\#### <code>glm.<code>**polar**(**euclidean**: *vec3*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Convert Euclidean to Polar coordinates, x is the xz distance, y, the latitude and z the longitude.
+

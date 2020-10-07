@@ -1,0 +1,52 @@
+\c\This file was generated using a tool\c\
+\h1\matrix_transform methods\h1\
+The following methods are all part of the \b\matrix_transform methods\b\.
+Defines functions that generate common transformation matrices.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #identity-function\\b\identity\b\ function\url\
+\-\\url #lookat-function\\b\lookAt\b\ function\url\
+\-\\url #lookatlh-function\\b\lookAtLH\b\ function\url\
+\-\\url #lookatrh-function\\b\lookAtRH\b\ function\url\
+\-\\url #rotate-function\\b\rotate\b\ function\url\
+\-\\url #rotate_slow-function\\b\rotate_slow\b\ function\url\
+\-\\url #scale-function\\b\scale\b\ function\url\
+\-\\url #scale_slow-function\\b\scale_slow\b\ function\url\
+\-\\url #translate-function\\b\translate\b\ function\url\
+\ul\
+\h3\identity() function\h3\
+\raw\#### <code>glm.<code>**identity**(**matrix_type**: *type*) -\\> *matNxM*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds an identity matrix.
+
+\h3\lookAt() function\h3\
+\raw\#### <code>glm.<code>**lookAt**(**eye**: *vec3*, **center**: *vec3*, **up**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a look at view matrix based on the default handedness.
+
+\h3\lookAtLH() function\h3\
+\raw\#### <code>glm.<code>**lookAtLH**(**eye**: *vec3*, **center**: *vec3*, **up**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a left handed look at view matrix.
+
+\h3\lookAtRH() function\h3\
+\raw\#### <code>glm.<code>**lookAtRH**(**eye**: *vec3*, **center**: *vec3*, **up**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a right handed look at view matrix.
+
+\h3\rotate() function\h3\
+\raw\#### <code>glm.<code>**rotate**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a rotation 4 * 4 matrix created from an axis vector and an angle.
+
+\h3\rotate_slow() function\h3\
+\raw\#### <code>glm.<code>**rotate_slow**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a rotation 4 * 4 matrix created from an axis vector and an angle.
+
+\h3\scale() function\h3\
+\raw\#### <code>glm.<code>**scale**(**m**: *mat4x4*, **v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a scale 4 * 4 matrix created from 3 scalars.
+
+\h3\scale_slow() function\h3\
+\raw\#### <code>glm.<code>**scale_slow**(**m**: *mat4x4*, **v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a scale 4 * 4 matrix created from 3 scalars.
+
+\h3\translate() function\h3\
+\raw\#### <code>glm.<code>**translate**(**m**: *mat4x4*, **v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a translation 4 * 4 matrix created from a vector of 3 components.
+

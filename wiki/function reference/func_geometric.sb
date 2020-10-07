@@ -1,0 +1,82 @@
+\c\This file was generated using a tool\c\
+\h1\func_geometric methods\h1\
+The following methods are all part of the \b\func_geometric methods\b\.
+These operate on vectors as vectors, not component-wise.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #cross-function\\b\cross\b\ function\url\
+\-\\url #distance-function\\b\distance\b\ function\url\
+\-\\url #dot-function\\b\dot\b\ function\url\
+\-\\url #faceforward-function\\b\faceforward\b\ function\url\
+\-\\url #length-function\\b\length\b\ function\url\
+\-\\url #normalize-function\\b\normalize\b\ function\url\
+\-\\url #reflect-function\\b\reflect\b\ function\url\
+\-\\url #refract-function\\b\refract\b\ function\url\
+\ul\
+\h3\cross() function\h3\
+\raw\#### <code>glm.<code>**cross**(**x**: *vec3*, **y**: *vec3*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the cross product of x and y.
+
+\raw\#### <code>glm.<code>**cross**(**x**: *quat*, **y**: *quat*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Compute a cross product.
+
+\h3\distance() function\h3\
+\raw\#### <code>glm.<code>**distance**(**p0**: *float*, **p1**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the distance between p0 and p1, i.e., length(p0 - p1).
+
+\raw\#### <code>glm.<code>**distance**(**p0**: *vecN*, **p1**: *vecN*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the distance between p0 and p1, i.e., length(p0 - p1).
+
+\h3\dot() function\h3\
+\raw\#### <code>glm.<code>**dot**(**x**: *float*, **y**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the dot product of x and y, i.e., result = x * y.
+
+\raw\#### <code>glm.<code>**dot**(**x**: *vecN*, **y**: *vecN*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the dot product of x and y, i.e., result = x[0] * y[0] + x[1] * y[1] + ...
+
+\raw\#### <code>glm.<code>**dot**(**x**: *quat*, **y**: *quat*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns dot product of x and y, i.e., x[0] * y[0] + x[1] * y[1] + ...
+
+\h3\faceforward() function\h3\
+\raw\#### <code>glm.<code>**faceforward**(**N**: *float*, **I**: *float*, **Nref**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\If dot(Nref, I) < 0.0, return N, otherwise, return -N.
+
+\raw\#### <code>glm.<code>**faceforward**(**N**: *vecN*, **I**: *vecN*, **Nref**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\For every index i:
+\raw\&emsp;&emsp;\raw\If dot(Nref[i], I[i]) < 0.0, return N[i], otherwise, return -N[i].
+
+\h3\length() function\h3\
+\raw\#### <code>glm.<code>**length**(**x**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the length of x, i.e., abs(x).
+
+\raw\#### <code>glm.<code>**length**(**x**: *vecN*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the length of x, i.e., sqrt(x * x).
+
+\raw\#### <code>glm.<code>**length**(**x**: *quat*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the norm of a quaternion.
+
+\h3\normalize() function\h3\
+\raw\#### <code>glm.<code>**normalize**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns a vector in the same direction as x but with length of 1.
+
+\raw\#### <code>glm.<code>**normalize**(**x**: *quat*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the normalized quaternion.
+
+\h3\reflect() function\h3\
+\raw\#### <code>glm.<code>**reflect**(**I**: *float*, **N**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\For the incident vector I and surface orientation N, returns the reflection direction:
+\raw\&emsp;&emsp;\raw\result = I - 2.0 * dot(N, I) * N.
+
+\raw\#### <code>glm.<code>**reflect**(**I**: *vecN*, **N**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\For the incident vector I and surface orientation N, returns the reflection direction:
+\raw\&emsp;&emsp;\raw\result = I - 2.0 * dot(N, I) * N.
+
+\h3\refract() function\h3\
+\raw\#### <code>glm.<code>**refract**(**I**: *float*, **N**: *float*, **eta**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\For the incident vector I and surface normal N, and the ratio of indices of refraction eta,
+\raw\&emsp;&emsp;\raw\return the refraction vector.
+
+\raw\#### <code>glm.<code>**refract**(**I**: *vecN*, **N**: *vecN*, **eta**: *float*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\For the incident vector I and surface normal N, and the ratio of indices of refraction eta,
+\raw\&emsp;&emsp;\raw\return the refraction vector.
+

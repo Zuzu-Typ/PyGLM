@@ -1,0 +1,20 @@
+\c\This file was generated using a tool\c\
+\h1\noise methods\h1\
+The following methods are all part of the \b\noise methods\b\.
+Defines 2D, 3D and 4D procedural noise functions Based on the work of Stefan Gustavson and Ashima Arts on "webgl-noise": \raw\https://github.com/ashima/webgl-noise\raw\ Following Stefan Gustavson's paper "Simplex noise demystified": \raw\http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf\raw\
+\h2\Table of contents\h2\
+\ul\
+\-\\url #perlin-function\\b\perlin\b\ function\url\
+\-\\url #simplex-function\\b\simplex\b\ function\url\
+\ul\
+\h3\perlin() function\h3\
+\raw\#### <code>glm.<code>**perlin**(**p**: *vecN*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Classic perlin noise.
+
+\raw\#### <code>glm.<code>**perlin**(**p**: *vecN*, **rep**: *vecN*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Periodic perlin noise.
+
+\h3\simplex() function\h3\
+\raw\#### <code>glm.<code>**simplex**(**p**: *vecN*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Simplex noise.
+

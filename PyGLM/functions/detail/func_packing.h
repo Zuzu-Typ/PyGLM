@@ -140,7 +140,7 @@ unpackDouble2x32_(PyObject*, PyObject* arg) {
 }
 
 PyDoc_STRVAR(unpackUnorm2x16_docstr,
-	"packUnorm2x16(p: int) -> vec2\n"
+	"unpackUnorm2x16(p: int) -> vec2\n"
 	"	First, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers,\n"
 	"	four 8-bit unsigned integers, or four 8-bit signed integers. Then, each component is\n"
 	"	converted to a normalized floating - point value to generate the returned two- or\n"

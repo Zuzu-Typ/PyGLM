@@ -1,0 +1,12 @@
+\c\This file was generated using a tool\c\
+\h1\other methods\h1\
+The following methods are all part of the \b\other methods\b\.
+PyGLM's custom functions.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #silence-function\\b\silence\b\ function\url\
+\ul\
+\h3\silence() function\h3\
+\raw\#### <code>glm.<code>**silence**(**ID**: *int*) -\\> *None*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Silence a PyGLM warning (or all using 0).
+

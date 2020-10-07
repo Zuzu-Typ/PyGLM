@@ -1,0 +1,23 @@
+\c\This file was generated using a tool\c\
+\h1\quaternion_common methods\h1\
+The following methods are all part of the \b\quaternion_common methods\b\.
+Provides common functions for quaternion types.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #conjugate-function\\b\conjugate\b\ function\url\
+\-\\url #lerp-function\\b\lerp\b\ function\url\
+\-\\url #slerp-function\\b\slerp\b\ function\url\
+\ul\
+\h3\conjugate() function\h3\
+\raw\#### <code>glm.<code>**conjugate**(**q**: *quat*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the q conjugate.
+
+\h3\lerp() function\h3\
+\raw\#### <code>glm.<code>**lerp**(**x**: *quat*, **y**: *quat*, **a**: *float*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Linear interpolation of two quaternions. The interpolation is oriented.
+
+\h3\slerp() function\h3\
+\raw\#### <code>glm.<code>**slerp**(**x**: *quat*, **y**: *quat*, **a**: *float*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Spherical linear interpolation of two quaternions. The interpolation always take the short
+\raw\&emsp;&emsp;\raw\path and the rotation is performed at constant speed.
+

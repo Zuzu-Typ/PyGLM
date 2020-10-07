@@ -7,7 +7,7 @@
 #include "../../internal_functions/all.h"
 
 PyDoc_STRVAR(uaddCarry_docstr,
-	"umulExtended(x: uvecN, y: uvecN, carry: uvecN) -> uvecN\n"
+	"uaddCarry(x: uvecN, y: uvecN, carry: uvecN) -> uvecN\n"
 	"	Adds 32-bit unsigned integer x and y, returning the sum modulo pow(2, 32). The value carry\n"
 	"	is set to 0 if the sum was less than pow(2, 32), or to 1 otherwise."
 );
@@ -179,7 +179,7 @@ PyDoc_STRVAR(bitfieldExtract_docstr,
 	"	the value of bit offset + base - 1. If bits is zero, the result will be zero.The result\n"
 	"	will be undefined if offset or bits is negative, or if the sum of offsetand bits is greater\n"
 	"	than the number of bits used to store the operand.\n"
-	"bitfieldExtract(value: vecN, offset: int; bits: int) -> vecN\n"
+	"bitfieldExtract(value: vecN, offset: int, bits: int) -> vecN\n"
 	"	Returns bitfieldExtract(c, offset, bits) for every component c of value."
 );
 static PyObject*
@@ -332,7 +332,7 @@ PyDoc_STRVAR(bitfieldInsert_docstr,
 	"	bits taken directly from the corresponding bits of base. If bits is zero, the result will\n"
 	"	simply be base.The result will be undefined if offset or bits is negative, or if the sum of\n"
 	"	offsetand bits is greater than the number of bits used to store the operand.\n"
-	"bitfieldInsert(base: vecN, insert: vecN, offset: int; bits: int) -> vecN\n"
+	"bitfieldInsert(base: vecN, insert: vecN, offset: int, bits: int) -> vecN\n"
 	"	Returns bitfieldInsert(base[i], insert[i], offset, bits) for every index i."
 );
 static PyObject*

@@ -1,0 +1,23 @@
+\c\This file was generated using a tool\c\
+\h1\color_space methods\h1\
+The following methods are all part of the \b\color_space methods\b\.
+Allow to perform bit operations on integer values.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #convertlineartosrgb-function\\b\convertLinearToSRGB\b\ function\url\
+\-\\url #convertsrgbtolinear-function\\b\convertSRGBToLinear\b\ function\url\
+\ul\
+\h3\convertLinearToSRGB() function\h3\
+\raw\#### <code>glm.<code>**convertLinearToSRGB**(**ColorLinear**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Convert a linear color to sRGB color using a standard gamma correction.
+
+\raw\#### <code>glm.<code>**convertLinearToSRGB**(**ColorLinear**: *vecN*, **Gamma**: *number*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Convert a linear color to sRGB color using a custom gamma correction.
+
+\h3\convertSRGBToLinear() function\h3\
+\raw\#### <code>glm.<code>**convertSRGBToLinear**(**ColorLinear**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Convert a sRGB color to linear color using a standard gamma correction.
+
+\raw\#### <code>glm.<code>**convertSRGBToLinear**(**ColorLinear**: *vecN*, **Gamma**: *number*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Convert a sRGB color to linear color using a custom gamma correction.
+

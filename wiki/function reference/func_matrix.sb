@@ -1,0 +1,37 @@
+\c\This file was generated using a tool\c\
+\h1\func_matrix methods\h1\
+The following methods are all part of the \b\func_matrix methods\b\.
+It contains GLSL matrix functions.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #determinant-function\\b\determinant\b\ function\url\
+\-\\url #inverse-function\\b\inverse\b\ function\url\
+\-\\url #matrixcompmult-function\\b\matrixCompMult\b\ function\url\
+\-\\url #outerproduct-function\\b\outerProduct\b\ function\url\
+\-\\url #transpose-function\\b\transpose\b\ function\url\
+\ul\
+\h3\determinant() function\h3\
+\raw\#### <code>glm.<code>**determinant**(**m**: *matSxS*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the determinant of a squared matrix.
+
+\h3\inverse() function\h3\
+\raw\#### <code>glm.<code>**inverse**(**m**: *matSxS*) -\\> *matSxS*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the inverse of a squared matrix.
+
+\raw\#### <code>glm.<code>**inverse**(**q**: *quat*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the inverse of a quaternion.
+
+\h3\matrixCompMult() function\h3\
+\raw\#### <code>glm.<code>**matrixCompMult**(**x**: *matNxM*, **y**: *matNxM*) -\\> *matNxM*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Multiply matrix x by matrix y component-wise, i.e., result[i][j] is the scalar product of
+\raw\&emsp;&emsp;\raw\x[i][j] and y[i][j].
+
+\h3\outerProduct() function\h3\
+\raw\#### <code>glm.<code>**outerProduct**(**c**: *vecC*, **r**: *vecR*) -\\> *matRxC*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Treats the first parameter c as a column vector and the second parameter r as a row vector
+\raw\&emsp;&emsp;\raw\and does a linear algebraic matrix multiply c * r.
+
+\h3\transpose() function\h3\
+\raw\#### <code>glm.<code>**transpose**(**x**: *matNxM*) -\\> *matMxN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the transposed matrix of x.
+

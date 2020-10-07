@@ -85,7 +85,7 @@ PyDoc_STRVAR(one_over_root_two_docstr,
 	"	Return 1 / sqrt(2)."
 );
 PyDoc_STRVAR(one_over_two_pi_docstr,
-	"one_over_root_two() -> float\n"
+	"one_over_two_pi() -> float\n"
 	"	Return 1 / (pi * 2)."
 );
 PyDoc_STRVAR(quarter_pi_docstr,
@@ -101,7 +101,7 @@ PyDoc_STRVAR(root_half_pi_docstr,
 	"	Return sqrt(pi / 2)."
 );
 PyDoc_STRVAR(root_ln_four_docstr,
-	"root_half_pi() -> float\n"
+	"root_ln_four() -> float\n"
 	"	Return sqrt(ln(4))."
 );
 PyDoc_STRVAR(root_pi_docstr,

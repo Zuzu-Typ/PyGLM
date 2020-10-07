@@ -1,0 +1,60 @@
+\c\This file was generated using a tool\c\
+\h1\quaternion methods\h1\
+The following methods are all part of the \b\quaternion methods\b\.
+Defines a templated quaternion type and several quaternion operations.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #eulerangles-function\\b\eulerAngles\b\ function\url\
+\-\\url #mat3_cast-function\\b\mat3_cast\b\ function\url\
+\-\\url #mat4_cast-function\\b\mat4_cast\b\ function\url\
+\-\\url #pitch-function\\b\pitch\b\ function\url\
+\-\\url #quatlookat-function\\b\quatLookAt\b\ function\url\
+\-\\url #quatlookatlh-function\\b\quatLookAtLH\b\ function\url\
+\-\\url #quatlookatrh-function\\b\quatLookAtRH\b\ function\url\
+\-\\url #quat_cast-function\\b\quat_cast\b\ function\url\
+\-\\url #roll-function\\b\roll\b\ function\url\
+\-\\url #yaw-function\\b\yaw\b\ function\url\
+\ul\
+\h3\eulerAngles() function\h3\
+\raw\#### <code>glm.<code>**eulerAngles**(**x**: *quat*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns euler angles, pitch as x, yaw as y, roll as z. The result is expressed in radians.
+
+\h3\mat3_cast() function\h3\
+\raw\#### <code>glm.<code>**mat3_cast**(**x**: *quat*) -\\> *mat3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Converts a quaternion to a 3 * 3 matrix.
+
+\h3\mat4_cast() function\h3\
+\raw\#### <code>glm.<code>**mat4_cast**(**x**: *quat*) -\\> *mat4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Converts a quaternion to a 4 * 4 matrix.
+
+\h3\pitch() function\h3\
+\raw\#### <code>glm.<code>**pitch**(**x**: *quat*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns pitch value of euler angles expressed in radians.
+
+\h3\quatLookAt() function\h3\
+\raw\#### <code>glm.<code>**quatLookAt**(**direction**: *vec3*, **up**: *vec3*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\See quatLookAtRH.
+
+\h3\quatLookAtLH() function\h3\
+\raw\#### <code>glm.<code>**quatLookAtLH**(**direction**: *vec3*, **up**: *vec3*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a left-handed look at quaternion.
+
+\h3\quatLookAtRH() function\h3\
+\raw\#### <code>glm.<code>**quatLookAtRH**(**direction**: *vec3*, **up**: *vec3*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a right-handed look at quaternion.
+
+\h3\quat_cast() function\h3\
+\raw\#### <code>glm.<code>**quat_cast**(**x**: *mat3*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Converts a pure rotation 3 * 3 matrix to a quaternion.
+
+\raw\#### <code>glm.<code>**quat_cast**(**x**: *mat4*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Converts a pure rotation 4 * 4 matrix to a quaternion.
+
+\h3\roll() function\h3\
+\raw\#### <code>glm.<code>**roll**(**x**: *quat*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns roll value of euler angles expressed in radians.
+
+\h3\yaw() function\h3\
+\raw\#### <code>glm.<code>**yaw**(**x**: *quat*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns yaw value of euler angles expressed in radians.
+

@@ -1,0 +1,17 @@
+\c\This file was generated using a tool\c\
+\h1\matrix_inverse methods\h1\
+The following methods are all part of the \b\matrix_inverse methods\b\.
+Defines additional matrix inverting functions.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #affineinverse-function\\b\affineInverse\b\ function\url\
+\-\\url #inversetranspose-function\\b\inverseTranspose\b\ function\url\
+\ul\
+\h3\affineInverse() function\h3\
+\raw\#### <code>glm.<code>**affineInverse**(**m**: *matSxS*) -\\> *matSxS*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Fast matrix inverse for affine matrix.
+
+\h3\inverseTranspose() function\h3\
+\raw\#### <code>glm.<code>**inverseTranspose**(**m**: *matSxS*) -\\> *matSxS*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Compute the inverse transpose of a matrix.
+

@@ -21,9 +21,9 @@ PyGLM_MAKE_GLM_FUNC_N_V_Q__tfF(length)
 
 PyDoc_STRVAR(distance_docstr,
 	"distance(p0: float, p1: float) -> float\n"
-	"	Returns the distance betwwen p0 and p1, i.e., length(p0 - p1).\n"
+	"	Returns the distance between p0 and p1, i.e., length(p0 - p1).\n"
 	"distance(p0: vecN, p1: vecN) -> float\n"
-	"	Returns the distance betwwen p0 and p1, i.e., length(p0 - p1)."
+	"	Returns the distance between p0 and p1, i.e., length(p0 - p1)."
 );
 PyGLM_MAKE_GLM_FUNC_NN_VV__tfF(distance)
 

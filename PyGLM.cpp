@@ -363,14 +363,14 @@ extern "C" {
 			return NULL;
 
 
-#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
-		// backwards compatibility
-		Py_INCREF(module_glm);
-		PyModule_AddObject(module_glm, "detail", module_glm);
-
-		Py_INCREF(module_glm);
-		PyModule_AddObject(module_glm, "gtc", module_glm);
-#endif
+//#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
+//		// backwards compatibility
+//		Py_INCREF(module_glm);
+//		PyModule_AddObject(module_glm, "detail", module_glm);
+//
+//		Py_INCREF(module_glm);
+//		PyModule_AddObject(module_glm, "gtc", module_glm);
+//#endif
 
 		// float
 		PyModule_AddObject(module_glm, "c_float", ctypes_float);
