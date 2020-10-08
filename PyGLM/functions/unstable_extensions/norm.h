@@ -7,6 +7,7 @@ PyGLM_MAKE_GLM_FUNC_VV__tfF(distance2)
 
 PyGLM_MAKE_GLM_FUNC_V3_V3V3__tfF(l1Norm)
 PyGLM_MAKE_GLM_FUNC_V3_V3V3__tfF(l2Norm)
+PyGLM_MAKE_GLM_FUNC_V3_V3V3__tfF(lMaxNorm)
 
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(length2)
 
@@ -42,8 +43,43 @@ lxNorm_(PyObject*, PyObject* args) {
 	return NULL;
 }
 
-#define NORM_METHODS { "distance2", (PyCFunction)distance2_, METH_VARARGS, "distance2(p0, p1) -> float\nReturns the squared distance between p0 and p1, i.e., length2(p0 - p1)." }, \
-{ "l1Norm", (PyCFunction)l1Norm_, METH_VARARGS, "l1Norm(x[, y]) -> float\nReturns the L1 norm of x or the L1 norm between x and y respectively." }, \
-{ "l2Norm", (PyCFunction)l2Norm_, METH_VARARGS, "l2Norm(x[, y]) -> float\nReturns the L2 norm of x or the L2 norm between x and y respectively." }, \
-{ "length2", (PyCFunction)length2_, METH_O, "length2(x) -> float\nReturns the squared length of x." }, \
-{ "lxNorm", (PyCFunction)lxNorm_, METH_VARARGS, "lxNorm(x[, y], Depth) -> float\nReturns the L norm of x or the L norm between x and y respectively." }
+PyDoc_STRVAR(distance2_docstr,
+	"distance2(p0: vecN, p1: vecN) -> float\n"
+	"	Returns the squared distance between p0 and p1, i.e., length2(p0 - p1)."
+);
+PyDoc_STRVAR(l1Norm_docstr,
+	"l1Norm(v: vec3) -> float\n"
+	"	Returns the L1 norm of v.\n"
+	"l1Norm(x: vec3, y: vec3) -> float\n"
+	"	Returns the L1 norm between x and y."
+);
+PyDoc_STRVAR(l2Norm_docstr,
+	"l2Norm(v: vec3) -> float\n"
+	"	Returns the L2 norm of v.\n"
+	"l2Norm(x: vec3, y: vec3) -> float\n"
+	"	Returns the L2 norm between x and y."
+);
+PyDoc_STRVAR(length2_docstr,
+	"length2(v: vecN) -> float\n"
+	"	Returns the squared length of x."
+);
+PyDoc_STRVAR(lMaxNorm_docstr,
+	"lMaxNorm(v: vec3) -> float\n"
+	"	Returns the LMax norm of v.\n"
+	"lMaxNorm(x: vec3, y: vec3) -> float\n"
+	"	Returns the LMax norm between x and y."
+);
+PyDoc_STRVAR(lxNorm_docstr,
+	"lxNorm(v: vec3, Depth: int) -> float\n"
+	"	Returns the L norm of v.\n"
+	"lxNorm(x: vec3, y: vec3, Depth: int) -> float\n"
+	"	Returns the L norm between x and y."
+);
+
+#define NORM_METHODS \
+{ "distance2", (PyCFunction)distance2_, METH_VARARGS, distance2_docstr }, \
+{ "l1Norm", (PyCFunction)l1Norm_, METH_VARARGS, l1Norm_docstr }, \
+{ "l2Norm", (PyCFunction)l2Norm_, METH_VARARGS, l2Norm_docstr }, \
+{ "lMaxNorm", (PyCFunction)lMaxNorm_, METH_VARARGS, lMaxNorm_docstr }, \
+{ "length2", (PyCFunction)length2_, METH_O, length2_docstr }, \
+{ "lxNorm", (PyCFunction)lxNorm_, METH_VARARGS, lxNorm_docstr }

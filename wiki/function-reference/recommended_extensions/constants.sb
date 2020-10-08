@@ -1,0 +1,152 @@
+\c\This file was generated using a tool\c\
+\h1\constants methods\h1\
+The following methods are all part of the \b\constants methods\b\.
+Provide a list of constants and precomputed useful values.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #e-function\\b\e\b\ function\url\
+\-\\url #epsilon-function\\b\epsilon\b\ function\url\
+\-\\url #euler-function\\b\euler\b\ function\url\
+\-\\url #four_over_pi-function\\b\four_over_pi\b\ function\url\
+\-\\url #golden_ratio-function\\b\golden_ratio\b\ function\url\
+\-\\url #half_pi-function\\b\half_pi\b\ function\url\
+\-\\url #ln_ln_two-function\\b\ln_ln_two\b\ function\url\
+\-\\url #ln_ten-function\\b\ln_ten\b\ function\url\
+\-\\url #ln_two-function\\b\ln_two\b\ function\url\
+\-\\url #one-function\\b\one\b\ function\url\
+\-\\url #one_over_pi-function\\b\one_over_pi\b\ function\url\
+\-\\url #one_over_root_two-function\\b\one_over_root_two\b\ function\url\
+\-\\url #one_over_two_pi-function\\b\one_over_two_pi\b\ function\url\
+\-\\url #pi-function\\b\pi\b\ function\url\
+\-\\url #quarter_pi-function\\b\quarter_pi\b\ function\url\
+\-\\url #root_five-function\\b\root_five\b\ function\url\
+\-\\url #root_half_pi-function\\b\root_half_pi\b\ function\url\
+\-\\url #root_ln_four-function\\b\root_ln_four\b\ function\url\
+\-\\url #root_pi-function\\b\root_pi\b\ function\url\
+\-\\url #root_three-function\\b\root_three\b\ function\url\
+\-\\url #root_two-function\\b\root_two\b\ function\url\
+\-\\url #root_two_pi-function\\b\root_two_pi\b\ function\url\
+\-\\url #third-function\\b\third\b\ function\url\
+\-\\url #three_over_two_pi-function\\b\three_over_two_pi\b\ function\url\
+\-\\url #two_over_pi-function\\b\two_over_pi\b\ function\url\
+\-\\url #two_over_root_pi-function\\b\two_over_root_pi\b\ function\url\
+\-\\url #two_pi-function\\b\two_pi\b\ function\url\
+\-\\url #two_thirds-function\\b\two_thirds\b\ function\url\
+\-\\url #zero-function\\b\zero\b\ function\url\
+\ul\
+\h3\e() function\h3\
+\raw\#### <code>glm.<code>**e**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return e constant.
+
+\h3\epsilon() function\h3\
+\raw\#### <code>glm.<code>**epsilon**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the epsilon constant for floating point types.
+
+\h3\euler() function\h3\
+\raw\#### <code>glm.<code>**euler**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return Euler's constant.
+
+\h3\four_over_pi() function\h3\
+\raw\#### <code>glm.<code>**four_over_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return 4 / pi.
+
+\h3\golden_ratio() function\h3\
+\raw\#### <code>glm.<code>**golden_ratio**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the golden ratio constant.
+
+\h3\half_pi() function\h3\
+\raw\#### <code>glm.<code>**half_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return pi / 2.
+
+\h3\ln_ln_two() function\h3\
+\raw\#### <code>glm.<code>**ln_ln_two**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return ln(ln(2)).
+
+\h3\ln_ten() function\h3\
+\raw\#### <code>glm.<code>**ln_ten**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return ln(10).
+
+\h3\ln_two() function\h3\
+\raw\#### <code>glm.<code>**ln_two**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return ln(2).
+
+\h3\one() function\h3\
+\raw\#### <code>glm.<code>**one**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return 1.
+
+\h3\one_over_pi() function\h3\
+\raw\#### <code>glm.<code>**one_over_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return 1 / pi.
+
+\h3\one_over_root_two() function\h3\
+\raw\#### <code>glm.<code>**one_over_root_two**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return 1 / sqrt(2).
+
+\h3\one_over_two_pi() function\h3\
+\raw\#### <code>glm.<code>**one_over_two_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return 1 / (pi * 2).
+
+\h3\pi() function\h3\
+\raw\#### <code>glm.<code>**pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the pi constant for floating point types.
+
+\h3\quarter_pi() function\h3\
+\raw\#### <code>glm.<code>**quarter_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return pi / 4.
+
+\h3\root_five() function\h3\
+\raw\#### <code>glm.<code>**root_five**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return sqrt(5).
+
+\h3\root_half_pi() function\h3\
+\raw\#### <code>glm.<code>**root_half_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return sqrt(pi / 2).
+
+\h3\root_ln_four() function\h3\
+\raw\#### <code>glm.<code>**root_ln_four**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return sqrt(ln(4)).
+
+\h3\root_pi() function\h3\
+\raw\#### <code>glm.<code>**root_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return square root of pi.
+
+\h3\root_three() function\h3\
+\raw\#### <code>glm.<code>**root_three**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return sqrt(3).
+
+\h3\root_two() function\h3\
+\raw\#### <code>glm.<code>**root_two**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return sqrt(2).
+
+\h3\root_two_pi() function\h3\
+\raw\#### <code>glm.<code>**root_two_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return sqrt(2 * pi).
+
+\h3\third() function\h3\
+\raw\#### <code>glm.<code>**third**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return 1 / 3.
+
+\h3\three_over_two_pi() function\h3\
+\raw\#### <code>glm.<code>**three_over_two_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return pi / 2 * 3.
+
+\h3\two_over_pi() function\h3\
+\raw\#### <code>glm.<code>**two_over_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return 2 / pi.
+
+\h3\two_over_root_pi() function\h3\
+\raw\#### <code>glm.<code>**two_over_root_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return 2 / sqrt(pi).
+
+\h3\two_pi() function\h3\
+\raw\#### <code>glm.<code>**two_pi**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return pi * 2.
+
+\h3\two_thirds() function\h3\
+\raw\#### <code>glm.<code>**two_thirds**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return 2 / 3.
+
+\h3\zero() function\h3\
+\raw\#### <code>glm.<code>**zero**() -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return 0.
+

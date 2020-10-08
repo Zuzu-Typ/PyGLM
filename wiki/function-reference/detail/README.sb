@@ -1,0 +1,93 @@
+\h1\Table of Contents\h1\
+\ul\
+\-\ \url func_common.md \func_common methods\ url\
+\--\ \url func_common.md#abs-function \\b\abs\b\ function \ url\
+\--\ \url func_common.md#ceil-function \\b\ceil\b\ function \ url\
+\--\ \url func_common.md#clamp-function \\b\clamp\b\ function \ url\
+\--\ \url func_common.md#floatBitsToInt-function \\b\floatBitsToInt\b\ function \ url\
+\--\ \url func_common.md#floatBitsToUint-function \\b\floatBitsToUint\b\ function \ url\
+\--\ \url func_common.md#floor-function \\b\floor\b\ function \ url\
+\--\ \url func_common.md#fma-function \\b\fma\b\ function \ url\
+\--\ \url func_common.md#fmax-function \\b\fmax\b\ function \ url\
+\--\ \url func_common.md#fmin-function \\b\fmin\b\ function \ url\
+\--\ \url func_common.md#fract-function \\b\fract\b\ function \ url\
+\--\ \url func_common.md#frexp-function \\b\frexp\b\ function \ url\
+\--\ \url func_common.md#intBitsToFloat-function \\b\intBitsToFloat\b\ function \ url\
+\--\ \url func_common.md#isinf-function \\b\isinf\b\ function \ url\
+\--\ \url func_common.md#isnan-function \\b\isnan\b\ function \ url\
+\--\ \url func_common.md#ldexp-function \\b\ldexp\b\ function \ url\
+\--\ \url func_common.md#max-function \\b\max\b\ function \ url\
+\--\ \url func_common.md#min-function \\b\min\b\ function \ url\
+\--\ \url func_common.md#mix-function \\b\mix\b\ function \ url\
+\--\ \url func_common.md#mod-function \\b\mod\b\ function \ url\
+\--\ \url func_common.md#modf-function \\b\modf\b\ function \ url\
+\--\ \url func_common.md#round-function \\b\round\b\ function \ url\
+\--\ \url func_common.md#roundEven-function \\b\roundEven\b\ function \ url\
+\--\ \url func_common.md#sign-function \\b\sign\b\ function \ url\
+\--\ \url func_common.md#smoothstep-function \\b\smoothstep\b\ function \ url\
+\--\ \url func_common.md#step-function \\b\step\b\ function \ url\
+\--\ \url func_common.md#trunc-function \\b\trunc\b\ function \ url\
+\--\ \url func_common.md#uintBitsToFloat-function \\b\uintBitsToFloat\b\ function \ url\
+\-\ \url func_exponential.md \func_exponential methods\ url\
+\--\ \url func_exponential.md#exp-function \\b\exp\b\ function \ url\
+\--\ \url func_exponential.md#exp2-function \\b\exp2\b\ function \ url\
+\--\ \url func_exponential.md#inversesqrt-function \\b\inversesqrt\b\ function \ url\
+\--\ \url func_exponential.md#log-function \\b\log\b\ function \ url\
+\--\ \url func_exponential.md#log2-function \\b\log2\b\ function \ url\
+\--\ \url func_exponential.md#pow-function \\b\pow\b\ function \ url\
+\--\ \url func_exponential.md#sqrt-function \\b\sqrt\b\ function \ url\
+\-\ \url func_geometric.md \func_geometric methods\ url\
+\--\ \url func_geometric.md#cross-function \\b\cross\b\ function \ url\
+\--\ \url func_geometric.md#distance-function \\b\distance\b\ function \ url\
+\--\ \url func_geometric.md#dot-function \\b\dot\b\ function \ url\
+\--\ \url func_geometric.md#faceforward-function \\b\faceforward\b\ function \ url\
+\--\ \url func_geometric.md#length-function \\b\length\b\ function \ url\
+\--\ \url func_geometric.md#normalize-function \\b\normalize\b\ function \ url\
+\--\ \url func_geometric.md#reflect-function \\b\reflect\b\ function \ url\
+\--\ \url func_geometric.md#refract-function \\b\refract\b\ function \ url\
+\-\ \url func_integer.md \func_integer methods\ url\
+\--\ \url func_integer.md#bitCount-function \\b\bitCount\b\ function \ url\
+\--\ \url func_integer.md#bitfieldExtract-function \\b\bitfieldExtract\b\ function \ url\
+\--\ \url func_integer.md#bitfieldInsert-function \\b\bitfieldInsert\b\ function \ url\
+\--\ \url func_integer.md#bitfieldReverse-function \\b\bitfieldReverse\b\ function \ url\
+\--\ \url func_integer.md#findLSB-function \\b\findLSB\b\ function \ url\
+\--\ \url func_integer.md#findMSB-function \\b\findMSB\b\ function \ url\
+\--\ \url func_integer.md#imulExtended-function \\b\imulExtended\b\ function \ url\
+\--\ \url func_integer.md#uaddCarry-function \\b\uaddCarry\b\ function \ url\
+\--\ \url func_integer.md#umulExtended-function \\b\umulExtended\b\ function \ url\
+\--\ \url func_integer.md#usubBorrow-function \\b\usubBorrow\b\ function \ url\
+\-\ \url func_matrix.md \func_matrix methods\ url\
+\--\ \url func_matrix.md#determinant-function \\b\determinant\b\ function \ url\
+\--\ \url func_matrix.md#inverse-function \\b\inverse\b\ function \ url\
+\--\ \url func_matrix.md#matrixCompMult-function \\b\matrixCompMult\b\ function \ url\
+\--\ \url func_matrix.md#outerProduct-function \\b\outerProduct\b\ function \ url\
+\--\ \url func_matrix.md#transpose-function \\b\transpose\b\ function \ url\
+\-\ \url func_packing.md \func_packing methods\ url\
+\--\ \url func_packing.md#packDouble2x32-function \\b\packDouble2x32\b\ function \ url\
+\--\ \url func_packing.md#packHalf2x16-function \\b\packHalf2x16\b\ function \ url\
+\--\ \url func_packing.md#packSnorm2x16-function \\b\packSnorm2x16\b\ function \ url\
+\--\ \url func_packing.md#packSnorm4x8-function \\b\packSnorm4x8\b\ function \ url\
+\--\ \url func_packing.md#packUnorm2x16-function \\b\packUnorm2x16\b\ function \ url\
+\--\ \url func_packing.md#packUnorm4x8-function \\b\packUnorm4x8\b\ function \ url\
+\--\ \url func_packing.md#unpackDouble2x32-function \\b\unpackDouble2x32\b\ function \ url\
+\--\ \url func_packing.md#unpackHalf2x16-function \\b\unpackHalf2x16\b\ function \ url\
+\--\ \url func_packing.md#unpackSnorm2x16-function \\b\unpackSnorm2x16\b\ function \ url\
+\--\ \url func_packing.md#unpackSnorm4x8-function \\b\unpackSnorm4x8\b\ function \ url\
+\--\ \url func_packing.md#unpackUnorm2x16-function \\b\unpackUnorm2x16\b\ function \ url\
+\--\ \url func_packing.md#unpackUnorm4x8-function \\b\unpackUnorm4x8\b\ function \ url\
+\-\ \url func_trigonometric.md \func_trigonometric methods\ url\
+\--\ \url func_trigonometric.md#acos-function \\b\acos\b\ function \ url\
+\--\ \url func_trigonometric.md#acosh-function \\b\acosh\b\ function \ url\
+\--\ \url func_trigonometric.md#asin-function \\b\asin\b\ function \ url\
+\--\ \url func_trigonometric.md#asinh-function \\b\asinh\b\ function \ url\
+\--\ \url func_trigonometric.md#atan-function \\b\atan\b\ function \ url\
+\--\ \url func_trigonometric.md#atanh-function \\b\atanh\b\ function \ url\
+\--\ \url func_trigonometric.md#cos-function \\b\cos\b\ function \ url\
+\--\ \url func_trigonometric.md#cosh-function \\b\cosh\b\ function \ url\
+\--\ \url func_trigonometric.md#degrees-function \\b\degrees\b\ function \ url\
+\--\ \url func_trigonometric.md#radians-function \\b\radians\b\ function \ url\
+\--\ \url func_trigonometric.md#sin-function \\b\sin\b\ function \ url\
+\--\ \url func_trigonometric.md#sinh-function \\b\sinh\b\ function \ url\
+\--\ \url func_trigonometric.md#tan-function \\b\tan\b\ function \ url\
+\--\ \url func_trigonometric.md#tanh-function \\b\tanh\b\ function \ url\
+\ul\

@@ -252,5 +252,17 @@ epsilonNotEqual_(PyObject*, PyObject* args) {
 	return NULL;
 }
 
-#define EPSILON_METHODS { "epsilonEqual", (PyCFunction)epsilonEqual_, METH_VARARGS, "epsilonEqual(x, y, epsilon) -> vecn or quat\nReturns the component-wise comparison of |x - y| < epsilon.\nTrue if this expression is satisfied." }, \
-{ "epsilonNotEqual", (PyCFunction)epsilonNotEqual_, METH_VARARGS, "epsilonNotEqual(x, y, epsilon) -> vecn or quat\nReturns the component-wise comparison of |x - y| >= epsilon.\nTrue if this expression is satisfied." }
+PyDoc_STRVAR(epsilonEqual_docstr,
+	"epsilonEqual(x: number, y: number, epsilon: number) -> bool\n"
+	"	Returns the component-wise comparison of |x - y| < epsilon.\n"
+	"epsilonEqual(x: vecN, y: vecN, epsilon: number) -> bvecN\n"
+	"	Returns the component-wise comparison of |x - y| < epsilon."
+);
+
+PyDoc_STRVAR(epsilonNotEqual_docstr,
+	"epsilonNotEqual(*args) -> not epsilonEqual(*args)"
+);
+
+#define EPSILON_METHODS \
+{ "epsilonEqual", (PyCFunction)epsilonEqual_, METH_VARARGS, epsilonEqual_docstr }, \
+{ "epsilonNotEqual", (PyCFunction)epsilonNotEqual_, METH_VARARGS, epsilonNotEqual_docstr }

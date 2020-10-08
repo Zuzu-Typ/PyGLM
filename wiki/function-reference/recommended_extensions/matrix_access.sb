@@ -1,0 +1,23 @@
+\c\This file was generated using a tool\c\
+\h1\matrix_access methods\h1\
+The following methods are all part of the \b\matrix_access methods\b\.
+Defines functions to access rows or columns of a matrix easily.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #column-function\\b\column\b\ function\url\
+\-\\url #row-function\\b\row\b\ function\url\
+\ul\
+\h3\column() function\h3\
+\raw\#### <code>glm.<code>**column**(**m**: *matNxM*, **index**: *int*) -\\> *vecM*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Get a specific column of a matrix.
+
+\raw\#### <code>glm.<code>**column**(**m**: *matNxM*, **index**: *int*, **x**: *vecM*) -\\> *matNxM*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Set a specific column to a matrix.
+
+\h3\row() function\h3\
+\raw\#### <code>glm.<code>**row**(**m**: *matNxM*, **index**: *int*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Get a specific row of a matrix.
+
+\raw\#### <code>glm.<code>**row**(**m**: *matNxM*, **index**: *int*, **x**: *vecN*) -\\> *matNxM*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Set a specific row to a matrix.
+

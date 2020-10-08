@@ -8,6 +8,12 @@
 
 #include "../function_generator_macros.h"
 
+PyDoc_STRVAR(convertLinearToSRGB_docstr,
+	"convertLinearToSRGB(ColorLinear: vecN) -> vecN\n"
+	"	Convert a linear color to sRGB color using a standard gamma correction.\n"
+	"convertLinearToSRGB(ColorLinear: vecN, Gamma: number) -> vecN\n"
+	"	Convert a linear color to sRGB color using a custom gamma correction."
+);
 static PyObject*
 convertLinearToSRGB_(PyObject*, PyObject* args) {
 	PyObject* arg1;
@@ -77,6 +83,12 @@ convertLinearToSRGB_(PyObject*, PyObject* args) {
 	return NULL;
 }
 
+PyDoc_STRVAR(convertSRGBToLinear_docstr,
+	"convertSRGBToLinear(ColorLinear: vecN) -> vecN\n"
+	"	Convert a sRGB color to linear color using a standard gamma correction.\n"
+	"convertSRGBToLinear(ColorLinear: vecN, Gamma: number) -> vecN\n"
+	"	Convert a sRGB color to linear color using a custom gamma correction."
+);
 static PyObject*
 convertSRGBToLinear_(PyObject*, PyObject* args) {
 	PyObject* arg1;
@@ -146,5 +158,6 @@ convertSRGBToLinear_(PyObject*, PyObject* args) {
 	return NULL;
 }
 
-#define COLOR_SPACE_METHODS { "convertLinearToSRGB", (PyCFunction)convertLinearToSRGB_, METH_VARARGS, "convertLinearToSRGB(ColorLinear[, Gamma]) -> vecn\nConvert a linear color to sRGB color using a standard / custom gamma correction." }, \
-{ "convertSRGBToLinear", (PyCFunction)convertSRGBToLinear_, METH_VARARGS, "convertSRGBToLinear(ColorLinear[, Gamma]) -> vecn\nConvert a sRGB color to linear color using a standard / custom gamma correction." }
+#define COLOR_SPACE_METHODS \
+{ "convertLinearToSRGB", (PyCFunction)convertLinearToSRGB_, METH_VARARGS, convertLinearToSRGB_docstr }, \
+{ "convertSRGBToLinear", (PyCFunction)convertSRGBToLinear_, METH_VARARGS, convertSRGBToLinear_docstr }

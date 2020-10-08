@@ -109,5 +109,17 @@ simplex_(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
-#define NOISE_METHODS { "perlin", (PyCFunction)perlin_, METH_VARARGS, "perlin(p[, rep]) -> float\nClassic or periodic perlin noise." }, \
-{ "simplex", (PyCFunction)simplex_, METH_O, "simplex(p) -> float\nSimplex noise." }
+PyDoc_STRVAR(perlin_docstr, 
+	"perlin(p: vecN) -> float\n"
+	"	Classic perlin noise.\n"
+	"perlin(p: vecN, rep: vecN) -> float\n"
+	"	Periodic perlin noise."
+);
+PyDoc_STRVAR(simplex_docstr,
+	"simplex(p: vecN) -> float\n"
+	"	Simplex noise."
+);
+
+#define NOISE_METHODS \
+{ "perlin", (PyCFunction)perlin_, METH_VARARGS, perlin_docstr }, \
+{ "simplex", (PyCFunction)simplex_, METH_O, simplex_docstr }

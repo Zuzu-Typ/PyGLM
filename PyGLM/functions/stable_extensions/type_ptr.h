@@ -8,6 +8,39 @@
 
 static PyObject*
 sizeof_(PyObject*, PyObject* arg) {
+	if (arg == ctypes_float) {
+		return PyLong_FromLong(sizeof(float));
+	}
+	if (arg == ctypes_double) {
+		return PyLong_FromLong(sizeof(double));
+	}
+	if (arg == ctypes_int64) {
+		return PyLong_FromLong(sizeof(int64));
+	}
+	if (arg == ctypes_int32) {
+		return PyLong_FromLong(sizeof(int32));
+	}
+	if (arg == ctypes_int16) {
+		return PyLong_FromLong(sizeof(int16));
+	}
+	if (arg == ctypes_int8) {
+		return PyLong_FromLong(sizeof(int8));
+	}
+	if (arg == ctypes_uint64) {
+		return PyLong_FromLong(sizeof(uint64));
+	}
+	if (arg == ctypes_uint32) {
+		return PyLong_FromLong(sizeof(uint32));
+	}
+	if (arg == ctypes_uint16) {
+		return PyLong_FromLong(sizeof(uint16));
+	}
+	if (arg == ctypes_uint8) {
+		return PyLong_FromLong(sizeof(uint8));
+	}
+	if (arg == ctypes_bool) {
+		return PyLong_FromLong(sizeof(bool));
+	}
 	if (PyGLM_Vec_Check(1, float, arg) || arg == (PyObject*)&hfvec1Type) {
 		return PyLong_FromLong(sizeof(glm::vec<1, float>));
 	}
@@ -766,21 +799,96 @@ make_quat_(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
-#define TYPE_PTR_METHODS { "value_ptr", (PyCFunction)value_ptr_, METH_O, "value_ptr(x) -> void* as int\nReturn the constant address to the data of the input parameter." }, \
-{ "sizeof", (PyCFunction)sizeof_, METH_O, "sizeof(x) -> int\nReturn the size of x in bytes." }, \
-{ "make_vec2", (PyCFunction)make_vec2_, METH_O, "make_vec2(ptr) -> vec2\nBuild a vector from a pointer." }, \
-{ "make_vec3", (PyCFunction)make_vec3_, METH_O, "make_vec3(ptr) -> vec3\nBuild a vector from a pointer." }, \
-{ "make_vec4", (PyCFunction)make_vec4_, METH_O, "make_vec4(ptr) -> vec4\nBuild a vector from a pointer." }, \
-{ "make_mat2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2(ptr) -> mat2x2\nBuild a matrix from a pointer." }, \
-{ "make_mat2x2", (PyCFunction)make_mat2x2_, METH_O, "make_mat2x2(ptr) -> mat2x2\nBuild a matrix from a pointer." }, \
-{ "make_mat2x3", (PyCFunction)make_mat2x3_, METH_O, "make_mat2x3(ptr) -> mat2x3\nBuild a matrix from a pointer." }, \
-{ "make_mat2x4", (PyCFunction)make_mat2x4_, METH_O, "make_mat2x4(ptr) -> mat2x4\nBuild a matrix from a pointer." }, \
-{ "make_mat3x2", (PyCFunction)make_mat3x2_, METH_O, "make_mat3x2(ptr) -> mat3x2\nBuild a matrix from a pointer." }, \
-{ "make_mat3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3(ptr) -> mat3x3\nBuild a matrix from a pointer." }, \
-{ "make_mat3x3", (PyCFunction)make_mat3x3_, METH_O, "make_mat3x3(ptr) -> mat3x3\nBuild a matrix from a pointer." }, \
-{ "make_mat3x4", (PyCFunction)make_mat3x4_, METH_O, "make_mat3x4(ptr) -> mat3x4\nBuild a matrix from a pointer." }, \
-{ "make_mat4x2", (PyCFunction)make_mat4x2_, METH_O, "make_mat4x2(ptr) -> mat4x2\nBuild a matrix from a pointer." }, \
-{ "make_mat4x3", (PyCFunction)make_mat4x3_, METH_O, "make_mat4x3(ptr) -> mat4x3\nBuild a matrix from a pointer." }, \
-{ "make_mat4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4(ptr) -> mat4x4\nBuild a matrix from a pointer." }, \
-{ "make_mat4x4", (PyCFunction)make_mat4x4_, METH_O, "make_mat4x4(ptr) -> mat4x4\nBuild a matrix from a pointer." }, \
-{ "make_quat", (PyCFunction)make_quat_, METH_O, "make_quat(ptr) -> quat\nBuild a quaternion from a pointer." }
+PyDoc_STRVAR(value_ptr_docstr,
+	"value_ptr(x) -> ctypes pointer\n"
+	"	Return the constant address to the data of the input parameter."
+);
+PyDoc_STRVAR(sizeof_docstr,
+	"sizeof(x: type) -> int\n"
+	"	Return the data size of x in bytes.\n"
+	"	E.g. sizeof(vec4) == sizeof(float32) * 4 = 4 * 4 = 16."
+);
+PyDoc_STRVAR(make_vec2_docstr,
+	"make_vec2(x: ctypes pointer) -> vec2\n"
+	"	Build a vector from a pointer."
+);
+PyDoc_STRVAR(make_vec3_docstr,
+	"make_vec3(x: ctypes pointer) -> vec3\n"
+	"	Build a vector from a pointer."
+);
+PyDoc_STRVAR(make_vec4_docstr,
+	"make_vec4(x: ctypes pointer) -> vec4\n"
+	"	Build a vector from a pointer."
+);
+PyDoc_STRVAR(make_mat2_docstr,
+	"make_mat2(x: ctypes pointer) -> mat2\n"
+	"	See make_mat2x2()."
+);
+PyDoc_STRVAR(make_mat3_docstr,
+	"make_mat3(x: ctypes pointer) -> mat3\n"
+	"	See make_mat3x3()."
+);
+PyDoc_STRVAR(make_mat4_docstr,
+	"make_mat4(x: ctypes pointer) -> mat4\n"
+	"	See make_mat4x4()."
+);
+PyDoc_STRVAR(make_mat2x2_docstr,
+	"make_mat2x2(x: ctypes pointer) -> mat2\n"
+	"	Build a matrix from a pointer."
+);
+PyDoc_STRVAR(make_mat2x3_docstr,
+	"make_mat2x3(x: ctypes pointer) -> mat2x3\n"
+	"	Build a matrix from a pointer."
+);
+PyDoc_STRVAR(make_mat2x4_docstr,
+	"make_mat2x4(x: ctypes pointer) -> mat2x4\n"
+	"	Build a matrix from a pointer."
+);
+PyDoc_STRVAR(make_mat3x2_docstr,
+	"make_mat3x2(x: ctypes pointer) -> mat3x2\n"
+	"	Build a matrix from a pointer."
+);
+PyDoc_STRVAR(make_mat3x3_docstr,
+	"make_mat3x3(x: ctypes pointer) -> mat3\n"
+	"	Build a matrix from a pointer."
+);
+PyDoc_STRVAR(make_mat3x4_docstr,
+	"make_mat3x4(x: ctypes pointer) -> mat3x4\n"
+	"	Build a matrix from a pointer."
+);
+PyDoc_STRVAR(make_mat4x2_docstr,
+	"make_mat4x2(x: ctypes pointer) -> mat4x2\n"
+	"	Build a matrix from a pointer."
+);
+PyDoc_STRVAR(make_mat4x3_docstr,
+	"make_mat4x3(x: ctypes pointer) -> mat4\n"
+	"	Build a matrix from a pointer."
+);
+PyDoc_STRVAR(make_mat4x4_docstr,
+	"make_mat4x4(x: ctypes pointer) -> mat4x4\n"
+	"	Build a matrix from a pointer."
+);
+PyDoc_STRVAR(make_quat_docstr,
+	"make_quat(x: ctypes pointer) -> quat\n"
+	"	Build a quaternion from a pointer."
+);
+
+#define TYPE_PTR_METHODS \
+{ "value_ptr", (PyCFunction)value_ptr_, METH_O, value_ptr_docstr }, \
+{ "sizeof", (PyCFunction)sizeof_, METH_O, sizeof_docstr }, \
+{ "make_vec2", (PyCFunction)make_vec2_, METH_O, make_vec2_docstr }, \
+{ "make_vec3", (PyCFunction)make_vec3_, METH_O, make_vec3_docstr }, \
+{ "make_vec4", (PyCFunction)make_vec4_, METH_O, make_vec4_docstr }, \
+{ "make_mat2", (PyCFunction)make_mat2x2_, METH_O, make_mat2_docstr }, \
+{ "make_mat2x2", (PyCFunction)make_mat2x2_, METH_O, make_mat2x2_docstr }, \
+{ "make_mat2x3", (PyCFunction)make_mat2x3_, METH_O, make_mat2x3_docstr }, \
+{ "make_mat2x4", (PyCFunction)make_mat2x4_, METH_O, make_mat2x4_docstr }, \
+{ "make_mat3x2", (PyCFunction)make_mat3x2_, METH_O, make_mat3x2_docstr }, \
+{ "make_mat3", (PyCFunction)make_mat3x3_, METH_O, make_mat3_docstr }, \
+{ "make_mat3x3", (PyCFunction)make_mat3x3_, METH_O, make_mat3x3_docstr }, \
+{ "make_mat3x4", (PyCFunction)make_mat3x4_, METH_O, make_mat3x4_docstr }, \
+{ "make_mat4x2", (PyCFunction)make_mat4x2_, METH_O, make_mat4x2_docstr }, \
+{ "make_mat4x3", (PyCFunction)make_mat4x3_, METH_O, make_mat4x3_docstr }, \
+{ "make_mat4", (PyCFunction)make_mat4x4_, METH_O, make_mat4_docstr }, \
+{ "make_mat4x4", (PyCFunction)make_mat4x4_, METH_O, make_mat4x4_docstr }, \
+{ "make_quat", (PyCFunction)make_quat_, METH_O, make_quat_docstr }

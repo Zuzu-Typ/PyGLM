@@ -12,7 +12,15 @@
 
 #include "matrix_transform.h"
 
+#include "matrix_projection.h"
+
+#include "matrix_clip_space.h"
+
 #include "quaternion.h"
+
+#include "quaternion_common.h"
+
+#include "quaternion_trigonometric.h"
 
 #include "matrix_access.h"
 

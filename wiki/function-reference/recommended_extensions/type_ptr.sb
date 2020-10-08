@@ -1,0 +1,98 @@
+\c\This file was generated using a tool\c\
+\h1\type_ptr methods\h1\
+The following methods are all part of the \b\type_ptr methods\b\.
+Handles the interaction between pointers and vector, matrix types. This extension defines an overloaded function, glm.value_ptr. It returns a pointer to the memory layout of the object. Matrix types store their values in column-major order. This is useful for uploading data to matrices or copying data to buffer objects.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #make_mat2-function\\b\make_mat2\b\ function\url\
+\-\\url #make_mat2x2-function\\b\make_mat2x2\b\ function\url\
+\-\\url #make_mat2x3-function\\b\make_mat2x3\b\ function\url\
+\-\\url #make_mat2x4-function\\b\make_mat2x4\b\ function\url\
+\-\\url #make_mat3-function\\b\make_mat3\b\ function\url\
+\-\\url #make_mat3x2-function\\b\make_mat3x2\b\ function\url\
+\-\\url #make_mat3x3-function\\b\make_mat3x3\b\ function\url\
+\-\\url #make_mat3x4-function\\b\make_mat3x4\b\ function\url\
+\-\\url #make_mat4-function\\b\make_mat4\b\ function\url\
+\-\\url #make_mat4x2-function\\b\make_mat4x2\b\ function\url\
+\-\\url #make_mat4x3-function\\b\make_mat4x3\b\ function\url\
+\-\\url #make_mat4x4-function\\b\make_mat4x4\b\ function\url\
+\-\\url #make_quat-function\\b\make_quat\b\ function\url\
+\-\\url #make_vec2-function\\b\make_vec2\b\ function\url\
+\-\\url #make_vec3-function\\b\make_vec3\b\ function\url\
+\-\\url #make_vec4-function\\b\make_vec4\b\ function\url\
+\-\\url #sizeof-function\\b\sizeof\b\ function\url\
+\-\\url #value_ptr-function\\b\value_ptr\b\ function\url\
+\ul\
+\h3\make_mat2() function\h3\
+\raw\#### <code>glm.<code>**make_mat2**(**x**: *ctypes pointer*) -\\> *mat2*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\See make_mat2x2().
+
+\h3\make_mat2x2() function\h3\
+\raw\#### <code>glm.<code>**make_mat2x2**(**x**: *ctypes pointer*) -\\> *mat2*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a matrix from a pointer.
+
+\h3\make_mat2x3() function\h3\
+\raw\#### <code>glm.<code>**make_mat2x3**(**x**: *ctypes pointer*) -\\> *mat2x3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a matrix from a pointer.
+
+\h3\make_mat2x4() function\h3\
+\raw\#### <code>glm.<code>**make_mat2x4**(**x**: *ctypes pointer*) -\\> *mat2x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a matrix from a pointer.
+
+\h3\make_mat3() function\h3\
+\raw\#### <code>glm.<code>**make_mat3**(**x**: *ctypes pointer*) -\\> *mat3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\See make_mat3x3().
+
+\h3\make_mat3x2() function\h3\
+\raw\#### <code>glm.<code>**make_mat3x2**(**x**: *ctypes pointer*) -\\> *mat3x2*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a matrix from a pointer.
+
+\h3\make_mat3x3() function\h3\
+\raw\#### <code>glm.<code>**make_mat3x3**(**x**: *ctypes pointer*) -\\> *mat3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a matrix from a pointer.
+
+\h3\make_mat3x4() function\h3\
+\raw\#### <code>glm.<code>**make_mat3x4**(**x**: *ctypes pointer*) -\\> *mat3x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a matrix from a pointer.
+
+\h3\make_mat4() function\h3\
+\raw\#### <code>glm.<code>**make_mat4**(**x**: *ctypes pointer*) -\\> *mat4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\See make_mat4x4().
+
+\h3\make_mat4x2() function\h3\
+\raw\#### <code>glm.<code>**make_mat4x2**(**x**: *ctypes pointer*) -\\> *mat4x2*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a matrix from a pointer.
+
+\h3\make_mat4x3() function\h3\
+\raw\#### <code>glm.<code>**make_mat4x3**(**x**: *ctypes pointer*) -\\> *mat4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a matrix from a pointer.
+
+\h3\make_mat4x4() function\h3\
+\raw\#### <code>glm.<code>**make_mat4x4**(**x**: *ctypes pointer*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a matrix from a pointer.
+
+\h3\make_quat() function\h3\
+\raw\#### <code>glm.<code>**make_quat**(**x**: *ctypes pointer*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a quaternion from a pointer.
+
+\h3\make_vec2() function\h3\
+\raw\#### <code>glm.<code>**make_vec2**(**x**: *ctypes pointer*) -\\> *vec2*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a vector from a pointer.
+
+\h3\make_vec3() function\h3\
+\raw\#### <code>glm.<code>**make_vec3**(**x**: *ctypes pointer*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a vector from a pointer.
+
+\h3\make_vec4() function\h3\
+\raw\#### <code>glm.<code>**make_vec4**(**x**: *ctypes pointer*) -\\> *vec4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a vector from a pointer.
+
+\h3\sizeof() function\h3\
+\raw\#### <code>glm.<code>**sizeof**(**x**: *type*) -\\> *int*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the data size of x in bytes.
+\raw\&emsp;&emsp;\raw\E.g. sizeof(vec4) == sizeof(float32) * 4 = 4 * 4 = 16.
+
+\h3\value_ptr() function\h3\
+\raw\#### <code>glm.<code>**value_ptr**(**x**) -\\> *ctypes pointer*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the constant address to the data of the input parameter.
+

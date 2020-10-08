@@ -1,0 +1,59 @@
+\c\This file was generated using a tool\c\
+\h1\round methods\h1\
+The following methods are all part of the \b\round methods\b\.
+Rounding value to specific boundings.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #ceilmultiple-function\\b\ceilMultiple\b\ function\url\
+\-\\url #ceilpoweroftwo-function\\b\ceilPowerOfTwo\b\ function\url\
+\-\\url #floormultiple-function\\b\floorMultiple\b\ function\url\
+\-\\url #floorpoweroftwo-function\\b\floorPowerOfTwo\b\ function\url\
+\-\\url #roundmultiple-function\\b\roundMultiple\b\ function\url\
+\-\\url #roundpoweroftwo-function\\b\roundPowerOfTwo\b\ function\url\
+\ul\
+\h3\ceilMultiple() function\h3\
+\raw\#### <code>glm.<code>**ceilMultiple**(**v**: *number*, **Multiple**: *number*) -\\> *number*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Higher multiple number of Source.
+
+\raw\#### <code>glm.<code>**ceilMultiple**(**v**: *vecN*, **Multiple**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Higher multiple number of Source.
+
+\h3\ceilPowerOfTwo() function\h3\
+\raw\#### <code>glm.<code>**ceilPowerOfTwo**(**v**: *number*) -\\> *number*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the power of two number which value is just higher the input value, round up to a
+\raw\&emsp;&emsp;\raw\power of two.
+
+\raw\#### <code>glm.<code>**ceilPowerOfTwo**(**v**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the power of two number which value is just higher the input value, round up to a
+\raw\&emsp;&emsp;\raw\power of two.
+
+\h3\floorMultiple() function\h3\
+\raw\#### <code>glm.<code>**floorMultiple**(**v**: *number*, **Multiple**: *number*) -\\> *number*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Lower multiple number of Source.
+
+\raw\#### <code>glm.<code>**floorMultiple**(**v**: *vecN*, **Multiple**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Lower multiple number of Source.
+
+\h3\floorPowerOfTwo() function\h3\
+\raw\#### <code>glm.<code>**floorPowerOfTwo**(**v**: *number*) -\\> *number*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the power of two number which value is just lower the input value, round down to a
+\raw\&emsp;&emsp;\raw\power of two.
+
+\raw\#### <code>glm.<code>**floorPowerOfTwo**(**v**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the power of two number which value is just lower the input value, round down to a
+\raw\&emsp;&emsp;\raw\power of two.
+
+\h3\roundMultiple() function\h3\
+\raw\#### <code>glm.<code>**roundMultiple**(**v**: *number*, **Multiple**: *number*) -\\> *number*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Lower multiple number of Source.
+
+\raw\#### <code>glm.<code>**roundMultiple**(**v**: *vecN*, **Multiple**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Lower multiple number of Source.
+
+\h3\roundPowerOfTwo() function\h3\
+\raw\#### <code>glm.<code>**roundPowerOfTwo**(**v**: *number*) -\\> *number*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the power of two number which value is the closet to the input value.
+
+\raw\#### <code>glm.<code>**roundPowerOfTwo**(**v**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Return the power of two number which value is the closet to the input value.
+

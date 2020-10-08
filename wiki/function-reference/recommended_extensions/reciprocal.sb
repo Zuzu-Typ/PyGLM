@@ -1,0 +1,67 @@
+\c\This file was generated using a tool\c\
+\h1\reciprocal methods\h1\
+The following methods are all part of the \b\reciprocal methods\b\.
+Define secant, cosecant and cotangent functions.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #acot-function\\b\acot\b\ function\url\
+\-\\url #acoth-function\\b\acoth\b\ function\url\
+\-\\url #acsc-function\\b\acsc\b\ function\url\
+\-\\url #acsch-function\\b\acsch\b\ function\url\
+\-\\url #asec-function\\b\asec\b\ function\url\
+\-\\url #asech-function\\b\asech\b\ function\url\
+\-\\url #cot-function\\b\cot\b\ function\url\
+\-\\url #coth-function\\b\coth\b\ function\url\
+\-\\url #csc-function\\b\csc\b\ function\url\
+\-\\url #csch-function\\b\csch\b\ function\url\
+\-\\url #sec-function\\b\sec\b\ function\url\
+\-\\url #sech-function\\b\sech\b\ function\url\
+\ul\
+\h3\acot() function\h3\
+\raw\#### <code>glm.<code>**acot**(**x**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Inverse cotangent function.
+
+\h3\acoth() function\h3\
+\raw\#### <code>glm.<code>**acoth**(**x**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Inverse cotangent hyperbolic function.
+
+\h3\acsc() function\h3\
+\raw\#### <code>glm.<code>**acsc**(**x**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Inverse cosecant function.
+
+\h3\acsch() function\h3\
+\raw\#### <code>glm.<code>**acsch**(**x**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Inverse cosecant hyperbolic function.
+
+\h3\asec() function\h3\
+\raw\#### <code>glm.<code>**asec**(**x**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Inverse secant function.
+
+\h3\asech() function\h3\
+\raw\#### <code>glm.<code>**asech**(**x**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Inverse secant hyperbolic function.
+
+\h3\cot() function\h3\
+\raw\#### <code>glm.<code>**cot**(**angle**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Cotangent function. adjacent / opposite or 1 / tan(x).
+
+\h3\coth() function\h3\
+\raw\#### <code>glm.<code>**coth**(**angle**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Cotangent hyperbolic function.
+
+\h3\csc() function\h3\
+\raw\#### <code>glm.<code>**csc**(**angle**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Cosecant function. hypotenuse / opposite or 1 / sin(x).
+
+\h3\csch() function\h3\
+\raw\#### <code>glm.<code>**csch**(**angle**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Cosecant hyperbolic function.
+
+\h3\sec() function\h3\
+\raw\#### <code>glm.<code>**sec**(**angle**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Secant function. hypotenuse / adjacent or 1 / cos(x).
+
+\h3\sech() function\h3\
+\raw\#### <code>glm.<code>**sech**(**angle**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Secant hyperbolic function.
+

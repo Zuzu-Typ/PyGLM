@@ -7,6 +7,11 @@
 
 int PyGLM_SHOW_WARNINGS = PyGLM_FREXP_WARNING | PyGLM_FLOAT_ZERO_DIVISION_WARNING;
 
+PyDoc_STRVAR(silence_docstr,
+	"silence(ID: int) -> None\n"
+	"	Silence a PyGLM warning (or all using 0)."
+);
+
 static PyObject*
 silence(PyObject*, PyObject* arg) {
 	if (PyLong_Check(arg)) {

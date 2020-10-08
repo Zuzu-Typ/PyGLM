@@ -1,0 +1,19 @@
+\c\This file was generated using a tool\c\
+\h1\epsilon methods\h1\
+The following methods are all part of the \b\epsilon methods\b\.
+Comparison functions for a user defined epsilon values.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #epsilonequal-function\\b\epsilonEqual\b\ function\url\
+\-\\url #epsilonnotequal-function\\b\epsilonNotEqual\b\ function\url\
+\ul\
+\h3\epsilonEqual() function\h3\
+\raw\#### <code>glm.<code>**epsilonEqual**(**x**: *number*, **y**: *number*, **epsilon**: *number*) -\\> *bool*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of |x - y| < epsilon.
+
+\raw\#### <code>glm.<code>**epsilonEqual**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *number*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of |x - y| < epsilon.
+
+\h3\epsilonNotEqual() function\h3\
+\raw\#### <code>glm.<code>**epsilonNotEqual**(***args**) -\\> *not epsilonEqual(*args)*</code></code>\raw\
+

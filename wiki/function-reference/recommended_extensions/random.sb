@@ -1,0 +1,47 @@
+\c\This file was generated using a tool\c\
+\h1\random methods\h1\
+The following methods are all part of the \b\random methods\b\.
+Generate random number from various distribution methods.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #ballrand-function\\b\ballRand\b\ function\url\
+\-\\url #circularrand-function\\b\circularRand\b\ function\url\
+\-\\url #diskrand-function\\b\diskRand\b\ function\url\
+\-\\url #gaussrand-function\\b\gaussRand\b\ function\url\
+\-\\url #linearrand-function\\b\linearRand\b\ function\url\
+\-\\url #sphericalrand-function\\b\sphericalRand\b\ function\url\
+\ul\
+\h3\ballRand() function\h3\
+\raw\#### <code>glm.<code>**ballRand**(**Radius**: *float*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Generate a random 3D vector which coordinates are regulary distributed within the volume of
+\raw\&emsp;&emsp;\raw\a ball of a given radius.
+
+\h3\circularRand() function\h3\
+\raw\#### <code>glm.<code>**circularRand**(**Radius**: *float*) -\\> *vec2*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Generate a random 2D vector which coordinates are regulary distributed on a circle of a
+\raw\&emsp;&emsp;\raw\given radius.
+
+\h3\diskRand() function\h3\
+\raw\#### <code>glm.<code>**diskRand**(**Radius**: *float*) -\\> *vec2*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Generate a random 2D vector which coordinates are regulary distributed within the area of
+\raw\&emsp;&emsp;\raw\a disk of a given radius.
+
+\h3\gaussRand() function\h3\
+\raw\#### <code>glm.<code>**gaussRand**(**Mean**: *float*, **Deviation**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Generate random numbers in the interval [Min, Max], according a gaussian distribution.
+
+\raw\#### <code>glm.<code>**gaussRand**(**Mean**: *vecN*, **Deviation**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Generate random numbers in the interval [Min, Max], according a gaussian distribution.
+
+\h3\linearRand() function\h3\
+\raw\#### <code>glm.<code>**linearRand**(**Min**: *float*, **Max**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Generate random numbers in the interval [Min, Max], according a linear distribution.
+
+\raw\#### <code>glm.<code>**linearRand**(**Min**: *vecN*, **Max**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Generate random numbers in the interval [Min, Max], according a linear distribution.
+
+\h3\sphericalRand() function\h3\
+\raw\#### <code>glm.<code>**sphericalRand**(**Radius**: *float*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Generate a random 3D vector which coordinates are regulary distributed on a sphere of a
+\raw\&emsp;&emsp;\raw\given radius.
+

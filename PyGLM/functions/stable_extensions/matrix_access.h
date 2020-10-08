@@ -3108,5 +3108,19 @@ column_(PyObject*, PyObject* args) {
 	return NULL;
 }
 
-#define MATRIX_ACCESS_METHODS { "row", (PyCFunction)row_, METH_VARARGS, "row(m, index[, x]) -> vecn or matnxn\nGet a specific row of a matrix or set a specific row to a matrix." }, \
-{ "column", (PyCFunction)column_, METH_VARARGS, "column(m, index[, x]) -> vecn or matnxn\nGet a specific column of a matrix or set a specific column to a matrix." }
+PyDoc_STRVAR(row_docstr,
+	"row(m: matNxM, index: int) -> vecN\n"
+	"	Get a specific row of a matrix.\n"
+	"row(m: matNxM, index: int, x: vecN) -> matNxM\n"
+	"	Set a specific row to a matrix."
+);
+PyDoc_STRVAR(column_docstr,
+	"column(m: matNxM, index: int) -> vecM\n"
+	"	Get a specific column of a matrix.\n"
+	"column(m: matNxM, index: int, x: vecM) -> matNxM\n"
+	"	Set a specific column to a matrix."
+);
+
+#define MATRIX_ACCESS_METHODS \
+{ "row", (PyCFunction)row_, METH_VARARGS, row_docstr }, \
+{ "column", (PyCFunction)column_, METH_VARARGS, column_docstr }

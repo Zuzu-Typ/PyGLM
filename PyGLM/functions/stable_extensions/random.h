@@ -67,9 +67,43 @@ ballRand_(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
-#define RANDOM_METHODS { "linearRand", (PyCFunction)linearRand_, METH_VARARGS, "linearRand(Min, Max) -> float or vecn\nGenerate random numbers in the interval [Min, Max], according a linear distribution" }, \
-{ "gaussRand", (PyCFunction)gaussRand_, METH_VARARGS, "gaussRand(Mean, Deviation) -> float\nGenerate random numbers in the interval [Min, Max], according a gaussian distribution" }, \
-{ "circularRand", (PyCFunction)circularRand_, METH_O, "circularRand(Radius) -> vec2\nGenerate a random 2D vector which coordinates are regulary distributed on a circle of a given radius" }, \
-{ "sphericalRand", (PyCFunction)sphericalRand_, METH_O, "sphericalRand(Radius) -> vec3\nGenerate a random 3D vector which coordinates are regulary distributed on a sphere of a given radius" }, \
-{ "diskRand", (PyCFunction)diskRand_, METH_O, "diskRand(Radius) -> vec2\nGenerate a random 2D vector which coordinates are regulary distributed within the area of a disk of a given radius" }, \
-{ "ballRand", (PyCFunction)ballRand_, METH_O, "ballRand(Radius) -> vec3\nGenerate a random 3D vector which coordinates are regulary distributed within the area of a ball of a given radius" }
+PyDoc_STRVAR(ballRand_docstr,
+	"ballRand(Radius: float) -> vec3\n"
+	"	Generate a random 3D vector which coordinates are regulary distributed within the volume of\n"
+	"	a ball of a given radius."
+);
+PyDoc_STRVAR(circularRand_docstr,
+	"circularRand(Radius: float) -> vec2\n"
+	"	Generate a random 2D vector which coordinates are regulary distributed on a circle of a\n"
+	"	given radius."
+);
+PyDoc_STRVAR(diskRand_docstr,
+	"diskRand(Radius: float) -> vec2\n"
+	"	Generate a random 2D vector which coordinates are regulary distributed within the area of\n"
+	"	a disk of a given radius."
+);
+PyDoc_STRVAR(gaussRand_docstr,
+	"gaussRand(Mean: float, Deviation: float) -> float\n"
+	"	Generate random numbers in the interval [Min, Max], according a gaussian distribution.\n"
+	"gaussRand(Mean: vecN, Deviation: vecN) -> vecN\n"
+	"	Generate random numbers in the interval [Min, Max], according a gaussian distribution."
+);
+PyDoc_STRVAR(linearRand_docstr,
+	"linearRand(Min: float, Max: float) -> float\n"
+	"	Generate random numbers in the interval [Min, Max], according a linear distribution.\n"
+	"linearRand(Min: vecN, Max: vecN) -> vecN\n"
+	"	Generate random numbers in the interval [Min, Max], according a linear distribution."
+);
+PyDoc_STRVAR(sphericalRand_docstr,
+	"sphericalRand(Radius: float) -> vec3\n"
+	"	Generate a random 3D vector which coordinates are regulary distributed on a sphere of a\n"
+	"	given radius."
+);
+
+#define RANDOM_METHODS \
+{ "linearRand", (PyCFunction)linearRand_, METH_VARARGS, linearRand_docstr }, \
+{ "gaussRand", (PyCFunction)gaussRand_, METH_VARARGS, gaussRand_docstr }, \
+{ "circularRand", (PyCFunction)circularRand_, METH_O, circularRand_docstr }, \
+{ "sphericalRand", (PyCFunction)sphericalRand_, METH_O, sphericalRand_docstr }, \
+{ "diskRand", (PyCFunction)diskRand_, METH_O, diskRand_docstr }, \
+{ "ballRand", (PyCFunction)ballRand_, METH_O, ballRand_docstr }

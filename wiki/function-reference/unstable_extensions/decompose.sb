@@ -1,0 +1,13 @@
+\c\This file was generated using a tool\c\
+\h1\decompose methods\h1\
+The following methods are all part of the \b\decompose methods\b\.
+Decomposes a model matrix to translations, rotation and scale components.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #decompose-function\\b\decompose\b\ function\url\
+\ul\
+\h3\decompose() function\h3\
+\raw\#### <code>glm.<code>**decompose**(**modelMatrix**: *mat4*, **scale**: *vec3*, **orientation**: *quat*, **translation**: *vec3*, **skew**: *vec3*, **perspective**: *vec4*) -\\> *bool*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Decomposes a model matrix to translations, rotation and scale components.
+\raw\&emsp;&emsp;\raw\Returns true on success.
+

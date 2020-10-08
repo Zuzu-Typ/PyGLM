@@ -1,0 +1,183 @@
+\h1\Table of Contents\h1\
+\ul\
+\-\ \url color_space.md \color_space methods\ url\
+\--\ \url color_space.md#convertLinearToSRGB-function \\b\convertLinearToSRGB\b\ function \ url\
+\--\ \url color_space.md#convertSRGBToLinear-function \\b\convertSRGBToLinear\b\ function \ url\
+\-\ \url constants.md \constants methods\ url\
+\--\ \url constants.md#e-function \\b\e\b\ function \ url\
+\--\ \url constants.md#epsilon-function \\b\epsilon\b\ function \ url\
+\--\ \url constants.md#euler-function \\b\euler\b\ function \ url\
+\--\ \url constants.md#four_over_pi-function \\b\four_over_pi\b\ function \ url\
+\--\ \url constants.md#golden_ratio-function \\b\golden_ratio\b\ function \ url\
+\--\ \url constants.md#half_pi-function \\b\half_pi\b\ function \ url\
+\--\ \url constants.md#ln_ln_two-function \\b\ln_ln_two\b\ function \ url\
+\--\ \url constants.md#ln_ten-function \\b\ln_ten\b\ function \ url\
+\--\ \url constants.md#ln_two-function \\b\ln_two\b\ function \ url\
+\--\ \url constants.md#one-function \\b\one\b\ function \ url\
+\--\ \url constants.md#one_over_pi-function \\b\one_over_pi\b\ function \ url\
+\--\ \url constants.md#one_over_root_two-function \\b\one_over_root_two\b\ function \ url\
+\--\ \url constants.md#one_over_two_pi-function \\b\one_over_two_pi\b\ function \ url\
+\--\ \url constants.md#pi-function \\b\pi\b\ function \ url\
+\--\ \url constants.md#quarter_pi-function \\b\quarter_pi\b\ function \ url\
+\--\ \url constants.md#root_five-function \\b\root_five\b\ function \ url\
+\--\ \url constants.md#root_half_pi-function \\b\root_half_pi\b\ function \ url\
+\--\ \url constants.md#root_ln_four-function \\b\root_ln_four\b\ function \ url\
+\--\ \url constants.md#root_pi-function \\b\root_pi\b\ function \ url\
+\--\ \url constants.md#root_three-function \\b\root_three\b\ function \ url\
+\--\ \url constants.md#root_two-function \\b\root_two\b\ function \ url\
+\--\ \url constants.md#root_two_pi-function \\b\root_two_pi\b\ function \ url\
+\--\ \url constants.md#third-function \\b\third\b\ function \ url\
+\--\ \url constants.md#three_over_two_pi-function \\b\three_over_two_pi\b\ function \ url\
+\--\ \url constants.md#two_over_pi-function \\b\two_over_pi\b\ function \ url\
+\--\ \url constants.md#two_over_root_pi-function \\b\two_over_root_pi\b\ function \ url\
+\--\ \url constants.md#two_pi-function \\b\two_pi\b\ function \ url\
+\--\ \url constants.md#two_thirds-function \\b\two_thirds\b\ function \ url\
+\--\ \url constants.md#zero-function \\b\zero\b\ function \ url\
+\-\ \url epsilon.md \epsilon methods\ url\
+\--\ \url epsilon.md#epsilonEqual-function \\b\epsilonEqual\b\ function \ url\
+\--\ \url epsilon.md#epsilonNotEqual-function \\b\epsilonNotEqual\b\ function \ url\
+\-\ \url integer.md \integer methods\ url\
+\--\ \url integer.md#iround-function \\b\iround\b\ function \ url\
+\--\ \url integer.md#uround-function \\b\uround\b\ function \ url\
+\-\ \url matrix_access.md \matrix_access methods\ url\
+\--\ \url matrix_access.md#column-function \\b\column\b\ function \ url\
+\--\ \url matrix_access.md#row-function \\b\row\b\ function \ url\
+\-\ \url matrix_inverse.md \matrix_inverse methods\ url\
+\--\ \url matrix_inverse.md#affineInverse-function \\b\affineInverse\b\ function \ url\
+\--\ \url matrix_inverse.md#inverseTranspose-function \\b\inverseTranspose\b\ function \ url\
+\-\ \url noise.md \noise methods\ url\
+\--\ \url noise.md#perlin-function \\b\perlin\b\ function \ url\
+\--\ \url noise.md#simplex-function \\b\simplex\b\ function \ url\
+\-\ \url packing.md \packing methods\ url\
+\--\ \url packing.md#packF2x11_1x10-function \\b\packF2x11_1x10\b\ function \ url\
+\--\ \url packing.md#packF3x9_E1x5-function \\b\packF3x9_E1x5\b\ function \ url\
+\--\ \url packing.md#packHalf-function \\b\packHalf\b\ function \ url\
+\--\ \url packing.md#packHalf1x16-function \\b\packHalf1x16\b\ function \ url\
+\--\ \url packing.md#packHalf4x16-function \\b\packHalf4x16\b\ function \ url\
+\--\ \url packing.md#packI3x10_1x2-function \\b\packI3x10_1x2\b\ function \ url\
+\--\ \url packing.md#packInt2x16-function \\b\packInt2x16\b\ function \ url\
+\--\ \url packing.md#packInt2x32-function \\b\packInt2x32\b\ function \ url\
+\--\ \url packing.md#packInt2x8-function \\b\packInt2x8\b\ function \ url\
+\--\ \url packing.md#packInt4x16-function \\b\packInt4x16\b\ function \ url\
+\--\ \url packing.md#packInt4x8-function \\b\packInt4x8\b\ function \ url\
+\--\ \url packing.md#packRGBM-function \\b\packRGBM\b\ function \ url\
+\--\ \url packing.md#packSnorm-function \\b\packSnorm\b\ function \ url\
+\--\ \url packing.md#packSnorm1x16-function \\b\packSnorm1x16\b\ function \ url\
+\--\ \url packing.md#packSnorm1x8-function \\b\packSnorm1x8\b\ function \ url\
+\--\ \url packing.md#packSnorm2x8-function \\b\packSnorm2x8\b\ function \ url\
+\--\ \url packing.md#packSnorm3x10_1x2-function \\b\packSnorm3x10_1x2\b\ function \ url\
+\--\ \url packing.md#packSnorm4x16-function \\b\packSnorm4x16\b\ function \ url\
+\--\ \url packing.md#packU3x10_1x2-function \\b\packU3x10_1x2\b\ function \ url\
+\--\ \url packing.md#packUint2x16-function \\b\packUint2x16\b\ function \ url\
+\--\ \url packing.md#packUint2x32-function \\b\packUint2x32\b\ function \ url\
+\--\ \url packing.md#packUint2x8-function \\b\packUint2x8\b\ function \ url\
+\--\ \url packing.md#packUint4x16-function \\b\packUint4x16\b\ function \ url\
+\--\ \url packing.md#packUint4x8-function \\b\packUint4x8\b\ function \ url\
+\--\ \url packing.md#packUnorm-function \\b\packUnorm\b\ function \ url\
+\--\ \url packing.md#packUnorm1x16-function \\b\packUnorm1x16\b\ function \ url\
+\--\ \url packing.md#packUnorm1x5_1x6_1x5-function \\b\packUnorm1x5_1x6_1x5\b\ function \ url\
+\--\ \url packing.md#packUnorm1x8-function \\b\packUnorm1x8\b\ function \ url\
+\--\ \url packing.md#packUnorm2x3_1x2-function \\b\packUnorm2x3_1x2\b\ function \ url\
+\--\ \url packing.md#packUnorm2x4-function \\b\packUnorm2x4\b\ function \ url\
+\--\ \url packing.md#packUnorm2x8-function \\b\packUnorm2x8\b\ function \ url\
+\--\ \url packing.md#packUnorm3x10_1x2-function \\b\packUnorm3x10_1x2\b\ function \ url\
+\--\ \url packing.md#packUnorm3x5_1x1-function \\b\packUnorm3x5_1x1\b\ function \ url\
+\--\ \url packing.md#packUnorm4x16-function \\b\packUnorm4x16\b\ function \ url\
+\--\ \url packing.md#packUnorm4x4-function \\b\packUnorm4x4\b\ function \ url\
+\--\ \url packing.md#unpackF2x11_1x10-function \\b\unpackF2x11_1x10\b\ function \ url\
+\--\ \url packing.md#unpackF3x9_E1x5-function \\b\unpackF3x9_E1x5\b\ function \ url\
+\--\ \url packing.md#unpackHalf-function \\b\unpackHalf\b\ function \ url\
+\--\ \url packing.md#unpackHalf1x16-function \\b\unpackHalf1x16\b\ function \ url\
+\--\ \url packing.md#unpackHalf4x16-function \\b\unpackHalf4x16\b\ function \ url\
+\--\ \url packing.md#unpackI3x10_1x2-function \\b\unpackI3x10_1x2\b\ function \ url\
+\--\ \url packing.md#unpackInt2x16-function \\b\unpackInt2x16\b\ function \ url\
+\--\ \url packing.md#unpackInt2x32-function \\b\unpackInt2x32\b\ function \ url\
+\--\ \url packing.md#unpackInt2x8-function \\b\unpackInt2x8\b\ function \ url\
+\--\ \url packing.md#unpackInt4x16-function \\b\unpackInt4x16\b\ function \ url\
+\--\ \url packing.md#unpackInt4x8-function \\b\unpackInt4x8\b\ function \ url\
+\--\ \url packing.md#unpackRGBM-function \\b\unpackRGBM\b\ function \ url\
+\--\ \url packing.md#unpackSnorm-function \\b\unpackSnorm\b\ function \ url\
+\--\ \url packing.md#unpackSnorm1x16-function \\b\unpackSnorm1x16\b\ function \ url\
+\--\ \url packing.md#unpackSnorm1x8-function \\b\unpackSnorm1x8\b\ function \ url\
+\--\ \url packing.md#unpackSnorm2x8-function \\b\unpackSnorm2x8\b\ function \ url\
+\--\ \url packing.md#unpackSnorm3x10_1x2-function \\b\unpackSnorm3x10_1x2\b\ function \ url\
+\--\ \url packing.md#unpackSnorm4x16-function \\b\unpackSnorm4x16\b\ function \ url\
+\--\ \url packing.md#unpackU3x10_1x2-function \\b\unpackU3x10_1x2\b\ function \ url\
+\--\ \url packing.md#unpackUint2x16-function \\b\unpackUint2x16\b\ function \ url\
+\--\ \url packing.md#unpackUint2x32-function \\b\unpackUint2x32\b\ function \ url\
+\--\ \url packing.md#unpackUint2x8-function \\b\unpackUint2x8\b\ function \ url\
+\--\ \url packing.md#unpackUint4x16-function \\b\unpackUint4x16\b\ function \ url\
+\--\ \url packing.md#unpackUint4x8-function \\b\unpackUint4x8\b\ function \ url\
+\--\ \url packing.md#unpackUnorm-function \\b\unpackUnorm\b\ function \ url\
+\--\ \url packing.md#unpackUnorm1x16-function \\b\unpackUnorm1x16\b\ function \ url\
+\--\ \url packing.md#unpackUnorm1x5_1x6_1x5-function \\b\unpackUnorm1x5_1x6_1x5\b\ function \ url\
+\--\ \url packing.md#unpackUnorm1x8-function \\b\unpackUnorm1x8\b\ function \ url\
+\--\ \url packing.md#unpackUnorm2x3_1x2-function \\b\unpackUnorm2x3_1x2\b\ function \ url\
+\--\ \url packing.md#unpackUnorm2x4-function \\b\unpackUnorm2x4\b\ function \ url\
+\--\ \url packing.md#unpackUnorm2x8-function \\b\unpackUnorm2x8\b\ function \ url\
+\--\ \url packing.md#unpackUnorm3x10_1x2-function \\b\unpackUnorm3x10_1x2\b\ function \ url\
+\--\ \url packing.md#unpackUnorm3x5_1x1-function \\b\unpackUnorm3x5_1x1\b\ function \ url\
+\--\ \url packing.md#unpackUnorm4x16-function \\b\unpackUnorm4x16\b\ function \ url\
+\--\ \url packing.md#unpackUnorm4x4-function \\b\unpackUnorm4x4\b\ function \ url\
+\-\ \url quaternion.md \quaternion methods\ url\
+\--\ \url quaternion.md#eulerAngles-function \\b\eulerAngles\b\ function \ url\
+\--\ \url quaternion.md#mat3_cast-function \\b\mat3_cast\b\ function \ url\
+\--\ \url quaternion.md#mat4_cast-function \\b\mat4_cast\b\ function \ url\
+\--\ \url quaternion.md#pitch-function \\b\pitch\b\ function \ url\
+\--\ \url quaternion.md#quatLookAt-function \\b\quatLookAt\b\ function \ url\
+\--\ \url quaternion.md#quatLookAtLH-function \\b\quatLookAtLH\b\ function \ url\
+\--\ \url quaternion.md#quatLookAtRH-function \\b\quatLookAtRH\b\ function \ url\
+\--\ \url quaternion.md#quat_cast-function \\b\quat_cast\b\ function \ url\
+\--\ \url quaternion.md#roll-function \\b\roll\b\ function \ url\
+\--\ \url quaternion.md#yaw-function \\b\yaw\b\ function \ url\
+\-\ \url random.md \random methods\ url\
+\--\ \url random.md#ballRand-function \\b\ballRand\b\ function \ url\
+\--\ \url random.md#circularRand-function \\b\circularRand\b\ function \ url\
+\--\ \url random.md#diskRand-function \\b\diskRand\b\ function \ url\
+\--\ \url random.md#gaussRand-function \\b\gaussRand\b\ function \ url\
+\--\ \url random.md#linearRand-function \\b\linearRand\b\ function \ url\
+\--\ \url random.md#sphericalRand-function \\b\sphericalRand\b\ function \ url\
+\-\ \url reciprocal.md \reciprocal methods\ url\
+\--\ \url reciprocal.md#acot-function \\b\acot\b\ function \ url\
+\--\ \url reciprocal.md#acoth-function \\b\acoth\b\ function \ url\
+\--\ \url reciprocal.md#acsc-function \\b\acsc\b\ function \ url\
+\--\ \url reciprocal.md#acsch-function \\b\acsch\b\ function \ url\
+\--\ \url reciprocal.md#asec-function \\b\asec\b\ function \ url\
+\--\ \url reciprocal.md#asech-function \\b\asech\b\ function \ url\
+\--\ \url reciprocal.md#cot-function \\b\cot\b\ function \ url\
+\--\ \url reciprocal.md#coth-function \\b\coth\b\ function \ url\
+\--\ \url reciprocal.md#csc-function \\b\csc\b\ function \ url\
+\--\ \url reciprocal.md#csch-function \\b\csch\b\ function \ url\
+\--\ \url reciprocal.md#sec-function \\b\sec\b\ function \ url\
+\--\ \url reciprocal.md#sech-function \\b\sech\b\ function \ url\
+\-\ \url round.md \round methods\ url\
+\--\ \url round.md#ceilMultiple-function \\b\ceilMultiple\b\ function \ url\
+\--\ \url round.md#ceilPowerOfTwo-function \\b\ceilPowerOfTwo\b\ function \ url\
+\--\ \url round.md#floorMultiple-function \\b\floorMultiple\b\ function \ url\
+\--\ \url round.md#floorPowerOfTwo-function \\b\floorPowerOfTwo\b\ function \ url\
+\--\ \url round.md#roundMultiple-function \\b\roundMultiple\b\ function \ url\
+\--\ \url round.md#roundPowerOfTwo-function \\b\roundPowerOfTwo\b\ function \ url\
+\-\ \url type_ptr.md \type_ptr methods\ url\
+\--\ \url type_ptr.md#make_mat2-function \\b\make_mat2\b\ function \ url\
+\--\ \url type_ptr.md#make_mat2x2-function \\b\make_mat2x2\b\ function \ url\
+\--\ \url type_ptr.md#make_mat2x3-function \\b\make_mat2x3\b\ function \ url\
+\--\ \url type_ptr.md#make_mat2x4-function \\b\make_mat2x4\b\ function \ url\
+\--\ \url type_ptr.md#make_mat3-function \\b\make_mat3\b\ function \ url\
+\--\ \url type_ptr.md#make_mat3x2-function \\b\make_mat3x2\b\ function \ url\
+\--\ \url type_ptr.md#make_mat3x3-function \\b\make_mat3x3\b\ function \ url\
+\--\ \url type_ptr.md#make_mat3x4-function \\b\make_mat3x4\b\ function \ url\
+\--\ \url type_ptr.md#make_mat4-function \\b\make_mat4\b\ function \ url\
+\--\ \url type_ptr.md#make_mat4x2-function \\b\make_mat4x2\b\ function \ url\
+\--\ \url type_ptr.md#make_mat4x3-function \\b\make_mat4x3\b\ function \ url\
+\--\ \url type_ptr.md#make_mat4x4-function \\b\make_mat4x4\b\ function \ url\
+\--\ \url type_ptr.md#make_quat-function \\b\make_quat\b\ function \ url\
+\--\ \url type_ptr.md#make_vec2-function \\b\make_vec2\b\ function \ url\
+\--\ \url type_ptr.md#make_vec3-function \\b\make_vec3\b\ function \ url\
+\--\ \url type_ptr.md#make_vec4-function \\b\make_vec4\b\ function \ url\
+\--\ \url type_ptr.md#sizeof-function \\b\sizeof\b\ function \ url\
+\--\ \url type_ptr.md#value_ptr-function \\b\value_ptr\b\ function \ url\
+\-\ \url ulp.md \ulp methods\ url\
+\--\ \url ulp.md#float_distance-function \\b\float_distance\b\ function \ url\
+\--\ \url ulp.md#next_float-function \\b\next_float\b\ function \ url\
+\--\ \url ulp.md#prev_float-function \\b\prev_float\b\ function \ url\
+\ul\

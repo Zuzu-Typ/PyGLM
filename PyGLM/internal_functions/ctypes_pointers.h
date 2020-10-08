@@ -2,6 +2,18 @@
 
 #include "../compiler_setup.h"
 
+PyObject* ctypes_float;
+PyObject* ctypes_double;
+PyObject* ctypes_int64;
+PyObject* ctypes_int32;
+PyObject* ctypes_int16;
+PyObject* ctypes_int8;
+PyObject* ctypes_uint64;
+PyObject* ctypes_uint32;
+PyObject* ctypes_uint16;
+PyObject* ctypes_uint8;
+PyObject* ctypes_bool;
+
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 PyObject* ctypes_void_p = NULL;
 PyObject* ctypes_cast = NULL;
