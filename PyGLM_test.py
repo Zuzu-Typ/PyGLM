@@ -934,9 +934,11 @@ for args in gen_args("#uVV_QQ_NNNi_VfVfNi_VFVFNi_MfMfNi_MFMFNi"): # need to add 
     fassert(glm.equal, args)
     fassert(glm.notEqual, args)
 
-for args in gen_args("#uVV"):
+for args in gen_args("#uVV_QQ"):
     fassert(glm.lessThan, args)
     fassert(glm.lessThanEqual, args)
+    fassert(glm.greaterThan, args)
+    fassert(glm.greaterThanEqual, args)
 
 for args in gen_args("#uV__B"):
     fassert(glm.any, args)
@@ -1350,6 +1352,22 @@ for args in gen_args("V__f"):
 
 for args in gen_args("V__S"):
     fassert(glm.unpackHalf, args)
+
+for args in gen_args("V__fF"):
+    for dt in (glm.int8, glm.int16, glm.int32, glm.int64, glm.uint8, glm.uint16, glm.uint32, glm.uint64):
+        fassert(glm.packSnorm, (dt, args[0]))
+
+for args in gen_args("V__iqsuIQSU"):
+    for dt in (glm.float32, glm.float64):
+        fassert(glm.unpackSnorm, (dt, args[0]))
+
+for args in gen_args("V__fF"):
+    for dt in (glm.uint8, glm.uint16, glm.uint32, glm.uint64):
+        fassert(glm.packUnorm, (dt, args[0]))
+
+for args in gen_args("V__IQSU"):
+    for dt in (glm.float32, glm.float64):
+        fassert(glm.unpackUnorm, (dt, args[0]))
 #/packing #
 
 # random #

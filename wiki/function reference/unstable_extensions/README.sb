@@ -1,0 +1,15 @@
+\h1\Table of Contents\h1\
+\ul\
+\-\ \url decompose.md \decompose methods\ url\
+\--\ \url decompose.md#decompose-function \\b\decompose\b\ function \ url\
+\-\ \url norm.md \norm methods\ url\
+\--\ \url norm.md#distance2-function \\b\distance2\b\ function \ url\
+\--\ \url norm.md#l1Norm-function \\b\l1Norm\b\ function \ url\
+\--\ \url norm.md#l2Norm-function \\b\l2Norm\b\ function \ url\
+\--\ \url norm.md#lMaxNorm-function \\b\lMaxNorm\b\ function \ url\
+\--\ \url norm.md#length2-function \\b\length2\b\ function \ url\
+\--\ \url norm.md#lxNorm-function \\b\lxNorm\b\ function \ url\
+\-\ \url polar_coordinates.md \polar_coordinates methods\ url\
+\--\ \url polar_coordinates.md#euclidean-function \\b\euclidean\b\ function \ url\
+\--\ \url polar_coordinates.md#polar-function \\b\polar\b\ function \ url\
+\ul\

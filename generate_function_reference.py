@@ -3,6 +3,8 @@ import re, os, SlashBack, sys, traceback
 
 builtin_function_or_method = type(glm.silence)
 
+TARGET_FOLDER = "../wiki/function reference"
+
 functions = []
 
 func_common = ["abs", "sign", "floor", "trunc", "round", "roundEven",
@@ -112,6 +114,8 @@ other_functions = ["silence"]
 
 known_functions = detail + recommended_extensions + stable_extensions + unstable_extensions + other_functions
 
+
+folders = {}
 
 for raw in dir(glm):
     func = getattr(glm, raw)
@@ -235,7 +239,20 @@ def convert_sb_file(filename):
         traceback.print_exc()
 
 def generate_reference_for(name, function_names, description):
-    file_name = "../wiki/function reference/{}.sb".format(name)
+    folder = "detail" if function_names[0] in detail else "stable_extensions" if function_names[0] in stable_extensions else \
+        "recommended_extensions" if function_names[0] in recommended_extensions else "unstable_extensions" if function_names[0] in unstable_extensions else \
+        "other"
+
+    if not folder in folders:
+        folders[folder] = {}
+
+    folders[folder][name] = function_names
+
+    if not os.path.exists(TARGET_FOLDER + "/{}/".format(folder)):
+        os.mkdir(TARGET_FOLDER + "/{}/".format(folder))
+
+    file_name = TARGET_FOLDER + "/{}/{}.sb".format(folder, name)
+
     file = open(file_name, "w")
     file.write("\\c\\This file was generated using a tool\\c\\\n")
     file.write("\\h1\\{} methods\\h1\\\n".format(name))
@@ -345,14 +362,46 @@ generate_reference_for("norm", norm,
 generate_reference_for("polar_coordinates", polar_coordinates,
                        "Conversion from Euclidean space to polar space and revert.")
 
-
 generate_reference_for("other", other_functions,
                        "PyGLM's custom functions.")
 
+instructions_filename = TARGET_FOLDER + "/INSTRUCTIONS.sb"
 
+instructions_file = open(instructions_filename, "r")
+instuctions = instructions_file.read()
+instructions_file.close()
 
+toc_filename = TARGET_FOLDER + "/README.sb"
 
+toc_file = open(toc_filename, "w")
+toc_file.write("{}\n".format(instuctions))
+toc_file.write("\\h1\\Table of Contents\\h1\\\n")
+toc_file.write("\\ul\\\n")
 
+for folder in folders:
+    sub_toc_filename = TARGET_FOLDER + "/{}/README.sb".format(folder)
+    sub_toc_file = open(sub_toc_filename, "w")
+    sub_toc_file.write("\\h1\\Table of Contents\\h1\\\n")
+    sub_toc_file.write("\\ul\\\n")
+    toc_file.write("\\-\\ \\url {0}/README.md\\{0}\\url\\\n".format(folder))
+    folder_content = folders[folder]
+    for functions_name in folder_content:
+        sub_toc_file.write("\\-\\ \\url {0}.md \\{0} methods\\ url\\\n".format(functions_name))
+        toc_file.write("\\--\\ \\url {0}/{1}.md \\{1} methods\\ url\\\n".format(folder, functions_name))
+        functions = folder_content[functions_name]
+        for function_name in functions:
+            sub_toc_file.write("\\--\\ \\url {0}.md#{1}-function \\\\b\\{1}\\b\\ function \\ url\\\n".format(functions_name, function_name))
+            toc_file.write("\\---\\ \\url {0}/{1}.md#{2}-function \\\\b\\{2}\\b\\ function \\ url\\\n".format(folder, functions_name, function_name))
+
+    sub_toc_file.write("\\ul\\\n")
+    sub_toc_file.close()
+    convert_sb_file(sub_toc_filename)
+
+toc_file.write("\\ul\\\n")
+
+toc_file.close()
+
+convert_sb_file(toc_filename)
 
 
 

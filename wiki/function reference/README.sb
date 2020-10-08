@@ -1,0 +1,389 @@
+\h1\Function Reference\h1\
+This is where you will find a \b\reference of all the functions that PyGLM provides\b\.
+
+Most functions are \b\overloaded\b\, i.e. they accept more than one type of argument and may or may not behave differently depending on the type of argument(s).
+Where possible, I tried to \b\compromise between exactness and readability\b\ of the supported data types.
+Therefore there are some \b\types\b\ that are \b\placeholders\b\ for others.
+Here are a few examples:
+\tbl\
+Name \-\ Description
+\i\number\i\ \-\ Can be \b\(any) numerical type\b\, usually \code\float\code\ or \code\int\code\.
+\i\vecN\i\ \-\ Can be \b\any\b\ or most of the available \b\vector\b\ types of \b\any length\b\.
+\i\vec3\i\ \-\ Can be \b\any\b\ or most of the available \b\vector\b\ types of \b\length 3\b\.
+\i\fvecN\i\ \-\ A \b\float vector\b\ of \b\any length\b\.
+\i\matNxM\i\ \-\ Can be \b\any\b\ or most of the available \b\matrix\b\ types of \b\any shape\b\.
+\i\matSxS\i\ \-\ Can be \b\any\b\ or most of the available \b\matrix\b\ types of \b\square shape\b\.
+\i\quat\i\ \-\ \b\Any\b\ type of \b\quaternion\b\.
+\tbl\
+
+If different combinations of input arguments are possible, \b\multiple ways to call a particular function are presented\b\.
+
+Example:
+\raw\#### <code>glm.<code>**abs**(**x**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns x if x >= 0; otherwise it returns -x.
+
+\raw\#### <code>glm.<code>**abs**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\For each component c of x,
+\raw\&emsp;&emsp;\raw\Returns c if c >= 0; otherwise it returns -c.
+
+This means that you can call the \code\glm.abs\code\ function with a \code\float\code\ \code\"x"\code\ and it will return a \code\float\code\ value
+(as you can tell by the \raw\<code> -> *float*</code>\raw\), or you can call it with a vector, e.g. a \code\vec3\code\ and get a vector (\code\vec3\code\ in this case) back.
+\h1\Table of Contents\h1\
+\ul\
+\-\ \url detail/README.md\detail\url\
+\--\ \url detail/func_common.md \func_common methods\ url\
+\---\ \url detail/func_common.md#abs-function \\b\abs\b\ function \ url\
+\---\ \url detail/func_common.md#ceil-function \\b\ceil\b\ function \ url\
+\---\ \url detail/func_common.md#clamp-function \\b\clamp\b\ function \ url\
+\---\ \url detail/func_common.md#floatBitsToInt-function \\b\floatBitsToInt\b\ function \ url\
+\---\ \url detail/func_common.md#floatBitsToUint-function \\b\floatBitsToUint\b\ function \ url\
+\---\ \url detail/func_common.md#floor-function \\b\floor\b\ function \ url\
+\---\ \url detail/func_common.md#fma-function \\b\fma\b\ function \ url\
+\---\ \url detail/func_common.md#fmax-function \\b\fmax\b\ function \ url\
+\---\ \url detail/func_common.md#fmin-function \\b\fmin\b\ function \ url\
+\---\ \url detail/func_common.md#fract-function \\b\fract\b\ function \ url\
+\---\ \url detail/func_common.md#frexp-function \\b\frexp\b\ function \ url\
+\---\ \url detail/func_common.md#intBitsToFloat-function \\b\intBitsToFloat\b\ function \ url\
+\---\ \url detail/func_common.md#isinf-function \\b\isinf\b\ function \ url\
+\---\ \url detail/func_common.md#isnan-function \\b\isnan\b\ function \ url\
+\---\ \url detail/func_common.md#ldexp-function \\b\ldexp\b\ function \ url\
+\---\ \url detail/func_common.md#max-function \\b\max\b\ function \ url\
+\---\ \url detail/func_common.md#min-function \\b\min\b\ function \ url\
+\---\ \url detail/func_common.md#mix-function \\b\mix\b\ function \ url\
+\---\ \url detail/func_common.md#mod-function \\b\mod\b\ function \ url\
+\---\ \url detail/func_common.md#modf-function \\b\modf\b\ function \ url\
+\---\ \url detail/func_common.md#round-function \\b\round\b\ function \ url\
+\---\ \url detail/func_common.md#roundEven-function \\b\roundEven\b\ function \ url\
+\---\ \url detail/func_common.md#sign-function \\b\sign\b\ function \ url\
+\---\ \url detail/func_common.md#smoothstep-function \\b\smoothstep\b\ function \ url\
+\---\ \url detail/func_common.md#step-function \\b\step\b\ function \ url\
+\---\ \url detail/func_common.md#trunc-function \\b\trunc\b\ function \ url\
+\---\ \url detail/func_common.md#uintBitsToFloat-function \\b\uintBitsToFloat\b\ function \ url\
+\--\ \url detail/func_exponential.md \func_exponential methods\ url\
+\---\ \url detail/func_exponential.md#exp-function \\b\exp\b\ function \ url\
+\---\ \url detail/func_exponential.md#exp2-function \\b\exp2\b\ function \ url\
+\---\ \url detail/func_exponential.md#inversesqrt-function \\b\inversesqrt\b\ function \ url\
+\---\ \url detail/func_exponential.md#log-function \\b\log\b\ function \ url\
+\---\ \url detail/func_exponential.md#log2-function \\b\log2\b\ function \ url\
+\---\ \url detail/func_exponential.md#pow-function \\b\pow\b\ function \ url\
+\---\ \url detail/func_exponential.md#sqrt-function \\b\sqrt\b\ function \ url\
+\--\ \url detail/func_geometric.md \func_geometric methods\ url\
+\---\ \url detail/func_geometric.md#cross-function \\b\cross\b\ function \ url\
+\---\ \url detail/func_geometric.md#distance-function \\b\distance\b\ function \ url\
+\---\ \url detail/func_geometric.md#dot-function \\b\dot\b\ function \ url\
+\---\ \url detail/func_geometric.md#faceforward-function \\b\faceforward\b\ function \ url\
+\---\ \url detail/func_geometric.md#length-function \\b\length\b\ function \ url\
+\---\ \url detail/func_geometric.md#normalize-function \\b\normalize\b\ function \ url\
+\---\ \url detail/func_geometric.md#reflect-function \\b\reflect\b\ function \ url\
+\---\ \url detail/func_geometric.md#refract-function \\b\refract\b\ function \ url\
+\--\ \url detail/func_integer.md \func_integer methods\ url\
+\---\ \url detail/func_integer.md#bitCount-function \\b\bitCount\b\ function \ url\
+\---\ \url detail/func_integer.md#bitfieldExtract-function \\b\bitfieldExtract\b\ function \ url\
+\---\ \url detail/func_integer.md#bitfieldInsert-function \\b\bitfieldInsert\b\ function \ url\
+\---\ \url detail/func_integer.md#bitfieldReverse-function \\b\bitfieldReverse\b\ function \ url\
+\---\ \url detail/func_integer.md#findLSB-function \\b\findLSB\b\ function \ url\
+\---\ \url detail/func_integer.md#findMSB-function \\b\findMSB\b\ function \ url\
+\---\ \url detail/func_integer.md#imulExtended-function \\b\imulExtended\b\ function \ url\
+\---\ \url detail/func_integer.md#uaddCarry-function \\b\uaddCarry\b\ function \ url\
+\---\ \url detail/func_integer.md#umulExtended-function \\b\umulExtended\b\ function \ url\
+\---\ \url detail/func_integer.md#usubBorrow-function \\b\usubBorrow\b\ function \ url\
+\--\ \url detail/func_matrix.md \func_matrix methods\ url\
+\---\ \url detail/func_matrix.md#determinant-function \\b\determinant\b\ function \ url\
+\---\ \url detail/func_matrix.md#inverse-function \\b\inverse\b\ function \ url\
+\---\ \url detail/func_matrix.md#matrixCompMult-function \\b\matrixCompMult\b\ function \ url\
+\---\ \url detail/func_matrix.md#outerProduct-function \\b\outerProduct\b\ function \ url\
+\---\ \url detail/func_matrix.md#transpose-function \\b\transpose\b\ function \ url\
+\--\ \url detail/func_packing.md \func_packing methods\ url\
+\---\ \url detail/func_packing.md#packDouble2x32-function \\b\packDouble2x32\b\ function \ url\
+\---\ \url detail/func_packing.md#packHalf2x16-function \\b\packHalf2x16\b\ function \ url\
+\---\ \url detail/func_packing.md#packSnorm2x16-function \\b\packSnorm2x16\b\ function \ url\
+\---\ \url detail/func_packing.md#packSnorm4x8-function \\b\packSnorm4x8\b\ function \ url\
+\---\ \url detail/func_packing.md#packUnorm2x16-function \\b\packUnorm2x16\b\ function \ url\
+\---\ \url detail/func_packing.md#packUnorm4x8-function \\b\packUnorm4x8\b\ function \ url\
+\---\ \url detail/func_packing.md#unpackDouble2x32-function \\b\unpackDouble2x32\b\ function \ url\
+\---\ \url detail/func_packing.md#unpackHalf2x16-function \\b\unpackHalf2x16\b\ function \ url\
+\---\ \url detail/func_packing.md#unpackSnorm2x16-function \\b\unpackSnorm2x16\b\ function \ url\
+\---\ \url detail/func_packing.md#unpackSnorm4x8-function \\b\unpackSnorm4x8\b\ function \ url\
+\---\ \url detail/func_packing.md#unpackUnorm2x16-function \\b\unpackUnorm2x16\b\ function \ url\
+\---\ \url detail/func_packing.md#unpackUnorm4x8-function \\b\unpackUnorm4x8\b\ function \ url\
+\--\ \url detail/func_trigonometric.md \func_trigonometric methods\ url\
+\---\ \url detail/func_trigonometric.md#acos-function \\b\acos\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#acosh-function \\b\acosh\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#asin-function \\b\asin\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#asinh-function \\b\asinh\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#atan-function \\b\atan\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#atanh-function \\b\atanh\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#cos-function \\b\cos\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#cosh-function \\b\cosh\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#degrees-function \\b\degrees\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#radians-function \\b\radians\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#sin-function \\b\sin\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#sinh-function \\b\sinh\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#tan-function \\b\tan\b\ function \ url\
+\---\ \url detail/func_trigonometric.md#tanh-function \\b\tanh\b\ function \ url\
+\-\ \url recommended_extensions/README.md\recommended_extensions\url\
+\--\ \url recommended_extensions/color_space.md \color_space methods\ url\
+\---\ \url recommended_extensions/color_space.md#convertLinearToSRGB-function \\b\convertLinearToSRGB\b\ function \ url\
+\---\ \url recommended_extensions/color_space.md#convertSRGBToLinear-function \\b\convertSRGBToLinear\b\ function \ url\
+\--\ \url recommended_extensions/constants.md \constants methods\ url\
+\---\ \url recommended_extensions/constants.md#e-function \\b\e\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#epsilon-function \\b\epsilon\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#euler-function \\b\euler\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#four_over_pi-function \\b\four_over_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#golden_ratio-function \\b\golden_ratio\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#half_pi-function \\b\half_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#ln_ln_two-function \\b\ln_ln_two\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#ln_ten-function \\b\ln_ten\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#ln_two-function \\b\ln_two\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#one-function \\b\one\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#one_over_pi-function \\b\one_over_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#one_over_root_two-function \\b\one_over_root_two\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#one_over_two_pi-function \\b\one_over_two_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#pi-function \\b\pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#quarter_pi-function \\b\quarter_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#root_five-function \\b\root_five\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#root_half_pi-function \\b\root_half_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#root_ln_four-function \\b\root_ln_four\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#root_pi-function \\b\root_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#root_three-function \\b\root_three\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#root_two-function \\b\root_two\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#root_two_pi-function \\b\root_two_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#third-function \\b\third\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#three_over_two_pi-function \\b\three_over_two_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#two_over_pi-function \\b\two_over_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#two_over_root_pi-function \\b\two_over_root_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#two_pi-function \\b\two_pi\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#two_thirds-function \\b\two_thirds\b\ function \ url\
+\---\ \url recommended_extensions/constants.md#zero-function \\b\zero\b\ function \ url\
+\--\ \url recommended_extensions/epsilon.md \epsilon methods\ url\
+\---\ \url recommended_extensions/epsilon.md#epsilonEqual-function \\b\epsilonEqual\b\ function \ url\
+\---\ \url recommended_extensions/epsilon.md#epsilonNotEqual-function \\b\epsilonNotEqual\b\ function \ url\
+\--\ \url recommended_extensions/integer.md \integer methods\ url\
+\---\ \url recommended_extensions/integer.md#iround-function \\b\iround\b\ function \ url\
+\---\ \url recommended_extensions/integer.md#uround-function \\b\uround\b\ function \ url\
+\--\ \url recommended_extensions/matrix_access.md \matrix_access methods\ url\
+\---\ \url recommended_extensions/matrix_access.md#column-function \\b\column\b\ function \ url\
+\---\ \url recommended_extensions/matrix_access.md#row-function \\b\row\b\ function \ url\
+\--\ \url recommended_extensions/matrix_inverse.md \matrix_inverse methods\ url\
+\---\ \url recommended_extensions/matrix_inverse.md#affineInverse-function \\b\affineInverse\b\ function \ url\
+\---\ \url recommended_extensions/matrix_inverse.md#inverseTranspose-function \\b\inverseTranspose\b\ function \ url\
+\--\ \url recommended_extensions/noise.md \noise methods\ url\
+\---\ \url recommended_extensions/noise.md#perlin-function \\b\perlin\b\ function \ url\
+\---\ \url recommended_extensions/noise.md#simplex-function \\b\simplex\b\ function \ url\
+\--\ \url recommended_extensions/packing.md \packing methods\ url\
+\---\ \url recommended_extensions/packing.md#packF2x11_1x10-function \\b\packF2x11_1x10\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packF3x9_E1x5-function \\b\packF3x9_E1x5\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packHalf-function \\b\packHalf\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packHalf1x16-function \\b\packHalf1x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packHalf4x16-function \\b\packHalf4x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packI3x10_1x2-function \\b\packI3x10_1x2\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packInt2x16-function \\b\packInt2x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packInt2x32-function \\b\packInt2x32\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packInt2x8-function \\b\packInt2x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packInt4x16-function \\b\packInt4x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packInt4x8-function \\b\packInt4x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packRGBM-function \\b\packRGBM\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packSnorm-function \\b\packSnorm\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packSnorm1x16-function \\b\packSnorm1x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packSnorm1x8-function \\b\packSnorm1x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packSnorm2x8-function \\b\packSnorm2x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packSnorm3x10_1x2-function \\b\packSnorm3x10_1x2\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packSnorm4x16-function \\b\packSnorm4x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packU3x10_1x2-function \\b\packU3x10_1x2\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUint2x16-function \\b\packUint2x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUint2x32-function \\b\packUint2x32\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUint2x8-function \\b\packUint2x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUint4x16-function \\b\packUint4x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUint4x8-function \\b\packUint4x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUnorm-function \\b\packUnorm\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUnorm1x16-function \\b\packUnorm1x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUnorm1x5_1x6_1x5-function \\b\packUnorm1x5_1x6_1x5\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUnorm1x8-function \\b\packUnorm1x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUnorm2x3_1x2-function \\b\packUnorm2x3_1x2\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUnorm2x4-function \\b\packUnorm2x4\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUnorm2x8-function \\b\packUnorm2x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUnorm3x10_1x2-function \\b\packUnorm3x10_1x2\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUnorm3x5_1x1-function \\b\packUnorm3x5_1x1\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUnorm4x16-function \\b\packUnorm4x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#packUnorm4x4-function \\b\packUnorm4x4\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackF2x11_1x10-function \\b\unpackF2x11_1x10\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackF3x9_E1x5-function \\b\unpackF3x9_E1x5\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackHalf-function \\b\unpackHalf\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackHalf1x16-function \\b\unpackHalf1x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackHalf4x16-function \\b\unpackHalf4x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackI3x10_1x2-function \\b\unpackI3x10_1x2\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackInt2x16-function \\b\unpackInt2x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackInt2x32-function \\b\unpackInt2x32\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackInt2x8-function \\b\unpackInt2x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackInt4x16-function \\b\unpackInt4x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackInt4x8-function \\b\unpackInt4x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackRGBM-function \\b\unpackRGBM\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackSnorm-function \\b\unpackSnorm\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackSnorm1x16-function \\b\unpackSnorm1x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackSnorm1x8-function \\b\unpackSnorm1x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackSnorm2x8-function \\b\unpackSnorm2x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackSnorm3x10_1x2-function \\b\unpackSnorm3x10_1x2\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackSnorm4x16-function \\b\unpackSnorm4x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackU3x10_1x2-function \\b\unpackU3x10_1x2\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUint2x16-function \\b\unpackUint2x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUint2x32-function \\b\unpackUint2x32\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUint2x8-function \\b\unpackUint2x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUint4x16-function \\b\unpackUint4x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUint4x8-function \\b\unpackUint4x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUnorm-function \\b\unpackUnorm\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUnorm1x16-function \\b\unpackUnorm1x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUnorm1x5_1x6_1x5-function \\b\unpackUnorm1x5_1x6_1x5\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUnorm1x8-function \\b\unpackUnorm1x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUnorm2x3_1x2-function \\b\unpackUnorm2x3_1x2\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUnorm2x4-function \\b\unpackUnorm2x4\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUnorm2x8-function \\b\unpackUnorm2x8\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUnorm3x10_1x2-function \\b\unpackUnorm3x10_1x2\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUnorm3x5_1x1-function \\b\unpackUnorm3x5_1x1\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUnorm4x16-function \\b\unpackUnorm4x16\b\ function \ url\
+\---\ \url recommended_extensions/packing.md#unpackUnorm4x4-function \\b\unpackUnorm4x4\b\ function \ url\
+\--\ \url recommended_extensions/quaternion.md \quaternion methods\ url\
+\---\ \url recommended_extensions/quaternion.md#eulerAngles-function \\b\eulerAngles\b\ function \ url\
+\---\ \url recommended_extensions/quaternion.md#mat3_cast-function \\b\mat3_cast\b\ function \ url\
+\---\ \url recommended_extensions/quaternion.md#mat4_cast-function \\b\mat4_cast\b\ function \ url\
+\---\ \url recommended_extensions/quaternion.md#pitch-function \\b\pitch\b\ function \ url\
+\---\ \url recommended_extensions/quaternion.md#quatLookAt-function \\b\quatLookAt\b\ function \ url\
+\---\ \url recommended_extensions/quaternion.md#quatLookAtLH-function \\b\quatLookAtLH\b\ function \ url\
+\---\ \url recommended_extensions/quaternion.md#quatLookAtRH-function \\b\quatLookAtRH\b\ function \ url\
+\---\ \url recommended_extensions/quaternion.md#quat_cast-function \\b\quat_cast\b\ function \ url\
+\---\ \url recommended_extensions/quaternion.md#roll-function \\b\roll\b\ function \ url\
+\---\ \url recommended_extensions/quaternion.md#yaw-function \\b\yaw\b\ function \ url\
+\--\ \url recommended_extensions/random.md \random methods\ url\
+\---\ \url recommended_extensions/random.md#ballRand-function \\b\ballRand\b\ function \ url\
+\---\ \url recommended_extensions/random.md#circularRand-function \\b\circularRand\b\ function \ url\
+\---\ \url recommended_extensions/random.md#diskRand-function \\b\diskRand\b\ function \ url\
+\---\ \url recommended_extensions/random.md#gaussRand-function \\b\gaussRand\b\ function \ url\
+\---\ \url recommended_extensions/random.md#linearRand-function \\b\linearRand\b\ function \ url\
+\---\ \url recommended_extensions/random.md#sphericalRand-function \\b\sphericalRand\b\ function \ url\
+\--\ \url recommended_extensions/reciprocal.md \reciprocal methods\ url\
+\---\ \url recommended_extensions/reciprocal.md#acot-function \\b\acot\b\ function \ url\
+\---\ \url recommended_extensions/reciprocal.md#acoth-function \\b\acoth\b\ function \ url\
+\---\ \url recommended_extensions/reciprocal.md#acsc-function \\b\acsc\b\ function \ url\
+\---\ \url recommended_extensions/reciprocal.md#acsch-function \\b\acsch\b\ function \ url\
+\---\ \url recommended_extensions/reciprocal.md#asec-function \\b\asec\b\ function \ url\
+\---\ \url recommended_extensions/reciprocal.md#asech-function \\b\asech\b\ function \ url\
+\---\ \url recommended_extensions/reciprocal.md#cot-function \\b\cot\b\ function \ url\
+\---\ \url recommended_extensions/reciprocal.md#coth-function \\b\coth\b\ function \ url\
+\---\ \url recommended_extensions/reciprocal.md#csc-function \\b\csc\b\ function \ url\
+\---\ \url recommended_extensions/reciprocal.md#csch-function \\b\csch\b\ function \ url\
+\---\ \url recommended_extensions/reciprocal.md#sec-function \\b\sec\b\ function \ url\
+\---\ \url recommended_extensions/reciprocal.md#sech-function \\b\sech\b\ function \ url\
+\--\ \url recommended_extensions/round.md \round methods\ url\
+\---\ \url recommended_extensions/round.md#ceilMultiple-function \\b\ceilMultiple\b\ function \ url\
+\---\ \url recommended_extensions/round.md#ceilPowerOfTwo-function \\b\ceilPowerOfTwo\b\ function \ url\
+\---\ \url recommended_extensions/round.md#floorMultiple-function \\b\floorMultiple\b\ function \ url\
+\---\ \url recommended_extensions/round.md#floorPowerOfTwo-function \\b\floorPowerOfTwo\b\ function \ url\
+\---\ \url recommended_extensions/round.md#roundMultiple-function \\b\roundMultiple\b\ function \ url\
+\---\ \url recommended_extensions/round.md#roundPowerOfTwo-function \\b\roundPowerOfTwo\b\ function \ url\
+\--\ \url recommended_extensions/type_ptr.md \type_ptr methods\ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat2-function \\b\make_mat2\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat2x2-function \\b\make_mat2x2\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat2x3-function \\b\make_mat2x3\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat2x4-function \\b\make_mat2x4\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat3-function \\b\make_mat3\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat3x2-function \\b\make_mat3x2\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat3x3-function \\b\make_mat3x3\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat3x4-function \\b\make_mat3x4\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat4-function \\b\make_mat4\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat4x2-function \\b\make_mat4x2\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat4x3-function \\b\make_mat4x3\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_mat4x4-function \\b\make_mat4x4\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_quat-function \\b\make_quat\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_vec2-function \\b\make_vec2\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_vec3-function \\b\make_vec3\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#make_vec4-function \\b\make_vec4\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#sizeof-function \\b\sizeof\b\ function \ url\
+\---\ \url recommended_extensions/type_ptr.md#value_ptr-function \\b\value_ptr\b\ function \ url\
+\--\ \url recommended_extensions/ulp.md \ulp methods\ url\
+\---\ \url recommended_extensions/ulp.md#float_distance-function \\b\float_distance\b\ function \ url\
+\---\ \url recommended_extensions/ulp.md#next_float-function \\b\next_float\b\ function \ url\
+\---\ \url recommended_extensions/ulp.md#prev_float-function \\b\prev_float\b\ function \ url\
+\-\ \url stable_extensions/README.md\stable_extensions\url\
+\--\ \url stable_extensions/matrix_clip_space.md \matrix_clip_space methods\ url\
+\---\ \url stable_extensions/matrix_clip_space.md#frustum-function \\b\frustum\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#frustumLH-function \\b\frustumLH\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#frustumLH_NO-function \\b\frustumLH_NO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#frustumLH_ZO-function \\b\frustumLH_ZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#frustumNO-function \\b\frustumNO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#frustumRH-function \\b\frustumRH\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#frustumRH_NO-function \\b\frustumRH_NO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#frustumRH_ZO-function \\b\frustumRH_ZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#frustumZO-function \\b\frustumZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#infinitePerspective-function \\b\infinitePerspective\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#infinitePerspectiveLH-function \\b\infinitePerspectiveLH\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#infinitePerspectiveRH-function \\b\infinitePerspectiveRH\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#ortho-function \\b\ortho\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#orthoLH-function \\b\orthoLH\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#orthoLH_NO-function \\b\orthoLH_NO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#orthoLH_ZO-function \\b\orthoLH_ZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#orthoNO-function \\b\orthoNO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#orthoRH-function \\b\orthoRH\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#orthoRH_NO-function \\b\orthoRH_NO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#orthoRH_ZO-function \\b\orthoRH_ZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#orthoZO-function \\b\orthoZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspective-function \\b\perspective\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveFov-function \\b\perspectiveFov\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveFovLH-function \\b\perspectiveFovLH\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveFovLH_NO-function \\b\perspectiveFovLH_NO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveFovLH_ZO-function \\b\perspectiveFovLH_ZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveFovNO-function \\b\perspectiveFovNO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveFovRH-function \\b\perspectiveFovRH\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveFovRH_NO-function \\b\perspectiveFovRH_NO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveFovRH_ZO-function \\b\perspectiveFovRH_ZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveFovZO-function \\b\perspectiveFovZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveLH-function \\b\perspectiveLH\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveLH_NO-function \\b\perspectiveLH_NO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveLH_ZO-function \\b\perspectiveLH_ZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveNO-function \\b\perspectiveNO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveRH-function \\b\perspectiveRH\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveRH_NO-function \\b\perspectiveRH_NO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveRH_ZO-function \\b\perspectiveRH_ZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#perspectiveZO-function \\b\perspectiveZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_clip_space.md#tweakedInfinitePerspective-function \\b\tweakedInfinitePerspective\b\ function \ url\
+\--\ \url stable_extensions/matrix_projection.md \matrix_projection methods\ url\
+\---\ \url stable_extensions/matrix_projection.md#pickMatrix-function \\b\pickMatrix\b\ function \ url\
+\---\ \url stable_extensions/matrix_projection.md#project-function \\b\project\b\ function \ url\
+\---\ \url stable_extensions/matrix_projection.md#projectNO-function \\b\projectNO\b\ function \ url\
+\---\ \url stable_extensions/matrix_projection.md#projectZO-function \\b\projectZO\b\ function \ url\
+\---\ \url stable_extensions/matrix_projection.md#unProject-function \\b\unProject\b\ function \ url\
+\---\ \url stable_extensions/matrix_projection.md#unProjectNO-function \\b\unProjectNO\b\ function \ url\
+\---\ \url stable_extensions/matrix_projection.md#unProjectZO-function \\b\unProjectZO\b\ function \ url\
+\--\ \url stable_extensions/matrix_transform.md \matrix_transform methods\ url\
+\---\ \url stable_extensions/matrix_transform.md#identity-function \\b\identity\b\ function \ url\
+\---\ \url stable_extensions/matrix_transform.md#lookAt-function \\b\lookAt\b\ function \ url\
+\---\ \url stable_extensions/matrix_transform.md#lookAtLH-function \\b\lookAtLH\b\ function \ url\
+\---\ \url stable_extensions/matrix_transform.md#lookAtRH-function \\b\lookAtRH\b\ function \ url\
+\---\ \url stable_extensions/matrix_transform.md#rotate-function \\b\rotate\b\ function \ url\
+\---\ \url stable_extensions/matrix_transform.md#rotate_slow-function \\b\rotate_slow\b\ function \ url\
+\---\ \url stable_extensions/matrix_transform.md#scale-function \\b\scale\b\ function \ url\
+\---\ \url stable_extensions/matrix_transform.md#scale_slow-function \\b\scale_slow\b\ function \ url\
+\---\ \url stable_extensions/matrix_transform.md#translate-function \\b\translate\b\ function \ url\
+\--\ \url stable_extensions/quaternion_common.md \quaternion_common methods\ url\
+\---\ \url stable_extensions/quaternion_common.md#conjugate-function \\b\conjugate\b\ function \ url\
+\---\ \url stable_extensions/quaternion_common.md#lerp-function \\b\lerp\b\ function \ url\
+\---\ \url stable_extensions/quaternion_common.md#slerp-function \\b\slerp\b\ function \ url\
+\--\ \url stable_extensions/quaternion_trigonometric.md \quaternion_trigonometric methods\ url\
+\---\ \url stable_extensions/quaternion_trigonometric.md#angle-function \\b\angle\b\ function \ url\
+\---\ \url stable_extensions/quaternion_trigonometric.md#angleAxis-function \\b\angleAxis\b\ function \ url\
+\---\ \url stable_extensions/quaternion_trigonometric.md#axis-function \\b\axis\b\ function \ url\
+\-\ \url unstable_extensions/README.md\unstable_extensions\url\
+\--\ \url unstable_extensions/decompose.md \decompose methods\ url\
+\---\ \url unstable_extensions/decompose.md#decompose-function \\b\decompose\b\ function \ url\
+\--\ \url unstable_extensions/norm.md \norm methods\ url\
+\---\ \url unstable_extensions/norm.md#distance2-function \\b\distance2\b\ function \ url\
+\---\ \url unstable_extensions/norm.md#l1Norm-function \\b\l1Norm\b\ function \ url\
+\---\ \url unstable_extensions/norm.md#l2Norm-function \\b\l2Norm\b\ function \ url\
+\---\ \url unstable_extensions/norm.md#lMaxNorm-function \\b\lMaxNorm\b\ function \ url\
+\---\ \url unstable_extensions/norm.md#length2-function \\b\length2\b\ function \ url\
+\---\ \url unstable_extensions/norm.md#lxNorm-function \\b\lxNorm\b\ function \ url\
+\--\ \url unstable_extensions/polar_coordinates.md \polar_coordinates methods\ url\
+\---\ \url unstable_extensions/polar_coordinates.md#euclidean-function \\b\euclidean\b\ function \ url\
+\---\ \url unstable_extensions/polar_coordinates.md#polar-function \\b\polar\b\ function \ url\
+\-\ \url other/README.md\other\url\
+\--\ \url other/other.md \other methods\ url\
+\---\ \url other/other.md#silence-function \\b\silence\b\ function \ url\
+\ul\

@@ -1,0 +1,30 @@
+\h1\Function Reference\h1\
+This is where you will find a \b\reference of all the functions that PyGLM provides\b\.
+
+Most functions are \b\overloaded\b\, i.e. they accept more than one type of argument and may or may not behave differently depending on the type of argument(s).
+Where possible, I tried to \b\compromise between exactness and readability\b\ of the supported data types.
+Therefore there are some \b\types\b\ that are \b\placeholders\b\ for others.
+Here are a few examples:
+\tbl\
+Name \-\ Description
+\i\number\i\ \-\ Can be \b\(any) numerical type\b\, usually \code\float\code\ or \code\int\code\.
+\i\vecN\i\ \-\ Can be \b\any\b\ or most of the available \b\vector\b\ types of \b\any length\b\.
+\i\vec3\i\ \-\ Can be \b\any\b\ or most of the available \b\vector\b\ types of \b\length 3\b\.
+\i\fvecN\i\ \-\ A \b\float vector\b\ of \b\any length\b\.
+\i\matNxM\i\ \-\ Can be \b\any\b\ or most of the available \b\matrix\b\ types of \b\any shape\b\.
+\i\matSxS\i\ \-\ Can be \b\any\b\ or most of the available \b\matrix\b\ types of \b\square shape\b\.
+\i\quat\i\ \-\ \b\Any\b\ type of \b\quaternion\b\.
+\tbl\
+
+If different combinations of input arguments are possible, \b\multiple ways to call a particular function are presented\b\.
+
+Example:
+\raw\#### <code>glm.<code>**abs**(**x**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns x if x >= 0; otherwise it returns -x.
+
+\raw\#### <code>glm.<code>**abs**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\For each component c of x,
+\raw\&emsp;&emsp;\raw\Returns c if c >= 0; otherwise it returns -c.
+
+This means that you can call the \code\glm.abs\code\ function with a \code\float\code\ \code\"x"\code\ and it will return a \code\float\code\ value
+(as you can tell by the \raw\<code> -> *float*</code>\raw\), or you can call it with a vector, e.g. a \code\vec3\code\ and get a vector (\code\vec3\code\ in this case) back.
