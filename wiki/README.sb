@@ -4,7 +4,7 @@ The wiki is continuously growing and improving.
 
 I recommend starting at \url PyGLM-Types.md \PyGLM Types\ url\ if you're new.
 
-For a reference of all of PyGLM's functions, take a look over \url function-reference/README.md \here\ url\.
+For a \b\reference of all of PyGLM's functions\b\, take a look over \url function-reference/README.md \here\ url\.
 You can also refer to the Python Help system or __doc__ fields if you need more info about individual functions.
 \code Python\
 >>> help(glm.identity)
