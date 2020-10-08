@@ -27,7 +27,7 @@ You can replace \code \PyGLM_DEFAULT\ code\ by one of the following options:
 \lu \
 \-\ \code \PyGLM_FAST\ code\ - No support for using iterables / buffers instead of PyGLM types  
 \-\ \code \PyGLM_NO_FUNCTIONS\ code\ - Only build the types  
-\-\ \code \PYGLM_MINIMAL\ code\ - Combines \code \PyGLM_FAST\ code\ and \code \PyGLM_NO_FUNCTIONS\ code\
+\-\ \code \PyGLM_MINIMAL\ code\ - Combines \code \PyGLM_FAST\ code\ and \code \PyGLM_NO_FUNCTIONS\ code\
 \ lu\
 Another option \code \PyGLM_SLIM\ code\ was planned, which was supposed to only build the float types, to decrease the file size, though demand seems to be low.
 

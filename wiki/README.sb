@@ -1,0 +1,31 @@
+\h1\PyGLM Wiki\h1\
+\h3\Welcome to PyGLM's wiki\h3\
+The wiki is continuously growing and improving.
+
+I recommend starting at \url PyGLM-Types.md \PyGLM Types\ url\ if you're new.
+
+For a reference of all of PyGLM's functions, take a look over \url function-reference/README.md \here\ url\.
+You can also refer to the Python Help system or __doc__ fields if you need more info about individual functions.
+\code Python\
+>>> help(glm.identity)
+Help on built-in function identity in module glm:
+
+identity(...)
+    identity(matrix_type: type) -> matNxM
+    Builds an identity matrix.
+\code\
+
+Feel free to browse through the other wiki pages.
+
+Thank you for using PyGLM!
+
+\h2\Pages in this wiki\h2\
+\ul\
+\-\ \url PyGLM-Types.md \PyGLM Types\ url\ - An overview of the data types that PyGLM provides.
+\-\ \url Using-vectors.md \Using Vectors\ url\ - A reference of the usage of vector types.
+\-\ \url Using-matrices.md \Using Matrices\ url\ - A reference of the usage of matrix types.
+\-\ \url Using-quaternions.md \Using Quaternions\ url\ - A reference of the usage of quaternion types.
+\-\ \url Using-arrays.md \Using Arrays\ url\ - A reference of the usage of the array type.
+\-\ \url Building-PyGLM.md \Building PyGLM\ url\ - How to build PyGLM from source.
+\-\ \url Passing-data-to-external-libs.md \Passing data to external libs\ url\ - How to pass data from PyGLM to other C libraries, such as PyOpenGL.
+\ul\

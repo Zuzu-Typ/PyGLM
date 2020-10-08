@@ -1,5 +1,6 @@
 [//]: # (generated using SlashBack 0.2.0)
 
+# Using Matrices  
   
 1.  [Initialization](#Initialization)  
     *  [with no arguments](#initialization-with-no-arguments)  

@@ -1,5 +1,6 @@
 [//]: # (generated using SlashBack 0.2.0)
 
+# Using Arrays  
 PyGLM's array type was introduced in version 2\.0\.0 to reduce the likelihood of requiring users to also use numpy besides glm\.  
   
 It's mainly intended to **provide a way of passing multiple glm type instances** \(such as vectors\) **to external C functions**   
@@ -15,6 +16,7 @@ It's mainly intended to **provide a way of passing multiple glm type instances**
 3. [Members](#members)  
 4. [Methods](#methods)  
     * [The copy protocol](#the-copy-protocol)  
+    *  [Pickling](#pickling)  
     * [To list / tuple](#to-list--tuple)  
 5. [Operators](#operators)  
     * [concat](#concat--operator)  
@@ -94,6 +96,9 @@ dt\_size | int | The size of each single component of the elements in bytes \(si
 ### The copy protocol  
 Arrays support the copy protocol \(see [here](https://docs.python.org/3/library/copy.html)\)\.&nbsp;&nbsp;  
 You can use ``` copy.copy(<array>) ``` or ``` copy.deepcopy(<array>) ``` to get a copy of an array\.  
+  
+### Pickling  
+Arrays support [pickling](https://docs.python.org/3/library/pickle.html#module-interface) \(as of PyGLM 2\.0\.0\), which is Python's serialization method\.  
   
 ### To list / tuple  
 Any array has a ``` to_list() ``` and a ``` to_tuple() ``` function, which return's the arrays's data represented as a list or tuple respectively\.  

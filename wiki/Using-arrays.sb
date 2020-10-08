@@ -1,3 +1,4 @@
+\h1\Using Arrays\h1\
 PyGLM's array type was introduced in version 2.0.0 to reduce the likelihood of requiring users to also use numpy besides glm.
 
 It's mainly intended to \b\provide a way of passing multiple glm type instances\b\ (such as vectors) \b\to external C functions\b\ 

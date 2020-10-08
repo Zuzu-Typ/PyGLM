@@ -29,7 +29,7 @@ You can replace ``` PyGLM_DEFAULT ``` by one of the following options:&nbsp;&nbs
   
 *  ``` PyGLM_FAST ``` \- No support for using iterables / buffers instead of PyGLM types&nbsp;&nbsp;  
 *  ``` PyGLM_NO_FUNCTIONS ``` \- Only build the types&nbsp;&nbsp;  
-*  ``` PYGLM_MINIMAL ``` \- Combines ``` PyGLM_FAST ``` and ``` PyGLM_NO_FUNCTIONS ```  
+*  ``` PyGLM_MINIMAL ``` \- Combines ``` PyGLM_FAST ``` and ``` PyGLM_NO_FUNCTIONS ```  
   
 Another option ``` PyGLM_SLIM ``` was planned, which was supposed to only build the float types, to decrease the file size, though demand seems to be low\.  
   
