@@ -12,4 +12,10 @@
 \-\ \url polar_coordinates.md \polar_coordinates methods\ url\
 \--\ \url polar_coordinates.md#euclidean-function \\b\euclidean\b\ function \ url\
 \--\ \url polar_coordinates.md#polar-function \\b\polar\b\ function \ url\
+\-\ \url matrix_transform_2d.md \matrix_transform_2d methods\ url\
+\--\ \url matrix_transform_2d.md#rotate-function \\b\rotate\b\ function \ url\
+\--\ \url matrix_transform_2d.md#scale-function \\b\scale\b\ function \ url\
+\--\ \url matrix_transform_2d.md#shearX-function \\b\shearX\b\ function \ url\
+\--\ \url matrix_transform_2d.md#shearY-function \\b\shearY\b\ function \ url\
+\--\ \url matrix_transform_2d.md#translate-function \\b\translate\b\ function \ url\
 \ul\

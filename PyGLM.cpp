@@ -139,6 +139,9 @@ static PyMethodDef glmmethods[] = {
 	// decompose
 	DECOMPOSE_METHODS,
 
+	// matrix_transform_2d
+	MATRIX_TRANSFORM_2D_METHODS,
+
 	// PyGLM functions
 	{ "silence", (PyCFunction)silence, METH_O, silence_docstr },
 	//{ "_get_type_info", (PyCFunction)_get_type_info, METH_VARARGS, "_get_type_info(accepted_types, object) -> None\nAn internal testing funtion to check wether or not the type checking works correctly." },

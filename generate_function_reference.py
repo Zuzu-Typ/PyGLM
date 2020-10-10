@@ -102,18 +102,22 @@ norm = ["distance2", "l1Norm", "l2Norm", "lMaxNorm", "length2", "lxNorm"]
 
 polar_coordinates = ["polar", "euclidean"]
 
+matrix_transform_2d = ["shearX", "shearY", "rotate", "translate", "scale"]
+
 stable_extensions = matrix_clip_space + matrix_projection + matrix_transform + quaternion_common +\
                     quaternion_trigonometric
 
 recommended_extensions = color_space + constants + epsilon + integer + matrix_access + matrix_inverse +\
                          noise + packing + quaternion + random + reciprocal + round + type_ptr + ulp
 
-unstable_extensions = decompose + norm + polar_coordinates
+unstable_extensions = decompose + norm + polar_coordinates + matrix_transform_2d
 
 other_functions = ["silence"]
 
 known_functions = detail + recommended_extensions + stable_extensions + unstable_extensions + other_functions
 
+
+multiple_expected = ["rotate", "translate", "scale"]
 
 folders = {}
 
@@ -130,7 +134,7 @@ for known_func in known_functions:
     if not is_defined(known_func):
         print("A 'known' function was not defined: {}".format(known_func))
 
-    if known_functions.count(known_func) != 1:
+    if known_func not in multiple_expected and known_functions.count(known_func) != 1:
         print("Function '{}' is known multiple times".format(known_func))
 
 
@@ -361,6 +365,9 @@ generate_reference_for("norm", norm,
 
 generate_reference_for("polar_coordinates", polar_coordinates,
                        "Conversion from Euclidean space to polar space and revert.")
+
+generate_reference_for("matrix_transform_2d", matrix_transform_2d,
+                       "Defines functions that generate common 2d transformation matrices.")
 
 generate_reference_for("other", other_functions,
                        "PyGLM's custom functions.")

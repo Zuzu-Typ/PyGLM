@@ -384,6 +384,12 @@ This means that you can call the \code\glm.abs\code\ function with a \code\float
 \--\ \url unstable_extensions/polar_coordinates.md \polar_coordinates methods\ url\
 \---\ \url unstable_extensions/polar_coordinates.md#euclidean-function \\b\euclidean\b\ function \ url\
 \---\ \url unstable_extensions/polar_coordinates.md#polar-function \\b\polar\b\ function \ url\
+\--\ \url unstable_extensions/matrix_transform_2d.md \matrix_transform_2d methods\ url\
+\---\ \url unstable_extensions/matrix_transform_2d.md#rotate-function \\b\rotate\b\ function \ url\
+\---\ \url unstable_extensions/matrix_transform_2d.md#scale-function \\b\scale\b\ function \ url\
+\---\ \url unstable_extensions/matrix_transform_2d.md#shearX-function \\b\shearX\b\ function \ url\
+\---\ \url unstable_extensions/matrix_transform_2d.md#shearY-function \\b\shearY\b\ function \ url\
+\---\ \url unstable_extensions/matrix_transform_2d.md#translate-function \\b\translate\b\ function \ url\
 \-\ \url other/README.md\other\url\
 \--\ \url other/other.md \other methods\ url\
 \---\ \url other/other.md#silence-function \\b\silence\b\ function \ url\
