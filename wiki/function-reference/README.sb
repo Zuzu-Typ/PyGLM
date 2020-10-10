@@ -258,6 +258,7 @@ This means that you can call the \code\glm.abs\code\ function with a \code\float
 \---\ \url recommended_extensions/random.md#diskRand-function \\b\diskRand\b\ function \ url\
 \---\ \url recommended_extensions/random.md#gaussRand-function \\b\gaussRand\b\ function \ url\
 \---\ \url recommended_extensions/random.md#linearRand-function \\b\linearRand\b\ function \ url\
+\---\ \url recommended_extensions/random.md#setSeed-function \\b\setSeed\b\ function \ url\
 \---\ \url recommended_extensions/random.md#sphericalRand-function \\b\sphericalRand\b\ function \ url\
 \--\ \url recommended_extensions/reciprocal.md \reciprocal methods\ url\
 \---\ \url recommended_extensions/reciprocal.md#acot-function \\b\acot\b\ function \ url\

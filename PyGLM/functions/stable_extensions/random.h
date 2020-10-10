@@ -67,6 +67,17 @@ ballRand_(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
+static PyObject*
+setSeed_(PyObject*, PyObject* arg) {
+	if (PyLong_Check(arg)) {
+		unsigned long seed = PyLong_AsUnsignedLong(arg);
+		std::srand(seed);
+		Py_RETURN_NONE;
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for setSeed(): ", arg);
+	return NULL;
+}
+
 PyDoc_STRVAR(ballRand_docstr,
 	"ballRand(Radius: float) -> vec3\n"
 	"	Generate a random 3D vector which coordinates are regulary distributed within the volume of\n"
@@ -99,6 +110,12 @@ PyDoc_STRVAR(sphericalRand_docstr,
 	"	Generate a random 3D vector which coordinates are regulary distributed on a sphere of a\n"
 	"	given radius."
 );
+PyDoc_STRVAR(setSeed_docstr,
+	"setSeed(seed: int) -> None\n"
+	"	Sets the seed fot the pseudo-random number generator used by the -Rand functions.\n"
+	"	The seed needs to be greater or equal to zero.\n"
+	"	Default seed is 1.\n"
+);
 
 #define RANDOM_METHODS \
 { "linearRand", (PyCFunction)linearRand_, METH_VARARGS, linearRand_docstr }, \
@@ -106,4 +123,5 @@ PyDoc_STRVAR(sphericalRand_docstr,
 { "circularRand", (PyCFunction)circularRand_, METH_O, circularRand_docstr }, \
 { "sphericalRand", (PyCFunction)sphericalRand_, METH_O, sphericalRand_docstr }, \
 { "diskRand", (PyCFunction)diskRand_, METH_O, diskRand_docstr }, \
-{ "ballRand", (PyCFunction)ballRand_, METH_O, ballRand_docstr }
+{ "ballRand", (PyCFunction)ballRand_, METH_O, ballRand_docstr }, \
+{ "setSeed", (PyCFunction)setSeed_, METH_O, setSeed_docstr }

@@ -261,6 +261,7 @@ This means that you can call the ``` glm.abs ``` function with a ``` float ``` `
         *  [**diskRand** function ](recommended_extensions/random.md#diskRand-function)  
         *  [**gaussRand** function ](recommended_extensions/random.md#gaussRand-function)  
         *  [**linearRand** function ](recommended_extensions/random.md#linearRand-function)  
+        *  [**setSeed** function ](recommended_extensions/random.md#setSeed-function)  
         *  [**sphericalRand** function ](recommended_extensions/random.md#sphericalRand-function)  
     *  [reciprocal methods](recommended_extensions/reciprocal.md)  
         *  [**acot** function ](recommended_extensions/reciprocal.md#acot-function)  

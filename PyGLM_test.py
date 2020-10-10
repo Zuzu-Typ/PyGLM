@@ -1510,6 +1510,8 @@ def test_random():
         fassert(glm.sphericalRand, args)
         fassert(glm.diskRand, args)
         fassert(glm.ballRand, args)
+
+    fassert(glm.setSeed, (0,))
 #/random #
 
 # round #

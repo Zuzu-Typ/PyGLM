@@ -138,6 +138,7 @@
     *  [**diskRand** function ](random.md#diskRand-function)  
     *  [**gaussRand** function ](random.md#gaussRand-function)  
     *  [**linearRand** function ](random.md#linearRand-function)  
+    *  [**setSeed** function ](random.md#setSeed-function)  
     *  [**sphericalRand** function ](random.md#sphericalRand-function)  
 *  [reciprocal methods](reciprocal.md)  
     *  [**acot** function ](reciprocal.md#acot-function)  
