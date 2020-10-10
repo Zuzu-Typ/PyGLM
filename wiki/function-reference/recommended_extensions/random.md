@@ -11,6 +11,7 @@ Generate random number from various distribution methods\.
 * [**diskRand** function](#diskrand-function)  
 * [**gaussRand** function](#gaussrand-function)  
 * [**linearRand** function](#linearrand-function)  
+* [**setSeed** function](#setseed-function)  
 * [**sphericalRand** function](#sphericalrand-function)  
   
 ### ballRand\(\) function  
@@ -41,6 +42,12 @@ Generate random number from various distribution methods\.
   
 #### <code>glm.<code>**linearRand**(**Min**: *vecN*, **Max**: *vecN*) -\> *vecN*</code></code>  
 &emsp;&emsp;Generate random numbers in the interval \[Min, Max\], according a linear distribution\.  
+  
+### setSeed\(\) function  
+#### <code>glm.<code>**setSeed**(**seed**: *int*) -\> *None*</code></code>  
+&emsp;&emsp;Sets the seed fot the pseudo\-random number generator used by the \-Rand functions\.  
+&emsp;&emsp;The seed needs to be greater or equal to zero\.  
+&emsp;&emsp;Default seed is 1\.  
   
 ### sphericalRand\(\) function  
 #### <code>glm.<code>**sphericalRand**(**Radius**: *float*) -\> *vec3*</code></code>  

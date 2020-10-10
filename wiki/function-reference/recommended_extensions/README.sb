@@ -136,6 +136,7 @@
 \--\ \url random.md#diskRand-function \\b\diskRand\b\ function \ url\
 \--\ \url random.md#gaussRand-function \\b\gaussRand\b\ function \ url\
 \--\ \url random.md#linearRand-function \\b\linearRand\b\ function \ url\
+\--\ \url random.md#setSeed-function \\b\setSeed\b\ function \ url\
 \--\ \url random.md#sphericalRand-function \\b\sphericalRand\b\ function \ url\
 \-\ \url reciprocal.md \reciprocal methods\ url\
 \--\ \url reciprocal.md#acot-function \\b\acot\b\ function \ url\

@@ -9,6 +9,7 @@ Generate random number from various distribution methods.
 \-\\url #diskrand-function\\b\diskRand\b\ function\url\
 \-\\url #gaussrand-function\\b\gaussRand\b\ function\url\
 \-\\url #linearrand-function\\b\linearRand\b\ function\url\
+\-\\url #setseed-function\\b\setSeed\b\ function\url\
 \-\\url #sphericalrand-function\\b\sphericalRand\b\ function\url\
 \ul\
 \h3\ballRand() function\h3\
@@ -39,6 +40,12 @@ Generate random number from various distribution methods.
 
 \raw\#### <code>glm.<code>**linearRand**(**Min**: *vecN*, **Max**: *vecN*) -\\> *vecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Generate random numbers in the interval [Min, Max], according a linear distribution.
+
+\h3\setSeed() function\h3\
+\raw\#### <code>glm.<code>**setSeed**(**seed**: *int*) -\\> *None*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Sets the seed fot the pseudo-random number generator used by the -Rand functions.
+\raw\&emsp;&emsp;\raw\The seed needs to be greater or equal to zero.
+\raw\&emsp;&emsp;\raw\Default seed is 1.
 
 \h3\sphericalRand() function\h3\
 \raw\#### <code>glm.<code>**sphericalRand**(**Radius**: *float*) -\\> *vec3*</code></code>\raw\

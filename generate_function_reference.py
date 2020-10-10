@@ -3,7 +3,7 @@ import re, os, SlashBack, sys, traceback
 
 builtin_function_or_method = type(glm.silence)
 
-TARGET_FOLDER = "../wiki/function reference"
+TARGET_FOLDER = "../wiki/function-reference"
 
 functions = []
 
@@ -84,7 +84,7 @@ quaternion_common = ["lerp", "slerp", "conjugate"]
 
 quaternion_trigonometric = ["angle", "axis", "angleAxis"]
 
-random = ["linearRand", "gaussRand", "circularRand", "sphericalRand", "diskRand", "ballRand"]
+random = ["linearRand", "gaussRand", "circularRand", "sphericalRand", "diskRand", "ballRand", "setSeed"]
 
 reciprocal = [f.format(x) for f in ("{}", "a{}", "{}h", "a{}h") for x in ("sec", "csc", "cot")]
 
