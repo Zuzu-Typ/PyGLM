@@ -145,6 +145,21 @@ def list_replace(list_, x, y):
 randf = lambda: random.random()*100
 randfs = lambda: randf()-50
 
+mvec_mats = {
+    "f2" : glm.fmat2x2(0),
+    "f3" : glm.fmat2x3(0),
+    "f4" : glm.fmat2x4(0),
+    "d2" : glm.dmat2x2(0),
+    "d3" : glm.dmat2x3(0),
+    "d4" : glm.dmat2x4(0),
+    "i2" : glm.imat2x2(0),
+    "i3" : glm.imat2x3(0),
+    "i4" : glm.imat2x4(0),
+    "u2" : glm.umat2x2(0),
+    "u3" : glm.umat2x3(0),
+    "u4" : glm.umat2x4(0),
+    }
+
 def get_args(arg_string, type_, rand_func=None):
     if not rand_func:
         if type_ in "IQSU":
@@ -178,6 +193,15 @@ def get_args(arg_string, type_, rand_func=None):
             L = int(arg[1])
             args.append(getattr(glm, "{T}vec{L}".format(T=T, L=L))(*([rand_func()] * L)))
 
+        elif "P" in arg:
+            if len(arg) == 3 and arg[2] in "fFi":
+                T = prefixes[suffixes.index(arg[2])]
+            else:
+                T = prefixes[suffixes.index(type_)]
+
+            L = int(arg[1])
+            args.append(mvec_mats["{T}{L}".format(T=T, L=L)][0])
+
         elif arg == "Q":
             args.append(getattr(glm, "{T}quat".format(T=prefixes[suffixes.index(type_)]))(rand_func(), rand_func(), rand_func(), rand_func()))
 
@@ -195,6 +219,11 @@ def get_args(arg_string, type_, rand_func=None):
 
 
 def gen_args(args_string):
+    if "#M" in args_string:
+        supports_mvec = True
+        args_string = args_string.replace("#M", "")
+    else:
+        supports_mvec = False
     if "#u" in args_string:
         rand_func = randf
         args_string = args_string.replace("#u", "")
@@ -214,6 +243,8 @@ def gen_args(args_string):
     else:
         parts = args_string.split("_")
         types = suffixes
+
+    mvec_types = ("f" if "f" in types else "") + ("F" if "F" in types else "") + ("i" if "i" in types else "") + ("I" if "I" in types else "")
     
     for part in parts:
         arg_strings = []
@@ -233,18 +264,35 @@ def gen_args(args_string):
             for T in types:
                 for L in range(1, 5):
                     yield get_args(list_replace(arg_strings, "V", "V{L}".format(L=L)), T, rand_func)
+            if supports_mvec:
+                for T in mvec_types:
+                    for L in range(2, 5):
+                        yield get_args(list_replace(arg_strings, "V", "P{L}".format(L=L)), T, rand_func)
+        elif "P" in arg_strings:
+            for T in mvec_types:
+                for L in range(2, 5):
+                    yield get_args(list_replace(arg_strings, "P", "P{L}".format(L=L)), T, rand_func)
 
         elif "Vf" in arg_strings:
             for L in range(1, 5):
                 yield get_args(list_replace(arg_strings, "Vf", "V{L}".format(L=L)), "f", rand_func)
+            if supports_mvec:
+                for L in range(2, 5):
+                    yield get_args(list_replace(arg_strings, "Vf", "P{L}".format(L=L)), "f", rand_func)
 
         elif "VF" in arg_strings:
             for L in range(1, 5):
                 yield get_args(list_replace(arg_strings, "VF", "V{L}".format(L=L)), "F", rand_func)
+            if supports_mvec:
+                for L in range(2, 5):
+                    yield get_args(list_replace(arg_strings, "VF", "P{L}".format(L=L)), "F", rand_func)
 
         elif "Vi" in arg_strings:
             for L in range(1, 5):
                 yield get_args(list_replace(arg_strings, "Vi", "V{L}".format(L=L)), "i", rand_func)
+            if supports_mvec:
+                for L in range(2, 5):
+                    yield get_args(list_replace(arg_strings, "Vi", "P{L}".format(L=L)), "i", rand_func)
 
         elif "VB" in arg_strings:
             for L in range(1, 5):
@@ -253,6 +301,9 @@ def gen_args(args_string):
         elif "V1" in arg_strings or "V2" in arg_strings or "V3" in arg_strings or "V4" in arg_strings or "M22" in arg_strings or "M23" in arg_strings or "M24" in arg_strings or "M32" in arg_strings or "M33" in arg_strings or "M34" in arg_strings or "M42" in arg_strings or "M43" in arg_strings or "M44" in arg_strings:
             for T in types:
                 yield get_args(arg_strings, T, rand_func)
+            if supports_mvec:
+                for T in mvec_types:
+                    yield get_args(list_replace(arg_strings, "V", "P"), T, rand_func)
 
         elif "Q" in arg_strings:
             for T in types:
@@ -446,25 +497,25 @@ def test_repr_eval():
 
 # neg #
 def test_neg():
-    for obj in gen_obj("V_M_Q__fFiqsu"):
+    for obj in gen_obj("#MV_M_Q__fFiqsu"):
         fassert(obj.__neg__, ())
 #/neg #
 
 # pos #
 def test_pos():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__pos__, ())
 #/pos #
 
 # abs #
 def test_abs():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__pos__, ())
 #/abs #
 
 # add #
 def test_add():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__add__, (obj,))
 
     arr = glm.array(glm.mat4())
@@ -474,13 +525,13 @@ def test_add():
 
 # sub #
 def test_sub():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__sub__, (obj,))
 #/sub #
 
 # mul #
 def test_mul():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__mul__, (1,))
 
     arr = glm.array(glm.mat4())
@@ -490,7 +541,7 @@ def test_mul():
 
 # div #
 def test_div():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__truediv__, (1,))
 
     for obj in gen_obj("V__iqsuIQSU"):
@@ -499,8 +550,14 @@ def test_div():
             fail(obj)
         except ZeroDivisionError:
             pass
+    for obj in gen_obj("P__iI"):
+        try:
+            obj.__truediv__(obj)
+            fail(obj)
+        except ZeroDivisionError:
+            pass
 
-    for obj in gen_obj("V_M_Q__iqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__iqsuIQSU"):
         try:
             obj.__truediv__(0)
             fail(obj)
@@ -510,32 +567,32 @@ def test_div():
 
 # mod #
 def test_mod():
-    for obj in gen_obj("V__fF"):
+    for obj in gen_obj("#MV__fF"):
         fassert(obj.__mod__, (1,))
 #/mod #
 
 # floordiv #
 def test_floordiv():
-    for obj in gen_obj("V__fF"):
+    for obj in gen_obj("#MV__fF"):
         fassert(obj.__floordiv__, (1,))
 #/floordiv #
 
 # divmod #
 def test_divmod():
-    for obj in gen_obj("V__fF"):
+    for obj in gen_obj("#MV__fF"):
         fassert(obj.__divmod__, (1,))
 #/divmod #
 
 # pow #
 def test_pow():
-    for obj in gen_obj("V__fF"):
+    for obj in gen_obj("#MV__fF"):
         fassert(obj.__pow__, (obj,))
         fassert(obj.__pow__, (obj, obj))
 #/pow #
 
 # matmul #
 def test_matmul():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         try:
             obj @ obj
         except TypeError:
@@ -544,7 +601,7 @@ def test_matmul():
 
 # iadd #
 def test_iadd():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__iadd__, (obj,))
     
     arr = glm.array(glm.mat4())
@@ -554,13 +611,13 @@ def test_iadd():
 
 # isub #
 def test_isub():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__isub__, (obj,))
 #/isub #
 
 # imul #
 def test_imul():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__imul__, (1,))
 
     arr = glm.array(glm.mat4())
@@ -570,31 +627,31 @@ def test_imul():
 
 # idiv #
 def test_idiv():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__itruediv__, (1,))
 #/idiv #
 
 # imod #
 def test_imod():
-    for obj in gen_obj("V__fF"):
+    for obj in gen_obj("#MV__fF"):
         fassert(obj.__imod__, (1,))
 #/imod #
 
 # ifloordiv #
 def test_ifloordiv():
-    for obj in gen_obj("V__fF"):
+    for obj in gen_obj("#MV__fF"):
         fassert(obj.__ifloordiv__, (1,))
 #/ifloordiv #
 
 # ipow #
 def test_ipow():
-    for obj in gen_obj("V__fF"):
+    for obj in gen_obj("#MV__fF"):
         fassert(obj.__ipow__, (obj,))
 #/ipow #
 
 # imatmul #
 def test_imatmul():
-    for obj in gen_obj("V_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         try:
             obj @= obj
         except TypeError:
@@ -603,19 +660,19 @@ def test_imatmul():
 
 # str #
 def test_str():
-    for obj in gen_obj("V_M_Q"):
+    for obj in gen_obj("#MV_M_Q"):
         assert str(obj), obj
 #/str #
 
 # repr #
 def test_repr():
-    for obj in gen_obj("V_M_Q"):
+    for obj in gen_obj("#MV_M_Q"):
         assert repr(obj), obj
 #/repr #
 
 # len #
 def test_len():
-    for obj in gen_obj("V_M_Q"):
+    for obj in gen_obj("#MV_M_Q"):
         assert len(obj), obj
 
     arr = glm.array(glm.mat4())
@@ -626,7 +683,7 @@ def test_len():
 
 # getitem #
 def test_getitem():
-    for obj in gen_obj("V_M_Q"):
+    for obj in gen_obj("#MV_M_Q"):
         for i in range(len(obj)):
             assert obj[i] != None, obj
 
@@ -643,7 +700,7 @@ def test_getitem():
 
 # setitem #
 def test_setitem():
-    for obj in gen_obj("V_M_Q"):
+    for obj in gen_obj("#MV_M_Q"):
         for i in range(len(obj)):
             fassert(obj.__setitem__,(i, obj[i]))
 
@@ -662,7 +719,7 @@ def test_setitem():
 
 # contains #
 def test_contains():
-    for obj in gen_obj("V_M_Q"):
+    for obj in gen_obj("#MV_M_Q"):
         assert obj[0] in obj, obj
 
     arr = glm.array(glm.mat4(), glm.mat4(2))

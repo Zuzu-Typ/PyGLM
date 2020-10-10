@@ -79,7 +79,7 @@ mvec_add(PyObject *obj1, PyObject *obj2)
 		Py_RETURN_NOTIMPLEMENTED;
 	}
 
-	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj2);
 
 	// obj1 and obj2 can be interpreted as a mvec
 	return pack_vec<L, T>(o + o2);
@@ -112,7 +112,7 @@ mvec_sub(PyObject *obj1, PyObject *obj2)
 		Py_RETURN_NOTIMPLEMENTED;
 	}
 
-	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj2);
 
 	// obj1 and obj2 can be interpreted as a mvec
 	return pack_vec<L, T>(o - o2);
@@ -145,7 +145,7 @@ mvec_mul(PyObject *obj1, PyObject *obj2)
 		Py_RETURN_NOTIMPLEMENTED;
 	}
 
-	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj2);
 
 	// obj1 and obj2 can be interpreted as a mvec
 	return pack_vec<L, T>(o * o2);
@@ -185,7 +185,7 @@ mvec_div(PyObject *obj1, PyObject *obj2)
 		Py_RETURN_NOTIMPLEMENTED;
 	}
 
-	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj2);
 
 	if (!glm::all((glm::vec<L, bool>)o2)) {
 		PyGLM_ZERO_DIVISION_ERROR_T(T);
@@ -229,7 +229,7 @@ mvec_mod(PyObject *obj1, PyObject *obj2)
 		Py_RETURN_NOTIMPLEMENTED;
 	}
 
-	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj2);
 
 	if (!glm::all((glm::vec<L, bool>)o2)) {
 		PyGLM_ZERO_DIVISION_ERROR_T(T);
@@ -273,7 +273,7 @@ mvec_floordiv(PyObject *obj1, PyObject *obj2)
 		Py_RETURN_NOTIMPLEMENTED;
 	}
 
-	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj1);
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj2);
 
 	if (!glm::all((glm::vec<L, bool>)o2)) {
 		PyGLM_ZERO_DIVISION_ERROR_T(T);
