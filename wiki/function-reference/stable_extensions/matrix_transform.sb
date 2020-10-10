@@ -34,6 +34,10 @@ Defines functions that generate common transformation matrices.
 \raw\#### <code>glm.<code>**rotate**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\\> *mat4x4*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a rotation 4 * 4 matrix created from an axis vector and an angle.
 
+\raw\#### <code>glm.<code>**rotate**(**m**: *mat3x3*, **angle**: *number*) -\\> *mat3x3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a rotation 3 * 3 matrix created from an angle.
+\raw\&emsp;&emsp;\raw\m is the input matrix multiplied by this translation matrix
+
 \h3\rotate_slow() function\h3\
 \raw\#### <code>glm.<code>**rotate_slow**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\\> *mat4x4*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a rotation 4 * 4 matrix created from an axis vector and an angle.
@@ -42,6 +46,10 @@ Defines functions that generate common transformation matrices.
 \raw\#### <code>glm.<code>**scale**(**m**: *mat4x4*, **v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a scale 4 * 4 matrix created from 3 scalars.
 
+\raw\#### <code>glm.<code>**scale**(**m**: *mat3x3*, **v**: *vec2*) -\\> *mat3x3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a scale 3 * 3 matrix created from a vector of 2 components.
+\raw\&emsp;&emsp;\raw\m is the input matrix multiplied by this translation matrix
+
 \h3\scale_slow() function\h3\
 \raw\#### <code>glm.<code>**scale_slow**(**m**: *mat4x4*, **v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a scale 4 * 4 matrix created from 3 scalars.
@@ -49,4 +57,8 @@ Defines functions that generate common transformation matrices.
 \h3\translate() function\h3\
 \raw\#### <code>glm.<code>**translate**(**m**: *mat4x4*, **v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a translation 4 * 4 matrix created from a vector of 3 components.
+
+\raw\#### <code>glm.<code>**translate**(**m**: *mat3x3*, **v**: *vec2*) -\\> *mat3x3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a translation 3 * 3 matrix created from a vector of 2 components.
+\raw\&emsp;&emsp;\raw\m is the input matrix multiplied by this translation matrix
 

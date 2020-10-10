@@ -36,6 +36,10 @@ Defines functions that generate common transformation matrices\.
 #### <code>glm.<code>**rotate**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\> *mat4x4*</code></code>  
 &emsp;&emsp;Builds a rotation 4 \* 4 matrix created from an axis vector and an angle\.  
   
+#### <code>glm.<code>**rotate**(**m**: *mat3x3*, **angle**: *number*) -\> *mat3x3*</code></code>  
+&emsp;&emsp;Builds a rotation 3 \* 3 matrix created from an angle\.  
+&emsp;&emsp;m is the input matrix multiplied by this translation matrix  
+  
 ### rotate\_slow\(\) function  
 #### <code>glm.<code>**rotate_slow**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\> *mat4x4*</code></code>  
 &emsp;&emsp;Builds a rotation 4 \* 4 matrix created from an axis vector and an angle\.  
@@ -44,6 +48,10 @@ Defines functions that generate common transformation matrices\.
 #### <code>glm.<code>**scale**(**m**: *mat4x4*, **v**: *vec3*) -\> *mat4x4*</code></code>  
 &emsp;&emsp;Builds a scale 4 \* 4 matrix created from 3 scalars\.  
   
+#### <code>glm.<code>**scale**(**m**: *mat3x3*, **v**: *vec2*) -\> *mat3x3*</code></code>  
+&emsp;&emsp;Builds a scale 3 \* 3 matrix created from a vector of 2 components\.  
+&emsp;&emsp;m is the input matrix multiplied by this translation matrix  
+  
 ### scale\_slow\(\) function  
 #### <code>glm.<code>**scale_slow**(**m**: *mat4x4*, **v**: *vec3*) -\> *mat4x4*</code></code>  
 &emsp;&emsp;Builds a scale 4 \* 4 matrix created from 3 scalars\.  
@@ -51,4 +59,8 @@ Defines functions that generate common transformation matrices\.
 ### translate\(\) function  
 #### <code>glm.<code>**translate**(**m**: *mat4x4*, **v**: *vec3*) -\> *mat4x4*</code></code>  
 &emsp;&emsp;Builds a translation 4 \* 4 matrix created from a vector of 3 components\.  
+  
+#### <code>glm.<code>**translate**(**m**: *mat3x3*, **v**: *vec2*) -\> *mat3x3*</code></code>  
+&emsp;&emsp;Builds a translation 3 \* 3 matrix created from a vector of 2 components\.  
+&emsp;&emsp;m is the input matrix multiplied by this translation matrix  
   

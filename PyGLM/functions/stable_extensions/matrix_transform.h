@@ -126,13 +126,26 @@ identity_(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
-PyGLM_MAKE_GLM_FUNC_M4V3__tfF(translate)
+PyGLM_MAKE_GLM_FUNC_M3V2_M4V3__tfF(translate)
 
 static PyObject*
 rotate_(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2, *arg3;
-	PyGLM_Arg_Unpack_3O(args, "rotate", arg1, arg2, arg3);
-	if (PyGLM_Number_Check(arg2)) {
+	PyObject *arg1, *arg2, *arg3 = NULL;
+	if (!PyArg_UnpackTuple(args, "rotate", 2, 3, &arg1, &arg2, &arg3)) return NULL;
+	if (arg3 == NULL) {
+		if (PyGLM_Number_Check(arg2)) {
+			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FD);
+			if (PyGLM_Mat_PTI_Check0(3, 3, float, arg1)) {
+				glm::mat<3, 3, float> m = PyGLM_Mat_PTI_Get0(3, 3, float, arg1);
+				return pack(glm::rotate(m, PyGLM_Number_FromPyObject<float>(arg2)));
+			}
+			if (PyGLM_Mat_PTI_Check0(3, 3, double, arg1)) {
+				glm::mat<3, 3, double> m = PyGLM_Mat_PTI_Get0(3, 3, double, arg1);
+				return pack(glm::rotate(m, PyGLM_Number_FromPyObject<double>(arg2)));
+			}
+		}
+	}
+	else if (PyGLM_Number_Check(arg2)) {
 		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_T_QUA | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);
 		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);
 		if (PyGLM_Mat_PTI_Check0(4, 4, float, arg1) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
@@ -182,7 +195,7 @@ rotate_slow_(PyObject*, PyObject* args) {
 	return NULL;
 }
 
-PyGLM_MAKE_GLM_FUNC_M4V3__tfF(scale)
+PyGLM_MAKE_GLM_FUNC_M3V2_M4V3__tfF(scale)
 PyGLM_MAKE_GLM_FUNC_M4V3__tfF(scale_slow)
 
 
@@ -211,15 +224,24 @@ PyDoc_STRVAR(lookAtRH_docstr,
 );
 PyDoc_STRVAR(rotate_docstr,
 	"rotate(m: mat4x4, angle: number, axis: vec3) -> mat4x4\n"
-	"	Builds a rotation 4 * 4 matrix created from an axis vector and an angle."
+	"	Builds a rotation 4 * 4 matrix created from an axis vector and an angle.\n"
+	"rotate(m: mat3x3, angle: number) -> mat3x3\n"
+	"	Builds a rotation 3 * 3 matrix created from an angle.\n"
+	"	m is the input matrix multiplied by this translation matrix"
 );
 PyDoc_STRVAR(scale_docstr,
 	"scale(m: mat4x4, v: vec3) -> mat4x4\n"
-	"	Builds a scale 4 * 4 matrix created from 3 scalars."
+	"	Builds a scale 4 * 4 matrix created from 3 scalars.\n"
+	"scale(m: mat3x3, v: vec2) -> mat3x3\n"
+	"	Builds a scale 3 * 3 matrix created from a vector of 2 components.\n"
+	"	m is the input matrix multiplied by this translation matrix"
 );
 PyDoc_STRVAR(translate_docstr,
 	"translate(m: mat4x4, v: vec3) -> mat4x4\n"
-	"	Builds a translation 4 * 4 matrix created from a vector of 3 components."
+	"	Builds a translation 4 * 4 matrix created from a vector of 3 components.\n"
+	"translate(m: mat3x3, v: vec2) -> mat3x3\n"
+	"	Builds a translation 3 * 3 matrix created from a vector of 2 components.\n"
+	"	m is the input matrix multiplied by this translation matrix"
 );
 PyDoc_STRVAR(rotate_slow_docstr,
 	"rotate_slow(m: mat4x4, angle: number, axis: vec3) -> mat4x4\n"

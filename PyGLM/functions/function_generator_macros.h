@@ -585,6 +585,53 @@ NAME##_(PyObject*, PyObject*) {\
 	return pack(glm::NAME<double>());\
 }
 
+#define PyGLM_MAKE_GLM_FUNC_M3V2_M4V3__tfF(NAME)\
+static PyObject*\
+NAME##_(PyObject*, PyObject* args) {\
+	PyObject *arg1, *arg2;\
+	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
+	PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_SHAPE_4x4 | PyGLM_DT_NORMAL);\
+	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_DT_NORMAL);\
+	if (PyGLM_Mat_PTI_Check0(4, 4, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 4, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 4, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 4, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 4, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 4, int, arg1), PyGLM_Vec_PTI_Get1(3, int, arg2)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 4, uint32, arg1) && PyGLM_Vec_PTI_Check1(3, uint32, arg2)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 4, uint32, arg1), PyGLM_Vec_PTI_Get1(3, uint32, arg2)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 3, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 3, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 3, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 3, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2)));\
+	}\
+	PyGLM_TYPEERROR_2O("invalid argument type(s) for " #NAME "(): ", arg1, arg2);\
+	return NULL;\
+}
+
+#define PyGLM_MAKE_GLM_FUNC_M3N__tfF(NAME)\
+static PyObject*\
+NAME##_(PyObject*, PyObject* args) {\
+	PyObject *arg1, *arg2;\
+	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
+	if (PyGLM_Number_Check(arg2)) {\
+		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FD);\
+		if (PyGLM_Mat_PTI_Check0(3, 3, float, arg1)) {\
+			return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 3, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));\
+		}\
+		if (PyGLM_Mat_PTI_Check0(3, 3, double, arg1)) {\
+			return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 3, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));\
+		}\
+	}\
+	PyGLM_TYPEERROR_2O("invalid argument type(s) for " #NAME "(): ", arg1, arg2);\
+	return NULL;\
+}
+
 #define PyGLM_MAKE_GLM_FUNC_M4V3__tfF(NAME)\
 static PyObject*\
 NAME##_(PyObject*, PyObject* args) {\

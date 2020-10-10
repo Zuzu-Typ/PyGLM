@@ -1620,5 +1620,16 @@ def test_matrix_decompose():
     for args in gen_args("M44V3QV3V3V4__fF"):
         fassert(glm.decompose, args)
 #/matrix_decompose #
+
+# matrix_transform_2d #
+def test_matrix_transform_2d():
+    for args in gen_args("M33N__fF"):
+        fassert(glm.rotate, args)
+        fassert(glm.shearX, args)
+        fassert(glm.shearY, args)
+    for args in gen_args("M33V2__fF"):
+        fassert(glm.scale, args)
+        fassert(glm.translate, args)
+#/matrix_transform_2d #
 ##/UNSTABLE EXTENSIONS ##
     

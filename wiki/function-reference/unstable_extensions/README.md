@@ -14,4 +14,10 @@
 *  [polar\_coordinates methods](polar_coordinates.md)  
     *  [**euclidean** function ](polar_coordinates.md#euclidean-function)  
     *  [**polar** function ](polar_coordinates.md#polar-function)  
+*  [matrix\_transform\_2d methods](matrix_transform_2d.md)  
+    *  [**rotate** function ](matrix_transform_2d.md#rotate-function)  
+    *  [**scale** function ](matrix_transform_2d.md#scale-function)  
+    *  [**shearX** function ](matrix_transform_2d.md#shearX-function)  
+    *  [**shearY** function ](matrix_transform_2d.md#shearY-function)  
+    *  [**translate** function ](matrix_transform_2d.md#translate-function)  
   
