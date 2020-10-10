@@ -19,7 +19,8 @@ install:
 
 script:
   - python3 setup.py install
-  - python3 PyGLM_test.py
+  - python3 -m pip install pytest
+  - pytest PyGLM_test.py -v
   
 stages:
   - test
@@ -39,7 +40,7 @@ jobs:
     
   - stage: deploy
     services: docker
-    install: python3 -m pip install twine cibuildwheel 
+    install: python3 -m pip install twine cibuildwheel pytest
     script:
     - python3 -m cibuildwheel --output-dir ./wheelhouse
     - ls wheelhouse
@@ -48,7 +49,7 @@ jobs:
   - stage: deploy
     os: osx
     language: shell
-    install: python3 -m pip install twine cibuildwheel 
+    install: python3 -m pip install twine cibuildwheel pytest
     script:
     - python3 -m cibuildwheel --output-dir ./wheelhouse
     - ls wheelhouse
@@ -58,7 +59,7 @@ jobs:
   - stage: deploy
     os: windows
     language: shell
-    install: python3 -m pip install twine cibuildwheel 
+    install: python3 -m pip install twine cibuildwheel pytest
     script:
     - python3 -m cibuildwheel --output-dir ./wheelhouse
     - ls wheelhouse
@@ -80,7 +81,7 @@ env:
   global:
   - CIBW_SKIP=cp34-*
   - CIBW_BUILD=cp3?-*
-  - CIBW_TEST_COMMAND="python {project}/PyGLM_test.py"
+  - CIBW_TEST_COMMAND="pytest {project}/PyGLM_test.py -v"
   - CIBW_MANYLINUX_X86_64_IMAGE=manylinux1
   - CIBW_MANYLINUX_I686_IMAGE=manylinux1
   - TWINE_USERNAME=__token__
