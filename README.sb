@@ -15,7 +15,7 @@ If you encounter any issues or want to request a feature, please create an issue
 Besides the obvious - being mostly compatible with \b \GLM\ b\ - PyGLM offers a variety of features for \b \vector\ b\ and \b \matrix manipulation\ b\.
 It has a lot of possible use cases, including \b \3D-Graphics\ b\ (OpenGL, DirectX, ...), \b \Physics\ b\ and more.
 
-At the same time, it has \b \great performance\ b\, being between \b \1.2x and 130x as fast as numpy!\ b\ (see \url #speed-comparison-to-numpy \end of page\ url\)
+At the same time, it has \b \great performance\ b\, being between \b \1.5x and 100x as fast as numpy!\ b\ (see \url #speed-comparison-to-numpy \end of page\ url\)
 (\i \depending on the individual function\ i\)
 \h3 \Installation\ h3\
 \b \PyGLM\ b\ supports \b \Windows\ b\, \b \Linux\ b\, \b \MacOS\ b\ and other operating systems with either x86 (\b \32-bit\ b\) or x64 (\b \64-bit\ b\) architecture, 
