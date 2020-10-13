@@ -10,7 +10,7 @@ It's mainly intended to **provide a way of passing multiple glm type instances**
   
 1. [About arrays](#about-arrays)  
 2. [Initialization](#initialization)  
-    * [\.\. with vectors, matrices or quaternions](#-with-vectors-matrices-or-quaternions)  
+    * [\.\. with vectors, matrices, quaternions or ctypes number objects](#-with-vectors-matrices-quaternions-or-ctypes-number-objects)  
     * [\.\. with other array instances](#-with-other-array-instances)  
     * [\.\. with other compatible arrays / lists / iterables](#-with-other-compatible-arrays--lists--iterables)  
 3. [Members](#members)  
@@ -18,6 +18,7 @@ It's mainly intended to **provide a way of passing multiple glm type instances**
     * [The copy protocol](#the-copy-protocol)  
     *  [Pickling](#pickling)  
     * [To list / tuple](#to-list--tuple)  
+    * [From Numbers](#from-numbers)  
 5. [Operators](#operators)  
     * [concat](#concat--operator)  
     * [repeat](#repeat--operator)  
@@ -39,7 +40,7 @@ Additionally, the data inside the array is only a **copy**, thus if the data ins
   
 ## Initialization  
 Arrays can be initialized in a few different ways\.  
-### \.\.\. with vectors, matrices or quaternions  
+### \.\.\. with vectors, matrices, quaternions or ctypes number objects  
 An array can be initialized with any number of vectors, metrices or quaternions, as long as they're all of the same type\.  
 ``` Python
 >>> array(vec3(1, 2, 3), vec3(4, 5, 6))
@@ -47,6 +48,22 @@ array(vec3(1, 2, 3), vec3(4, 5, 6))
 
 >>> array(vec3(), ivec3())
 TypeError: arrays have to be initialized with arguments of the same glm type
+ ```  
+The same holds true for ctypes numbers:  
+``` Python
+>>> array(int8(2), int8(3))
+array(c_int8(2), c_int8(3))
+
+>>> array(int8(2), int16(3))
+TypeError: arrays have to be initialized with arguments of the same type
+ ```  
+You can also create an array of ctypes numbers from normal numbers using ``` from_numbers ```, which needs to have the data type as it's first argument:  
+``` Python
+>>> array.from_numbers(int8, 2, 3)
+array(c_int8(2), c_int8(3))
+
+>>> array(int8, 2, 3) # alternative way
+array(c_int8(2), c_int8(3))
  ```  
   
 *Note: The list representations of vecs, mats and quats such as ``` ((1, 2), (3, 4)) ``` \(an alias for ``` mat2(1, 2, 3, 4) ```\) cannot be used here\.*  
@@ -102,6 +119,18 @@ Arrays support [pickling](https://docs.python.org/3/library/pickle.html#module-i
   
 ### To list / tuple  
 Any array has a ``` to_list() ``` and a ``` to_tuple() ``` function, which return's the arrays's data represented as a list or tuple respectively\.  
+  
+### From Numbers  
+The array class has a static ``` from_numbers ``` method, which allows for creation of a one\-dimensional array of numbers\.  
+It takes a ctypes number type as it's first argument\.  
+Example:  
+``` Python
+>>> array.from_numbers(c_float, 1.2, 3.4)
+array(c_float(1.2), c_float(3.4))
+
+>>> array.from_numbers(int32, 1, 3, 4, 5)
+array(c_int32(1), c_int32(3), c_int32(4), c_int32(5))
+ ```  
   
 ## Operators  
 ### concat \(``` + ``` operator\)  

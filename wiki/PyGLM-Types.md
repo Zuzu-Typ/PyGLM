@@ -25,11 +25,14 @@ They are made up of a scalar part ``` (w) ``` and a vector part ``` (x, y, z) ``
 Quaternion types are simply expressed as ``` glm.quat ```\.  
 Refer to [using quaternions](Using-quaternions.md) for a complete type reference\.  
   
-4. A PyGLM **array** \(``` glm.array ```\) is a simple way of storing a copy of multiple instances of one of the aforementioned types\.  
+4. A PyGLM **array** \(``` glm.array ```\) is a simple way of storing a copy of multiple instances of one of the aforementioned types or numbers\.  
 This array can then be used to **transfer that data over to external C functions**, such as ``` glBufferData ``` from PyOpenGL\.  
 Although PyGLM's arrays are a lot simpler than NumPy arrays, they're **quite a bit faster**\.  
 Refer to [using arrays](Using-arrays.md) for a complete type reference\.  
   
+  
+PyGLM also provides simple access to ``` ctypes ``` C datatypes, such as ``` c_float ```, which can be accessed as ``` glm.c_float ``` or ``` glm.float_ ```   
+\(the underscore is only present for ``` float ``` and ``` bool ``` to accomodate for wildcard imports, which would override the builtin types\)\.  
   
 **The following section is devoted to vectors, matrices and quaternions only\.**  
   

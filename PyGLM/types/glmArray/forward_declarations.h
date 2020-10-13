@@ -13,6 +13,8 @@ static PyObject* glmArray_to_list(glmArray* self, PyObject*);
 
 static PyObject* glmArray_to_tuple(glmArray* self, PyObject*);
 
+static PyObject* glmArray_from_numbers(PyObject*, PyObject* args);
+
 static PyObject* glmArray_getPtr(glmArray* self, void*);
 
 static PyObject* glmArray_getDtype(glmArray* self, void*);

@@ -6,6 +6,8 @@
 
 #define PyGLM_ASSERT(cond, msg) if (!cond) {PyErr_SetString(PyExc_AssertionError, msg); return NULL;}
 
+#define PyGLM_ASSERT_NO(cond, msg) if (!cond) {PyErr_SetString(PyExc_AssertionError, msg); return -1;}
+
 #define PyObject_IterCheck(op) ((op)->ob_type->tp_iter != 0)
 
 #define PyGLM_TYPE_AS_CSTRING(op) op->ob_type->tp_name

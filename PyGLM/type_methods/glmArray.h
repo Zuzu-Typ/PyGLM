@@ -189,8 +189,20 @@ default:\
 *(((glm::qua<T>*)self->data) + index) = ((qua<T>*)value)->super_type;\
 return 0;
 
+#define GLM_ARRAY_SET_IF_IS_CTYPES(T)\
+if (PyObject_TypeCheck(value, (PyGLM_CTYPES_TYPE<T>()))) {\
+	*(((T*)self->data) + index) = *reinterpret_cast<T*>(((ctypes_helper*)value)->b_ptr);\
+	return 0;\
+}\
+if (PyGLM_Number_Check(value)) {\
+	*(((T*)self->data) + index) = PyGLM_Number_FromPyObject<T>(value);\
+	return 0;\
+}\
+PyGLM_TYPEERROR_O("invalid assignment type ", value); \
+return -1;
+
 int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
-	if (index >= self->itemCount) {
+	if (index >= self->itemCount || index < -self->itemCount) {
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return -1;
 	}
@@ -242,7 +254,7 @@ int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
 		case '?':
 			GLM_ARRAY_SET_IF_IS_VEC(bool);
 		default:
-			PyErr_SetString(PyExc_AssertionError, "Invalid shape occured. This should not have happened."); 
+			PyErr_SetString(PyExc_AssertionError, "Invalid format specifier. This should not have happened."); 
 			return -1; 
 		}
 	}
@@ -257,7 +269,7 @@ int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
 		case 'I':
 			GLM_ARRAY_SET_IF_IS_MAT(uint32);
 		default:
-			PyErr_SetString(PyExc_AssertionError, "Invalid shape occured. This should not have happened.");
+			PyErr_SetString(PyExc_AssertionError, "Invalid format specifier. This should not have happened.");
 			return -1;
 		}
 	}
@@ -268,7 +280,36 @@ int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
 		case 'd':
 			GLM_ARRAY_SET_IF_IS_QUA(double);
 		default:
-			PyErr_SetString(PyExc_AssertionError, "Invalid shape occured. This should not have happened.");
+			PyErr_SetString(PyExc_AssertionError, "Invalid format specifier. This should not have happened.");
+			return -1;
+		}
+	}
+	if (self->glmType == PyGLM_TYPE_CTYPES) {
+		switch (self->format) {
+		case 'f':
+			GLM_ARRAY_SET_IF_IS_CTYPES(float);
+		case 'd':
+			GLM_ARRAY_SET_IF_IS_CTYPES(double);
+		case 'i':
+			GLM_ARRAY_SET_IF_IS_CTYPES(int32);
+		case 'I':
+			GLM_ARRAY_SET_IF_IS_CTYPES(uint32);
+		case 'b':
+			GLM_ARRAY_SET_IF_IS_CTYPES(int8);
+		case 'B':
+			GLM_ARRAY_SET_IF_IS_CTYPES(uint8);
+		case 'h':
+			GLM_ARRAY_SET_IF_IS_CTYPES(int16);
+		case 'H':
+			GLM_ARRAY_SET_IF_IS_CTYPES(uint16);
+		case 'q':
+			GLM_ARRAY_SET_IF_IS_CTYPES(int64);
+		case 'Q':
+			GLM_ARRAY_SET_IF_IS_CTYPES(uint64);
+		case '?':
+			GLM_ARRAY_SET_IF_IS_CTYPES(bool);
+		default:
+			PyErr_SetString(PyExc_AssertionError, "Invalid format specifier. This should not have happened.");
 			return -1;
 		}
 	}
@@ -326,10 +367,13 @@ default:\
 	PyGLM_ASSERT(0, "Invalid shape occured. This should not have happened.");\
 }
 
+#define GLM_ARRAY_GET_IF_IS_CTYPES(T) \
+return PyGLM_PyObject_FromNumber<T>(*(((T*)self->data) + index));
+
 #define GLM_ARRAY_GET_IF_IS_QUA(T) return pack(*(((glm::qua<T>*)self->data) + index));
 
 PyObject* glmArray_get(glmArray* self, ssize_t index) {
-	if (index >= self->itemCount) {
+	if (index >= self->itemCount || index < -self->itemCount) {
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return NULL;
 	}
@@ -384,6 +428,34 @@ PyObject* glmArray_get(glmArray* self, ssize_t index) {
 			GLM_ARRAY_GET_IF_IS_QUA(float);
 		case 'd':
 			GLM_ARRAY_GET_IF_IS_QUA(double);
+		default:
+			PyGLM_ASSERT(0, "Invalid format specifier. This should not have happened.");
+		}
+	}
+	if (self->glmType == PyGLM_TYPE_CTYPES) {
+		switch (self->format) {
+		case 'f':
+			GLM_ARRAY_GET_IF_IS_CTYPES(float);
+		case 'd':
+			GLM_ARRAY_GET_IF_IS_CTYPES(double);
+		case 'i':
+			GLM_ARRAY_GET_IF_IS_CTYPES(int32);
+		case 'I':
+			GLM_ARRAY_GET_IF_IS_CTYPES(uint32);
+		case 'b':
+			GLM_ARRAY_GET_IF_IS_CTYPES(int8);
+		case 'B':
+			GLM_ARRAY_GET_IF_IS_CTYPES(uint8);
+		case 'h':
+			GLM_ARRAY_GET_IF_IS_CTYPES(int16);
+		case 'H':
+			GLM_ARRAY_GET_IF_IS_CTYPES(uint16);
+		case 'q':
+			GLM_ARRAY_GET_IF_IS_CTYPES(int64);
+		case 'Q':
+			GLM_ARRAY_GET_IF_IS_CTYPES(uint64);
+		case '?':
+			GLM_ARRAY_GET_IF_IS_CTYPES(bool);
 		default:
 			PyGLM_ASSERT(0, "Invalid format specifier. This should not have happened.");
 		}
@@ -492,6 +564,27 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 			view->strides = NULL;
 		}
 	}
+	else if (self->glmType == PyGLM_TYPE_CTYPES) {
+		view->ndim = 1;
+		if (flags & PyBUF_ND) {
+			view->shape = (Py_ssize_t*)PyMem_Malloc(sizeof(Py_ssize_t));
+			if (view->shape != NULL) {
+				view->shape[0] = self->itemCount;
+			}
+		}
+		else {
+			view->shape = NULL;
+		}
+		if ((flags & PyBUF_STRIDES) == PyBUF_STRIDES) {
+			view->strides = (Py_ssize_t*)PyMem_Malloc(sizeof(Py_ssize_t));
+			if (view->strides != NULL) {
+				view->strides[0] = self->dtSize;
+			}
+		}
+		else {
+			view->strides = NULL;
+		}
+	}
 	
 	view->suboffsets = NULL;
 	view->internal = NULL;
@@ -524,6 +617,145 @@ glmArray_to_tuple(glmArray* self, PyObject*) {
 		PyTuple_SET_ITEM(out, i, glmArray_get(self, i));
 	}
 	return out;
+}
+
+template<typename T>
+static bool
+glmArray_from_numbers_init_iter(glmArray* out, PyObject* iterator, Py_ssize_t& argCount) {
+	out->dtSize = sizeof(T);
+	out->itemSize = sizeof(T);
+	out->itemCount = argCount - 1;
+	out->nBytes = out->itemSize * out->itemCount;
+	out->format = get_format_specifier<T>();
+	out->data = PyMem_Malloc(out->nBytes);
+
+	if (out->data == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "Out of memory");
+		return false;
+	}
+
+	T* values = reinterpret_cast<T*>(out->data);
+
+	for (Py_ssize_t i = 1; i < argCount; i++) {
+		PyObject* element = PyIter_Next(iterator);
+		if (!PyGLM_Number_Check(element)) {
+			PyGLM_TYPEERROR_O("Invalid argument type(s) for from_number(). Expected only numbers, got ", element);
+			return false;
+		}
+		values[i - 1] = PyGLM_Number_FromPyObject<T>(element);
+	}
+
+	return true;
+}
+
+template<typename T>
+static bool
+glmArray_from_numbers_init(glmArray* out, PyObject* tuple, Py_ssize_t& argCount) {
+	out->dtSize = sizeof(T);
+	out->itemSize = sizeof(T);
+	out->itemCount = argCount - 1;
+	out->nBytes = out->itemSize * out->itemCount;
+	out->format = get_format_specifier<T>();
+	out->data = PyMem_Malloc(out->nBytes);
+
+	if (out->data == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "Out of memory");
+		return false;
+	}
+
+	T* values = reinterpret_cast<T*>(out->data);
+
+	for (Py_ssize_t i = 1; i < argCount; i++) {
+		PyObject* element = PyGLM_TupleOrList_GET_ITEM(tuple, i);
+		if (!PyGLM_Number_Check(element)) {
+			PyGLM_TYPEERROR_O("Invalid argument type(s) for from_number(). Expected only numbers, got ", element);
+			return false;
+		}
+		values[i - 1] = PyGLM_Number_FromPyObject<T>(element);
+	}
+
+	return true;
+}
+
+static PyObject*
+glmArray_from_numbers(PyObject*, PyObject* args) {
+	Py_ssize_t argCount = PyTuple_GET_SIZE(args);
+	PyGLM_ASSERT((argCount >= 1), "Invalid argument count for from_number(), expected at least 1, got 0");
+
+	PyObject* formatType = PyTuple_GET_ITEM(args, 0);
+	if (!PyType_Check(formatType)) {
+		PyGLM_TYPEERROR_O("Invalid argument type for from_number(), expected a data type as the first argument. Got ", formatType);
+		return NULL;
+	}
+
+	glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
+
+	if (out == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "Out of memory");
+		return NULL;
+	}
+
+	out->subtype = (PyTypeObject*)formatType;
+	out->glmType = PyGLM_TYPE_CTYPES;
+
+	if (formatType == ctypes_float) {
+		if (glmArray_from_numbers_init<float>(out, args, argCount))
+			return (PyObject*)out;
+		return NULL;
+	}
+	if (formatType == ctypes_double) {
+		if (glmArray_from_numbers_init<double>(out, args, argCount))
+			return (PyObject*)out;
+		return NULL;
+	}
+	if (formatType == ctypes_int8) {
+		if (glmArray_from_numbers_init<int8>(out, args, argCount))
+			return (PyObject*)out;
+		return NULL;
+	}
+	if (formatType == ctypes_int16) {
+		if (glmArray_from_numbers_init<int16>(out, args, argCount))
+			return (PyObject*)out;
+		return NULL;
+	}
+	if (formatType == ctypes_int32) {
+		if (glmArray_from_numbers_init<int32>(out, args, argCount))
+			return (PyObject*)out;
+		return NULL;
+	}
+	if (formatType == ctypes_int64) {
+		if (glmArray_from_numbers_init<int64>(out, args, argCount))
+			return (PyObject*)out;
+		return NULL;
+	}
+	if (formatType == ctypes_uint8) {
+		if (glmArray_from_numbers_init<uint8>(out, args, argCount))
+			return (PyObject*)out;
+		return NULL;
+	}
+	if (formatType == ctypes_uint16) {
+		if (glmArray_from_numbers_init<uint16>(out, args, argCount))
+			return (PyObject*)out;
+		return NULL;
+	}
+	if (formatType == ctypes_uint32) {
+		if (glmArray_from_numbers_init<uint32>(out, args, argCount))
+			return (PyObject*)out;
+		return NULL;
+	}
+	if (formatType == ctypes_uint64) {
+		if (glmArray_from_numbers_init<uint64>(out, args, argCount))
+			return (PyObject*)out;
+		return NULL;
+	}
+	if (formatType == ctypes_bool) {
+		if (glmArray_from_numbers_init<bool>(out, args, argCount))
+			return (PyObject*)out;
+		return NULL;
+	}
+
+	PyGLM_TYPEERROR_O("Invalid argument type for from_number(), expected a ctypes data type as the first argument. Got ", formatType);
+	return NULL;
 }
 
 static PyObject*
@@ -1087,6 +1319,84 @@ glmArray_repr_qua(glmArray* self) {
 	return po;
 }
 
+template<typename T>
+static PyObject*
+glmArray_str_ctypes(glmArray* self) {
+	constexpr uint64 itemSize = (1 + 12 + 2);
+	uint64 outLength = 1 + 3 + self->itemCount * itemSize;
+
+	char* out = (char*)PyMem_Malloc(outLength * sizeof(char));
+	if (out == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "out of memory");
+		return NULL;
+	}
+	char* currentIndex = out;
+
+	snprintf(currentIndex, 2 + 1, "[\n");
+	currentIndex += 2;
+
+	T* values = reinterpret_cast<T*>(self->data);
+
+	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+		snprintf(currentIndex, 1 + 12 + 2 + 1, " %12.6g,\n", static_cast<double>(values[itemIndex]));
+		currentIndex += 1 + 12 + 2;
+	}
+
+	snprintf(currentIndex, 1 + 1, "]");
+
+	PyObject* po = PyUnicode_FromString(out);
+	PyMem_Free(out);
+	return po;
+}
+
+template<typename T>
+static PyObject*
+glmArray_repr_ctypes(glmArray* self) {
+	const int L = self->getShape();
+
+	const char* subtypeName = PyGLM_CTYPES_TYPE_STRING<T>();
+
+	const char* arrayTypeName = glmArrayType.tp_name + 4;
+
+	const uint64 arrayNameLength = strlen(arrayTypeName);
+	const uint64 subtypeNameLength = strlen(subtypeName);
+
+	const uint64 itemSize = (subtypeNameLength + 2 + 12);
+	const uint64 outLength = 1 + arrayNameLength + 2 + itemSize + (itemSize + 2) * (self->itemCount - 1);
+
+	char* out = (char*)PyMem_Malloc(outLength * sizeof(char));
+	if (out == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "out of memory");
+		return NULL;
+	}
+	char* currentIndex = out;
+
+	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", arrayTypeName);
+	currentIndex += arrayNameLength + 1;
+
+	T* values = reinterpret_cast<T*>(self->data);
+
+	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+		snprintf(currentIndex, subtypeNameLength + 1 + 12 + 1, "%s(%g", subtypeName, static_cast<double>(values[itemIndex]));
+		currentIndex += strlen(currentIndex);
+
+		if (itemIndex < self->itemCount - 1) {
+			snprintf(currentIndex, 3 + 1, "), ");
+			currentIndex += 3;
+		}
+		else {
+			snprintf(currentIndex, 1 + 1, ")");
+			currentIndex += 1;
+		}
+	}
+
+	snprintf(currentIndex, 1 + 1, ")");
+
+	PyObject* po = PyUnicode_FromString(out);
+	PyMem_Free(out);
+	return po;
+}
+
 static PyObject* 
 glmArray_str(glmArray* self) {
 	switch (self->glmType) {
@@ -1136,6 +1446,33 @@ glmArray_str(glmArray* self) {
 			return glmArray_str_qua<float>(self);
 		case 'd':
 			return glmArray_str_qua<double>(self);
+		default:
+			return NULL;
+		}
+	case PyGLM_TYPE_CTYPES:
+		switch (self->format) {
+		case 'f':
+			return glmArray_str_ctypes<float>(self);
+		case 'd':
+			return glmArray_str_ctypes<double>(self);
+		case 'i':
+			return glmArray_str_ctypes<int32>(self);
+		case 'I':
+			return glmArray_str_ctypes<uint32>(self);
+		case 'b':
+			return glmArray_str_ctypes<int8>(self);
+		case 'B':
+			return glmArray_str_ctypes<uint8>(self);
+		case 'h':
+			return glmArray_str_ctypes<int16>(self);
+		case 'H':
+			return glmArray_str_ctypes<uint16>(self);
+		case 'q':
+			return glmArray_str_ctypes<int64>(self);
+		case 'Q':
+			return glmArray_str_ctypes<uint64>(self);
+		case '?':
+			return glmArray_str_ctypes<bool>(self);
 		default:
 			return NULL;
 		}
@@ -1192,6 +1529,33 @@ static PyObject* glmArray_repr(glmArray* self) {
 			return glmArray_repr_qua<float>(self);
 		case 'd':
 			return glmArray_repr_qua<double>(self);
+		default:
+			return NULL;
+		}
+	case PyGLM_TYPE_CTYPES:
+		switch (self->format) {
+		case 'f':
+			return glmArray_repr_ctypes<float>(self);
+		case 'd':
+			return glmArray_repr_ctypes<double>(self);
+		case 'i':
+			return glmArray_repr_ctypes<int32>(self);
+		case 'I':
+			return glmArray_repr_ctypes<uint32>(self);
+		case 'b':
+			return glmArray_repr_ctypes<int8>(self);
+		case 'B':
+			return glmArray_repr_ctypes<uint8>(self);
+		case 'h':
+			return glmArray_repr_ctypes<int16>(self);
+		case 'H':
+			return glmArray_repr_ctypes<uint16>(self);
+		case 'q':
+			return glmArray_repr_ctypes<int64>(self);
+		case 'Q':
+			return glmArray_repr_ctypes<uint64>(self);
+		case '?':
+			return glmArray_repr_ctypes<bool>(self);
 		default:
 			return NULL;
 		}
@@ -1372,6 +1736,45 @@ glmArray_init_qua_iter(glmArray* self, PyObject* firstElement, PyObject* iterato
 	return 0;
 }
 
+#define GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(T) if (firstElementType == UNBRACKET (PyGLM_CTYPES_TYPE<T>())) {return UNBRACKET (glmArray_init_ctypes_iter<T>(self, firstElement, iterator, argCount));}
+
+template<typename T>
+static int
+glmArray_init_ctypes_iter(glmArray* self, PyObject* firstElement, PyObject* iterator, Py_ssize_t argCount) {
+	self->itemCount = argCount;
+	self->dtSize = sizeof(T);
+	self->itemSize = sizeof(T);
+	self->nBytes = self->itemSize * argCount;
+	self->subtype = PyGLM_CTYPES_TYPE<T>();
+	self->glmType = PyGLM_TYPE_CTYPES;
+	self->format = get_format_specifier<T>();
+	self->data = PyMem_Malloc(self->nBytes);
+
+	if (self->data == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "array creation failed");
+		Py_DECREF(iterator);
+		Py_DECREF(firstElement);
+		return -1;
+	}
+	T* dataAsTPtr = (T*)self->data;
+	dataAsTPtr[0] = *reinterpret_cast<T*>(((ctypes_helper*)firstElement)->b_ptr);
+	Py_DECREF(firstElement);
+	for (Py_ssize_t i = 1; i < argCount; i++) {
+		ctypes_helper* currentArg = (ctypes_helper*)PyIter_Next(iterator);
+		if (Py_TYPE(currentArg) != self->subtype) {
+			PyGLM_free(self->data);
+			PyErr_SetString(PyExc_TypeError, "arrays have to be initialized with arguments of the same glm type");
+			Py_DECREF(iterator);
+			Py_DECREF(currentArg);
+			return -1;
+		}
+		dataAsTPtr[i] = *reinterpret_cast<T*>(currentArg->b_ptr);
+		Py_DECREF(currentArg);
+	}
+	Py_DECREF(iterator);
+	return 0;
+}
+
 #define GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(C, R, T) if (firstElementType == UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) {return UNBRACKET (glmArray_init_mat_tuple_or_list<C, R, T>(self, args, argCount));}
 
 template<int C, int R, typename T>
@@ -1473,6 +1876,37 @@ glmArray_init_qua_tuple_or_list(glmArray* self, PyObject* args, Py_ssize_t argCo
 	return 0;
 }
 
+#define GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(T) if (firstElementType == UNBRACKET (PyGLM_CTYPES_TYPE<T>())) {return UNBRACKET (glmArray_init_ctypes_tuple_or_list<T>(self, args, argCount));}
+
+template<typename T>
+static int
+glmArray_init_ctypes_tuple_or_list(glmArray* self, PyObject* args, Py_ssize_t argCount) {
+	self->itemCount = argCount;
+	self->dtSize = sizeof(T);
+	self->itemSize = sizeof(T);
+	self->nBytes = self->itemSize * argCount;
+	self->subtype = PyGLM_CTYPES_TYPE<T>();
+	self->glmType = PyGLM_TYPE_CTYPES;
+	self->format = get_format_specifier<T>();
+	self->data = PyMem_Malloc(self->nBytes);
+
+	if (self->data == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "array creation failed");
+		return -1;
+	}
+	T* dataAsTPtr = (T*)self->data;
+	for (Py_ssize_t i = 0; i < argCount; i++) {
+		ctypes_helper* currentArg = (ctypes_helper*)PyGLM_TupleOrList_GET_ITEM(args, i);
+		if (Py_TYPE(currentArg) != self->subtype) {
+			PyGLM_free(self->data);
+			PyErr_SetString(PyExc_TypeError, "arrays have to be initialized with arguments of the same type");
+			return -1;
+		}
+		dataAsTPtr[i] = *reinterpret_cast<T*>(currentArg->b_ptr);
+	}
+	return 0;
+}
+
 #define GLM_ARRAY_INIT_IF_IS_VEC_BUFFER(T) self->dtSize = sizeof(T);\
 self->itemSize = L * self->dtSize;\
 self->nBytes = self->itemSize * self->itemCount;\
@@ -1501,6 +1935,19 @@ memcpy(self->data, view.buf, self->nBytes);\
 PyBuffer_Release(&view);\
 return 0
 
+#define GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(T) self->dtSize = sizeof(T);\
+self->itemSize = self->dtSize;\
+self->nBytes = self->itemSize * self->itemCount;\
+self->subtype = PyGLM_CTYPES_TYPE<T>();\
+self->data = PyMem_Malloc(self->nBytes);\
+if (self->data == NULL) {\
+	PyErr_SetString(PyExc_MemoryError, "out of memory");\
+	return -1;\
+}\
+memcpy(self->data, view.buf, self->nBytes);\
+PyBuffer_Release(&view);\
+return 0
+
 static int 
 glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 	Py_ssize_t argCount = PyGLM_TupleOrList_GET_SIZE(args);
@@ -1512,105 +1959,204 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 	PyTypeObject*& firstElementType = Py_TYPE(firstElement);
 
 	// vectors
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, float);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, double);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int32);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint32);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int64);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint64);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int16);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint16);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int8);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint8);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, bool);
+	if (firstElementType->tp_dealloc == vec_dealloc || firstElementType->tp_dealloc == mvec_dealloc) {
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, float);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, double);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int32);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint32);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int64);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint64);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int16);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint16);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int8);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint8);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, bool);
 
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, float);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, double);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int32);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint32);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int64);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint64);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int16);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint16);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int8);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint8);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, bool);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, float);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, double);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int32);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint32);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int64);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint64);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int16);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint16);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int8);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint8);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, bool);
 
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, float);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, double);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int32);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint32);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int64);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint64);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int16);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint16);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int8);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint8);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, bool);
 
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, float);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, double);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int32);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint32);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int64);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint64);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int16);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint16);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int8);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint8);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, bool);
-
-
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, float);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, double);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int32);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint32);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int64);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint64);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int16);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint16);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int8);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint8);
-	GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, bool);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, float);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, double);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int32);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint32);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int64);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint64);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int16);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint16);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int8);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint8);
+		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, bool);
+	}
 
 	// matrices
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, float);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, double);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, int32);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, uint32);
+	if (firstElementType->tp_dealloc == mat_dealloc) {
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, float);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, double);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, int32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, uint32);
 
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, float);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, double);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, int32);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, uint32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, float);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, double);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, int32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, uint32);
 
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, float);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, double);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, int32);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, uint32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, float);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, double);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, int32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, uint32);
 
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, float);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, double);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, int32);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, uint32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, float);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, double);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, int32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, uint32);
 
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, float);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, double);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, int32);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, uint32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, float);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, double);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, int32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, uint32);
 
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, float);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, double);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, int32);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, uint32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, float);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, double);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, int32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, uint32);
 
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, float);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, double);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, int32);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, uint32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, float);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, double);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, int32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, uint32);
 
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, float);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, double);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, int32);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, uint32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, float);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, double);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, int32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, uint32);
 
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, float);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, double);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, int32);
-	GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, uint32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, float);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, double);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, int32);
+		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, uint32);
+	}
 
 	// quaternions
-	GLM_ARRAY_INIT_IF_IS_QUA_TUPLE_OR_LIST(float);
-	GLM_ARRAY_INIT_IF_IS_QUA_TUPLE_OR_LIST(double);
+	if (firstElementType->tp_dealloc == qua_dealloc) {
+		GLM_ARRAY_INIT_IF_IS_QUA_TUPLE_OR_LIST(float);
+		GLM_ARRAY_INIT_IF_IS_QUA_TUPLE_OR_LIST(double);
+	}
+
+	// ctypes
+	if (firstElementType->tp_dealloc == ((PyTypeObject*)ctypes_float)->tp_dealloc) {
+		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(float);
+		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(double);
+		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(int8);
+		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(int16);
+		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(int32);
+		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(int64);
+		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(uint8);
+		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(uint16);
+		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(uint32);
+		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(uint64);
+		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(bool);
+	}
+
+	if (PyType_FastSubclass(firstElementType, Py_TPFLAGS_TYPE_SUBCLASS)) {
+		if (firstElement == ctypes_float) {
+			self->subtype = (PyTypeObject*)firstElement;
+			self->glmType = PyGLM_TYPE_CTYPES;
+			if (glmArray_from_numbers_init<float>(self, args, argCount))
+				return 0;
+			return -1;
+		}
+		if (firstElement == ctypes_double) {
+			self->subtype = (PyTypeObject*)firstElement;
+			self->glmType = PyGLM_TYPE_CTYPES;
+			if (glmArray_from_numbers_init<double>(self, args, argCount))
+				return 0;
+			return -1;
+		}
+		if (firstElement == ctypes_int8) {
+			self->subtype = (PyTypeObject*)firstElement;
+			self->glmType = PyGLM_TYPE_CTYPES;
+			if (glmArray_from_numbers_init<int8>(self, args, argCount))
+				return 0;
+			return -1;
+		}
+		if (firstElement == ctypes_int16) {
+			self->subtype = (PyTypeObject*)firstElement;
+			self->glmType = PyGLM_TYPE_CTYPES;
+			if (glmArray_from_numbers_init<int16>(self, args, argCount))
+				return 0;
+			return -1;
+		}
+		if (firstElement == ctypes_int32) {
+			self->subtype = (PyTypeObject*)firstElement;
+			self->glmType = PyGLM_TYPE_CTYPES;
+			if (glmArray_from_numbers_init<int32>(self, args, argCount))
+				return 0;
+			return -1;
+		}
+		if (firstElement == ctypes_int64) {
+			self->subtype = (PyTypeObject*)firstElement;
+			self->glmType = PyGLM_TYPE_CTYPES;
+			if (glmArray_from_numbers_init<int64>(self, args, argCount))
+				return 0;
+			return -1;
+		}
+		if (firstElement == ctypes_uint8) {
+			self->subtype = (PyTypeObject*)firstElement;
+			self->glmType = PyGLM_TYPE_CTYPES;
+			if (glmArray_from_numbers_init<uint8>(self, args, argCount))
+				return 0;
+			return -1;
+		}
+		if (firstElement == ctypes_uint16) {
+			self->subtype = (PyTypeObject*)firstElement;
+			self->glmType = PyGLM_TYPE_CTYPES;
+			if (glmArray_from_numbers_init<uint16>(self, args, argCount))
+				return 0;
+			return -1;
+		}
+		if (firstElement == ctypes_uint32) {
+			self->subtype = (PyTypeObject*)firstElement;
+			self->glmType = PyGLM_TYPE_CTYPES;
+			if (glmArray_from_numbers_init<uint32>(self, args, argCount))
+				return 0;
+			return -1;
+		}
+		if (firstElement == ctypes_uint64) {
+			self->subtype = (PyTypeObject*)firstElement;
+			self->glmType = PyGLM_TYPE_CTYPES;
+			if (glmArray_from_numbers_init<uint64>(self, args, argCount))
+				return 0;
+			return -1;
+		}
+		if (firstElement == ctypes_bool) {
+			self->subtype = (PyTypeObject*)firstElement;
+			self->glmType = PyGLM_TYPE_CTYPES;
+			if (glmArray_from_numbers_init<bool>(self, args, argCount))
+				return 0;
+			return -1;
+		}
+	}
 
 	// others
 	if (argCount == 1) {
@@ -1649,7 +2195,44 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 				PyBuffer_Release(&view);
 				return -1;
 			}
-			if (view.ndim == 2) {
+			if (view.ndim == 1) {
+				self->itemCount = view.shape[0];
+				self->format = view.format[0];
+
+				if (self->format == 'l') self->format = 'i';
+				else if (self->format == 'L') self->format = 'I';
+
+				self->glmType = PyGLM_TYPE_CTYPES;
+				switch (self->format) {
+				case 'f':
+					GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(float);
+				case 'd':
+					GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(double);
+				case 'i':
+					GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(int32);
+				case 'I':
+					GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(uint32);
+				case 'b':
+					GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(int8);
+				case 'B':
+					GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(uint8);
+				case 'h':
+					GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(int16);
+				case 'H':
+					GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(uint16);
+				case 'q':
+					GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(int64);
+				case 'Q':
+					GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(uint64);
+				case '?':
+					GLM_ARRAY_INIT_IF_IS_CTYPES_BUFFER(bool);
+				default:
+					PyGLM_TYPEERROR_O("invalid argument type ", firstElement);
+					PyBuffer_Release(&view);
+					return -1;
+				}
+			}
+			else if (view.ndim == 2) {
 				if (view.shape[1] < 1 || view.shape[1] > 4) {
 					PyErr_SetString(PyExc_ValueError, "invalid buffer shape");
 					return -1;
@@ -1733,110 +2316,212 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 		// iterators
 		if (PyObject_IterCheck(firstElement)) {
 			argCount = PyObject_Length(firstElement);
+			PyGLM_ASSERT_NO((argCount >= 1), "Iterable needs to have at least one element");
 			PyObject* iterator = PyObject_GetIter(firstElement);
 			PyObject* firstElement = PyIter_Next(iterator);
 			PyTypeObject* firstElementType = Py_TYPE(firstElement);
 
 			// vectors
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, float);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, double);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int32);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint32);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int64);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint64);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int16);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint16);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int8);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint8);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, bool);
+			if (firstElementType->tp_dealloc == vec_dealloc || firstElementType->tp_dealloc == mvec_dealloc) {
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, float);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, double);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int32);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint32);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int64);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint64);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int16);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint16);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int8);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint8);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, bool);
 
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, float);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, double);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int32);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint32);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int64);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint64);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int16);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint16);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int8);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint8);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, bool);
-
-
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, float);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, double);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int32);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint32);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int64);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint64);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int16);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint16);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int8);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint8);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, bool);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, float);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, double);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int32);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint32);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int64);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint64);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int16);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint16);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int8);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint8);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, bool);
 
 
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, float);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, double);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int32);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint32);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int64);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint64);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int16);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint16);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int8);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint8);
-			GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, bool);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, float);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, double);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int32);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint32);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int64);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint64);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int16);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint16);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int8);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint8);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, bool);
+
+
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, float);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, double);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int32);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint32);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int64);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint64);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int16);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint16);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int8);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint8);
+				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, bool);
+			}
 
 			// matrices
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, float);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, double);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, int32);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, uint32);
+			if (firstElementType->tp_dealloc == mat_dealloc) {
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, float);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, double);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, int32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, uint32);
 
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, float);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, double);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, int32);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, uint32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, float);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, double);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, int32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, uint32);
 
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, float);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, double);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, int32);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, uint32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, float);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, double);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, int32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, uint32);
 
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, float);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, double);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, int32);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, uint32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, float);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, double);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, int32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, uint32);
 
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, float);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, double);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, int32);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, uint32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, float);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, double);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, int32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, uint32);
 
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, float);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, double);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, int32);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, uint32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, float);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, double);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, int32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, uint32);
 
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, float);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, double);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, int32);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, uint32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, float);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, double);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, int32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, uint32);
 
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, float);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, double);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, int32);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, uint32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, float);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, double);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, int32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, uint32);
 
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, float);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, double);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, int32);
-			GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, uint32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, float);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, double);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, int32);
+				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, uint32);
+			}
 
 			// quaternions
-			GLM_ARRAY_INIT_IF_IS_QUA_ITER(float);
-			GLM_ARRAY_INIT_IF_IS_QUA_ITER(double);
+			if (firstElementType->tp_dealloc == qua_dealloc) {
+				GLM_ARRAY_INIT_IF_IS_QUA_ITER(float);
+				GLM_ARRAY_INIT_IF_IS_QUA_ITER(double);
+			}
+
+			// ctypes
+			if (firstElementType->tp_dealloc == ((PyTypeObject*)ctypes_float)->tp_dealloc) {
+				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(float);
+				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(double);
+				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(int8);
+				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(int16);
+				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(int32);
+				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(int64);
+				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(uint8);
+				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(uint16);
+				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(uint32);
+				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(uint64);
+				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(bool);
+			}
+
+			if (PyType_FastSubclass(firstElementType, Py_TPFLAGS_TYPE_SUBCLASS)) {
+				if (firstElement == ctypes_float) {
+					self->subtype = firstElementType;
+					self->glmType = PyGLM_TYPE_CTYPES;
+					if (glmArray_from_numbers_init_iter<float>(self, iterator, argCount))
+						return 0;
+					return -1;
+				}
+				if (firstElement == ctypes_double) {
+					self->subtype = firstElementType;
+					self->glmType = PyGLM_TYPE_CTYPES;
+					if (glmArray_from_numbers_init_iter<double>(self, iterator, argCount))
+						return 0;
+					return -1;
+				}
+				if (firstElement == ctypes_int8) {
+					self->subtype = firstElementType;
+					self->glmType = PyGLM_TYPE_CTYPES;
+					if (glmArray_from_numbers_init_iter<int8>(self, iterator, argCount))
+						return 0;
+					return -1;
+				}
+				if (firstElement == ctypes_int16) {
+					self->subtype = firstElementType;
+					self->glmType = PyGLM_TYPE_CTYPES;
+					if (glmArray_from_numbers_init_iter<int16>(self, iterator, argCount))
+						return 0;
+					return -1;
+				}
+				if (firstElement == ctypes_int32) {
+					self->subtype = firstElementType;
+					self->glmType = PyGLM_TYPE_CTYPES;
+					if (glmArray_from_numbers_init_iter<int32>(self, iterator, argCount))
+						return 0;
+					return -1;
+				}
+				if (firstElement == ctypes_int64) {
+					self->subtype = firstElementType;
+					self->glmType = PyGLM_TYPE_CTYPES;
+					if (glmArray_from_numbers_init_iter<int64>(self, iterator, argCount))
+						return 0;
+					return -1;
+				}
+				if (firstElement == ctypes_uint8) {
+					self->subtype = firstElementType;
+					self->glmType = PyGLM_TYPE_CTYPES;
+					if (glmArray_from_numbers_init_iter<uint8>(self, iterator, argCount))
+						return 0;
+					return -1;
+				}
+				if (firstElement == ctypes_uint16) {
+					self->subtype = firstElementType;
+					self->glmType = PyGLM_TYPE_CTYPES;
+					if (glmArray_from_numbers_init_iter<uint16>(self, iterator, argCount))
+						return 0;
+					return -1;
+				}
+				if (firstElement == ctypes_uint32) {
+					self->subtype = firstElementType;
+					self->glmType = PyGLM_TYPE_CTYPES;
+					if (glmArray_from_numbers_init_iter<uint32>(self, iterator, argCount))
+						return 0;
+					return -1;
+				}
+				if (firstElement == ctypes_uint64) {
+					self->subtype = firstElementType;
+					self->glmType = PyGLM_TYPE_CTYPES;
+					if (glmArray_from_numbers_init_iter<uint64>(self, iterator, argCount))
+						return 0;
+					return -1;
+				}
+				if (firstElement == ctypes_bool) {
+					self->subtype = firstElementType;
+					self->glmType = PyGLM_TYPE_CTYPES;
+					if (glmArray_from_numbers_init_iter<bool>(self, iterator, argCount))
+						return 0;
+					return -1;
+				}
+			}
 		}
 	}
 
@@ -1891,6 +2576,24 @@ glmArrayIter_new(PyTypeObject* type, PyObject* args, PyObject* kwargs) {
 	rgstate->seq_index = 0;
 
 	return (PyObject*)rgstate;
+}
+
+template<typename T>
+static Py_hash_t
+array_hash_ctypes(T* data, ssize_t count) {
+	std::hash<T> hasher;
+
+	size_t seed = 0;
+
+	for (ssize_t i = 0; i < count; i++) {
+		glm::detail::hash_combine(seed, hasher(data[i]));
+	}
+
+	if (seed == static_cast<size_t>(-1)) {
+		return static_cast<Py_hash_t>(-2);
+	}
+
+	return  static_cast<Py_hash_t>(seed);
 }
 
 template<int L, typename T>
@@ -2213,6 +2916,30 @@ array_hash(glmArray* self, PyObject*) {
 
 		if (subtype == PyGLM_QUA_TYPE<double>())
 			return array_hash_qua<double>(reinterpret_cast<glm::qua<double>*>(self->data), self->itemCount);
+	}
+	if (glmType == PyGLM_TYPE_CTYPES) {
+		if (subtype == PyGLM_CTYPES_TYPE<float>())
+			return array_hash_ctypes<float>(reinterpret_cast<float*>(self->data), self->itemCount);
+		if (subtype == PyGLM_CTYPES_TYPE<double>())
+			return array_hash_ctypes<double>(reinterpret_cast<double*>(self->data), self->itemCount);
+		if (subtype == PyGLM_CTYPES_TYPE<int8>())
+			return array_hash_ctypes<int8>(reinterpret_cast<int8*>(self->data), self->itemCount);
+		if (subtype == PyGLM_CTYPES_TYPE<int16>())
+			return array_hash_ctypes<int16>(reinterpret_cast<int16*>(self->data), self->itemCount);
+		if (subtype == PyGLM_CTYPES_TYPE<int32>())
+			return array_hash_ctypes<int32>(reinterpret_cast<int32*>(self->data), self->itemCount);
+		if (subtype == PyGLM_CTYPES_TYPE<int64>())
+			return array_hash_ctypes<int64>(reinterpret_cast<int64*>(self->data), self->itemCount);
+		if (subtype == PyGLM_CTYPES_TYPE<uint8>())
+			return array_hash_ctypes<uint8>(reinterpret_cast<uint8*>(self->data), self->itemCount);
+		if (subtype == PyGLM_CTYPES_TYPE<uint16>())
+			return array_hash_ctypes<uint16>(reinterpret_cast<uint16*>(self->data), self->itemCount);
+		if (subtype == PyGLM_CTYPES_TYPE<uint32>())
+			return array_hash_ctypes<uint32>(reinterpret_cast<uint32*>(self->data), self->itemCount);
+		if (subtype == PyGLM_CTYPES_TYPE<uint64>())
+			return array_hash_ctypes<uint64>(reinterpret_cast<uint64*>(self->data), self->itemCount);
+		if (subtype == PyGLM_CTYPES_TYPE<bool>())
+			return array_hash_ctypes<bool>(reinterpret_cast<bool*>(self->data), self->itemCount);
 	}
 	return -1;
 }

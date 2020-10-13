@@ -15,3 +15,5 @@
 #include "qua.h"
 
 #include "qua_iter.h"
+
+#include "ctypes_datatypes.h"

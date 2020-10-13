@@ -31,12 +31,12 @@
 //	return PyLong_FromLong(pti.info);
 //}
 //
+
+
+
 //static PyObject*
-//test(PyObject*, PyObject* arg) {
-//	PyGLM_PTI_InitN(0, arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
-//	if (PyGLM_Vec_PTI_CheckN(0, 3, float, arg)) {
-//		Py_RETURN_TRUE;
-//	}
+//test(PyObject*, ctypes_helper* arg) {
+//	
 //	//PyGLMTypeInfo pti(PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLMTypeInfo::getDT<float>(), arg);
 //	////return pack(*((glm::mat<4,4, float>*)pti.data));
 //	//return PyLong_FromLong(pti.info);
