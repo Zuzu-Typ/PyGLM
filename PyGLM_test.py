@@ -1,5 +1,7 @@
 import glm, sys, random, time, copy
 
+from collections import OrderedDict
+
 glm.silence(0)
 
 ## type checking definitions ##
@@ -460,6 +462,18 @@ def test_array_types():
     assert glm.array(tuple([glm.mat4() for x in range(10)]))
     assert glm.array({x : glm.mat4() for x in range(10)}.values())
     assert glm.array(memoryview(glm.array([glm.mat4() for x in range(10)])))
+
+    assert glm.array([glm.float32(x) for x in range(10)])
+    assert glm.array(tuple([glm.float32(x) for x in range(10)]))
+    assert glm.array({x : glm.float32(x) for x in range(10)}.values())
+    assert glm.array(memoryview(glm.array([glm.float32(x) for x in range(10)])))
+
+    assert glm.array(glm.float32, *range(10))
+    assert glm.array.from_numbers(glm.float32, *range(10))
+    assert glm.array([glm.float32, 1, 2, 3])
+    assert glm.array((glm.float32, 1, 2, 3))
+    assert glm.array(OrderedDict([(glm.float32, 1), (1, 2), (2, 3), (3, 4)]))
+    assert glm.array(memoryview(glm.array.from_numbers(glm.float32, *range(10))))
 
     arr = glm.array(glm.mat4(), glm.mat4(2))
     assert len(arr) == 2, arr

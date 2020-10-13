@@ -23,11 +23,14 @@ They are made up of a scalar part \code\(w)\code\ and a vector part \code\(x, y,
 Quaternion types are simply expressed as \code\glm.quat\code\.
 Refer to \url Using-quaternions.md \using quaternions\url\ for a complete type reference.
 
-\-\A PyGLM \b\array\b\ (\code\glm.array\code\) is a simple way of storing a copy of multiple instances of one of the aforementioned types.
+\-\A PyGLM \b\array\b\ (\code\glm.array\code\) is a simple way of storing a copy of multiple instances of one of the aforementioned types or numbers.
 This array can then be used to \b\transfer that data over to external C functions\b\, such as \code\glBufferData\code\ from PyOpenGL.
 Although PyGLM's arrays are a lot simpler than NumPy arrays, they're \b\quite a bit faster\b\.
 Refer to \url Using-arrays.md \using arrays\url\ for a complete type reference.
 \ lo\
+
+PyGLM also provides simple access to \code\ctypes\code\ C datatypes, such as \code\c_float\code\, which can be accessed as \code\glm.c_float\code\ or \code\glm.float_\code\ 
+(the underscore is only present for \code\float\code\ and \code\bool\code\ to accomodate for wildcard imports, which would override the builtin types).
 
 \b\The following section is devoted to vectors, matrices and quaternions only.\b\
 

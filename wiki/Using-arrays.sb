@@ -8,14 +8,15 @@ It's mainly intended to \b\provide a way of passing multiple glm type instances\
 \lo\
 \-\\url #about-arrays\About arrays\url\
 \-\\url #initialization\Initialization\url\\list switch\
-\--\\url #-with-vectors-matrices-or-quaternions\.. with vectors, matrices or quaternions\url\
+\--\\url #-with-vectors-matrices-quaternions-or-ctypes-number-objects\.. with vectors, matrices, quaternions or ctypes number objects\url\
 \--\\url #-with-other-array-instances\.. with other array instances\url\
 \--\\url #-with-other-compatible-arrays--lists--iterables\.. with other compatible arrays / lists / iterables\url\\list switch\
 \-\\url #members\Members\url\
 \-\\url #methods\Methods\url\\list switch\
 \--\\url #the-copy-protocol\The copy protocol\url\
 \--\ \url #pickling \Pickling\ url\
-\--\\url #to-list--tuple\To list / tuple\url\\list switch\
+\--\\url #to-list--tuple\To list / tuple\url\
+\--\\url #from-numbers\From Numbers\url\\list switch\
 \-\\url #operators\Operators\url\\list switch\
 \--\\url #concat--operator\concat\url\
 \--\\url #repeat--operator\repeat\url\
@@ -37,7 +38,7 @@ Additionally, the data inside the array is only a \b\copy\b\, thus if the data i
 
 \h2\Initialization\h2\
 Arrays can be initialized in a few different ways.
-\h3\... with vectors, matrices or quaternions\h3\
+\h3\... with vectors, matrices, quaternions or ctypes number objects\h3\
 An array can be initialized with any number of vectors, metrices or quaternions, as long as they're all of the same type.
 \code Python\
 >>> array(vec3(1, 2, 3), vec3(4, 5, 6))
@@ -45,6 +46,22 @@ array(vec3(1, 2, 3), vec3(4, 5, 6))
 
 >>> array(vec3(), ivec3())
 TypeError: arrays have to be initialized with arguments of the same glm type
+\code\
+The same holds true for ctypes numbers:
+\code Python\
+>>> array(int8(2), int8(3))
+array(c_int8(2), c_int8(3))
+
+>>> array(int8(2), int16(3))
+TypeError: arrays have to be initialized with arguments of the same type
+\code\
+You can also create an array of ctypes numbers from normal numbers using \code\from_numbers\code\, which needs to have the data type as it's first argument:
+\code Python\
+>>> array.from_numbers(int8, 2, 3)
+array(c_int8(2), c_int8(3))
+
+>>> array(int8, 2, 3) # alternative way
+array(c_int8(2), c_int8(3))
 \code\
 
 \i\Note: The list representations of vecs, mats and quats such as \code\((1, 2), (3, 4))\code\ (an alias for \code\mat2(1, 2, 3, 4)\code\) cannot be used here.\i\
@@ -99,6 +116,18 @@ Arrays support \url https://docs.python.org/3/library/pickle.html#module-interfa
 
 \h3\To list / tuple\h3\
 Any array has a \code\to_list()\code\ and a \code\to_tuple()\code\ function, which return's the arrays's data represented as a list or tuple respectively.
+
+\h3\From Numbers\h3\
+The array class has a static \code\from_numbers\code\ method, which allows for creation of a one-dimensional array of numbers.
+It takes a ctypes number type as it's first argument.
+Example:
+\code Python\
+>>> array.from_numbers(c_float, 1.2, 3.4)
+array(c_float(1.2), c_float(3.4))
+
+>>> array.from_numbers(int32, 1, 3, 4, 5)
+array(c_int32(1), c_int32(3), c_int32(4), c_int32(5))
+\code\
 
 \h2\Operators\h2\
 \h3\concat (\code\+\code\ operator)\h3\

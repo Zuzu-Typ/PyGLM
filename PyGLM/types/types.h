@@ -7,6 +7,7 @@
 #define PyGLM_TYPE_VEC 1
 #define PyGLM_TYPE_MAT 2
 #define PyGLM_TYPE_QUA 3
+#define PyGLM_TYPE_CTYPES 4
 /*
 shape looks like this:
 For Vec:
@@ -200,6 +201,11 @@ struct shape_helper {
 struct type_helper {
 	PyObject_HEAD
 		uint8_t info;
+};
+
+struct ctypes_helper {
+	PyObject_HEAD
+		void* b_ptr;                /* pointer to memory block */
 };
 
 template<int L, typename T>
