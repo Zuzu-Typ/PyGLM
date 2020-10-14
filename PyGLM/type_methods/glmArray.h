@@ -1352,8 +1352,6 @@ glmArray_str_ctypes(glmArray* self) {
 template<typename T>
 static PyObject*
 glmArray_repr_ctypes(glmArray* self) {
-	const int L = self->getShape();
-
 	const char* subtypeName = PyGLM_CTYPES_TYPE_STRING<T>();
 
 	const char* arrayTypeName = glmArrayType.tp_name + 4;
