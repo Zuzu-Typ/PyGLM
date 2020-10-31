@@ -9,6 +9,7 @@
 #include <type_traits>
 #include <stdint.h>
 #include <clocale>
+#include <algorithm>
 
 #define GLM_FORCE_CTOR_INIT
 #define GLM_ENABLE_EXPERIMENTAL
