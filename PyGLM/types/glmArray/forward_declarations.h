@@ -15,9 +15,15 @@ static PyObject* glmArray_to_tuple(glmArray* self, PyObject*);
 
 static PyObject* glmArray_from_numbers(PyObject*, PyObject* args);
 
+static PyObject* glmArray_as_reference(PyObject*, PyObject* args);
+
+static PyObject* glmArray_zeros(PyObject*, PyObject* args);
+
 static PyObject* glmArray_getPtr(glmArray* self, void*);
 
 static PyObject* glmArray_getDtype(glmArray* self, void*);
+
+static PyObject* glmArray_getCtype(glmArray* self, void*);
 
 static Py_ssize_t glmArray_len(glmArray* self);
 

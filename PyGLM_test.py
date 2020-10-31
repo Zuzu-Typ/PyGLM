@@ -470,20 +470,34 @@ def test_array_types():
 
     assert glm.array(glm.float32, *range(10))
     assert glm.array.from_numbers(glm.float32, *range(10))
-    assert glm.array([glm.float32, 1, 2, 3])
-    assert glm.array((glm.float32, 1, 2, 3))
+    assert glm.array([glm.float32, 1, 2, 3]) == glm.array((glm.float32, 1, 2, 3))
     assert glm.array(OrderedDict([(glm.float32, 1), (1, 2), (2, 3), (3, 4)]))
     assert glm.array(memoryview(glm.array.from_numbers(glm.float32, *range(10))))
+    
+    assert glm.array.zeros(1000, glm.uint8) == glm.array.zeros(1000, glm.u8vec1) == glm.array(glm.int8, 0) * 1000
+    assert glm.array.zeros(1000, glm.quat)
+    assert glm.array.zeros(1000, glm.vec4)
+    assert glm.array.zeros(1000, glm.mat4)
 
     arr = glm.array(glm.mat4(), glm.mat4(2))
+
+    mv = memoryview(arr)
+
+    assert glm.array.as_reference(mv) == arr
+    assert glm.array.as_reference(mv).reference == mv
+    assert glm.array.as_reference(mv).address == arr.address
+
     assert len(arr) == 2, arr
     assert arr.typecode == "f", arr
     assert arr.dtype == "float32", arr
+    assert arr.ctype == glm.float32, arr
     assert arr.dt_size == 4, arr
     assert arr.itemsize == arr.dt_size * 4 * 4, arr
     assert arr.ptr, arr
     assert arr.nbytes == arr.itemsize * len(arr), arr
     assert arr.element_type == glm.mat4, arr
+    assert arr.readonly == False
+    assert arr.reference is None
 
 # repr #
 def test_repr_eval():

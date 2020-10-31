@@ -10,11 +10,14 @@ static PyMemberDef glmArray_members[] = {
 	{ (char*)"dt_size",			T_PYSSIZET,		offsetof(glmArray, dtSize),		1, (char*)"The size of each single component of the elements in bytes (size of data type)"	},
 	{ (char*)"address",			T_ULONGLONG,	offsetof(glmArray, data),		1, (char*)"The memory address where this array stores it's data"							},
 	{ (char*)"length",			T_PYSSIZET,		offsetof(glmArray, itemCount),	1, (char*)"The count of elements contained by this array"									},
+	{ (char*)"readonly",		T_BOOL,			offsetof(glmArray, readonly),	1, (char*)"Whether or not the array is read-only"											},
+	{ (char*)"reference",		T_OBJECT,		offsetof(glmArray, reference),	1, (char*)"The reference to the array owning the data (if any)"								},
 	{ NULL }  /* Sentinel */
 };
 static PyGetSetDef glmArray_getSet[] = {
 	{ (char*)"ptr",		(getter)glmArray_getPtr,	NULL, (char*)"A ctypes pointer that points to the content of this array",	NULL },
 	{ (char*)"dtype",	(getter)glmArray_getDtype,	NULL, (char*)"A numpy-like data type string",								NULL },
+	{ (char*)"ctype",	(getter)glmArray_getCtype,	NULL, (char*)"The respective ctypes data type",								NULL },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef glmArray_methods[] = {
@@ -25,6 +28,8 @@ static PyMethodDef glmArray_methods[] = {
 	{ "to_list",		(PyCFunction)glmArray_to_list,		METH_NOARGS,				"Return the elements of this array as a list"																	},
 	{ "to_tuple",		(PyCFunction)glmArray_to_tuple,		METH_NOARGS,				"Return the elements of this array as a tuple"																	},
 	{ "from_numbers",	(PyCFunction)glmArray_from_numbers, METH_VARARGS | METH_STATIC,	"from_numbers(data_type: type, ...) -> array\n\tCreates an array from numbers using the specified data type"	},
+	{ "as_reference",	(PyCFunction)glmArray_as_reference, METH_O | METH_STATIC,		"as_reference(other) -> array\n\tCreates an array from another array (or a compatible buffer) as a reference"	},
+	{ "zeros",			(PyCFunction)glmArray_zeros,		METH_VARARGS | METH_STATIC,	"zeros(count: int, data_type: type) -> array\n\tCreates an array of 0s using the specified data type"			},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs glmArrayBufferMethods = {

@@ -14,6 +14,8 @@ PyObject* ctypes_uint16;
 PyObject* ctypes_uint8;
 PyObject* ctypes_bool;
 
+destructor ctypes_dealloc;
+
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 PyObject* ctypes_void_p = NULL;
 PyObject* ctypes_cast = NULL;

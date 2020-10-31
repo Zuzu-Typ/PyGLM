@@ -36,6 +36,11 @@
 
 //static PyObject*
 //test(PyObject*, ctypes_helper* arg) {
+//	uint64 ptr1 = reinterpret_cast<uint64>(&hfvec1Type);
+//	uint64 ptr2 = reinterpret_cast<uint64>(&hfvec1GLMType.typeObject);
+//
+//	PyGLMTypeObject* ptr3 =(&hfvec1GLMType);
+//	PyGLMTypeObject* ptr4 =(PyGLMTypeObject::fromTypeObjectPointer(&hfvec1Type));
 //	
 //	//PyGLMTypeInfo pti(PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLMTypeInfo::getDT<float>(), arg);
 //	////return pack(*((glm::mat<4,4, float>*)pti.data));
@@ -217,6 +222,8 @@ extern "C" {
 		ctypes_uint16 = PyObject_GetAttrString(ctypes_module, "c_uint16");
 		ctypes_uint8 = PyObject_GetAttrString(ctypes_module, "c_uint8");
 		ctypes_bool = PyObject_GetAttrString(ctypes_module, "c_bool");
+
+		ctypes_dealloc = ((PyTypeObject*)ctypes_float)->tp_dealloc;
 
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 		ctypes_cast = PyObject_GetAttrString(ctypes_module, "cast");

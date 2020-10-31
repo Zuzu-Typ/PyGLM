@@ -282,6 +282,8 @@ struct glmArray {
 	ssize_t dtSize;
 	ssize_t itemSize;
 	PyTypeObject* subtype;
+	PyObject* reference;
+	bool readonly;
 	void* data;
 
 	const int getShape() {
@@ -310,3 +312,24 @@ struct glmArrayIter {
 		ssize_t seq_index;
 	glmArray* sequence;
 };
+
+// Work in progress
+//struct PyGLMTypeObject {
+//	uint8 glmType;
+//	uint8 C;
+//	uint8 R;
+//	ssize_t dtSize;
+//	ssize_t nbytes;
+//	char format;
+//	char reserved = '\x00';
+//	PyTypeObject typeObject;
+//
+//	inline PyTypeObject* typeObjectPointer() {
+//		return &typeObject;
+//	}
+//
+//	static inline PyGLMTypeObject* fromTypeObjectPointer(PyTypeObject* typeObject) {
+//		constexpr uint64 typeObjectOffset = sizeof(PyGLMTypeObject) - sizeof(PyTypeObject);
+//		return reinterpret_cast<PyGLMTypeObject*>(reinterpret_cast<char*>(typeObject) - typeObjectOffset);
+//	}
+//};

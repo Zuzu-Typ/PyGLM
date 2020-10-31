@@ -13,12 +13,17 @@ It's mainly intended to **provide a way of passing multiple glm type instances**
     * [\.\. with vectors, matrices, quaternions or ctypes number objects](#-with-vectors-matrices-quaternions-or-ctypes-number-objects)  
     * [\.\. with other array instances](#-with-other-array-instances)  
     * [\.\. with other compatible arrays / lists / iterables](#-with-other-compatible-arrays--lists--iterables)  
+    * [\.\. as a reference instead of a copy](#-as-a-reference-instead-of-a-copy)  
+    * [\.\. with zeros](#-with-zeros)  
+    * [\.\. from numbers](#-from-numbers)  
 3. [Members](#members)  
 4. [Methods](#methods)  
     * [The copy protocol](#the-copy-protocol)  
     *  [Pickling](#pickling)  
     * [To list / tuple](#to-list--tuple)  
     * [From Numbers](#from-numbers)  
+    * [As Reference](#as-reference)  
+    * [Zeros](#zeros)  
 5. [Operators](#operators)  
     * [concat](#concat--operator)  
     * [repeat](#repeat--operator)  
@@ -92,6 +97,50 @@ TypeError: invalid argument type(s) for array()
  ```  
 *Note: array buffers that store length 4 items are interpreted as vec4s rather than quats\.*  
   
+### \.\.\. as a reference instead of a copy  
+If you don't need or don't want a copy of an array or buffer, but want a reference instead \(i\.e\. use the same data in memory as another array / buffer\), you can do so by using ``` glm.array.as_reference ```\.  
+``` Python
+>>> arr = array(vec3(1))
+>>> arr2 = array.as_reference(arr)
+>>> arr == arr2
+True
+
+>>> arr.address == arr2.address
+True
+
+>>> arr[0] = vec3(2) # if you change one of them, the other changes as well
+>>> arr2
+array(vec3(2, 2, 2))
+ ```  
+  
+*Note: ``` as_reference ``` only works with array instances or buffers \(e\.g\. ``` numpy.array ```\)\.*  
+  
+### \.\.\. with zeros  
+You can initialize an array with any given number of zeros or a given type:  
+``` Python
+>>> array.zeros(4, uint8)
+array(c_uint8(0), c_uint8(0), c_uint8(0), c_uint8(0))
+
+>>> array.zeros(2, vec3)
+array(vec3(0, 0, 0), vec3(0, 0, 0))
+
+ ```  
+  
+### \.\.\. from numbers  
+You can initialize an array with numbers and a \(ctypes\) data type using ``` glm.array.from_numbers ```:  
+``` Python
+>>> array.from_numbers(int8, 1, 2, 3)
+array(c_int8(1), c_int8(2), c_int8(3))
+
+>>> array.from_numbers(float32, 4.2, 1.1)
+array(c_float(4.2), c_float(1.1))
+
+>>> array(int8, 1, 2, 3) # You can also use the array() constructor, but beware that the dedicated function is faster
+array(c_int8(1), c_int8(2), c_int8(3))
+
+>>> array.from_numbers(vec1, 1, 2, 3)
+TypeError: Invalid argument type for from_number(), expected a ctypes data type as the first argument. Got 'type'
+ ```  
   
 ## Members  
 PyGLM arrays have the following members:  
@@ -105,8 +154,11 @@ ptr | c\_void\_p | A ctypes pointer that points to the content of an array
 nbytes | int | The total data size in bytes
 typecode | str | A single character, describing the data type of the elements' values, according to [this list](https://docs.python.org/3/library/struct.html#format-characters)
 dtype | str | A numpy\-like data type string
+ctype | str | The respective ctypes data type
 itemsize | int | The size of one array element in bytes
 dt\_size | int | The size of each single component of the elements in bytes \(size of data type\)
+readonly | int | Whether or not the array is read\-only
+reference | int | The reference to the array owning the data \(if any\)
   
   
 ## Methods  
@@ -130,6 +182,42 @@ array(c_float(1.2), c_float(3.4))
 
 >>> array.from_numbers(int32, 1, 3, 4, 5)
 array(c_int32(1), c_int32(3), c_int32(4), c_int32(5))
+ ```  
+  
+### As Reference  
+The array class also has a static ``` as_reference ``` method, which allows for creation of a reference copy of other arrays or objects that support the buffer protocol\.  
+  
+A reference copy means that the newly created array will use the same data in memory as the source array\.  
+It will also keep a reference to the object it shares the data with in the ``` reference ``` member\.  
+Example:  
+``` Python
+>>> arr = array(vec2(1))
+>>> arr2 = array.as_reference(arr)
+>>> arr == arr2
+True
+
+>>> arr is arr2.reference
+True
+
+>>> arr[0] = vec2(-1) # if you change one of them, the other changes as well
+>>> arr2
+array(vec2(-1, -1))
+ ```  
+  
+### Zeros  
+Additionally, the array class has a static ``` zeros ``` method, which allows for creation of an array with items that are initialized with zeros\.  
+This is the fastest way of creating an array, as it uses the builtin ``` calloc ``` function to allocate the memory and initialize it in the same step\.  
+  
+Example:  
+``` Python
+>>> array.zeros(4, uint8)
+array(c_uint8(0), c_uint8(0), c_uint8(0), c_uint8(0))
+
+>>> array.zeros(2, vec3)
+array(vec3(0, 0, 0), vec3(0, 0, 0))
+
+>>> array.zeros(1, mat4)
+array(mat4x4((0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0)))
  ```  
   
 ## Operators  
