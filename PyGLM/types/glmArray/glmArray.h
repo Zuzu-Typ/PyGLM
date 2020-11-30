@@ -2,6 +2,7 @@
 
 #include "forward_declarations.h"
 
+#define T_PTR_AS_NUM ((sizeof(void*) == sizeof(unsigned long long)) ? T_ULONGLONG : (sizeof(void*) == sizeof(unsigned long)) ? T_ULONG : (sizeof(void*) == sizeof(unsigned int)) ? T_UINT : T_PYSSIZET)
 
 static PyMemberDef glmArray_members[] = {
 	{ (char*)"nbytes",			T_PYSSIZET,		offsetof(glmArray, nBytes),		1, (char*)"Total combined bytecount of all elements"										},
@@ -9,7 +10,7 @@ static PyMemberDef glmArray_members[] = {
 	{ (char*)"element_type",	T_OBJECT,		offsetof(glmArray, subtype),	1, (char*)"Type class of the contained elements"											},
 	{ (char*)"itemsize",		T_PYSSIZET,		offsetof(glmArray, itemSize),	1, (char*)"The size of one array item in bytes "											},
 	{ (char*)"dt_size",			T_PYSSIZET,		offsetof(glmArray, dtSize),		1, (char*)"The size of each single component of the elements in bytes (size of data type)"	},
-	{ (char*)"address",			T_ULONGLONG,	offsetof(glmArray, data),		1, (char*)"The memory address where this array stores it's data"							},
+	{ (char*)"address",			T_PTR_AS_NUM,	offsetof(glmArray, data),		1, (char*)"The memory address where this array stores it's data"							},
 	{ (char*)"length",			T_PYSSIZET,		offsetof(glmArray, itemCount),	1, (char*)"The count of elements contained by this array"									},
 	{ (char*)"readonly",		T_BOOL,			offsetof(glmArray, readonly),	1, (char*)"Whether or not the array is read-only"											},
 	{ (char*)"reference",		T_OBJECT,		offsetof(glmArray, reference),	1, (char*)"The reference to the array owning the data (if any)"								},
