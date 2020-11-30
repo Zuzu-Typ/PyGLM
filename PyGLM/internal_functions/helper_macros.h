@@ -4,9 +4,9 @@
 
 #define Py_IS_NOTIMPLEMENTED(op) (op == NULL || (PyObject*)op == Py_NotImplemented) // find out if op is NULL or NotImplemented
 
-#define PyGLM_ASSERT(cond, msg) if (!cond) {PyErr_SetString(PyExc_AssertionError, msg); return NULL;}
+#define PyGLM_ASSERT(cond, msg) if (!(cond)) {PyErr_SetString(PyExc_AssertionError, msg); return NULL;}
 
-#define PyGLM_ASSERT_NO(cond, msg) if (!cond) {PyErr_SetString(PyExc_AssertionError, msg); return -1;}
+#define PyGLM_ASSERT_NO(cond, msg) if (!(cond)) {PyErr_SetString(PyExc_AssertionError, msg); return -1;}
 
 #define PyObject_IterCheck(op) ((op)->ob_type->tp_iter != 0)
 

@@ -3869,7 +3869,7 @@ static PyObject* glmArray_addO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -4122,7 +4122,7 @@ static PyObject* glmArray_subO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -4174,7 +4174,7 @@ static PyObject* glmArray_rsubO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -4566,8 +4566,6 @@ static PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
 
 	ssize_t outArrayIndex = 0;
 	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-	ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-	ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
 	for (ssize_t i = 0; i < outArray->itemCount; i++) {
 		for (ssize_t j = 0; j < outArrayRatio; j++) {
@@ -4716,8 +4714,6 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 	ssize_t outArrayIndex = 0;
 	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-	ssize_t arrRatio = arr->itemSize / outArray->dtSize;
-	ssize_t oRatio = pto->itemSize / outArray->dtSize;
 
 	for (ssize_t i = 0; i < outArray->itemCount; i++) {
 		for (ssize_t j = 0; j < outArrayRatio; j++) {
@@ -4806,8 +4802,6 @@ static PyObject* glmArray_rmulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 
 	ssize_t outArrayIndex = 0;
 	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-	ssize_t arrRatio = arr->itemSize / outArray->dtSize;
-	ssize_t oRatio = pto->itemSize / outArray->dtSize;
 
 	for (ssize_t i = 0; i < outArray->itemCount; i++) {
 		for (ssize_t j = 0; j < outArrayRatio; j++) {
@@ -5660,7 +5654,7 @@ static PyObject* glmArray_modO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -5718,7 +5712,7 @@ static PyObject* glmArray_rmodO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -6078,7 +6072,7 @@ static PyObject* glmArray_powO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -6130,7 +6124,7 @@ static PyObject* glmArray_rpowO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -6570,7 +6564,7 @@ static PyObject* glmArray_lshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTy
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -6622,7 +6616,7 @@ static PyObject* glmArray_rlshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMT
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -6947,7 +6941,7 @@ static PyObject* glmArray_rshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTy
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -6999,7 +6993,7 @@ static PyObject* glmArray_rrshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMT
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -7324,7 +7318,7 @@ static PyObject* glmArray_andO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -7376,7 +7370,7 @@ static PyObject* glmArray_randO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -7701,7 +7695,7 @@ static PyObject* glmArray_xorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -7753,7 +7747,7 @@ static PyObject* glmArray_rxorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -8078,7 +8072,7 @@ static PyObject* glmArray_orO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeOb
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -8130,7 +8124,7 @@ static PyObject* glmArray_rorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -8461,7 +8455,7 @@ static PyObject* glmArray_divO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
@@ -8519,7 +8513,7 @@ static PyObject* glmArray_rdivO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 		outArray->shape[1] = arr->shape[1];
 	}
 	else {
-		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		PyGLM_ASSERT(pto != ((PyGLMTypeObject *) NULL), "pto is NULL. This should never occur!");
 		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
 		outArray->itemSize = pto->itemSize;
 		outArray->nBytes = outArray->itemCount * outArray->itemSize;
