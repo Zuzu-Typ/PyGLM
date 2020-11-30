@@ -67,7 +67,13 @@ long PyGLM_Number_AsLong(PyObject* arg) {
 
 unsigned long PyGLM_Number_AsUnsignedLong(PyObject* arg) {
 	if (PyLong_Check(arg)) {
-		return PyLong_AsUnsignedLong(arg);
+		unsigned long out = PyLong_AsUnsignedLong(arg);
+		if (PyErr_Occurred() != NULL) {
+			PyErr_Clear();
+			int overflow;
+			out = static_cast<unsigned long>(PyLong_AsLongLongAndOverflow(arg, &overflow));
+		}
+		return out;
 	}
 	if (PyFloat_Check(arg)) {
 		return (unsigned long)PyFloat_AS_DOUBLE(arg);
@@ -101,7 +107,13 @@ long long PyGLM_Number_AsLongLong(PyObject* arg) {
 
 unsigned long long PyGLM_Number_AsUnsignedLongLong(PyObject* arg) {
 	if (PyLong_Check(arg)) {
-		return PyLong_AsUnsignedLongLong(arg);
+		unsigned long long out = PyLong_AsUnsignedLongLong(arg);
+		if (PyErr_Occurred() != NULL) {
+			PyErr_Clear();
+			int overflow;
+			out = static_cast<unsigned long long>(PyLong_AsLongLongAndOverflow(arg, &overflow));
+		}
+		return out;
 	}
 	if (PyFloat_Check(arg)) {
 		return (unsigned long long)PyFloat_AS_DOUBLE(arg);

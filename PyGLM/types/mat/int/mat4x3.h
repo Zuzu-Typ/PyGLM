@@ -71,47 +71,6 @@ static PyNumberMethods himat4x3NumMethods = {
 	(binaryfunc)mat_matmul, //nb_matrix_multiply
 	(binaryfunc)mat_imatmul<4, 3, glm::i32>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject himat4x3Type = {
-	PyObject_HEAD_INIT(NULL)
-	"glm.imat4x3",             /* tp_name */
-	sizeof(mat<4, 3, glm::i32>),             /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	(destructor)mat_dealloc, /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	(reprfunc)mat4x3_repr<glm::i32>,                         /* tp_repr */
-	&himat4x3NumMethods,             /* tp_as_number */
-	&himat4x3SeqMethods,                         /* tp_as_sequence */
-	&himat4x3MapMethods,                         /* tp_as_mapping */
-	(hashfunc)mat_hash<4, 3, glm::i32>,                         /* tp_hash  */
-	0,                         /* tp_call */
-	(reprfunc)mat4x3_str<glm::i32>,                         /* tp_str */
-	0,                         /* tp_getattro */
-	0,                         /* tp_setattro */
-	&himat4x3BufferMethods,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"imat4x3( <imat4x3 compatible type(s)> )\n4 columns of 3 components matrix of integer numbers.",           /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	(richcmpfunc)mat_richcompare<4, 3, glm::i32>,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	(getiterfunc)mat_geniter<4, 3, glm::i32>,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	himat4x3_methods,             /* tp_methods */
-	0,             /* tp_members */
-	0,           			/* tp_getset */
-	0,                         /* tp_base */
-	0,                         /* tp_dict */
-	0,                         /* tp_descr_get */
-	0,                         /* tp_descr_set */
-	0,                         /* tp_dictoffset */
-	(initproc)mat4x3_init<glm::i32>,      /* tp_init */
-	0,                         /* tp_alloc */
-	(newfunc)mat_new<4, 3, glm::i32>,                 /* tp_new */
-};
 static PyTypeObject himat4x3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"imat4x3Iter",             /* tp_name */
@@ -152,3 +111,55 @@ static PyTypeObject himat4x3IterType = {
 	0,                         /* tp_alloc */
 	(newfunc)matIter_new<4, 3, glm::i32>,                 /* tp_new */
 };
+
+static PyGLMTypeObject himat4x3GLMType = {
+	{
+		PyObject_HEAD_INIT(NULL)
+		"glm.imat4x3",             /* tp_name */
+		sizeof(mat<4, 3, glm::i32>),             /* tp_basicsize */
+		0,                         /* tp_itemsize */
+		(destructor)mat_dealloc, /* tp_dealloc */
+		0,                         /* tp_print */
+		0,                         /* tp_getattr */
+		0,                         /* tp_setattr */
+		0,                         /* tp_reserved */
+		(reprfunc)mat4x3_repr<glm::i32>,                         /* tp_repr */
+		& himat4x3NumMethods,             /* tp_as_number */
+		& himat4x3SeqMethods,                         /* tp_as_sequence */
+		& himat4x3MapMethods,                         /* tp_as_mapping */
+		(hashfunc)mat_hash<4, 3, glm::i32>,                         /* tp_hash  */
+		0,                         /* tp_call */
+		(reprfunc)mat4x3_str<glm::i32>,                         /* tp_str */
+		0,                         /* tp_getattro */
+		0,                         /* tp_setattro */
+		& himat4x3BufferMethods,                         /* tp_as_buffer */
+		Py_TPFLAGS_DEFAULT |
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */
+		"imat4x3( <imat4x3 compatible type(s)> )\n4 columns of 3 components matrix of integer numbers.",           /* tp_doc */
+		0,                         /* tp_traverse */
+		0,                         /* tp_clear */
+		(richcmpfunc)mat_richcompare<4, 3, glm::i32>,                         /* tp_richcompare */
+		0,                         /* tp_weaklistoffset */
+		(getiterfunc)mat_geniter<4, 3, glm::i32>,                         /* tp_iter */
+		0,                         /* tp_iternext */
+		himat4x3_methods,             /* tp_methods */
+		0,             /* tp_members */
+		0,           			/* tp_getset */
+		0,                         /* tp_base */
+		0,                         /* tp_dict */
+		0,                         /* tp_descr_get */
+		0,                         /* tp_descr_set */
+		0,                         /* tp_dictoffset */
+		(initproc)mat4x3_init<glm::i32>,      /* tp_init */
+		0,                         /* tp_alloc */
+		(newfunc)mat_new<4, 3, glm::i32>,                 /* tp_new */
+	},
+	PyGLM_TYPE_MAT,
+	4,
+	3,
+	sizeof(int32),
+	sizeof(glm::mat<4, 3, int32>),
+	PyGLM_FS_INT32
+};
+
+static PyTypeObject& himat4x3Type = *((PyTypeObject*)&himat4x3GLMType);

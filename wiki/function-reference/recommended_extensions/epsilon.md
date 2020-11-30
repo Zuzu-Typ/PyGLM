@@ -11,10 +11,10 @@ Comparison functions for a user defined epsilon values\.
   
 ### epsilonEqual\(\) function  
 #### <code>glm.<code>**epsilonEqual**(**x**: *number*, **y**: *number*, **epsilon**: *number*) -\> *bool*</code></code>  
-&emsp;&emsp;Returns the component\-wise comparison of &#124;x \- y&#124; &lt; epsilon\.  
+&emsp;&emsp;Returns the component\-wise comparison of ``` |x - y| < epsilon ```\.  
   
 #### <code>glm.<code>**epsilonEqual**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *number*) -\> *bvecN*</code></code>  
-&emsp;&emsp;Returns the component\-wise comparison of &#124;x \- y&#124; &lt; epsilon\.  
+&emsp;&emsp;Returns the component\-wise comparison of ``` |x - y| < epsilon ```\.  
   
 ### epsilonNotEqual\(\) function  
 #### <code>glm.<code>**epsilonNotEqual**(***args**) -\> *not epsilonEqual(*args)*</code></code>  

@@ -89,8 +89,8 @@ Handles the interaction between pointers and vector, matrix types. This extensio
 
 \h3\sizeof() function\h3\
 \raw\#### <code>glm.<code>**sizeof**(**x**: *type*) -\\> *int*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Return the data size of x in bytes.
-\raw\&emsp;&emsp;\raw\E.g. sizeof(vec4) == sizeof(float32) * 4 = 4 * 4 = 16.
+\raw\&emsp;&emsp;\raw\Return the data size of \code\x\code\ in bytes.
+\raw\&emsp;&emsp;\raw\E.g. \code\sizeof(vec4) == sizeof(float32) * 4 = 4 * 4 = 16\code\.
 
 \h3\value_ptr() function\h3\
 \raw\#### <code>glm.<code>**value_ptr**(**x**) -\\> *ctypes pointer*</code></code>\raw\

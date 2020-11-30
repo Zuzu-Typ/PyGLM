@@ -8,8 +8,8 @@
 
 PyDoc_STRVAR(uaddCarry_docstr,
 	"uaddCarry(x: uvecN, y: uvecN, carry: uvecN) -> uvecN\n"
-	"	Adds 32-bit unsigned integer x and y, returning the sum modulo pow(2, 32). The value carry\n"
-	"	is set to 0 if the sum was less than pow(2, 32), or to 1 otherwise."
+	"	Adds 32-bit unsigned integer `x` and `y`, returning the `sum` modulo `pow(2, 32)`. The value carry\n"
+	"	is set to `0` if the `sum` was less than `pow(2, 32)`, or to `1` otherwise."
 );
 static PyObject*
 uaddCarry_(PyObject*, PyObject* args) {
@@ -47,9 +47,9 @@ uaddCarry_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(usubBorrow_docstr,
 	"usubBorrow(x: uvecN, y: uvecN, borrow: uvecN) -> uvecN\n"
-	"	Subtracts the 32-bit unsigned integer y from x, returning the difference if non-negative,\n"
-	"	or pow(2, 32) plus the difference otherwise. The value borrow is set to 0 if x >= y, or to\n"
-	"	1 otherwise."
+	"	Subtracts the 32-bit unsigned integer `y` from `x`, returning the difference if non-negative,\n"
+	"	or `pow(2, 32)` plus the difference otherwise. The value borrow is set to `0` if `x >= y`, or to\n"
+	"	`1` otherwise."
 );
 static PyObject*
 usubBorrow_(PyObject*, PyObject* args) {
@@ -87,8 +87,8 @@ usubBorrow_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(umulExtended_docstr,
 	"umulExtended(x: uvecN, y: uvecN, msb: uvecN, lsb: uvecN) -> uvecN\n"
-	"	Multiplies 32-bit integers x and y, producing a 64-bit result. The 32 least - significant\n"
-	"	bits are returned in lsb.The 32 most - significant bits are returned in msb."
+	"	Multiplies 32-bit integers `x` and `y`, producing a 64-bit result. The 32 least-significant\n"
+	"	bits are returned in `lsb`. The 32 most-significant bits are returned in `msb`."
 );
 static PyObject*
 umulExtended_(PyObject*, PyObject* args) {
@@ -130,8 +130,8 @@ umulExtended_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(imulExtended_docstr,
 	"imulExtended(x: ivecN, y: ivecN, msb: ivecN, lsb: ivecN) -> ivecN\n"
-	"	Multiplies 32-bit integers x and y, producing a 64-bit result. The 32 least - significant\n"
-	"	bits are returned in lsb.The 32 most - significant bits are returned in msb."
+	"	Multiplies 32-bit integers `x` and `y`, producing a 64-bit result. The 32 least-significant\n"
+	"	bits are returned in `lsb`. The 32 most-significant bits are returned in `msb`."
 );
 static PyObject*
 imulExtended_(PyObject*, PyObject* args) {
@@ -173,14 +173,14 @@ imulExtended_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(bitfieldExtract_docstr,
 	"bitfieldExtract(value: int, offset: int, bits: int) -> int\n"
-	"	Extracts bits [offset, offset + bits - 1] from value, returning them in the least\n"
+	"	Extracts bits `[offset, offset + bits - 1]` from value, returning them in the least\n"
 	"	significant bits of the result. For unsigned data types, the most significant bits of the\n"
 	"	result will be set to zero. For signed data types, the most significant bits will be set to\n"
-	"	the value of bit offset + base - 1. If bits is zero, the result will be zero.The result\n"
-	"	will be undefined if offset or bits is negative, or if the sum of offsetand bits is greater\n"
-	"	than the number of bits used to store the operand.\n"
+	"	the value of bit `offset + base - 1`. If `bits` is zero, the result will be zero. The result\n"
+	"	will be undefined if `offset` or `bits` is negative, or if the sum of `offset` and `bits` is\n"
+	"	greater than the number of bits used to store the operand.\n"
 	"bitfieldExtract(value: vecN, offset: int, bits: int) -> vecN\n"
-	"	Returns bitfieldExtract(c, offset, bits) for every component c of value."
+	"	Returns `bitfieldExtract(c, offset, bits)` for every component `c` of `value`."
 );
 static PyObject*
 bitfieldExtract_(PyObject*, PyObject* args) {
@@ -328,12 +328,12 @@ bitfieldExtract_(PyObject*, PyObject* args) {
 PyDoc_STRVAR(bitfieldInsert_docstr,
 	"bitfieldInsert(base: int, insert: int, offset: int, bits: int) -> int\n"
 	"	Returns the insertion the bits least-significant bits of insert into base. The result will\n"
-	"	have bits[offset, offset + bits - 1] taken from bits[0, bits - 1] of insert, and all other\n"
-	"	bits taken directly from the corresponding bits of base. If bits is zero, the result will\n"
-	"	simply be base.The result will be undefined if offset or bits is negative, or if the sum of\n"
-	"	offsetand bits is greater than the number of bits used to store the operand.\n"
+	"	have `bits[offset, offset + bits - 1]` taken from `bits[0, bits - 1]` of `insert`, and all other\n"
+	"	bits taken directly from the corresponding bits of `base`. If `bits` is zero, the result will\n"
+	"	simply be `base`. The result will be undefined if `offset` or `bits` is negative, or if the sum of\n"
+	"	`offset` and `bits` is greater than the number of bits used to store the operand.\n"
 	"bitfieldInsert(base: vecN, insert: vecN, offset: int, bits: int) -> vecN\n"
-	"	Returns bitfieldInsert(base[i], insert[i], offset, bits) for every index i."
+	"	Returns `bitfieldInsert(base[i], insert[i], offset, bits)` for every index `i`."
 );
 static PyObject*
 bitfieldInsert_(PyObject*, PyObject* args) {
@@ -433,13 +433,13 @@ bitfieldInsert_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(bitfieldReverse_docstr,
 	"bitfieldReverse(value: int) -> int\n"
-	"	Returns the reversal of the bits of value. The bit numbered n of the result will be taken\n"
-	"	from bit(bits - 1) - n of value, where bits is the total number of bits used to represent\n"
-	"	value.\n"
+	"	Returns the reversal of the bits of `value`. The bit numbered `n` of the result will be taken\n"
+	"	from `bit(bits - 1) - n` of `value`, where `bits` is the total number of bits used to represent\n"
+	"	`value`.\n"
 	"bitfieldReverse(value: vecN) -> vecN\n"
-	"	Returns the reversal of the bits of value. The bit numbered n of the result will be taken\n"
-	"	from bit(bits - 1) - n of value, where bits is the total number of bits used to represent\n"
-	"	value."
+	"	Returns the reversal of the bits of `value`. The bit numbered `n` of the result will be taken\n"
+	"	from `bit(bits - 1) - n` of `value`, where `bits` is the total number of bits used to represent\n"
+	"	`value`."
 );
 static PyObject* bitfieldReverse_(PyObject*, PyObject* arg) {
 	if (PyLong_Check(arg)) {
@@ -500,10 +500,10 @@ static PyObject* bitfieldReverse_(PyObject*, PyObject* arg) {
 
 PyDoc_STRVAR(bitCount_docstr,
 	"bitCount(v: int) -> int\n"
-	"	Returns the number of bits set to 1 in the binary representation of value.\n"
+	"	Returns the number of bits set to `1` in the binary representation of `value`.\n"
 	"bitCount(v: ivecN) -> ivecN\n"
-	"	For every component c of v:\n"
-	"	Returns the number of bits set to 1 in the binary representation of c."
+	"	For every component `c` of `v`:\n"
+	"	Returns the number of bits set to `1` in the binary representation of `c`."
 );
 static PyObject*
 bitCount_(PyObject*, PyObject* arg) {
@@ -645,11 +645,11 @@ bitCount_(PyObject*, PyObject* arg) {
 
 PyDoc_STRVAR(findLSB_docstr,
 	"findLSB(value: int) -> int\n"
-	"	Returns the bit number of the least significant bit set to 1 in the binary representation\n"
-	"	of value. If value is zero, -1 will be returned.\n"
+	"	Returns the bit number of the least significant bit set to `1` in the binary representation\n"
+	"	of `value`. If `value` is zero, `-1` will be returned.\n"
 	"findLSB(value: vecN) -> vecN\n"
-	"	Returns the bit number of the least significant bit set to 1 in the binary representation\n"
-	"	of value. If value is zero, -1 will be returned."
+	"	Returns the bit number of the least significant bit set to `1` in the binary representation\n"
+	"	of `value`. If `value` is zero, `-1` will be returned."
 );
 static PyObject*
 findLSB_(PyObject*, PyObject* arg) {
@@ -791,13 +791,13 @@ findLSB_(PyObject*, PyObject* arg) {
 
 PyDoc_STRVAR(findMSB_docstr,
 	"findMSB(value: int) -> int\n"
-	"	Returns the bit number of the most significant bit in the binary representation of value.\n"
+	"	Returns the bit number of the most significant bit in the binary representation of `value`.\n"
 	"	For positive integers, the result will be the bit number of the most significant bit set to\n"
-	"	1. For negative integers, the result will be the bit number of the most significant bit set\n"
-	"	to 0. For a value of zero or negative one, -1 will be returned.\n"
+	"	`1`. For negative integers, the result will be the bit number of the most significant bit set\n"
+	"	to `0`. For a value of zero or negative one, `-1` will be returned.\n"
 	"findMSB(value: vecN) -> vecN\n"
-	"	Returns the bit number of the least significant bit set to 1 in the binary representation\n"
-	"	of value. If value is zero, -1 will be returned."
+	"	Returns the bit number of the least significant bit set to `1` in the binary representation\n"
+	"	of `value`. If `value` is zero, `-1` will be returned."
 );
 static PyObject*
 findMSB_(PyObject*, PyObject* arg) {

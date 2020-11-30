@@ -8,510 +8,345 @@
 
 static PyObject*
 sizeof_(PyObject*, PyObject* arg) {
-	if (arg == ctypes_float) {
-		return PyLong_FromLong(sizeof(float));
-	}
-	if (arg == ctypes_double) {
-		return PyLong_FromLong(sizeof(double));
-	}
-	if (arg == ctypes_int64) {
-		return PyLong_FromLong(sizeof(int64));
-	}
-	if (arg == ctypes_int32) {
-		return PyLong_FromLong(sizeof(int32));
-	}
-	if (arg == ctypes_int16) {
-		return PyLong_FromLong(sizeof(int16));
-	}
-	if (arg == ctypes_int8) {
-		return PyLong_FromLong(sizeof(int8));
-	}
-	if (arg == ctypes_uint64) {
-		return PyLong_FromLong(sizeof(uint64));
-	}
-	if (arg == ctypes_uint32) {
-		return PyLong_FromLong(sizeof(uint32));
-	}
-	if (arg == ctypes_uint16) {
-		return PyLong_FromLong(sizeof(uint16));
-	}
-	if (arg == ctypes_uint8) {
-		return PyLong_FromLong(sizeof(uint8));
-	}
-	if (arg == ctypes_bool) {
-		return PyLong_FromLong(sizeof(bool));
-	}
-	if (PyGLM_Vec_Check(1, float, arg) || arg == (PyObject*)&hfvec1Type) {
-		return PyLong_FromLong(sizeof(glm::vec<1, float>));
-	}
-	if (PyGLM_Vec_Check(1, double, arg) || arg == (PyObject*)&hdvec1Type) {
-		return PyLong_FromLong(sizeof(glm::vec<1, double>));
-	}
-	if (PyGLM_Vec_Check(1, int, arg) || arg == (PyObject*)&hivec1Type) {
-		return PyLong_FromLong(sizeof(glm::vec<1, int>));
-	}
-	if (PyGLM_Vec_Check(1, glm::uint, arg) || arg == (PyObject*)&huvec1Type) {
-		return PyLong_FromLong(sizeof(glm::vec<1, glm::uint>));
-	}
-	if (PyGLM_Vec_Check(1, glm::i64, arg) || arg == (PyObject*)&hi64vec1Type) {
-		return PyLong_FromLong(sizeof(glm::vec<1, glm::i64>));
-	}
-	if (PyGLM_Vec_Check(1, glm::u64, arg) || arg == (PyObject*)&hu64vec1Type) {
-		return PyLong_FromLong(sizeof(glm::vec<1, glm::u64>));
-	}
-	if (PyGLM_Vec_Check(1, glm::i16, arg) || arg == (PyObject*)&hi16vec1Type) {
-		return PyLong_FromLong(sizeof(glm::vec<1, glm::i16>));
-	}
-	if (PyGLM_Vec_Check(1, glm::u16, arg) || arg == (PyObject*)&hu16vec1Type) {
-		return PyLong_FromLong(sizeof(glm::vec<1, glm::u16>));
-	}
-	if (PyGLM_Vec_Check(1, glm::i8, arg) || arg == (PyObject*)&hi8vec1Type) {
-		return PyLong_FromLong(sizeof(glm::vec<1, glm::i8>));
-	}
-	if (PyGLM_Vec_Check(1, glm::u8, arg) || arg == (PyObject*)&hu8vec1Type) {
-		return PyLong_FromLong(sizeof(glm::vec<1, glm::u8>));
-	}
-	if (PyGLM_Vec_Check(1, bool, arg) || arg == (PyObject*)&hbvec1Type) {
-		return PyLong_FromLong(sizeof(glm::vec<1, bool>));
-	}
-	if (PyGLM_Vec_Check(2, float, arg) || arg == (PyObject*)&hfvec2Type) {
-		return PyLong_FromLong(sizeof(glm::vec<2, float>));
-	}
-	if (PyGLM_Vec_Check(2, double, arg) || arg == (PyObject*)&hdvec2Type) {
-		return PyLong_FromLong(sizeof(glm::vec<2, double>));
-	}
-	if (PyGLM_Vec_Check(2, int, arg) || arg == (PyObject*)&hivec2Type) {
-		return PyLong_FromLong(sizeof(glm::vec<2, int>));
-	}
-	if (PyGLM_Vec_Check(2, glm::uint, arg) || arg == (PyObject*)&huvec2Type) {
-		return PyLong_FromLong(sizeof(glm::vec<2, glm::uint>));
-	}
-	if (PyGLM_Vec_Check(2, glm::i64, arg) || arg == (PyObject*)&hi64vec2Type) {
-		return PyLong_FromLong(sizeof(glm::vec<2, glm::i64>));
-	}
-	if (PyGLM_Vec_Check(2, glm::u64, arg) || arg == (PyObject*)&hu64vec2Type) {
-		return PyLong_FromLong(sizeof(glm::vec<2, glm::u64>));
-	}
-	if (PyGLM_Vec_Check(2, glm::i16, arg) || arg == (PyObject*)&hi16vec2Type) {
-		return PyLong_FromLong(sizeof(glm::vec<2, glm::i16>));
-	}
-	if (PyGLM_Vec_Check(2, glm::u16, arg) || arg == (PyObject*)&hu16vec2Type) {
-		return PyLong_FromLong(sizeof(glm::vec<2, glm::u16>));
-	}
-	if (PyGLM_Vec_Check(2, glm::i8, arg) || arg == (PyObject*)&hi8vec2Type) {
-		return PyLong_FromLong(sizeof(glm::vec<2, glm::i8>));
-	}
-	if (PyGLM_Vec_Check(2, glm::u8, arg) || arg == (PyObject*)&hu8vec2Type) {
-		return PyLong_FromLong(sizeof(glm::vec<2, glm::u8>));
-	}
-	if (PyGLM_Vec_Check(2, bool, arg) || arg == (PyObject*)&hbvec2Type) {
-		return PyLong_FromLong(sizeof(glm::vec<2, bool>));
-	}
-	if (PyGLM_Vec_Check(3, float, arg) || arg == (PyObject*)&hfvec3Type) {
-		return PyLong_FromLong(sizeof(glm::vec<3, float>));
-	}
-	if (PyGLM_Vec_Check(3, double, arg) || arg == (PyObject*)&hdvec3Type) {
-		return PyLong_FromLong(sizeof(glm::vec<3, double>));
-	}
-	if (PyGLM_Vec_Check(3, int, arg) || arg == (PyObject*)&hivec3Type) {
-		return PyLong_FromLong(sizeof(glm::vec<3, int>));
-	}
-	if (PyGLM_Vec_Check(3, glm::uint, arg) || arg == (PyObject*)&huvec3Type) {
-		return PyLong_FromLong(sizeof(glm::vec<3, glm::uint>));
-	}
-	if (PyGLM_Vec_Check(3, glm::i64, arg) || arg == (PyObject*)&hi64vec3Type) {
-		return PyLong_FromLong(sizeof(glm::vec<3, glm::i64>));
-	}
-	if (PyGLM_Vec_Check(3, glm::u64, arg) || arg == (PyObject*)&hu64vec3Type) {
-		return PyLong_FromLong(sizeof(glm::vec<3, glm::u64>));
-	}
-	if (PyGLM_Vec_Check(3, glm::i16, arg) || arg == (PyObject*)&hi16vec3Type) {
-		return PyLong_FromLong(sizeof(glm::vec<3, glm::i16>));
-	}
-	if (PyGLM_Vec_Check(3, glm::u16, arg) || arg == (PyObject*)&hu16vec3Type) {
-		return PyLong_FromLong(sizeof(glm::vec<3, glm::u16>));
-	}
-	if (PyGLM_Vec_Check(3, glm::i8, arg) || arg == (PyObject*)&hi8vec3Type) {
-		return PyLong_FromLong(sizeof(glm::vec<3, glm::i8>));
-	}
-	if (PyGLM_Vec_Check(3, glm::u8, arg) || arg == (PyObject*)&hu8vec3Type) {
-		return PyLong_FromLong(sizeof(glm::vec<3, glm::u8>));
-	}
-	if (PyGLM_Vec_Check(3, bool, arg) || arg == (PyObject*)&hbvec3Type) {
-		return PyLong_FromLong(sizeof(glm::vec<3, bool>));
-	}
-	if (PyGLM_Vec_Check(4, float, arg) || arg == (PyObject*)&hfvec4Type) {
-		return PyLong_FromLong(sizeof(glm::vec<4, float>));
-	}
-	if (PyGLM_Vec_Check(4, double, arg) || arg == (PyObject*)&hdvec4Type) {
-		return PyLong_FromLong(sizeof(glm::vec<4, double>));
-	}
-	if (PyGLM_Vec_Check(4, int, arg) || arg == (PyObject*)&hivec4Type) {
-		return PyLong_FromLong(sizeof(glm::vec<4, int>));
-	}
-	if (PyGLM_Vec_Check(4, glm::uint, arg) || arg == (PyObject*)&huvec4Type) {
-		return PyLong_FromLong(sizeof(glm::vec<4, glm::uint>));
-	}
-	if (PyGLM_Vec_Check(4, glm::i64, arg) || arg == (PyObject*)&hi64vec4Type) {
-		return PyLong_FromLong(sizeof(glm::vec<4, glm::i64>));
-	}
-	if (PyGLM_Vec_Check(4, glm::u64, arg) || arg == (PyObject*)&hu64vec4Type) {
-		return PyLong_FromLong(sizeof(glm::vec<4, glm::u64>));
-	}
-	if (PyGLM_Vec_Check(4, glm::i16, arg) || arg == (PyObject*)&hi16vec4Type) {
-		return PyLong_FromLong(sizeof(glm::vec<4, glm::i16>));
-	}
-	if (PyGLM_Vec_Check(4, glm::u16, arg) || arg == (PyObject*)&hu16vec4Type) {
-		return PyLong_FromLong(sizeof(glm::vec<4, glm::u16>));
-	}
-	if (PyGLM_Vec_Check(4, glm::i8, arg) || arg == (PyObject*)&hi8vec4Type) {
-		return PyLong_FromLong(sizeof(glm::vec<4, glm::i8>));
-	}
-	if (PyGLM_Vec_Check(4, glm::u8, arg) || arg == (PyObject*)&hu8vec4Type) {
-		return PyLong_FromLong(sizeof(glm::vec<4, glm::u8>));
-	}
-	if (PyGLM_Vec_Check(4, bool, arg) || arg == (PyObject*)&hbvec4Type) {
-		return PyLong_FromLong(sizeof(glm::vec<4, bool>));
-	}
-	if (PyGLM_Qua_Check(float, arg) || arg == (PyObject*)&hfquaType) {
-		return PyLong_FromLong(sizeof(glm::qua<float>));
-	}
-	if (PyGLM_Qua_Check(double, arg) || arg == (PyObject*)&hdquaType) {
-		return PyLong_FromLong(sizeof(glm::qua<double>));
-	}
-	if (PyGLM_Mat_Check(2, 2, float, arg) || arg == (PyObject*)&hfmat2x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 2, float>));
-	}
-	if (PyGLM_Mat_Check(2, 2, double, arg) || arg == (PyObject*)&hdmat2x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 2, double>));
-	}
-	if (PyGLM_Mat_Check(2, 2, int, arg) || arg == (PyObject*)&himat2x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 2, int>));
-	}
-	if (PyGLM_Mat_Check(2, 2, glm::uint, arg) || arg == (PyObject*)&humat2x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 2, glm::uint>));
-	}
-	if (PyGLM_Mat_Check(2, 3, float, arg) || arg == (PyObject*)&hfmat2x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 3, float>));
-	}
-	if (PyGLM_Mat_Check(2, 3, double, arg) || arg == (PyObject*)&hdmat2x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 3, double>));
-	}
-	if (PyGLM_Mat_Check(2, 3, int, arg) || arg == (PyObject*)&himat2x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 3, int>));
-	}
-	if (PyGLM_Mat_Check(2, 3, glm::uint, arg) || arg == (PyObject*)&humat2x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 3, glm::uint>));
-	}
-	if (PyGLM_Mat_Check(2, 4, float, arg) || arg == (PyObject*)&hfmat2x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 4, float>));
-	}
-	if (PyGLM_Mat_Check(2, 4, double, arg) || arg == (PyObject*)&hdmat2x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 4, double>));
-	}
-	if (PyGLM_Mat_Check(2, 4, int, arg) || arg == (PyObject*)&himat2x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 4, int>));
-	}
-	if (PyGLM_Mat_Check(2, 4, glm::uint, arg) || arg == (PyObject*)&humat2x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<2, 4, glm::uint>));
-	}
-	if (PyGLM_Mat_Check(3, 2, float, arg) || arg == (PyObject*)&hfmat3x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 2, float>));
-	}
-	if (PyGLM_Mat_Check(3, 2, double, arg) || arg == (PyObject*)&hdmat3x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 2, double>));
-	}
-	if (PyGLM_Mat_Check(3, 2, int, arg) || arg == (PyObject*)&himat3x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 2, int>));
-	}
-	if (PyGLM_Mat_Check(3, 2, glm::uint, arg) || arg == (PyObject*)&humat3x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 2, glm::uint>));
-	}
-	if (PyGLM_Mat_Check(3, 3, float, arg) || arg == (PyObject*)&hfmat3x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 3, float>));
-	}
-	if (PyGLM_Mat_Check(3, 3, double, arg) || arg == (PyObject*)&hdmat3x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 3, double>));
-	}
-	if (PyGLM_Mat_Check(3, 3, int, arg) || arg == (PyObject*)&himat3x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 3, int>));
-	}
-	if (PyGLM_Mat_Check(3, 3, glm::uint, arg) || arg == (PyObject*)&humat3x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 3, glm::uint>));
-	}
-	if (PyGLM_Mat_Check(3, 4, float, arg) || arg == (PyObject*)&hfmat3x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 4, float>));
-	}
-	if (PyGLM_Mat_Check(3, 4, double, arg) || arg == (PyObject*)&hdmat3x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 4, double>));
-	}
-	if (PyGLM_Mat_Check(3, 4, int, arg) || arg == (PyObject*)&himat3x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 4, int>));
-	}
-	if (PyGLM_Mat_Check(3, 4, glm::uint, arg) || arg == (PyObject*)&humat3x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<3, 4, glm::uint>));
-	}
-	if (PyGLM_Mat_Check(4, 2, float, arg) || arg == (PyObject*)&hfmat4x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 2, float>));
-	}
-	if (PyGLM_Mat_Check(4, 2, double, arg) || arg == (PyObject*)&hdmat4x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 2, double>));
-	}
-	if (PyGLM_Mat_Check(4, 2, int, arg) || arg == (PyObject*)&himat4x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 2, int>));
-	}
-	if (PyGLM_Mat_Check(4, 2, glm::uint, arg) || arg == (PyObject*)&humat4x2Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 2, glm::uint>));
-	}
-	if (PyGLM_Mat_Check(4, 3, float, arg) || arg == (PyObject*)&hfmat4x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 3, float>));
-	}
-	if (PyGLM_Mat_Check(4, 3, double, arg) || arg == (PyObject*)&hdmat4x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 3, double>));
-	}
-	if (PyGLM_Mat_Check(4, 3, int, arg) || arg == (PyObject*)&himat4x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 3, int>));
-	}
-	if (PyGLM_Mat_Check(4, 3, glm::uint, arg) || arg == (PyObject*)&humat4x3Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 3, glm::uint>));
-	}
-	if (PyGLM_Mat_Check(4, 4, float, arg) || arg == (PyObject*)&hfmat4x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 4, float>));
-	}
-	if (PyGLM_Mat_Check(4, 4, double, arg) || arg == (PyObject*)&hdmat4x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 4, double>));
-	}
-	if (PyGLM_Mat_Check(4, 4, int, arg) || arg == (PyObject*)&himat4x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 4, int>));
-	}
-	if (PyGLM_Mat_Check(4, 4, glm::uint, arg) || arg == (PyObject*)&humat4x4Type) {
-		return PyLong_FromLong(sizeof(glm::mat<4, 4, glm::uint>));
-	}
-	if (PyObject_TypeCheck(arg, &glmArrayType)) {
+	PyObject* argAsType = (PyType_Check(arg)) ? arg : (PyObject*)Py_TYPE(arg);
+
+	destructor& arg_dealloc = ((PyTypeObject*)argAsType)->tp_dealloc;
+
+	if (arg_dealloc == ctypes_dealloc) {
+		if (argAsType == ctypes_float) {
+			return PyLong_FromLong(sizeof(float));
+		}
+		if (argAsType == ctypes_double) {
+			return PyLong_FromLong(sizeof(double));
+		}
+		if (argAsType == ctypes_int64) {
+			return PyLong_FromLong(sizeof(int64));
+		}
+		if (argAsType == ctypes_int32) {
+			return PyLong_FromLong(sizeof(int32));
+		}
+		if (argAsType == ctypes_int16) {
+			return PyLong_FromLong(sizeof(int16));
+		}
+		if (argAsType == ctypes_int8) {
+			return PyLong_FromLong(sizeof(int8));
+		}
+		if (argAsType == ctypes_uint64) {
+			return PyLong_FromLong(sizeof(uint64));
+		}
+		if (argAsType == ctypes_uint32) {
+			return PyLong_FromLong(sizeof(uint32));
+		}
+		if (argAsType == ctypes_uint16) {
+			return PyLong_FromLong(sizeof(uint16));
+		}
+		if (argAsType == ctypes_uint8) {
+			return PyLong_FromLong(sizeof(uint8));
+		}
+		if (argAsType == ctypes_bool) {
+			return PyLong_FromLong(sizeof(bool));
+		}
+	}
+	if (arg_dealloc == vec_dealloc) {
+		if (argAsType == (PyObject*)&hfvec4Type) {
+			return PyLong_FromLong(sizeof(glm::vec<4, float>));
+		}
+		if (argAsType == (PyObject*)&hdvec4Type) {
+			return PyLong_FromLong(sizeof(glm::vec<4, double>));
+		}
+		if (argAsType == (PyObject*)&hivec4Type) {
+			return PyLong_FromLong(sizeof(glm::vec<4, int>));
+		}
+		if (argAsType == (PyObject*)&huvec4Type) {
+			return PyLong_FromLong(sizeof(glm::vec<4, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hfvec3Type) {
+			return PyLong_FromLong(sizeof(glm::vec<3, float>));
+		}
+		if (argAsType == (PyObject*)&hdvec3Type) {
+			return PyLong_FromLong(sizeof(glm::vec<3, double>));
+		}
+		if (argAsType == (PyObject*)&hivec3Type) {
+			return PyLong_FromLong(sizeof(glm::vec<3, int>));
+		}
+		if (argAsType == (PyObject*)&huvec3Type) {
+			return PyLong_FromLong(sizeof(glm::vec<3, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hfvec2Type) {
+			return PyLong_FromLong(sizeof(glm::vec<2, float>));
+		}
+		if (argAsType == (PyObject*)&hdvec2Type) {
+			return PyLong_FromLong(sizeof(glm::vec<2, double>));
+		}
+		if (argAsType == (PyObject*)&hivec2Type) {
+			return PyLong_FromLong(sizeof(glm::vec<2, int>));
+		}
+		if (argAsType == (PyObject*)&huvec2Type) {
+			return PyLong_FromLong(sizeof(glm::vec<2, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hfvec1Type) {
+			return PyLong_FromLong(sizeof(glm::vec<1, float>));
+		}
+		if (argAsType == (PyObject*)&hdvec1Type) {
+			return PyLong_FromLong(sizeof(glm::vec<1, double>));
+		}
+		if (argAsType == (PyObject*)&hivec1Type) {
+			return PyLong_FromLong(sizeof(glm::vec<1, int>));
+		}
+		if (argAsType == (PyObject*)&huvec1Type) {
+			return PyLong_FromLong(sizeof(glm::vec<1, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hi64vec1Type) {
+			return PyLong_FromLong(sizeof(glm::vec<1, glm::i64>));
+		}
+		if (argAsType == (PyObject*)&hu64vec1Type) {
+			return PyLong_FromLong(sizeof(glm::vec<1, glm::u64>));
+		}
+		if (argAsType == (PyObject*)&hi16vec1Type) {
+			return PyLong_FromLong(sizeof(glm::vec<1, glm::i16>));
+		}
+		if (argAsType == (PyObject*)&hu16vec1Type) {
+			return PyLong_FromLong(sizeof(glm::vec<1, glm::u16>));
+		}
+		if (argAsType == (PyObject*)&hi8vec1Type) {
+			return PyLong_FromLong(sizeof(glm::vec<1, glm::i8>));
+		}
+		if (argAsType == (PyObject*)&hu8vec1Type) {
+			return PyLong_FromLong(sizeof(glm::vec<1, glm::u8>));
+		}
+		if (argAsType == (PyObject*)&hbvec1Type) {
+			return PyLong_FromLong(sizeof(glm::vec<1, bool>));
+		}
+		if (argAsType == (PyObject*)&hi64vec2Type) {
+			return PyLong_FromLong(sizeof(glm::vec<2, glm::i64>));
+		}
+		if (argAsType == (PyObject*)&hu64vec2Type) {
+			return PyLong_FromLong(sizeof(glm::vec<2, glm::u64>));
+		}
+		if (argAsType == (PyObject*)&hi16vec2Type) {
+			return PyLong_FromLong(sizeof(glm::vec<2, glm::i16>));
+		}
+		if (argAsType == (PyObject*)&hu16vec2Type) {
+			return PyLong_FromLong(sizeof(glm::vec<2, glm::u16>));
+		}
+		if (argAsType == (PyObject*)&hi8vec2Type) {
+			return PyLong_FromLong(sizeof(glm::vec<2, glm::i8>));
+		}
+		if (argAsType == (PyObject*)&hu8vec2Type) {
+			return PyLong_FromLong(sizeof(glm::vec<2, glm::u8>));
+		}
+		if (argAsType == (PyObject*)&hbvec2Type) {
+			return PyLong_FromLong(sizeof(glm::vec<2, bool>));
+		}
+		if (argAsType == (PyObject*)&hi64vec3Type) {
+			return PyLong_FromLong(sizeof(glm::vec<3, glm::i64>));
+		}
+		if (argAsType == (PyObject*)&hu64vec3Type) {
+			return PyLong_FromLong(sizeof(glm::vec<3, glm::u64>));
+		}
+		if (argAsType == (PyObject*)&hi16vec3Type) {
+			return PyLong_FromLong(sizeof(glm::vec<3, glm::i16>));
+		}
+		if (argAsType == (PyObject*)&hu16vec3Type) {
+			return PyLong_FromLong(sizeof(glm::vec<3, glm::u16>));
+		}
+		if (argAsType == (PyObject*)&hi8vec3Type) {
+			return PyLong_FromLong(sizeof(glm::vec<3, glm::i8>));
+		}
+		if (argAsType == (PyObject*)&hu8vec3Type) {
+			return PyLong_FromLong(sizeof(glm::vec<3, glm::u8>));
+		}
+		if (argAsType == (PyObject*)&hbvec3Type) {
+			return PyLong_FromLong(sizeof(glm::vec<3, bool>));
+		}
+		if (argAsType == (PyObject*)&hi64vec4Type) {
+			return PyLong_FromLong(sizeof(glm::vec<4, glm::i64>));
+		}
+		if (argAsType == (PyObject*)&hu64vec4Type) {
+			return PyLong_FromLong(sizeof(glm::vec<4, glm::u64>));
+		}
+		if (argAsType == (PyObject*)&hi16vec4Type) {
+			return PyLong_FromLong(sizeof(glm::vec<4, glm::i16>));
+		}
+		if (argAsType == (PyObject*)&hu16vec4Type) {
+			return PyLong_FromLong(sizeof(glm::vec<4, glm::u16>));
+		}
+		if (argAsType == (PyObject*)&hi8vec4Type) {
+			return PyLong_FromLong(sizeof(glm::vec<4, glm::i8>));
+		}
+		if (argAsType == (PyObject*)&hu8vec4Type) {
+			return PyLong_FromLong(sizeof(glm::vec<4, glm::u8>));
+		}
+		if (argAsType == (PyObject*)&hbvec4Type) {
+			return PyLong_FromLong(sizeof(glm::vec<4, bool>));
+		}
+	}
+	
+	if (arg_dealloc == qua_dealloc) {
+		if (argAsType == (PyObject*)&hfquaType) {
+			return PyLong_FromLong(sizeof(glm::qua<float>));
+		}
+		if (argAsType == (PyObject*)&hdquaType) {
+			return PyLong_FromLong(sizeof(glm::qua<double>));
+		}
+	}
+	
+	if (arg_dealloc == mat_dealloc) {
+		if (argAsType == (PyObject*)&hfmat2x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 2, float>));
+		}
+		if (argAsType == (PyObject*)&hdmat2x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 2, double>));
+		}
+		if (argAsType == (PyObject*)&himat2x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 2, int>));
+		}
+		if (argAsType == (PyObject*)&humat2x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 2, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hfmat3x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 3, float>));
+		}
+		if (argAsType == (PyObject*)&hdmat3x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 3, double>));
+		}
+		if (argAsType == (PyObject*)&himat3x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 3, int>));
+		}
+		if (argAsType == (PyObject*)&humat3x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 3, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hfmat4x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 4, float>));
+		}
+		if (argAsType == (PyObject*)&hdmat4x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 4, double>));
+		}
+		if (argAsType == (PyObject*)&himat4x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 4, int>));
+		}
+		if (argAsType == (PyObject*)&humat4x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 4, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hfmat2x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 3, float>));
+		}
+		if (argAsType == (PyObject*)&hdmat2x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 3, double>));
+		}
+		if (argAsType == (PyObject*)&himat2x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 3, int>));
+		}
+		if (argAsType == (PyObject*)&humat2x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 3, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hfmat2x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 4, float>));
+		}
+		if (argAsType == (PyObject*)&hdmat2x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 4, double>));
+		}
+		if (argAsType == (PyObject*)&himat2x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 4, int>));
+		}
+		if (argAsType == (PyObject*)&humat2x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<2, 4, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hfmat3x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 2, float>));
+		}
+		if (argAsType == (PyObject*)&hdmat3x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 2, double>));
+		}
+		if (argAsType == (PyObject*)&himat3x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 2, int>));
+		}
+		if (argAsType == (PyObject*)&humat3x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 2, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hfmat3x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 4, float>));
+		}
+		if (argAsType == (PyObject*)&hdmat3x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 4, double>));
+		}
+		if (argAsType == (PyObject*)&himat3x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 4, int>));
+		}
+		if (argAsType == (PyObject*)&humat3x4Type) {
+			return PyLong_FromLong(sizeof(glm::mat<3, 4, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hfmat4x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 2, float>));
+		}
+		if (argAsType == (PyObject*)&hdmat4x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 2, double>));
+		}
+		if (argAsType == (PyObject*)&himat4x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 2, int>));
+		}
+		if (argAsType == (PyObject*)&humat4x2Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 2, glm::uint>));
+		}
+		if (argAsType == (PyObject*)&hfmat4x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 3, float>));
+		}
+		if (argAsType == (PyObject*)&hdmat4x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 3, double>));
+		}
+		if (argAsType == (PyObject*)&himat4x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 3, int>));
+		}
+		if (argAsType == (PyObject*)&humat4x3Type) {
+			return PyLong_FromLong(sizeof(glm::mat<4, 3, glm::uint>));
+		}
+	}
+
+	if (argAsType == (PyObject*)&glmArrayType) {
+		if (PyType_Check(arg)) {
+			PyErr_SetString(PyExc_ValueError, "The array class doesn't have a general size. Use an instance instead.");
+			return NULL;
+		}
 		return PyLong_FromSsize_t(((glmArray*)arg)->nBytes);
 	}
+
 	PyGLM_TYPEERROR_O("sizeof() requires the argument to be a glm type, not ", arg);
 	return NULL;
 }
 
 static PyObject*
 value_ptr_(PyObject*, PyObject* arg) {
-	if (Py_TYPE(arg) == &hfvec2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdvec2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hivec2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &huvec2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hi64vec2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::i64>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hu64vec2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::u64>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hi16vec2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::i16>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hu16vec2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::u16>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hi8vec2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::i8>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hu8vec2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, glm::u8>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hbvec2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<2, bool>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfvec3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdvec3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hivec3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &huvec3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hi64vec3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::i64>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hu64vec3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::u64>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hi16vec3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::i16>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hu16vec3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::u16>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hi8vec3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::i8>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hu8vec3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, glm::u8>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hbvec3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<3, bool>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfvec4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdvec4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hivec4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &huvec4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hi64vec4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::i64>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hu64vec4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::u64>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hi16vec4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::i16>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hu16vec4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::u16>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hi8vec4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::i8>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hu8vec4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, glm::u8>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hbvec4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((vec<4, bool>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfquaType) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((qua<float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdquaType) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((qua<double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfmat2x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 2, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdmat2x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 2, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &himat2x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 2, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &humat2x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 2, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfmat2x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 3, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdmat2x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 3, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &himat2x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 3, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &humat2x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 3, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfmat2x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 4, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdmat2x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 4, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &himat2x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 4, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &humat2x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<2, 4, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfmat3x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 2, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdmat3x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 2, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &himat3x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 2, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &humat3x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 2, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfmat3x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 3, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdmat3x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 3, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &himat3x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 3, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &humat3x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 3, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfmat3x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 4, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdmat3x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 4, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &himat3x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 4, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &humat3x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<3, 4, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfmat4x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 2, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdmat4x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 2, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &himat4x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 2, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &humat4x2Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 2, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfmat4x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 3, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdmat4x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 3, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &himat4x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 3, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &humat4x3Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 3, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hfmat4x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 4, float>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &hdmat4x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 4, double>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &himat4x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 4, int>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &humat4x4Type) {
-		return PyGLM_ToCtypesP(glm::value_ptr(((mat<4, 4, glm::uint>*)arg)->super_type));
-	}
-	if (Py_TYPE(arg) == &glmArrayType) {
-		return PyGLM_ToCtypesP(((glmArray*)arg)->data);
-	}
+	if (PyGLM_Is_PyGLM_Type(Py_TYPE(arg))) {
+		PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(arg));
+
+		char* data = pto->getDataOf(arg);
+
+		switch (pto->format) {
+		case get_format_specifier<float>() :
+			return PyGLM_ToCtypesP((float*)data);
+		case get_format_specifier<double>() :
+			return PyGLM_ToCtypesP((double*)data);
+		case get_format_specifier<int64>() :
+			return PyGLM_ToCtypesP((int64*)data);
+		case get_format_specifier<uint64>() :
+			return PyGLM_ToCtypesP((uint64*)data);
+		case get_format_specifier<int32>() :
+			return PyGLM_ToCtypesP((int32*)data);
+		case get_format_specifier<uint32>() :
+			return PyGLM_ToCtypesP((uint32*)data);
+		case get_format_specifier<int16>() :
+			return PyGLM_ToCtypesP((int16*)data);
+		case get_format_specifier<uint16>() :
+			return PyGLM_ToCtypesP((uint16*)data);
+		case get_format_specifier<int8>() :
+			return PyGLM_ToCtypesP((int8*)data);
+		case get_format_specifier<uint8>() :
+			return PyGLM_ToCtypesP((uint8*)data);
+		case get_format_specifier<bool>() :
+			return PyGLM_ToCtypesP((bool*)data);
+		}
+	}
+
 	PyGLM_TYPEERROR_O("value_ptr() requires the argument to be a glm type, not ", arg);
 	return NULL;
 }
@@ -805,8 +640,8 @@ PyDoc_STRVAR(value_ptr_docstr,
 );
 PyDoc_STRVAR(sizeof_docstr,
 	"sizeof(x: type) -> int\n"
-	"	Return the data size of x in bytes.\n"
-	"	E.g. sizeof(vec4) == sizeof(float32) * 4 = 4 * 4 = 16."
+	"	Return the data size of `x` in bytes.\n"
+	"	E.g. `sizeof(vec4) == sizeof(float32) * 4 = 4 * 4 = 16`."
 );
 PyDoc_STRVAR(make_vec2_docstr,
 	"make_vec2(x: ctypes pointer) -> vec2\n"

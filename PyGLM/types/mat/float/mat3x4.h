@@ -71,47 +71,6 @@ static PyNumberMethods hfmat3x4NumMethods = {
 	(binaryfunc)mat_matmul, //nb_matrix_multiply
 	(binaryfunc)mat_imatmul<3, 4, float>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject hfmat3x4Type = {
-	PyObject_HEAD_INIT(NULL)
-	"glm.mat3x4",             /* tp_name */
-	sizeof(mat<3, 4, float>),             /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	(destructor)mat_dealloc, /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	(reprfunc)mat3x4_repr<float>,                         /* tp_repr */
-	&hfmat3x4NumMethods,             /* tp_as_number */
-	&hfmat3x4SeqMethods,                         /* tp_as_sequence */
-	&hfmat3x4MapMethods,                         /* tp_as_mapping */
-	(hashfunc)mat_hash<3, 4, float>,                         /* tp_hash  */
-	0,                         /* tp_call */
-	(reprfunc)mat3x4_str<float>,                         /* tp_str */
-	0,                         /* tp_getattro */
-	0,                         /* tp_setattro */
-	&hfmat3x4BufferMethods,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"mat3x4( <mat3x4 compatible type(s)> )\n3 columns of 4 components matrix of floating-point numbers.",           /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	(richcmpfunc)mat_richcompare<3, 4, float>,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	(getiterfunc)mat_geniter<3, 4, float>,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	hfmat3x4_methods,             /* tp_methods */
-	0,             /* tp_members */
-	0,           			/* tp_getset */
-	0,                         /* tp_base */
-	0,                         /* tp_dict */
-	0,                         /* tp_descr_get */
-	0,                         /* tp_descr_set */
-	0,                         /* tp_dictoffset */
-	(initproc)mat3x4_init<float>,      /* tp_init */
-	0,                         /* tp_alloc */
-	(newfunc)mat_new<3, 4, float>,                 /* tp_new */
-};
 static PyTypeObject hfmat3x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"mat3x4Iter",             /* tp_name */
@@ -152,3 +111,55 @@ static PyTypeObject hfmat3x4IterType = {
 	0,                         /* tp_alloc */
 	(newfunc)matIter_new<3, 4, float>,                 /* tp_new */
 };
+
+static PyGLMTypeObject hfmat3x4GLMType = {
+	{
+		PyObject_HEAD_INIT(NULL)
+		"glm.mat3x4",             /* tp_name */
+		sizeof(mat<3, 4, float>),             /* tp_basicsize */
+		0,                         /* tp_itemsize */
+		(destructor)mat_dealloc, /* tp_dealloc */
+		0,                         /* tp_print */
+		0,                         /* tp_getattr */
+		0,                         /* tp_setattr */
+		0,                         /* tp_reserved */
+		(reprfunc)mat3x4_repr<float>,                         /* tp_repr */
+		& hfmat3x4NumMethods,             /* tp_as_number */
+		& hfmat3x4SeqMethods,                         /* tp_as_sequence */
+		& hfmat3x4MapMethods,                         /* tp_as_mapping */
+		(hashfunc)mat_hash<3, 4, float>,                         /* tp_hash  */
+		0,                         /* tp_call */
+		(reprfunc)mat3x4_str<float>,                         /* tp_str */
+		0,                         /* tp_getattro */
+		0,                         /* tp_setattro */
+		& hfmat3x4BufferMethods,                         /* tp_as_buffer */
+		Py_TPFLAGS_DEFAULT |
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */
+		"mat3x4( <mat3x4 compatible type(s)> )\n3 columns of 4 components matrix of floating-point numbers.",           /* tp_doc */
+		0,                         /* tp_traverse */
+		0,                         /* tp_clear */
+		(richcmpfunc)mat_richcompare<3, 4, float>,                         /* tp_richcompare */
+		0,                         /* tp_weaklistoffset */
+		(getiterfunc)mat_geniter<3, 4, float>,                         /* tp_iter */
+		0,                         /* tp_iternext */
+		hfmat3x4_methods,             /* tp_methods */
+		0,             /* tp_members */
+		0,           			/* tp_getset */
+		0,                         /* tp_base */
+		0,                         /* tp_dict */
+		0,                         /* tp_descr_get */
+		0,                         /* tp_descr_set */
+		0,                         /* tp_dictoffset */
+		(initproc)mat3x4_init<float>,      /* tp_init */
+		0,                         /* tp_alloc */
+		(newfunc)mat_new<3, 4, float>,                 /* tp_new */
+	},
+	PyGLM_TYPE_MAT,
+	3,
+	4,
+	sizeof(float),
+	sizeof(glm::mat<3, 4, float>),
+	PyGLM_FS_FLOAT
+};
+
+static PyTypeObject& hfmat3x4Type = *((PyTypeObject*)&hfmat3x4GLMType);

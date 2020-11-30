@@ -11,5 +11,5 @@ Decomposes a model matrix to translations, rotation and scale components\.
 ### decompose\(\) function  
 #### <code>glm.<code>**decompose**(**modelMatrix**: *mat4*, **scale**: *vec3*, **orientation**: *quat*, **translation**: *vec3*, **skew**: *vec3*, **perspective**: *vec4*) -\> *bool*</code></code>  
 &emsp;&emsp;Decomposes a model matrix to translations, rotation and scale components\.  
-&emsp;&emsp;Returns true on success\.  
+&emsp;&emsp;Returns ``` True ``` on success\.  
   

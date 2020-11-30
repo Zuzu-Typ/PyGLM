@@ -35,7 +35,14 @@
 
 
 //static PyObject*
-//test(PyObject*, ctypes_helper* arg) {
+//test(PyObject*, PyObject* arg) {
+//
+//
+//	uint64 ptr1 = reinterpret_cast<uint64>(&hbvec1Type);
+//	uint64 ptr2 = reinterpret_cast<uint64>(&hbvec1GLMType.typeObject);
+//
+//	PyGLMTypeObject* ptr3 =(&hbvec1GLMType);
+//	PyGLMTypeObject* ptr4 =((PyGLMTypeObject*)(&hbvec1Type));
 //	
 //	//PyGLMTypeInfo pti(PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLMTypeInfo::getDT<float>(), arg);
 //	////return pack(*((glm::mat<4,4, float>*)pti.data));
@@ -142,6 +149,15 @@ static PyMethodDef glmmethods[] = {
 	// matrix_transform_2d
 	MATRIX_TRANSFORM_2D_METHODS,
 
+	// unary
+	UNARY_METHODS,
+
+	// binary
+	BINARY_METHODS,
+
+	// ternary
+	TERNARY_METHODS,
+
 	// PyGLM functions
 	{ "silence", (PyCFunction)silence, METH_O, silence_docstr },
 	//{ "_get_type_info", (PyCFunction)_get_type_info, METH_VARARGS, "_get_type_info(accepted_types, object) -> None\nAn internal testing funtion to check wether or not the type checking works correctly." },
@@ -217,6 +233,8 @@ extern "C" {
 		ctypes_uint16 = PyObject_GetAttrString(ctypes_module, "c_uint16");
 		ctypes_uint8 = PyObject_GetAttrString(ctypes_module, "c_uint8");
 		ctypes_bool = PyObject_GetAttrString(ctypes_module, "c_bool");
+
+		ctypes_dealloc = ((PyTypeObject*)ctypes_float)->tp_dealloc;
 
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 		ctypes_cast = PyObject_GetAttrString(ctypes_module, "cast");
@@ -364,7 +382,6 @@ extern "C" {
 		module_glm = PyModule_Create(&glmmodule);
 		if (module_glm == NULL)
 			return NULL;
-
 
 //#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 //		// backwards compatibility

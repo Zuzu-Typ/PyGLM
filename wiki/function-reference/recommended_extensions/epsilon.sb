@@ -9,10 +9,10 @@ Comparison functions for a user defined epsilon values.
 \ul\
 \h3\epsilonEqual() function\h3\
 \raw\#### <code>glm.<code>**epsilonEqual**(**x**: *number*, **y**: *number*, **epsilon**: *number*) -\\> *bool*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of |x - y| < epsilon.
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| < epsilon\code\.
 
 \raw\#### <code>glm.<code>**epsilonEqual**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *number*) -\\> *bvecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of |x - y| < epsilon.
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| < epsilon\code\.
 
 \h3\epsilonNotEqual() function\h3\
 \raw\#### <code>glm.<code>**epsilonNotEqual**(***args**) -\\> *not epsilonEqual(*args)*</code></code>\raw\

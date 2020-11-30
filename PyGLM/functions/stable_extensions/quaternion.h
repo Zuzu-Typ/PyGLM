@@ -32,11 +32,11 @@ PyDoc_STRVAR(eulerAngles_docstr,
 );
 PyDoc_STRVAR(mat3_cast_docstr,
 	"mat3_cast(x: quat) -> mat3\n"
-	"	Converts a quaternion to a 3 * 3 matrix."
+	"	Converts a quaternion to a 3 x 3 matrix."
 );
 PyDoc_STRVAR(mat4_cast_docstr,
 	"mat4_cast(x: quat) -> mat4\n"
-	"	Converts a quaternion to a 4 * 4 matrix."
+	"	Converts a quaternion to a 4 x 4 matrix."
 );
 PyDoc_STRVAR(pitch_docstr,
 	"pitch(x: quat) -> float\n"
@@ -44,9 +44,9 @@ PyDoc_STRVAR(pitch_docstr,
 );
 PyDoc_STRVAR(quat_cast_docstr,
 	"quat_cast(x: mat3) -> quat\n"
-	"	Converts a pure rotation 3 * 3 matrix to a quaternion.\n"
+	"	Converts a pure rotation 3 x 3 matrix to a quaternion.\n"
 	"quat_cast(x: mat4) -> quat\n"
-	"	Converts a pure rotation 4 * 4 matrix to a quaternion."
+	"	Converts a pure rotation 4 x 4 matrix to a quaternion."
 );
 PyDoc_STRVAR(quatLookAt_docstr,
 	"quatLookAt(direction: vec3, up: vec3) -> quat\n"

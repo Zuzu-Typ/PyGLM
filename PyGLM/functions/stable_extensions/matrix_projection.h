@@ -56,14 +56,14 @@ PyDoc_STRVAR(project_docstr,
 );
 PyDoc_STRVAR(projectNO_docstr,
 	"projectNO(obj: vec3, model: mat4, proj: mat4, viewport: vec4) -> vec3\n"
-	"	Map the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\n"
-	"	The near and far clip planes correspond to z normalized device coordinates of -1 and +1\n"
+	"	Map the specified object coordinates `(obj.x, obj.y, obj.z)` into window coordinates.\n"
+	"	The near and far clip planes correspond to z normalized device coordinates of `-1` and `+1`\n"
 	"	respectively. (OpenGL clip volume definition)"
 );
 PyDoc_STRVAR(projectZO_docstr,
 	"projectZO(obj: vec3, model: mat4, proj: mat4, viewport: vec4) -> vec3\n"
-	"	Map the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.\n"
-	"	The nearand far clip planes correspond to z normalized device coordinates of 0 and +1\n"
+	"	Map the specified object coordinates `(obj.x, obj.y, obj.z)` into window coordinates.\n"
+	"	The nearand far clip planes correspond to z normalized device coordinates of `0` and `+1`\n"
 	"	respectively. (Direct3D clip volume definition)"
 );
 PyDoc_STRVAR(unProject_docstr,
@@ -72,14 +72,14 @@ PyDoc_STRVAR(unProject_docstr,
 );
 PyDoc_STRVAR(unProjectNO_docstr,
 	"unProjectNO(win: vec3, model: mat4, proj: mat4, viewport: vec4) -> vec3\n"
-	"	Map the specified window coordinates (win.x, win.y, win.z) into object coordinates.\n"
-	"	The nearand far clip planes correspond to z normalized device coordinates of -1 and +1\n"
+	"	Map the specified window coordinates `(win.x, win.y, win.z)` into object coordinates.\n"
+	"	The nearand far clip planes correspond to z normalized device coordinates of `-1` and `+1`\n"
 	"	respectively. (OpenGL clip volume definition)"
 );
 PyDoc_STRVAR(unProjectZO_docstr,
 	"unProjectZO(win: vec3, model: mat4, proj: mat4, viewport: vec4) -> vec3\n"
-	"	Map the specified window coordinates (win.x, win.y, win.z) into object coordinates.\n"
-	"	The nearand far clip planes correspond to z normalized device coordinates of 0 and +1\n"
+	"	Map the specified window coordinates `(win.x, win.y, win.z)` into object coordinates.\n"
+	"	The nearand far clip planes correspond to z normalized device coordinates of `0` and `+1`\n"
 	"	respectively. (Direct3D clip volume definition)"
 );
 

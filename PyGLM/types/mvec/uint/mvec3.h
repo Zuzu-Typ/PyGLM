@@ -2,6 +2,8 @@
 
 #include "../forward_declarations.h"
 
+#include "../../vec/all.h"
+
 static PyMethodDef humvec3_methods[] = {
 	{ "__copy__", (PyCFunction)mvec_copy<3, glm::u32>, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<3, glm::u32>, METH_O, "Create a (deep)copy of this instance"},
@@ -65,47 +67,6 @@ static PyNumberMethods humvec3NumMethods = {
 	(binaryfunc)mvec_matmul, //nb_matrix_multiply
 	(binaryfunc)mvec_imatmul<3, glm::u32>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject humvec3Type = {
-	PyObject_HEAD_INIT(NULL)
-	"glm.umvec3",             /* tp_name */
-	sizeof(mvec<3, glm::u32>),             /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc, /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	(reprfunc)mvec3_str<glm::u32>,                         /* tp_repr */
-	&humvec3NumMethods,             /* tp_as_number */
-	&humvec3SeqMethods,                         /* tp_as_sequence */
-	0,                         /* tp_as_mapping */
-	(hashfunc)mvec_hash<3, glm::u32>,                         /* tp_hash  */
-	0,                         /* tp_call */
-	(reprfunc)mvec3_str<glm::u32>,                         /* tp_str */
-	(getattrofunc)mvec_getattr<3, glm::u32>,                         /* tp_getattro */
-	(setattrofunc)mvec_setattr<3, glm::u32>,                         /* tp_setattro */
-	&humvec3BufferMethods,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"umvec3( <mvec3 compatible type(s)> )\n3 components mvector of high qualifier unsigned integer numbers.",           /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	(richcmpfunc)mvec_richcompare<3, glm::u32>,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	(getiterfunc)mvec_geniter<3, glm::u32>,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	humvec3_methods,             /* tp_methods */
-	0,             /* tp_members */
-	0,           			/* tp_getset */
-	0,                         /* tp_base */
-	0,                         /* tp_dict */
-	0,                         /* tp_descr_get */
-	0,                         /* tp_descr_set */
-	0,                         /* tp_dictoffset */
-	0,      /* tp_init */
-	0,                         /* tp_alloc */
-	(newfunc)mvec_new<3, glm::u32>,                 /* tp_new */
-};
 static PyTypeObject humvec3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"umvec3Iter",             /* tp_name */
@@ -146,3 +107,56 @@ static PyTypeObject humvec3IterType = {
 	0,                         /* tp_alloc */
 	(newfunc)mvecIter_new<3, glm::u32>,                 /* tp_new */
 };
+
+static PyGLMTypeObject humvec3GLMType = {
+	{
+		PyObject_HEAD_INIT(NULL)
+		"glm.umvec3",             /* tp_name */
+		sizeof(mvec<3, glm::u32>),             /* tp_basicsize */
+		0,                         /* tp_itemsize */
+		(destructor)mvec_dealloc, /* tp_dealloc */
+		0,                         /* tp_print */
+		0,                         /* tp_getattr */
+		0,                         /* tp_setattr */
+		0,                         /* tp_reserved */
+		(reprfunc)mvec3_str<glm::u32>,                         /* tp_repr */
+		& humvec3NumMethods,             /* tp_as_number */
+		& humvec3SeqMethods,                         /* tp_as_sequence */
+		0,                         /* tp_as_mapping */
+		(hashfunc)mvec_hash<3, glm::u32>,                         /* tp_hash  */
+		0,                         /* tp_call */
+		(reprfunc)mvec3_str<glm::u32>,                         /* tp_str */
+		(getattrofunc)mvec_getattr<3, glm::u32>,                         /* tp_getattro */
+		(setattrofunc)mvec_setattr<3, glm::u32>,                         /* tp_setattro */
+		& humvec3BufferMethods,                         /* tp_as_buffer */
+		Py_TPFLAGS_DEFAULT |
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */
+		"umvec3( <mvec3 compatible type(s)> )\n3 components mvector of high qualifier unsigned integer numbers.",           /* tp_doc */
+		0,                         /* tp_traverse */
+		0,                         /* tp_clear */
+		(richcmpfunc)mvec_richcompare<3, glm::u32>,                         /* tp_richcompare */
+		0,                         /* tp_weaklistoffset */
+		(getiterfunc)mvec_geniter<3, glm::u32>,                         /* tp_iter */
+		0,                         /* tp_iternext */
+		humvec3_methods,             /* tp_methods */
+		0,             /* tp_members */
+		0,           			/* tp_getset */
+		0,                         /* tp_base */
+		0,                         /* tp_dict */
+		0,                         /* tp_descr_get */
+		0,                         /* tp_descr_set */
+		0,                         /* tp_dictoffset */
+		0,      /* tp_init */
+		0,                         /* tp_alloc */
+		(newfunc)mvec_new<3, glm::u32>,                 /* tp_new */
+	},
+	PyGLM_TYPE_MVEC,
+	3,
+	0,
+	sizeof(uint32),
+	sizeof(glm::vec<3, uint32>),
+	PyGLM_FS_UINT32,
+	&huvec3Type
+};
+
+static PyTypeObject& humvec3Type = *((PyTypeObject*)&humvec3GLMType);

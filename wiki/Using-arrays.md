@@ -13,15 +13,24 @@ It's mainly intended to **provide a way of passing multiple glm type instances**
     * [\.\. with vectors, matrices, quaternions or ctypes number objects](#-with-vectors-matrices-quaternions-or-ctypes-number-objects)  
     * [\.\. with other array instances](#-with-other-array-instances)  
     * [\.\. with other compatible arrays / lists / iterables](#-with-other-compatible-arrays--lists--iterables)  
+    * [\.\. as a reference instead of a copy](#-as-a-reference-instead-of-a-copy)  
+    * [\.\. with zeros](#-with-zeros)  
+    * [\.\. from numbers](#-from-numbers)  
 3. [Members](#members)  
 4. [Methods](#methods)  
     * [The copy protocol](#the-copy-protocol)  
     *  [Pickling](#pickling)  
     * [To list / tuple](#to-list--tuple)  
     * [From Numbers](#from-numbers)  
+    * [As Reference](#as-reference)  
+    * [Zeros](#zeros)  
+    * [Filter](#filter)  
+    * [Map](#map)  
+    * [Sort](#sort)  
+    * [Concat](#concat)  
+    * [Repeat](#repeat)  
 5. [Operators](#operators)  
-    * [concat](#concat--operator)  
-    * [repeat](#repeat--operator)  
+    * [Numeric operations](#numeric-operations)  
     * [getitem and setitem](#getitem-and-setitem--operator)  
     * [contains](#contains-in-operator)  
     * [len](#len)  
@@ -92,6 +101,51 @@ TypeError: invalid argument type(s) for array()
  ```  
 *Note: array buffers that store length 4 items are interpreted as vec4s rather than quats\.*  
   
+### \.\.\. as a reference instead of a copy  
+If you don't need or don't want a copy of an array or buffer, but want a reference instead \(i\.e\. use the same data in memory as another array / buffer\), you can do so by using ``` glm.array.as_reference ```\.  
+``` Python
+>>> arr = array(vec3(1))
+>>> arr2 = array.as_reference(arr)
+>>> arr == arr2
+True
+
+>>> arr.address == arr2.address
+True
+
+>>> arr[0] = vec3(2) # if you change one of them, the other changes as well
+>>> arr2
+array(vec3(2, 2, 2))
+ ```  
+  
+*Note: ``` as_reference ``` only works with array instances or buffers \(e\.g\. ``` numpy.array ```\)\.  
+Also it may not always be possible to create a reference copy, in which case a normal copy is made and a warning is raised\.*  
+  
+### \.\.\. with zeros  
+You can initialize an array with any given number of zeros or a given type:  
+``` Python
+>>> array.zeros(4, uint8)
+array(c_uint8(0), c_uint8(0), c_uint8(0), c_uint8(0))
+
+>>> array.zeros(2, vec3)
+array(vec3(0, 0, 0), vec3(0, 0, 0))
+
+ ```  
+  
+### \.\.\. from numbers  
+You can initialize an array with numbers and a \(ctypes\) data type using ``` glm.array.from_numbers ```:  
+``` Python
+>>> array.from_numbers(int8, 1, 2, 3)
+array(c_int8(1), c_int8(2), c_int8(3))
+
+>>> array.from_numbers(float32, 4.2, 1.1)
+array(c_float(4.2), c_float(1.1))
+
+>>> array(int8, 1, 2, 3) # You can also use the array() constructor, but beware that the dedicated function is faster
+array(c_int8(1), c_int8(2), c_int8(3))
+
+>>> array.from_numbers(vec1, 1, 2, 3)
+TypeError: Invalid argument type for from_number(), expected a ctypes data type as the first argument. Got 'type'
+ ```  
   
 ## Members  
 PyGLM arrays have the following members:  
@@ -105,8 +159,11 @@ ptr | c\_void\_p | A ctypes pointer that points to the content of an array
 nbytes | int | The total data size in bytes
 typecode | str | A single character, describing the data type of the elements' values, according to [this list](https://docs.python.org/3/library/struct.html#format-characters)
 dtype | str | A numpy\-like data type string
+ctype | str | The respective ctypes data type
 itemsize | int | The size of one array element in bytes
 dt\_size | int | The size of each single component of the elements in bytes \(size of data type\)
+readonly | int | Whether or not the array is read\-only
+reference | int | The reference to the array owning the data \(if any\)
   
   
 ## Methods  
@@ -132,23 +189,165 @@ array(c_float(1.2), c_float(3.4))
 array(c_int32(1), c_int32(3), c_int32(4), c_int32(5))
  ```  
   
-## Operators  
-### concat \(``` + ``` operator\)  
-Arrays can be combined / concaternated using the ``` + ``` operator, as long as they have the same element type\.  
+### As Reference  
+The array class also has a static ``` as_reference ``` method, which allows for creation of a reference copy of other arrays or objects that support the buffer protocol\.  
+  
+A reference copy means that the newly created array will use the same data in memory as the source array\.  
+It will also keep a reference to the object it shares the data with in the ``` reference ``` member\.  
+Example:  
 ``` Python
->>> array(vec2(1, 2)) + array(vec2(3, 4))
+>>> arr = array(vec2(1))
+>>> arr2 = array.as_reference(arr)
+>>> arr == arr2
+True
+
+>>> arr is arr2.reference
+True
+
+>>> arr[0] = vec2(-1) # if you change one of them, the other changes as well
+>>> arr2
+array(vec2(-1, -1))
+ ```  
+  
+### Zeros  
+Additionally, the array class has a static ``` zeros ``` method, which allows for creation of an array with items that are initialized with zeros\.  
+This is the fastest way of creating an array, as it uses the builtin ``` calloc ``` function to allocate the memory and initialize it in the same step\.  
+  
+Example:  
+``` Python
+>>> array.zeros(4, uint8)
+array(c_uint8(0), c_uint8(0), c_uint8(0), c_uint8(0))
+
+>>> array.zeros(2, vec3)
+array(vec3(0, 0, 0), vec3(0, 0, 0))
+
+>>> array.zeros(1, mat4)
+array(mat4x4((0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0)))
+ ```  
+  
+### Filter  
+You can filter an array using a custom filtering function \(i\.e\. create a new array with all of this array's elements that match a certain criteria\)\.  
+  
+The filtering function is called with each element of the array and must return ``` True ``` for the elements to keep and ``` False ``` for the elements to discard\.  
+  
+Example:  
+``` Python
+>>> array(c_float, 1, 2, 3, 4, 5).filter(lambda x: x > 3)
+array(c_float(4), c_float(5))
+
+>>> array(vec3(1), vec3(2), vec3(3)).filter(lambda x: x.x + x.y == 2)
+array(vec3(1, 1, 1))
+ ```  
+  
+### Map  
+You can map the elements of an array to one or any number of new values using a custom mapping function\.  
+  
+The mapping function is supplied with the amounts of arguments that the map function is given\.  
+  
+If the mapping function returns ``` None ```, the element is discarded \(much like filter\)\.  
+If it returns a single value, that value becomes a new element of the resulting array\.  
+If it returns a tuple, all of the tuple's items are added to the resulting array\.  
+  
+Example:  
+``` Python
+>>> array(c_float, 1, 2, 3).map(lambda x: x + 1)
+array(c_float(2), c_float(3), c_float(4))
+
+>>> array(c_float, 1, 2, 3).map(vec3)
+array(vec3(1, 1, 1), vec3(2, 2, 2), vec3(3, 3, 3))
+
+>>> array(c_float, 1, 2, 3, 4, 5).map(lambda x: x if x > 3 else None)
+array(c_float(4), c_float(5))
+
+>>> array(c_float, 1, 2).map(lambda x: (x, x))
+array(c_float(1), c_float(1), c_float(2), c_float(2))
+
+>>> array(c_float, 1, 2).map(lambda x: (3, 4) if x == 1 else 5)
+array(c_float(3), c_float(4), c_float(5))
+
+>>> arr1 = array(c_float, 1, 2, 3)
+>>> arr2 = array(c_float, 4, 5, 6)
+>>> arr1.map(lambda x, y: (x + x) * y, arr2)
+array(c_float(8), c_float(20), c_float(36))
+
+>>> arr3 = array(c_float, 7, 8, 9)
+>>> arr1.map(lambda x, y, z: vec3(x, y, z), arr2, arr3)
+array(vec3(1, 4, 7), vec3(2, 5, 8), vec3(3, 6, 9))
+
+>>> arr1.map(lambda x, y, z: x * y + z, arr2, arr3)
+array(c_float(11), c_float(18), c_float(27))
+
+>>> arr4 = array(vec3(1, 2, 3), vec3( 4, 5, 6))
+>>> arr4.map(normalize)
+array(vec3(0.267261, 0.534522, 0.801784), vec3(0.455842, 0.569803, 0.683764))
+
+>>> arr5 = array(vec3(7, 8, 9), vec3(10,11,12))
+>>> arr4.map(dot, arr5)
+array(c_float(50), c_float(167))
+ ```  
+  
+### Sort  
+You can sort an array by using a custom sorting function\.  
+  
+The sorting function is called with two elements from the array and should return ``` -1 ``` if the first element comes before the second element in order\.  
+Otherwise it may return any other value\. Typically ``` 0 ``` for equal elements and ``` 1 ``` if the first element comes after the second\.  
+  
+The sorting algorithm used is a recursive quicksort\.  
+  
+Example:  
+``` Python
+>>> arr = array(c_float, 6, 5, 4, 3, 2, 1)
+>>> arr.sort(lambda x, y: -1 if x < y else 1)
+>>> arr
+array(c_float(1), c_float(2), c_float(3), c_float(4), c_float(5), c_float(6))
+
+>>> arr.sort(lambda x, y: int(sign(y - x)))
+>>> arr
+array(c_float(6), c_float(5), c_float(4), c_float(3), c_float(2), c_float(1))
+
+>>> arr.sort(cmp) # using glm.cmp
+>>> arr
+array(c_float(1), c_float(2), c_float(3), c_float(4), c_float(5), c_float(6))
+ ```  
+  
+### Concat  
+Arrays can be combined / concatenated using the ``` concat() ``` method, as long as they have the same element type\.  
+``` Python
+>>> array(vec2(1, 2)).concat(array(vec2(3, 4)))
 array(vec2(1, 2), vec2(3, 4))
 
->>> array(vec4()) + array(vec1())
+>>> array(vec4()).concat(array(vec1()))
 ValueError: the given arrays are incompatible
  ```  
   
-### repeat \(``` * ``` operator\)  
-Arrays can be repeated a given number of times using the ``` * ``` operator\.  
+### Repeat  
+Arrays can be repeated a given number of times using the ``` repeat() ``` method\.  
 ``` Python
->>> array(vec3(1, 2, 3)) * 3
+>>> array(vec3(1, 2, 3)).repeat(3)
 array(vec3(1, 2, 3), vec3(1, 2, 3), vec3(1, 2, 3))
  ```  
+  
+## Operators  
+### Numeric operations  
+Arrays support a dozen numeric operations:  
+  
+*  Addition \(``` + ```\)  
+*  Subtraction \(``` - ```\)  
+*  Multiplication \(``` * ```\)  
+*  Division \(``` / ```\)  
+*  Modulus \(``` % ```\)  
+*  Power \(``` ** ```\)  
+*  Negation \(``` - ```\)  
+*  Absolution \(``` abs() ```\)  
+*  Inversion \(``` ~ ```\)  
+*  Left shift \(``` << ```\)  
+*  Right shift \(``` >> ```\)  
+*  Bitwise and \(``` & ```\)  
+*  Bitwise or \(``` | ```\)  
+*  Bitwise xor \(``` ^ ```\)  
+  
+  
+*Note: Not all types are compatible though\.*  
   
 ### getitem, setitem and delitem \(``` [] ``` operator\)  
 You can access the individual elements of an array using indices\.  

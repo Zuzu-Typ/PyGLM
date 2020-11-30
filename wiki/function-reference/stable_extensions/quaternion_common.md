@@ -12,7 +12,7 @@ Provides common functions for quaternion types\.
   
 ### conjugate\(\) function  
 #### <code>glm.<code>**conjugate**(**q**: *quat*) -\> *quat*</code></code>  
-&emsp;&emsp;Returns the q conjugate\.  
+&emsp;&emsp;Returns the ``` q ``` conjugate\.  
   
 ### lerp\(\) function  
 #### <code>glm.<code>**lerp**(**x**: *quat*, **y**: *quat*, **a**: *float*) -\> *quat*</code></code>  

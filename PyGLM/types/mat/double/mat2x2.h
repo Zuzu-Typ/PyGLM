@@ -71,47 +71,6 @@ static PyNumberMethods hdmat2x2NumMethods = {
 	(binaryfunc)mat_matmul, //nb_matrix_multiply
 	(binaryfunc)mat_imatmul<2, 2, double>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject hdmat2x2Type = {
-	PyObject_HEAD_INIT(NULL)
-	"glm.dmat2x2",             /* tp_name */
-	sizeof(mat<2, 2, double>),             /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	(destructor)mat_dealloc, /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	(reprfunc)mat2x2_repr<double>,                         /* tp_repr */
-	&hdmat2x2NumMethods,             /* tp_as_number */
-	&hdmat2x2SeqMethods,                         /* tp_as_sequence */
-	&hdmat2x2MapMethods,                         /* tp_as_mapping */
-	(hashfunc)mat_hash<2, 2, double>,                         /* tp_hash  */
-	0,                         /* tp_call */
-	(reprfunc)mat2x2_str<double>,                         /* tp_str */
-	0,                         /* tp_getattro */
-	0,                         /* tp_setattro */
-	&hdmat2x2BufferMethods,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"dmat2x2( <dmat2x2 compatible type(s)> )\n2 columns of 2 components matrix of double numbers.",           /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	(richcmpfunc)mat_richcompare<2, 2, double>,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	(getiterfunc)mat_geniter<2, 2, double>,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	hdmat2x2_methods,             /* tp_methods */
-	0,             /* tp_members */
-	0,           			/* tp_getset */
-	0,                         /* tp_base */
-	0,                         /* tp_dict */
-	0,                         /* tp_descr_get */
-	0,                         /* tp_descr_set */
-	0,                         /* tp_dictoffset */
-	(initproc)mat2x2_init<double>,      /* tp_init */
-	0,                         /* tp_alloc */
-	(newfunc)mat_new<2, 2, double>,                 /* tp_new */
-};
 static PyTypeObject hdmat2x2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"dmat2x2Iter",             /* tp_name */
@@ -152,3 +111,55 @@ static PyTypeObject hdmat2x2IterType = {
 	0,                         /* tp_alloc */
 	(newfunc)matIter_new<2, 2, double>,                 /* tp_new */
 };
+
+static PyGLMTypeObject hdmat2x2GLMType = {
+	{
+		PyObject_HEAD_INIT(NULL)
+		"glm.dmat2x2",             /* tp_name */
+		sizeof(mat<2, 2, double>),             /* tp_basicsize */
+		0,                         /* tp_itemsize */
+		(destructor)mat_dealloc, /* tp_dealloc */
+		0,                         /* tp_print */
+		0,                         /* tp_getattr */
+		0,                         /* tp_setattr */
+		0,                         /* tp_reserved */
+		(reprfunc)mat2x2_repr<double>,                         /* tp_repr */
+		& hdmat2x2NumMethods,             /* tp_as_number */
+		& hdmat2x2SeqMethods,                         /* tp_as_sequence */
+		& hdmat2x2MapMethods,                         /* tp_as_mapping */
+		(hashfunc)mat_hash<2, 2, double>,                         /* tp_hash  */
+		0,                         /* tp_call */
+		(reprfunc)mat2x2_str<double>,                         /* tp_str */
+		0,                         /* tp_getattro */
+		0,                         /* tp_setattro */
+		& hdmat2x2BufferMethods,                         /* tp_as_buffer */
+		Py_TPFLAGS_DEFAULT |
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */
+		"dmat2x2( <dmat2x2 compatible type(s)> )\n2 columns of 2 components matrix of double numbers.",           /* tp_doc */
+		0,                         /* tp_traverse */
+		0,                         /* tp_clear */
+		(richcmpfunc)mat_richcompare<2, 2, double>,                         /* tp_richcompare */
+		0,                         /* tp_weaklistoffset */
+		(getiterfunc)mat_geniter<2, 2, double>,                         /* tp_iter */
+		0,                         /* tp_iternext */
+		hdmat2x2_methods,             /* tp_methods */
+		0,             /* tp_members */
+		0,           			/* tp_getset */
+		0,                         /* tp_base */
+		0,                         /* tp_dict */
+		0,                         /* tp_descr_get */
+		0,                         /* tp_descr_set */
+		0,                         /* tp_dictoffset */
+		(initproc)mat2x2_init<double>,      /* tp_init */
+		0,                         /* tp_alloc */
+		(newfunc)mat_new<2, 2, double>,                 /* tp_new */
+	},
+	PyGLM_TYPE_MAT,
+	2,
+	2,
+	sizeof(double),
+	sizeof(glm::mat<2, 2, double>),
+	PyGLM_FS_DOUBLE
+};
+
+static PyTypeObject& hdmat2x2Type = *((PyTypeObject*)&hdmat2x2GLMType);

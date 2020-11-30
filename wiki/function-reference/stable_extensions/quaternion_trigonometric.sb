@@ -18,5 +18,5 @@ Provides trigonometric functions for quaternion types.
 
 \h3\axis() function\h3\
 \raw\#### <code>glm.<code>**axis**(**x**: *quat*) -\\> *vec3*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the q rotation axis.
+\raw\&emsp;&emsp;\raw\Returns the \code\q\code\ rotation axis.
 

@@ -44,7 +44,7 @@ PyDoc_STRVAR(asech_docstr,
 );
 PyDoc_STRVAR(cot_docstr,
 	"cot(angle: float) -> float\n"
-	"	Cotangent function. adjacent / opposite or 1 / tan(x)."
+	"	Cotangent function. adjacent / opposite or `1 / tan(x)`."
 );
 PyDoc_STRVAR(coth_docstr,
 	"coth(angle: float) -> float\n"
@@ -52,7 +52,7 @@ PyDoc_STRVAR(coth_docstr,
 );
 PyDoc_STRVAR(csc_docstr,
 	"csc(angle: float) -> float\n"
-	"	Cosecant function. hypotenuse / opposite or 1 / sin(x)."
+	"	Cosecant function. hypotenuse / opposite or `1 / sin(x)`."
 );
 PyDoc_STRVAR(csch_docstr,
 	"csch(angle: float) -> float\n"
@@ -60,7 +60,7 @@ PyDoc_STRVAR(csch_docstr,
 );
 PyDoc_STRVAR(sec_docstr,
 	"sec(angle: float) -> float\n"
-	"	Secant function. hypotenuse / adjacent or 1 / cos(x)."
+	"	Secant function. hypotenuse / adjacent or `1 / cos(x)`."
 );
 PyDoc_STRVAR(sech_docstr,
 	"sech(angle: float) -> float\n"

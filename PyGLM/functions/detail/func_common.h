@@ -10,99 +10,99 @@
 
 PyDoc_STRVAR(abs_docstr,
 	"abs(x: float) -> float\n"
-	"	Returns x if x >= 0; otherwise it returns -x.\n"
+	"	Returns `x` if `x >= 0`; otherwise it returns `-x`.\n"
 	"abs(x: vecN) -> vecN\n"
-	"	For each component c of x,\n"
-	"	Returns c if c >= 0; otherwise it returns -c.\n"
+	"	For each component `c` of `x`,\n"
+	"	Returns `c` if `c >= 0`; otherwise it returns `-c`.\n"
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(abs)
 
 PyDoc_STRVAR(sign_docstr,
 	"sign(x: number) -> float\n"
-	"	Returns 1.0 if x > 0, 0.0 if x == 0, or -1.0 if x < 0.\n"
+	"	Returns `1.0` if `x > 0`, `0.0` if `x == 0`, or `-1.0` if `x < 0`.\n"
 	"sign(x: vecN) -> vecN\n"
-	"	For every component c of x:\n"
-	"	Returns 1.0 if x > 0, 0.0 if x == 0, or -1.0 if x < 0."
+	"	For every component `c` of `x`:\n"
+	"	Returns `1.0` if `x > 0`, `0.0` if `x == 0`, or `-1.0` if `x < 0`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(sign)
 
 PyDoc_STRVAR(floor_docstr,
 	"floor(x: float) -> float\n"
-	"	Returns a value equal to the nearest integer that is less then or equal to x.\n"
+	"	Returns a value equal to the nearest integer that is less then or equal to `x`.\n"
 	"floor(v: vecN) -> vecN\n"
-	"	For each component c of v:\n"
-	"	Returns a value equal to the nearest integer that is less then or equal to c."
+	"	For each component `c` of `v`:\n"
+	"	Returns a value equal to the nearest integer that is less then or equal to `c`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(floor)
 
 PyDoc_STRVAR(trunc_docstr,
 	"trunc(x: number) -> float\n"
-	"	Returns a value equal to the nearest integer to x whose absolute value is not larger than\n"
-	"	the absolute value of x.\n"
+	"	Returns a value equal to the nearest integer to `x` whose absolute value is not larger than\n"
+	"	the absolute value of `x`.\n"
 	"trunc(x: vecN) -> vecN\n"
-	"	For every component c of x:\n"
-	"	Returns a value equal to the nearest integer to c whose absolute value is not larger than\n"
-	"	the absolute value of c."
+	"	For every component `c` of `x`:\n"
+	"	Returns a value equal to the nearest integer to `c` whose absolute value is not larger than\n"
+	"	the absolute value of `c`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(trunc)
 
 PyDoc_STRVAR(round_docstr,
 	"round(x: number) -> float\n"
-	"	Returns a value equal to the nearest integer to x. The fraction 0.5 will round in a\n"
+	"	Returns a value equal to the nearest integer to `x`. The fraction `0.5` will round in a\n"
 	"	direction chosen by the implementation, presumably the direction that is fastest. This\n"
-	"	includes the possibility that round(x) returns the same value as roundEven(x)\n"
+	"	includes the possibility that `round(x)` returns the same value as `roundEven(x)`\n"
 	"round(x: vecN) -> vecN\n"
-	"	Returns a value equal to the nearest integer to x. The fraction 0.5 will round in a\n"
+	"	Returns a value equal to the nearest integer to `x`. The fraction `0.5` will round in a\n"
 	"	direction chosen by the implementation, presumably the direction that is fastest. This\n"
-	"	includes the possibility that round(x) returns the same value as roundEven(x) for all\n"
-	"	values of x."
+	"	includes the possibility that `round(x)` returns the same value as `roundEven(x)` for all\n"
+	"	values of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(round)
 
 PyDoc_STRVAR(roundEven_docstr,
 	"roundEven(x: number) -> float\n"
-	"	Returns a value equal to the nearest integer to x. A fractional part of 0.5 will round\n"
-	"	toward the nearest even integer. (Both 3.5 and 4.5 for x will return 4.0.)\n"
+	"	Returns a value equal to the nearest integer to `x`. A fractional part of `0.5` will round\n"
+	"	toward the nearest even integer. (Both `3.5` and `4.5` for `x` will return `4.0`.)\n"
 	"roundEven(x: vecN) -> vecN\n"
-	"	Returns a value equal to the nearest integer to x. A fractional part of 0.5 will round\n"
-	"	toward the nearest even integer. (Both 3.5 and 4.5 for x will return 4.0.)"
+	"	Returns a value equal to the nearest integer to `x`. A fractional part of `0.5` will round\n"
+	"	toward the nearest even integer. (Both `3.5` and `4.5` for `x` will return `4.0`.)"
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(roundEven)
 
 PyDoc_STRVAR(ceil_docstr,
 	"ceil(x: float) -> float\n"
-	"	Returns a value equal to the nearest integer that is greater than or equal to x.\n"
+	"	Returns a value equal to the nearest integer that is greater than or equal to `x`.\n"
 	"ceil(x: vecN) -> vecN\n"
-	"	For each component c of x,\n"
-	"	Returns a value equal to the nearest integer that is greater than or equal to c.\n"
+	"	For each component `c` of `x`,\n"
+	"	Returns a value equal to the nearest integer that is greater than or equal to `c`.\n"
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(ceil)
 
 PyDoc_STRVAR(fract_docstr,
 	"fract(x: float) -> float\n"
-	"	Returns x - floor(x).\n"
+	"	Returns `x - floor(x)`.\n"
 	"fract(c: vecN) -> vecN\n"
-	"	Returns x - floor(x)."
+	"	Returns `x - floor(x)`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(fract)
 
 PyDoc_STRVAR(mod_docstr,
 	"mod(x: vecN, y: vecN) -> vecN\n"
-	"	Returns x - y * floor(x / y) for each component in x using the floating point value y.\n"
+	"	Returns `x - y * floor(x / y)` for each component in `x` using the floating point value `y`.\n"
 	"mod(x: vecN, y: number) -> vecN\n"
-	"	Returns x - y * floor(x / y) for each component in x using the floating point value y.\n"
+	"	Returns `x - y * floor(x / y)` for each component in `x` using the floating point value `y`.\n"
 	"mod(x: number, y: number) -> number\n"
-	"	Returns x - y * floor(x / y) for each component in x using the floating point value y."
+	"	Returns `x - y * floor(x / y)` for each component in `x` using the floating point value `y`."
 );
 PyGLM_MAKE_GLM_FUNC_NN_VV_VN__tfF(mod)
 
 PyDoc_STRVAR(min_docstr,
 	"min(x: number, y: number) -> float\n"
-	"	Returns y if y < x; otherwise, it returns x.\n"
+	"	Returns `y` if `y < x`; otherwise, it returns `x`.\n"
 	"min(x: vecN, y: number) -> vecN\n"
-	"	Returns y if y < x; otherwise, it returns x.\n"
+	"	Returns `y` if `y < x`; otherwise, it returns `x`.\n"
 	"min(x: vecN, y: vecN) -> vecN\n"
-	"	Returns y if y < x; otherwise, it returns x.\n"
+	"	Returns `y` if `y < x`; otherwise, it returns `x`.\n"
 	"min(a: number, b: number, c: number) -> float\n"
 	"	Returns the minimum value of 3 inputs.\n"
 	"min(a: vecN, b: vecN, c: vecN) -> vecN\n"
@@ -640,11 +640,11 @@ min_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(max_docstr,
 	"max(x: number, y: number) -> float\n"
-	"	Returns y if x < y; otherwise, it returns x.\n"
+	"	Returns `y` if `x < y`; otherwise, it returns `x`.\n"
 	"max(x: vecN, y: number) -> vecN\n"
-	"	Returns y if x < y; otherwise, it returns x.\n"
+	"	Returns `y` if `x < y`; otherwise, it returns `x`.\n"
 	"max(x: vecN, y: vecN) -> vecN\n"
-	"	Returns y if x < y; otherwise, it returns x.\n"
+	"	Returns `y` if `x < y`; otherwise, it returns `x`.\n"
 	"max(a: number, b: number, c: number) -> float\n"
 	"	Returns the maximum value of 3 inputs.\n"
 	"max(a: vecN, b: vecN, c: vecN) -> vecN\n"
@@ -1182,20 +1182,20 @@ max_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(fmin_docstr,
 	"fmin(x: number, y: number) -> float\n"
-	"	Returns y if y < x; otherwise, it returns x. If one of the two arguments is NaN, the value\n"
+	"	Returns `y` if `y < x`; otherwise, it returns `x`. If one of the two arguments is `NaN`, the value\n"
 	"	of the other argument is returned.\n"
 	"fmin(x: vecN, y: number) -> vecN\n"
-	"	For each component c of x:\n"
-	"	Returns y if y < c; otherwise, it returns c. If one of the two arguments is NaN, the value\n"
+	"	For each component `c` of `x`:\n"
+	"	Returns `y` if `y < c`; otherwise, it returns `c`. If one of the two arguments is `NaN`, the value\n"
 	"	of the other argument is returned.\n"
 	"fmin(x: vecN, y: vecN) -> vecN\n"
-	"	For every index i:\n"
-	"	Returns y[i] if y[i] < x[i]; otherwise, it returns x[i]. If one of the two arguments is NaN,\n"
-	"	the value of the other argument is returned.\n"
+	"	For every index `i`:\n"
+	"	Returns `y[i]` if `y[i] < x[i]`; otherwise, it returns `x[i]`. If one of the two arguments is\n"
+	"	`NaN`, the value of the other argument is returned.\n"
 	"fmin(a: vecN, b: vecN, c : vecN) -> vecN\n"
-	"	Returns fmin(fmin(a, b), c).\n"
+	"	Returns `fmin(fmin(a, b), c)`.\n"
 	"fmin(a: vecN, b: vecN, c : vecN, d: vecN) -> vecN\n"
-	"	Returns fmin(fmin(a, b), fmin(c, d))."
+	"	Returns `fmin(fmin(a, b), fmin(c, d))`."
 );
 static PyObject*
 fmin_(PyObject*, PyObject* args) {
@@ -1329,20 +1329,20 @@ fmin_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(fmax_docstr,
 	"fmax(x: number, y: number) -> float\n"
-	"	Returns y if x < y; otherwise, it returns x. If one of the two arguments is NaN, the value\n"
+	"	Returns `y` if `x < y`; otherwise, it returns `x`. If one of the two arguments is `NaN`, the value\n"
 	"	of the other argument is returned.\n"
 	"fmax(x: vecN, y: number) -> vecN\n"
-	"	For each component c of x:\n"
-	"	Returns y if c < y; otherwise, it returns c. If one of the two arguments is NaN, the value\n"
+	"	For each component `c` of `x`:\n"
+	"	Returns `y` if `c < y`; otherwise, it returns `c`. If one of the two arguments is `NaN`, the value\n"
 	"	of the other argument is returned.\n"
 	"fmax(x: vecN, y: vecN) -> vecN\n"
-	"	For every index i:\n"
-	"	Returns y[i] if x[i] < y[i]; otherwise, it returns x[i]. If one of the two arguments is NaN,\n"
-	"	the value of the other argument is returned.\n"
-	"fmax(a: vecN, b: vecN, c : vecN) -> vecN\n"
-	"	Returns fmax(fmax(a, b), c).\n"
-	"fmax(a: vecN, b: vecN, c : vecN, d: vecN) -> vecN\n"
-	"	Returns fmax(fmax(a, b), fmax(c, d))."
+	"	For every index `i`:\n"
+	"	Returns `y[i]` if `x[i] < y[i]`; otherwise, it returns `x[i]`. If one of the two arguments is\n"
+	"	`NaN`, the value of the other argument is returned.\n"
+	"fmax(a: vecN, b: vecN, c: vecN) -> vecN\n"
+	"	Returns `fmax(fmax(a, b), c)`.\n"
+	"fmax(a: vecN, b: vecN, c: vecN, d: vecN) -> vecN\n"
+	"	Returns `fmax(fmax(a, b), fmax(c, d))`."
 );
 static PyObject*
 fmax_(PyObject*, PyObject* args) {
@@ -1476,13 +1476,13 @@ fmax_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(clamp_docstr,
 	"clamp(x: number, minVal: number, maxVal: number) -> number\n"
-	"	Returns min(max(x, minVal), maxVal).\n"
+	"	Returns `min(max(x, minVal), maxVal)`.\n"
 	"clamp(x: vecN, minVal: number, maxVal: number) -> vecN\n"
-	"	Returns min(max(x, minVal), maxVal) for each component in x using the floating-point values\n"
-	"	minVal and maxVal.\n"
+	"	Returns `min(max(x, minVal), maxVal)` for each component in `x` using the floating-point values\n"
+	"	`minVal` and `maxVal`.\n"
 	"clamp(x: vecN, minVal: vecN, maxVal: vecN) -> vecN\n"
-	"	Returns min(max(x, minVal), maxVal) for each component in x using the floating-point values\n"
-	"	minVal and maxVal.\n"
+	"	Returns `min(max(x, minVal), maxVal)` for each component in `x` using the floating-point values\n"
+	"	`minVal` and `maxVal`.\n"
 );
 static PyObject*
 clamp_(PyObject*, PyObject* args) {
@@ -1746,26 +1746,26 @@ clamp_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(mix_docstr,
 	"mix(x: number, y: number, a: float) -> number\n"
-	"	Returns x * (1.0 - a) + y * a, i.e., the linear blend of x and y using the floating-point\n"
-	"	value a. The value for a is not restricted to the range[0, 1].\n"
+	"	Returns `x * (1.0 - a) + y * a`, i.e., the linear blend of `x` and `y` using the floating-point\n"
+	"	value `a`. The value for `a` is not restricted to the range `[0, 1]`.\n"
 	"mix(x: number, y: number, a: bool) -> number\n"
-	"	Returns y if a is true and x otherwise.\n"
+	"	Returns `y` if `a` is `True` and `x` otherwise.\n"
 	"mix(x: vecN, y: vecN, a: fvecN) -> vecN\n"
-	"	Returns x * (1.0 - a) + y * a, i.e., the linear blend of x and y using the floating-point\n"
-	"	value a. The value for a is not restricted to the range[0, 1].\n"
+	"	Returns `x * (1.0 - a) + y * a`, i.e., the linear blend of `x` and `y` using the floating-point\n"
+	"	value `a`. The value for `a` is not restricted to the range `[0, 1]`.\n"
 	"mix(x: vecN, y: vecN, a: bvecN) -> vecN\n"
-	"	For each component index i:\n"
-	"	Returns y[i] if a[i] is true and x[i] otherwise.\n"
+	"	For each component index `i`:\n"
+	"	Returns `y[i]` if `a[i]` is `True` and `x[i]` otherwise.\n"
 	"mix(x: matNxM, y: matNxM, a: fmatNxM) -> matNxM\n"
-	"	Returns x * (1.0 - a) + y * a, i.e., the linear blend of x and y using the floating-point\n"
-	"	value a for each component. The value for a is not restricted to the range[0, 1].\n"
+	"	Returns `x * (1.0 - a) + y * a`, i.e., the linear blend of `x` and `y` using the floating-point\n"
+	"	value `a` for each component. The value for `a` is not restricted to the range `[0, 1]`.\n"
 	"mix(x: matNxM, y: matNxM, a: float) -> matNxM\n"
-	"	Returns x * (1.0 - a) + y * a, i.e., the linear blend of x and y using the floating-point\n"
-	"	value a for each component. The value for a is not restricted to the range[0, 1].\n"
+	"	Returns `x * (1.0 - a) + y * a`, i.e., the linear blend of `x` and `y` using the floating-point\n"
+	"	value `a` for each component. The value for `a` is not restricted to the range `[0, 1]`.\n"
 	"mix(x: quat, y: quat, a: float) -> quat\n"
 	"	Spherical linear interpolation of two quaternions. The interpolation is oriented and the\n"
 	"	rotation is performed at constant speed. For short path spherical linear interpolation, use\n"
-	"	the slerp function."
+	"	the `slerp` function."
 );
 static PyObject*
 mix_(PyObject*, PyObject* args) {
@@ -3306,13 +3306,13 @@ mix_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(step_docstr,
 	"step(edge: number, x: number) -> float\n"
-	"	Returns 0.0 if x < edge, otherwise it returns 1.0.\n"
+	"	Returns `0.0` if `x < edge`, otherwise it returns `1.0`.\n"
 	"step(edge: number, x: vecN) -> vecN\n"
-	"	For every component c of x:\n"
-	"	Returns 0.0 if c < edge, otherwise it returns 1.0.\n"
+	"	For every component `c` of `x`:\n"
+	"	Returns `0.0` if `c < edge`, otherwise it returns `1.0`.\n"
 	"step(edge: vecN, x: vecN) -> vecN\n"
-	"	For every index i:\n"
-	"	Returns 0.0 if x[i] < edge[i], otherwise it returns 1.0."
+	"	For every index `i`:\n"
+	"	Returns `0.0` if `x[i] < edge[i]`, otherwise it returns `1.0`."
 );
 static PyObject*
 step_(PyObject*, PyObject* args) {
@@ -3769,26 +3769,26 @@ step_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(smoothstep_docstr,
 	"smoothstep(edge0: number, edge1: number, x: number) -> float\n"
-	"	Returns 0.0 if x <= edge0 and 1.0 if x >= edge1 and performs smooth Hermite interpolation\n"
-	"	between 0 and 1 when edge0 < x < edge1. This is useful in cases where you would want a\n"
+	"	Returns `0.0` if `x <= edge0` and `1.0` if `x >= edge1` and performs smooth Hermite interpolation\n"
+	"	between `0` and `1` when `edge0 < x < edge1`. This is useful in cases where you would want a\n"
 	"	threshold function with a smooth transition. This is equivalent to :\n"
-	"	t = clamp((x - edge0) / (edge1 - edge0), 0, 1)\n"
-	"	return t * t * (3 - 2 * t)\n"
-	"	Results are undefined if edge0 >= edge1.\n"
+	"	`t = clamp((x - edge0) / (edge1 - edge0), 0, 1)`\n"
+	"	`return t * t * (3 - 2 * t)`\n"
+	"	Results are undefined if `edge0 >= edge1`.\n"
 	"smoothstep(edge0: number, edge1: number, x: vecN) -> vecN\n"
-	"	Returns 0.0 if x <= edge0 and 1.0 if x >= edge1 and performs smooth Hermite interpolation\n"
-	"	between 0 and 1 when edge0 < x < edge1. This is useful in cases where you would want a\n"
+	"	Returns `0.0` if `x <= edge0` and `1.0` if `x >= edge1` and performs smooth Hermite interpolation\n"
+	"	between `0` and `1` when `edge0 < x < edge1`. This is useful in cases where you would want a\n"
 	"	threshold function with a smooth transition. This is equivalent to :\n"
-	"	t = clamp((x - edge0) / (edge1 - edge0), 0, 1)\n"
-	"	return t * t * (3 - 2 * t)\n"
-	"	Results are undefined if edge0 >= edge1.\n"
+	"	`t = clamp((x - edge0) / (edge1 - edge0), 0, 1)`\n"
+	"	`return t * t * (3 - 2 * t)`\n"
+	"	Results are undefined if `edge0 >= edge1`.\n"
 	"smoothstep(edge0: vecN, edge1: vecN, x: vecN) -> vecN\n"
-	"	Returns 0.0 if x <= edge0 and 1.0 if x >= edge1 and performs smooth Hermite interpolation\n"
-	"	between 0 and 1 when edge0 < x < edge1. This is useful in cases where you would want a\n"
+	"	Returns `0.0` if `x <= edge0` and `1.0` if `x >= edge1` and performs smooth Hermite interpolation\n"
+	"	between `0` and `1` when `edge0 < x < edge1`. This is useful in cases where you would want a\n"
 	"	threshold function with a smooth transition. This is equivalent to :\n"
-	"	t = clamp((x - edge0) / (edge1 - edge0), 0, 1)\n"
-	"	return t * t * (3 - 2 * t)\n"
-	"	Results are undefined if edge0 >= edge1."
+	"	`t = clamp((x - edge0) / (edge1 - edge0), 0, 1)`\n"
+	"	`return t * t * (3 - 2 * t)`\n"
+	"	Results are undefined if `edge0 >= edge1`."
 );
 static PyObject*
 smoothstep_(PyObject*, PyObject* args) {
@@ -3908,39 +3908,39 @@ smoothstep_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(isnan_docstr,
 	"isnan(x: float) -> bool\n"
-	"	Returns true if x holds a NaN (not a number) representation in the underlying\n"
+	"	Returns `True` if `x` holds a `NaN` (not a number) representation in the underlying\n"
 	"	implementation's set of floating point representations.\n"
-	"	Returns false otherwise, including for implementations with no NaN representations.\n"
+	"	Returns `False` otherwise, including for implementations with no `NaN` representations.\n"
 	"isnan(x: vecN) -> bvecN\n"
-	"	Returns true if x holds a NaN (not a number) representation in the underlying\n"
+	"	Returns `True` if `x` holds a `NaN` (not a number) representation in the underlying\n"
 	"	implementation's set of floating point representations.\n"
-	"	Returns false otherwise, including for implementations with no NaN representations.\n"
+	"	Returns `False` otherwise, including for implementations with no `NaN` representations.\n"
 	"isnan(x: quat) -> bvecN\n"
-	"	Returns true if x holds a NaN (not a number) representation in the underlying\n"
+	"	Returns `True` if `x` holds a `NaN` (not a number) representation in the underlying\n"
 	"	implementation's set of floating point representations.\n"
-	"	Returns false otherwise, including for implementations with no NaN representations."
+	"	Returns `False` otherwise, including for implementations with no `NaN` representations."
 );
 PyGLM_MAKE_GLM_FUNC_N_V_Q__tfF(isnan)
 
 PyDoc_STRVAR(isinf_docstr,
 	"isinf(x: float) -> bool\n"
-	"	Returns true if x holds a positive infinity or negative infinity representation in the\n"
+	"	Returns `True` if `x` holds a positive infinity or negative infinity representation in the\n"
 	"	underlying implementation's set of floating point representations.\n"
-	"	Returns false otherwise, including for implementations with no infinity representations.\n"
+	"	Returns `False` otherwise, including for implementations with no infinity representations.\n"
 	"isinf(x: vecN) -> bvecN\n"
-	"	Returns true if x holds a positive infinity or negative infinity representation in the\n"
+	"	Returns `True` if `x` holds a positive infinity or negative infinity representation in the\n"
 	"	underlying implementation's set of floating point representations.\n"
-	"	Returns false otherwise, including for implementations with no infinity representations.\n"
+	"	Returns `False` otherwise, including for implementations with no infinity representations.\n"
 	"isinf(x: quat) -> bvecN\n"
-	"	Returns true if x holds a positive infinity or negative infinity representation in the\n"
+	"	Returns `True` if `x` holds a positive infinity or negative infinity representation in the\n"
 	"	underlying implementation's set of floating point representations.\n"
-	"	Returns false otherwise, including for implementations with no infinity representations."
+	"	Returns `False` otherwise, including for implementations with no infinity representations."
 );
 PyGLM_MAKE_GLM_FUNC_N_V_Q__tfF(isinf)
 
 PyDoc_STRVAR(fma_docstr,
 	"fma(a: float, b: float, c: float) -> float\n"
-	"	Computes and returns a * b + c."
+	"	Computes and returns `a * b + c`."
 );
 static PyObject*
 fma_(PyObject*, PyObject* args) {
@@ -3955,13 +3955,13 @@ fma_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(frexp_docstr,
 	"frexp(x: float) -> (significant: float, exponent: int)\n"
-	"	Splits x into a floating-point significand in the range [0.5, 1.0) and an integral exponent\n"
-	"	of two, such that: x = significand * exp(2, exponent)\n"
+	"	Splits `x` into a floating-point significand in the range `[0.5, 1.0)` and an integral exponent\n"
+	"	of two, such that: `x = significand * exp(2, exponent)`\n"
 	"frexp(x: vecN, exp: ivecN) -> vecN\n"
-	"	Splits x into a floating-point significand in the range [0.5, 1.0) and an integral exponent\n"
-	"	of two, such that: x = significand * exp(2, exponent)\n"
+	"	Splits `x` into a floating-point significand in the range `[0.5, 1.0)` and an integral exponent\n"
+	"	of two, such that: `x = significand * exp(2, exponent)`\n"
 	"	The significand is returned by the function and the exponent is returned in the parameter\n"
-	"	exp. For a floating-point value of zero, the significantand exponent are both zero. For a\n"
+	"	`exp`. For a floating-point value of zero, the significantand exponent are both zero. For a\n"
 	"	floating-point value that is an infinity or is not a number, the results are undefined."
 );
 static PyObject*
@@ -4018,12 +4018,12 @@ frexp_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(ldexp_docstr,
 	"ldexp(x: number, exp: int) -> float\n"
-	"	Builds a floating-point number from x and the corresponding integral exponent of two in\n"
-	"	exp, returning: significand * exp(2, exponent). If this product is too large to be\n"
+	"	Builds a floating-point number from `x` and the corresponding integral exponent of two in\n"
+	"	`exp`, returning: `significand * exp(2, exponent)`. If this product is too large to be\n"
 	"	represented in the floating-point type, the result is undefined.\n"
 	"ldexp(x: vecN, exp: ivecN) -> vecN\n"
-	"	Builds a floating-point number from x and the corresponding integral exponent of two in\n"
-	"	exp, returning: significand * exp(2, exponent). If this product is too large to be\n"
+	"	Builds a floating-point number from `x` and the corresponding integral exponent of two in\n"
+	"	`exp`, returning: `significand * exp(2, exponent)`. If this product is too large to be\n"
 	"	represented in the floating-point type, the result is undefined."
 );
 static PyObject*
@@ -4073,10 +4073,10 @@ ldexp_(PyObject*, PyObject* args) {
 PyDoc_STRVAR(floatBitsToInt_docstr,
 	"floatBitsToInt(v: float) -> int\n"
 	"	Returns a signed integer value representing the encoding of a floating-point value.\n"
-	"	The floating - point value's bit-level representation is preserved.\n"
+	"	The floating-point value's bit-level representation is preserved.\n"
 	"floatBitsToInt(v: fvecN) -> ivecN\n"
 	"	Returns a signed integer value representing the encoding of a floating-point value.\n"
-	"	The floating - point value's bit-level representation is preserved.\n"
+	"	The floating-point value's bit-level representation is preserved.\n"
 );
 static PyObject*
 floatBitsToInt_(PyObject*, PyObject* arg) {
@@ -4108,10 +4108,10 @@ floatBitsToInt_(PyObject*, PyObject* arg) {
 PyDoc_STRVAR(floatBitsToUint_docstr,
 	"floatBitsToUint(v: float) -> int\n"
 	"	Returns an unsigned integer value representing the encoding of a floating-point value.\n"
-	"	The floating - point value's bit-level representation is preserved.\n"
+	"	The floating-point value's bit-level representation is preserved.\n"
 	"floatBitsToUint(v: fvecN) -> uvecN\n"
 	"	Returns an unsigned integer value representing the encoding of a floating-point value.\n"
-	"	The floating - point value's bit-level representation is preserved.\n"
+	"	The floating-point value's bit-level representation is preserved.\n"
 );
 static PyObject*
 floatBitsToUint_(PyObject*, PyObject* arg) {
@@ -4143,11 +4143,11 @@ floatBitsToUint_(PyObject*, PyObject* arg) {
 PyDoc_STRVAR(intBitsToFloat_docstr,
 	"intBitsToFloat(v: int) -> float\n"
 	"	Returns a floating-point value corresponding to a signed integer encoding of a floating-point\n"
-	"	value. If an inf or NaN is passed in, it will not signal, and the resulting floating point\n"
+	"	value. If an `inf` or `NaN` is passed in, it will not signal, and the resulting floating point\n"
 	"	value is unspecified. Otherwise, the bit-level representation is preserved.\n"
 	"intBitsToFloat(v: ivecN) -> fvecN\n"
 	"	Returns a floating-point value corresponding to a signed integer encoding of a floating-point\n"
-	"	value. If an inf or NaN is passed in, it will not signal, and the resulting floating point\n"
+	"	value. If an `inf` or `NaN` is passed in, it will not signal, and the resulting floating point\n"
 	"	value is unspecified. Otherwise, the bit-level representation is preserved."
 );
 static PyObject*
@@ -4180,11 +4180,11 @@ intBitsToFloat_(PyObject*, PyObject* arg) {
 PyDoc_STRVAR(uintBitsToFloat_docstr,
 	"uintBitsToFloat(v: int) -> float\n"
 	"	Returns a floating-point value corresponding to an unsigned integer encoding of a floating-point\n"
-	"	value. If an inf or NaN is passed in, it will not signal, and the resulting floating point\n"
+	"	value. If an `inf` or `NaN` is passed in, it will not signal, and the resulting floating point\n"
 	"	value is unspecified. Otherwise, the bit-level representation is preserved.\n"
 	"uintBitsToFloat(v: ivecN) -> fvecN\n"
 	"	Returns a floating-point value corresponding to an unsigned integer encoding of a floating-point\n"
-	"	value. If an inf or NaN is passed in, it will not signal, and the resulting floating point\n"
+	"	value. If an `inf` or `NaN` is passed in, it will not signal, and the resulting floating point\n"
 	"	value is unspecified. Otherwise, the bit-level representation is preserved."
 );
 static PyObject*
@@ -4216,9 +4216,9 @@ uintBitsToFloat_(PyObject*, PyObject* arg) {
 
 PyDoc_STRVAR(modf_docstr,
 	"modf(x: float) -> (fraction, integer)\n"
-	"	Returns the fractional part of x and the integer part (as a whole number floating point value).\n"
+	"	Returns the fractional part of `x` and the integer part (as a whole number floating point value).\n"
 	"modf(x: vecN, i: vecN) -> vecN\n"
-	"	Returns the fractional part of x and sets i to the integer part (as a whole number floating\n"
+	"	Returns the fractional part of `x` and sets `i` to the integer part (as a whole number floating\n"
 	"	point value)."
 );
 static PyObject*

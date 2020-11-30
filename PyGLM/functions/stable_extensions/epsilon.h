@@ -254,9 +254,9 @@ epsilonNotEqual_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(epsilonEqual_docstr,
 	"epsilonEqual(x: number, y: number, epsilon: number) -> bool\n"
-	"	Returns the component-wise comparison of |x - y| < epsilon.\n"
+	"	Returns the component-wise comparison of `|x - y| < epsilon`.\n"
 	"epsilonEqual(x: vecN, y: vecN, epsilon: number) -> bvecN\n"
-	"	Returns the component-wise comparison of |x - y| < epsilon."
+	"	Returns the component-wise comparison of `|x - y| < epsilon`."
 );
 
 PyDoc_STRVAR(epsilonNotEqual_docstr,

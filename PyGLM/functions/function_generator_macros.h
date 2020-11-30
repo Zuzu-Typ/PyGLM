@@ -519,6 +519,122 @@ NAME##_(PyObject*, PyObject* arg) {\
 	return NULL;\
 }
 
+#define PyGLM_MAKE_GLM_FUNC_M(NAME)\
+static PyObject*\
+NAME##_(PyObject*, PyObject* arg) {\
+	PyGLM_PTI_Init0(arg, PyGLM_T_MAT | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);\
+	if (PyGLM_Mat_PTI_Check0(2, 2, float, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 2, float, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(2, 2, double, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 2, double, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(2, 2, int32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 2, int32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(2, 2, uint32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 2, uint32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(2, 3, float, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 3, float, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(2, 3, double, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 3, double, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(2, 3, int32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 3, int32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(2, 3, uint32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 3, uint32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(2, 4, float, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 4, float, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(2, 4, double, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 4, double, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(2, 4, int32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 4, int32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(2, 4, uint32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(2, 4, uint32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 2, float, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 2, float, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 2, double, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 2, double, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 2, int32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 2, int32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 2, uint32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 2, uint32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 3, float, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 3, float, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 3, double, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 3, double, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 3, int32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 3, int32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 3, uint32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 3, uint32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 4, float, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 4, float, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 4, double, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 4, double, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 4, int32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 4, int32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(3, 4, uint32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(3, 4, uint32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 2, float, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 2, float, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 2, double, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 2, double, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 2, int32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 2, int32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 2, uint32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 2, uint32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 3, float, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 3, float, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 3, double, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 3, double, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 3, int32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 3, int32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 3, uint32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 3, uint32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 4, float, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 4, float, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 4, double, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 4, double, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 4, int32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 4, int32, arg)));\
+	}\
+	if (PyGLM_Mat_PTI_Check0(4, 4, uint32, arg)) {\
+		return pack(glm::NAME(PyGLM_Mat_PTI_Get0(4, 4, uint32, arg)));\
+	}\
+	PyGLM_TYPEERROR_O("invalid argument type for " #NAME "(): ", arg);\
+	return NULL;\
+}
+
 #define PyGLM_MAKE_GLM_FUNC_S__tfF(NAME)\
 static PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\

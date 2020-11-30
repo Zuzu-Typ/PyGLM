@@ -12,7 +12,7 @@ PyDoc_STRVAR(radians_docstr,
 	"radians(angle: float) -> float\n"
 	"	Converts degrees to radians and returns the result.\n"
 	"radians(angle: vecN) -> vecN\n"
-	"	Returns radians(c) for every component c of x."
+	"	Returns `radians(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(radians)
 
@@ -20,25 +20,25 @@ PyDoc_STRVAR(degrees_docstr,
 	"degrees(angle: float) -> float\n"
 	"	Converts radians to degrees and returns the result.\n"
 	"degrees(angle: vecN) -> vecN\n"
-	"	Returns degrees(c) for every component c of x."
+	"	Returns `degrees(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(degrees)
 
 PyDoc_STRVAR(sin_docstr,
 	"sin(angle: float) -> float\n"
 	"	The standard trigonometric sine function. The values returned by this function will range\n"
-	"	from[-1, 1].\n"
+	"	from `[-1, 1]`.\n"
 	"sin(angle: vecN) -> vecN\n"
-	"	Returns sin(c) for every component c of x."
+	"	Returns `sin(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(sin)
 
 PyDoc_STRVAR(cos_docstr,
 	"cos(angle: float) -> float\n"
 	"	The standard trigonometric cosine function. The values returned by this function will range\n"
-	"	from[-1, 1].\n"
+	"	from `[-1, 1]`.\n"
 	"cos(angle: vecN) -> vecN\n"
-	"	Returns cos(c) for every component c of x."
+	"	Returns `cos(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(cos)
 
@@ -46,40 +46,40 @@ PyDoc_STRVAR(tan_docstr,
 	"tan(angle: float) -> float\n"
 	"	The standard trigonometric tangent function.\n"
 	"tan(angle: vecN) -> vecN\n"
-	"	Returns tan(c) for every component c of x."
+	"	Returns `tan(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(tan)
 
 PyDoc_STRVAR(asin_docstr,
 	"asin(x: float) -> float\n"
-	"	Arc sine. Returns an angle whose sine is x. The range of values returned by this function\n"
-	"	is[0, PI]. Results are undefined if |x| > 1.\n"
+	"	Arc sine. Returns an angle whose sine is `x`. The range of values returned by this function\n"
+	"	is `[0, PI]`. Results are undefined if `|x| > 1`.\n"
 	"asin(x: vecN) -> vecN\n"
-	"	Returns asin(c) for every component c of x."
+	"	Returns `asin(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(asin)
 
 PyDoc_STRVAR(acos_docstr,
 	"acos(x: float) -> float\n"
-	"	Arc cosine. Returns an angle whose cosine is x. The range of values returned by this function\n"
-	"	is[0, PI]. Results are undefined if |x| > 1.\n"
+	"	Arc cosine. Returns an angle whose cosine is `x`. The range of values returned by this function\n"
+	"	is `[0, PI]`. Results are undefined if `|x| > 1`.\n"
 	"acos(x: vecN) -> vecN\n"
-	"	Returns acos(c) for every component c of x."
+	"	Returns `acos(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(acos)
 
 PyDoc_STRVAR(atan_docstr,
 	"atan(y_over_x: float) -> float\n"
-	"	Arc tangent. Returns an angle whose tangent is y_over_x. The range of values returned by\n"
-	"	this function is[-PI / 2, PI / 2].\n"
+	"	Arc tangent. Returns an angle whose tangent is `y_over_x`. The range of values returned by\n"
+	"	this function is `[-PI / 2, PI / 2]`.\n"
 	"atan(y_over_x: vecN) -> vecN\n"
-	"	Returns atan(c) for every component c of x.\n"
+	"	Returns `atan(c)` for every component `c` of `x`.\n"
 	"atan(y: float, x: float) -> float\n"
-	"	Arc tangent. Returns an angle whose tangent is y / x. The signs of x and y are used to\n"
+	"	Arc tangent. Returns an angle whose tangent is `y / x`. The signs of `x` and `y` are used to\n"
 	"	determine what quadrant the angle is in. The range of values returned by this function\n"
-	"	is[-PI, PI]. Results are undefined if x and y are both 0.\n"
+	"	is `[-PI, PI]`. Results are undefined if `x` and `y` are both `0`.\n"
 	"atan(y: vecN, x: vecN) -> vecN\n"
-	"	Returns atan(y[i], x[i]) for every index i."
+	"	Returns `atan(y[i], x[i])` for every index `i`."
 );
 static PyObject*
 atan_(PyObject*, PyObject* args) {
@@ -181,50 +181,50 @@ atan_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(sinh_docstr,
 	"sinh(angle: float) -> float\n"
-	"	Returns the hyperbolic sine function, (exp(angle) - exp(-angle)) / 2.\n"
+	"	Returns the hyperbolic sine function, `(exp(angle) - exp(-angle)) / 2`.\n"
 	"sinh(angle: vecN) -> vecN\n"
-	"	Returns sinh(c) for every component c of x."
+	"	Returns `sinh(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(sinh)
 
 PyDoc_STRVAR(cosh_docstr,
 	"cosh(angle: float) -> float\n"
-	"	Returns the hyperbolic cosine function, (exp(angle) + exp(-angle)) / 2.\n"
+	"	Returns the hyperbolic cosine function, `(exp(angle) + exp(-angle)) / 2`.\n"
 	"cosh(angle: vecN) -> vecN\n"
-	"	Returns cosh(c) for every component c of x."
+	"	Returns `cosh(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(cosh)
 
 PyDoc_STRVAR(tanh_docstr,
 	"tanh(angle: float) -> float\n"
-	"	Returns the hyperbolic tangent function, sinh(angle) / cosh(angle)\n"
+	"	Returns the hyperbolic tangent function, `sinh(angle) / cosh(angle)`\n"
 	"tanh(angle: vecN) -> vecN\n"
-	"	Returns tanh(c) for every component c of x."
+	"	Returns `tanh(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(tanh)
 
 PyDoc_STRVAR(asinh_docstr,
 	"asinh(x: float) -> float\n"
-	"	Arc hyperbolic sine; returns the inverse of sinh.\n"
+	"	Arc hyperbolic sine; returns the inverse of `sinh`.\n"
 	"asinh(x: vecN) -> vecN\n"
-	"	Returns asinh(c) for every component c of x."
+	"	Returns `asinh(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(asinh)
 
 PyDoc_STRVAR(acosh_docstr,
 	"acosh(x: float) -> float\n"
-	"	Arc hyperbolic cosine; returns the non-negative inverse of cosh. Results are undefined\n"
-	"	if x < 1.\n"
+	"	Arc hyperbolic cosine; returns the non-negative inverse of `cosh`. Results are undefined\n"
+	"	if `x < 1`.\n"
 	"acosh(x: vecN) -> vecN\n"
-	"	Returns acosh(c) for every component c of x."
+	"	Returns `acosh(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(acosh)
 
 PyDoc_STRVAR(atanh_docstr,
 	"atanh(x: float) -> float\n"
-	"	Arc hyperbolic tangent; returns the inverse of tanh. Results are undefined if abs(x) >= 1.\n"
+	"	Arc hyperbolic tangent; returns the inverse of `tanh`. Results are undefined if `abs(x) >= 1`.\n"
 	"atanh(x: vecN) -> vecN\n"
-	"	Returns atanh(c) for every component c of x."
+	"	Returns `atanh(c)` for every component `c` of `x`."
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(atanh)
 

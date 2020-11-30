@@ -52,3 +52,12 @@ static constexpr PyTypeObject* PyGLM_VEC_TYPE() {
 		(std::is_same<vec<L, T>, vec<4, bool> >::value) ? (PyTypeObject*)&hbvec4Type :
 		(PyTypeObject*)0;
 }
+
+template<typename T>
+static constexpr PyTypeObject* PyGLM_VEC_TYPE_T_ONLY(int L) {
+	return (L == 1) ? PyGLM_VEC_TYPE<1, T>() : 
+		(L == 2) ? PyGLM_VEC_TYPE<2, T>() : 
+		(L == 3) ? PyGLM_VEC_TYPE<3, T>() : 
+		(L == 4) ? PyGLM_VEC_TYPE<4, T>() : 
+		NULL;
+}

@@ -14,7 +14,7 @@ static PyObject* mat_length(PyObject *, PyObject*) {
 static void
 mat_dealloc(PyObject* self)
 {
-	if (((type_helper*)self)->info != 0) Py_TYPE(self)->tp_free(self);
+	if (self->ob_type != NULL) Py_TYPE(self)->tp_free(self);
 }
 
 template<int C, int R, typename T>
@@ -23,9 +23,9 @@ mat_new(PyTypeObject *type, PyObject *, PyObject *)
 {
 	mat<C, R, T> *self = (mat<C, R, T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
-		constexpr uint8_t info_type = get_type_helper_type<T>();
-		constexpr uint8_t info = (uint8_t)((C << PyGLM_TYPE_INFO_MAT_SHAPE1_OFFSET) | (R << PyGLM_TYPE_INFO_MAT_SHAPE2_OFFSET) | (info_type << PyGLM_TYPE_INFO_MAT_TYPE_OFFSET));
-		self->info = info;
+		//constexpr uint8_t info_type = get_type_helper_type<T>();
+		//constexpr uint8_t info = (uint8_t)((C << PyGLM_TYPE_INFO_MAT_SHAPE1_OFFSET) | (R << PyGLM_TYPE_INFO_MAT_SHAPE2_OFFSET) | (info_type << PyGLM_TYPE_INFO_MAT_TYPE_OFFSET));
+		//self->info = info;
 		self->super_type = glm::mat<C, R, T>();
 	}
 	return (PyObject *)self;
@@ -1432,7 +1432,7 @@ mat_div(PyObject *obj1, PyObject *obj2)
 static PyObject*
 mat_matmul(PyObject* obj1, PyObject* obj2)
 {
-	PyObject* out = PyNumber_Multiply(obj2, obj1);
+	PyObject* out = PyNumber_Multiply(obj1, obj2);
 	if (out == NULL) {
 		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
 	}
@@ -1581,8 +1581,8 @@ template<typename T>
 static PyObject *
 mat2x2_str(mat<2, 2, T>* self)
 {
-	char * out = (char*)PyMem_Malloc((64) * sizeof(char));
-	snprintf(out, 64, "[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1]);
+	char * out = (char*)PyMem_Malloc((66) * sizeof(char));
+	snprintf(out, 66, "[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[0][1], (double)self->super_type[1][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1592,8 +1592,8 @@ template<typename T>
 static PyObject *
 mat2x3_str(mat<2, 3, T>* self)
 {
-	char * out = (char*)PyMem_Malloc((94) * sizeof(char));
-	snprintf(out, 94, "[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2]);
+	char * out = (char*)PyMem_Malloc((99) * sizeof(char));
+	snprintf(out, 99, "[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[0][2], (double)self->super_type[1][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1603,8 +1603,8 @@ template<typename T>
 static PyObject *
 mat2x4_str(mat<2, 4, T>* self)
 {
-	char * out = (char*)PyMem_Malloc((124) * sizeof(char));
-	snprintf(out, 124, "[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3]);
+	char * out = (char*)PyMem_Malloc((132) * sizeof(char));
+	snprintf(out, 132, "[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[0][2], (double)self->super_type[1][2], (double)self->super_type[0][3], (double)self->super_type[1][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1614,8 +1614,8 @@ template<typename T>
 static PyObject *
 mat3x2_str(mat<3, 2, T>* self)
 {
-	char * out = (char*)PyMem_Malloc((96) * sizeof(char));
-	snprintf(out, 96, "[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1]);
+	char * out = (char*)PyMem_Malloc((98) * sizeof(char));
+	snprintf(out, 98, "[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1625,8 +1625,8 @@ template<typename T>
 static PyObject *
 mat3x3_str(mat<3, 3, T>* self)
 {
-	char * out = (char*)PyMem_Malloc((141) * sizeof(char));
-	snprintf(out, 141, "[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2]);
+	char * out = (char*)PyMem_Malloc((147) * sizeof(char));
+	snprintf(out, 147, "[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1], (double)self->super_type[0][2], (double)self->super_type[1][2], (double)self->super_type[2][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1636,8 +1636,8 @@ template<typename T>
 static PyObject *
 mat3x4_str(mat<3, 4, T>* self)
 {
-	char * out = (char*)PyMem_Malloc((186) * sizeof(char));
-	snprintf(out, 186, "[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3]);
+	char * out = (char*)PyMem_Malloc((196) * sizeof(char));
+	snprintf(out, 196, "[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1], (double)self->super_type[0][2], (double)self->super_type[1][2], (double)self->super_type[2][2], (double)self->super_type[0][3], (double)self->super_type[1][3], (double)self->super_type[2][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1647,8 +1647,8 @@ template<typename T>
 static PyObject *
 mat4x2_str(mat<4, 2, T>* self)
 {
-	char * out = (char*)PyMem_Malloc((128) * sizeof(char));
-	snprintf(out, 128, "[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]\n[ %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[3][0], (double)self->super_type[3][1]);
+	char * out = (char*)PyMem_Malloc((130) * sizeof(char));
+	snprintf(out, 130, "[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[3][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1], (double)self->super_type[3][1]);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1658,8 +1658,8 @@ template<typename T>
 static PyObject *
 mat4x3_str(mat<4, 3, T>* self)
 {
-	char * out = (char*)PyMem_Malloc((188) * sizeof(char));
-	snprintf(out, 188, "[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2]);
+	char * out = (char*)PyMem_Malloc((195) * sizeof(char));
+	snprintf(out, 195, "[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[3][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1], (double)self->super_type[3][1], (double)self->super_type[0][2], (double)self->super_type[1][2], (double)self->super_type[2][2], (double)self->super_type[3][2]);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1669,8 +1669,8 @@ template<typename T>
 static PyObject *
 mat4x4_str(mat<4, 4, T>* self)
 {
-	char * out = (char*)PyMem_Malloc((248) * sizeof(char));
-	snprintf(out, 248, "[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]\n[ %12.6g | %12.6g | %12.6g | %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[0][1], (double)self->super_type[0][2], (double)self->super_type[0][3], (double)self->super_type[1][0], (double)self->super_type[1][1], (double)self->super_type[1][2], (double)self->super_type[1][3], (double)self->super_type[2][0], (double)self->super_type[2][1], (double)self->super_type[2][2], (double)self->super_type[2][3], (double)self->super_type[3][0], (double)self->super_type[3][1], (double)self->super_type[3][2], (double)self->super_type[3][3]);
+	char * out = (char*)PyMem_Malloc((260) * sizeof(char));
+	snprintf(out, 260, "[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[3][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1], (double)self->super_type[3][1], (double)self->super_type[0][2], (double)self->super_type[1][2], (double)self->super_type[2][2], (double)self->super_type[3][2], (double)self->super_type[0][3], (double)self->super_type[1][3], (double)self->super_type[2][3], (double)self->super_type[3][3]);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -2670,7 +2670,7 @@ template<int C, int R, typename T>
 static PyObject *
 matIter_new(PyTypeObject *type, PyObject *args, PyObject *)
 {
-	mat<C, R, T> *sequence;
+	mat<C, R, T> *sequence = NULL;
 
 	if (!PyArg_UnpackTuple(args, "__iter__", 1, 1, &sequence))
 		return NULL;
@@ -2727,7 +2727,7 @@ mat_getbuffer(mat<C, R, T>* self, Py_buffer* view, int flags) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
 		return -1;
 	}
-	if ((flags & PyBUF_F_CONTIGUOUS) == PyBUF_F_CONTIGUOUS) {
+	if ((flags & PyBUF_C_CONTIGUOUS) == PyBUF_C_CONTIGUOUS || (flags & PyBUF_STRIDES) != PyBUF_STRIDES) {
 		PyErr_SetString(PyExc_BufferError, "This type of buffer is not supported.");
 		view->obj = NULL;
 		return -1;
@@ -2750,8 +2750,8 @@ mat_getbuffer(mat<C, R, T>* self, Py_buffer* view, int flags) {
 	if (flags & PyBUF_ND) {
 		view->shape = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
 		if (view->shape != NULL) {
-			view->shape[0] = C;
-			view->shape[1] = R;
+			view->shape[0] = R;
+			view->shape[1] = C;
 		}
 	}
 	else {
@@ -2760,8 +2760,8 @@ mat_getbuffer(mat<C, R, T>* self, Py_buffer* view, int flags) {
 	if ((flags & PyBUF_STRIDES) == PyBUF_STRIDES) {
 		view->strides = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
 		if (view->strides != NULL) {
-			view->strides[0] = sizeof(typename glm::mat<C, R, T>::col_type);
-			view->strides[1] = sizeof(T);
+			view->strides[0] = sizeof(T);
+			view->strides[1] = sizeof(typename glm::mat<C, R, T>::col_type);
 		}
 	}
 	else {

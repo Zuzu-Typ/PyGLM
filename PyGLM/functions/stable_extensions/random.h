@@ -95,15 +95,15 @@ PyDoc_STRVAR(diskRand_docstr,
 );
 PyDoc_STRVAR(gaussRand_docstr,
 	"gaussRand(Mean: float, Deviation: float) -> float\n"
-	"	Generate random numbers in the interval [Min, Max], according a gaussian distribution.\n"
+	"	Generate random numbers in the interval `[Min, Max]`, according a gaussian distribution.\n"
 	"gaussRand(Mean: vecN, Deviation: vecN) -> vecN\n"
-	"	Generate random numbers in the interval [Min, Max], according a gaussian distribution."
+	"	Generate random numbers in the interval `[Min, Max]`, according a gaussian distribution."
 );
 PyDoc_STRVAR(linearRand_docstr,
 	"linearRand(Min: float, Max: float) -> float\n"
-	"	Generate random numbers in the interval [Min, Max], according a linear distribution.\n"
+	"	Generate random numbers in the interval `[Min, Max]`, according a linear distribution.\n"
 	"linearRand(Min: vecN, Max: vecN) -> vecN\n"
-	"	Generate random numbers in the interval [Min, Max], according a linear distribution."
+	"	Generate random numbers in the interval `[Min, Max]`, according a linear distribution."
 );
 PyDoc_STRVAR(sphericalRand_docstr,
 	"sphericalRand(Radius: float) -> vec3\n"
@@ -114,7 +114,7 @@ PyDoc_STRVAR(setSeed_docstr,
 	"setSeed(seed: int) -> None\n"
 	"	Sets the seed fot the pseudo-random number generator used by the -Rand functions.\n"
 	"	The seed needs to be greater or equal to zero.\n"
-	"	Default seed is 1.\n"
+	"	Default seed is `1`.\n"
 );
 
 #define RANDOM_METHODS \

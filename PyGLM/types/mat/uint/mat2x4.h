@@ -71,47 +71,6 @@ static PyNumberMethods humat2x4NumMethods = {
 	(binaryfunc)mat_matmul, //nb_matrix_multiply
 	(binaryfunc)mat_imatmul<2, 4, glm::u32>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject humat2x4Type = {
-	PyObject_HEAD_INIT(NULL)
-	"glm.umat2x4",             /* tp_name */
-	sizeof(mat<2, 4, glm::u32>),             /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	(destructor)mat_dealloc, /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	(reprfunc)mat2x4_repr<glm::u32>,                         /* tp_repr */
-	&humat2x4NumMethods,             /* tp_as_number */
-	&humat2x4SeqMethods,                         /* tp_as_sequence */
-	&humat2x4MapMethods,                         /* tp_as_mapping */
-	(hashfunc)mat_hash<2, 4, glm::u32>,                         /* tp_hash  */
-	0,                         /* tp_call */
-	(reprfunc)mat2x4_str<glm::u32>,                         /* tp_str */
-	0,                         /* tp_getattro */
-	0,                         /* tp_setattro */
-	&humat2x4BufferMethods,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"umat2x4( <umat2x4 compatible type(s)> )\n2 columns of 4 components matrix of unsigned integer numbers.",           /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	(richcmpfunc)mat_richcompare<2, 4, glm::u32>,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	(getiterfunc)mat_geniter<2, 4, glm::u32>,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	humat2x4_methods,             /* tp_methods */
-	0,             /* tp_members */
-	0,           			/* tp_getset */
-	0,                         /* tp_base */
-	0,                         /* tp_dict */
-	0,                         /* tp_descr_get */
-	0,                         /* tp_descr_set */
-	0,                         /* tp_dictoffset */
-	(initproc)mat2x4_init<glm::u32>,      /* tp_init */
-	0,                         /* tp_alloc */
-	(newfunc)mat_new<2, 4, glm::u32>,                 /* tp_new */
-};
 static PyTypeObject humat2x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"umat2x4Iter",             /* tp_name */
@@ -152,3 +111,55 @@ static PyTypeObject humat2x4IterType = {
 	0,                         /* tp_alloc */
 	(newfunc)matIter_new<2, 4, glm::u32>,                 /* tp_new */
 };
+
+static PyGLMTypeObject humat2x4GLMType = {
+	{
+		PyObject_HEAD_INIT(NULL)
+		"glm.umat2x4",             /* tp_name */
+		sizeof(mat<2, 4, glm::u32>),             /* tp_basicsize */
+		0,                         /* tp_itemsize */
+		(destructor)mat_dealloc, /* tp_dealloc */
+		0,                         /* tp_print */
+		0,                         /* tp_getattr */
+		0,                         /* tp_setattr */
+		0,                         /* tp_reserved */
+		(reprfunc)mat2x4_repr<glm::u32>,                         /* tp_repr */
+		& humat2x4NumMethods,             /* tp_as_number */
+		& humat2x4SeqMethods,                         /* tp_as_sequence */
+		& humat2x4MapMethods,                         /* tp_as_mapping */
+		(hashfunc)mat_hash<2, 4, glm::u32>,                         /* tp_hash  */
+		0,                         /* tp_call */
+		(reprfunc)mat2x4_str<glm::u32>,                         /* tp_str */
+		0,                         /* tp_getattro */
+		0,                         /* tp_setattro */
+		& humat2x4BufferMethods,                         /* tp_as_buffer */
+		Py_TPFLAGS_DEFAULT |
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */
+		"umat2x4( <umat2x4 compatible type(s)> )\n2 columns of 4 components matrix of unsigned integer numbers.",           /* tp_doc */
+		0,                         /* tp_traverse */
+		0,                         /* tp_clear */
+		(richcmpfunc)mat_richcompare<2, 4, glm::u32>,                         /* tp_richcompare */
+		0,                         /* tp_weaklistoffset */
+		(getiterfunc)mat_geniter<2, 4, glm::u32>,                         /* tp_iter */
+		0,                         /* tp_iternext */
+		humat2x4_methods,             /* tp_methods */
+		0,             /* tp_members */
+		0,           			/* tp_getset */
+		0,                         /* tp_base */
+		0,                         /* tp_dict */
+		0,                         /* tp_descr_get */
+		0,                         /* tp_descr_set */
+		0,                         /* tp_dictoffset */
+		(initproc)mat2x4_init<glm::u32>,      /* tp_init */
+		0,                         /* tp_alloc */
+		(newfunc)mat_new<2, 4, glm::u32>,                 /* tp_new */
+	},
+	PyGLM_TYPE_MAT,
+	2,
+	4,
+	sizeof(uint32),
+	sizeof(glm::mat<2, 4, uint32>),
+	PyGLM_FS_UINT32
+};
+
+static PyTypeObject& humat2x4Type = *((PyTypeObject*)&humat2x4GLMType);

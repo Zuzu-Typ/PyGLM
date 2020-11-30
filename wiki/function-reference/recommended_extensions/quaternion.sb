@@ -21,11 +21,11 @@ Defines a templated quaternion type and several quaternion operations.
 
 \h3\mat3_cast() function\h3\
 \raw\#### <code>glm.<code>**mat3_cast**(**x**: *quat*) -\\> *mat3*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Converts a quaternion to a 3 * 3 matrix.
+\raw\&emsp;&emsp;\raw\Converts a quaternion to a 3 x 3 matrix.
 
 \h3\mat4_cast() function\h3\
 \raw\#### <code>glm.<code>**mat4_cast**(**x**: *quat*) -\\> *mat4*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Converts a quaternion to a 4 * 4 matrix.
+\raw\&emsp;&emsp;\raw\Converts a quaternion to a 4 x 4 matrix.
 
 \h3\pitch() function\h3\
 \raw\#### <code>glm.<code>**pitch**(**x**: *quat*) -\\> *float*</code></code>\raw\
@@ -45,10 +45,10 @@ Defines a templated quaternion type and several quaternion operations.
 
 \h3\quat_cast() function\h3\
 \raw\#### <code>glm.<code>**quat_cast**(**x**: *mat3*) -\\> *quat*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Converts a pure rotation 3 * 3 matrix to a quaternion.
+\raw\&emsp;&emsp;\raw\Converts a pure rotation 3 x 3 matrix to a quaternion.
 
 \raw\#### <code>glm.<code>**quat_cast**(**x**: *mat4*) -\\> *quat*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Converts a pure rotation 4 * 4 matrix to a quaternion.
+\raw\&emsp;&emsp;\raw\Converts a pure rotation 4 x 4 matrix to a quaternion.
 
 \h3\roll() function\h3\
 \raw\#### <code>glm.<code>**roll**(**x**: *quat*) -\\> *float*</code></code>\raw\

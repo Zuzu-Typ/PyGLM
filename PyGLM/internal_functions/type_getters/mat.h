@@ -44,3 +44,26 @@ static constexpr PyTypeObject* PyGLM_MAT_TYPE() {
 		(std::is_same<mat<C, R, T>, mat<4, 4, uint32> >::value) ? (PyTypeObject*)&humat4x4Type :
 		(PyTypeObject*)0;
 }
+
+template<typename T>
+static PyTypeObject* PyGLM_MAT_TYPE_T_ONLY(int C, int R) {
+	return (C == 2) ? (
+			(R == 2) ? PyGLM_MAT_TYPE<2, 2, T>() :
+			(R == 3) ? PyGLM_MAT_TYPE<2, 3, T>() :
+			(R == 4) ? PyGLM_MAT_TYPE<2, 4, T>() :
+			NULL
+		) :
+		(C == 3) ? (
+			(R == 2) ? PyGLM_MAT_TYPE<3, 2, T>() :
+			(R == 3) ? PyGLM_MAT_TYPE<3, 3, T>() :
+			(R == 4) ? PyGLM_MAT_TYPE<3, 4, T>() :
+			NULL
+		) :
+		(C == 4) ? (
+			(R == 2) ? PyGLM_MAT_TYPE<4, 2, T>() :
+			(R == 3) ? PyGLM_MAT_TYPE<4, 3, T>() :
+			(R == 4) ? PyGLM_MAT_TYPE<4, 4, T>() :
+			NULL
+		) :
+		NULL;
+}

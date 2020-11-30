@@ -34,7 +34,7 @@ PyGLM_MAKE_GLM_FUNC_Q(conjugate)
 
 PyDoc_STRVAR(conjugate_docstr,
 	"conjugate(q: quat) -> quat\n"
-	"	Returns the q conjugate."
+	"	Returns the `q` conjugate."
 );
 PyDoc_STRVAR(lerp_docstr,
 	"lerp(x: quat, y: quat, a: float) -> quat\n"

@@ -36,7 +36,7 @@ PyDoc_STRVAR(angleAxis_docstr,
 );
 PyDoc_STRVAR(axis_docstr,
 	"axis(x: quat) -> vec3\n"
-	"	Returns the q rotation axis."
+	"	Returns the `q` rotation axis."
 );
 
 #define QUATERNION_TRIGONOMETRIC_METHODS \

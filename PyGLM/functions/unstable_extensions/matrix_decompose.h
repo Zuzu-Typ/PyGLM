@@ -20,7 +20,7 @@ PyDoc_STRVAR(decompose_docstr,
 	"decompose(modelMatrix: mat4, scale: vec3, orientation: quat, translation: vec3, skew: vec3,\n"
 	"	perspective: vec4) -> bool\n"
 	"	Decomposes a model matrix to translations, rotation and scale components.\n"
-	"	Returns true on success."
+	"	Returns `True` on success."
 );
 
 #define DECOMPOSE_METHODS \

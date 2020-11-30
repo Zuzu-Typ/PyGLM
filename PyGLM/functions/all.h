@@ -7,3 +7,5 @@
 #include "stable_extensions/all.h"
 
 #include "unstable_extensions/all.h"
+
+#include "other/all.h"

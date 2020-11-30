@@ -58,13 +58,13 @@ Defines functions that generate clip space transformation matrices\.
 ### frustumLH\_NO\(\) function  
 #### <code>glm.<code>**frustumLH_NO**(**left**: *float*, **right**: *float*, **bottom**: *float*, **top**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a left handed frustum matrix\. The near and far clip planes correspond to z  
-&emsp;&emsp;normalized device coordinates of \-1 and \+1 respectively\.  
+&emsp;&emsp;normalized device coordinates of ``` -1 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(OpenGL clip volume definition\)  
   
 ### frustumLH\_ZO\(\) function  
 #### <code>glm.<code>**frustumLH_ZO**(**left**: *float*, **right**: *float*, **bottom**: *float*, **top**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a left handed frustum matrix\. The near and far clip planes correspond to z  
-&emsp;&emsp;normalized device coordinates of 0 and \+1 respectively\.  
+&emsp;&emsp;normalized device coordinates of ``` 0 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(Direct3D clip volume definition\)  
   
 ### frustumNO\(\) function  
@@ -78,13 +78,13 @@ Defines functions that generate clip space transformation matrices\.
 ### frustumRH\_NO\(\) function  
 #### <code>glm.<code>**frustumRH_NO**(**left**: *float*, **right**: *float*, **bottom**: *float*, **top**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a right handed frustum matrix\. The near and far clip planes correspond to z  
-&emsp;&emsp;normalized device coordinates of \-1 and \+1 respectively\.  
+&emsp;&emsp;normalized device coordinates of ``` -1 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(OpenGL clip volume definition\)  
   
 ### frustumRH\_ZO\(\) function  
 #### <code>glm.<code>**frustumRH_ZO**(**left**: *float*, **right**: *float*, **bottom**: *float*, **top**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a right handed frustum matrix\. The near and far clip planes correspond to z  
-&emsp;&emsp;normalized device coordinates of 0 and \+1 respectively\.  
+&emsp;&emsp;normalized device coordinates of ``` 0 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(Direct3D clip volume definition\)  
   
 ### frustumZO\(\) function  
@@ -120,14 +120,14 @@ Defines functions that generate clip space transformation matrices\.
 #### <code>glm.<code>**orthoLH_NO**(**left**: *float*, **right**: *float*, **bottom**: *float*, **top**: *float*, **zNear**: *float*, **zFar**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a matrix for an orthographic parallel viewing volume using left\-handed  
 &emsp;&emsp;coordinates\. The nearand far clip planes correspond to z normalized device coordinates of  
-&emsp;&emsp;\-1 and \+1 respectively\.  
+&emsp;&emsp;``` -1 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(OpenGL clip volume definition\)  
   
 ### orthoLH\_ZO\(\) function  
 #### <code>glm.<code>**orthoLH_ZO**(**left**: *float*, **right**: *float*, **bottom**: *float*, **top**: *float*, **zNear**: *float*, **zFar**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a matrix for an orthographic parallel viewing volume, using left\-handed  
 &emsp;&emsp;coordinates\. The nearand far clip planes correspond to z normalized device  
-&emsp;&emsp;coordinates of 0 and \+1 respectively\.  
+&emsp;&emsp;coordinates of ``` 0 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(Direct3D clip volume definition\)  
   
 ### orthoNO\(\) function  
@@ -142,14 +142,14 @@ Defines functions that generate clip space transformation matrices\.
 #### <code>glm.<code>**orthoRH_NO**(**left**: *float*, **right**: *float*, **bottom**: *float*, **top**: *float*, **zNear**: *float*, **zFar**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a matrix for an orthographic parallel viewing volume using right\-handed  
 &emsp;&emsp;coordinates\. The nearand far clip planes correspond to z normalized device coordinates of  
-&emsp;&emsp;\-1 and \+1 respectively\.  
+&emsp;&emsp;``` -1 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(OpenGL clip volume definition\)  
   
 ### orthoRH\_ZO\(\) function  
 #### <code>glm.<code>**orthoRH_ZO**(**left**: *float*, **right**: *float*, **bottom**: *float*, **top**: *float*, **zNear**: *float*, **zFar**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a matrix for an orthographic parallel viewing volume, using right\-handed  
 &emsp;&emsp;coordinates\. The nearand far clip planes correspond to z normalized device  
-&emsp;&emsp;coordinates of 0 and \+1 respectively\.  
+&emsp;&emsp;coordinates of ``` 0 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(Direct3D clip volume definition\)  
   
 ### orthoZO\(\) function  
@@ -172,13 +172,13 @@ Defines functions that generate clip space transformation matrices\.
 #### <code>glm.<code>**perspectiveFovLH_NO**(**fov**: *float*, **width**: *float*, **height**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Builds a perspective projection matrix based on a field of view using left\-handed  
 &emsp;&emsp;coordinates\. The nearand far clip planes correspond to z normalized device coordinates of  
-&emsp;&emsp;\-1 and \+1 respectively\. \(OpenGL clip volume definition\)  
+&emsp;&emsp;``` -1 ``` and ``` +1 ``` respectively\. \(OpenGL clip volume definition\)  
   
 ### perspectiveFovLH\_ZO\(\) function  
 #### <code>glm.<code>**perspectiveFovLH_ZO**(**fov**: *float*, **width**: *float*, **height**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Builds a perspective projection matrix based on a field of view using left\-handed  
 &emsp;&emsp;coordinates\. The nearand far clip planes correspond to z normalized device coordinates of  
-&emsp;&emsp;0 and \+1 respectively\. \(Direct3D clip volume definition\)  
+&emsp;&emsp;``` 0 ``` and ``` +1 ``` respectively\. \(Direct3D clip volume definition\)  
   
 ### perspectiveFovNO\(\) function  
 #### <code>glm.<code>**perspectiveFovNO**(**fov**: *float*, **width**: *float*, **height**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
@@ -192,13 +192,13 @@ Defines functions that generate clip space transformation matrices\.
 #### <code>glm.<code>**perspectiveFovRH_NO**(**fov**: *float*, **width**: *float*, **height**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Builds a perspective projection matrix based on a field of view using right\-handed  
 &emsp;&emsp;coordinates\. The nearand far clip planes correspond to z normalized device coordinates of  
-&emsp;&emsp;\-1 and \+1 respectively\. \(OpenGL clip volume definition\)  
+&emsp;&emsp;``` -1 ``` and ``` +1 ``` respectively\. \(OpenGL clip volume definition\)  
   
 ### perspectiveFovRH\_ZO\(\) function  
 #### <code>glm.<code>**perspectiveFovRH_ZO**(**fov**: *float*, **width**: *float*, **height**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Builds a perspective projection matrix based on a field of view using right\-handed  
 &emsp;&emsp;coordinates\. The nearand far clip planes correspond to z normalized device coordinates of  
-&emsp;&emsp;0 and \+1 respectively\. \(Direct3D clip volume definition\)  
+&emsp;&emsp;``` 0 ``` and ``` +1 ``` respectively\. \(Direct3D clip volume definition\)  
   
 ### perspectiveFovZO\(\) function  
 #### <code>glm.<code>**perspectiveFovZO**(**fov**: *float*, **width**: *float*, **height**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
@@ -211,13 +211,13 @@ Defines functions that generate clip space transformation matrices\.
 ### perspectiveLH\_NO\(\) function  
 #### <code>glm.<code>**perspectiveLH_NO**(**fovy**: *float*, **aspect**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a matrix for a left handed, symetric perspective\-view frustum\. The near and far  
-&emsp;&emsp;clip planes correspond to z normalized device coordinates of \-1 and \+1 respectively\.  
+&emsp;&emsp;clip planes correspond to z normalized device coordinates of ``` -1 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(OpenGL clip volume definition\)  
   
 ### perspectiveLH\_ZO\(\) function  
 #### <code>glm.<code>**perspectiveLH_ZO**(**fovy**: *float*, **aspect**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a matrix for a left handed, symetric perspective\-view frustum\. The near and far  
-&emsp;&emsp;clip planes correspond to z normalized device coordinates of 0 and \+1 respectively\.  
+&emsp;&emsp;clip planes correspond to z normalized device coordinates of ``` 0 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(Direct3D clip volume definition\)  
   
 ### perspectiveNO\(\) function  
@@ -231,13 +231,13 @@ Defines functions that generate clip space transformation matrices\.
 ### perspectiveRH\_NO\(\) function  
 #### <code>glm.<code>**perspectiveRH_NO**(**fovy**: *float*, **aspect**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a matrix for a right handed, symetric perspective\-view frustum\. The near and far  
-&emsp;&emsp;clip planes correspond to z normalized device coordinates of \-1 and \+1 respectively\.  
+&emsp;&emsp;clip planes correspond to z normalized device coordinates of ``` -1 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(OpenGL clip volume definition\)  
   
 ### perspectiveRH\_ZO\(\) function  
 #### <code>glm.<code>**perspectiveRH_ZO**(**fovy**: *float*, **aspect**: *float*, **near**: *float*, **far**: *float*) -\> *fmat4x4*</code></code>  
 &emsp;&emsp;Creates a matrix for a right handed, symetric perspective\-view frustum\. The near and far  
-&emsp;&emsp;clip planes correspond to z normalized device coordinates of 0 and \+1 respectively\.  
+&emsp;&emsp;clip planes correspond to z normalized device coordinates of ``` 0 ``` and ``` +1 ``` respectively\.  
 &emsp;&emsp;\(Direct3D clip volume definition\)  
   
 ### perspectiveZO\(\) function  

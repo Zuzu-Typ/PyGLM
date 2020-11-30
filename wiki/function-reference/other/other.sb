@@ -4,9 +4,84 @@ The following methods are all part of the \b\other methods\b\.
 PyGLM's custom functions.
 \h2\Table of contents\h2\
 \ul\
+\-\\url #add-function\\b\add\b\ function\url\
+\-\\url #and_-function\\b\and_\b\ function\url\
+\-\\url #cmp-function\\b\cmp\b\ function\url\
+\-\\url #div-function\\b\div\b\ function\url\
+\-\\url #floordiv-function\\b\floordiv\b\ function\url\
+\-\\url #if_else-function\\b\if_else\b\ function\url\
+\-\\url #inv-function\\b\inv\b\ function\url\
+\-\\url #lshift-function\\b\lshift\b\ function\url\
+\-\\url #mul-function\\b\mul\b\ function\url\
+\-\\url #neg-function\\b\neg\b\ function\url\
+\-\\url #or_-function\\b\or_\b\ function\url\
+\-\\url #pos-function\\b\pos\b\ function\url\
+\-\\url #rshift-function\\b\rshift\b\ function\url\
 \-\\url #silence-function\\b\silence\b\ function\url\
+\-\\url #sub-function\\b\sub\b\ function\url\
+\-\\url #xor-function\\b\xor\b\ function\url\
 \ul\
+\h3\add() function\h3\
+\raw\#### <code>glm.<code>**add**(**a**, **b**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\a + b\code\.
+
+\h3\and_() function\h3\
+\raw\#### <code>glm.<code>**and_**(**a**, **b**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\a & b\code\.
+
+\h3\cmp() function\h3\
+\raw\#### <code>glm.<code>**cmp**(**a**, **b**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\-1 if a < b else 1 if a > b else 0\code\.
+
+\h3\div() function\h3\
+\raw\#### <code>glm.<code>**div**(**a**, **b**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\a / b\code\.
+
+\h3\floordiv() function\h3\
+\raw\#### <code>glm.<code>**floordiv**(**a**, **b**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\a // b\code\.
+
+\h3\if_else() function\h3\
+\raw\#### <code>glm.<code>**if_else**(**b**, **x**, **y**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\x if b else y\code\.
+
+\h3\inv() function\h3\
+\raw\#### <code>glm.<code>**inv**(**a**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\~a\code\.
+
+\h3\lshift() function\h3\
+\raw\#### <code>glm.<code>**lshift**(**a**, **b**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\a << b\code\.
+
+\h3\mul() function\h3\
+\raw\#### <code>glm.<code>**mul**(**a**, **b**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\a * b\code\.
+
+\h3\neg() function\h3\
+\raw\#### <code>glm.<code>**neg**(**a**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\-a\code\.
+
+\h3\or_() function\h3\
+\raw\#### <code>glm.<code>**or_**(**a**, **b**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\a | b\code\.
+
+\h3\pos() function\h3\
+\raw\#### <code>glm.<code>**pos**(**a**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\+a\code\.
+
+\h3\rshift() function\h3\
+\raw\#### <code>glm.<code>**rshift**(**a**, **b**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\a >> b\code\.
+
 \h3\silence() function\h3\
 \raw\#### <code>glm.<code>**silence**(**ID**: *int*) -\\> *None*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Silence a PyGLM warning (or all using 0).
+
+\h3\sub() function\h3\
+\raw\#### <code>glm.<code>**sub**(**a**, **b**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\a - b\code\.
+
+\h3\xor() function\h3\
+\raw\#### <code>glm.<code>**xor**(**a**, **b**) -\\> *Any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Equivalent to \code\a ^ b\code\.
 

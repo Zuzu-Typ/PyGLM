@@ -1304,28 +1304,28 @@ unpackHalf_(PyObject*, PyObject* arg) {
 
 PyDoc_STRVAR(packF2x11_1x10_docstr,
 	"packF2x11_1x10(v: vec3) -> int\n"
-	"	First, converts the first two components of the normalized floating-point value v into\n"
+	"	First, converts the first two components of the normalized floating-point value `v` into\n"
 	"	11-bit signless floating-point values. Then, converts the third component of the normalized\n"
-	"	floating - point value v into a 10 - bit signless floating - point value.Then, the results\n"
-	"	are packed into the returned 32 - bit unsigned integer. The first vector component\n"
-	"	specifies the 11 least - significant bits of the result; the last component specifies the\n"
-	"	10 most - significant bits."
+	"	floating-point value `v` into a 10-bit signless floating-point value. Then, the results\n"
+	"	are packed into the returned 32-bit unsigned integer. The first vector component\n"
+	"	specifies the 11 least-significant bits of the result; the last component specifies the\n"
+	"	10 most-significant bits."
 );
 PyDoc_STRVAR(packF3x9_E1x5_docstr,
 	"packF3x9_E1x5(v: vec3) -> int\n"
-	"	First, converts the first two components of the normalized floating-point value v into\n"
+	"	First, converts the first two components of the normalized floating-point value `v` into\n"
 	"	11-bit signless floating-point values. Then, converts the third component of the normalized\n"
-	"	floating - point value v into a 10 - bit signless floating - point value.Then, the results\n"
-	"	are packed into the returned 32 - bit unsigned integer. The first vector component\n"
-	"	specifies the 11 least - significant bits of the result; the last component specifies the\n"
-	"	10 most - significant bits. packF3x9_E1x5 allows encoding into RGBE / RGB9E5 format"
+	"	floating-point value `v` into a 10-bit signless floating-point value.Then, the results\n"
+	"	are packed into the returned 32-bit unsigned integer. The first vector component\n"
+	"	specifies the 11 least-significant bits of the result; the last component specifies the\n"
+	"	10 most-significant bits. packF3x9_E1x5 allows encoding into RGBE / RGB9E5 format"
 );
 PyDoc_STRVAR(packHalf_docstr,
 	"packHalf(v: vecN) -> u16vecN\n"
 	"	Returns an unsigned integer vector obtained by converting the components of a\n"
 	"	floating-point vector to the 16-bit floating-point representation found in the OpenGL\n"
-	"	Specification. The first vector component specifies the 16 least - significant bits of the\n"
-	"	result; the forth component specifies the 16 most - significant bits."
+	"	Specification. The first vector component specifies the 16 least-significant bits of the\n"
+	"	result; the forth component specifies the 16 most-significant bits."
 );
 PyDoc_STRVAR(packHalf1x16_docstr,
 	"packHalf1x16(v: float) -> int\n"
@@ -1338,16 +1338,16 @@ PyDoc_STRVAR(packHalf4x16_docstr,
 	"	Returns an unsigned integer obtained by converting the components of a four-component\n"
 	"	floating-point vector to the 16-bit floating-point representation found in the OpenGL\n"
 	"	Specification, and then packing these four 16-bit values into a 64-bit unsigned integer.\n"
-	"	The first vector component specifies the 16 least - significant bits of the result; the\n"
-	"	forth component specifies the 16 most - significant bits."
+	"	The first vector component specifies the 16 least-significant bits of the result; the\n"
+	"	forth component specifies the 16 most-significant bits."
 );
 PyDoc_STRVAR(packI3x10_1x2_docstr,
 	"packI3x10_1x2(v: ivec4) -> int\n"
 	"	Returns an unsigned integer obtained by converting the components of a four-component\n"
 	"	signed integer vector to the 10-10-10-2-bit signed integer representation found in the\n"
 	"	OpenGL Specification, and then packing these four values into a 32-bit unsigned integer.\n"
-	"	The first vector component specifies the 10 least - significant bits of the result; the\n"
-	"	forth component specifies the 2 most - significant bits."
+	"	The first vector component specifies the 10 least-significant bits of the result; the\n"
+	"	forth component specifies the 2 most-significant bits."
 );
 PyDoc_STRVAR(packInt2x16_docstr,
 	"packInt2x16(v: i16vec2) -> int\n"
@@ -1374,52 +1374,52 @@ PyDoc_STRVAR(packRGBM_docstr,
 	"	Returns an unsigned integer vector obtained by converting the components of a\n"
 	"	floating-point vector to the 16-bit floating-point representation found in the OpenGL\n"
 	"	Specification. The first vector component specifies the 16 least-significant bits of the\n"
-	"	result; the forth component specifies the 16 most - significant bits."
+	"	result; the forth component specifies the 16 most-significant bits."
 );
 PyDoc_STRVAR(packSnorm_docstr,
 	"packSnorm(t: type, v: vecN) -> vecN\n"
 	"	Convert each component of the normalized floating-point vector into signed integer values\n"
-	"	of type t.\n"
-	"	t can be any of the 8 integer types (glm.int32, glm.int64, glm.uint8, ...)."
+	"	of type `t`.\n"
+	"	`t` can be any of the 8 integer types (`glm.int32`, `glm.int64`, `glm.uint8`, ...)."
 );
 PyDoc_STRVAR(packSnorm1x16_docstr,
 	"packSnorm1x16(v: float) -> int\n"
-	"	First, converts the normalized floating-point value v into 16-bit integer value. Then, the\n"
+	"	First, converts the normalized floating-point value `v` into 16-bit integer value. Then, the\n"
 	"	results are packed into the returned 16-bit unsigned integer. The conversion to fixed point is\n"
-	"	done as follows : packSnorm1x16: round(clamp(s, -1, +1) * 32767.0)"
+	"	done as follows : `round(clamp(s, -1, +1) * 32767.0)`"
 );
 PyDoc_STRVAR(packSnorm1x8_docstr,
 	"packSnorm1x8(v: float) -> int\n"
-	"	First, converts the normalized floating-point value v into 8-bit integer value. Then, the\n"
-	"	results are packed into the returned 8 - bit unsigned integer. The conversion to fixed point is\n"
-	"	done as follows : packSnorm1x8: round(clamp(v, -1, +1) * 127.0)"
+	"	First, converts the normalized floating-point value `v` into 8-bit integer value. Then, the\n"
+	"	results are packed into the returned 8-bit unsigned integer. The conversion to fixed point is\n"
+	"	done as follows : `round(clamp(v, -1, +1) * 127.0)`"
 );
 PyDoc_STRVAR(packSnorm2x8_docstr,
 	"packSnorm2x8(v: fvec2) -> int\n"
-	"	First, converts each component of the normalized floating-point value v into 8-bit integer\n"
-	"	values. Then, the results are packed into the returned 16 - bit unsigned integer. The\n"
-	"	conversion for component c of v to fixed point is done as follows :\n"
-	"	packSnorm2x8: round(clamp(c, -1, +1) * 127.0). The first component of the vector will be\n"
+	"	First, converts each component of the normalized floating-point value `v` into 8-bit integer\n"
+	"	values. Then, the results are packed into the returned 16-bit unsigned integer. The\n"
+	"	conversion for component `c` of `v` to fixed point is done as follows :\n"
+	"	`round(clamp(c, -1, +1) * 127.0)`. The first component of the vector will be\n"
 	"	written to the least significant bits of the output; the last component will be written to\n"
 	"	the most significant bits."
 );
 PyDoc_STRVAR(packSnorm3x10_1x2_docstr,
 	"packSnorm3x10_1x2(v: fvec4) -> int\n"
-	"	First, converts the first three components of the normalized floating-point value v into\n"
+	"	First, converts the first three components of the normalized floating-point value `v` into\n"
 	"	10-bit signed integer values. Then, converts the forth component of the normalized\n"
-	"	floating-point value v into 2-bit signed integer values. Then, the results are packed into\n"
-	"	the returned 32 - bit unsigned integer. The conversion for component c of v to fixed point\n"
-	"	is done as follows : packSnorm3x10_1x2(xyz) : round(clamp(c, -1, +1) * 511.0)\n"
-	"	packSnorm3x10_1x2(w) : round(clamp(c, -1, +1) * 1.0). The first vector component specifies\n"
-	"	the 10 least - significant bits of the result; the forth component specifies the 2\n"
+	"	floating-point value `v` into 2-bit signed integer values. Then, the results are packed into\n"
+	"	the returned 32-bit unsigned integer. The conversion for component c of v to fixed point\n"
+	"	is done as follows : `packSnorm3x10_1x2(xyz)` : `round(clamp(c, -1, +1) * 511.0)`\n"
+	"	`packSnorm3x10_1x2(w)` : `round(clamp(c, -1, +1) * 1.0)`. The first vector component specifies\n"
+	"	the 10 least-significant bits of the result; the forth component specifies the 2\n"
 	"	most-significant bits."
 );
 PyDoc_STRVAR(packSnorm4x16_docstr,
 	"packSnorm4x16(v: fvec4) -> int\n"
-	"	First, converts each component of the normalized floating-point value v into 16-bit integer\n"
-	"	values. Then, the results are packed into the returned 64 - bit unsigned integer. The\n"
-	"	conversion for component c of v to fixed point is done as follows :\n"
-	"	packSnorm2x8: round(clamp(c, -1, +1) * 32767.0). The first component of the vector will be\n"
+	"	First, converts each component of the normalized floating-point value `v` into 16-bit integer\n"
+	"	values. Then, the results are packed into the returned 64-bit unsigned integer. The\n"
+	"	conversion for component `c` of `v` to fixed point is done as follows :\n"
+	"	`round(clamp(c, -1, +1) * 32767.0)`. The first component of the vector will be\n"
 	"	written to the least significant bits of the output; the last component will be written to\n"
 	"	the most significant bits."
 );
@@ -1428,8 +1428,8 @@ PyDoc_STRVAR(packU3x10_1x2_docstr,
 	"	Returns an unsigned integer obtained by converting the components of a four-component\n"
 	"	unsigned integer vector to the 10-10-10-2-bit unsigned integer representation found in the\n"
 	"	OpenGL Specification, and then packing these four values into a 32-bit unsigned integer.\n"
-	"	The first vector component specifies the 10 least - significant bits of the result; the\n"
-	"	forth component specifies the 2 most - significant bits."
+	"	The first vector component specifies the 10 least-significant bits of the result; the\n"
+	"	forth component specifies the 2 most-significant bits."
 );
 PyDoc_STRVAR(packUint2x16_docstr,
 	"packUint2x16(v: u16vec2) -> int\n"
@@ -1454,15 +1454,16 @@ PyDoc_STRVAR(packUint4x8_docstr,
 PyDoc_STRVAR(packUnorm_docstr,
 	"packUnorm(t: type, v: vecN) -> vecN\n"
 	"	Convert each component of the normalized floating-point vector into unsigned integer values\n"
-	"	of type t.\n"
-	"	t can be any of the 4 unsigned integer types (glm.uint64, glm.uint32, glm.uint16, glm.uint8)."
+	"	of type `t`.\n"
+	"	`t` can be any of the 4 unsigned integer types\n"
+	"	(`glm.uint64`, `glm.uint32`, `glm.uint16`, `glm.uint8`)."
 );
 PyDoc_STRVAR(packUnorm1x16_docstr,
 	"packUnorm1x16(v: float) -> int\n"
-	"	First, converts the normalized floating-point value v into a 16-bit integer value. Then,\n"
-	"	the results are packed into the returned 16 - bit unsigned integer. The conversion for\n"
-	"	component c of v to fixed point is done as follows :\n"
-	"	packUnorm1x16: round(clamp(c, 0, +1) * 65535.0)"
+	"	First, converts the normalized floating-point value `v` into a 16-bit integer value. Then,\n"
+	"	the results are packed into the returned 16-bit unsigned integer. The conversion for\n"
+	"	component `c` of `v` to fixed point is done as follows :\n"
+	"	`round(clamp(c, 0, +1) * 65535.0)`"
 );
 PyDoc_STRVAR(packUnorm1x5_1x6_1x5_docstr,
 	"packUnorm1x5_1x6_1x5(v: fvec3) -> int\n"
@@ -1471,9 +1472,9 @@ PyDoc_STRVAR(packUnorm1x5_1x6_1x5_docstr,
 );
 PyDoc_STRVAR(packUnorm1x8_docstr,
 	"packUnorm1x8(v: float) -> int\n"
-	"	First, converts the normalized floating-point value v into a 8-bit integer value. Then, the\n"
+	"	First, converts the normalized floating-point value `v` into a 8-bit integer value. Then, the\n"
 	"	results are packed into the returned 8-bit unsigned integer. The conversion for component\n"
-	"	c of v to fixed point is done as follows : packUnorm1x8: round(clamp(c, 0, +1) * 255.0)"
+	"	`c` of `v` to fixed point is done as follows : `round(clamp(c, 0, +1) * 255.0)`"
 );
 PyDoc_STRVAR(packUnorm2x3_1x2_docstr,
 	"packUnorm2x3_1x2(v: fvec3) -> int\n"
@@ -1487,22 +1488,22 @@ PyDoc_STRVAR(packUnorm2x4_docstr,
 );
 PyDoc_STRVAR(packUnorm2x8_docstr,
 	"packUnorm2x8(v: fvec2) -> int\n"
-	"	First, converts each component of the normalized floating-point value v into 8-bit integer\n"
-	"	values. Then, the results are packed into the returned 16 - bit unsigned integer. The\n"
-	"	conversion for component c of v to fixed point is done as follows :\n"
-	"	packUnorm2x8: round(clamp(c, 0, +1) * 255.0). The first component of the vector will be\n"
+	"	First, converts each component of the normalized floating-point value `v` into 8-bit integer\n"
+	"	values. Then, the results are packed into the returned 16-bit unsigned integer. The\n"
+	"	conversion for component `c` of `v` to fixed point is done as follows :\n"
+	"	`round(clamp(c, 0, +1) * 255.0)`. The first component of the vector will be\n"
 	"	written to the least significant bits of the output; the last component will be written to\n"
 	"	the most significant bits."
 );
 PyDoc_STRVAR(packUnorm3x10_1x2_docstr,
 	"packUnorm3x10_1x2(v: fvec4) -> int\n"
-	"	First, converts the first three components of the normalized floating-point value v into\n"
+	"	First, converts the first three components of the normalized floating-point value `v` into\n"
 	"	10-bit unsigned integer values. Then, converts the forth component of the normalized\n"
-	"	floating-point value v into 2-bit signed uninteger values.Then, the results are packed into\n"
+	"	floating-point value `v` into 2-bit signed uninteger values.Then, the results are packed into\n"
 	"	the returned 32-bit unsigned integer. The conversion for component c of v to fixed point is\n"
-	"	done as follows : packUnorm3x10_1x2(xyz) : round(clamp(c, 0, +1) * 1023.0)\n"
-	"	packUnorm3x10_1x2(w) : round(clamp(c, 0, +1) * 3.0). The first vector component specifies\n"
-	"	the 10 least - significant bits of the result; the forth component specifies the 2\n"
+	"	done as follows : `packUnorm3x10_1x2(xyz)` : `round(clamp(c, 0, +1) * 1023.0)`\n"
+	"	`packUnorm3x10_1x2(w)` : `round(clamp(c, 0, +1) * 3.0)`. The first vector component specifies\n"
+	"	the 10 least-significant bits of the result; the forth component specifies the 2\n"
 	"	most-significant bits."
 );
 PyDoc_STRVAR(packUnorm3x5_1x1_docstr,
@@ -1512,10 +1513,10 @@ PyDoc_STRVAR(packUnorm3x5_1x1_docstr,
 );
 PyDoc_STRVAR(packUnorm4x16_docstr,
 	"packUnorm4x16(v: fvec4) -> int\n"
-	"	First, converts each component of the normalized floating-point value v into 16-bit integer\n"
-	"	values. Then, the results are packed into the returned 64 - bit unsigned integer. The\n"
+	"	First, converts each component of the normalized floating-point value `v` into 16-bit integer\n"
+	"	values. Then, the results are packed into the returned 64-bit unsigned integer. The\n"
 	"	conversion for component c of v to fixed point is done as follows :\n"
-	"	packUnorm4x16: round(clamp(c, 0, +1) * 65535.0). The first component of the vector will be\n"
+	"	`round(clamp(c, 0, +1) * 65535.0)`. The first component of the vector will be\n"
 	"	written to the least significant bits of the output; the last component will be written to\n"
 	"	the most significant bits."
 );
@@ -1526,9 +1527,9 @@ PyDoc_STRVAR(packUnorm4x4_docstr,
 );
 PyDoc_STRVAR(unpackF2x11_1x10_docstr,
 	"unpackF2x11_1x10(p: int) -> vec3\n"
-	"	First, unpacks a single 32-bit unsigned integer p into two 11-bit signless floating-point\n"
+	"	First, unpacks a single 32-bit unsigned integer `p` into two 11-bit signless floating-point\n"
 	"	values and one 10-bit signless floating-point value. Then, each component is converted to a\n"
-	"	normalized floating - point value to generate the returned three - component vector. The\n"
+	"	normalized floating-point value to generate the returned three-component vector. The\n"
 	"	first component of the returned vector will be extracted from the least significant bits of\n"
 	"	the input; the last component will be extracted from the most significant bits."
 );
@@ -1536,7 +1537,7 @@ PyDoc_STRVAR(unpackF3x9_E1x5_docstr,
 	"unpackF3x9_E1x5(p: int) -> vec3\n"
 	"	First, unpacks a single 32-bit unsigned integer p into two 11-bit signless floating-point\n"
 	"	values and one 10-bit signless floating-point value. Then, each component is converted to a\n"
-	"	normalized floating - point value to generate the returned three - component vector. The\n"
+	"	normalized floating-point value to generate the returned three-component vector. The\n"
 	"	first component of the returned vector will be extracted from the least significant bits of\n"
 	"	the input; the last component will be extracted from the most significant bits.\n"
 	"	unpackF3x9_E1x5 allows decoding RGBE / RGB9E5 data"
@@ -1545,8 +1546,8 @@ PyDoc_STRVAR(unpackHalf_docstr,
 	"unpackHalf(p: u16vecN) -> vecN\n"
 	"	Returns a floating-point vector with components obtained by reinterpreting an integer\n"
 	"	vector as 16-bit floating-point numbers and converting them to 32-bit floating-point\n"
-	"	values. The first component of the vector is obtained from the 16 least - significant bits\n"
-	"	of v; the forth component is obtained from the 16 most - significant bits of v."
+	"	values. The first component of the vector is obtained from the 16 least-significant bits\n"
+	"	of `v`; the forth component is obtained from the 16 most-significant bits of `v`."
 );
 PyDoc_STRVAR(unpackHalf1x16_docstr,
 	"unpackHalf1x16(p: int) -> float\n"
@@ -1560,8 +1561,8 @@ PyDoc_STRVAR(unpackHalf4x16_docstr,
 	"	64-bit unsigned integer into four 16-bit values, interpreting those values as 16-bit\n"
 	"	floating-point numbers according to the OpenGL Specification, and converting them to 32-bit\n"
 	"	floating-point values. The first component of the vector is obtained from the 16\n"
-	"	least-significant bits of v; the forth component is obtained from the 16 most-significant\n"
-	"	bits of v."
+	"	least-significant bits of `v`; the forth component is obtained from the 16 most-significant\n"
+	"	bits of `v`."
 );
 PyDoc_STRVAR(unpackI3x10_1x2_docstr,
 	"unpackI3x10_1x2(p: int) -> ivec4\n"
@@ -1594,58 +1595,58 @@ PyDoc_STRVAR(unpackRGBM_docstr,
 	"	Returns a floating-point vector with components obtained by reinterpreting an integer\n"
 	"	vector as 16-bit floating-point numbers and converting them to 32-bit floating-point\n"
 	"	values. The first component of the vector is obtained from the 16 least-significant bits of\n"
-	"	v; the forth component is obtained from the 16 most-significant bits of v."
+	"	`v`; the forth component is obtained from the 16 most-significant bits of `v`."
 );
 PyDoc_STRVAR(unpackSnorm_docstr,
 	"unpackSnorm(t: type, v: vecN) -> vecN\n"
-	"	Convert a packed integer to a normalized floating-point vector of type t.\n"
-	"	t can be either glm.float or glm.double."
+	"	Convert a packed integer to a normalized floating-point vector of type `t`.\n"
+	"	`t` can be either `glm.float` or `glm.double`."
 );
 PyDoc_STRVAR(unpackSnorm1x16_docstr,
 	"unpackSnorm1x16(p: int) -> float\n"
-	"	First, unpacks a single 16-bit unsigned integer p into a single 16-bit signed integers.\n"
-	"	Then, each component is converted to a normalized floating - point value to generate the\n"
-	"	returned scalar. The conversion for unpacked fixed - point value f to floating point is\n"
-	"	done as follows : unpackSnorm1x16: clamp(f / 32767.0, -1, +1)"
+	"	First, unpacks a single 16-bit unsigned integer `p` into a single 16-bit signed integers.\n"
+	"	Then, each component is converted to a normalized floating-point value to generate the\n"
+	"	returned scalar. The conversion for unpacked fixed-point value `f` to floating point is\n"
+	"	done as follows : `clamp(f / 32767.0, -1, +1)`"
 );
 PyDoc_STRVAR(unpackSnorm1x8_docstr,
 	"unpackSnorm1x8(p: int) -> float\n"
-	"	First, unpacks a single 8-bit unsigned integer p into a single 8-bit signed integers.\n"
-	"	Then, the value is converted to a normalized floating - point value to generate the\n"
-	"	returned scalar. The conversion for unpacked fixed - point value f to floating point is\n"
-	"	done as follows : unpackSnorm1x8: clamp(f / 127.0, -1, +1)"
+	"	First, unpacks a single 8-bit unsigned integer `p` into a single 8-bit signed integers.\n"
+	"	Then, the value is converted to a normalized floating-point value to generate the\n"
+	"	returned scalar. The conversion for unpacked fixed-point value `f` to floating point is\n"
+	"	done as follows : `clamp(f / 127.0, -1, +1)`"
 );
 PyDoc_STRVAR(unpackSnorm2x8_docstr,
 	"unpackSnorm2x8(p: int) -> vec2\n"
 	"	First, unpacks a single 16-bit unsigned integer p into a pair of 8-bit signed integers.\n"
-	"	Then, each component is converted to a normalized floating - point value to generate the\n"
-	"	returned two - component vector. The conversion for unpacked fixed - point value f to\n"
-	"	floating point is done as follows : unpackSnorm2x8: clamp(f / 127.0, -1, +1)\n"
+	"	Then, each component is converted to a normalized floating-point value to generate the\n"
+	"	returned two-component vector. The conversion for unpacked fixed-point value `f` to\n"
+	"	floating point is done as follows : `clamp(f / 127.0, -1, +1)`\n"
 	"	The first component of the returned vector will be extracted from the least significant\n"
 	"	bits of the input; the last component will be extracted from the most significant bits."
 );
 PyDoc_STRVAR(unpackSnorm3x10_1x2_docstr,
 	"unpackSnorm3x10_1x2(p: int) -> vec4\n"
-	"	First, unpacks a single 32-bit unsigned integer p into four 16-bit signed integers. Then,\n"
-	"	each component is converted to a normalized floating - point value to generate the returned\n"
-	"	four-component vector. The conversion for unpacked fixed - point value f to floating point\n"
-	"	is done as follows : unpackSnorm3x10_1x2(xyz) : clamp(f / 511.0, -1, +1)\n"
-	"	unpackSnorm3x10_1x2(w) : clamp(f / 511.0, -1, +1). The first component of the returned\n"
+	"	First, unpacks a single 32-bit unsigned integer `p` into four 16-bit signed integers. Then,\n"
+	"	each component is converted to a normalized floating-point value to generate the returned\n"
+	"	four-component vector. The conversion for unpacked fixed-point value `f` to floating point\n"
+	"	is done as follows : `unpackSnorm3x10_1x2(xyz)` : `clamp(f / 511.0, -1, +1)`\n"
+	"	`unpackSnorm3x10_1x2(w)` : `clamp(f / 511.0, -1, +1)`. The first component of the returned\n"
 	"	vector will be extracted from the least significant bits of the input; the last component\n"
 	"	will be extracted from the most significant bits."
 );
 PyDoc_STRVAR(unpackSnorm4x16_docstr,
 	"unpackSnorm4x16(p: int) -> vec4\n"
-	"	First, unpacks a single 64-bit unsigned integer p into four 16-bit signed integers. Then,\n"
-	"	each component is converted to a normalized floating - point value to generate the returned\n"
-	"	four-component vector. The conversion for unpacked fixed - point value f to floating point\n"
-	"	is done as follows : unpackSnorm4x16: clamp(f / 32767.0, -1, +1)\n"
+	"	First, unpacks a single 64-bit unsigned integer `p` into four 16-bit signed integers. Then,\n"
+	"	each component is converted to a normalized floating-point value to generate the returned\n"
+	"	four-component vector. The conversion for unpacked fixed-point value `f` to floating point\n"
+	"	is done as follows : `clamp(f / 32767.0, -1, +1)`\n"
 	"	The first component of the returned vector will be extracted from the least significant\n"
 	"	bits of the input; the last component will be extracted from the most significant bits."
 );
 PyDoc_STRVAR(unpackU3x10_1x2_docstr,
 	"unpackU3x10_1x2(p: int) -> uvec4\n"
-	"	Unpacks a single 32-bit unsigned integer p into three 10-bit and one 2-bit unsigned\n"
+	"	Unpacks a single 32-bit unsigned integer `p` into three 10-bit and one 2-bit unsigned\n"
 	"	integers. The first component of the returned vector will be extracted from the least\n"
 	"	significant bits of the input; the last component will be extracted from the most\n"
 	"	significant bits."
@@ -1672,15 +1673,15 @@ PyDoc_STRVAR(unpackUint4x8_docstr,
 );
 PyDoc_STRVAR(unpackUnorm_docstr,
 	"unpackUnorm(t: type, v: vecN) -> vecN\n"
-	"	Convert a packed unsigned integer to a normalized floating-point vector of type t.\n"
-	"	t can be either glm.float or glm.double."
+	"	Convert a packed unsigned integer to a normalized floating-point vector of type `t`.\n"
+	"	`t` can be either `glm.float` or `glm.double`."
 );
 PyDoc_STRVAR(unpackUnorm1x16_docstr,
 	"unpackUnorm1x16(p: int) -> float\n"
-	"	First, unpacks a single 16-bit unsigned integer p into a of 16-bit unsigned integers.\n"
-	"	Then, the value is converted to a normalized floating - point value to generate the\n"
-	"	returned scalar. The conversion for unpacked fixed - point value f to floating point is\n"
-	"	done as follows : unpackUnorm1x16: f / 65535.0"
+	"	First, unpacks a single 16-bit unsigned integer `p` into a of 16-bit unsigned integers.\n"
+	"	Then, the value is converted to a normalized floating-point value to generate the\n"
+	"	returned scalar. The conversion for unpacked fixed-point value `f` to floating point is\n"
+	"	done as follows : `f / 65535.0`"
 );
 PyDoc_STRVAR(unpackUnorm1x5_1x6_1x5_docstr,
 	"unpackUnorm1x5_1x6_1x5(p: int) -> vec3\n"
@@ -1689,8 +1690,8 @@ PyDoc_STRVAR(unpackUnorm1x5_1x6_1x5_docstr,
 PyDoc_STRVAR(unpackUnorm1x8_docstr,
 	"unpackUnorm1x8(p: int) -> float\n"
 	"	Convert a single 8-bit integer to a normalized floating-point value. The conversion for\n"
-	"	unpacked fixed - point value f to floating point is done as follows :\n"
-	"	unpackUnorm4x8: f / 255.0"
+	"	unpacked fixed-point value `f` to floating point is done as follows :\n"
+	"	`f / 255.0`"
 );
 PyDoc_STRVAR(unpackUnorm2x3_1x2_docstr,
 	"unpackUnorm2x3_1x2(p: int) -> vec3\n"
@@ -1702,20 +1703,20 @@ PyDoc_STRVAR(unpackUnorm2x4_docstr,
 );
 PyDoc_STRVAR(unpackUnorm2x8_docstr,
 	"unpackUnorm2x8(p: int) -> vec2\n"
-	"	First, unpacks a single 16-bit unsigned integer p into a pair of 8-bit unsigned integers.\n"
-	"	Then, each component is converted to a normalized floating - point value to generate the\n"
-	"	returned two - component vector. The conversion for unpacked fixed - point value f to\n"
-	"	floating point is done as follows : unpackUnorm4x8: f / 255.0. The first component of the\n"
+	"	First, unpacks a single 16-bit unsigned integer `p` into a pair of 8-bit unsigned integers.\n"
+	"	Then, each component is converted to a normalized floating-point value to generate the\n"
+	"	returned two-component vector. The conversion for unpacked fixed-point value `f` to\n"
+	"	floating point is done as follows : `f / 255.0`. The first component of the\n"
 	"	returned vector will be extracted from the least significant bits of the input; the last\n"
 	"	component will be extracted from the most significant bits."
 );
 PyDoc_STRVAR(unpackUnorm3x10_1x2_docstr,
 	"unpackUnorm3x10_1x2(p: int) -> vec4\n"
-	"	First, unpacks a single 32-bit unsigned integer p into four 16-bit signed integers.\n"
-	"	Then, each component is converted to a normalized floating - point value to generate the\n"
-	"	returned four - component vector. The conversion for unpacked fixed - point value f to\n"
-	"	floating point is done as follows : unpackSnorm3x10_1x2(xyz) : clamp(f / 1023.0, 0, +1)\n"
-	"	unpackSnorm3x10_1x2(w) : clamp(f / 3.0, 0, +1). The first component of the returned vector\n"
+	"	First, unpacks a single 32-bit unsigned integer `p` into four 16-bit signed integers.\n"
+	"	Then, each component is converted to a normalized floating-point value to generate the\n"
+	"	returned four-component vector. The conversion for unpacked fixed-point value `f` to\n"
+	"	floating point is done as follows : `unpackSnorm3x10_1x2(xyz)` : `clamp(f / 1023.0, 0, +1)`\n"
+	"	`unpackSnorm3x10_1x2(w)` : `clamp(f / 3.0, 0, +1)`. The first component of the returned vector\n"
 	"	will be extracted from the least significant bits of the input; the last component will be\n"
 	"	extracted from the most significant bits."
 );
@@ -1725,10 +1726,10 @@ PyDoc_STRVAR(unpackUnorm3x5_1x1_docstr,
 );
 PyDoc_STRVAR(unpackUnorm4x16_docstr,
 	"unpackUnorm4x16(p: int) -> vec4\n"
-	"	First, unpacks a single 64-bit unsigned integer p into four 16-bit unsigned integers.\n"
-	"	Then, each component is converted to a normalized floating - point value to generate the\n"
-	"	returned four - component vector. The conversion for unpacked fixed - point value f to\n"
-	"	floating point is done as follows : unpackUnormx4x16: f / 65535.0. The first component of\n"
+	"	First, unpacks a single 64-bit unsigned integer `p` into four 16-bit unsigned integers.\n"
+	"	Then, each component is converted to a normalized floating-point value to generate the\n"
+	"	returned four-component vector. The conversion for unpacked fixed-point value `f` to\n"
+	"	floating point is done as follows : `f / 65535.0`. The first component of\n"
 	"	the returned vector will be extracted from the least significant bits of the input; the\n"
 	"	last component will be extracted from the most significant bits."
 );

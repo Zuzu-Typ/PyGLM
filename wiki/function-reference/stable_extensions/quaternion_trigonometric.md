@@ -20,5 +20,5 @@ Provides trigonometric functions for quaternion types\.
   
 ### axis\(\) function  
 #### <code>glm.<code>**axis**(**x**: *quat*) -\> *vec3*</code></code>  
-&emsp;&emsp;Returns the q rotation axis\.  
+&emsp;&emsp;Returns the ``` q ``` rotation axis\.  
   

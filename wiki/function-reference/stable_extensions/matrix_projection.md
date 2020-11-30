@@ -24,14 +24,14 @@ Functions that generate common projection transformation matrices\.
   
 ### projectNO\(\) function  
 #### <code>glm.<code>**projectNO**(**obj**: *vec3*, **model**: *mat4*, **proj**: *mat4*, **viewport**: *vec4*) -\> *vec3*</code></code>  
-&emsp;&emsp;Map the specified object coordinates \(obj\.x, obj\.y, obj\.z\) into window coordinates\.  
-&emsp;&emsp;The near and far clip planes correspond to z normalized device coordinates of \-1 and \+1  
+&emsp;&emsp;Map the specified object coordinates ``` (obj.x, obj.y, obj.z) ``` into window coordinates\.  
+&emsp;&emsp;The near and far clip planes correspond to z normalized device coordinates of ``` -1 ``` and ``` +1 ```  
 &emsp;&emsp;respectively\. \(OpenGL clip volume definition\)  
   
 ### projectZO\(\) function  
 #### <code>glm.<code>**projectZO**(**obj**: *vec3*, **model**: *mat4*, **proj**: *mat4*, **viewport**: *vec4*) -\> *vec3*</code></code>  
-&emsp;&emsp;Map the specified object coordinates \(obj\.x, obj\.y, obj\.z\) into window coordinates\.  
-&emsp;&emsp;The nearand far clip planes correspond to z normalized device coordinates of 0 and \+1  
+&emsp;&emsp;Map the specified object coordinates ``` (obj.x, obj.y, obj.z) ``` into window coordinates\.  
+&emsp;&emsp;The nearand far clip planes correspond to z normalized device coordinates of ``` 0 ``` and ``` +1 ```  
 &emsp;&emsp;respectively\. \(Direct3D clip volume definition\)  
   
 ### unProject\(\) function  
@@ -40,13 +40,13 @@ Functions that generate common projection transformation matrices\.
   
 ### unProjectNO\(\) function  
 #### <code>glm.<code>**unProjectNO**(**win**: *vec3*, **model**: *mat4*, **proj**: *mat4*, **viewport**: *vec4*) -\> *vec3*</code></code>  
-&emsp;&emsp;Map the specified window coordinates \(win\.x, win\.y, win\.z\) into object coordinates\.  
-&emsp;&emsp;The nearand far clip planes correspond to z normalized device coordinates of \-1 and \+1  
+&emsp;&emsp;Map the specified window coordinates ``` (win.x, win.y, win.z) ``` into object coordinates\.  
+&emsp;&emsp;The nearand far clip planes correspond to z normalized device coordinates of ``` -1 ``` and ``` +1 ```  
 &emsp;&emsp;respectively\. \(OpenGL clip volume definition\)  
   
 ### unProjectZO\(\) function  
 #### <code>glm.<code>**unProjectZO**(**win**: *vec3*, **model**: *mat4*, **proj**: *mat4*, **viewport**: *vec4*) -\> *vec3*</code></code>  
-&emsp;&emsp;Map the specified window coordinates \(win\.x, win\.y, win\.z\) into object coordinates\.  
-&emsp;&emsp;The nearand far clip planes correspond to z normalized device coordinates of 0 and \+1  
+&emsp;&emsp;Map the specified window coordinates ``` (win.x, win.y, win.z) ``` into object coordinates\.  
+&emsp;&emsp;The nearand far clip planes correspond to z normalized device coordinates of ``` 0 ``` and ``` +1 ```  
 &emsp;&emsp;respectively\. \(Direct3D clip volume definition\)  
   

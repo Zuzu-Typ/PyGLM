@@ -71,47 +71,6 @@ static PyNumberMethods hfvec3NumMethods = {
 	(binaryfunc)vec_matmul, //nb_matrix_multiply
 	(binaryfunc)vec_imatmul<3, float>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject hfvec3Type = {
-	PyObject_HEAD_INIT(NULL)
-	"glm.vec3",             /* tp_name */
-	sizeof(vec<3, float>),             /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	(destructor)vec_dealloc, /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	(reprfunc)vec3_repr<float>,                         /* tp_repr */
-	&hfvec3NumMethods,             /* tp_as_number */
-	&hfvec3SeqMethods,                         /* tp_as_sequence */
-	0,                         /* tp_as_mapping */
-	(hashfunc)vec_hash<3, float>,                         /* tp_hash  */
-	0,                         /* tp_call */
-	(reprfunc)vec3_str<float>,                         /* tp_str */
-	(getattrofunc)vec_getattr<3, float>,                         /* tp_getattro */
-	(setattrofunc)vec_setattr<3, float>,                         /* tp_setattro */
-	&hfvec3BufferMethods,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"vec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier float numbers.",           /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	(richcmpfunc)vec_richcompare<3, float>,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	(getiterfunc)vec_geniter<3, float>,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	hfvec3_methods,             /* tp_methods */
-	hfvec3_members,             /* tp_members */
-	0,           			/* tp_getset */
-	0,                         /* tp_base */
-	0,                         /* tp_dict */
-	0,                         /* tp_descr_get */
-	0,                         /* tp_descr_set */
-	0,                         /* tp_dictoffset */
-	(initproc)vec3_init<float>,      /* tp_init */
-	0,                         /* tp_alloc */
-	(newfunc)vec_new<3, float>,                 /* tp_new */
-};
 static PyTypeObject hfvec3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"vec3Iter",             /* tp_name */
@@ -152,3 +111,55 @@ static PyTypeObject hfvec3IterType = {
 	0,                         /* tp_alloc */
 	(newfunc)vecIter_new<3, float>,                 /* tp_new */
 };
+
+static PyGLMTypeObject hfvec3GLMType = {
+	{
+		PyObject_HEAD_INIT(NULL)
+		"glm.vec3",             /* tp_name */
+		sizeof(vec<3, float>),             /* tp_basicsize */
+		0,                         /* tp_itemsize */
+		(destructor)vec_dealloc, /* tp_dealloc */
+		0,                         /* tp_print */
+		0,                         /* tp_getattr */
+		0,                         /* tp_setattr */
+		0,                         /* tp_reserved */
+		(reprfunc)vec3_repr<float>,                         /* tp_repr */
+		& hfvec3NumMethods,             /* tp_as_number */
+		& hfvec3SeqMethods,                         /* tp_as_sequence */
+		0,                         /* tp_as_mapping */
+		(hashfunc)vec_hash<3, float>,                         /* tp_hash  */
+		0,                         /* tp_call */
+		(reprfunc)vec3_str<float>,                         /* tp_str */
+		(getattrofunc)vec_getattr<3, float>,                         /* tp_getattro */
+		(setattrofunc)vec_setattr<3, float>,                         /* tp_setattro */
+		& hfvec3BufferMethods,                         /* tp_as_buffer */
+		Py_TPFLAGS_DEFAULT |
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */
+		"vec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier float numbers.",           /* tp_doc */
+		0,                         /* tp_traverse */
+		0,                         /* tp_clear */
+		(richcmpfunc)vec_richcompare<3, float>,                         /* tp_richcompare */
+		0,                         /* tp_weaklistoffset */
+		(getiterfunc)vec_geniter<3, float>,                         /* tp_iter */
+		0,                         /* tp_iternext */
+		hfvec3_methods,             /* tp_methods */
+		hfvec3_members,             /* tp_members */
+		0,           			/* tp_getset */
+		0,                         /* tp_base */
+		0,                         /* tp_dict */
+		0,                         /* tp_descr_get */
+		0,                         /* tp_descr_set */
+		0,                         /* tp_dictoffset */
+		(initproc)vec3_init<float>,      /* tp_init */
+		0,                         /* tp_alloc */
+		(newfunc)vec_new<3, float>,                 /* tp_new */
+	},
+	PyGLM_TYPE_VEC,
+	3,
+	0,
+	sizeof(float),
+	sizeof(glm::vec<3, float>),
+	PyGLM_FS_FLOAT
+};
+
+static PyTypeObject& hfvec3Type = *((PyTypeObject*)&hfvec3GLMType);

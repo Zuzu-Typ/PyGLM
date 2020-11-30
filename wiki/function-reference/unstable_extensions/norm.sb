@@ -13,37 +13,37 @@ Various ways to compute vector norms.
 \ul\
 \h3\distance2() function\h3\
 \raw\#### <code>glm.<code>**distance2**(**p0**: *vecN*, **p1**: *vecN*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the squared distance between p0 and p1, i.e., length2(p0 - p1).
+\raw\&emsp;&emsp;\raw\Returns the squared distance between \code\p0\code\ and \code\p1\code\, i.e., \code\length2(p0 - p1)\code\.
 
 \h3\l1Norm() function\h3\
 \raw\#### <code>glm.<code>**l1Norm**(**v**: *vec3*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the L1 norm of v.
+\raw\&emsp;&emsp;\raw\Returns the L1 norm of \code\v\code\.
 
 \raw\#### <code>glm.<code>**l1Norm**(**x**: *vec3*, **y**: *vec3*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the L1 norm between x and y.
+\raw\&emsp;&emsp;\raw\Returns the L1 norm between \code\x\code\ and \code\y\code\.
 
 \h3\l2Norm() function\h3\
 \raw\#### <code>glm.<code>**l2Norm**(**v**: *vec3*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the L2 norm of v.
+\raw\&emsp;&emsp;\raw\Returns the L2 norm of \code\v\code\.
 
 \raw\#### <code>glm.<code>**l2Norm**(**x**: *vec3*, **y**: *vec3*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the L2 norm between x and y.
+\raw\&emsp;&emsp;\raw\Returns the L2 norm between \code\x\code\ and \code\y\code\.
 
 \h3\lMaxNorm() function\h3\
 \raw\#### <code>glm.<code>**lMaxNorm**(**v**: *vec3*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the LMax norm of v.
+\raw\&emsp;&emsp;\raw\Returns the LMax norm of \code\v\code\.
 
 \raw\#### <code>glm.<code>**lMaxNorm**(**x**: *vec3*, **y**: *vec3*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the LMax norm between x and y.
+\raw\&emsp;&emsp;\raw\Returns the LMax norm between \code\x\code\ and \code\y\code\.
 
 \h3\length2() function\h3\
 \raw\#### <code>glm.<code>**length2**(**v**: *vecN*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the squared length of x.
+\raw\&emsp;&emsp;\raw\Returns the squared length of \code\x\code\.
 
 \h3\lxNorm() function\h3\
 \raw\#### <code>glm.<code>**lxNorm**(**v**: *vec3*, **Depth**: *int*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the L norm of v.
+\raw\&emsp;&emsp;\raw\Returns the L norm of \code\v\code\.
 
 \raw\#### <code>glm.<code>**lxNorm**(**x**: *vec3*, **y**: *vec3*, **Depth**: *int*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the L norm between x and y.
+\raw\&emsp;&emsp;\raw\Returns the L norm between \code\x\code\ and \code\y\code\.
 

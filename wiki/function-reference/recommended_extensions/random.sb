@@ -29,23 +29,23 @@ Generate random number from various distribution methods.
 
 \h3\gaussRand() function\h3\
 \raw\#### <code>glm.<code>**gaussRand**(**Mean**: *float*, **Deviation**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Generate random numbers in the interval [Min, Max], according a gaussian distribution.
+\raw\&emsp;&emsp;\raw\Generate random numbers in the interval \code\[Min, Max]\code\, according a gaussian distribution.
 
 \raw\#### <code>glm.<code>**gaussRand**(**Mean**: *vecN*, **Deviation**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Generate random numbers in the interval [Min, Max], according a gaussian distribution.
+\raw\&emsp;&emsp;\raw\Generate random numbers in the interval \code\[Min, Max]\code\, according a gaussian distribution.
 
 \h3\linearRand() function\h3\
 \raw\#### <code>glm.<code>**linearRand**(**Min**: *float*, **Max**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Generate random numbers in the interval [Min, Max], according a linear distribution.
+\raw\&emsp;&emsp;\raw\Generate random numbers in the interval \code\[Min, Max]\code\, according a linear distribution.
 
 \raw\#### <code>glm.<code>**linearRand**(**Min**: *vecN*, **Max**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Generate random numbers in the interval [Min, Max], according a linear distribution.
+\raw\&emsp;&emsp;\raw\Generate random numbers in the interval \code\[Min, Max]\code\, according a linear distribution.
 
 \h3\setSeed() function\h3\
 \raw\#### <code>glm.<code>**setSeed**(**seed**: *int*) -\\> *None*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Sets the seed fot the pseudo-random number generator used by the -Rand functions.
 \raw\&emsp;&emsp;\raw\The seed needs to be greater or equal to zero.
-\raw\&emsp;&emsp;\raw\Default seed is 1.
+\raw\&emsp;&emsp;\raw\Default seed is \code\1\code\.
 
 \h3\sphericalRand() function\h3\
 \raw\#### <code>glm.<code>**sphericalRand**(**Radius**: *float*) -\\> *vec3*</code></code>\raw\

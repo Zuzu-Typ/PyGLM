@@ -12,35 +12,35 @@ Defines functions that generate common 2d transformation matrices.
 \ul\
 \h3\rotate() function\h3\
 \raw\#### <code>glm.<code>**rotate**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\\> *mat4x4*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Builds a rotation 4 * 4 matrix created from an axis vector and an angle.
+\raw\&emsp;&emsp;\raw\Builds a rotation 4 x 4 matrix created from an axis vector and an angle.
 
 \raw\#### <code>glm.<code>**rotate**(**m**: *mat3x3*, **angle**: *number*) -\\> *mat3x3*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Builds a rotation 3 * 3 matrix created from an angle.
-\raw\&emsp;&emsp;\raw\m is the input matrix multiplied by this translation matrix
+\raw\&emsp;&emsp;\raw\Builds a rotation 3 x 3 matrix created from an angle.
+\raw\&emsp;&emsp;\raw\\code\m\code\ is the input matrix multiplied by this translation matrix
 
 \h3\scale() function\h3\
 \raw\#### <code>glm.<code>**scale**(**m**: *mat4x4*, **v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Builds a scale 4 * 4 matrix created from 3 scalars.
+\raw\&emsp;&emsp;\raw\Builds a scale 4 x 4 matrix created from 3 scalars.
 
 \raw\#### <code>glm.<code>**scale**(**m**: *mat3x3*, **v**: *vec2*) -\\> *mat3x3*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Builds a scale 3 * 3 matrix created from a vector of 2 components.
-\raw\&emsp;&emsp;\raw\m is the input matrix multiplied by this translation matrix
+\raw\&emsp;&emsp;\raw\Builds a scale 3 x 3 matrix created from a vector of 2 components.
+\raw\&emsp;&emsp;\raw\\code\m\code\ is the input matrix multiplied by this translation matrix
 
 \h3\shearX() function\h3\
 \raw\#### <code>glm.<code>**shearX**(**m**: *mat3x3*, **y**: *number*) -\\> *mat3x3*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Builds an horizontal (parallel to the x axis) shear 3 * 3 matrix.
-\raw\&emsp;&emsp;\raw\m is the input matrix multiplied by this translation matrix
+\raw\&emsp;&emsp;\raw\Builds an horizontal (parallel to the x axis) shear 3 x 3 matrix.
+\raw\&emsp;&emsp;\raw\\code\m\code\ is the input matrix multiplied by this translation matrix
 
 \h3\shearY() function\h3\
 \raw\#### <code>glm.<code>**shearY**(**m**: *mat3x3*, **x**: *number*) -\\> *mat3x3*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Builds a vertical (parallel to the y axis) shear 3 * 3 matrix.
-\raw\&emsp;&emsp;\raw\m is the input matrix multiplied by this translation matrix
+\raw\&emsp;&emsp;\raw\Builds a vertical (parallel to the y axis) shear 3 x 3 matrix.
+\raw\&emsp;&emsp;\raw\\code\m\code\ is the input matrix multiplied by this translation matrix
 
 \h3\translate() function\h3\
 \raw\#### <code>glm.<code>**translate**(**m**: *mat4x4*, **v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Builds a translation 4 * 4 matrix created from a vector of 3 components.
+\raw\&emsp;&emsp;\raw\Builds a translation 4 x 4 matrix created from a vector of 3 components.
 
 \raw\#### <code>glm.<code>**translate**(**m**: *mat3x3*, **v**: *vec2*) -\\> *mat3x3*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Builds a translation 3 * 3 matrix created from a vector of 2 components.
-\raw\&emsp;&emsp;\raw\m is the input matrix multiplied by this translation matrix
+\raw\&emsp;&emsp;\raw\Builds a translation 3 x 3 matrix created from a vector of 2 components.
+\raw\&emsp;&emsp;\raw\\code\m\code\ is the input matrix multiplied by this translation matrix
 

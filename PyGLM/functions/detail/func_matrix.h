@@ -10,8 +10,8 @@
 
 PyDoc_STRVAR(outerProduct_docstr,
 	"outerProduct(c: vecC, r: vecR) -> matRxC\n"
-	"	Treats the first parameter c as a column vector and the second parameter r as a row vector\n"
-	"	and does a linear algebraic matrix multiply c * r."
+	"	Treats the first parameter `c` as a column vector and the second parameter `r` as a row vector\n"
+	"	and does a linear algebraic matrix multiply `c * r`."
 );
 static PyObject*
 outerProduct_(PyObject*, PyObject* args) {
@@ -115,16 +115,16 @@ outerProduct_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(matrixCompMult_docstr,
 	"matrixCompMult(x: matNxM, y: matNxM) -> matNxM\n"
-	"	Multiply matrix x by matrix y component-wise, i.e., result[i][j] is the scalar product of\n"
-	"	x[i][j] and y[i][j]."
+	"	Multiply matrix `x` by matrix `y` component-wise, i.e., `result[i][j]` is the scalar product of\n"
+	"	`x[i][j]` and `y[i][j]`."
 );
 PyGLM_MAKE_GLM_FUNC_MM__tfF(matrixCompMult)
 
 PyDoc_STRVAR(transpose_docstr,
 	"transpose(x: matNxM) -> matMxN\n"
-	"	Returns the transposed matrix of x."
+	"	Returns the transposed matrix of `x`."
 );
-PyGLM_MAKE_GLM_FUNC_M__tfF(transpose)
+PyGLM_MAKE_GLM_FUNC_M(transpose)
 
 PyDoc_STRVAR(determinant_docstr,
 	"determinant(m: matSxS) -> float\n"

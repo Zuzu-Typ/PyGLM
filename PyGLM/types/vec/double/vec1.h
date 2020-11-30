@@ -69,47 +69,6 @@ static PyNumberMethods hdvec1NumMethods = {
 	(binaryfunc)vec_matmul, //nb_matrix_multiply
 	(binaryfunc)vec_imatmul<1, double>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject hdvec1Type = {
-	PyObject_HEAD_INIT(NULL)
-	"glm.dvec1",             /* tp_name */
-	sizeof(vec<1, double>),             /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	(destructor)vec_dealloc, /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	(reprfunc)vec1_repr<double>,                         /* tp_repr */
-	&hdvec1NumMethods,             /* tp_as_number */
-	&hdvec1SeqMethods,                         /* tp_as_sequence */
-	0,                         /* tp_as_mapping */
-	(hashfunc)vec_hash<1, double>,                         /* tp_hash  */
-	0,                         /* tp_call */
-	(reprfunc)vec1_str<double>,                         /* tp_str */
-	(getattrofunc)vec_getattr<1, double>,                         /* tp_getattro */
-	(setattrofunc)vec_setattr<1, double>,                         /* tp_setattro */
-	&hdvec1BufferMethods,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"dvec1( <vec1 compatible type(s)> )\n1 component vector of high qualifier double numbers.",           /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	(richcmpfunc)vec_richcompare<1, double>,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	(getiterfunc)vec_geniter<1, double>,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	hdvec1_methods,             /* tp_methods */
-	hdvec1_members,             /* tp_members */
-	0,           			/* tp_getset */
-	0,                         /* tp_base */
-	0,                         /* tp_dict */
-	0,                         /* tp_descr_get */
-	0,                         /* tp_descr_set */
-	0,                         /* tp_dictoffset */
-	(initproc)vec1_init<double>,      /* tp_init */
-	0,                         /* tp_alloc */
-	(newfunc)vec_new<1, double>,                 /* tp_new */
-};
 static PyTypeObject hdvec1IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"dvec1Iter",             /* tp_name */
@@ -150,3 +109,55 @@ static PyTypeObject hdvec1IterType = {
 	0,                         /* tp_alloc */
 	(newfunc)vecIter_new<1, double>,                 /* tp_new */
 };
+
+static PyGLMTypeObject hdvec1GLMType = {
+	{
+		PyObject_HEAD_INIT(NULL)
+		"glm.dvec1",             /* tp_name */
+		sizeof(vec<1, double>),             /* tp_basicsize */
+		0,                         /* tp_itemsize */
+		(destructor)vec_dealloc, /* tp_dealloc */
+		0,                         /* tp_print */
+		0,                         /* tp_getattr */
+		0,                         /* tp_setattr */
+		0,                         /* tp_reserved */
+		(reprfunc)vec1_repr<double>,                         /* tp_repr */
+		& hdvec1NumMethods,             /* tp_as_number */
+		& hdvec1SeqMethods,                         /* tp_as_sequence */
+		0,                         /* tp_as_mapping */
+		(hashfunc)vec_hash<1, double>,                         /* tp_hash  */
+		0,                         /* tp_call */
+		(reprfunc)vec1_str<double>,                         /* tp_str */
+		(getattrofunc)vec_getattr<1, double>,                         /* tp_getattro */
+		(setattrofunc)vec_setattr<1, double>,                         /* tp_setattro */
+		& hdvec1BufferMethods,                         /* tp_as_buffer */
+		Py_TPFLAGS_DEFAULT |
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */
+		"dvec1( <vec1 compatible type(s)> )\n1 component vector of high qualifier double numbers.",           /* tp_doc */
+		0,                         /* tp_traverse */
+		0,                         /* tp_clear */
+		(richcmpfunc)vec_richcompare<1, double>,                         /* tp_richcompare */
+		0,                         /* tp_weaklistoffset */
+		(getiterfunc)vec_geniter<1, double>,                         /* tp_iter */
+		0,                         /* tp_iternext */
+		hdvec1_methods,             /* tp_methods */
+		hdvec1_members,             /* tp_members */
+		0,           			/* tp_getset */
+		0,                         /* tp_base */
+		0,                         /* tp_dict */
+		0,                         /* tp_descr_get */
+		0,                         /* tp_descr_set */
+		0,                         /* tp_dictoffset */
+		(initproc)vec1_init<double>,      /* tp_init */
+		0,                         /* tp_alloc */
+		(newfunc)vec_new<1, double>,                 /* tp_new */
+	},
+	PyGLM_TYPE_VEC,
+	1,
+	0,
+	sizeof(double),
+	sizeof(glm::vec<1, double>),
+	PyGLM_FS_DOUBLE
+};
+
+static PyTypeObject& hdvec1Type = *((PyTypeObject*)&hdvec1GLMType);
