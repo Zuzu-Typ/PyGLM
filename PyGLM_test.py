@@ -487,7 +487,7 @@ def test_array_types():
 
     assert glm.array.as_reference(mv) == arr
     assert glm.array.as_reference(mv).reference == mv
-    assert glm.array.as_reference(mv).address == arr.address
+    assert glm.array.as_reference(arr).address == arr.address
 
     assert len(arr) == 2, arr
     assert arr.typecode == "f", arr
