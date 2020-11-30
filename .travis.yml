@@ -4,6 +4,7 @@ python:
   - 3.6
   - 3.7
   - 3.8
+  - 3.9
   
 before_install:
   - |
@@ -79,7 +80,7 @@ deploy:
     
 env:
   global:
-  - CIBW_SKIP="cp34-* cp39-*"
+  - CIBW_SKIP="cp34-*
   - CIBW_BUILD=cp3?-*
   - CIBW_TEST_REQUIRES=pytest
   - CIBW_TEST_COMMAND="pytest {project}/PyGLM_test.py -v"
