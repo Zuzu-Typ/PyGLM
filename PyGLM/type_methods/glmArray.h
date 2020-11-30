@@ -4881,7 +4881,7 @@ static PyObject* glmArray_mul(PyObject* obj1, PyObject* obj2) {
 				return NULL;
 			}
 
-			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype && arr1->glmType == PyGLM_TYPE_VEC) {
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || (arr1->subtype == arr2->subtype && arr1->glmType == PyGLM_TYPE_VEC)) {
 				switch (arr1->format) {
 					case get_format_specifier<float>() :
 						return glmArray_mul_T_SEQ<float>(arr1, arr2);
