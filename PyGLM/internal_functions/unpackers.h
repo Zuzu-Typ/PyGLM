@@ -10,7 +10,7 @@
 
 template<int L, typename T>
 static bool unpack_vec(PyObject* value, glm::vec<L, T>& out) {
-	if (PyObject_TypeCheck(value, UNBRACKET(PyGLM_VEC_TYPE<L, T>()))) {
+	if (PyObject_TypeCheck(value, (UNBRACKET(PyGLM_VEC_TYPE<L, T>())))) {
 		out = ((vec<L, T>*)value)->super_type;
 		return true;
 	}
@@ -37,7 +37,7 @@ static glm::vec<L, T> unpack_vec(PyObject* value) {
 
 template<int C, int R, typename T>
 static bool unpack_mat(PyObject* value, glm::mat<C, R, T>& out) {
-	if (PyObject_TypeCheck(value, UNBRACKET(PyGLM_MAT_TYPE<C, R, T>()))) {
+	if (PyObject_TypeCheck(value, (UNBRACKET(PyGLM_MAT_TYPE<C, R, T>())))) {
 		out = ((mat<C, R, T>*)value)->super_type;
 		return true;
 	}
@@ -62,7 +62,7 @@ static glm::mat<C, R, T> unpack_mat(PyObject* value) {
 
 template<typename T>
 static bool unpack_qua(PyObject* value, glm::qua<T>& out) {
-	if (PyObject_TypeCheck(value, UNBRACKET(PyGLM_QUA_TYPE<T>()))) {
+	if (PyObject_TypeCheck(value, (UNBRACKET(PyGLM_QUA_TYPE<T>())))) {
 		out = ((qua<T>*)value)->super_type;
 		return true;
 	}

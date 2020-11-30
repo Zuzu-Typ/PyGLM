@@ -4,6 +4,7 @@ python:
   - 3.6
   - 3.7
   - 3.8
+  - 3.9
   
 before_install:
   - |
@@ -43,6 +44,7 @@ jobs:
     install: python3 -m pip install twine cibuildwheel
     script:
     - python3 -m cibuildwheel --output-dir ./wheelhouse
+    - python3 setup.py sdist -d ./wheelhouse
     - ls wheelhouse
     after_success: |
       if [[ $TRAVIS_TAG ]]; then python3 -m pip install twine; python3 -m twine upload --skip-existing wheelhouse/*.whl; fi
@@ -79,7 +81,7 @@ deploy:
     
 env:
   global:
-  - CIBW_SKIP="cp34-* cp39-*"
+  - CIBW_SKIP="cp34-*
   - CIBW_BUILD=cp3?-*
   - CIBW_TEST_REQUIRES=pytest
   - CIBW_TEST_COMMAND="pytest {project}/PyGLM_test.py -v"
