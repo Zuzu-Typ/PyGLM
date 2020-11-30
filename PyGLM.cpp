@@ -35,12 +35,14 @@
 
 
 //static PyObject*
-//test(PyObject*, ctypes_helper* arg) {
-//	uint64 ptr1 = reinterpret_cast<uint64>(&hfvec1Type);
-//	uint64 ptr2 = reinterpret_cast<uint64>(&hfvec1GLMType.typeObject);
+//test(PyObject*, PyObject* arg) {
 //
-//	PyGLMTypeObject* ptr3 =(&hfvec1GLMType);
-//	PyGLMTypeObject* ptr4 =(PyGLMTypeObject::fromTypeObjectPointer(&hfvec1Type));
+//
+//	uint64 ptr1 = reinterpret_cast<uint64>(&hbvec1Type);
+//	uint64 ptr2 = reinterpret_cast<uint64>(&hbvec1GLMType.typeObject);
+//
+//	PyGLMTypeObject* ptr3 =(&hbvec1GLMType);
+//	PyGLMTypeObject* ptr4 =((PyGLMTypeObject*)(&hbvec1Type));
 //	
 //	//PyGLMTypeInfo pti(PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLMTypeInfo::getDT<float>(), arg);
 //	////return pack(*((glm::mat<4,4, float>*)pti.data));
@@ -146,6 +148,15 @@ static PyMethodDef glmmethods[] = {
 
 	// matrix_transform_2d
 	MATRIX_TRANSFORM_2D_METHODS,
+
+	// unary
+	UNARY_METHODS,
+
+	// binary
+	BINARY_METHODS,
+
+	// ternary
+	TERNARY_METHODS,
 
 	// PyGLM functions
 	{ "silence", (PyCFunction)silence, METH_O, silence_docstr },
@@ -371,7 +382,6 @@ extern "C" {
 		module_glm = PyModule_Create(&glmmodule);
 		if (module_glm == NULL)
 			return NULL;
-
 
 //#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 //		// backwards compatibility

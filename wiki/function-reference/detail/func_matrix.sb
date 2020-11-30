@@ -23,15 +23,15 @@ It contains GLSL matrix functions.
 
 \h3\matrixCompMult() function\h3\
 \raw\#### <code>glm.<code>**matrixCompMult**(**x**: *matNxM*, **y**: *matNxM*) -\\> *matNxM*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Multiply matrix x by matrix y component-wise, i.e., result[i][j] is the scalar product of
-\raw\&emsp;&emsp;\raw\x[i][j] and y[i][j].
+\raw\&emsp;&emsp;\raw\Multiply matrix \code\x\code\ by matrix \code\y\code\ component-wise, i.e., \code\result[i][j]\code\ is the scalar product of
+\raw\&emsp;&emsp;\raw\\code\x[i][j]\code\ and \code\y[i][j]\code\.
 
 \h3\outerProduct() function\h3\
 \raw\#### <code>glm.<code>**outerProduct**(**c**: *vecC*, **r**: *vecR*) -\\> *matRxC*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Treats the first parameter c as a column vector and the second parameter r as a row vector
-\raw\&emsp;&emsp;\raw\and does a linear algebraic matrix multiply c * r.
+\raw\&emsp;&emsp;\raw\Treats the first parameter \code\c\code\ as a column vector and the second parameter \code\r\code\ as a row vector
+\raw\&emsp;&emsp;\raw\and does a linear algebraic matrix multiply \code\c * r\code\.
 
 \h3\transpose() function\h3\
 \raw\#### <code>glm.<code>**transpose**(**x**: *matNxM*) -\\> *matMxN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the transposed matrix of x.
+\raw\&emsp;&emsp;\raw\Returns the transposed matrix of \code\x\code\.
 

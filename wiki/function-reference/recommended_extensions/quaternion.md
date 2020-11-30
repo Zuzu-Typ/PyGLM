@@ -23,11 +23,11 @@ Defines a templated quaternion type and several quaternion operations\.
   
 ### mat3\_cast\(\) function  
 #### <code>glm.<code>**mat3_cast**(**x**: *quat*) -\> *mat3*</code></code>  
-&emsp;&emsp;Converts a quaternion to a 3 \* 3 matrix\.  
+&emsp;&emsp;Converts a quaternion to a 3 x 3 matrix\.  
   
 ### mat4\_cast\(\) function  
 #### <code>glm.<code>**mat4_cast**(**x**: *quat*) -\> *mat4*</code></code>  
-&emsp;&emsp;Converts a quaternion to a 4 \* 4 matrix\.  
+&emsp;&emsp;Converts a quaternion to a 4 x 4 matrix\.  
   
 ### pitch\(\) function  
 #### <code>glm.<code>**pitch**(**x**: *quat*) -\> *float*</code></code>  
@@ -47,10 +47,10 @@ Defines a templated quaternion type and several quaternion operations\.
   
 ### quat\_cast\(\) function  
 #### <code>glm.<code>**quat_cast**(**x**: *mat3*) -\> *quat*</code></code>  
-&emsp;&emsp;Converts a pure rotation 3 \* 3 matrix to a quaternion\.  
+&emsp;&emsp;Converts a pure rotation 3 x 3 matrix to a quaternion\.  
   
 #### <code>glm.<code>**quat_cast**(**x**: *mat4*) -\> *quat*</code></code>  
-&emsp;&emsp;Converts a pure rotation 4 \* 4 matrix to a quaternion\.  
+&emsp;&emsp;Converts a pure rotation 4 x 4 matrix to a quaternion\.  
   
 ### roll\(\) function  
 #### <code>glm.<code>**roll**(**x**: *quat*) -\> *float*</code></code>  

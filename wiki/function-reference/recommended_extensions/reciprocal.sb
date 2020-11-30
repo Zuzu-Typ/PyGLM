@@ -43,7 +43,7 @@ Define secant, cosecant and cotangent functions.
 
 \h3\cot() function\h3\
 \raw\#### <code>glm.<code>**cot**(**angle**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Cotangent function. adjacent / opposite or 1 / tan(x).
+\raw\&emsp;&emsp;\raw\Cotangent function. adjacent / opposite or \code\1 / tan(x)\code\.
 
 \h3\coth() function\h3\
 \raw\#### <code>glm.<code>**coth**(**angle**: *float*) -\\> *float*</code></code>\raw\
@@ -51,7 +51,7 @@ Define secant, cosecant and cotangent functions.
 
 \h3\csc() function\h3\
 \raw\#### <code>glm.<code>**csc**(**angle**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Cosecant function. hypotenuse / opposite or 1 / sin(x).
+\raw\&emsp;&emsp;\raw\Cosecant function. hypotenuse / opposite or \code\1 / sin(x)\code\.
 
 \h3\csch() function\h3\
 \raw\#### <code>glm.<code>**csch**(**angle**: *float*) -\\> *float*</code></code>\raw\
@@ -59,7 +59,7 @@ Define secant, cosecant and cotangent functions.
 
 \h3\sec() function\h3\
 \raw\#### <code>glm.<code>**sec**(**angle**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Secant function. hypotenuse / adjacent or 1 / cos(x).
+\raw\&emsp;&emsp;\raw\Secant function. hypotenuse / adjacent or \code\1 / cos(x)\code\.
 
 \h3\sech() function\h3\
 \raw\#### <code>glm.<code>**sech**(**angle**: *float*) -\\> *float*</code></code>\raw\

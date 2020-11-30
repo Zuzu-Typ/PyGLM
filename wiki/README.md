@@ -6,8 +6,8 @@ The wiki is continuously growing and improving\.
   
 I recommend starting at [PyGLM Types](PyGLM-Types.md) if you're new\.  
   
-For a **reference of all of PyGLM's functions**, take a look over [here](function-reference/README.md)\.  
-You can also refer to the Python Help system or \_\_doc\_\_ fields if you need more info about individual functions\.  
+You can also have a look at the[reference of PyGLM's functions](function-reference/README.md)\.  
+\(Or refer to the Python Help system or \_\_doc\_\_ fields if you need more info about individual functions\)\.  
 ``` Python
 >>> help(glm.identity)
 Help on built-in function identity in module glm:

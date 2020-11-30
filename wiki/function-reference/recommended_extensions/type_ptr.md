@@ -91,8 +91,8 @@ Handles the interaction between pointers and vector, matrix types\. This extensi
   
 ### sizeof\(\) function  
 #### <code>glm.<code>**sizeof**(**x**: *type*) -\> *int*</code></code>  
-&emsp;&emsp;Return the data size of x in bytes\.  
-&emsp;&emsp;E\.g\. sizeof\(vec4\) == sizeof\(float32\) \* 4 = 4 \* 4 = 16\.  
+&emsp;&emsp;Return the data size of ``` x ``` in bytes\.  
+&emsp;&emsp;E\.g\. ``` sizeof(vec4) == sizeof(float32) * 4 = 4 * 4 = 16 ```\.  
   
 ### value\_ptr\(\) function  
 #### <code>glm.<code>**value_ptr**(**x**) -\> *ctypes pointer*</code></code>  

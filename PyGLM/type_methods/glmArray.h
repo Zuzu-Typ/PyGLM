@@ -510,7 +510,7 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
 		return -1;
 	}
-	if ((flags & PyBUF_F_CONTIGUOUS) == PyBUF_F_CONTIGUOUS) {
+	if ((flags & PyBUF_STRIDES) != PyBUF_STRIDES || (flags & PyBUF_C_CONTIGUOUS) == PyBUF_C_CONTIGUOUS) {
 		PyErr_SetString(PyExc_BufferError, "This type of buffer is not supported.");
 		view->obj = NULL;
 		return -1;
@@ -538,8 +538,8 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 			view->shape = (Py_ssize_t*)PyMem_Malloc(3 * sizeof(Py_ssize_t));
 			if (view->shape != NULL) {
 				view->shape[0] = self->itemCount;
-				view->shape[1] = C;
-				view->shape[2] = R;
+				view->shape[1] = R;
+				view->shape[2] = C;
 			}
 		}
 		else {
@@ -549,8 +549,8 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 			view->strides = (Py_ssize_t*)PyMem_Malloc(3 * sizeof(Py_ssize_t));
 			if (view->strides != NULL) {
 				view->strides[0] =  self->dtSize * C * R;
-				view->strides[1] = R * self->dtSize;
-				view->strides[2] = self->dtSize;
+				view->strides[1] = self->dtSize;
+				view->strides[2] = R * self->dtSize;
 			}
 		}
 		else {
@@ -641,6 +641,8 @@ glmArray_releasebuffer(PyObject* self, Py_buffer* view) {
 }
 
 
+
+
 static PyObject* 
 glmArray_to_list(glmArray* self, PyObject*) {
 	PyObject* out = PyList_New(self->itemCount);
@@ -649,6 +651,8 @@ glmArray_to_list(glmArray* self, PyObject*) {
 	}
 	return out;
 }
+
+
 
 
 static PyObject* 
@@ -717,6 +721,8 @@ glmArray_from_numbers_init(glmArray* out, PyObject* tuple, Py_ssize_t& argCount)
 
 	return true;
 }
+
+
 
 static PyObject*
 glmArray_from_numbers(PyObject*, PyObject* args) {
@@ -810,9 +816,7 @@ PyBuffer_Release(&view);\
 return (PyObject*)out
 
 #define GLM_ARRAY_AS_REFERENCE_IF_IS_MAT_BUFFER(T) \
-out->dtSize = sizeof(T);\
 out->itemSize = C * R * out->dtSize;\
-out->nBytes = out->itemSize * out->itemCount;\
 out->subtype = (C == 2) ? (R == 2) ? PyGLM_MAT_TYPE<2, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<2, 3, T>() : PyGLM_MAT_TYPE<2, 4, T>() :\
 (C == 3) ? (R == 2) ? PyGLM_MAT_TYPE<3, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<3, 3, T>() : PyGLM_MAT_TYPE<3, 4, T>() :\
 (R == 2) ? PyGLM_MAT_TYPE<4, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<4, 3, T>() : PyGLM_MAT_TYPE<4, 4, T>();\
@@ -826,6 +830,8 @@ out->nBytes = out->itemSize * out->itemCount;\
 out->subtype = PyGLM_CTYPES_TYPE<T>();\
 PyBuffer_Release(&view);\
 return (PyObject*)out
+
+
 
 static PyObject*
 glmArray_as_reference(PyObject*, PyObject* arg) {
@@ -856,7 +862,7 @@ glmArray_as_reference(PyObject*, PyObject* arg) {
 	}
 	if (PyObject_CheckBuffer(arg)) {
 		Py_buffer view;
-		if (PyObject_GetBuffer(arg, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1) {
+		if (PyObject_GetBuffer(arg, &view, PyBUF_RECORDS_RO) == -1) {
 			PyBuffer_Release(&view);
 			return NULL;
 		}
@@ -960,9 +966,42 @@ glmArray_as_reference(PyObject*, PyObject* arg) {
 			out->itemCount = view.shape[0];
 			int R = static_cast<int>(view.shape[1]);
 			int C = static_cast<int>(view.shape[2]);
+
+			if (view.strides[0] != view.itemsize * C * R || view.strides[1] != view.itemsize || view.strides[2] != view.itemsize * R) {
+				if (PyGLM_SHOW_WARNINGS & PyGLM_NO_REFERENCE_POSSIBLE_WARNING) {
+					PyErr_WarnEx(PyExc_UserWarning, "The given array has an incompatible memory layout, therefore it will be copied!\n(You can silence this warning using glm.silence(3))", 1);
+				}
+
+				Py_DECREF(out->reference);
+				out->reference = NULL;
+				out->readonly = 0;
+
+				out->data = PyMem_Malloc(view.len);
+				if (out->data == NULL) {
+					PyErr_SetString(PyExc_MemoryError, "out of memory");
+					return NULL;
+				}
+
+				char* dataPtr = (char*)out->data;
+				char* bufPtr = (char*)view.buf;
+
+				for (ssize_t i0 = 0; i0 < out->itemCount; i0++) {
+					for (ssize_t i1 = 0; i1 < R; i1++) {
+						for (ssize_t i2 = 0; i2 < C; i2++) {
+							ssize_t origOffset = (view.strides[0] * i0 + view.strides[1] * i1 + view.strides[2] * i2);
+							ssize_t targetOffset = (out->itemCount * C * R * i0 + view.itemsize * i1 + view.itemsize * R * i2);
+							memcpy(dataPtr + targetOffset, bufPtr + origOffset, view.itemsize);
+						}
+					}
+				}
+			}
+
 			out->shape[0] = static_cast<uint8>(C);
 			out->shape[1] = static_cast<uint8>(R);
 			out->format = view.format[0];
+
+			out->dtSize = view.itemsize;
+			out->nBytes = view.len;
 
 			if (out->format == 'l') out->format = 'i';
 			else if (out->format == 'L') out->format = 'I';
@@ -1007,30 +1046,6 @@ glmArray_zeros_return(glmArray*& out, long& count) {
 
 	return (PyObject*)out;
 }
-#define GLM_ARRAY_ZEROS_IF_IS_VEC(L, T)\
-if (type == PyGLM_VEC_TYPE<L, T>()) {\
-	out->dtSize = sizeof(T);\
-	out->itemSize = sizeof(glm::vec<L, T>);\
-	out->shape[0] = L;\
-	out->format = get_format_specifier<T>();\
-	return glmArray_zeros_return(out, count);\
-}
-#define GLM_ARRAY_ZEROS_IF_IS_MAT(C, R, T)\
-if (type == PyGLM_MAT_TYPE<C, R, T>()) {\
-	out->dtSize = sizeof(T);\
-	out->itemSize = sizeof(glm::mat<C, R, T>);\
-	out->shape[0] = C;\
-	out->shape[1] = R;\
-	out->format = get_format_specifier<T>();\
-	return glmArray_zeros_return(out, count);\
-}
-#define GLM_ARRAY_ZEROS_IF_IS_QUA(T)\
-if (type == PyGLM_QUA_TYPE<T>()) {\
-	out->dtSize = sizeof(T);\
-	out->itemSize = sizeof(glm::qua<T>);\
-	out->format = get_format_specifier<T>();\
-	return glmArray_zeros_return(out, count);\
-}
 #define GLM_ARRAY_ZEROS_IF_IS_CTYPES(T)\
 if (type == PyGLM_CTYPES_TYPE<T>()) {\
 	out->dtSize = sizeof(T);\
@@ -1038,6 +1053,8 @@ if (type == PyGLM_CTYPES_TYPE<T>()) {\
 	out->format = get_format_specifier<T>();\
 	return glmArray_zeros_return(out, count);\
 }
+
+
 
 static PyObject*
 glmArray_zeros(PyObject*, PyObject* args) {
@@ -1061,117 +1078,25 @@ glmArray_zeros(PyObject*, PyObject* args) {
 		out->readonly = false;
 		out->reference = NULL;
 
-		if (type->tp_dealloc == vec_dealloc || type->tp_dealloc == mvec_dealloc) {
-			out->glmType = PyGLM_TYPE_VEC;
+		if (PyGLM_Is_PyGLM_Type(type)) {
+			PyGLMTypeObject* asPyGLMType = (PyGLMTypeObject*)type;
+			out->glmType = asPyGLMType->glmType & PyGLM_TYPE_MVEC_FILTER;
+			out->dtSize = asPyGLMType->dtSize;
+			out->itemSize = asPyGLMType->itemSize;
+			out->shape[0] = asPyGLMType->C;
+			out->shape[1] = asPyGLMType->R;
+			out->format = asPyGLMType->format;
+			out->nBytes = out->itemSize * count;
+			out->data = PyMem_Calloc(count, out->itemSize);
 
-			GLM_ARRAY_ZEROS_IF_IS_VEC(1, float);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(2, float);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(3, float);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(4, float);
+			if (out->data == NULL) {
+				PyErr_SetString(PyExc_MemoryError, "Out of memory");
+				return NULL;
+			}
 
-			GLM_ARRAY_ZEROS_IF_IS_VEC(1, double);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(2, double);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(3, double);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(4, double);
-
-			GLM_ARRAY_ZEROS_IF_IS_VEC(1, int32);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(2, int32);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(3, int32);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(4, int32);
-
-			GLM_ARRAY_ZEROS_IF_IS_VEC(1, uint32);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(2, uint32);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(3, uint32);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(4, uint32);
-
-			GLM_ARRAY_ZEROS_IF_IS_VEC(1, int64);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(2, int64);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(3, int64);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(4, int64);
-
-			GLM_ARRAY_ZEROS_IF_IS_VEC(1, uint64);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(2, uint64);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(3, uint64);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(4, uint64);
-
-			GLM_ARRAY_ZEROS_IF_IS_VEC(1, int16);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(2, int16);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(3, int16);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(4, int16);
-
-			GLM_ARRAY_ZEROS_IF_IS_VEC(1, uint16);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(2, uint16);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(3, uint16);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(4, uint16);
-
-			GLM_ARRAY_ZEROS_IF_IS_VEC(1, int8);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(2, int8);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(3, int8);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(4, int8);
-
-			GLM_ARRAY_ZEROS_IF_IS_VEC(1, uint8);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(2, uint8);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(3, uint8);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(4, uint8);
-
-			GLM_ARRAY_ZEROS_IF_IS_VEC(1, bool);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(2, bool);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(3, bool);
-			GLM_ARRAY_ZEROS_IF_IS_VEC(4, bool);
+			return (PyObject*)out;
 		}
-		if (type->tp_dealloc == mat_dealloc) {
-			out->glmType = PyGLM_TYPE_MAT;
 
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 2, float);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 3, float);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 4, float);
-
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 2, double);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 3, double);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 4, double);
-
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 2, int32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 3, int32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 4, int32);
-
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 2, uint32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 3, uint32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 4, uint32);
-
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 3, float);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 4, float);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 2, float);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 4, float);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 2, float);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 3, float);
-
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 3, double);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 4, double);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 2, double);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 4, double);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 2, double);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 3, double);
-
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 3, int32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 4, int32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 2, int32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 4, int32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 2, int32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 3, int32);
-
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 3, uint32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(2, 4, uint32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 2, uint32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(3, 4, uint32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 2, uint32);
-			GLM_ARRAY_ZEROS_IF_IS_MAT(4, 3, uint32);
-		}
-		if (type->tp_dealloc == qua_dealloc) {
-			out->glmType = PyGLM_TYPE_QUA;
-
-			GLM_ARRAY_ZEROS_IF_IS_QUA(float);
-			GLM_ARRAY_ZEROS_IF_IS_QUA(double);
-		}
 		if (type->tp_dealloc == ctypes_dealloc) {
 			out->glmType = PyGLM_TYPE_CTYPES;
 
@@ -1194,6 +1119,8 @@ glmArray_zeros(PyObject*, PyObject* args) {
 	return NULL;
 }
 
+
+
 static PyObject*
 glmArray_getstate(glmArray* self, PyObject*) {
 	return PyTuple_Pack(10,
@@ -1209,6 +1136,8 @@ glmArray_getstate(glmArray* self, PyObject*) {
 		self->subtype
 		);
 }
+
+
 
 static PyObject*
 glmArray_setstate(glmArray* self, PyObject* state) {
@@ -1241,7 +1170,7 @@ glmArray_len(glmArray* self) {
 
 static PyObject* glmArray_concat(PyObject* obj1, PyObject* obj2) {
 	if (!PyObject_TypeCheck(obj1, &glmArrayType) || !PyObject_TypeCheck(obj2, &glmArrayType)) {
-		PyGLM_TYPEERROR_2O("invalid operand type(s) for +: ", obj1, obj2);
+		PyGLM_TYPEERROR_2O("invalid argument type(s) for concat(): ", obj1, obj2);
 		return NULL;
 	}
 
@@ -1284,36 +1213,44 @@ static PyObject* glmArray_concat(PyObject* obj1, PyObject* obj2) {
 	return (PyObject*)out;
 }
 
-static PyObject* glmArray_repeat(glmArray* self, Py_ssize_t count) {
-	glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
-	PyGLM_ASSERT((out != NULL), "generated array was NULL. (maybe we're out of memory?)");
+static PyObject* glmArray_repeat(glmArray* self, PyObject* count) {
+	if (PyLong_Check(count)) {
+		glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
+		PyGLM_ASSERT((out != NULL), "generated array was NULL. (maybe we're out of memory?)");
 
-	out->dtSize = self->dtSize;
-	out->format = self->format;
-	out->glmType = self->glmType;
-	out->itemCount = self->itemCount * count;
-	out->itemSize = self->itemSize;
-	out->nBytes = self->nBytes * count;
-	memcpy(out->shape, self->shape, sizeof(out->shape));
-	out->subtype = self->subtype;
+		Py_ssize_t countAsSsizet = PyLong_AsSsize_t(count);
 
-	out->data = PyMem_Malloc(out->nBytes);
-	if (out->data == NULL) {
-		PyErr_SetString(PyExc_MemoryError, "out of memory");
-		return NULL;
-	}
-	if (count >= 1) {
-		memcpy(out->data, self->data, self->nBytes);
-	}
-	for (ssize_t i = 1; i < count;) {
-		ssize_t destOffset = i * self->nBytes;
-		ssize_t copyCount = std::min(i, count - i);
-		size_t copySize = (size_t)copyCount * (size_t)self->nBytes;
-		memcpy(((char*)out->data) + destOffset, out->data, copySize);
-		i += copyCount;
-	}
+		PyGLM_ASSERT((countAsSsizet >= 0), "count must not be negative");
 
-	return (PyObject*)out;
+		out->dtSize = self->dtSize;
+		out->format = self->format;
+		out->glmType = self->glmType;
+		out->itemCount = self->itemCount * countAsSsizet;
+		out->itemSize = self->itemSize;
+		out->nBytes = self->nBytes * countAsSsizet;
+		memcpy(out->shape, self->shape, sizeof(out->shape));
+		out->subtype = self->subtype;
+
+		out->data = PyMem_Malloc(out->nBytes);
+		if (out->data == NULL) {
+			PyErr_SetString(PyExc_MemoryError, "out of memory");
+			return NULL;
+		}
+		if (countAsSsizet >= 1) {
+			memcpy(out->data, self->data, self->nBytes);
+		}
+		for (ssize_t i = 1; i < countAsSsizet;) {
+			ssize_t destOffset = i * self->nBytes;
+			ssize_t copyCount = std::min(i, countAsSsizet - i);
+			size_t copySize = (size_t)copyCount * (size_t)self->nBytes;
+			memcpy(((char*)out->data) + destOffset, out->data, copySize);
+			i += copyCount;
+		}
+
+		return (PyObject*)out;
+	}
+	PyGLM_TYPEERROR_O("Invalid argument type for repeat(): Expected int, got ", count);
+	return NULL;
 }
 
 static PyObject* glmArray_inplace_concat(glmArray* self, PyObject* obj) {
@@ -1330,7 +1267,7 @@ static PyObject* glmArray_inplace_concat(glmArray* self, PyObject* obj) {
 	return (PyObject*)self;
 }
 
-static PyObject* glmArray_inplace_repeat(glmArray* self, Py_ssize_t count) {
+static PyObject* glmArray_inplace_repeat(glmArray* self, PyObject* count) {
 	glmArray* temp = (glmArray*)glmArray_repeat(self, count);
 
 	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
@@ -1611,13 +1548,14 @@ glmArray_str_mat(glmArray* self) {
 		snprintf(currentIndex, 3 + 1, " [\n");
 		currentIndex += 3;
 
-		for (ssize_t columnIndex = 0; columnIndex < C; columnIndex++) {
-			T* values = &((T*)self->data)[itemIndex * (C * R) + columnIndex * R];
-			snprintf(currentIndex, 4 + 12 + 1, "  [ %12.6g", static_cast<double>(values[0]));
+		T* values = &((T*)self->data)[itemIndex * (C * R)];
+
+		for (ssize_t rowIndex = 0; rowIndex < R; rowIndex++) {
+			snprintf(currentIndex, 4 + 12 + 1, "  [ %12.6g", static_cast<double>(values[rowIndex]));
 			currentIndex += 4 + 12;
 
-			for (ssize_t valueIndex = 1; valueIndex < R; valueIndex++) {
-				snprintf(currentIndex, 2 + 12 + 1, ", %12.6g", static_cast<double>(values[valueIndex]));
+			for (ssize_t valueIndex = 1; valueIndex < C; valueIndex++) {
+				snprintf(currentIndex, 2 + 12 + 1, ", %12.6g", static_cast<double>(values[valueIndex * R + rowIndex]));
 				currentIndex += 2 + 12;
 			}
 
@@ -2070,139 +2008,6 @@ glmArray_geniter(glmArray* self) {
 	return (PyObject*)rgstate;
 }
 
-#define GLM_ARRAY_INIT_IF_IS_MAT_ITER(C, R, T) if (firstElementType == UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) {return UNBRACKET (glmArray_init_mat_iter<C, R, T>(self, firstElement, iterator, argCount));}
-
-template<int C, int R, typename T>
-static int
-glmArray_init_mat_iter(glmArray* self, PyObject* firstElement, PyObject* iterator, Py_ssize_t argCount) {
-	self->itemCount = argCount;
-	self->dtSize = sizeof(T);
-	self->itemSize = sizeof(glm::mat<C, R, T>);
-	self->nBytes = self->itemSize * argCount;
-	self->subtype = PyGLM_MAT_TYPE<C, R, T>();
-	self->glmType = PyGLM_TYPE_MAT;
-	self->shape[0] = C;
-	self->shape[1] = R;
-	self->format = get_format_specifier<T>();
-	self->data = PyMem_Malloc(self->nBytes);
-
-	if (self->data == NULL) {
-		PyErr_SetString(PyExc_MemoryError, "array creation failed");
-		Py_DECREF(iterator);
-		Py_DECREF(firstElement);
-		return -1;
-	}
-	glm::mat<C, R, T>* dataAsVecPtr = (glm::mat<C, R, T>*)self->data;
-	dataAsVecPtr[0] = ((mat<C, R, T>*)firstElement)->super_type;
-	Py_DECREF(firstElement);
-	for (Py_ssize_t i = 1; i < argCount; i++) {
-		mat<C, R, T>* currentArg = (mat<C, R, T> *)PyIter_Next(iterator);
-		if (Py_TYPE(currentArg) != self->subtype) {
-			PyGLM_free(self->data);
-			PyErr_SetString(PyExc_TypeError, "arrays have to be initialized with arguments of the same glm type");
-			Py_DECREF(iterator);
-			Py_DECREF(currentArg);
-			return -1;
-		}
-		dataAsVecPtr[i] = currentArg->super_type;
-		Py_DECREF(currentArg);
-	}
-	Py_DECREF(iterator);
-	return 0;
-}
-
-#define GLM_ARRAY_INIT_IF_IS_VEC_ITER(L, T) if (firstElementType == UNBRACKET (PyGLM_VEC_TYPE<L, T>()) || firstElementType == UNBRACKET (PyGLM_MVEC_TYPE<L, T>())) {return UNBRACKET (glmArray_init_vec_iter<L, T>(self, firstElement, iterator, argCount));}
-
-template<int L, typename T>
-static int
-glmArray_init_vec_iter(glmArray* self, PyObject* firstElement, PyObject* iterator, Py_ssize_t argCount) {
-	self->itemCount = argCount;
-	self->dtSize = sizeof(T);
-	self->itemSize = sizeof(glm::vec<L, T>);
-	self->nBytes = self->itemSize * argCount;
-	self->subtype = PyGLM_VEC_TYPE<L, T>();
-	self->glmType = PyGLM_TYPE_VEC;
-	self->shape[0] = L;
-	self->format = get_format_specifier<T>();
-	self->data = PyMem_Malloc(self->nBytes);
-
-	if (self->data == NULL) {
-		PyErr_SetString(PyExc_MemoryError, "array creation failed");
-		Py_DECREF(iterator);
-		Py_DECREF(firstElement);
-		return -1;
-	}
-	glm::vec<L, T>* dataAsVecPtr = (glm::vec<L, T>*)self->data;
-	if (Py_TYPE(firstElement) == self->subtype) {
-		dataAsVecPtr[0] = ((vec<L, T>*)firstElement)->super_type;
-	}
-	else if (Py_TYPE(firstElement) == PyGLM_MVEC_TYPE<L, T>()) {
-		dataAsVecPtr[0] = *((mvec<L, T>*)firstElement)->super_type;
-	}
-	Py_DECREF(firstElement);
-	for (Py_ssize_t i = 1; i < argCount; i++) {
-		vec<L, T>* currentArg = (vec<L, T>*)PyIter_Next(iterator);
-		if (currentArg == NULL) {
-			break;
-		}
-		if (Py_TYPE(currentArg) == self->subtype) {
-			dataAsVecPtr[i] = currentArg->super_type;
-		}
-		else if (Py_TYPE(currentArg) == PyGLM_MVEC_TYPE<L, T>()) {
-			dataAsVecPtr[i] = *((mvec<L, T>*)currentArg)->super_type;
-		}
-		else {
-			PyGLM_free(self->data);
-			PyErr_SetString(PyExc_TypeError, "arrays have to be initialized with arguments of the same glm type");
-			Py_DECREF(iterator);
-			Py_DECREF(currentArg);
-			return -1;
-		}
-		Py_DECREF(currentArg);
-	}
-	Py_DECREF(iterator);
-	return 0;
-}
-
-#define GLM_ARRAY_INIT_IF_IS_QUA_ITER(T) if (firstElementType == UNBRACKET (PyGLM_QUA_TYPE<T>())) {return UNBRACKET (glmArray_init_qua_iter<T>(self, firstElement, iterator, argCount));}
-
-template<typename T>
-static int
-glmArray_init_qua_iter(glmArray* self, PyObject* firstElement, PyObject* iterator, Py_ssize_t argCount) {
-	self->itemCount = argCount;
-	self->dtSize = sizeof(T);
-	self->itemSize = sizeof(glm::qua<T>);
-	self->nBytes = self->itemSize * argCount;
-	self->subtype = PyGLM_QUA_TYPE<T>();
-	self->glmType = PyGLM_TYPE_QUA;
-	self->format = get_format_specifier<T>();
-	self->data = PyMem_Malloc(self->nBytes);
-
-	if (self->data == NULL) {
-		PyErr_SetString(PyExc_MemoryError, "array creation failed");
-		Py_DECREF(iterator);
-		Py_DECREF(firstElement);
-		return -1;
-	}
-	glm::qua<T>* dataAsVecPtr = (glm::qua<T>*)self->data;
-	dataAsVecPtr[0] = ((qua<T>*)firstElement)->super_type;
-	Py_DECREF(firstElement);
-	for (Py_ssize_t i = 1; i < argCount; i++) {
-		qua<T>* currentArg = (qua<T>*)PyIter_Next(iterator);
-		if (Py_TYPE(currentArg) != self->subtype) {
-			PyGLM_free(self->data);
-			PyErr_SetString(PyExc_TypeError, "arrays have to be initialized with arguments of the same glm type");
-			Py_DECREF(iterator);
-			Py_DECREF(currentArg);
-			return -1;
-		}
-		dataAsVecPtr[i] = currentArg->super_type;
-		Py_DECREF(currentArg);
-	}
-	Py_DECREF(iterator);
-	return 0;
-}
-
 #define GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(T) if (firstElementType == UNBRACKET (PyGLM_CTYPES_TYPE<T>())) {return UNBRACKET (glmArray_init_ctypes_iter<T>(self, firstElement, iterator, argCount));}
 
 template<typename T>
@@ -2239,107 +2044,6 @@ glmArray_init_ctypes_iter(glmArray* self, PyObject* firstElement, PyObject* iter
 		Py_DECREF(currentArg);
 	}
 	Py_DECREF(iterator);
-	return 0;
-}
-
-#define GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(C, R, T) if (firstElementType == UNBRACKET (PyGLM_MAT_TYPE<C, R, T>())) {return UNBRACKET (glmArray_init_mat_tuple_or_list<C, R, T>(self, args, argCount));}
-
-template<int C, int R, typename T>
-static int
-glmArray_init_mat_tuple_or_list(glmArray* self, PyObject* args, Py_ssize_t argCount) {
-	self->itemCount = argCount;
-	self->dtSize = sizeof(T);
-	self->itemSize = sizeof(glm::mat<C, R, T>);
-	self->nBytes = self->itemSize * argCount;
-	self->subtype = PyGLM_MAT_TYPE<C, R, T>();
-	self->glmType = PyGLM_TYPE_MAT;
-	self->shape[0] = C;
-	self->shape[1] = R;
-	self->format = get_format_specifier<T>();
-	self->data = PyMem_Malloc(self->nBytes);
-
-	if (self->data == NULL) {
-		PyErr_SetString(PyExc_MemoryError, "array creation failed");
-		return -1;
-	}
-	glm::mat<C, R, T>* dataAsVecPtr = (glm::mat<C, R, T>*)self->data;
-	for (Py_ssize_t i = 0; i < argCount; i++) {
-		mat<C, R, T>* currentArg = (mat<C, R, T>*)PyGLM_TupleOrList_GET_ITEM(args, i);
-		if (Py_TYPE(currentArg) != self->subtype) {
-			PyGLM_free(self->data);
-			PyErr_SetString(PyExc_TypeError, "arrays have to be initialized with arguments of the same glm type");
-			return -1;
-		}
-		dataAsVecPtr[i] = currentArg->super_type;
-	}
-	return 0;
-}
-
-#define GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(L, T) if (firstElementType == UNBRACKET (PyGLM_VEC_TYPE<L, T>()) || firstElementType == UNBRACKET (PyGLM_MVEC_TYPE<L, T>())) {return UNBRACKET (glmArray_init_vec_tuple_or_list<L, T>(self, args, argCount));}
-
-template<int L, typename T>
-static int
-glmArray_init_vec_tuple_or_list(glmArray* self, PyObject* args, Py_ssize_t argCount) {
-	self->itemCount = argCount;
-	self->dtSize = sizeof(T);
-	self->itemSize = sizeof(glm::vec<L, T>);
-	self->nBytes = self->itemSize * argCount;
-	self->subtype = PyGLM_VEC_TYPE<L, T>();
-	self->glmType = PyGLM_TYPE_VEC;
-	self->shape[0] = L;
-	self->format = get_format_specifier<T>();
-	self->data = PyMem_Malloc(self->nBytes);
-
-	if (self->data == NULL) {
-		PyErr_SetString(PyExc_MemoryError, "array creation failed");
-		return -1;
-	}
-	glm::vec<L, T>* dataAsVecPtr = (glm::vec<L, T> *)self->data;
-	for (Py_ssize_t i = 0; i < argCount; i++) {
-		vec<L, T>* currentArg = (vec<L, T>*)PyGLM_TupleOrList_GET_ITEM(args, i);
-		if (Py_TYPE(currentArg) == self->subtype) {
-			dataAsVecPtr[i] = currentArg->super_type;
-		}
-		else if (Py_TYPE(currentArg) == PyGLM_MVEC_TYPE<L, T>()) {
-			dataAsVecPtr[i] = *((mvec<L, T>*)currentArg)->super_type;
-		}
-		else {
-			PyGLM_free(self->data);
-			PyErr_SetString(PyExc_TypeError, "arrays have to be initialized with arguments of the same glm type");
-			return -1;
-		}
-	}
-	return 0;
-}
-
-#define GLM_ARRAY_INIT_IF_IS_QUA_TUPLE_OR_LIST(T) if (firstElementType == UNBRACKET (PyGLM_QUA_TYPE<T>())) {return UNBRACKET (glmArray_init_qua_tuple_or_list<T>(self, args, argCount));}
-
-template<typename T>
-static int
-glmArray_init_qua_tuple_or_list(glmArray* self, PyObject* args, Py_ssize_t argCount) {
-	self->itemCount = argCount;
-	self->dtSize = sizeof(T);
-	self->itemSize = sizeof(glm::qua<T>);
-	self->nBytes = self->itemSize * argCount;
-	self->subtype = PyGLM_QUA_TYPE<T>();
-	self->glmType = PyGLM_TYPE_QUA;
-	self->format = get_format_specifier<T>();
-	self->data = PyMem_Malloc(self->nBytes);
-
-	if (self->data == NULL) {
-		PyErr_SetString(PyExc_MemoryError, "array creation failed");
-		return -1;
-	}
-	glm::qua<T>* dataAsVecPtr = (glm::qua<T>*)self->data;
-	for (Py_ssize_t i = 0; i < argCount; i++) {
-		qua<T>* currentArg = (qua<T>*)PyGLM_TupleOrList_GET_ITEM(args, i);
-		if (Py_TYPE(currentArg) != self->subtype) {
-			PyGLM_free(self->data);
-			PyErr_SetString(PyExc_TypeError, "arrays have to be initialized with arguments of the same glm type");
-			return -1;
-		}
-		dataAsVecPtr[i] = currentArg->super_type;
-	}
 	return 0;
 }
 
@@ -2387,18 +2091,10 @@ memcpy(self->data, view.buf, self->nBytes);\
 PyBuffer_Release(&view);\
 return 0
 
-#define GLM_ARRAY_INIT_IF_IS_MAT_BUFFER(T) self->dtSize = sizeof(T);\
-self->itemSize = C * R * self->dtSize;\
-self->nBytes = self->itemSize * self->itemCount;\
+#define GLM_ARRAY_INIT_IF_IS_MAT_BUFFER(T) self->itemSize = self->dtSize * C * R;\
 self->subtype = (C == 2) ? (R == 2) ? PyGLM_MAT_TYPE<2, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<2, 3, T>() : PyGLM_MAT_TYPE<2, 4, T>() :\
 (C == 3) ? (R == 2) ? PyGLM_MAT_TYPE<3, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<3, 3, T>() : PyGLM_MAT_TYPE<3, 4, T>() :\
 (R == 2) ? PyGLM_MAT_TYPE<4, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<4, 3, T>() : PyGLM_MAT_TYPE<4, 4, T>();\
-self->data = PyMem_Malloc(self->nBytes);\
-if (self->data == NULL) {\
-	PyErr_SetString(PyExc_MemoryError, "out of memory");\
-	return -1;\
-}\
-memcpy(self->data, view.buf, self->nBytes);\
 PyBuffer_Release(&view);\
 return 0
 
@@ -2425,109 +2121,41 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 	PyObject* firstElement = PyGLM_TupleOrList_GET_ITEM(args, 0);
 	PyTypeObject*& firstElementType = Py_TYPE(firstElement);
 
-	// vectors
-	if (firstElementType->tp_dealloc == vec_dealloc || firstElementType->tp_dealloc == mvec_dealloc) {
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, float);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, double);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int32);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint32);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int64);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint64);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int16);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint16);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, int8);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, uint8);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(1, bool);
+	// PyGLM types
+	if (PyGLM_Is_PyGLM_Type(firstElementType)) {
+		PyGLMTypeObject* pto = (PyGLMTypeObject*)firstElementType;
 
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, float);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, double);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int32);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint32);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int64);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint64);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int16);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint16);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, int8);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, uint8);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(2, bool);
+		self->itemCount = argCount;
+		self->dtSize = pto->dtSize;
+		self->itemSize = pto->itemSize;
+		self->nBytes = self->itemSize * argCount;
+		self->subtype = pto->subtype;
+		self->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		self->shape[0] = pto->C;
+		self->shape[1] = pto->R;
+		self->format = pto->format;
+		self->data = PyMem_Malloc(self->nBytes);
 
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, float);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, double);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int32);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint32);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int64);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint64);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int16);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint16);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, int8);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, uint8);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(3, bool);
-
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, float);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, double);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int32);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint32);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int64);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint64);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int16);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint16);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, int8);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, uint8);
-		GLM_ARRAY_INIT_IF_IS_VEC_TUPLE_OR_LIST(4, bool);
-	}
-
-	// matrices
-	if (firstElementType->tp_dealloc == mat_dealloc) {
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, float);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, double);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, int32);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 2, uint32);
-
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, float);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, double);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, int32);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 3, uint32);
-
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, float);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, double);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, int32);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(2, 4, uint32);
-
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, float);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, double);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, int32);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 2, uint32);
-
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, float);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, double);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, int32);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 3, uint32);
-
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, float);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, double);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, int32);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(3, 4, uint32);
-
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, float);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, double);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, int32);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 2, uint32);
-
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, float);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, double);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, int32);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 3, uint32);
-
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, float);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, double);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, int32);
-		GLM_ARRAY_INIT_IF_IS_MAT_TUPLE_OR_LIST(4, 4, uint32);
-	}
-
-	// quaternions
-	if (firstElementType->tp_dealloc == qua_dealloc) {
-		GLM_ARRAY_INIT_IF_IS_QUA_TUPLE_OR_LIST(float);
-		GLM_ARRAY_INIT_IF_IS_QUA_TUPLE_OR_LIST(double);
+		if (self->data == NULL) {
+			PyErr_SetString(PyExc_MemoryError, "array creation failed");
+			return -1;
+		}
+		char* dataAsCharPtr = reinterpret_cast<char*>(self->data);
+		for (Py_ssize_t i = 0; i < argCount; i++) {
+			PyObject* currentArg = PyGLM_TupleOrList_GET_ITEM(args, i);
+			if (Py_TYPE(currentArg) == self->subtype) {
+				memcpy(dataAsCharPtr + (i * self->itemSize), pto->getDataOf(currentArg), self->itemSize);
+			}
+			else if (self->glmType == PyGLM_TYPE_VEC && (((PyGLMTypeObject*)(Py_TYPE(currentArg)))->PTI_info & (pto->PTI_info | PyGLM_T_MVEC)) == ((PyGLMTypeObject*)(Py_TYPE(currentArg)))->PTI_info) {
+				memcpy(dataAsCharPtr + (i * self->itemSize), ((PyGLMTypeObject*)(Py_TYPE(currentArg)))->getDataOf(currentArg), self->itemSize);
+			}
+			else {
+				PyGLM_free(self->data);
+				PyErr_SetString(PyExc_TypeError, "arrays have to be initialized with arguments of the same glm type");
+				return -1;
+			}
+		}
+		return 0;
 	}
 
 	// ctypes
@@ -2658,7 +2286,7 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 		// buffer protocol
 		if (PyObject_CheckBuffer(firstElement)) {
 			Py_buffer view;
-			if (PyObject_GetBuffer(firstElement, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1) {
+			if (PyObject_GetBuffer(firstElement, &view, PyBUF_RECORDS_RO) == -1) {
 				PyBuffer_Release(&view);
 				return -1;
 			}
@@ -2750,6 +2378,34 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 				self->itemCount = view.shape[0];
 				int R = static_cast<int>(view.shape[1]);
 				int C = static_cast<int>(view.shape[2]);
+
+				self->nBytes = view.len;
+				self->dtSize = view.itemsize;
+
+				self->data = PyMem_Malloc(view.len);
+				if (self->data == NULL) {
+					PyErr_SetString(PyExc_MemoryError, "out of memory");
+					return -1;
+				}
+
+				if (view.strides[0] == view.itemsize * C * R && view.strides[1] == view.itemsize && view.strides[2] == view.itemsize * R) {
+					memcpy(self->data, view.buf, view.len);
+				}
+				else {
+					char* dataPtr = (char*)self->data;
+					char* bufPtr = (char*)view.buf;
+
+					for (ssize_t i0 = 0; i0 < self->itemCount; i0++) {
+						for (ssize_t i1 = 0; i1 < R; i1++) {
+							for (ssize_t i2 = 0; i2 < C; i2++) {
+								ssize_t origOffset = (view.strides[0] * i0 + view.strides[1] * i1 + view.strides[2] * i2);
+								ssize_t targetOffset = (self->itemCount * C * R * i0 + view.itemsize * i1 + view.itemsize * R * i2);
+								memcpy(dataPtr + targetOffset, bufPtr + origOffset, view.itemsize);
+							}
+						}
+					}
+				}
+
 				self->shape[0] = static_cast<uint8>(C);
 				self->shape[1] = static_cast<uint8>(R);
 				self->format = view.format[0];
@@ -2788,111 +2444,57 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 			PyObject* firstElement = PyIter_Next(iterator);
 			PyTypeObject* firstElementType = Py_TYPE(firstElement);
 
-			// vectors
-			if (firstElementType->tp_dealloc == vec_dealloc || firstElementType->tp_dealloc == mvec_dealloc) {
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, float);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, double);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int32);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint32);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int64);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint64);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int16);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint16);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, int8);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, uint8);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(1, bool);
+			// PyGLM types
+			if (PyGLM_Is_PyGLM_Type(firstElementType)) {
+				PyGLMTypeObject* pto = (PyGLMTypeObject*)firstElementType;
 
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, float);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, double);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int32);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint32);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int64);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint64);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int16);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint16);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, int8);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, uint8);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(2, bool);
+				self->itemCount = argCount;
+				self->dtSize = pto->dtSize;
+				self->itemSize = pto->itemSize;
+				self->nBytes = self->itemSize * argCount;
+				self->subtype = pto->subtype;
+				self->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+				self->shape[0] = pto->C;
+				self->shape[1] = pto->R;
+				self->format = pto->format;
+				self->data = PyMem_Malloc(self->nBytes);
 
-
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, float);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, double);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int32);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint32);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int64);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint64);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int16);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint16);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, int8);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, uint8);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(3, bool);
-
-
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, float);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, double);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int32);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint32);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int64);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint64);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int16);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint16);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, int8);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, uint8);
-				GLM_ARRAY_INIT_IF_IS_VEC_ITER(4, bool);
-			}
-
-			// matrices
-			if (firstElementType->tp_dealloc == mat_dealloc) {
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, float);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, double);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, int32);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 2, uint32);
-
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, float);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, double);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, int32);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 3, uint32);
-
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, float);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, double);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, int32);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(2, 4, uint32);
-
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, float);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, double);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, int32);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 2, uint32);
-
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, float);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, double);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, int32);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 3, uint32);
-
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, float);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, double);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, int32);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(3, 4, uint32);
-
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, float);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, double);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, int32);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 2, uint32);
-
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, float);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, double);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, int32);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 3, uint32);
-
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, float);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, double);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, int32);
-				GLM_ARRAY_INIT_IF_IS_MAT_ITER(4, 4, uint32);
-			}
-
-			// quaternions
-			if (firstElementType->tp_dealloc == qua_dealloc) {
-				GLM_ARRAY_INIT_IF_IS_QUA_ITER(float);
-				GLM_ARRAY_INIT_IF_IS_QUA_ITER(double);
+				if (self->data == NULL) {
+					PyErr_SetString(PyExc_MemoryError, "array creation failed");
+					Py_DECREF(iterator);
+					Py_DECREF(firstElement);
+					return -1;
+				}
+				char* dataAsCharPtr = reinterpret_cast<char*>(self->data);
+				if (Py_TYPE(firstElement) == self->subtype) {
+					memcpy(dataAsCharPtr, pto->getDataOf(firstElement), self->itemSize);
+				}
+				else if (self->glmType == PyGLM_TYPE_VEC && (((PyGLMTypeObject*)(Py_TYPE(firstElement)))->PTI_info & (pto->PTI_info | PyGLM_T_MVEC)) == ((PyGLMTypeObject*)(Py_TYPE(firstElement)))->PTI_info) {
+					memcpy(dataAsCharPtr, ((PyGLMTypeObject*)(Py_TYPE(firstElement)))->getDataOf(firstElement), self->itemSize);
+				}
+				Py_DECREF(firstElement);
+				for (Py_ssize_t i = 1; i < argCount; i++) {
+					PyObject* currentArg = PyIter_Next(iterator);
+					if (currentArg == NULL) {
+						break;
+					}
+					if (Py_TYPE(currentArg) == self->subtype) {
+						memcpy(dataAsCharPtr + (i * self->itemSize), pto->getDataOf(currentArg), self->itemSize);
+					}
+					else if (self->glmType == PyGLM_TYPE_VEC && (((PyGLMTypeObject*)(Py_TYPE(currentArg)))->PTI_info & (pto->PTI_info | PyGLM_T_MVEC)) == ((PyGLMTypeObject*)(Py_TYPE(currentArg)))->PTI_info) {
+						memcpy(dataAsCharPtr + (i * self->itemSize), ((PyGLMTypeObject*)(Py_TYPE(currentArg)))->getDataOf(currentArg), self->itemSize);
+					}
+					else {
+						PyGLM_free(self->data);
+						PyErr_SetString(PyExc_TypeError, "arrays have to be initialized with arguments of the same glm type");
+						Py_DECREF(iterator);
+						Py_DECREF(currentArg);
+						return -1;
+					}
+					Py_DECREF(currentArg);
+				}
+				Py_DECREF(iterator);
+				return 0;
 			}
 
 			// ctypes
@@ -3126,259 +2728,220 @@ array_hash(glmArray* self, PyObject*) {
 	PyTypeObject*& subtype = self->subtype;
 
 	if (glmType == PyGLM_TYPE_VEC) {
-		if (subtype == PyGLM_VEC_TYPE<1, float>())
-			return array_hash_vec<1, float>(reinterpret_cast<glm::vec<1, float>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<2, float>())
-			return array_hash_vec<2, float>(reinterpret_cast<glm::vec<2, float>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<3, float>())
-			return array_hash_vec<3, float>(reinterpret_cast<glm::vec<3, float>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<4, float>())
-			return array_hash_vec<4, float>(reinterpret_cast<glm::vec<4, float>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_VEC_TYPE<1, double>())
-			return array_hash_vec<1, double>(reinterpret_cast<glm::vec<1, double>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<2, double>())
-			return array_hash_vec<2, double>(reinterpret_cast<glm::vec<2, double>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<3, double>())
-			return array_hash_vec<3, double>(reinterpret_cast<glm::vec<3, double>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<4, double>())
-			return array_hash_vec<4, double>(reinterpret_cast<glm::vec<4, double>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_VEC_TYPE<1, int32>())
-			return array_hash_vec<1, int32>(reinterpret_cast<glm::vec<1, int32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<2, int32>())
-			return array_hash_vec<2, int32>(reinterpret_cast<glm::vec<2, int32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<3, int32>())
-			return array_hash_vec<3, int32>(reinterpret_cast<glm::vec<3, int32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<4, int32>())
-			return array_hash_vec<4, int32>(reinterpret_cast<glm::vec<4, int32>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_VEC_TYPE<1, uint32>())
-			return array_hash_vec<1, uint32>(reinterpret_cast<glm::vec<1, uint32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<2, uint32>())
-			return array_hash_vec<2, uint32>(reinterpret_cast<glm::vec<2, uint32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<3, uint32>())
-			return array_hash_vec<3, uint32>(reinterpret_cast<glm::vec<3, uint32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<4, uint32>())
-			return array_hash_vec<4, uint32>(reinterpret_cast<glm::vec<4, uint32>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_VEC_TYPE<1, int64>())
-			return array_hash_vec<1, int64>(reinterpret_cast<glm::vec<1, int64>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<2, int64>())
-			return array_hash_vec<2, int64>(reinterpret_cast<glm::vec<2, int64>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<3, int64>())
-			return array_hash_vec<3, int64>(reinterpret_cast<glm::vec<3, int64>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<4, int64>())
-			return array_hash_vec<4, int64>(reinterpret_cast<glm::vec<4, int64>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_VEC_TYPE<1, uint64>())
-			return array_hash_vec<1, uint64>(reinterpret_cast<glm::vec<1, uint64>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<2, uint64>())
-			return array_hash_vec<2, uint64>(reinterpret_cast<glm::vec<2, uint64>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<3, uint64>())
-			return array_hash_vec<3, uint64>(reinterpret_cast<glm::vec<3, uint64>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<4, uint64>())
-			return array_hash_vec<4, uint64>(reinterpret_cast<glm::vec<4, uint64>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_VEC_TYPE<1, int16>())
-			return array_hash_vec<1, int16>(reinterpret_cast<glm::vec<1, int16>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<2, int16>())
-			return array_hash_vec<2, int16>(reinterpret_cast<glm::vec<2, int16>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<3, int16>())
-			return array_hash_vec<3, int16>(reinterpret_cast<glm::vec<3, int16>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<4, int16>())
-			return array_hash_vec<4, int16>(reinterpret_cast<glm::vec<4, int16>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_VEC_TYPE<1, uint16>())
-			return array_hash_vec<1, uint16>(reinterpret_cast<glm::vec<1, uint16>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<2, uint16>())
-			return array_hash_vec<2, uint16>(reinterpret_cast<glm::vec<2, uint16>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<3, uint16>())
-			return array_hash_vec<3, uint16>(reinterpret_cast<glm::vec<3, uint16>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<4, uint16>())
-			return array_hash_vec<4, uint16>(reinterpret_cast<glm::vec<4, uint16>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_VEC_TYPE<1, int8>())
-			return array_hash_vec<1, int8>(reinterpret_cast<glm::vec<1, int8>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<2, int8>())
-			return array_hash_vec<2, int8>(reinterpret_cast<glm::vec<2, int8>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<3, int8>())
-			return array_hash_vec<3, int8>(reinterpret_cast<glm::vec<3, int8>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<4, int8>())
-			return array_hash_vec<4, int8>(reinterpret_cast<glm::vec<4, int8>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_VEC_TYPE<1, uint8>())
-			return array_hash_vec<1, uint8>(reinterpret_cast<glm::vec<1, uint8>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<2, uint8>())
-			return array_hash_vec<2, uint8>(reinterpret_cast<glm::vec<2, uint8>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<3, uint8>())
-			return array_hash_vec<3, uint8>(reinterpret_cast<glm::vec<3, uint8>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<4, uint8>())
-			return array_hash_vec<4, uint8>(reinterpret_cast<glm::vec<4, uint8>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_VEC_TYPE<1, bool>())
-			return array_hash_vec<1, bool>(reinterpret_cast<glm::vec<1, bool>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<2, bool>())
-			return array_hash_vec<2, bool>(reinterpret_cast<glm::vec<2, bool>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<3, bool>())
-			return array_hash_vec<3, bool>(reinterpret_cast<glm::vec<3, bool>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_VEC_TYPE<4, bool>())
-			return array_hash_vec<4, bool>(reinterpret_cast<glm::vec<4, bool>*>(self->data), self->itemCount);
+		switch (self->shape[0]) {
+		case 1:
+			switch (self->format) {
+			case get_format_specifier<float>() :
+				return array_hash_vec<1, float>(reinterpret_cast<glm::vec<1, float>*>(self->data), self->itemCount);
+			case get_format_specifier<double>() :
+				return array_hash_vec<1, double>(reinterpret_cast<glm::vec<1, double>*>(self->data), self->itemCount);
+			case get_format_specifier<int64>() :
+				return array_hash_vec<1, int64>(reinterpret_cast<glm::vec<1, int64>*>(self->data), self->itemCount);
+			case get_format_specifier<uint64>() :
+				return array_hash_vec<1, uint64>(reinterpret_cast<glm::vec<1, uint64>*>(self->data), self->itemCount);
+			case get_format_specifier<int32>() :
+				return array_hash_vec<1, int32>(reinterpret_cast<glm::vec<1, int32>*>(self->data), self->itemCount);
+			case get_format_specifier<uint32>() :
+				return array_hash_vec<1, uint32>(reinterpret_cast<glm::vec<1, uint32>*>(self->data), self->itemCount);
+			case get_format_specifier<int16>() :
+				return array_hash_vec<1, int16>(reinterpret_cast<glm::vec<1, int16>*>(self->data), self->itemCount);
+			case get_format_specifier<uint16>() :
+				return array_hash_vec<1, uint16>(reinterpret_cast<glm::vec<1, uint16>*>(self->data), self->itemCount);
+			case get_format_specifier<int8>() :
+				return array_hash_vec<1, int8>(reinterpret_cast<glm::vec<1, int8>*>(self->data), self->itemCount);
+			case get_format_specifier<uint8>() :
+				return array_hash_vec<1, uint8>(reinterpret_cast<glm::vec<1, uint8>*>(self->data), self->itemCount);
+			case get_format_specifier<bool>() :
+				return array_hash_vec<1, bool>(reinterpret_cast<glm::vec<1, bool>*>(self->data), self->itemCount);
+			}
+		case 2:
+			switch (self->format) {
+			case get_format_specifier<float>() :
+				return array_hash_vec<2, float>(reinterpret_cast<glm::vec<2, float>*>(self->data), self->itemCount);
+			case get_format_specifier<double>() :
+				return array_hash_vec<2, double>(reinterpret_cast<glm::vec<2, double>*>(self->data), self->itemCount);
+			case get_format_specifier<int64>() :
+				return array_hash_vec<2, int64>(reinterpret_cast<glm::vec<2, int64>*>(self->data), self->itemCount);
+			case get_format_specifier<uint64>() :
+				return array_hash_vec<2, uint64>(reinterpret_cast<glm::vec<2, uint64>*>(self->data), self->itemCount);
+			case get_format_specifier<int32>() :
+				return array_hash_vec<2, int32>(reinterpret_cast<glm::vec<2, int32>*>(self->data), self->itemCount);
+			case get_format_specifier<uint32>() :
+				return array_hash_vec<2, uint32>(reinterpret_cast<glm::vec<2, uint32>*>(self->data), self->itemCount);
+			case get_format_specifier<int16>() :
+				return array_hash_vec<2, int16>(reinterpret_cast<glm::vec<2, int16>*>(self->data), self->itemCount);
+			case get_format_specifier<uint16>() :
+				return array_hash_vec<2, uint16>(reinterpret_cast<glm::vec<2, uint16>*>(self->data), self->itemCount);
+			case get_format_specifier<int8>() :
+				return array_hash_vec<2, int8>(reinterpret_cast<glm::vec<2, int8>*>(self->data), self->itemCount);
+			case get_format_specifier<uint8>() :
+				return array_hash_vec<2, uint8>(reinterpret_cast<glm::vec<2, uint8>*>(self->data), self->itemCount);
+			case get_format_specifier<bool>() :
+				return array_hash_vec<2, bool>(reinterpret_cast<glm::vec<2, bool>*>(self->data), self->itemCount);
+			}
+		case 3:
+			switch (self->format) {
+			case get_format_specifier<float>() :
+				return array_hash_vec<3, float>(reinterpret_cast<glm::vec<3, float>*>(self->data), self->itemCount);
+			case get_format_specifier<double>() :
+				return array_hash_vec<3, double>(reinterpret_cast<glm::vec<3, double>*>(self->data), self->itemCount);
+			case get_format_specifier<int64>() :
+				return array_hash_vec<3, int64>(reinterpret_cast<glm::vec<3, int64>*>(self->data), self->itemCount);
+			case get_format_specifier<uint64>() :
+				return array_hash_vec<3, uint64>(reinterpret_cast<glm::vec<3, uint64>*>(self->data), self->itemCount);
+			case get_format_specifier<int32>() :
+				return array_hash_vec<3, int32>(reinterpret_cast<glm::vec<3, int32>*>(self->data), self->itemCount);
+			case get_format_specifier<uint32>() :
+				return array_hash_vec<3, uint32>(reinterpret_cast<glm::vec<3, uint32>*>(self->data), self->itemCount);
+			case get_format_specifier<int16>() :
+				return array_hash_vec<3, int16>(reinterpret_cast<glm::vec<3, int16>*>(self->data), self->itemCount);
+			case get_format_specifier<uint16>() :
+				return array_hash_vec<3, uint16>(reinterpret_cast<glm::vec<3, uint16>*>(self->data), self->itemCount);
+			case get_format_specifier<int8>() :
+				return array_hash_vec<3, int8>(reinterpret_cast<glm::vec<3, int8>*>(self->data), self->itemCount);
+			case get_format_specifier<uint8>() :
+				return array_hash_vec<3, uint8>(reinterpret_cast<glm::vec<3, uint8>*>(self->data), self->itemCount);
+			case get_format_specifier<bool>() :
+				return array_hash_vec<3, bool>(reinterpret_cast<glm::vec<3, bool>*>(self->data), self->itemCount);
+			}
+		case 4:
+			switch (self->format) {
+			case get_format_specifier<float>() :
+				return array_hash_vec<4, float>(reinterpret_cast<glm::vec<4, float>*>(self->data), self->itemCount);
+			case get_format_specifier<double>() :
+				return array_hash_vec<4, double>(reinterpret_cast<glm::vec<4, double>*>(self->data), self->itemCount);
+			case get_format_specifier<int64>() :
+				return array_hash_vec<4, int64>(reinterpret_cast<glm::vec<4, int64>*>(self->data), self->itemCount);
+			case get_format_specifier<uint64>() :
+				return array_hash_vec<4, uint64>(reinterpret_cast<glm::vec<4, uint64>*>(self->data), self->itemCount);
+			case get_format_specifier<int32>() :
+				return array_hash_vec<4, int32>(reinterpret_cast<glm::vec<4, int32>*>(self->data), self->itemCount);
+			case get_format_specifier<uint32>() :
+				return array_hash_vec<4, uint32>(reinterpret_cast<glm::vec<4, uint32>*>(self->data), self->itemCount);
+			case get_format_specifier<int16>() :
+				return array_hash_vec<4, int16>(reinterpret_cast<glm::vec<4, int16>*>(self->data), self->itemCount);
+			case get_format_specifier<uint16>() :
+				return array_hash_vec<4, uint16>(reinterpret_cast<glm::vec<4, uint16>*>(self->data), self->itemCount);
+			case get_format_specifier<int8>() :
+				return array_hash_vec<4, int8>(reinterpret_cast<glm::vec<4, int8>*>(self->data), self->itemCount);
+			case get_format_specifier<uint8>() :
+				return array_hash_vec<4, uint8>(reinterpret_cast<glm::vec<4, uint8>*>(self->data), self->itemCount);
+			case get_format_specifier<bool>() :
+				return array_hash_vec<4, bool>(reinterpret_cast<glm::vec<4, bool>*>(self->data), self->itemCount);
+			}
+		}
 	}
 	if (glmType == PyGLM_TYPE_MAT) {
-		if (subtype == PyGLM_MAT_TYPE<2, 2, float>())
-			return array_hash_mat<2, 2, float>(reinterpret_cast<glm::mat<2, 2, float>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<2, 3, float>())
-			return array_hash_mat<2, 3, float>(reinterpret_cast<glm::mat<2, 3, float>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<2, 4, float>())
-			return array_hash_mat<2, 4, float>(reinterpret_cast<glm::mat<2, 4, float>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 2, float>())
-			return array_hash_mat<3, 2, float>(reinterpret_cast<glm::mat<3, 2, float>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 3, float>())
-			return array_hash_mat<3, 3, float>(reinterpret_cast<glm::mat<3, 3, float>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 4, float>())
-			return array_hash_mat<3, 4, float>(reinterpret_cast<glm::mat<3, 4, float>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 2, float>())
-			return array_hash_mat<4, 2, float>(reinterpret_cast<glm::mat<4, 2, float>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 3, float>())
-			return array_hash_mat<4, 3, float>(reinterpret_cast<glm::mat<4, 3, float>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 4, float>())
-			return array_hash_mat<4, 4, float>(reinterpret_cast<glm::mat<4, 4, float>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_MAT_TYPE<2, 2, double>())
-			return array_hash_mat<2, 2, double>(reinterpret_cast<glm::mat<2, 2, double>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<2, 3, double>())
-			return array_hash_mat<2, 3, double>(reinterpret_cast<glm::mat<2, 3, double>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<2, 4, double>())
-			return array_hash_mat<2, 4, double>(reinterpret_cast<glm::mat<2, 4, double>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 2, double>())
-			return array_hash_mat<3, 2, double>(reinterpret_cast<glm::mat<3, 2, double>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 3, double>())
-			return array_hash_mat<3, 3, double>(reinterpret_cast<glm::mat<3, 3, double>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 4, double>())
-			return array_hash_mat<3, 4, double>(reinterpret_cast<glm::mat<3, 4, double>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 2, double>())
-			return array_hash_mat<4, 2, double>(reinterpret_cast<glm::mat<4, 2, double>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 3, double>())
-			return array_hash_mat<4, 3, double>(reinterpret_cast<glm::mat<4, 3, double>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 4, double>())
-			return array_hash_mat<4, 4, double>(reinterpret_cast<glm::mat<4, 4, double>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_MAT_TYPE<2, 2, int32>())
-			return array_hash_mat<2, 2, int32>(reinterpret_cast<glm::mat<2, 2, int32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<2, 3, int32>())
-			return array_hash_mat<2, 3, int32>(reinterpret_cast<glm::mat<2, 3, int32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<2, 4, int32>())
-			return array_hash_mat<2, 4, int32>(reinterpret_cast<glm::mat<2, 4, int32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 2, int32>())
-			return array_hash_mat<3, 2, int32>(reinterpret_cast<glm::mat<3, 2, int32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 3, int32>())
-			return array_hash_mat<3, 3, int32>(reinterpret_cast<glm::mat<3, 3, int32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 4, int32>())
-			return array_hash_mat<3, 4, int32>(reinterpret_cast<glm::mat<3, 4, int32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 2, int32>())
-			return array_hash_mat<4, 2, int32>(reinterpret_cast<glm::mat<4, 2, int32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 3, int32>())
-			return array_hash_mat<4, 3, int32>(reinterpret_cast<glm::mat<4, 3, int32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 4, int32>())
-			return array_hash_mat<4, 4, int32>(reinterpret_cast<glm::mat<4, 4, int32>*>(self->data), self->itemCount);
-
-
-		if (subtype == PyGLM_MAT_TYPE<2, 2, uint32>())
-			return array_hash_mat<2, 2, uint32>(reinterpret_cast<glm::mat<2, 2, uint32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<2, 3, uint32>())
-			return array_hash_mat<2, 3, uint32>(reinterpret_cast<glm::mat<2, 3, uint32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<2, 4, uint32>())
-			return array_hash_mat<2, 4, uint32>(reinterpret_cast<glm::mat<2, 4, uint32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 2, uint32>())
-			return array_hash_mat<3, 2, uint32>(reinterpret_cast<glm::mat<3, 2, uint32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 3, uint32>())
-			return array_hash_mat<3, 3, uint32>(reinterpret_cast<glm::mat<3, 3, uint32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<3, 4, uint32>())
-			return array_hash_mat<3, 4, uint32>(reinterpret_cast<glm::mat<3, 4, uint32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 2, uint32>())
-			return array_hash_mat<4, 2, uint32>(reinterpret_cast<glm::mat<4, 2, uint32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 3, uint32>())
-			return array_hash_mat<4, 3, uint32>(reinterpret_cast<glm::mat<4, 3, uint32>*>(self->data), self->itemCount);
-
-		if (subtype == PyGLM_MAT_TYPE<4, 4, uint32>())
-			return array_hash_mat<4, 4, uint32>(reinterpret_cast<glm::mat<4, 4, uint32>*>(self->data), self->itemCount);
+		switch (self->shape[0]) {
+		case 2:
+			switch (self->shape[1]) {
+			case 2:
+				switch (self->format) {
+				case get_format_specifier<float>():
+					return array_hash_mat<2, 2, float>(reinterpret_cast<glm::mat<2, 2, float>*>(self->data), self->itemCount);
+				case get_format_specifier<double>():
+					return array_hash_mat<2, 2, double>(reinterpret_cast<glm::mat<2, 2, double>*>(self->data), self->itemCount);
+				case get_format_specifier<int32>():
+					return array_hash_mat<2, 2, int32>(reinterpret_cast<glm::mat<2, 2, int32>*>(self->data), self->itemCount);
+				case get_format_specifier<uint32>():
+					return array_hash_mat<2, 2, uint32>(reinterpret_cast<glm::mat<2, 2, uint32>*>(self->data), self->itemCount);
+				}
+			case 3:
+				switch (self->format) {
+				case get_format_specifier<float>():
+					return array_hash_mat<2, 3, float>(reinterpret_cast<glm::mat<2, 3, float>*>(self->data), self->itemCount);
+				case get_format_specifier<double>():
+					return array_hash_mat<2, 3, double>(reinterpret_cast<glm::mat<2, 3, double>*>(self->data), self->itemCount);
+				case get_format_specifier<int32>():
+					return array_hash_mat<2, 3, int32>(reinterpret_cast<glm::mat<2, 3, int32>*>(self->data), self->itemCount);
+				case get_format_specifier<uint32>():
+					return array_hash_mat<2, 3, uint32>(reinterpret_cast<glm::mat<2, 3, uint32>*>(self->data), self->itemCount);
+				}
+			case 4:
+				switch (self->format) {
+				case get_format_specifier<float>():
+					return array_hash_mat<2, 4, float>(reinterpret_cast<glm::mat<2, 4, float>*>(self->data), self->itemCount);
+				case get_format_specifier<double>():
+					return array_hash_mat<2, 4, double>(reinterpret_cast<glm::mat<2, 4, double>*>(self->data), self->itemCount);
+				case get_format_specifier<int32>():
+					return array_hash_mat<2, 4, int32>(reinterpret_cast<glm::mat<2, 4, int32>*>(self->data), self->itemCount);
+				case get_format_specifier<uint32>():
+					return array_hash_mat<2, 4, uint32>(reinterpret_cast<glm::mat<2, 4, uint32>*>(self->data), self->itemCount);
+				}
+			}
+		case 3:
+			switch (self->shape[1]) {
+			case 2:
+				switch (self->format) {
+				case get_format_specifier<float>():
+					return array_hash_mat<3, 2, float>(reinterpret_cast<glm::mat<3, 2, float>*>(self->data), self->itemCount);
+				case get_format_specifier<double>():
+					return array_hash_mat<3, 2, double>(reinterpret_cast<glm::mat<3, 2, double>*>(self->data), self->itemCount);
+				case get_format_specifier<int32>():
+					return array_hash_mat<3, 2, int32>(reinterpret_cast<glm::mat<3, 2, int32>*>(self->data), self->itemCount);
+				case get_format_specifier<uint32>():
+					return array_hash_mat<3, 2, uint32>(reinterpret_cast<glm::mat<3, 2, uint32>*>(self->data), self->itemCount);
+				}
+			case 3:
+				switch (self->format) {
+				case get_format_specifier<float>():
+					return array_hash_mat<3, 3, float>(reinterpret_cast<glm::mat<3, 3, float>*>(self->data), self->itemCount);
+				case get_format_specifier<double>():
+					return array_hash_mat<3, 3, double>(reinterpret_cast<glm::mat<3, 3, double>*>(self->data), self->itemCount);
+				case get_format_specifier<int32>():
+					return array_hash_mat<3, 3, int32>(reinterpret_cast<glm::mat<3, 3, int32>*>(self->data), self->itemCount);
+				case get_format_specifier<uint32>():
+					return array_hash_mat<3, 3, uint32>(reinterpret_cast<glm::mat<3, 3, uint32>*>(self->data), self->itemCount);
+				}
+			case 4:
+				switch (self->format) {
+				case get_format_specifier<float>():
+					return array_hash_mat<3, 4, float>(reinterpret_cast<glm::mat<3, 4, float>*>(self->data), self->itemCount);
+				case get_format_specifier<double>():
+					return array_hash_mat<3, 4, double>(reinterpret_cast<glm::mat<3, 4, double>*>(self->data), self->itemCount);
+				case get_format_specifier<int32>():
+					return array_hash_mat<3, 4, int32>(reinterpret_cast<glm::mat<3, 4, int32>*>(self->data), self->itemCount);
+				case get_format_specifier<uint32>():
+					return array_hash_mat<3, 4, uint32>(reinterpret_cast<glm::mat<3, 4, uint32>*>(self->data), self->itemCount);
+				}
+			}
+		case 4:
+			switch (self->shape[1]) {
+			case 2:
+				switch (self->format) {
+				case get_format_specifier<float>():
+					return array_hash_mat<4, 2, float>(reinterpret_cast<glm::mat<4, 2, float>*>(self->data), self->itemCount);
+				case get_format_specifier<double>():
+					return array_hash_mat<4, 2, double>(reinterpret_cast<glm::mat<4, 2, double>*>(self->data), self->itemCount);
+				case get_format_specifier<int32>():
+					return array_hash_mat<4, 2, int32>(reinterpret_cast<glm::mat<4, 2, int32>*>(self->data), self->itemCount);
+				case get_format_specifier<uint32>():
+					return array_hash_mat<4, 2, uint32>(reinterpret_cast<glm::mat<4, 2, uint32>*>(self->data), self->itemCount);
+				}
+			case 3:
+				switch (self->format) {
+				case get_format_specifier<float>():
+					return array_hash_mat<4, 3, float>(reinterpret_cast<glm::mat<4, 3, float>*>(self->data), self->itemCount);
+				case get_format_specifier<double>():
+					return array_hash_mat<4, 3, double>(reinterpret_cast<glm::mat<4, 3, double>*>(self->data), self->itemCount);
+				case get_format_specifier<int32>():
+					return array_hash_mat<4, 3, int32>(reinterpret_cast<glm::mat<4, 3, int32>*>(self->data), self->itemCount);
+				case get_format_specifier<uint32>():
+					return array_hash_mat<4, 3, uint32>(reinterpret_cast<glm::mat<4, 3, uint32>*>(self->data), self->itemCount);
+				}
+			case 4:
+				switch (self->format) {
+				case get_format_specifier<float>():
+					return array_hash_mat<4, 4, float>(reinterpret_cast<glm::mat<4, 4, float>*>(self->data), self->itemCount);
+				case get_format_specifier<double>():
+					return array_hash_mat<4, 4, double>(reinterpret_cast<glm::mat<4, 4, double>*>(self->data), self->itemCount);
+				case get_format_specifier<int32>():
+					return array_hash_mat<4, 4, int32>(reinterpret_cast<glm::mat<4, 4, int32>*>(self->data), self->itemCount);
+				case get_format_specifier<uint32>():
+					return array_hash_mat<4, 4, uint32>(reinterpret_cast<glm::mat<4, 4, uint32>*>(self->data), self->itemCount);
+				}
+			}
+		}
 	}
 	if (glmType == PyGLM_TYPE_QUA) {
 		if (subtype == PyGLM_QUA_TYPE<float>())
@@ -3412,4 +2975,5834 @@ array_hash(glmArray* self, PyObject*) {
 			return array_hash_ctypes<bool>(reinterpret_cast<bool*>(self->data), self->itemCount);
 	}
 	return -1;
+}
+
+
+
+
+static PyObject* glmArray_filter(glmArray* self, PyObject* func) {
+	std::vector<PyObject*> outObjects{};
+
+	if (PyCallable_Check(func)) {
+		PyObject* argTuple = PyTuple_New(1);
+
+		for (ssize_t i = 0; i < self->itemCount; i++) {
+			PyObject* currentItem = glmArray_get(self, i);
+
+			// Abusing the SET_ITEM macro for increased performance
+			PyTuple_SET_ITEM(argTuple, 0, currentItem);
+
+			PyObject* filterResult = PyObject_CallObject(func, argTuple);
+
+			if (filterResult == NULL) {
+				Py_DECREF(currentItem);
+				Py_DECREF(argTuple);
+				return NULL;
+			}
+
+			bool filterResultAsBool;
+
+			if (PyBool_Check(filterResult)) {
+				filterResultAsBool = (filterResult == Py_True);
+			}
+			else {
+				int filterResultAsInt = PyObject_IsTrue(filterResult);
+				if (filterResultAsInt == -1) {
+					PyErr_SetString(PyExc_ValueError, "The result of the filter function could not be interpreted as bool.");
+					return NULL;
+				}
+				filterResultAsBool = static_cast<bool>(filterResultAsInt);
+			}
+
+			Py_DECREF(filterResult);
+
+			if (filterResultAsBool) {
+				outObjects.push_back(currentItem);
+			}
+			else {
+				Py_DECREF(currentItem);
+			}
+		}
+		// Setting the first argument of the abused tuple to NULL to avoid memory corruption when DECREF is called
+		PyTuple_SET_ITEM(argTuple, 0, NULL);
+
+		Py_DECREF(argTuple);
+
+		const size_t outObjectsSize = outObjects.size();
+		
+		if (outObjectsSize) {
+			PyObject* firstOutObject = outObjects[0];
+			if (PyLong_CheckExact(firstOutObject) || PyFloat_CheckExact(firstOutObject) || PyBool_Check(firstOutObject)) {
+				// for number values
+
+				PyObject* fromNumbersArgs = PyTuple_New(outObjectsSize + 1);
+				PyTuple_SET_ITEM(fromNumbersArgs, 0, PyGLM_INCREF((PyObject*)self->subtype));
+
+				for (size_t i = 0; i < outObjectsSize; i++) {
+					PyTuple_SET_ITEM(fromNumbersArgs, i + 1, outObjects[i]);
+				}
+
+				PyObject* out = glmArray_from_numbers(NULL, fromNumbersArgs);
+				Py_DECREF(fromNumbersArgs);
+				if (out == NULL) {
+					PyErr_SetString(PyExc_ValueError, "Failed to construct the array from the filtered values. This should not occur.");
+					return NULL;
+				}
+				return out;
+			}
+			// for other values
+			PyObject* args = PyTuple_New(outObjectsSize);
+			for (size_t i = 0; i < outObjectsSize; i++) {
+				PyTuple_SET_ITEM(args, i, outObjects[i]);
+			}
+			glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+			int initResult = glmArray_init(outArray, args, NULL);
+			Py_DECREF(args);
+			if (initResult == 0) {
+				return (PyObject*)outArray;
+			}
+			PyErr_SetString(PyExc_ValueError, "Failed to construct the array from the filtered values. This should not occur.");
+			return NULL;
+		}
+
+		// for empty results
+		glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+		outArray->dtSize = self->dtSize;
+		outArray->format = self->format;
+		outArray->glmType = self->glmType;
+		outArray->itemSize = self->itemSize;
+		outArray->shape[0] = self->shape[0];
+		outArray->shape[1] = self->shape[1];
+		outArray->subtype = self->subtype;
+		return (PyObject*)outArray;
+	}
+	PyGLM_TYPEERROR_O("Invalid argument type for filter(). Expected callable, got ", func);
+	return NULL;
+}
+
+static PyObject* glmArray_map_binary(glmArray* self, PyObject* func, PyObject* arg) {
+	std::vector<PyObject*> outObjects{};
+
+	PyObject* argTuple = PyTuple_New(2);
+
+	if (PyCallable_Check(func)) {
+		if (PyObject_TypeCheck(arg, &glmArrayType)) { // arg is an array
+			glmArray* other = (glmArray*)arg;
+
+			if (other->itemCount != self->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "Invalid argument value for 'map_binary()'. The supplied array doesn't have the same item count as this one.");
+				return NULL;
+			}
+
+			for (ssize_t i = 0; i < self->itemCount; i++) {
+				PyObject* currentItem1 = glmArray_get(self, i);
+				PyObject* currentItem2 = glmArray_get(other, i);
+
+				// Abusing the SET_ITEM macro for increased performance
+				PyTuple_SET_ITEM(argTuple, 0, currentItem1);
+				PyTuple_SET_ITEM(argTuple, 1, currentItem2);
+
+				PyObject* mapResult = PyObject_CallObject(func, argTuple);
+
+				if (mapResult == NULL) {
+					return NULL;
+				}
+
+				if (mapResult != Py_None) {
+					if (PyTuple_Check(mapResult)) {
+						for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(mapResult); i++) {
+							outObjects.push_back(PyGLM_INCREF(PyTuple_GET_ITEM(mapResult, i)));
+						}
+						Py_DECREF(mapResult);
+					}
+					else {
+						outObjects.push_back(mapResult);
+					}
+				}
+				else {
+					Py_DECREF(mapResult);
+				}
+				Py_DECREF(currentItem1);
+				Py_DECREF(currentItem2);
+			}
+		}
+		else { // arg is a constant second argument
+			PyTuple_SET_ITEM(argTuple, 1, arg);
+			for (ssize_t i = 0; i < self->itemCount; i++) {
+				PyObject* currentItem = glmArray_get(self, i);
+
+				// Abusing the SET_ITEM macro for increased performance
+				PyTuple_SET_ITEM(argTuple, 0, currentItem);
+
+				PyObject* mapResult = PyObject_CallObject(func, argTuple);
+
+				if (mapResult == NULL) {
+					return NULL;
+				}
+
+				if (mapResult != Py_None) {
+					if (PyTuple_Check(mapResult)) {
+						for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(mapResult); i++) {
+							outObjects.push_back(PyGLM_INCREF(PyTuple_GET_ITEM(mapResult, i)));
+						}
+						Py_DECREF(mapResult);
+					}
+					else {
+						outObjects.push_back(mapResult);
+					}
+				}
+				else {
+					Py_DECREF(mapResult);
+				}
+				Py_DECREF(currentItem);
+			}
+		}
+
+
+		// Setting the items of the abused tuple to NULL to avoid memory corruption when DECREF is called
+		PyTuple_SET_ITEM(argTuple, 0, NULL);
+		PyTuple_SET_ITEM(argTuple, 1, NULL);
+
+		Py_DECREF(argTuple);
+
+		const size_t outObjectsSize = outObjects.size();
+
+		if (outObjectsSize) {
+			PyObject* firstOutObject = outObjects[0];
+			if (PyLong_CheckExact(firstOutObject) || PyFloat_CheckExact(firstOutObject) || PyBool_Check(firstOutObject)) {
+				// for number values
+				PyObject* fromNumbersArgs = PyTuple_New(outObjectsSize + 1);
+				PyTuple_SET_ITEM(fromNumbersArgs, 0, glmArray_getCtype(self, NULL));
+
+				for (size_t i = 0; i < outObjectsSize; i++) {
+					PyTuple_SET_ITEM(fromNumbersArgs, i + 1, outObjects[i]);
+				}
+
+				PyObject* out = glmArray_from_numbers(NULL, fromNumbersArgs);
+				Py_DECREF(fromNumbersArgs);
+				if (out == NULL) {
+					PyErr_SetString(PyExc_ValueError, "Failed to construct the array from the mapped values. They're probably not of the same type!");
+					return NULL;
+				}
+				return out;
+			}
+			// for other values
+			PyObject* args = PyTuple_New(outObjectsSize);
+			for (size_t i = 0; i < outObjectsSize; i++) {
+				PyTuple_SET_ITEM(args, i, outObjects[i]);
+			}
+			glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+			int initResult = glmArray_init(outArray, args, NULL);
+			Py_DECREF(args);
+			if (initResult == 0) {
+				return (PyObject*)outArray;
+			}
+			PyErr_SetString(PyExc_ValueError, "Failed to construct the array from the mapped values. They're probably not of the same type!");
+			return NULL;
+		}
+		// for empty results
+		glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+		outArray->dtSize = self->dtSize;
+		outArray->format = self->format;
+		outArray->glmType = self->glmType;
+		outArray->itemSize = self->itemSize;
+		outArray->shape[0] = self->shape[0];
+		outArray->shape[1] = self->shape[1];
+		outArray->subtype = self->subtype;
+		return (PyObject*)outArray;
+	}
+	PyGLM_TYPEERROR_2O("Invalid argument type for map_binary(). Expected callable, got ", func, arg);
+	return NULL;
+}
+
+static PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* arg1, PyObject* arg2) {
+	std::vector<PyObject*> outObjects{};
+
+	PyObject* argTuple = PyTuple_New(3);
+
+	if (PyCallable_Check(func)) {
+		if (PyObject_TypeCheck(arg1, &glmArrayType)) { // arg1 is an array
+			glmArray* other1 = (glmArray*)arg1;
+
+			if (other1->itemCount != self->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "Invalid argument value for 'map_ternary()'. One of the supplied arrays doesn't have the same item count as this one.");
+				return NULL;
+			}
+
+			if (PyObject_TypeCheck(arg2, &glmArrayType)) { // arg2 is an array
+				glmArray* other2 = (glmArray*)arg2;
+
+				if (other2->itemCount != self->itemCount) {
+					PyErr_SetString(PyExc_ValueError, "Invalid argument value for 'map_ternary()'. One of the supplied arrays doesn't have the same item count as this one.");
+					return NULL;
+				}
+
+				for (ssize_t i = 0; i < self->itemCount; i++) {
+					PyObject* currentItem1 = glmArray_get(self, i);
+					PyObject* currentItem2 = glmArray_get(other1, i);
+					PyObject* currentItem3 = glmArray_get(other2, i);
+
+					// Abusing the SET_ITEM macro for increased performance
+					PyTuple_SET_ITEM(argTuple, 0, currentItem1);
+					PyTuple_SET_ITEM(argTuple, 1, currentItem2);
+					PyTuple_SET_ITEM(argTuple, 2, currentItem3);
+
+					PyObject* mapResult = PyObject_CallObject(func, argTuple);
+
+					if (mapResult == NULL) {
+						return NULL;
+					}
+
+					if (mapResult != Py_None) {
+						if (PyTuple_Check(mapResult)) {
+							for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(mapResult); i++) {
+								outObjects.push_back(PyGLM_INCREF(PyTuple_GET_ITEM(mapResult, i)));
+							}
+							Py_DECREF(mapResult);
+						}
+						else {
+							outObjects.push_back(mapResult);
+						}
+					}
+					else {
+						Py_DECREF(mapResult);
+					}
+					Py_DECREF(currentItem1);
+					Py_DECREF(currentItem2);
+					Py_DECREF(currentItem3);
+				}
+			}
+			else { // arg2 is a constant third argument
+				PyTuple_SET_ITEM(argTuple, 2, arg2);
+
+				for (ssize_t i = 0; i < self->itemCount; i++) {
+					PyObject* currentItem1 = glmArray_get(self, i);
+					PyObject* currentItem2 = glmArray_get(other1, i);
+
+					// Abusing the SET_ITEM macro for increased performance
+					PyTuple_SET_ITEM(argTuple, 0, currentItem1);
+					PyTuple_SET_ITEM(argTuple, 1, currentItem2);
+
+					PyObject* mapResult = PyObject_CallObject(func, argTuple);
+
+					if (mapResult == NULL) {
+						return NULL;
+					}
+
+					if (mapResult != Py_None) {
+						if (PyTuple_Check(mapResult)) {
+							for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(mapResult); i++) {
+								outObjects.push_back(PyGLM_INCREF(PyTuple_GET_ITEM(mapResult, i)));
+							}
+							Py_DECREF(mapResult);
+						}
+						else {
+							outObjects.push_back(mapResult);
+						}
+					}
+					else {
+						Py_DECREF(mapResult);
+					}
+					Py_DECREF(currentItem1);
+					Py_DECREF(currentItem2);
+				}
+			}
+		}
+		else { // arg1 is a constant second argument
+			PyTuple_SET_ITEM(argTuple, 1, arg1);
+
+			if (PyObject_TypeCheck(arg2, &glmArrayType)) {
+				glmArray* other = (glmArray*)arg2;
+
+				if (other->itemCount != self->itemCount) {
+					PyErr_SetString(PyExc_ValueError, "Invalid argument value for 'map_ternary()'. The supplied array doesn't have the same item count as this one.");
+					return NULL;
+				}
+
+				for (ssize_t i = 0; i < self->itemCount; i++) {
+					PyObject* currentItem1 = glmArray_get(self, i);
+					PyObject* currentItem3 = glmArray_get(other, i);
+
+					// Abusing the SET_ITEM macro for increased performance
+					PyTuple_SET_ITEM(argTuple, 0, currentItem1);
+					PyTuple_SET_ITEM(argTuple, 2, currentItem3);
+
+					PyObject* mapResult = PyObject_CallObject(func, argTuple);
+
+					if (mapResult == NULL) {
+						return NULL;
+					}
+
+					if (mapResult != Py_None) {
+						if (PyTuple_Check(mapResult)) {
+							for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(mapResult); i++) {
+								outObjects.push_back(PyGLM_INCREF(PyTuple_GET_ITEM(mapResult, i)));
+							}
+							Py_DECREF(mapResult);
+						}
+						else {
+							outObjects.push_back(mapResult);
+						}
+					}
+					else {
+						Py_DECREF(mapResult);
+					}
+					Py_DECREF(currentItem1);
+					Py_DECREF(currentItem3);
+				}
+			}
+			else {
+				PyTuple_SET_ITEM(argTuple, 2, arg2);
+
+				for (ssize_t i = 0; i < self->itemCount; i++) {
+					PyObject* currentItem = glmArray_get(self, i);
+
+					// Abusing the SET_ITEM macro for increased performance
+					PyTuple_SET_ITEM(argTuple, 0, currentItem);
+
+					PyObject* mapResult = PyObject_CallObject(func, argTuple);
+
+					if (mapResult == NULL) {
+						return NULL;
+					}
+
+					if (mapResult != Py_None) {
+						if (PyTuple_Check(mapResult)) {
+							for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(mapResult); i++) {
+								outObjects.push_back(PyGLM_INCREF(PyTuple_GET_ITEM(mapResult, i)));
+							}
+							Py_DECREF(mapResult);
+						}
+						else {
+							outObjects.push_back(mapResult);
+						}
+					}
+					else {
+						Py_DECREF(mapResult);
+					}
+					Py_DECREF(currentItem);
+				}
+			}
+		}
+
+
+		// Setting the items of the abused tuple to NULL to avoid memory corruption when DECREF is called
+		PyTuple_SET_ITEM(argTuple, 0, NULL);
+		PyTuple_SET_ITEM(argTuple, 1, NULL);
+		PyTuple_SET_ITEM(argTuple, 2, NULL);
+
+		Py_DECREF(argTuple);
+
+		const size_t outObjectsSize = outObjects.size();
+
+		if (outObjectsSize) {
+			PyObject* firstOutObject = outObjects[0];
+			if (PyLong_CheckExact(firstOutObject) || PyFloat_CheckExact(firstOutObject) || PyBool_Check(firstOutObject)) {
+				// for number values
+				PyObject* fromNumbersArgs = PyTuple_New(outObjectsSize + 1);
+				PyTuple_SET_ITEM(fromNumbersArgs, 0, glmArray_getCtype(self, NULL));
+
+				for (size_t i = 0; i < outObjectsSize; i++) {
+					PyTuple_SET_ITEM(fromNumbersArgs, i + 1, outObjects[i]);
+				}
+
+				PyObject* out = glmArray_from_numbers(NULL, fromNumbersArgs);
+				Py_DECREF(fromNumbersArgs);
+				if (out == NULL) {
+					PyErr_SetString(PyExc_ValueError, "Failed to construct the array from the mapped values. They're probably not of the same type!");
+					return NULL;
+				}
+				return out;
+			}
+			// for other values
+			PyObject* args = PyTuple_New(outObjectsSize);
+			for (size_t i = 0; i < outObjectsSize; i++) {
+				PyTuple_SET_ITEM(args, i, outObjects[i]);
+			}
+			glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+			int initResult = glmArray_init(outArray, args, NULL);
+			Py_DECREF(args);
+			if (initResult == 0) {
+				return (PyObject*)outArray;
+			}
+			PyErr_SetString(PyExc_ValueError, "Failed to construct the array from the mapped values. They're probably not of the same type!");
+			return NULL;
+		}
+		// for empty results
+		glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+		outArray->dtSize = self->dtSize;
+		outArray->format = self->format;
+		outArray->glmType = self->glmType;
+		outArray->itemSize = self->itemSize;
+		outArray->shape[0] = self->shape[0];
+		outArray->shape[1] = self->shape[1];
+		outArray->subtype = self->subtype;
+		return (PyObject*)outArray;
+	}
+	PyErr_SetString(PyExc_TypeError, "Invalid argument type(s) for 'map_ternary()'. Expected a function and two other objects.");
+	return NULL;
+}
+
+static PyObject* glmArray_map_varargs(glmArray* self, PyObject* args) {
+	Py_ssize_t argsSize = PyTuple_GET_SIZE(args);
+
+	PyObject* func = PyTuple_GET_ITEM(args, 0);
+
+	std::vector<PyObject*> outObjects{};
+
+	PyObject* argTuple = PyTuple_New(argsSize);
+
+	if (PyCallable_Check(func)) {
+
+		std::vector<Py_ssize_t> arrayArgumentIndices{};
+
+		for (Py_ssize_t i = 1; i < argsSize; i++) {
+			PyObject* currentItem = PyTuple_GET_ITEM(args, i);
+			if (PyObject_TypeCheck(currentItem, &glmArrayType)) {
+				if (((glmArray*)currentItem)->itemCount != self->itemCount) {
+					PyErr_SetString(PyExc_ValueError, "Invalid argument value for 'map_varargs()'. One of the supplied arrays doesn't have the same item count as this one.");
+					return NULL;
+				}
+				arrayArgumentIndices.push_back(i);
+			}
+			else {
+				PyTuple_SET_ITEM(argTuple, i, currentItem);
+			}
+		}
+
+		for (ssize_t i = 0; i < self->itemCount; i++) {
+			PyObject* currentItemSelf = glmArray_get(self, i);
+
+			// Abusing the SET_ITEM macro for increased performance
+			PyTuple_SET_ITEM(argTuple, 0, currentItemSelf);
+
+			for (Py_ssize_t arrayArgumentIndex : arrayArgumentIndices) {
+				glmArray* currentArray = (glmArray*)PyTuple_GET_ITEM(args, arrayArgumentIndex);
+
+				PyObject* currentArrayItem = glmArray_get(currentArray, i);
+
+				PyTuple_SET_ITEM(argTuple, arrayArgumentIndex, currentArrayItem);
+			}
+
+			PyObject* mapResult = PyObject_CallObject(func, argTuple);
+
+			if (mapResult == NULL) {
+				return NULL;
+			}
+
+			if (mapResult != Py_None) {
+				if (PyTuple_Check(mapResult)) {
+					for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(mapResult); i++) {
+						outObjects.push_back(PyGLM_INCREF(PyTuple_GET_ITEM(mapResult, i)));
+					}
+					Py_DECREF(mapResult);
+				}
+				else {
+					outObjects.push_back(mapResult);
+				}
+			}
+			else {
+				Py_DECREF(mapResult);
+			}
+			Py_DECREF(currentItemSelf);
+
+			for (Py_ssize_t arrayArgumentIndex : arrayArgumentIndices) {
+				Py_DECREF(PyTuple_GET_ITEM(argTuple, arrayArgumentIndex));
+			}
+		}
+
+		// Setting the items of the abused tuple to NULL to avoid memory corruption when DECREF is called
+
+		for (Py_ssize_t i = 0; i < argsSize; i++) {
+			PyTuple_SET_ITEM(argTuple, i, NULL);
+		}
+
+		Py_DECREF(argTuple);
+
+		const size_t outObjectsSize = outObjects.size();
+
+		if (outObjectsSize) {
+			PyObject* firstOutObject = outObjects[0];
+			if (PyLong_CheckExact(firstOutObject) || PyFloat_CheckExact(firstOutObject) || PyBool_Check(firstOutObject)) {
+				// for number values
+				PyObject* fromNumbersArgs = PyTuple_New(outObjectsSize + 1);
+				PyTuple_SET_ITEM(fromNumbersArgs, 0, glmArray_getCtype(self, NULL));
+
+				for (size_t i = 0; i < outObjectsSize; i++) {
+					PyTuple_SET_ITEM(fromNumbersArgs, i + 1, outObjects[i]);
+				}
+
+				PyObject* out = glmArray_from_numbers(NULL, fromNumbersArgs);
+				Py_DECREF(fromNumbersArgs);
+				if (out == NULL) {
+					PyErr_SetString(PyExc_ValueError, "Failed to construct the array from the mapped values. They're probably not of the same type!");
+					return NULL;
+				}
+				return out;
+			}
+			// for other values
+			PyObject* args = PyTuple_New(outObjectsSize);
+			for (size_t i = 0; i < outObjectsSize; i++) {
+				PyTuple_SET_ITEM(args, i, outObjects[i]);
+			}
+			glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+			int initResult = glmArray_init(outArray, args, NULL);
+			Py_DECREF(args);
+			if (initResult == 0) {
+				return (PyObject*)outArray;
+			}
+			PyErr_SetString(PyExc_ValueError, "Failed to construct the array from the mapped values. They're probably not of the same type!");
+			return NULL;
+		}
+		// for empty results
+		glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+		outArray->dtSize = self->dtSize;
+		outArray->format = self->format;
+		outArray->glmType = self->glmType;
+		outArray->itemSize = self->itemSize;
+		outArray->shape[0] = self->shape[0];
+		outArray->shape[1] = self->shape[1];
+		outArray->subtype = self->subtype;
+		return (PyObject*)outArray;
+	}
+	PyGLM_TYPEERROR_O("Invalid argument type for map_varargs(). Expected callable, got ", func);
+	return NULL;
+}
+
+
+
+static PyObject* glmArray_map(glmArray* self, PyObject* args) {
+	Py_ssize_t argsSize = PyTuple_GET_SIZE(args);
+
+	switch (argsSize) {
+	case 0:
+		PyErr_SetString(PyExc_TypeError, "Invalid argument count for map(). Expected one or more arguments, got 0");
+		return NULL;
+	case 1:
+		break;
+	case 2:
+		return glmArray_map_binary(self, PyTuple_GET_ITEM(args, 0), PyTuple_GET_ITEM(args, 1));
+	case 3:
+		return glmArray_map_ternary(self, PyTuple_GET_ITEM(args, 0), PyTuple_GET_ITEM(args, 1), PyTuple_GET_ITEM(args, 2));
+	default:
+		return glmArray_map_varargs(self, args);
+	}
+
+	PyObject* func = PyTuple_GET_ITEM(args, 0);
+
+	std::vector<PyObject*> outObjects{};
+
+	PyObject* argTuple = PyTuple_New(1);
+
+	if (PyCallable_Check(func)) {
+		for (ssize_t i = 0; i < self->itemCount; i++) {
+			PyObject* currentItem = glmArray_get(self, i);
+
+			// Abusing the SET_ITEM macro for increased performance
+			PyTuple_SET_ITEM(argTuple, 0, currentItem);
+
+			PyObject* mapResult = PyObject_CallObject(func, argTuple);
+
+			if (mapResult == NULL) {
+				return NULL;
+			}
+
+			if (mapResult != Py_None) {
+				if (PyTuple_Check(mapResult)) {
+					for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(mapResult); i++) {
+						outObjects.push_back(PyGLM_INCREF(PyTuple_GET_ITEM(mapResult, i)));
+					}
+					Py_DECREF(mapResult);
+				}
+				else {
+					outObjects.push_back(mapResult);
+				}
+			}
+			else {
+				Py_DECREF(mapResult);
+			}
+			Py_DECREF(currentItem);
+		}
+
+		// Setting the first argument of the abused tuple to NULL to avoid memory corruption when DECREF is called
+		PyTuple_SET_ITEM(argTuple, 0, NULL);
+
+		Py_DECREF(argTuple);
+
+		const size_t outObjectsSize = outObjects.size();
+
+		if (outObjectsSize) {
+			PyObject* firstOutObject = outObjects[0];
+			if (PyLong_CheckExact(firstOutObject) || PyFloat_CheckExact(firstOutObject) || PyBool_Check(firstOutObject)) {
+				// for number values
+				PyObject* fromNumbersArgs = PyTuple_New(outObjectsSize + 1);
+				PyTuple_SET_ITEM(fromNumbersArgs, 0, glmArray_getCtype(self, NULL));
+
+				for (size_t i = 0; i < outObjectsSize; i++) {
+					PyTuple_SET_ITEM(fromNumbersArgs, i + 1, outObjects[i]);
+				}
+
+				PyObject* out = glmArray_from_numbers(NULL, fromNumbersArgs);
+				Py_DECREF(fromNumbersArgs);
+				if (out == NULL) {
+					PyErr_SetString(PyExc_ValueError, "Failed to construct the array from the mapped values. They're probably not of the same type!");
+					return NULL;
+				}
+				return out;
+			}
+			// for other values
+			PyObject* args = PyTuple_New(outObjectsSize);
+			for (size_t i = 0; i < outObjectsSize; i++) {
+				PyTuple_SET_ITEM(args, i, outObjects[i]);
+			}
+			glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+			int initResult = glmArray_init(outArray, args, NULL);
+			Py_DECREF(args);
+			if (initResult == 0) {
+				return (PyObject*)outArray;
+			}
+			PyErr_SetString(PyExc_ValueError, "Failed to construct the array from the mapped values. They're probably not of the same type!");
+			return NULL;
+		}
+		// for empty results
+		glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+		outArray->dtSize = self->dtSize;
+		outArray->format = self->format;
+		outArray->glmType = self->glmType;
+		outArray->itemSize = self->itemSize;
+		outArray->shape[0] = self->shape[0];
+		outArray->shape[1] = self->shape[1];
+		outArray->subtype = self->subtype;
+		return (PyObject*)outArray;
+	}
+	PyGLM_TYPEERROR_O("Invalid argument type for map(). Expected callable, got ", func);
+	return NULL;
+}
+
+static int quickSort(std::vector<PyObject*>& in, PyObject* func) {
+	const size_t inSize = in.size();
+
+	if (inSize <= 1) {
+		return 0;
+	}
+
+	size_t pivotIndex = inSize / 2;
+
+	PyObject* pivot = in[pivotIndex];
+
+	std::vector<PyObject*> lessThan{};
+	std::vector<PyObject*> greaterThanEqual{};
+
+	PyObject* funcArgs = PyTuple_New(2);
+	PyTuple_SET_ITEM(funcArgs, 1, pivot);
+
+	for (size_t i = 0; i < pivotIndex; i++) {
+		PyObject* currentElement = in[i];
+		PyTuple_SET_ITEM(funcArgs, 0, currentElement);
+
+		PyObject* comparisonResult = PyObject_CallObject(func, funcArgs);
+
+		if (comparisonResult == NULL) {
+			Py_DECREF(funcArgs);
+			return -1;
+		}
+		if (!PyLong_Check(comparisonResult)) {
+			PyGLM_TYPEERROR_O("The ordering function returned an invalid argument of type ", comparisonResult);
+			Py_DECREF(comparisonResult);
+			Py_DECREF(funcArgs);
+			return -1;
+		}
+
+		long cmp = PyLong_AS_LONG(comparisonResult);
+		Py_DECREF(comparisonResult);
+
+		if (cmp == -1) {
+			lessThan.push_back(currentElement);
+		}
+		else {
+			greaterThanEqual.push_back(currentElement);
+		}
+	}
+
+	for (size_t i = pivotIndex + 1; i < inSize; i++) {
+		PyObject* currentElement = in[i];
+		PyTuple_SET_ITEM(funcArgs, 0, currentElement);
+
+		PyObject* comparisonResult = PyObject_CallObject(func, funcArgs);
+
+		if (comparisonResult == NULL) {
+			Py_DECREF(funcArgs);
+			return -1;
+		}
+		if (!PyLong_Check(comparisonResult)) {
+			Py_DECREF(comparisonResult);
+			Py_DECREF(funcArgs);
+			PyGLM_TYPEERROR_O("The ordering function returned an invalid argument of type ", comparisonResult);
+			return -1;
+		}
+
+		long cmp = PyLong_AS_LONG(comparisonResult);
+		Py_DECREF(comparisonResult);
+
+		if (cmp == -1) {
+			lessThan.push_back(currentElement);
+		}
+		else {
+			greaterThanEqual.push_back(currentElement);
+		}
+	}
+
+	PyTuple_SET_ITEM(funcArgs, 0, NULL);
+	PyTuple_SET_ITEM(funcArgs, 1, NULL);
+	Py_DECREF(funcArgs);
+
+	if (quickSort(lessThan, func) == -1) {
+		return -1;
+	}
+	if (quickSort(greaterThanEqual, func) == -1) {
+		return -1;
+	}
+	size_t i = 0;
+	for (; i < lessThan.size(); i++) {
+		in[i] = lessThan[i];
+	}
+	in[i++] = pivot;
+	for (size_t j = 0; j + i < inSize; j++) {
+		in[i + j] = greaterThanEqual[j];
+	}
+	return 0;
+}
+
+
+
+static PyObject* glmArray_sort(glmArray* self, PyObject* func) {
+	if (PyCallable_Check(func)) {
+		std::vector<PyObject*> inObjects{};
+
+		for (ssize_t i = 0; i < self->itemCount; i++) {
+			inObjects.push_back(glmArray_get(self, i));
+		}
+
+		if (quickSort(inObjects, func) == -1) {
+			return NULL;
+		}
+
+		for (ssize_t i = 0; i < self->itemCount; i++) {
+			glmArray_set(self, i, inObjects[i]);
+			Py_DECREF(inObjects[i]);
+		}
+
+		Py_RETURN_NONE;
+	}
+	PyGLM_TYPEERROR_O("Invalid argument type for sort(). Expected callable, got ", func);
+	return NULL;
+}
+
+template<typename T>
+static PyObject* glmArray_add_T(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (arr1->nBytes > arr2->nBytes || arr1->glmType == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr1->glmType;
+		outArray->itemSize = arr1->itemSize;
+		outArray->nBytes = arr1->nBytes;
+		outArray->subtype = arr1->subtype;
+		outArray->shape[0] = arr1->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+	}
+	else {
+		outArray->glmType = arr2->glmType;
+		outArray->itemSize = arr2->itemSize;
+		outArray->nBytes = arr2->nBytes;
+		outArray->subtype = arr2->subtype;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr2->shape[1];
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] + arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_addO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] + o[j % o_size];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_add(PyObject* obj1, PyObject* obj2) {
+	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
+		// obj1 is an array
+
+		glmArray* arr1 = (glmArray*)obj1;
+
+		if (PyObject_TypeCheck(obj2, &glmArrayType)) {
+			// obj2 is an array
+			glmArray* arr2 = (glmArray*)obj2;
+
+			if (arr1->itemCount != arr2->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same amount of elements.");
+				return NULL;
+			}
+
+			if (arr1->format != arr2->format) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype) {
+				switch (arr1->format) {
+					case get_format_specifier<float>() :
+						return glmArray_add_T<float>(arr1, arr2);
+					case get_format_specifier<double>() :
+						return glmArray_add_T<double>(arr1, arr2);
+					case get_format_specifier<int64>() :
+						return glmArray_add_T<int64>(arr1, arr2);
+					case get_format_specifier<uint64>() :
+						return glmArray_add_T<uint64>(arr1, arr2);
+					case get_format_specifier<int32>() :
+						return glmArray_add_T<int32>(arr1, arr2);
+					case get_format_specifier<uint32>() :
+						return glmArray_add_T<uint32>(arr1, arr2);
+					case get_format_specifier<int16>() :
+						return glmArray_add_T<int16>(arr1, arr2);
+					case get_format_specifier<uint16>() :
+						return glmArray_add_T<uint16>(arr1, arr2);
+					case get_format_specifier<int8>() :
+						return glmArray_add_T<int8>(arr1, arr2);
+					case get_format_specifier<uint8>() :
+						return glmArray_add_T<uint8>(arr1, arr2);
+					case get_format_specifier<bool>() :
+						return glmArray_add_T<bool>(arr1, arr2);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given arrays are not compatible.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj2)) {
+			union {
+				float f;
+				double d;
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+				bool b;
+			};
+			switch (arr1->format) {
+			case get_format_specifier<float>() :
+				f = PyGLM_Number_FromPyObject<float>(obj2);
+				return glmArray_addO_T<float>(arr1, &f, 1, NULL);
+			case get_format_specifier<double>() :
+				d = PyGLM_Number_FromPyObject<double>(obj2);
+				return glmArray_addO_T<double>(arr1, &d, 1, NULL);
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj2);
+				return glmArray_addO_T<int64>(arr1, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj2);
+				return glmArray_addO_T<uint64>(arr1, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj2);
+				return glmArray_addO_T<int32>(arr1, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj2);
+				return glmArray_addO_T<uint32>(arr1, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj2);
+				return glmArray_addO_T<int16>(arr1, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj2);
+				return glmArray_addO_T<uint16>(arr1, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj2);
+				return glmArray_addO_T<int8>(arr1, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj2);
+				return glmArray_addO_T<uint8>(arr1, &u8, 1, NULL);
+			case get_format_specifier<bool>() :
+				b = PyGLM_Number_FromPyObject<bool>(obj2);
+				return glmArray_addO_T<bool>(arr1, &b, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj2))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj2));
+
+			if (arr1->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == pto->subtype) {
+				switch (arr1->format) {
+				case get_format_specifier<float>() :
+					return glmArray_addO_T<float>(arr1, (float*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<double>() :
+					return glmArray_addO_T<double>(arr1, (double*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int64>() :
+					return glmArray_addO_T<int64>(arr1, (int64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_addO_T<uint64>(arr1, (uint64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_addO_T<int32>(arr1, (int32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_addO_T<uint32>(arr1, (uint32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_addO_T<int16>(arr1, (int16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_addO_T<uint16>(arr1, (uint16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_addO_T<int8>(arr1, (int8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_addO_T<uint8>(arr1, (uint8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<bool>() :
+					return glmArray_addO_T<bool>(arr1, (bool*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	
+		Py_RETURN_NOTIMPLEMENTED;
+}
+	else {
+		return glmArray_add(obj2, obj1);
+	}
+	PyGLM_TYPEERROR_2O("Invalid operand type(s) for '+': ", obj1, obj2);
+	return NULL;
+}
+
+template<typename T>
+static PyObject* glmArray_sub_T(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (arr1->nBytes > arr2->nBytes || arr1->glmType == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr1->glmType;
+		outArray->itemSize = arr1->itemSize;
+		outArray->nBytes = arr1->nBytes;
+		outArray->subtype = arr1->subtype;
+		outArray->shape[0] = arr1->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+	}
+	else {
+		outArray->glmType = arr2->glmType;
+		outArray->itemSize = arr2->itemSize;
+		outArray->nBytes = arr2->nBytes;
+		outArray->subtype = arr2->subtype;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr2->shape[1];
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] - arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_subO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] - o[j % o_size];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_rsubO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = o[j % o_size] - arrDataPtr[i * arrRatio + (j % arrRatio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_sub(PyObject* obj1, PyObject* obj2) {
+	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
+		// obj1 is an array
+
+		glmArray* arr1 = (glmArray*)obj1;
+
+		if (PyObject_TypeCheck(obj2, &glmArrayType)) {
+			// obj2 is an array
+			glmArray* arr2 = (glmArray*)obj2;
+
+			if (arr1->itemCount != arr2->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same amount of elements.");
+				return NULL;
+			}
+
+			if (arr1->format != arr2->format) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype) {
+				switch (arr1->format) {
+					case get_format_specifier<float>() :
+						return glmArray_sub_T<float>(arr1, arr2);
+					case get_format_specifier<double>() :
+						return glmArray_sub_T<double>(arr1, arr2);
+					case get_format_specifier<int64>() :
+						return glmArray_sub_T<int64>(arr1, arr2);
+					case get_format_specifier<uint64>() :
+						return glmArray_sub_T<uint64>(arr1, arr2);
+					case get_format_specifier<int32>() :
+						return glmArray_sub_T<int32>(arr1, arr2);
+					case get_format_specifier<uint32>() :
+						return glmArray_sub_T<uint32>(arr1, arr2);
+					case get_format_specifier<int16>() :
+						return glmArray_sub_T<int16>(arr1, arr2);
+					case get_format_specifier<uint16>() :
+						return glmArray_sub_T<uint16>(arr1, arr2);
+					case get_format_specifier<int8>() :
+						return glmArray_sub_T<int8>(arr1, arr2);
+					case get_format_specifier<uint8>() :
+						return glmArray_sub_T<uint8>(arr1, arr2);
+					case get_format_specifier<bool>() :
+						return glmArray_sub_T<bool>(arr1, arr2);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given arrays are not compatible.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj2)) {
+			union {
+				float f;
+				double d;
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+				bool b;
+			};
+			switch (arr1->format) {
+			case get_format_specifier<float>() :
+				f = PyGLM_Number_FromPyObject<float>(obj2);
+				return glmArray_subO_T<float>(arr1, &f, 1, NULL);
+			case get_format_specifier<double>() :
+				d = PyGLM_Number_FromPyObject<double>(obj2);
+				return glmArray_subO_T<double>(arr1, &d, 1, NULL);
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj2);
+				return glmArray_subO_T<int64>(arr1, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj2);
+				return glmArray_subO_T<uint64>(arr1, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj2);
+				return glmArray_subO_T<int32>(arr1, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj2);
+				return glmArray_subO_T<uint32>(arr1, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj2);
+				return glmArray_subO_T<int16>(arr1, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj2);
+				return glmArray_subO_T<uint16>(arr1, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj2);
+				return glmArray_subO_T<int8>(arr1, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj2);
+				return glmArray_subO_T<uint8>(arr1, &u8, 1, NULL);
+			case get_format_specifier<bool>() :
+				b = PyGLM_Number_FromPyObject<bool>(obj2);
+				return glmArray_subO_T<bool>(arr1, &b, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj2))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj2));
+
+			if (arr1->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == pto->subtype) {
+				switch (arr1->format) {
+				case get_format_specifier<float>() :
+					return glmArray_subO_T<float>(arr1, (float*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<double>() :
+					return glmArray_subO_T<double>(arr1, (double*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int64>() :
+					return glmArray_subO_T<int64>(arr1, (int64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_subO_T<uint64>(arr1, (uint64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_subO_T<int32>(arr1, (int32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_subO_T<uint32>(arr1, (uint32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_subO_T<int16>(arr1, (int16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_subO_T<uint16>(arr1, (uint16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_subO_T<int8>(arr1, (int8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_subO_T<uint8>(arr1, (uint8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<bool>() :
+					return glmArray_subO_T<bool>(arr1, (bool*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+	else {
+		glmArray* arr2 = (glmArray*)obj2;
+
+		if (PyGLM_Number_Check(obj1)) {
+			union {
+				float f;
+				double d;
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+				bool b;
+			};
+			switch (arr2->format) {
+			case get_format_specifier<float>() :
+				f = PyGLM_Number_FromPyObject<float>(obj1);
+				return glmArray_rsubO_T<float>(arr2, &f, 1, NULL);
+			case get_format_specifier<double>() :
+				d = PyGLM_Number_FromPyObject<double>(obj1);
+				return glmArray_rsubO_T<double>(arr2, &d, 1, NULL);
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj1);
+				return glmArray_rsubO_T<int64>(arr2, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj1);
+				return glmArray_rsubO_T<uint64>(arr2, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj1);
+				return glmArray_rsubO_T<int32>(arr2, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj1);
+				return glmArray_rsubO_T<uint32>(arr2, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj1);
+				return glmArray_rsubO_T<int16>(arr2, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj1);
+				return glmArray_rsubO_T<uint16>(arr2, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj1);
+				return glmArray_rsubO_T<int8>(arr2, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj1);
+				return glmArray_rsubO_T<uint8>(arr2, &u8, 1, NULL);
+			case get_format_specifier<bool>() :
+				b = PyGLM_Number_FromPyObject<bool>(obj1);
+				return glmArray_rsubO_T<bool>(arr2, &b, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj1))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj1));
+
+			if (arr2->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr2->subtype == pto->subtype) {
+				switch (arr2->format) {
+				case get_format_specifier<float>() :
+					return glmArray_rsubO_T<float>(arr2, (float*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<double>() :
+					return glmArray_rsubO_T<double>(arr2, (double*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int64>() :
+					return glmArray_rsubO_T<int64>(arr2, (int64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_rsubO_T<uint64>(arr2, (uint64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_rsubO_T<int32>(arr2, (int32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_rsubO_T<uint32>(arr2, (uint32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_rsubO_T<int16>(arr2, (int16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_rsubO_T<uint16>(arr2, (uint16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_rsubO_T<int8>(arr2, (int8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_rsubO_T<uint8>(arr2, (uint8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<bool>() :
+					return glmArray_rsubO_T<bool>(arr2, (bool*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	}
+	PyGLM_TYPEERROR_2O("Invalid operand type(s) for '-': ", obj1, obj2);
+	return NULL;
+}
+
+template<typename T>
+static PyObject* glmArray_mul_T_SEQ(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (arr1->nBytes > arr2->nBytes || arr1->glmType == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr1->glmType;
+		outArray->itemSize = arr1->itemSize;
+		outArray->nBytes = arr1->nBytes;
+		outArray->subtype = arr1->subtype;
+		outArray->shape[0] = arr1->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+	}
+	else {
+		outArray->glmType = arr2->glmType;
+		outArray->itemSize = arr2->itemSize;
+		outArray->nBytes = arr2->nBytes;
+		outArray->subtype = arr2->subtype;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr2->shape[1];
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] * arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	ssize_t n, arr1Stride, arr2Stride, trueShape1;
+
+	if (arr1->glmType == PyGLM_TYPE_VEC) {
+		n = arr1->shape[0];
+		arr1Stride = 1;
+		arr2Stride = arr2->shape[1];
+
+		trueShape1 = 1;
+
+		outArray->glmType = PyGLM_TYPE_VEC;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = 0;
+		outArray->itemSize = outArray->shape[0] * outArray->dtSize;
+		outArray->nBytes = outArray->itemSize * outArray->itemCount;
+		outArray->subtype = PyGLM_VEC_TYPE_T_ONLY<T>(outArray->shape[0]);
+	}
+	else if (arr2->glmType == PyGLM_TYPE_VEC) {
+		n = arr2->shape[0];
+		arr1Stride = arr1->shape[1];
+		arr2Stride = 0;
+
+		trueShape1 = arr1->shape[1];
+
+		outArray->glmType = PyGLM_TYPE_VEC;
+		outArray->shape[0] = arr1->shape[1];
+		outArray->shape[1] = 0;
+		outArray->itemSize = outArray->shape[0] * outArray->dtSize;
+		outArray->nBytes = outArray->itemSize * outArray->itemCount;
+		outArray->subtype = PyGLM_VEC_TYPE_T_ONLY<T>(outArray->shape[0]);
+	}
+	else {
+		n = arr1->shape[0];
+		arr1Stride = arr1->shape[1];
+		arr2Stride = arr2->shape[1];
+
+		trueShape1 = arr1->shape[1];
+
+		outArray->glmType = PyGLM_TYPE_MAT;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+		outArray->itemSize = outArray->dtSize * outArray->shape[0] * outArray->shape[1];
+		outArray->nBytes = outArray->itemSize * outArray->itemCount;
+		outArray->subtype = PyGLM_MAT_TYPE_T_ONLY<T>(outArray->shape[0], outArray->shape[1]);
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+	ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+	ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			T result = (T)0;
+			for (ssize_t k = 0; k < n; k++) {
+				T a = arr1DataPtr[k * arr1Stride + j % trueShape1];
+				T b = arr2DataPtr[k + (j / trueShape1) * arr2Stride];
+
+				result += a * b;
+			}
+			outArrayDataPtr[outArrayIndex++] = result;
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_mulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (pto == NULL || arr->glmType == PyGLM_TYPE_VEC && (pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+
+		outArray->data = PyMem_Malloc(outArray->nBytes);
+		if (outArray->data == NULL) {
+			Py_DECREF(outArray);
+			PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+			return NULL;
+		}
+
+		T* arrDataPtr = (T*)arr->data;
+
+		T* outArrayDataPtr = (T*)outArray->data;
+
+		ssize_t outArrayIndex = 0;
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t i = 0; i < outArray->itemCount; i++) {
+			for (ssize_t j = 0; j < outArrayRatio; j++) {
+				outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] * o[j % o_size];
+			}
+		}
+
+		return (PyObject*)outArray;
+	}
+
+	if (arr->glmType == PyGLM_TYPE_CTYPES) {
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemSize * outArray->dtSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+
+		outArray->data = PyMem_Malloc(outArray->nBytes);
+		if (outArray->data == NULL) {
+			Py_DECREF(outArray);
+			PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+			return NULL;
+		}
+
+		T* arrDataPtr = (T*)arr->data;
+
+		T* outArrayDataPtr = (T*)outArray->data;
+
+		ssize_t outArrayIndex = 0;
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t i = 0; i < outArray->itemCount; i++) {
+			for (ssize_t j = 0; j < outArrayRatio; j++) {
+				outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] * o[j % o_size];
+			}
+		}
+
+		return (PyObject*)outArray;
+	}
+
+	ssize_t n, arrStride, oStride, trueShape1;
+
+	if (arr->glmType == PyGLM_TYPE_VEC) {
+		n = arr->shape[0];
+		arrStride = 1;
+		oStride = pto->R;
+
+		trueShape1 = 1;
+
+		outArray->glmType = PyGLM_TYPE_VEC;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = 0;
+		outArray->itemSize = outArray->shape[0] * outArray->dtSize;
+		outArray->nBytes = outArray->itemSize * outArray->itemCount;
+		outArray->subtype = PyGLM_VEC_TYPE_T_ONLY<T>(outArray->shape[0]);
+	}
+	else if ((pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC) {
+		n = pto->C;
+		arrStride = arr->shape[1];
+		oStride = 0;
+
+		trueShape1 = arr->shape[1];
+
+		outArray->glmType = PyGLM_TYPE_VEC;
+		outArray->shape[0] = arr->shape[1];
+		outArray->shape[1] = 0;
+		outArray->itemSize = outArray->shape[0] * outArray->dtSize;
+		outArray->nBytes = outArray->itemSize * outArray->itemCount;
+		outArray->subtype = PyGLM_VEC_TYPE_T_ONLY<T>(outArray->shape[0]);
+	}
+	else {
+		n = arr->shape[0];
+		arrStride = arr->shape[1];
+		oStride = pto->R;
+
+		trueShape1 = arr->shape[1];
+
+		outArray->glmType = PyGLM_TYPE_MAT;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = arr->shape[1];
+		outArray->itemSize = outArray->dtSize * outArray->shape[0] * outArray->shape[1];
+		outArray->nBytes = outArray->itemSize * outArray->itemCount;
+		outArray->subtype = PyGLM_MAT_TYPE_T_ONLY<T>(outArray->shape[0], outArray->shape[1]);
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+	ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	ssize_t oRatio = pto->itemSize / outArray->dtSize;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			T result = (T)0;
+			for (ssize_t k = 0; k < n; k++) {
+				T a = arrDataPtr[k * arrStride + j % trueShape1];
+				T b = o[k + (j / trueShape1) * oStride];
+
+				result = result + a * b;
+			}
+			outArrayDataPtr[outArrayIndex++] = result;
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_rmulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	if (pto == NULL || arr->glmType == PyGLM_TYPE_CTYPES || arr->glmType == PyGLM_TYPE_VEC && (pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC) {
+		return glmArray_mulO_T(arr, o, o_size, pto);
+	}
+
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	ssize_t n, arrStride, oStride, trueShape1;
+
+	if ((pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC) {
+		n = pto->C;
+		oStride = 1;
+		arrStride = arr->shape[1];
+
+		trueShape1 = 1;
+
+		outArray->glmType = PyGLM_TYPE_VEC;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = 0;
+		outArray->itemSize = outArray->shape[0] * outArray->dtSize;
+		outArray->nBytes = outArray->itemSize * outArray->itemCount;
+		outArray->subtype = PyGLM_VEC_TYPE_T_ONLY<T>(outArray->shape[0]);
+	}
+	else if (arr->glmType == PyGLM_TYPE_VEC) {
+		n = arr->shape[0];
+		oStride = pto->R;
+		arrStride = 0;
+
+		trueShape1 = pto->R;
+
+		outArray->glmType = PyGLM_TYPE_VEC;
+		outArray->shape[0] = pto->R;
+		outArray->shape[1] = 0;
+		outArray->itemSize = outArray->shape[0] * outArray->dtSize;
+		outArray->nBytes = outArray->itemSize * outArray->itemCount;
+		outArray->subtype = PyGLM_VEC_TYPE_T_ONLY<T>(outArray->shape[0]);
+	}
+	else {
+		n = pto->C;
+		arrStride = pto->R;
+		oStride = arr->shape[1];
+
+		trueShape1 = pto->R;
+
+		outArray->glmType = PyGLM_TYPE_MAT;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = pto->R;
+		outArray->itemSize = outArray->dtSize * outArray->shape[0] * outArray->shape[1];
+		outArray->nBytes = outArray->itemSize * outArray->itemCount;
+		outArray->subtype = PyGLM_MAT_TYPE_T_ONLY<T>(outArray->shape[0], outArray->shape[1]);
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+	ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	ssize_t oRatio = pto->itemSize / outArray->dtSize;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			T result = (T)0;
+			for (ssize_t k = 0; k < n; k++) {
+				T a = o[k * oStride + j % trueShape1];
+				T b = arrDataPtr[k + (j / trueShape1) * arrStride];
+
+				result = result + a * b;
+			}
+			outArrayDataPtr[outArrayIndex++] = result;
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename V, typename Q>
+static void glmArray_mul_Q(V* vecs, Q* quas, V* out, ssize_t len) {
+	for (ssize_t i = 0; i < len; i++) {
+		out[i] = vecs[i] * quas[i];
+	}
+}
+
+template<typename V, typename Q>
+static void glmArray_rmul_Q(Q* quas, V* vecs, V* out, ssize_t len) {
+	for (ssize_t i = 0; i < len; i++) {
+		out[i] = quas[i] * vecs[i];
+	}
+}
+
+template<typename V, typename Q>
+static void glmArray_mul_Q(V vec, Q* quas, V* out, ssize_t len) {
+	for (ssize_t i = 0; i < len; i++) {
+		out[i] = vec * quas[i];
+	}
+}
+
+template<typename V, typename Q>
+static void glmArray_mul_Q(V* vecs, Q qua, V* out, ssize_t len) {
+	for (ssize_t i = 0; i < len; i++) {
+		out[i] = vecs[i] * qua;
+	}
+}
+
+template<typename V, typename Q>
+static void glmArray_rmul_Q(Q* quas, V vec, V* out, ssize_t len) {
+	for (ssize_t i = 0; i < len; i++) {
+		out[i] = quas[i] * vec;
+	}
+}
+
+template<typename V, typename Q>
+static void glmArray_rmul_Q(Q qua, V* vecs, V* out, ssize_t len) {
+	for (ssize_t i = 0; i < len; i++) {
+		out[i] = qua * vecs[i];
+	}
+}
+
+static PyObject* glmArray_mul(PyObject* obj1, PyObject* obj2) {
+	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
+		// obj1 is an array
+
+		glmArray* arr1 = (glmArray*)obj1;
+
+		if (PyObject_TypeCheck(obj2, &glmArrayType)) {
+			// obj2 is an array
+			glmArray* arr2 = (glmArray*)obj2;
+
+			if (arr1->itemCount != arr2->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same amount of elements.");
+				return NULL;
+			}
+
+			if (arr1->format != arr2->format) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype && arr1->glmType == PyGLM_TYPE_VEC) {
+				switch (arr1->format) {
+					case get_format_specifier<float>() :
+						return glmArray_mul_T_SEQ<float>(arr1, arr2);
+					case get_format_specifier<double>() :
+						return glmArray_mul_T_SEQ<double>(arr1, arr2);
+					case get_format_specifier<int64>() :
+						return glmArray_mul_T_SEQ<int64>(arr1, arr2);
+					case get_format_specifier<uint64>() :
+						return glmArray_mul_T_SEQ<uint64>(arr1, arr2);
+					case get_format_specifier<int32>() :
+						return glmArray_mul_T_SEQ<int32>(arr1, arr2);
+					case get_format_specifier<uint32>() :
+						return glmArray_mul_T_SEQ<uint32>(arr1, arr2);
+					case get_format_specifier<int16>() :
+						return glmArray_mul_T_SEQ<int16>(arr1, arr2);
+					case get_format_specifier<uint16>() :
+						return glmArray_mul_T_SEQ<uint16>(arr1, arr2);
+					case get_format_specifier<int8>() :
+						return glmArray_mul_T_SEQ<int8>(arr1, arr2);
+					case get_format_specifier<uint8>() :
+						return glmArray_mul_T_SEQ<uint8>(arr1, arr2);
+					case get_format_specifier<bool>() :
+						return glmArray_mul_T_SEQ<bool>(arr1, arr2);
+				}
+			}
+			if (arr1->glmType == PyGLM_TYPE_VEC && arr2->glmType == PyGLM_TYPE_MAT && arr1->shape[0] == arr2->shape[1]
+				|| arr1->glmType == PyGLM_TYPE_MAT && arr2->glmType == PyGLM_TYPE_VEC && arr1->shape[0] == arr2->shape[0]
+				|| arr1->glmType == PyGLM_TYPE_MAT && arr2->glmType == PyGLM_TYPE_MAT && arr1->shape[0] == arr2->shape[1]) {
+				switch (arr1->format) {
+					case get_format_specifier<float>() :
+						return glmArray_mul_T_MMUL<float>(arr1, arr2);
+					case get_format_specifier<double>() :
+						return glmArray_mul_T_MMUL<double>(arr1, arr2);
+					case get_format_specifier<int32>() :
+						return glmArray_mul_T_MMUL<int32>(arr1, arr2);
+					case get_format_specifier<uint32>() :
+						return glmArray_mul_T_MMUL<uint32>(arr1, arr2);
+				}
+			}
+			if (arr1->glmType == PyGLM_TYPE_QUA || arr2->glmType == PyGLM_TYPE_QUA) {
+				glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+				outArray->dtSize = arr1->dtSize;
+				outArray->format = arr1->format;
+				outArray->itemCount = arr1->itemCount;
+				outArray->readonly = false;
+				outArray->reference = NULL;
+				outArray->glmType = (arr1->glmType == PyGLM_TYPE_QUA && arr2->glmType == PyGLM_TYPE_QUA) ? PyGLM_TYPE_QUA : PyGLM_TYPE_VEC;
+
+				if (arr1->glmType == PyGLM_TYPE_VEC) {
+					if (arr1->shape[0] < 3) {
+						PyErr_SetString(PyExc_ValueError, "Invalid operands.");
+						Py_DECREF(outArray);
+						return NULL;
+					}
+
+					outArray->itemSize = arr1->itemSize;
+					outArray->nBytes = arr1->nBytes;
+					outArray->shape[0] = arr1->shape[0];
+					outArray->shape[1] = 0;
+					outArray->subtype = arr1->subtype;
+
+					outArray->data = PyMem_Malloc(outArray->nBytes);
+
+					if (outArray->data == NULL) {
+						Py_DECREF(outArray);
+						PyErr_SetString(PyExc_MemoryError, "out of memory.");
+						return NULL;
+					}
+
+					if (arr1->shape[0] == 3) {
+						if (arr1->format == 'f') {
+							auto vp = (glm::vec<3, float>*)(arr1->data);
+							auto qp = (glm::qua<float>*)(arr2->data);
+							auto outp = (glm::vec<3, float>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (arr1->format == 'd') {
+							auto vp = (glm::vec<3, double>*)(arr1->data);
+							auto qp = (glm::qua<double>*)(arr2->data);
+							auto outp = (glm::vec<3, double>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+					else if (arr1->shape[0] == 4) {
+						if (arr1->format == 'f') {
+							auto vp = (glm::vec<4, float>*)(arr1->data);
+							auto qp = (glm::qua<float>*)(arr2->data);
+							auto outp = (glm::vec<4, float>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (arr1->format == 'd') {
+							auto vp = (glm::vec<4, double>*)(arr1->data);
+							auto qp = (glm::qua<double>*)(arr2->data);
+							auto outp = (glm::vec<4, double>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+					
+				}
+				else if (arr2->glmType == PyGLM_TYPE_VEC) {
+					if (arr2->shape[0] < 3) {
+						PyErr_SetString(PyExc_ValueError, "Invalid operands.");
+						Py_DECREF(outArray);
+						return NULL;
+					}
+
+					outArray->itemSize = arr2->itemSize;
+					outArray->nBytes = arr2->nBytes;
+					outArray->shape[0] = arr2->shape[0];
+					outArray->shape[1] = 0;
+					outArray->subtype = arr2->subtype;
+
+					outArray->data = PyMem_Malloc(outArray->nBytes);
+
+					if (outArray->data == NULL) {
+						Py_DECREF(outArray);
+						PyErr_SetString(PyExc_MemoryError, "out of memory.");
+						return NULL;
+					}
+
+					if (arr2->shape[0] == 3) {
+						if (arr2->format == 'f') {
+							auto vp = (glm::vec<3, float>*)(arr2->data);
+							auto qp = (glm::qua<float>*)(arr1->data);
+							auto outp = (glm::vec<3, float>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (arr2->format == 'd') {
+							auto vp = (glm::vec<3, double>*)(arr2->data);
+							auto qp = (glm::qua<double>*)(arr1->data);
+							auto outp = (glm::vec<3, double>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+					else if (arr2->shape[0] == 4) {
+						if (arr2->format == 'f') {
+							auto vp = (glm::vec<4, float>*)(arr2->data);
+							auto qp = (glm::qua<float>*)(arr1->data);
+							auto outp = (glm::vec<4, float>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (arr2->format == 'd') {
+							auto vp = (glm::vec<4, double>*)(arr2->data);
+							auto qp = (glm::qua<double>*)(arr1->data);
+							auto outp = (glm::vec<4, double>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+				}
+				else {
+					outArray->itemSize = arr1->itemSize;
+					outArray->nBytes = arr1->nBytes;
+					outArray->shape[0] = 4;
+					outArray->shape[1] = 0;
+					outArray->subtype = arr1->subtype;
+
+					outArray->data = PyMem_Malloc(outArray->nBytes);
+
+					if (outArray->data == NULL) {
+						Py_DECREF(outArray);
+						PyErr_SetString(PyExc_MemoryError, "out of memory.");
+						return NULL;
+					}
+
+					if (arr1->format == 'f') {
+						auto vp = (glm::qua<float>*)(arr1->data);
+						auto qp = (glm::qua<float>*)(arr2->data);
+						auto outp = (glm::qua<float>*)(outArray->data);
+						glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+						return (PyObject*)outArray;
+					}
+					if (arr1->format == 'd') {
+						auto vp = (glm::qua<double>*)(arr1->data);
+						auto qp = (glm::qua<double>*)(arr2->data);
+						auto outp = (glm::qua<double>*)(outArray->data);
+						glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+						return (PyObject*)outArray;
+					}
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given arrays are not compatible.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj2)) {
+			union {
+				float f;
+				double d;
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+				bool b;
+			};
+			switch (arr1->format) {
+			case get_format_specifier<float>() :
+				f = PyGLM_Number_FromPyObject<float>(obj2);
+				return glmArray_mulO_T<float>(arr1, &f, 1, NULL);
+			case get_format_specifier<double>() :
+				d = PyGLM_Number_FromPyObject<double>(obj2);
+				return glmArray_mulO_T<double>(arr1, &d, 1, NULL);
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj2);
+				return glmArray_mulO_T<int64>(arr1, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj2);
+				return glmArray_mulO_T<uint64>(arr1, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj2);
+				return glmArray_mulO_T<int32>(arr1, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj2);
+				return glmArray_mulO_T<uint32>(arr1, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj2);
+				return glmArray_mulO_T<int16>(arr1, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj2);
+				return glmArray_mulO_T<uint16>(arr1, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj2);
+				return glmArray_mulO_T<int8>(arr1, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj2);
+				return glmArray_mulO_T<uint8>(arr1, &u8, 1, NULL);
+			case get_format_specifier<bool>() :
+				b = PyGLM_Number_FromPyObject<bool>(obj2);
+				return glmArray_mulO_T<bool>(arr1, &b, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj2))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj2));
+
+			if (arr1->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr1->glmType == PyGLM_TYPE_VEC && ((pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC || pto->glmType == PyGLM_TYPE_MAT && arr1->shape[0] == pto->R)
+				|| arr1->glmType == PyGLM_TYPE_MAT && (pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC && arr1->shape[0] == pto->C
+				|| arr1->glmType == PyGLM_TYPE_MAT && pto->glmType == PyGLM_TYPE_MAT && arr1->shape[0] == pto->R) {
+				switch (arr1->format) {
+				case get_format_specifier<float>() :
+					return glmArray_mulO_T<float>(arr1, (float*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<double>() :
+					return glmArray_mulO_T<double>(arr1, (double*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int64>() :
+					return glmArray_mulO_T<int64>(arr1, (int64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_mulO_T<uint64>(arr1, (uint64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_mulO_T<int32>(arr1, (int32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_mulO_T<uint32>(arr1, (uint32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_mulO_T<int16>(arr1, (int16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_mulO_T<uint16>(arr1, (uint16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_mulO_T<int8>(arr1, (int8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_mulO_T<uint8>(arr1, (uint8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<bool>() :
+					return glmArray_mulO_T<bool>(arr1, (bool*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_QUA || pto->glmType == PyGLM_TYPE_QUA) {
+				glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+				outArray->dtSize = arr1->dtSize;
+				outArray->format = arr1->format;
+				outArray->itemCount = arr1->itemCount;
+				outArray->readonly = false;
+				outArray->reference = NULL;
+				outArray->glmType = (arr1->glmType == PyGLM_TYPE_QUA && pto->glmType == PyGLM_TYPE_QUA) ? PyGLM_TYPE_QUA : PyGLM_TYPE_VEC;
+
+				if (arr1->glmType == PyGLM_TYPE_VEC) {
+					if (arr1->shape[0] < 3) {
+						PyErr_SetString(PyExc_ValueError, "Invalid operands.");
+						Py_DECREF(outArray);
+						return NULL;
+					}
+
+					outArray->itemSize = arr1->itemSize;
+					outArray->nBytes = arr1->nBytes;
+					outArray->shape[0] = arr1->shape[0];
+					outArray->shape[1] = 0;
+					outArray->subtype = arr1->subtype;
+
+					outArray->data = PyMem_Malloc(outArray->nBytes);
+
+					if (outArray->data == NULL) {
+						Py_DECREF(outArray);
+						PyErr_SetString(PyExc_MemoryError, "out of memory.");
+						return NULL;
+					}
+
+					if (arr1->shape[0] == 3) {
+						if (arr1->format == 'f') {
+							auto vp = (glm::vec<3, float>*)(arr1->data);
+							auto qp = ((qua<float>*)obj2)->super_type;
+							auto outp = (glm::vec<3, float>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (arr1->format == 'd') {
+							auto vp = (glm::vec<3, double>*)(arr1->data);
+							auto qp = ((qua<double>*)obj2)->super_type;
+							auto outp = (glm::vec<3, double>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+					else if (arr1->shape[0] == 4) {
+						if (arr1->format == 'f') {
+							auto vp = (glm::vec<4, float>*)(arr1->data);
+							auto qp = ((qua<float>*)obj2)->super_type;
+							auto outp = (glm::vec<4, float>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (arr1->format == 'd') {
+							auto vp = (glm::vec<4, double>*)(arr1->data);
+							auto qp = ((qua<double>*)obj2)->super_type;
+							auto outp = (glm::vec<4, double>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+				}
+				else if (pto->glmType == PyGLM_TYPE_VEC) {
+					if (pto->C < 3) {
+						PyErr_SetString(PyExc_ValueError, "Invalid operands.");
+						Py_DECREF(outArray);
+						return NULL;
+					}
+
+					outArray->itemSize = pto->itemSize;
+					outArray->nBytes = outArray->itemSize * outArray->itemCount;
+					outArray->shape[0] = pto->C;
+					outArray->shape[1] = 0;
+					outArray->subtype = pto->subtype;
+
+					outArray->data = PyMem_Malloc(outArray->nBytes);
+
+					if (outArray->data == NULL) {
+						Py_DECREF(outArray);
+						PyErr_SetString(PyExc_MemoryError, "out of memory.");
+						return NULL;
+					}
+
+					if (pto->C == 3) {
+						if (pto->format == 'f') {
+							auto vp = ((vec<3, float>*)obj2)->super_type;
+							auto qp = (glm::qua<float>*)(arr1->data);
+							auto outp = (glm::vec<3, float>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (pto->format == 'd') {
+							auto vp = ((vec<3, double>*)obj2)->super_type;
+							auto qp = (glm::qua<double>*)(arr1->data);
+							auto outp = (glm::vec<3, double>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+					else if (pto->C == 4) {
+						if (pto->format == 'f') {
+							auto vp = ((vec<4, float>*)obj2)->super_type;
+							auto qp = (glm::qua<float>*)(arr1->data);
+							auto outp = (glm::vec<4, float>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (pto->format == 'd') {
+							auto vp = ((vec<4, double>*)obj2)->super_type;
+							auto qp = (glm::qua<double>*)(arr1->data);
+							auto outp = (glm::vec<4, double>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+				}
+				else {
+					outArray->itemSize = arr1->itemSize;
+					outArray->nBytes = arr1->nBytes;
+					outArray->shape[0] = 4;
+					outArray->shape[1] = 0;
+					outArray->subtype = arr1->subtype;
+
+					outArray->data = PyMem_Malloc(outArray->nBytes);
+
+					if (outArray->data == NULL) {
+						Py_DECREF(outArray);
+						PyErr_SetString(PyExc_MemoryError, "out of memory.");
+						return NULL;
+					}
+
+					if (arr1->format == 'f') {
+						auto vp = (glm::qua<float>*)(arr1->data);
+						auto qp = ((qua<float>*)obj2)->super_type;
+						auto outp = (glm::qua<float>*)(outArray->data);
+						glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+						return (PyObject*)outArray;
+					}
+					if (arr1->format == 'd') {
+						auto vp = (glm::qua<double>*)(arr1->data);
+						auto qp = ((qua<double>*)obj2)->super_type;
+						auto outp = (glm::qua<double>*)(outArray->data);
+						glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+						return (PyObject*)outArray;
+					}
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+	else {
+		glmArray* arr2 = (glmArray*)obj2;
+
+		if (PyGLM_Number_Check(obj1)) {
+			union {
+				float f;
+				double d;
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+				bool b;
+			};
+			switch (arr2->format) {
+			case get_format_specifier<float>() :
+				f = PyGLM_Number_FromPyObject<float>(obj1);
+				return glmArray_mulO_T<float>(arr2, &f, 1, NULL);
+			case get_format_specifier<double>() :
+				d = PyGLM_Number_FromPyObject<double>(obj1);
+				return glmArray_mulO_T<double>(arr2, &d, 1, NULL);
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj1);
+				return glmArray_mulO_T<int64>(arr2, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj1);
+				return glmArray_mulO_T<uint64>(arr2, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj1);
+				return glmArray_mulO_T<int32>(arr2, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj1);
+				return glmArray_mulO_T<uint32>(arr2, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj1);
+				return glmArray_mulO_T<int16>(arr2, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj1);
+				return glmArray_mulO_T<uint16>(arr2, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj1);
+				return glmArray_mulO_T<int8>(arr2, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj1);
+				return glmArray_mulO_T<uint8>(arr2, &u8, 1, NULL);
+			case get_format_specifier<bool>() :
+				b = PyGLM_Number_FromPyObject<bool>(obj1);
+				return glmArray_mulO_T<bool>(arr2, &b, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj1))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj1));
+
+			if (arr2->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_CTYPES || (pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC && (arr2->glmType == PyGLM_TYPE_VEC || arr2->glmType == PyGLM_TYPE_MAT && pto->C == arr2->shape[1])
+				|| pto->glmType == PyGLM_TYPE_MAT && arr2->glmType == PyGLM_TYPE_VEC && pto->C == arr2->shape[0]
+				|| pto->glmType == PyGLM_TYPE_MAT && arr2->glmType == PyGLM_TYPE_MAT && pto->C == arr2->shape[1]) {
+				switch (arr2->format) {
+				case get_format_specifier<float>() :
+					return glmArray_rmulO_T<float>(arr2, (float*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<double>() :
+					return glmArray_rmulO_T<double>(arr2, (double*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int64>() :
+					return glmArray_rmulO_T<int64>(arr2, (int64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_rmulO_T<uint64>(arr2, (uint64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_rmulO_T<int32>(arr2, (int32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_rmulO_T<uint32>(arr2, (uint32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_rmulO_T<int16>(arr2, (int16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_rmulO_T<uint16>(arr2, (uint16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_rmulO_T<int8>(arr2, (int8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_rmulO_T<uint8>(arr2, (uint8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<bool>() :
+					return glmArray_rmulO_T<bool>(arr2, (bool*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+
+			if (pto->glmType == PyGLM_TYPE_QUA || arr2->glmType == PyGLM_TYPE_QUA) {
+				glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+				outArray->dtSize = arr2->dtSize;
+				outArray->format = arr2->format;
+				outArray->itemCount = arr2->itemCount;
+				outArray->readonly = false;
+				outArray->reference = NULL;
+				outArray->glmType = (pto->glmType == PyGLM_TYPE_QUA && arr2->glmType == PyGLM_TYPE_QUA) ? PyGLM_TYPE_QUA : PyGLM_TYPE_VEC;
+
+				if (pto->glmType == PyGLM_TYPE_VEC) {
+					if (pto->C < 3) {
+						PyErr_SetString(PyExc_ValueError, "Invalid operands.");
+						Py_DECREF(outArray);
+						return NULL;
+					}
+
+					outArray->itemSize = pto->itemSize;
+					outArray->nBytes = outArray->itemSize * outArray->itemCount;
+					outArray->shape[0] = pto->C;
+					outArray->shape[1] = 0;
+					outArray->subtype = pto->subtype;
+
+					outArray->data = PyMem_Malloc(outArray->nBytes);
+
+					if (outArray->data == NULL) {
+						Py_DECREF(outArray);
+						PyErr_SetString(PyExc_MemoryError, "out of memory.");
+						return NULL;
+					}
+
+					if (pto->C == 3) {
+						if (pto->format == 'f') {
+							auto vp = ((vec<3, float>*)obj1)->super_type;
+							auto qp = (glm::qua<float>*)(arr2->data);
+							auto outp = (glm::vec<3, float>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (pto->format == 'd') {
+							auto vp = ((vec<3, double>*)obj1)->super_type;
+							auto qp = (glm::qua<double>*)(arr2->data);
+							auto outp = (glm::vec<3, double>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+					else if (pto->C == 4) {
+						if (pto->format == 'f') {
+							auto vp = ((vec<4, float>*)obj1)->super_type;
+							auto qp = (glm::qua<float>*)(arr2->data);
+							auto outp = (glm::vec<4, float>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (pto->format == 'd') {
+							auto vp = ((vec<4, double>*)obj1)->super_type;
+							auto qp = (glm::qua<double>*)(arr2->data);
+							auto outp = (glm::vec<4, double>*)(outArray->data);
+							glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+				}
+				else if (arr2->glmType == PyGLM_TYPE_VEC) {
+					if (arr2->shape[0] < 3) {
+						PyErr_SetString(PyExc_ValueError, "Invalid operands.");
+						Py_DECREF(outArray);
+						return NULL;
+					}
+
+					outArray->itemSize = arr2->itemSize;
+					outArray->nBytes = arr2->nBytes;
+					outArray->shape[0] = arr2->shape[0];
+					outArray->shape[1] = 0;
+					outArray->subtype = arr2->subtype;
+
+					outArray->data = PyMem_Malloc(outArray->nBytes);
+
+					if (outArray->data == NULL) {
+						Py_DECREF(outArray);
+						PyErr_SetString(PyExc_MemoryError, "out of memory.");
+						return NULL;
+					}
+
+					if (arr2->shape[0] == 3) {
+						if (arr2->format == 'f') {
+							auto vp = (glm::vec<3, float>*)(arr2->data);
+							auto qp = ((qua<float>*)obj1)->super_type;
+							auto outp = (glm::vec<3, float>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (arr2->format == 'd') {
+							auto vp = (glm::vec<3, double>*)(arr2->data);
+							auto qp = ((qua<double>*)obj1)->super_type;
+							auto outp = (glm::vec<3, double>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+					else if (arr2->shape[0] == 4) {
+						if (arr2->format == 'f') {
+							auto vp = (glm::vec<4, float>*)(arr2->data);
+							auto qp = ((qua<float>*)obj1)->super_type;
+							auto outp = (glm::vec<4, float>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+						if (arr2->format == 'd') {
+							auto vp = (glm::vec<4, double>*)(arr2->data);
+							auto qp = ((qua<double>*)obj1)->super_type;
+							auto outp = (glm::vec<4, double>*)(outArray->data);
+							glmArray_rmul_Q(qp, vp, outp, outArray->itemCount);
+							return (PyObject*)outArray;
+						}
+					}
+				}
+				else {
+					outArray->itemSize = arr2->itemSize;
+					outArray->nBytes = arr2->nBytes;
+					outArray->shape[0] = 4;
+					outArray->shape[1] = 0;
+					outArray->subtype = arr2->subtype;
+
+					outArray->data = PyMem_Malloc(outArray->nBytes);
+
+					if (outArray->data == NULL) {
+						Py_DECREF(outArray);
+						PyErr_SetString(PyExc_MemoryError, "out of memory.");
+						return NULL;
+					}
+
+					if (pto->format == 'f') {
+						auto vp = ((qua<float>*)obj1)->super_type;
+						auto qp = (glm::qua<float>*)(arr2->data);
+						auto outp = (glm::qua<float>*)(outArray->data);
+						glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+						return (PyObject*)outArray;
+					}
+					if (pto->format == 'd') {
+						auto vp = ((qua<double>*)obj1)->super_type;
+						auto qp = (glm::qua<double>*)(arr2->data);
+						auto outp = (glm::qua<double>*)(outArray->data);
+						glmArray_mul_Q(vp, qp, outp, outArray->itemCount);
+						return (PyObject*)outArray;
+					}
+				}
+			}
+
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	}
+	PyGLM_TYPEERROR_2O("Invalid operand type(s) for '*': ", obj1, obj2);
+	return NULL;
+}
+
+static float modT(float a, float b) {
+	return glm::mod(a, b);
+}
+
+static double modT(double a, double b) {
+	return glm::mod(a, b);
+}
+
+template<typename T>
+static T modT(T a, T b) {
+	return a % b;
+}
+
+template<typename T>
+static PyObject* glmArray_mod_T(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (arr1->nBytes > arr2->nBytes || arr1->glmType == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr1->glmType;
+		outArray->itemSize = arr1->itemSize;
+		outArray->nBytes = arr1->nBytes;
+		outArray->subtype = arr1->subtype;
+		outArray->shape[0] = arr1->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+	}
+	else {
+		outArray->glmType = arr2->glmType;
+		outArray->itemSize = arr2->itemSize;
+		outArray->nBytes = arr2->nBytes;
+		outArray->subtype = arr2->subtype;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr2->shape[1];
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			T b = arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
+
+			if (b == (T)0) {
+				PyGLM_ZERO_DIVISION_ERROR_T(T);
+			}
+
+			outArrayDataPtr[outArrayIndex++] = modT(arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)], b);
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_modO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			T b = o[j % o_size];
+
+			if (b == (T)0) {
+				PyGLM_ZERO_DIVISION_ERROR_T(T);
+			}
+
+			outArrayDataPtr[outArrayIndex++] = modT(arrDataPtr[i * arrRatio + (j % arrRatio)], b);
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_rmodO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			T b = arrDataPtr[i * arrRatio + (j % arrRatio)];
+			
+			if (b == (T)0) {
+				PyGLM_ZERO_DIVISION_ERROR_T(T);
+			}
+
+			outArrayDataPtr[outArrayIndex++] = modT(o[j % o_size], b);
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_mod(PyObject* obj1, PyObject* obj2) {
+	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
+		// obj1 is an array
+
+		glmArray* arr1 = (glmArray*)obj1;
+
+		if (arr1->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyObject_TypeCheck(obj2, &glmArrayType)) {
+			// obj2 is an array
+			glmArray* arr2 = (glmArray*)obj2;
+
+			if (arr1->itemCount != arr2->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same amount of elements.");
+				return NULL;
+			}
+
+			if (arr1->format != arr2->format) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype) {
+				switch (arr1->format) {
+					case get_format_specifier<float>() :
+						return glmArray_mod_T<float>(arr1, arr2);
+					case get_format_specifier<double>() :
+						return glmArray_mod_T<double>(arr1, arr2);
+					case get_format_specifier<int64>() :
+						return glmArray_mod_T<int64>(arr1, arr2);
+					case get_format_specifier<uint64>() :
+						return glmArray_mod_T<uint64>(arr1, arr2);
+					case get_format_specifier<int32>() :
+						return glmArray_mod_T<int32>(arr1, arr2);
+					case get_format_specifier<uint32>() :
+						return glmArray_mod_T<uint32>(arr1, arr2);
+					case get_format_specifier<int16>() :
+						return glmArray_mod_T<int16>(arr1, arr2);
+					case get_format_specifier<uint16>() :
+						return glmArray_mod_T<uint16>(arr1, arr2);
+					case get_format_specifier<int8>() :
+						return glmArray_mod_T<int8>(arr1, arr2);
+					case get_format_specifier<uint8>() :
+						return glmArray_mod_T<uint8>(arr1, arr2);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given arrays are not compatible.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj2)) {
+			union {
+				float f;
+				double d;
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr1->format) {
+			case get_format_specifier<float>() :
+				f = PyGLM_Number_FromPyObject<float>(obj2);
+				return glmArray_modO_T<float>(arr1, &f, 1, NULL);
+			case get_format_specifier<double>() :
+				d = PyGLM_Number_FromPyObject<double>(obj2);
+				return glmArray_modO_T<double>(arr1, &d, 1, NULL);
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj2);
+				return glmArray_modO_T<int64>(arr1, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj2);
+				return glmArray_modO_T<uint64>(arr1, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj2);
+				return glmArray_modO_T<int32>(arr1, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj2);
+				return glmArray_modO_T<uint32>(arr1, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj2);
+				return glmArray_modO_T<int16>(arr1, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj2);
+				return glmArray_modO_T<uint16>(arr1, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj2);
+				return glmArray_modO_T<int8>(arr1, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj2);
+				return glmArray_modO_T<uint8>(arr1, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj2))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj2));
+
+			if (arr1->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == pto->subtype) {
+				switch (arr1->format) {
+				case get_format_specifier<float>() :
+					return glmArray_modO_T<float>(arr1, (float*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<double>() :
+					return glmArray_modO_T<double>(arr1, (double*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int64>() :
+					return glmArray_modO_T<int64>(arr1, (int64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_modO_T<uint64>(arr1, (uint64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_modO_T<int32>(arr1, (int32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_modO_T<uint32>(arr1, (uint32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_modO_T<int16>(arr1, (int16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_modO_T<uint16>(arr1, (uint16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_modO_T<int8>(arr1, (int8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_modO_T<uint8>(arr1, (uint8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+	else {
+		glmArray* arr2 = (glmArray*)obj2;
+
+		if (arr2->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj1)) {
+			union {
+				float f;
+				double d;
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr2->format) {
+			case get_format_specifier<float>() :
+				f = PyGLM_Number_FromPyObject<float>(obj1);
+				return glmArray_rmodO_T<float>(arr2, &f, 1, NULL);
+			case get_format_specifier<double>() :
+				d = PyGLM_Number_FromPyObject<double>(obj1);
+				return glmArray_rmodO_T<double>(arr2, &d, 1, NULL);
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj1);
+				return glmArray_rmodO_T<int64>(arr2, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj1);
+				return glmArray_rmodO_T<uint64>(arr2, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj1);
+				return glmArray_rmodO_T<int32>(arr2, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj1);
+				return glmArray_rmodO_T<uint32>(arr2, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj1);
+				return glmArray_rmodO_T<int16>(arr2, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj1);
+				return glmArray_rmodO_T<uint16>(arr2, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj1);
+				return glmArray_rmodO_T<int8>(arr2, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj1);
+				return glmArray_rmodO_T<uint8>(arr2, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj1))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj1));
+
+			if (arr2->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr2->subtype == pto->subtype) {
+				switch (arr2->format) {
+				case get_format_specifier<float>() :
+					return glmArray_rmodO_T<float>(arr2, (float*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<double>() :
+					return glmArray_rmodO_T<double>(arr2, (double*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int64>() :
+					return glmArray_rmodO_T<int64>(arr2, (int64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_rmodO_T<uint64>(arr2, (uint64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_rmodO_T<int32>(arr2, (int32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_rmodO_T<uint32>(arr2, (uint32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_rmodO_T<int16>(arr2, (int16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_rmodO_T<uint16>(arr2, (uint16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_rmodO_T<int8>(arr2, (int8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_rmodO_T<uint8>(arr2, (uint8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	}
+	PyGLM_TYPEERROR_2O("Invalid operand type(s) for '%': ", obj1, obj2);
+	return NULL;
+}
+
+template<typename T>
+static PyObject* glmArray_pow_T(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (arr1->nBytes > arr2->nBytes || arr1->glmType == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr1->glmType;
+		outArray->itemSize = arr1->itemSize;
+		outArray->nBytes = arr1->nBytes;
+		outArray->subtype = arr1->subtype;
+		outArray->shape[0] = arr1->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+	}
+	else {
+		outArray->glmType = arr2->glmType;
+		outArray->itemSize = arr2->itemSize;
+		outArray->nBytes = arr2->nBytes;
+		outArray->subtype = arr2->subtype;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr2->shape[1];
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			
+			outArrayDataPtr[outArrayIndex++] = std::pow(arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)], arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)]);
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_powO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = std::pow(arrDataPtr[i * arrRatio + (j % arrRatio)], o[j % o_size]);
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_rpowO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = std::pow(o[j % o_size], arrDataPtr[i * arrRatio + (j % arrRatio)]);
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_pow(PyObject* obj1, PyObject* obj2, PyObject* obj3) {
+	PyGLM_ASSERT((obj3 == NULL || obj3 == Py_None), "Only binary pow is implemented.");
+
+	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
+		// obj1 is an array
+
+		glmArray* arr1 = (glmArray*)obj1;
+
+		if (arr1->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyObject_TypeCheck(obj2, &glmArrayType)) {
+			// obj2 is an array
+			glmArray* arr2 = (glmArray*)obj2;
+
+			if (arr1->itemCount != arr2->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same amount of elements.");
+				return NULL;
+			}
+
+			if (arr1->format != arr2->format) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype) {
+				switch (arr1->format) {
+					case get_format_specifier<float>() :
+						return glmArray_pow_T<float>(arr1, arr2);
+					case get_format_specifier<double>() :
+						return glmArray_pow_T<double>(arr1, arr2);
+				}
+				PyErr_SetString(PyExc_ValueError, "Expected floating point values.");
+				return NULL;
+			}
+			PyErr_SetString(PyExc_ValueError, "The given arrays are not compatible.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj2)) {
+			union {
+				float f;
+				double d;
+			};
+			switch (arr1->format) {
+			case get_format_specifier<float>() :
+				f = PyGLM_Number_FromPyObject<float>(obj2);
+				return glmArray_powO_T<float>(arr1, &f, 1, NULL);
+			case get_format_specifier<double>() :
+				d = PyGLM_Number_FromPyObject<double>(obj2);
+				return glmArray_powO_T<double>(arr1, &d, 1, NULL);
+			}
+			PyErr_SetString(PyExc_ValueError, "Expected floating point values.");
+			return NULL;
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj2))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj2));
+
+			if (arr1->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == pto->subtype) {
+				switch (arr1->format) {
+				case get_format_specifier<float>() :
+					return glmArray_powO_T<float>(arr1, (float*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<double>() :
+					return glmArray_powO_T<double>(arr1, (double*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				}
+				PyErr_SetString(PyExc_ValueError, "Expected floating point values.");
+				return NULL;
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+	else {
+		glmArray* arr2 = (glmArray*)obj2;
+
+		if (arr2->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj1)) {
+			union {
+				float f;
+				double d;
+			};
+			switch (arr2->format) {
+			case get_format_specifier<float>() :
+				f = PyGLM_Number_FromPyObject<float>(obj1);
+				return glmArray_rpowO_T<float>(arr2, &f, 1, NULL);
+			case get_format_specifier<double>() :
+				d = PyGLM_Number_FromPyObject<double>(obj1);
+				return glmArray_rpowO_T<double>(arr2, &d, 1, NULL);
+			}
+			PyErr_SetString(PyExc_ValueError, "Expected floating point values.");
+			return NULL;
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj1))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj1));
+
+			if (arr2->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr2->subtype == pto->subtype) {
+				switch (arr2->format) {
+				case get_format_specifier<float>() :
+					return glmArray_rpowO_T<float>(arr2, (float*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<double>() :
+					return glmArray_rpowO_T<double>(arr2, (double*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				}
+				PyErr_SetString(PyExc_ValueError, "Expected floating point values.");
+				return NULL;
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	}
+	PyGLM_TYPEERROR_2O("Invalid operand type(s) for '**': ", obj1, obj2);
+	return NULL;
+}
+
+static inline bool negT(bool v) {
+	return !v;
+}
+
+template<typename T>
+static inline T negT(T v) {
+	return -v;
+}
+
+template<typename T>
+static PyObject* glmArray_neg_T(glmArray* arr) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+	outArray->glmType = arr->glmType;
+	outArray->itemSize = arr->itemSize;
+	outArray->nBytes = arr->nBytes;
+	outArray->subtype = arr->subtype;
+	outArray->shape[0] = arr->shape[0];
+	outArray->shape[1] = arr->shape[1];
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+
+	for (ssize_t i = 0; i < outArray->itemCount * outArrayRatio; i++) {
+		outArrayDataPtr[i] = negT(arrDataPtr[i]);
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_neg(glmArray* arr) {
+	switch (arr->format) {
+	case get_format_specifier<float>() :
+		return glmArray_neg_T<float>(arr);
+	case get_format_specifier<double>() :
+		return glmArray_neg_T<double>(arr);
+	case get_format_specifier<int64>() :
+		return glmArray_neg_T<int64>(arr);
+	case get_format_specifier<int32>() :
+		return glmArray_neg_T<int32>(arr);
+	case get_format_specifier<int16>() :
+		return glmArray_neg_T<int16>(arr);
+	case get_format_specifier<int8>() :
+		return glmArray_neg_T<int8>(arr);
+	case get_format_specifier<bool>() :
+		return glmArray_neg_T<bool>(arr);
+	}
+	PyGLM_TYPEERROR_O("Invalid operand type for '-': ", ((PyObject*)arr));
+	return NULL;
+}
+
+static PyObject* glmArray_pos(glmArray* arr) {
+	return PyGLM_INCREF((PyObject*)arr);
+}
+
+template<typename T>
+static PyObject* glmArray_abs_T(glmArray* arr) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+	outArray->glmType = arr->glmType;
+	outArray->itemSize = arr->itemSize;
+	outArray->nBytes = arr->nBytes;
+	outArray->subtype = arr->subtype;
+	outArray->shape[0] = arr->shape[0];
+	outArray->shape[1] = arr->shape[1];
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+
+	for (ssize_t i = 0; i < outArray->itemCount * outArrayRatio; i++) {
+		outArrayDataPtr[i] = abs(arrDataPtr[i]);
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_abs(glmArray* arr) {
+	switch (arr->format) {
+	case get_format_specifier<float>() :
+		return glmArray_abs_T<float>(arr);
+	case get_format_specifier<double>() :
+		return glmArray_abs_T<double>(arr);
+	case get_format_specifier<int64>() :
+		return glmArray_abs_T<int64>(arr);
+	case get_format_specifier<int32>() :
+		return glmArray_abs_T<int32>(arr);
+	case get_format_specifier<int16>() :
+		return glmArray_abs_T<int16>(arr);
+	case get_format_specifier<int8>() :
+		return glmArray_abs_T<int8>(arr);
+	case get_format_specifier<uint8>() :
+	case get_format_specifier<uint16>() :
+	case get_format_specifier<uint32>() :
+	case get_format_specifier<uint64>() :
+	case get_format_specifier<bool>() :
+		return PyGLM_INCREF((PyObject*)arr);
+	}
+	PyGLM_TYPEERROR_O("Invalid operand type for 'abs()': ", ((PyObject*)arr));
+	return NULL;
+}
+
+template<typename T>
+static PyObject* glmArray_inv_T(glmArray* arr) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+	outArray->glmType = arr->glmType;
+	outArray->itemSize = arr->itemSize;
+	outArray->nBytes = arr->nBytes;
+	outArray->subtype = arr->subtype;
+	outArray->shape[0] = arr->shape[0];
+	outArray->shape[1] = arr->shape[1];
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+
+	for (ssize_t i = 0; i < outArray->itemCount * outArrayRatio; i++) {
+		outArrayDataPtr[i] = ~(arrDataPtr[i]);
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_inv(glmArray* arr) {
+	switch (arr->format) {
+	case get_format_specifier<int64>() :
+		return glmArray_inv_T<int64>(arr);
+	case get_format_specifier<uint64>() :
+		return glmArray_inv_T<uint64>(arr);
+	case get_format_specifier<int32>() :
+		return glmArray_inv_T<int32>(arr);
+	case get_format_specifier<uint32>() :
+		return glmArray_inv_T<uint32>(arr);
+	case get_format_specifier<int16>() :
+		return glmArray_inv_T<int16>(arr);
+	case get_format_specifier<uint16>() :
+		return glmArray_inv_T<uint16>(arr);
+	case get_format_specifier<int8>() :
+		return glmArray_inv_T<int8>(arr);
+	case get_format_specifier<uint8>() :
+		return glmArray_inv_T<uint8>(arr);
+	}
+	PyGLM_TYPEERROR_O("Invalid operand type for '~': ", ((PyObject*)arr));
+	return NULL;
+}
+
+template<typename T>
+static PyObject* glmArray_lshift_T(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (arr1->nBytes > arr2->nBytes || arr1->glmType == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr1->glmType;
+		outArray->itemSize = arr1->itemSize;
+		outArray->nBytes = arr1->nBytes;
+		outArray->subtype = arr1->subtype;
+		outArray->shape[0] = arr1->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+	}
+	else {
+		outArray->glmType = arr2->glmType;
+		outArray->itemSize = arr2->itemSize;
+		outArray->nBytes = arr2->nBytes;
+		outArray->subtype = arr2->subtype;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr2->shape[1];
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] << arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_lshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] << o[j % o_size];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_rlshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = o[j % o_size] << arrDataPtr[i * arrRatio + (j % arrRatio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_lshift(PyObject* obj1, PyObject* obj2) {
+	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
+		// obj1 is an array
+
+		glmArray* arr1 = (glmArray*)obj1;
+
+		if (arr1->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyObject_TypeCheck(obj2, &glmArrayType)) {
+			// obj2 is an array
+			glmArray* arr2 = (glmArray*)obj2;
+
+			if (arr1->itemCount != arr2->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same amount of elements.");
+				return NULL;
+			}
+
+			if (arr1->format != arr2->format) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype) {
+				switch (arr1->format) {
+					case get_format_specifier<int64>() :
+						return glmArray_lshift_T<int64>(arr1, arr2);
+					case get_format_specifier<uint64>() :
+						return glmArray_lshift_T<uint64>(arr1, arr2);
+					case get_format_specifier<int32>() :
+						return glmArray_lshift_T<int32>(arr1, arr2);
+					case get_format_specifier<uint32>() :
+						return glmArray_lshift_T<uint32>(arr1, arr2);
+					case get_format_specifier<int16>() :
+						return glmArray_lshift_T<int16>(arr1, arr2);
+					case get_format_specifier<uint16>() :
+						return glmArray_lshift_T<uint16>(arr1, arr2);
+					case get_format_specifier<int8>() :
+						return glmArray_lshift_T<int8>(arr1, arr2);
+					case get_format_specifier<uint8>() :
+						return glmArray_lshift_T<uint8>(arr1, arr2);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given arrays are not compatible.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj2)) {
+			union {
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr1->format) {
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj2);
+				return glmArray_lshiftO_T<int64>(arr1, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj2);
+				return glmArray_lshiftO_T<uint64>(arr1, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj2);
+				return glmArray_lshiftO_T<int32>(arr1, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj2);
+				return glmArray_lshiftO_T<uint32>(arr1, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj2);
+				return glmArray_lshiftO_T<int16>(arr1, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj2);
+				return glmArray_lshiftO_T<uint16>(arr1, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj2);
+				return glmArray_lshiftO_T<int8>(arr1, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj2);
+				return glmArray_lshiftO_T<uint8>(arr1, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj2))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj2));
+
+			if (arr1->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == pto->subtype) {
+				switch (arr1->format) {
+				case get_format_specifier<int64>() :
+					return glmArray_lshiftO_T<int64>(arr1, (int64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_lshiftO_T<uint64>(arr1, (uint64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_lshiftO_T<int32>(arr1, (int32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_lshiftO_T<uint32>(arr1, (uint32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_lshiftO_T<int16>(arr1, (int16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_lshiftO_T<uint16>(arr1, (uint16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_lshiftO_T<int8>(arr1, (int8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_lshiftO_T<uint8>(arr1, (uint8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+	else {
+		glmArray* arr2 = (glmArray*)obj2;
+
+		if (arr2->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj1)) {
+			union {
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr2->format) {
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj1);
+				return glmArray_rlshiftO_T<int64>(arr2, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj1);
+				return glmArray_rlshiftO_T<uint64>(arr2, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj1);
+				return glmArray_rlshiftO_T<int32>(arr2, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj1);
+				return glmArray_rlshiftO_T<uint32>(arr2, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj1);
+				return glmArray_rlshiftO_T<int16>(arr2, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj1);
+				return glmArray_rlshiftO_T<uint16>(arr2, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj1);
+				return glmArray_rlshiftO_T<int8>(arr2, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj1);
+				return glmArray_rlshiftO_T<uint8>(arr2, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj1))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj1));
+
+			if (arr2->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr2->subtype == pto->subtype) {
+				switch (arr2->format) {
+				case get_format_specifier<int64>() :
+					return glmArray_rlshiftO_T<int64>(arr2, (int64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_rlshiftO_T<uint64>(arr2, (uint64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_rlshiftO_T<int32>(arr2, (int32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_rlshiftO_T<uint32>(arr2, (uint32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_rlshiftO_T<int16>(arr2, (int16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_rlshiftO_T<uint16>(arr2, (uint16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_rlshiftO_T<int8>(arr2, (int8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_rlshiftO_T<uint8>(arr2, (uint8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	}
+	PyGLM_TYPEERROR_2O("Invalid operand type(s) for '<<': ", obj1, obj2);
+	return NULL;
+}
+
+template<typename T>
+static PyObject* glmArray_rshift_T(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (arr1->nBytes > arr2->nBytes || arr1->glmType == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr1->glmType;
+		outArray->itemSize = arr1->itemSize;
+		outArray->nBytes = arr1->nBytes;
+		outArray->subtype = arr1->subtype;
+		outArray->shape[0] = arr1->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+	}
+	else {
+		outArray->glmType = arr2->glmType;
+		outArray->itemSize = arr2->itemSize;
+		outArray->nBytes = arr2->nBytes;
+		outArray->subtype = arr2->subtype;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr2->shape[1];
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] >> arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_rshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] >> o[j % o_size];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_rrshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = o[j % o_size] >> arrDataPtr[i * arrRatio + (j % arrRatio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_rshift(PyObject* obj1, PyObject* obj2) {
+	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
+		// obj1 is an array
+
+		glmArray* arr1 = (glmArray*)obj1;
+
+		if (arr1->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyObject_TypeCheck(obj2, &glmArrayType)) {
+			// obj2 is an array
+			glmArray* arr2 = (glmArray*)obj2;
+
+			if (arr1->itemCount != arr2->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same amount of elements.");
+				return NULL;
+			}
+
+			if (arr1->format != arr2->format) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype) {
+				switch (arr1->format) {
+					case get_format_specifier<int64>() :
+						return glmArray_rshift_T<int64>(arr1, arr2);
+					case get_format_specifier<uint64>() :
+						return glmArray_rshift_T<uint64>(arr1, arr2);
+					case get_format_specifier<int32>() :
+						return glmArray_rshift_T<int32>(arr1, arr2);
+					case get_format_specifier<uint32>() :
+						return glmArray_rshift_T<uint32>(arr1, arr2);
+					case get_format_specifier<int16>() :
+						return glmArray_rshift_T<int16>(arr1, arr2);
+					case get_format_specifier<uint16>() :
+						return glmArray_rshift_T<uint16>(arr1, arr2);
+					case get_format_specifier<int8>() :
+						return glmArray_rshift_T<int8>(arr1, arr2);
+					case get_format_specifier<uint8>() :
+						return glmArray_rshift_T<uint8>(arr1, arr2);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given arrays are not compatible.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj2)) {
+			union {
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr1->format) {
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj2);
+				return glmArray_rshiftO_T<int64>(arr1, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj2);
+				return glmArray_rshiftO_T<uint64>(arr1, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj2);
+				return glmArray_rshiftO_T<int32>(arr1, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj2);
+				return glmArray_rshiftO_T<uint32>(arr1, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj2);
+				return glmArray_rshiftO_T<int16>(arr1, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj2);
+				return glmArray_rshiftO_T<uint16>(arr1, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj2);
+				return glmArray_rshiftO_T<int8>(arr1, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj2);
+				return glmArray_rshiftO_T<uint8>(arr1, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj2))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj2));
+
+			if (arr1->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == pto->subtype) {
+				switch (arr1->format) {
+				case get_format_specifier<int64>() :
+					return glmArray_rshiftO_T<int64>(arr1, (int64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_rshiftO_T<uint64>(arr1, (uint64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_rshiftO_T<int32>(arr1, (int32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_rshiftO_T<uint32>(arr1, (uint32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_rshiftO_T<int16>(arr1, (int16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_rshiftO_T<uint16>(arr1, (uint16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_rshiftO_T<int8>(arr1, (int8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_rshiftO_T<uint8>(arr1, (uint8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+	else {
+		glmArray* arr2 = (glmArray*)obj2;
+
+		if (arr2->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj1)) {
+			union {
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr2->format) {
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj1);
+				return glmArray_rrshiftO_T<int64>(arr2, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj1);
+				return glmArray_rrshiftO_T<uint64>(arr2, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj1);
+				return glmArray_rrshiftO_T<int32>(arr2, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj1);
+				return glmArray_rrshiftO_T<uint32>(arr2, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj1);
+				return glmArray_rrshiftO_T<int16>(arr2, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj1);
+				return glmArray_rrshiftO_T<uint16>(arr2, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj1);
+				return glmArray_rrshiftO_T<int8>(arr2, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj1);
+				return glmArray_rrshiftO_T<uint8>(arr2, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj1))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj1));
+
+			if (arr2->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr2->subtype == pto->subtype) {
+				switch (arr2->format) {
+				case get_format_specifier<int64>() :
+					return glmArray_rrshiftO_T<int64>(arr2, (int64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_rrshiftO_T<uint64>(arr2, (uint64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_rrshiftO_T<int32>(arr2, (int32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_rrshiftO_T<uint32>(arr2, (uint32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_rrshiftO_T<int16>(arr2, (int16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_rrshiftO_T<uint16>(arr2, (uint16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_rrshiftO_T<int8>(arr2, (int8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_rrshiftO_T<uint8>(arr2, (uint8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	}
+	PyGLM_TYPEERROR_2O("Invalid operand type(s) for '>>': ", obj1, obj2);
+	return NULL;
+}
+
+template<typename T>
+static PyObject* glmArray_and_T(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (arr1->nBytes > arr2->nBytes || arr1->glmType == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr1->glmType;
+		outArray->itemSize = arr1->itemSize;
+		outArray->nBytes = arr1->nBytes;
+		outArray->subtype = arr1->subtype;
+		outArray->shape[0] = arr1->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+	}
+	else {
+		outArray->glmType = arr2->glmType;
+		outArray->itemSize = arr2->itemSize;
+		outArray->nBytes = arr2->nBytes;
+		outArray->subtype = arr2->subtype;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr2->shape[1];
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] & arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_andO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] & o[j % o_size];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_randO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = o[j % o_size] & arrDataPtr[i * arrRatio + (j % arrRatio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_and(PyObject* obj1, PyObject* obj2) {
+	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
+		// obj1 is an array
+
+		glmArray* arr1 = (glmArray*)obj1;
+
+		if (arr1->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyObject_TypeCheck(obj2, &glmArrayType)) {
+			// obj2 is an array
+			glmArray* arr2 = (glmArray*)obj2;
+
+			if (arr1->itemCount != arr2->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same amount of elements.");
+				return NULL;
+			}
+
+			if (arr1->format != arr2->format) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype) {
+				switch (arr1->format) {
+					case get_format_specifier<int64>() :
+						return glmArray_and_T<int64>(arr1, arr2);
+					case get_format_specifier<uint64>() :
+						return glmArray_and_T<uint64>(arr1, arr2);
+					case get_format_specifier<int32>() :
+						return glmArray_and_T<int32>(arr1, arr2);
+					case get_format_specifier<uint32>() :
+						return glmArray_and_T<uint32>(arr1, arr2);
+					case get_format_specifier<int16>() :
+						return glmArray_and_T<int16>(arr1, arr2);
+					case get_format_specifier<uint16>() :
+						return glmArray_and_T<uint16>(arr1, arr2);
+					case get_format_specifier<int8>() :
+						return glmArray_and_T<int8>(arr1, arr2);
+					case get_format_specifier<uint8>() :
+						return glmArray_and_T<uint8>(arr1, arr2);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given arrays are not compatible.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj2)) {
+			union {
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr1->format) {
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj2);
+				return glmArray_andO_T<int64>(arr1, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj2);
+				return glmArray_andO_T<uint64>(arr1, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj2);
+				return glmArray_andO_T<int32>(arr1, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj2);
+				return glmArray_andO_T<uint32>(arr1, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj2);
+				return glmArray_andO_T<int16>(arr1, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj2);
+				return glmArray_andO_T<uint16>(arr1, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj2);
+				return glmArray_andO_T<int8>(arr1, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj2);
+				return glmArray_andO_T<uint8>(arr1, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj2))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj2));
+
+			if (arr1->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == pto->subtype) {
+				switch (arr1->format) {
+				case get_format_specifier<int64>() :
+					return glmArray_andO_T<int64>(arr1, (int64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_andO_T<uint64>(arr1, (uint64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_andO_T<int32>(arr1, (int32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_andO_T<uint32>(arr1, (uint32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_andO_T<int16>(arr1, (int16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_andO_T<uint16>(arr1, (uint16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_andO_T<int8>(arr1, (int8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_andO_T<uint8>(arr1, (uint8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+	else {
+		glmArray* arr2 = (glmArray*)obj2;
+
+		if (arr2->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj1)) {
+			union {
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr2->format) {
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj1);
+				return glmArray_randO_T<int64>(arr2, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj1);
+				return glmArray_randO_T<uint64>(arr2, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj1);
+				return glmArray_randO_T<int32>(arr2, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj1);
+				return glmArray_randO_T<uint32>(arr2, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj1);
+				return glmArray_randO_T<int16>(arr2, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj1);
+				return glmArray_randO_T<uint16>(arr2, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj1);
+				return glmArray_randO_T<int8>(arr2, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj1);
+				return glmArray_randO_T<uint8>(arr2, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj1))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj1));
+
+			if (arr2->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr2->subtype == pto->subtype) {
+				switch (arr2->format) {
+				case get_format_specifier<int64>() :
+					return glmArray_randO_T<int64>(arr2, (int64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_randO_T<uint64>(arr2, (uint64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_randO_T<int32>(arr2, (int32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_randO_T<uint32>(arr2, (uint32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_randO_T<int16>(arr2, (int16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_randO_T<uint16>(arr2, (uint16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_randO_T<int8>(arr2, (int8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_randO_T<uint8>(arr2, (uint8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	}
+	PyGLM_TYPEERROR_2O("Invalid operand type(s) for '&': ", obj1, obj2);
+	return NULL;
+}
+
+template<typename T>
+static PyObject* glmArray_xor_T(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (arr1->nBytes > arr2->nBytes || arr1->glmType == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr1->glmType;
+		outArray->itemSize = arr1->itemSize;
+		outArray->nBytes = arr1->nBytes;
+		outArray->subtype = arr1->subtype;
+		outArray->shape[0] = arr1->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+	}
+	else {
+		outArray->glmType = arr2->glmType;
+		outArray->itemSize = arr2->itemSize;
+		outArray->nBytes = arr2->nBytes;
+		outArray->subtype = arr2->subtype;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr2->shape[1];
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] ^ arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_xorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] ^ o[j % o_size];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_rxorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = o[j % o_size] ^ arrDataPtr[i * arrRatio + (j % arrRatio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_xor(PyObject* obj1, PyObject* obj2) {
+	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
+		// obj1 is an array
+
+		glmArray* arr1 = (glmArray*)obj1;
+
+		if (arr1->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyObject_TypeCheck(obj2, &glmArrayType)) {
+			// obj2 is an array
+			glmArray* arr2 = (glmArray*)obj2;
+
+			if (arr1->itemCount != arr2->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same amount of elements.");
+				return NULL;
+			}
+
+			if (arr1->format != arr2->format) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype) {
+				switch (arr1->format) {
+					case get_format_specifier<int64>() :
+						return glmArray_xor_T<int64>(arr1, arr2);
+					case get_format_specifier<uint64>() :
+						return glmArray_xor_T<uint64>(arr1, arr2);
+					case get_format_specifier<int32>() :
+						return glmArray_xor_T<int32>(arr1, arr2);
+					case get_format_specifier<uint32>() :
+						return glmArray_xor_T<uint32>(arr1, arr2);
+					case get_format_specifier<int16>() :
+						return glmArray_xor_T<int16>(arr1, arr2);
+					case get_format_specifier<uint16>() :
+						return glmArray_xor_T<uint16>(arr1, arr2);
+					case get_format_specifier<int8>() :
+						return glmArray_xor_T<int8>(arr1, arr2);
+					case get_format_specifier<uint8>() :
+						return glmArray_xor_T<uint8>(arr1, arr2);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given arrays are not compatible.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj2)) {
+			union {
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr1->format) {
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj2);
+				return glmArray_xorO_T<int64>(arr1, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj2);
+				return glmArray_xorO_T<uint64>(arr1, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj2);
+				return glmArray_xorO_T<int32>(arr1, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj2);
+				return glmArray_xorO_T<uint32>(arr1, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj2);
+				return glmArray_xorO_T<int16>(arr1, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj2);
+				return glmArray_xorO_T<uint16>(arr1, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj2);
+				return glmArray_xorO_T<int8>(arr1, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj2);
+				return glmArray_xorO_T<uint8>(arr1, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj2))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj2));
+
+			if (arr1->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == pto->subtype) {
+				switch (arr1->format) {
+				case get_format_specifier<int64>() :
+					return glmArray_xorO_T<int64>(arr1, (int64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_xorO_T<uint64>(arr1, (uint64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_xorO_T<int32>(arr1, (int32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_xorO_T<uint32>(arr1, (uint32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_xorO_T<int16>(arr1, (int16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_xorO_T<uint16>(arr1, (uint16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_xorO_T<int8>(arr1, (int8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_xorO_T<uint8>(arr1, (uint8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+	else {
+		glmArray* arr2 = (glmArray*)obj2;
+
+		if (arr2->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj1)) {
+			union {
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr2->format) {
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj1);
+				return glmArray_rxorO_T<int64>(arr2, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj1);
+				return glmArray_rxorO_T<uint64>(arr2, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj1);
+				return glmArray_rxorO_T<int32>(arr2, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj1);
+				return glmArray_rxorO_T<uint32>(arr2, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj1);
+				return glmArray_rxorO_T<int16>(arr2, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj1);
+				return glmArray_rxorO_T<uint16>(arr2, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj1);
+				return glmArray_rxorO_T<int8>(arr2, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj1);
+				return glmArray_rxorO_T<uint8>(arr2, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj1))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj1));
+
+			if (arr2->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr2->subtype == pto->subtype) {
+				switch (arr2->format) {
+				case get_format_specifier<int64>() :
+					return glmArray_rxorO_T<int64>(arr2, (int64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_rxorO_T<uint64>(arr2, (uint64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_rxorO_T<int32>(arr2, (int32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_rxorO_T<uint32>(arr2, (uint32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_rxorO_T<int16>(arr2, (int16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_rxorO_T<uint16>(arr2, (uint16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_rxorO_T<int8>(arr2, (int8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_rxorO_T<uint8>(arr2, (uint8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	}
+	PyGLM_TYPEERROR_2O("Invalid operand type(s) for '^': ", obj1, obj2);
+	return NULL;
+}
+
+template<typename T>
+static PyObject* glmArray_or_T(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (arr1->nBytes > arr2->nBytes || arr1->glmType == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr1->glmType;
+		outArray->itemSize = arr1->itemSize;
+		outArray->nBytes = arr1->nBytes;
+		outArray->subtype = arr1->subtype;
+		outArray->shape[0] = arr1->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+	}
+	else {
+		outArray->glmType = arr2->glmType;
+		outArray->itemSize = arr2->itemSize;
+		outArray->nBytes = arr2->nBytes;
+		outArray->subtype = arr2->subtype;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr2->shape[1];
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] | arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_orO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] | o[j % o_size];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_rorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			outArrayDataPtr[outArrayIndex++] = o[j % o_size] | arrDataPtr[i * arrRatio + (j % arrRatio)];
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_or(PyObject* obj1, PyObject* obj2) {
+	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
+		// obj1 is an array
+
+		glmArray* arr1 = (glmArray*)obj1;
+
+		if (arr1->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyObject_TypeCheck(obj2, &glmArrayType)) {
+			// obj2 is an array
+			glmArray* arr2 = (glmArray*)obj2;
+
+			if (arr1->itemCount != arr2->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same amount of elements.");
+				return NULL;
+			}
+
+			if (arr1->format != arr2->format) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype) {
+				switch (arr1->format) {
+					case get_format_specifier<int64>() :
+						return glmArray_or_T<int64>(arr1, arr2);
+					case get_format_specifier<uint64>() :
+						return glmArray_or_T<uint64>(arr1, arr2);
+					case get_format_specifier<int32>() :
+						return glmArray_or_T<int32>(arr1, arr2);
+					case get_format_specifier<uint32>() :
+						return glmArray_or_T<uint32>(arr1, arr2);
+					case get_format_specifier<int16>() :
+						return glmArray_or_T<int16>(arr1, arr2);
+					case get_format_specifier<uint16>() :
+						return glmArray_or_T<uint16>(arr1, arr2);
+					case get_format_specifier<int8>() :
+						return glmArray_or_T<int8>(arr1, arr2);
+					case get_format_specifier<uint8>() :
+						return glmArray_or_T<uint8>(arr1, arr2);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given arrays are not compatible.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj2)) {
+			union {
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr1->format) {
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj2);
+				return glmArray_orO_T<int64>(arr1, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj2);
+				return glmArray_orO_T<uint64>(arr1, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj2);
+				return glmArray_orO_T<int32>(arr1, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj2);
+				return glmArray_orO_T<uint32>(arr1, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj2);
+				return glmArray_orO_T<int16>(arr1, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj2);
+				return glmArray_orO_T<uint16>(arr1, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj2);
+				return glmArray_orO_T<int8>(arr1, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj2);
+				return glmArray_orO_T<uint8>(arr1, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj2))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj2));
+
+			if (arr1->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == pto->subtype) {
+				switch (arr1->format) {
+				case get_format_specifier<int64>() :
+					return glmArray_orO_T<int64>(arr1, (int64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_orO_T<uint64>(arr1, (uint64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_orO_T<int32>(arr1, (int32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_orO_T<uint32>(arr1, (uint32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_orO_T<int16>(arr1, (int16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_orO_T<uint16>(arr1, (uint16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_orO_T<int8>(arr1, (int8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_orO_T<uint8>(arr1, (uint8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+	else {
+		glmArray* arr2 = (glmArray*)obj2;
+
+		if (arr2->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj1)) {
+			union {
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr2->format) {
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj1);
+				return glmArray_rorO_T<int64>(arr2, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj1);
+				return glmArray_rorO_T<uint64>(arr2, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj1);
+				return glmArray_rorO_T<int32>(arr2, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj1);
+				return glmArray_rorO_T<uint32>(arr2, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj1);
+				return glmArray_rorO_T<int16>(arr2, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj1);
+				return glmArray_rorO_T<uint16>(arr2, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj1);
+				return glmArray_rorO_T<int8>(arr2, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj1);
+				return glmArray_rorO_T<uint8>(arr2, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj1))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj1));
+
+			if (arr2->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr2->subtype == pto->subtype) {
+				switch (arr2->format) {
+				case get_format_specifier<int64>() :
+					return glmArray_rorO_T<int64>(arr2, (int64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_rorO_T<uint64>(arr2, (uint64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_rorO_T<int32>(arr2, (int32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_rorO_T<uint32>(arr2, (uint32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_rorO_T<int16>(arr2, (int16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_rorO_T<uint16>(arr2, (uint16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_rorO_T<int8>(arr2, (int8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_rorO_T<uint8>(arr2, (uint8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	}
+	PyGLM_TYPEERROR_2O("Invalid operand type(s) for '|': ", obj1, obj2);
+	return NULL;
+}
+
+template<typename T>
+static PyObject* glmArray_div_T(glmArray* arr1, glmArray* arr2) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr1->dtSize;
+	outArray->format = arr1->format;
+	outArray->itemCount = arr1->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if (arr1->nBytes > arr2->nBytes || arr1->glmType == PyGLM_TYPE_VEC) {
+		outArray->glmType = arr1->glmType;
+		outArray->itemSize = arr1->itemSize;
+		outArray->nBytes = arr1->nBytes;
+		outArray->subtype = arr1->subtype;
+		outArray->shape[0] = arr1->shape[0];
+		outArray->shape[1] = arr1->shape[1];
+	}
+	else {
+		outArray->glmType = arr2->glmType;
+		outArray->itemSize = arr2->itemSize;
+		outArray->nBytes = arr2->nBytes;
+		outArray->subtype = arr2->subtype;
+		outArray->shape[0] = arr2->shape[0];
+		outArray->shape[1] = arr2->shape[1];
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arr1DataPtr = (T*)arr1->data;
+	T* arr2DataPtr = (T*)arr2->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			T b = arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
+
+			if (b == (T)0) {
+				PyGLM_ZERO_DIVISION_ERROR_T(T);
+			}
+
+			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] / b;
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_divO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			T b = o[j % o_size];
+
+			if (b == (T)0) {
+				PyGLM_ZERO_DIVISION_ERROR_T(T);
+			}
+
+			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] / b;
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+template<typename T>
+static PyObject* glmArray_rdivO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
+	outArray->dtSize = arr->dtSize;
+	outArray->format = arr->format;
+	outArray->itemCount = arr->itemCount;
+	outArray->readonly = false;
+	outArray->reference = NULL;
+
+	if ((size_t)arr->itemSize / sizeof(T) > (size_t)o_size || arr->glmType == PyGLM_TYPE_VEC || pto == NULL) {
+		outArray->glmType = arr->glmType;
+		outArray->itemSize = arr->itemSize;
+		outArray->nBytes = arr->nBytes;
+		outArray->subtype = arr->subtype;
+		outArray->shape[0] = arr->shape[0];
+		outArray->shape[1] = arr->shape[1];
+	}
+	else {
+		PyGLM_ASSERT(pto != NULL, "pto is NULL. This should never occur!");
+		outArray->glmType = pto->glmType & PyGLM_TYPE_MVEC_FILTER;
+		outArray->itemSize = pto->itemSize;
+		outArray->nBytes = outArray->itemCount * outArray->itemSize;
+		outArray->subtype = pto->subtype;
+		outArray->shape[0] = pto->C;
+		outArray->shape[1] = pto->R;
+	}
+
+	outArray->data = PyMem_Malloc(outArray->nBytes);
+	if (outArray->data == NULL) {
+		Py_DECREF(outArray);
+		PyErr_SetString(PyExc_MemoryError, "Out of memory.");
+		return NULL;
+	}
+
+	T* arrDataPtr = (T*)arr->data;
+
+	T* outArrayDataPtr = (T*)outArray->data;
+
+	ssize_t outArrayIndex = 0;
+
+	for (ssize_t i = 0; i < outArray->itemCount; i++) {
+		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+
+		for (ssize_t j = 0; j < outArrayRatio; j++) {
+			T b = arrDataPtr[i * arrRatio + (j % arrRatio)];
+			
+			if (b == (T)0) {
+				PyGLM_ZERO_DIVISION_ERROR_T(T);
+			}
+
+			outArrayDataPtr[outArrayIndex++] = o[j % o_size] / b;
+		}
+	}
+
+	return (PyObject*)outArray;
+}
+
+static PyObject* glmArray_div(PyObject* obj1, PyObject* obj2) {
+	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
+		// obj1 is an array
+
+		glmArray* arr1 = (glmArray*)obj1;
+
+		if (arr1->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyObject_TypeCheck(obj2, &glmArrayType)) {
+			// obj2 is an array
+			glmArray* arr2 = (glmArray*)obj2;
+
+			if (arr1->itemCount != arr2->itemCount) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same amount of elements.");
+				return NULL;
+			}
+
+			if (arr1->format != arr2->format) {
+				PyErr_SetString(PyExc_ValueError, "The given arrays don't have the same data type.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || arr2->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == arr2->subtype) {
+				switch (arr1->format) {
+					case get_format_specifier<float>() :
+						return glmArray_div_T<float>(arr1, arr2);
+					case get_format_specifier<double>() :
+						return glmArray_div_T<double>(arr1, arr2);
+					case get_format_specifier<int64>() :
+						return glmArray_div_T<int64>(arr1, arr2);
+					case get_format_specifier<uint64>() :
+						return glmArray_div_T<uint64>(arr1, arr2);
+					case get_format_specifier<int32>() :
+						return glmArray_div_T<int32>(arr1, arr2);
+					case get_format_specifier<uint32>() :
+						return glmArray_div_T<uint32>(arr1, arr2);
+					case get_format_specifier<int16>() :
+						return glmArray_div_T<int16>(arr1, arr2);
+					case get_format_specifier<uint16>() :
+						return glmArray_div_T<uint16>(arr1, arr2);
+					case get_format_specifier<int8>() :
+						return glmArray_div_T<int8>(arr1, arr2);
+					case get_format_specifier<uint8>() :
+						return glmArray_div_T<uint8>(arr1, arr2);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given arrays are not compatible.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj2)) {
+			union {
+				float f;
+				double d;
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr1->format) {
+			case get_format_specifier<float>() :
+				f = PyGLM_Number_FromPyObject<float>(obj2);
+				return glmArray_divO_T<float>(arr1, &f, 1, NULL);
+			case get_format_specifier<double>() :
+				d = PyGLM_Number_FromPyObject<double>(obj2);
+				return glmArray_divO_T<double>(arr1, &d, 1, NULL);
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj2);
+				return glmArray_divO_T<int64>(arr1, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj2);
+				return glmArray_divO_T<uint64>(arr1, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj2);
+				return glmArray_divO_T<int32>(arr1, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj2);
+				return glmArray_divO_T<uint32>(arr1, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj2);
+				return glmArray_divO_T<int16>(arr1, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj2);
+				return glmArray_divO_T<uint16>(arr1, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj2);
+				return glmArray_divO_T<int8>(arr1, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj2);
+				return glmArray_divO_T<uint8>(arr1, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj2))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj2));
+
+			if (arr1->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr1->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr1->subtype == pto->subtype) {
+				switch (arr1->format) {
+				case get_format_specifier<float>() :
+					return glmArray_divO_T<float>(arr1, (float*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<double>() :
+					return glmArray_divO_T<double>(arr1, (double*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int64>() :
+					return glmArray_divO_T<int64>(arr1, (int64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_divO_T<uint64>(arr1, (uint64*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_divO_T<int32>(arr1, (int32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_divO_T<uint32>(arr1, (uint32*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_divO_T<int16>(arr1, (int16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_divO_T<uint16>(arr1, (uint16*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_divO_T<int8>(arr1, (int8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_divO_T<uint8>(arr1, (uint8*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+	else {
+		glmArray* arr2 = (glmArray*)obj2;
+
+		if (arr2->glmType == PyGLM_TYPE_MAT) {
+			PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+			return NULL;
+		}
+
+		if (PyGLM_Number_Check(obj1)) {
+			union {
+				float f;
+				double d;
+				int64 i64;
+				uint64 u64;
+				int32 i32;
+				uint32 u32;
+				int16 i16;
+				uint16 u16;
+				int8 i8;
+				uint8 u8;
+			};
+			switch (arr2->format) {
+			case get_format_specifier<float>() :
+				f = PyGLM_Number_FromPyObject<float>(obj1);
+				return glmArray_rdivO_T<float>(arr2, &f, 1, NULL);
+			case get_format_specifier<double>() :
+				d = PyGLM_Number_FromPyObject<double>(obj1);
+				return glmArray_rdivO_T<double>(arr2, &d, 1, NULL);
+			case get_format_specifier<int64>() :
+				i64 = PyGLM_Number_FromPyObject<int64>(obj1);
+				return glmArray_rdivO_T<int64>(arr2, &i64, 1, NULL);
+			case get_format_specifier<uint64>() :
+				u64 = PyGLM_Number_FromPyObject<uint64>(obj1);
+				return glmArray_rdivO_T<uint64>(arr2, &u64, 1, NULL);
+			case get_format_specifier<int32>() :
+				i32 = PyGLM_Number_FromPyObject<int32>(obj1);
+				return glmArray_rdivO_T<int32>(arr2, &i32, 1, NULL);
+			case get_format_specifier<uint32>() :
+				u32 = PyGLM_Number_FromPyObject<uint32>(obj1);
+				return glmArray_rdivO_T<uint32>(arr2, &u32, 1, NULL);
+			case get_format_specifier<int16>() :
+				i16 = PyGLM_Number_FromPyObject<int16>(obj1);
+				return glmArray_rdivO_T<int16>(arr2, &i16, 1, NULL);
+			case get_format_specifier<uint16>() :
+				u16 = PyGLM_Number_FromPyObject<uint16>(obj1);
+				return glmArray_rdivO_T<uint16>(arr2, &u16, 1, NULL);
+			case get_format_specifier<int8>() :
+				i8 = PyGLM_Number_FromPyObject<int8>(obj1);
+				return glmArray_rdivO_T<int8>(arr2, &i8, 1, NULL);
+			case get_format_specifier<uint8>() :
+				u8 = PyGLM_Number_FromPyObject<uint8>(obj1);
+				return glmArray_rdivO_T<uint8>(arr2, &u8, 1, NULL);
+			}
+		}
+
+		if (PyGLM_Is_PyGLM_Type(Py_TYPE(obj1))) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)(Py_TYPE(obj1));
+
+			if (arr2->format != pto->format) {
+				PyErr_SetString(PyExc_ValueError, "The given array and object don't have the same data type.");
+				return NULL;
+			}
+
+			if (pto->glmType == PyGLM_TYPE_MAT) {
+				PyErr_SetString(PyExc_TypeError, "Matrices don't support this operation.");
+				return NULL;
+			}
+
+			if (arr2->glmType == PyGLM_TYPE_CTYPES || pto->glmType == PyGLM_TYPE_CTYPES || arr2->subtype == pto->subtype) {
+				switch (arr2->format) {
+				case get_format_specifier<float>() :
+					return glmArray_rdivO_T<float>(arr2, (float*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<double>() :
+					return glmArray_rdivO_T<double>(arr2, (double*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int64>() :
+					return glmArray_rdivO_T<int64>(arr2, (int64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint64>() :
+					return glmArray_rdivO_T<uint64>(arr2, (uint64*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int32>() :
+					return glmArray_rdivO_T<int32>(arr2, (int32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint32>() :
+					return glmArray_rdivO_T<uint32>(arr2, (uint32*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int16>() :
+					return glmArray_rdivO_T<int16>(arr2, (int16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint16>() :
+					return glmArray_rdivO_T<uint16>(arr2, (uint16*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<int8>() :
+					return glmArray_rdivO_T<int8>(arr2, (int8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				case get_format_specifier<uint8>() :
+					return glmArray_rdivO_T<uint8>(arr2, (uint8*)(pto->getDataOf(obj1)), pto->itemSize / pto->dtSize, pto);
+				}
+			}
+			PyErr_SetString(PyExc_ValueError, "The given array and object are not compatible.");
+			return NULL;
+		}
+	}
+	PyGLM_TYPEERROR_2O("Invalid operand type(s) for '/': ", obj1, obj2);
+	return NULL;
 }

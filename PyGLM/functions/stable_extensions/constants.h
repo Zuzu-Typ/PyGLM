@@ -34,15 +34,15 @@ PyGLM_MAKE_GLM_FUNC__rF(golden_ratio)
 
 PyDoc_STRVAR(epsilon_docstr,
 	"epsilon() -> float\n"
-	"	Return the epsilon constant for floating point types."
+	"	Return the `epsilon` constant for floating point types."
 );
 PyDoc_STRVAR(pi_docstr,
 	"pi() -> float\n"
-	"	Return the pi constant for floating point types."
+	"	Return the `pi` constant for floating point types."
 );
 PyDoc_STRVAR(e_docstr,
 	"e() -> float\n"
-	"	Return e constant."
+	"	Return `e` constant."
 );
 PyDoc_STRVAR(euler_docstr,
 	"euler() -> float\n"
@@ -50,7 +50,7 @@ PyDoc_STRVAR(euler_docstr,
 );
 PyDoc_STRVAR(four_over_pi_docstr,
 	"four_over_pi() -> float\n"
-	"	Return 4 / pi."
+	"	Return `4 / pi`."
 );
 PyDoc_STRVAR(golden_ratio_docstr,
 	"golden_ratio() -> float\n"
@@ -58,95 +58,95 @@ PyDoc_STRVAR(golden_ratio_docstr,
 );
 PyDoc_STRVAR(half_pi_docstr,
 	"half_pi() -> float\n"
-	"	Return pi / 2."
+	"	Return `pi / 2`."
 );
 PyDoc_STRVAR(ln_ln_two_docstr,
 	"ln_ln_two() -> float\n"
-	"	Return ln(ln(2))."
+	"	Return `ln(ln(2))`."
 );
 PyDoc_STRVAR(ln_ten_docstr,
 	"ln_ten() -> float\n"
-	"	Return ln(10)."
+	"	Return `ln(10)`."
 );
 PyDoc_STRVAR(ln_two_docstr,
 	"ln_two() -> float\n"
-	"	Return ln(2)."
+	"	Return `ln(2)`."
 );
 PyDoc_STRVAR(one_docstr,
 	"one() -> float\n"
-	"	Return 1."
+	"	Return `1`."
 );
 PyDoc_STRVAR(one_over_pi_docstr,
 	"one_over_pi() -> float\n"
-	"	Return 1 / pi."
+	"	Return `1 / pi`."
 );
 PyDoc_STRVAR(one_over_root_two_docstr,
 	"one_over_root_two() -> float\n"
-	"	Return 1 / sqrt(2)."
+	"	Return `1 / sqrt(2)`."
 );
 PyDoc_STRVAR(one_over_two_pi_docstr,
 	"one_over_two_pi() -> float\n"
-	"	Return 1 / (pi * 2)."
+	"	Return `1 / (pi * 2)`."
 );
 PyDoc_STRVAR(quarter_pi_docstr,
 	"quarter_pi() -> float\n"
-	"	Return pi / 4."
+	"	Return `pi / 4`."
 );
 PyDoc_STRVAR(root_five_docstr,
 	"root_five() -> float\n"
-	"	Return sqrt(5)."
+	"	Return `sqrt(5)`."
 );
 PyDoc_STRVAR(root_half_pi_docstr,
 	"root_half_pi() -> float\n"
-	"	Return sqrt(pi / 2)."
+	"	Return `sqrt(pi / 2)`."
 );
 PyDoc_STRVAR(root_ln_four_docstr,
 	"root_ln_four() -> float\n"
-	"	Return sqrt(ln(4))."
+	"	Return `sqrt(ln(4))`."
 );
 PyDoc_STRVAR(root_pi_docstr,
 	"root_pi() -> float\n"
-	"	Return square root of pi."
+	"	Return square root of `pi`."
 );
 PyDoc_STRVAR(root_three_docstr,
 	"root_three() -> float\n"
-	"	Return sqrt(3)."
+	"	Return `sqrt(3)`."
 );
 PyDoc_STRVAR(root_two_docstr,
 	"root_two() -> float\n"
-	"	Return sqrt(2)."
+	"	Return `sqrt(2)`."
 );
 PyDoc_STRVAR(root_two_pi_docstr,
 	"root_two_pi() -> float\n"
-	"	Return sqrt(2 * pi)."
+	"	Return `sqrt(2 * pi)`."
 );
 PyDoc_STRVAR(third_docstr,
 	"third() -> float\n"
-	"	Return 1 / 3."
+	"	Return `1 / 3`."
 );
 PyDoc_STRVAR(three_over_two_pi_docstr,
 	"three_over_two_pi() -> float\n"
-	"	Return pi / 2 * 3."
+	"	Return `pi / 2 * 3`."
 );
 PyDoc_STRVAR(two_over_pi_docstr,
 	"two_over_pi() -> float\n"
-	"	Return 2 / pi."
+	"	Return `2 / pi`."
 );
 PyDoc_STRVAR(two_over_root_pi_docstr,
 	"two_over_root_pi() -> float\n"
-	"	Return 2 / sqrt(pi)."
+	"	Return `2 / sqrt(pi)`."
 );
 PyDoc_STRVAR(two_pi_docstr,
 	"two_pi() -> float\n"
-	"	Return pi * 2."
+	"	Return `pi * 2`."
 );
 PyDoc_STRVAR(two_thirds_docstr,
 	"two_thirds() -> float\n"
-	"	Return 2 / 3."
+	"	Return `2 / 3`."
 );
 PyDoc_STRVAR(zero_docstr,
 	"zero() -> float\n"
-	"	Return 0."
+	"	Return `0`."
 );
 
 #define CONSTANTS_METHODS \

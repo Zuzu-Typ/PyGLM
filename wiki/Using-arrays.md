@@ -24,9 +24,13 @@ It's mainly intended to **provide a way of passing multiple glm type instances**
     * [From Numbers](#from-numbers)  
     * [As Reference](#as-reference)  
     * [Zeros](#zeros)  
+    * [Filter](#filter)  
+    * [Map](#map)  
+    * [Sort](#sort)  
+    * [Concat](#concat)  
+    * [Repeat](#repeat)  
 5. [Operators](#operators)  
-    * [concat](#concat--operator)  
-    * [repeat](#repeat--operator)  
+    * [Numeric operations](#numeric-operations)  
     * [getitem and setitem](#getitem-and-setitem--operator)  
     * [contains](#contains-in-operator)  
     * [len](#len)  
@@ -113,7 +117,8 @@ True
 array(vec3(2, 2, 2))
  ```  
   
-*Note: ``` as_reference ``` only works with array instances or buffers \(e\.g\. ``` numpy.array ```\)\.*  
+*Note: ``` as_reference ``` only works with array instances or buffers \(e\.g\. ``` numpy.array ```\)\.  
+Also it may not always be possible to create a reference copy, in which case a normal copy is made and a warning is raised\.*  
   
 ### \.\.\. with zeros  
 You can initialize an array with any given number of zeros or a given type:  
@@ -220,23 +225,129 @@ array(vec3(0, 0, 0), vec3(0, 0, 0))
 array(mat4x4((0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0)))
  ```  
   
-## Operators  
-### concat \(``` + ``` operator\)  
-Arrays can be combined / concaternated using the ``` + ``` operator, as long as they have the same element type\.  
+### Filter  
+You can filter an array using a custom filtering function \(i\.e\. create a new array with all of this array's elements that match a certain criteria\)\.  
+  
+The filtering function is called with each element of the array and must return ``` True ``` for the elements to keep and ``` False ``` for the elements to discard\.  
+  
+Example:  
 ``` Python
->>> array(vec2(1, 2)) + array(vec2(3, 4))
+>>> array(c_float, 1, 2, 3, 4, 5).filter(lambda x: x > 3)
+array(c_float(4), c_float(5))
+
+>>> array(vec3(1), vec3(2), vec3(3)).filter(lambda x: x.x + x.y == 2)
+array(vec3(1, 1, 1))
+ ```  
+  
+### Map  
+You can map the elements of an array to one or any number of new values using a custom mapping function\.  
+  
+The mapping function is supplied with the amounts of arguments that the map function is given\.  
+  
+If the mapping function returns ``` None ```, the element is discarded \(much like filter\)\.  
+If it returns a single value, that value becomes a new element of the resulting array\.  
+If it returns a tuple, all of the tuple's items are added to the resulting array\.  
+  
+Example:  
+``` Python
+>>> array(c_float, 1, 2, 3).map(lambda x: x + 1)
+array(c_float(2), c_float(3), c_float(4))
+
+>>> array(c_float, 1, 2, 3).map(vec3)
+array(vec3(1, 1, 1), vec3(2, 2, 2), vec3(3, 3, 3))
+
+>>> array(c_float, 1, 2, 3, 4, 5).map(lambda x: x if x > 3 else None)
+array(c_float(4), c_float(5))
+
+>>> array(c_float, 1, 2).map(lambda x: (x, x))
+array(c_float(1), c_float(1), c_float(2), c_float(2))
+
+>>> array(c_float, 1, 2).map(lambda x: (3, 4) if x == 1 else 5)
+array(c_float(3), c_float(4), c_float(5))
+
+>>> arr1 = array(c_float, 1, 2, 3)
+>>> arr2 = array(c_float, 4, 5, 6)
+>>> arr1.map(lambda x, y: (x + x) * y, arr2)
+array(c_float(8), c_float(20), c_float(36))
+
+>>> arr3 = array(c_float, 7, 8, 9)
+>>> arr1.map(lambda x, y, z: vec3(x, y, z), arr2, arr3)
+array(vec3(1, 4, 7), vec3(2, 5, 8), vec3(3, 6, 9))
+
+>>> arr1.map(lambda x, y, z: x * y + z, arr2, arr3)
+array(c_float(11), c_float(18), c_float(27))
+
+>>> arr4 = array(vec3(1, 2, 3), vec3( 4, 5, 6))
+>>> arr4.map(normalize)
+array(vec3(0.267261, 0.534522, 0.801784), vec3(0.455842, 0.569803, 0.683764))
+
+>>> arr5 = array(vec3(7, 8, 9), vec3(10,11,12))
+>>> arr4.map(dot, arr5)
+array(c_float(50), c_float(167))
+ ```  
+  
+### Sort  
+You can sort an array by using a custom sorting function\.  
+  
+The sorting function is called with two elements from the array and should return ``` -1 ``` if the first element comes before the second element in order\.  
+Otherwise it may return any other value\. Typically ``` 0 ``` for equal elements and ``` 1 ``` if the first element comes after the second\.  
+  
+The sorting algorithm used is a recursive quicksort\.  
+  
+Example:  
+``` Python
+>>> arr = array(c_float, 6, 5, 4, 3, 2, 1)
+>>> arr.sort(lambda x, y: -1 if x < y else 1)
+>>> arr
+array(c_float(1), c_float(2), c_float(3), c_float(4), c_float(5), c_float(6))
+
+>>> arr.sort(lambda x, y: int(sign(y - x)))
+>>> arr
+array(c_float(6), c_float(5), c_float(4), c_float(3), c_float(2), c_float(1))
+
+>>> arr.sort(cmp) # using glm.cmp
+>>> arr
+array(c_float(1), c_float(2), c_float(3), c_float(4), c_float(5), c_float(6))
+ ```  
+  
+### Concat  
+Arrays can be combined / concatenated using the ``` concat() ``` method, as long as they have the same element type\.  
+``` Python
+>>> array(vec2(1, 2)).concat(array(vec2(3, 4)))
 array(vec2(1, 2), vec2(3, 4))
 
->>> array(vec4()) + array(vec1())
+>>> array(vec4()).concat(array(vec1()))
 ValueError: the given arrays are incompatible
  ```  
   
-### repeat \(``` * ``` operator\)  
-Arrays can be repeated a given number of times using the ``` * ``` operator\.  
+### Repeat  
+Arrays can be repeated a given number of times using the ``` repeat() ``` method\.  
 ``` Python
->>> array(vec3(1, 2, 3)) * 3
+>>> array(vec3(1, 2, 3)).repeat(3)
 array(vec3(1, 2, 3), vec3(1, 2, 3), vec3(1, 2, 3))
  ```  
+  
+## Operators  
+### Numeric operations  
+Arrays support a dozen numeric operations:  
+  
+*  Addition \(``` + ```\)  
+*  Subtraction \(``` - ```\)  
+*  Multiplication \(``` * ```\)  
+*  Division \(``` / ```\)  
+*  Modulus \(``` % ```\)  
+*  Power \(``` ** ```\)  
+*  Negation \(``` - ```\)  
+*  Absolution \(``` abs() ```\)  
+*  Inversion \(``` ~ ```\)  
+*  Left shift \(``` << ```\)  
+*  Right shift \(``` >> ```\)  
+*  Bitwise and \(``` & ```\)  
+*  Bitwise or \(``` | ```\)  
+*  Bitwise xor \(``` ^ ```\)  
+  
+  
+*Note: Not all types are compatible though\.*  
   
 ### getitem, setitem and delitem \(``` [] ``` operator\)  
 You can access the individual elements of an array using indices\.  

@@ -2,6 +2,8 @@
 
 #include "../forward_declarations.h"
 
+#include "../../vec/all.h"
+
 static PyMethodDef hdmvec2_methods[] = {
 	{ "__copy__", (PyCFunction)mvec_copy<2, double>, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<2, double>, METH_O, "Create a (deep)copy of this instance"},
@@ -65,47 +67,6 @@ static PyNumberMethods hdmvec2NumMethods = {
 	(binaryfunc)mvec_matmul, //nb_matrix_multiply
 	(binaryfunc)mvec_imatmul<2, double>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject hdmvec2Type = {
-	PyObject_HEAD_INIT(NULL)
-	"glm.dmvec2",             /* tp_name */
-	sizeof(mvec<2, double>),             /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	(destructor)mvec_dealloc, /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	(reprfunc)mvec2_str<double>,                         /* tp_repr */
-	&hdmvec2NumMethods,             /* tp_as_number */
-	&hdmvec2SeqMethods,                         /* tp_as_sequence */
-	0,                         /* tp_as_mapping */
-	(hashfunc)mvec_hash<2, double>,                         /* tp_hash  */
-	0,                         /* tp_call */
-	(reprfunc)mvec2_str<double>,                         /* tp_str */
-	(getattrofunc)mvec_getattr<2, double>,                         /* tp_getattro */
-	(setattrofunc)mvec_setattr<2, double>,                         /* tp_setattro */
-	&hdmvec2BufferMethods,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"dmvec2( <mvec2 compatible type(s)> )\n2 components mvector of high qualifier double numbers.",           /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	(richcmpfunc)mvec_richcompare<2, double>,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	(getiterfunc)mvec_geniter<2, double>,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	hdmvec2_methods,             /* tp_methods */
-	0,             /* tp_members */
-	0,           			/* tp_getset */
-	0,                         /* tp_base */
-	0,                         /* tp_dict */
-	0,                         /* tp_descr_get */
-	0,                         /* tp_descr_set */
-	0,                         /* tp_dictoffset */
-	0,      /* tp_init */
-	0,                         /* tp_alloc */
-	(newfunc)mvec_new<2, double>,                 /* tp_new */
-};
 static PyTypeObject hdmvec2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"dmvec2Iter",             /* tp_name */
@@ -146,3 +107,56 @@ static PyTypeObject hdmvec2IterType = {
 	0,                         /* tp_alloc */
 	(newfunc)mvecIter_new<2, double>,                 /* tp_new */
 };
+
+static PyGLMTypeObject hdmvec2GLMType = {
+	{
+		PyObject_HEAD_INIT(NULL)
+		"glm.dmvec2",             /* tp_name */
+		sizeof(mvec<2, double>),             /* tp_basicsize */
+		0,                         /* tp_itemsize */
+		(destructor)mvec_dealloc, /* tp_dealloc */
+		0,                         /* tp_print */
+		0,                         /* tp_getattr */
+		0,                         /* tp_setattr */
+		0,                         /* tp_reserved */
+		(reprfunc)mvec2_str<double>,                         /* tp_repr */
+		& hdmvec2NumMethods,             /* tp_as_number */
+		& hdmvec2SeqMethods,                         /* tp_as_sequence */
+		0,                         /* tp_as_mapping */
+		(hashfunc)mvec_hash<2, double>,                         /* tp_hash  */
+		0,                         /* tp_call */
+		(reprfunc)mvec2_str<double>,                         /* tp_str */
+		(getattrofunc)mvec_getattr<2, double>,                         /* tp_getattro */
+		(setattrofunc)mvec_setattr<2, double>,                         /* tp_setattro */
+		& hdmvec2BufferMethods,                         /* tp_as_buffer */
+		Py_TPFLAGS_DEFAULT |
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */
+		"dmvec2( <mvec2 compatible type(s)> )\n2 components mvector of high qualifier double numbers.",           /* tp_doc */
+		0,                         /* tp_traverse */
+		0,                         /* tp_clear */
+		(richcmpfunc)mvec_richcompare<2, double>,                         /* tp_richcompare */
+		0,                         /* tp_weaklistoffset */
+		(getiterfunc)mvec_geniter<2, double>,                         /* tp_iter */
+		0,                         /* tp_iternext */
+		hdmvec2_methods,             /* tp_methods */
+		0,             /* tp_members */
+		0,           			/* tp_getset */
+		0,                         /* tp_base */
+		0,                         /* tp_dict */
+		0,                         /* tp_descr_get */
+		0,                         /* tp_descr_set */
+		0,                         /* tp_dictoffset */
+		0,      /* tp_init */
+		0,                         /* tp_alloc */
+		(newfunc)mvec_new<2, double>,                 /* tp_new */
+	},
+	PyGLM_TYPE_MVEC,
+	2,
+	0,
+	sizeof(double),
+	sizeof(glm::vec<2, double>),
+	PyGLM_FS_DOUBLE,
+	&hdvec2Type
+};
+
+static PyTypeObject& hdmvec2Type = *((PyTypeObject*)&hdmvec2GLMType);

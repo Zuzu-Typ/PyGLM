@@ -13,7 +13,7 @@ static PyObject* qua_length(PyObject*, PyObject*) {
 static void
 qua_dealloc(PyObject* self)
 {
-	if (((type_helper*)self)->info > 0) Py_TYPE(self)->tp_free(self);
+	if (self != NULL) Py_TYPE(self)->tp_free(self);
 }
 
 template<typename T>
@@ -22,9 +22,9 @@ qua_new(PyTypeObject *type, PyObject *, PyObject *)
 {
 	qua<T> *self = (qua<T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
-		constexpr uint8_t info_type = get_type_helper_type<T>();
-		constexpr uint8_t info = 4 | (info_type << PyGLM_TYPE_INFO_VEC_TYPE_OFFSET);
-		self->info = info;
+		//constexpr uint8_t info_type = get_type_helper_type<T>();
+		//constexpr uint8_t info = 4 | (info_type << PyGLM_TYPE_INFO_VEC_TYPE_OFFSET);
+		//self->info = info;
 		self->super_type = glm::qua<T>();
 	}
 
@@ -252,7 +252,7 @@ qua_div(PyObject *obj1, PyObject *obj2)
 static PyObject*
 qua_matmul(PyObject* obj1, PyObject* obj2)
 {
-	PyObject* out = PyNumber_Multiply(obj2, obj1);
+	PyObject* out = PyNumber_Multiply(obj1, obj2);
 	if (out == NULL) {
 		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
 	}

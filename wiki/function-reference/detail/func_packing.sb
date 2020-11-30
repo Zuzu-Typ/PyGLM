@@ -19,9 +19,9 @@ Provides GLSL functions to pack and unpack half, single and double-precision flo
 \ul\
 \h3\packDouble2x32() function\h3\
 \raw\#### <code>glm.<code>**packDouble2x32**(**v**: *uvec2*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns a double-qualifier value obtained by packing the components of v into a 64-bit
-\raw\&emsp;&emsp;\raw\value. If an IEEE 754 Inf or NaN is created, it will not signal, and the resulting floating
-\raw\&emsp;&emsp;\raw\point value is unspecified.Otherwise, the bit - level representation of v is preserved. The
+\raw\&emsp;&emsp;\raw\Returns a double-qualifier value obtained by packing the components of \code\v\code\ into a 64-bit
+\raw\&emsp;&emsp;\raw\value. If an IEEE 754 \code\Inf\code\ or \code\NaN\code\ is created, it will not signal, and the resulting floating
+\raw\&emsp;&emsp;\raw\point value is unspecified. Otherwise, the bit-level representation of \code\v\code\ is preserved. The
 \raw\&emsp;&emsp;\raw\first vector component specifies the 32 least significant bits; the second component
 \raw\&emsp;&emsp;\raw\specifies the 32 most significant bits.
 
@@ -29,50 +29,50 @@ Provides GLSL functions to pack and unpack half, single and double-precision flo
 \raw\#### <code>glm.<code>**packHalf2x16**(**v**: *vec2*) -\\> *int*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns an unsigned integer obtained by converting the components of a two-component
 \raw\&emsp;&emsp;\raw\floating-point vector to the 16-bit floating-point representation found in the OpenGL
-\raw\&emsp;&emsp;\raw\Specification, and then packing these two 16- bit integers into a 32-bit unsigned integer.
-\raw\&emsp;&emsp;\raw\The first vector component specifies the 16 least - significant bits of the result; the
-\raw\&emsp;&emsp;\raw\second component specifies the 16 most - significant bits.
+\raw\&emsp;&emsp;\raw\Specification, and then packing these two 16-bit integers into a 32-bit unsigned integer.
+\raw\&emsp;&emsp;\raw\The first vector component specifies the 16 least-significant bits of the result; the
+\raw\&emsp;&emsp;\raw\second component specifies the 16 most-significant bits.
 
 \h3\packSnorm2x16() function\h3\
 \raw\#### <code>glm.<code>**packSnorm2x16**(**v**: *vec2*) -\\> *int*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\First, converts each component of the normalized floating-point value v into 8- or 16-bit
-\raw\&emsp;&emsp;\raw\integer values. Then, the results are packed into the returned 32 - bit unsigned integer.
-\raw\&emsp;&emsp;\raw\The conversion for component c of v to fixed point is done as follows : packSnorm2x16: 
-\raw\&emsp;&emsp;\raw\round(clamp(v, -1, +1) * 32767.0). The first component of the vector will be written to
+\raw\&emsp;&emsp;\raw\First, converts each component of the normalized floating-point value \code\v\code\ into 8- or 16-bit
+\raw\&emsp;&emsp;\raw\integer values. Then, the results are packed into the returned 32-bit unsigned integer.
+\raw\&emsp;&emsp;\raw\The conversion for component \code\c\code\ of \code\v\code\ to fixed point is done as follows :
+\raw\&emsp;&emsp;\raw\\code\round(clamp(v, -1, +1) * 32767.0)\code\. The first component of the vector will be written to
 \raw\&emsp;&emsp;\raw\the least significant bits of the output; the last component will be written to the most
 \raw\&emsp;&emsp;\raw\significant bits.
 
 \h3\packSnorm4x8() function\h3\
 \raw\#### <code>glm.<code>**packSnorm4x8**(**v**: *vec4*) -\\> *int*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\First, converts each component of the normalized floating-point value v into 8- or 16-bit
-\raw\&emsp;&emsp;\raw\integer values. Then, the results are packed into the returned 32 - bit unsigned integer.
-\raw\&emsp;&emsp;\raw\The conversion for component c of v to fixed point is done as follows : packSnorm4x8:
-\raw\&emsp;&emsp;\raw\round(clamp(c, -1, +1) * 127.0). The first component of the vector will be written to
+\raw\&emsp;&emsp;\raw\First, converts each component of the normalized floating-point value \code\v\code\ into 8- or 16-bit
+\raw\&emsp;&emsp;\raw\integer values. Then, the results are packed into the returned 32-bit unsigned integer.
+\raw\&emsp;&emsp;\raw\The conversion for component \code\c\code\ of \code\v\code\ to fixed point is done as follows :
+\raw\&emsp;&emsp;\raw\\code\round(clamp(c, -1, +1) * 127.0)\code\. The first component of the vector will be written to
 \raw\&emsp;&emsp;\raw\the least significant bits of the output; the last component will be written to the most
 \raw\&emsp;&emsp;\raw\significant bits.
 
 \h3\packUnorm2x16() function\h3\
 \raw\#### <code>glm.<code>**packUnorm2x16**(**v**: *vec2*) -\\> *int*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\First, converts each component of the normalized floating-point value v into 8- or 16-bit
-\raw\&emsp;&emsp;\raw\integer values. Then, the results are packed into the returned 32 - bit unsigned integer.
-\raw\&emsp;&emsp;\raw\The conversion for component c of v to fixed point is done as follows : packUnorm2x16:
-\raw\&emsp;&emsp;\raw\round(clamp(c, 0, +1) * 65535.0). The first component of the vector will be written to the
+\raw\&emsp;&emsp;\raw\First, converts each component of the normalized floating-point value \code\v\code\ into 8- or 16-bit
+\raw\&emsp;&emsp;\raw\integer values. Then, the results are packed into the returned 32-bit unsigned integer.
+\raw\&emsp;&emsp;\raw\The conversion for component \code\c\code\ of \code\v\code\ to fixed point is done as follows :
+\raw\&emsp;&emsp;\raw\\code\round(clamp(c, 0, +1) * 65535.0)\code\. The first component of the vector will be written to the
 \raw\&emsp;&emsp;\raw\least significant bits of the output; the last component will be written to the most
 \raw\&emsp;&emsp;\raw\significant bits.
 
 \h3\packUnorm4x8() function\h3\
 \raw\#### <code>glm.<code>**packUnorm4x8**(**v**: *vec4*) -\\> *int*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\First, converts each component of the normalized floating-point value v into 8- or 16-bit
-\raw\&emsp;&emsp;\raw\integer values. Then, the results are packed into the returned 32 - bit unsigned integer.
-\raw\&emsp;&emsp;\raw\The conversion for component c of v to fixed point is done as follows : packUnorm4x8:
-\raw\&emsp;&emsp;\raw\round(clamp(c, 0, +1) * 255.0). The first component of the vector will be written to the
+\raw\&emsp;&emsp;\raw\First, converts each component of the normalized floating-point value \code\v\code\ into 8- or 16-bit
+\raw\&emsp;&emsp;\raw\integer values. Then, the results are packed into the returned 32-bit unsigned integer.
+\raw\&emsp;&emsp;\raw\The conversion for component \code\c\code\ of \code\v\code\ to fixed point is done as follows :
+\raw\&emsp;&emsp;\raw\\code\round(clamp(c, 0, +1) * 255.0)\code\. The first component of the vector will be written to the
 \raw\&emsp;&emsp;\raw\least significant bits of the output; the last component will be written to the most
 \raw\&emsp;&emsp;\raw\significant bits.
 
 \h3\unpackDouble2x32() function\h3\
 \raw\#### <code>glm.<code>**unpackDouble2x32**(**v**: *double*) -\\> *uvec2*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns a two-component unsigned integer vector representation of v. The bit - level
-\raw\&emsp;&emsp;\raw\representation of v is preserved.The first component of the vector contains the 32 least
+\raw\&emsp;&emsp;\raw\Returns a two-component unsigned integer vector representation of \code\v\code\. The bit-level
+\raw\&emsp;&emsp;\raw\representation of \code\v\code\ is preserved. The first component of the vector contains the 32 least
 \raw\&emsp;&emsp;\raw\significant bits of the double; the second component consists the 32 most significant bits.
 
 \h3\unpackHalf2x16() function\h3\
@@ -81,46 +81,46 @@ Provides GLSL functions to pack and unpack half, single and double-precision flo
 \raw\&emsp;&emsp;\raw\32-bit unsigned integer into a pair of 16-bit values, interpreting those values as 16-bit
 \raw\&emsp;&emsp;\raw\floating-point numbers according to the OpenGL Specification, and converting them to 32-bit
 \raw\&emsp;&emsp;\raw\floating-point values. The first component of the vector is obtained from the 16
-\raw\&emsp;&emsp;\raw\least - significant bits of v; the second component is obtained from the 16
-\raw\&emsp;&emsp;\raw\most - significant bits of v.
+\raw\&emsp;&emsp;\raw\least-significant bits of \code\v\code\; the second component is obtained from the 16
+\raw\&emsp;&emsp;\raw\most-significant bits of \code\v\code\.
 
 \h3\unpackSnorm2x16() function\h3\
 \raw\#### <code>glm.<code>**unpackSnorm2x16**(**p**: *int*) -\\> *vec2*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\First, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers,
+\raw\&emsp;&emsp;\raw\First, unpacks a single 32-bit unsigned integer \code\p\code\ into a pair of 16-bit unsigned integers,
 \raw\&emsp;&emsp;\raw\four 8-bit unsigned integers, or four 8-bit signed integers. Then, each component is
-\raw\&emsp;&emsp;\raw\converted to a normalized floating - point value to generate the returned two- or
-\raw\&emsp;&emsp;\raw\four-component vector. The conversion for unpacked fixed - point value f to floating point
-\raw\&emsp;&emsp;\raw\is done as follows : unpackSnorm2x16: clamp(f / 32767.0, -1, +1). The first component of
+\raw\&emsp;&emsp;\raw\converted to a normalized floating-point value to generate the returned two- or
+\raw\&emsp;&emsp;\raw\four-component vector. The conversion for unpacked fixed-point value \code\f\code\ to floating point
+\raw\&emsp;&emsp;\raw\is done as follows : \code\clamp(f / 32767.0, -1, +1)\code\. The first component of
 \raw\&emsp;&emsp;\raw\the returned vector will be extracted from the least significant bits of the input; the
 \raw\&emsp;&emsp;\raw\last component will be extracted from the most significant bits.
 
 \h3\unpackSnorm4x8() function\h3\
 \raw\#### <code>glm.<code>**unpackSnorm4x8**(**p**: *int*) -\\> *vec4*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\First, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers,
+\raw\&emsp;&emsp;\raw\First, unpacks a single 32-bit unsigned integer \code\p\code\ into a pair of 16-bit unsigned integers,
 \raw\&emsp;&emsp;\raw\four 8-bit unsigned integers, or four 8-bit signed integers. Then, each component is
-\raw\&emsp;&emsp;\raw\converted to a normalized floating - point value to generate the returned two- or
-\raw\&emsp;&emsp;\raw\four-component vector. The conversion for unpacked fixed - point value f to floating point
-\raw\&emsp;&emsp;\raw\is done as follows : unpackSnorm4x8: clamp(f / 127.0, -1, +1). The first component of the
+\raw\&emsp;&emsp;\raw\converted to a normalized floating-point value to generate the returned two- or
+\raw\&emsp;&emsp;\raw\four-component vector. The conversion for unpacked fixed-point value \code\f\code\ to floating point
+\raw\&emsp;&emsp;\raw\is done as follows : \code\clamp(f / 127.0, -1, +1)\code\. The first component of the
 \raw\&emsp;&emsp;\raw\returned vector will be extracted from the least significant bits of the input; the last
 \raw\&emsp;&emsp;\raw\component will be extracted from the most significant bits.
 
 \h3\unpackUnorm2x16() function\h3\
 \raw\#### <code>glm.<code>**unpackUnorm2x16**(**p**: *int*) -\\> *vec2*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\First, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers,
+\raw\&emsp;&emsp;\raw\First, unpacks a single 32-bit unsigned integer \code\p\code\ into a pair of 16-bit unsigned integers,
 \raw\&emsp;&emsp;\raw\four 8-bit unsigned integers, or four 8-bit signed integers. Then, each component is
-\raw\&emsp;&emsp;\raw\converted to a normalized floating - point value to generate the returned two- or
-\raw\&emsp;&emsp;\raw\four-component vector. The conversion for unpacked fixed - point value f to floating point
-\raw\&emsp;&emsp;\raw\is done as follows : unpackUnorm2x16: f / 65535.0. The first component of the returned
+\raw\&emsp;&emsp;\raw\converted to a normalized floating-point value to generate the returned two- or
+\raw\&emsp;&emsp;\raw\four-component vector. The conversion for unpacked fixed-point value \code\f\code\ to floating point
+\raw\&emsp;&emsp;\raw\is done as follows : \code\f / 65535.0\code\. The first component of the returned
 \raw\&emsp;&emsp;\raw\vector will be extracted from the least significant bits of the input; the last component
 \raw\&emsp;&emsp;\raw\will be extracted from the most significant bits.
 
 \h3\unpackUnorm4x8() function\h3\
 \raw\#### <code>glm.<code>**unpackUnorm4x8**(**p**: *int*) -\\> *vec4*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\First, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers,
+\raw\&emsp;&emsp;\raw\First, unpacks a single 32-bit unsigned integer \code\p\code\ into a pair of 16-bit unsigned integers,
 \raw\&emsp;&emsp;\raw\four 8-bit unsigned integers, or four 8-bit signed integers. Then, each component is
-\raw\&emsp;&emsp;\raw\converted to a normalized floating - point value to generate the returned two- or
-\raw\&emsp;&emsp;\raw\four-component vector. The conversion for unpacked fixed - point value f to floating point
-\raw\&emsp;&emsp;\raw\is done as follows : unpackUnorm4x8: f / 255.0. The first component of the returned vector
+\raw\&emsp;&emsp;\raw\converted to a normalized floating-point value to generate the returned two- or
+\raw\&emsp;&emsp;\raw\four-component vector. The conversion for unpacked fixed-point value \code\f\code\ to floating point
+\raw\&emsp;&emsp;\raw\is done as follows : \code\f / 255.0\code\. The first component of the returned vector
 \raw\&emsp;&emsp;\raw\will be extracted from the least significant bits of the input; the last component will be
 \raw\&emsp;&emsp;\raw\extracted from the most significant bits.
 

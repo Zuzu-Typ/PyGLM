@@ -33,47 +33,6 @@ static PySequenceMethods hbvec3SeqMethods = {
 	0, // sq_inplace_concat
 	0, // sq_inplace_repeat
 };
-static PyTypeObject hbvec3Type = {
-	PyObject_HEAD_INIT(NULL)
-	"glm.bvec3",             /* tp_name */
-	sizeof(vec<3, bool>),             /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	(destructor)vec_dealloc, /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	(reprfunc)vec3_repr<bool>,                         /* tp_repr */
-	0,             /* tp_as_number */
-	&hbvec3SeqMethods,                         /* tp_as_sequence */
-	0,                         /* tp_as_mapping */
-	(hashfunc)vec_hash<3, bool>,                         /* tp_hash  */
-	0,                         /* tp_call */
-	(reprfunc)vec3_str<bool>,                         /* tp_str */
-	(getattrofunc)vec_getattr<3, bool>,                         /* tp_getattro */
-	(setattrofunc)vec_setattr<3, bool>,                         /* tp_setattro */
-	&hbvec3BufferMethods,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"bvec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier boolean values.",           /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	(richcmpfunc)vec_richcompare<3, bool>,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	(getiterfunc)vec_geniter<3, bool>,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	hbvec3_methods,             /* tp_methods */
-	hbvec3_members,             /* tp_members */
-	0,           			/* tp_getset */
-	0,                         /* tp_base */
-	0,                         /* tp_dict */
-	0,                         /* tp_descr_get */
-	0,                         /* tp_descr_set */
-	0,                         /* tp_dictoffset */
-	(initproc)vec3_init<bool>,      /* tp_init */
-	0,                         /* tp_alloc */
-	(newfunc)vec_new<3, bool>,                 /* tp_new */
-};
 static PyTypeObject hbvec3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"bvec3Iter",             /* tp_name */
@@ -114,3 +73,55 @@ static PyTypeObject hbvec3IterType = {
 	0,                         /* tp_alloc */
 	(newfunc)vecIter_new<3, bool>,                 /* tp_new */
 };
+
+static PyGLMTypeObject hbvec3GLMType = {
+	{
+		PyObject_HEAD_INIT(NULL)
+		"glm.bvec3",             /* tp_name */
+		sizeof(vec<3, bool>),             /* tp_basicsize */
+		0,                         /* tp_itemsize */
+		(destructor)vec_dealloc, /* tp_dealloc */
+		0,                         /* tp_print */
+		0,                         /* tp_getattr */
+		0,                         /* tp_setattr */
+		0,                         /* tp_reserved */
+		(reprfunc)vec3_repr<bool>,                         /* tp_repr */
+		0,             /* tp_as_number */
+		& hbvec3SeqMethods,                         /* tp_as_sequence */
+		0,                         /* tp_as_mapping */
+		(hashfunc)vec_hash<3, bool>,                         /* tp_hash  */
+		0,                         /* tp_call */
+		(reprfunc)vec3_str<bool>,                         /* tp_str */
+		(getattrofunc)vec_getattr<3, bool>,                         /* tp_getattro */
+		(setattrofunc)vec_setattr<3, bool>,                         /* tp_setattro */
+		& hbvec3BufferMethods,                         /* tp_as_buffer */
+		Py_TPFLAGS_DEFAULT |
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */
+		"bvec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier boolean values.",           /* tp_doc */
+		0,                         /* tp_traverse */
+		0,                         /* tp_clear */
+		(richcmpfunc)vec_richcompare<3, bool>,                         /* tp_richcompare */
+		0,                         /* tp_weaklistoffset */
+		(getiterfunc)vec_geniter<3, bool>,                         /* tp_iter */
+		0,                         /* tp_iternext */
+		hbvec3_methods,             /* tp_methods */
+		hbvec3_members,             /* tp_members */
+		0,           			/* tp_getset */
+		0,                         /* tp_base */
+		0,                         /* tp_dict */
+		0,                         /* tp_descr_get */
+		0,                         /* tp_descr_set */
+		0,                         /* tp_dictoffset */
+		(initproc)vec3_init<bool>,      /* tp_init */
+		0,                         /* tp_alloc */
+		(newfunc)vec_new<3, bool>,                 /* tp_new */
+	},
+	PyGLM_TYPE_VEC,
+	3,
+	0,
+	sizeof(bool),
+	sizeof(glm::vec<3, bool>),
+	PyGLM_FS_BOOL
+};
+
+static PyTypeObject& hbvec3Type = *((PyTypeObject*)&hbvec3GLMType);

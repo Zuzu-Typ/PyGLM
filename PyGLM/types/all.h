@@ -6,10 +6,10 @@
 
 #include "mat/all.h"
 
+#include "vec/all.h"
+
 #include "mvec/all.h"
 
 #include "qua/all.h"
-
-#include "vec/all.h"
 
 #include "glmArray/glmArray.h"

@@ -6,8 +6,24 @@
 #define PyGLM_TYPE_UNKNOWN 0
 #define PyGLM_TYPE_VEC 1
 #define PyGLM_TYPE_MAT 2
-#define PyGLM_TYPE_QUA 3
-#define PyGLM_TYPE_CTYPES 4
+#define PyGLM_TYPE_QUA 4
+#define PyGLM_TYPE_CTYPES 8
+#define PyGLM_TYPE_MVEC_FILTER 15
+#define PyGLM_TYPE_MVEC (16 | PyGLM_TYPE_VEC)
+
+// format specifiers
+#define PyGLM_FS_FLOAT	'f'
+#define PyGLM_FS_DOUBLE 'd'
+#define PyGLM_FS_INT8	'b'
+#define PyGLM_FS_UINT8	'B'
+#define PyGLM_FS_INT16	'h'
+#define PyGLM_FS_UINT16 'H'
+#define PyGLM_FS_INT32	'i'
+#define PyGLM_FS_UINT32 'I'
+#define PyGLM_FS_INT64	'q'
+#define PyGLM_FS_UINT64 'Q'
+#define PyGLM_FS_BOOL	'?'
+
 /*
 shape looks like this:
 For Vec:
@@ -40,21 +56,21 @@ For Qua:
 	= quat
 */
 
-#define PyGLM_TYPE_INFO_VEC_SHAPE_OFFSET	0
-#define PyGLM_TYPE_INFO_VEC_SHAPE_LENGTH	4
-
-#define PyGLM_TYPE_INFO_VEC_TYPE_OFFSET		4
-#define PyGLM_TYPE_INFO_VEC_TYPE_LENGTH		4
-
-
-#define PyGLM_TYPE_INFO_MAT_SHAPE1_OFFSET	0
-#define PyGLM_TYPE_INFO_MAT_SHAPE1_LENGTH	3
-
-#define PyGLM_TYPE_INFO_MAT_SHAPE2_OFFSET	3
-#define PyGLM_TYPE_INFO_MAT_SHAPE2_LENGTH	3
-
-#define PyGLM_TYPE_INFO_MAT_TYPE_OFFSET		6
-#define PyGLM_TYPE_INFO_MAT_TYPE_LENGTH		2
+//#define PyGLM_TYPE_INFO_VEC_SHAPE_OFFSET	0
+//#define PyGLM_TYPE_INFO_VEC_SHAPE_LENGTH	4
+//
+//#define PyGLM_TYPE_INFO_VEC_TYPE_OFFSET		4
+//#define PyGLM_TYPE_INFO_VEC_TYPE_LENGTH		4
+//
+//
+//#define PyGLM_TYPE_INFO_MAT_SHAPE1_OFFSET	0
+//#define PyGLM_TYPE_INFO_MAT_SHAPE1_LENGTH	3
+//
+//#define PyGLM_TYPE_INFO_MAT_SHAPE2_OFFSET	3
+//#define PyGLM_TYPE_INFO_MAT_SHAPE2_LENGTH	3
+//
+//#define PyGLM_TYPE_INFO_MAT_TYPE_OFFSET		6
+//#define PyGLM_TYPE_INFO_MAT_TYPE_LENGTH		2
 
 
 #define PyGLM_TYPE_INFO_FLOAT	0
@@ -192,16 +208,16 @@ constexpr char get_format_specifier() {
 		'B';
 }
 
-struct shape_helper {
-	PyObject_HEAD
-		uint8_t shape;
-};
+//struct shape_helper {
+//	PyObject_HEAD
+//		uint8_t shape;
+//};
 
 // type definitions
-struct type_helper {
-	PyObject_HEAD
-		uint8_t info;
-};
+//struct type_helper {
+//	PyObject_HEAD
+//		uint8_t info;
+//};
 
 struct ctypes_helper {
 	PyObject_HEAD
@@ -211,7 +227,7 @@ struct ctypes_helper {
 template<int L, typename T>
 struct vec {
 	PyObject_HEAD
-		uint8_t info;
+		//uint8_t info;
 	glm::vec<L, T> super_type;
 };
 
@@ -224,7 +240,7 @@ struct vecIter {
 
 struct mvec_helper {
 	PyObject_HEAD
-		uint8_t info;
+		//uint8_t info;
 	void* super_type;
 	PyObject* master;
 };
@@ -232,7 +248,7 @@ struct mvec_helper {
 template<int L, typename T>
 struct mvec {
 	PyObject_HEAD
-		uint8_t info;
+		//uint8_t info;
 	glm::vec<L, T>* super_type;
 	PyObject* master;
 };
@@ -247,7 +263,7 @@ struct mvecIter {
 template<int C, int R, typename T>
 struct mat {
 	PyObject_HEAD
-		uint8_t info;
+		//uint8_t info;
 	glm::mat<C, R, T> super_type;
 };
 
@@ -261,7 +277,7 @@ struct matIter {
 template<typename T>
 struct qua {
 	PyObject_HEAD
-		uint8_t info;
+		//uint8_t info;
 	glm::qua<T> super_type;
 };
 
@@ -313,23 +329,89 @@ struct glmArrayIter {
 	glmArray* sequence;
 };
 
-// Work in progress
-//struct PyGLMTypeObject {
-//	uint8 glmType;
-//	uint8 C;
-//	uint8 R;
-//	ssize_t dtSize;
-//	ssize_t nbytes;
-//	char format;
-//	char reserved = '\x00';
-//	PyTypeObject typeObject;
-//
-//	inline PyTypeObject* typeObjectPointer() {
-//		return &typeObject;
-//	}
-//
-//	static inline PyGLMTypeObject* fromTypeObjectPointer(PyTypeObject* typeObject) {
-//		constexpr uint64 typeObjectOffset = sizeof(PyGLMTypeObject) - sizeof(PyTypeObject);
-//		return reinterpret_cast<PyGLMTypeObject*>(reinterpret_cast<char*>(typeObject) - typeObjectOffset);
-//	}
-//};
+
+struct PyGLMTypeObject {
+	PyTypeObject typeObject;
+	uint8 glmType;
+	uint8 C;
+	uint8 R;
+	ssize_t dtSize;
+	ssize_t itemSize;
+	char format;
+	char reserved = '\x00';
+
+	int PTI_info;
+
+	PyTypeObject* subtype;
+	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, ssize_t dtSize, ssize_t itemSize, char format) :
+		PyGLMTypeObject(typeObject, glmType, C, R, dtSize, itemSize, format, (PyTypeObject*)this) {}
+
+	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, ssize_t dtSize, ssize_t itemSize, char format, PyTypeObject* subtype)
+		: typeObject(typeObject), glmType(glmType), C(C), R(R), dtSize(dtSize), itemSize(itemSize), format(format), subtype(subtype) {
+
+		if (glmType == PyGLM_TYPE_VEC) {
+			int shape = (C == 1) ? PyGLM_SHAPE_1 : (C == 2) ? PyGLM_SHAPE_2 : (C == 3) ? PyGLM_SHAPE_3 : PyGLM_SHAPE_4;
+
+			int type_info = (format == PyGLM_FS_FLOAT) ? PyGLM_DT_FLOAT :
+				(format == PyGLM_FS_DOUBLE) ? PyGLM_DT_DOUBLE :
+				(format == PyGLM_FS_INT32) ? PyGLM_DT_INT :
+				(format == PyGLM_FS_UINT32) ? PyGLM_DT_UINT :
+				(format == PyGLM_FS_INT64) ? PyGLM_DT_INT64 :
+				(format == PyGLM_FS_UINT64) ? PyGLM_DT_UINT64 :
+				(format == PyGLM_FS_INT16) ? PyGLM_DT_INT16 :
+				(format == PyGLM_FS_UINT16) ? PyGLM_DT_UINT16 :
+				(format == PyGLM_FS_INT8) ? PyGLM_DT_INT8 :
+				(format == PyGLM_FS_UINT8) ? PyGLM_DT_UINT8 :
+				PyGLM_DT_BOOL;
+
+			PTI_info = shape | type_info | PyGLM_T_VEC;
+		}
+		else if (glmType == PyGLM_TYPE_MAT) {
+			int shape = (C == 2) ? (R == 2) ? PyGLM_SHAPE_2x2 : (R == 3) ? PyGLM_SHAPE_2x3 : PyGLM_SHAPE_2x4 :
+				(C == 3) ? (R == 2) ? PyGLM_SHAPE_3x2 : (R == 3) ? PyGLM_SHAPE_3x3 : PyGLM_SHAPE_3x4 :
+				(R == 2) ? PyGLM_SHAPE_4x2 : (R == 3) ? PyGLM_SHAPE_4x3 : PyGLM_SHAPE_4x4;
+
+			int type_info = (format == PyGLM_FS_FLOAT) ? PyGLM_DT_FLOAT :
+				(format == PyGLM_FS_DOUBLE) ? PyGLM_DT_DOUBLE :
+				(format == PyGLM_FS_INT32) ? PyGLM_DT_INT :
+				PyGLM_DT_UINT;
+
+			PTI_info = shape | type_info | PyGLM_T_MAT;
+		}
+		else if (glmType == PyGLM_TYPE_QUA) {
+			int type_info = (format == PyGLM_FS_FLOAT) ? PyGLM_DT_FLOAT :
+				PyGLM_DT_DOUBLE;
+
+			PTI_info = type_info | PyGLM_T_QUA;
+		}
+		else {
+			int shape = (C == 1) ? PyGLM_SHAPE_1 : (C == 2) ? PyGLM_SHAPE_2 : (C == 3) ? PyGLM_SHAPE_3 : PyGLM_SHAPE_4;
+
+			int type_info = (format == PyGLM_FS_FLOAT) ? PyGLM_DT_FLOAT :
+				(format == PyGLM_FS_DOUBLE) ? PyGLM_DT_DOUBLE :
+				(format == PyGLM_FS_INT32) ? PyGLM_DT_INT :
+				PyGLM_DT_UINT;
+
+			PTI_info = shape | type_info | PyGLM_T_MVEC;
+		}
+	}
+
+	inline char* getDataOf(PyObject* src) {
+		char* out = reinterpret_cast<char*>(src);
+
+		if (glmType == PyGLM_TYPE_MVEC) {
+			return *reinterpret_cast<char**>((out + sizeof(PyObject)));
+		}
+
+		return (out + sizeof(PyObject));
+	}
+
+	//inline PyTypeObject* typeObjectPointer() {
+	//	return &typeObject;
+	//}
+
+	//static inline PyGLMTypeObject* fromTypeObjectPointer(PyTypeObject* typeObject) {
+	//	constexpr uint64 typeObjectOffset = sizeof(PyGLMTypeObject) - sizeof(PyTypeObject);
+	//	return reinterpret_cast<PyGLMTypeObject*>(reinterpret_cast<char*>(typeObject) - typeObjectOffset);
+	//}
+};

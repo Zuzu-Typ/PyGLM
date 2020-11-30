@@ -21,113 +21,113 @@ Function parameters specified as angle are assumed to be in units of radians.
 \ul\
 \h3\acos() function\h3\
 \raw\#### <code>glm.<code>**acos**(**x**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Arc cosine. Returns an angle whose cosine is x. The range of values returned by this function
-\raw\&emsp;&emsp;\raw\is[0, PI]. Results are undefined if |x| > 1.
+\raw\&emsp;&emsp;\raw\Arc cosine. Returns an angle whose cosine is \code\x\code\. The range of values returned by this function
+\raw\&emsp;&emsp;\raw\is \code\[0, PI]\code\. Results are undefined if \code\|x| > 1\code\.
 
 \raw\#### <code>glm.<code>**acos**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns acos(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\acos(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\acosh() function\h3\
 \raw\#### <code>glm.<code>**acosh**(**x**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Arc hyperbolic cosine; returns the non-negative inverse of cosh. Results are undefined
-\raw\&emsp;&emsp;\raw\if x < 1.
+\raw\&emsp;&emsp;\raw\Arc hyperbolic cosine; returns the non-negative inverse of \code\cosh\code\. Results are undefined
+\raw\&emsp;&emsp;\raw\if \code\x < 1\code\.
 
 \raw\#### <code>glm.<code>**acosh**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns acosh(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\acosh(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\asin() function\h3\
 \raw\#### <code>glm.<code>**asin**(**x**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Arc sine. Returns an angle whose sine is x. The range of values returned by this function
-\raw\&emsp;&emsp;\raw\is[0, PI]. Results are undefined if |x| > 1.
+\raw\&emsp;&emsp;\raw\Arc sine. Returns an angle whose sine is \code\x\code\. The range of values returned by this function
+\raw\&emsp;&emsp;\raw\is \code\[0, PI]\code\. Results are undefined if \code\|x| > 1\code\.
 
 \raw\#### <code>glm.<code>**asin**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns asin(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\asin(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\asinh() function\h3\
 \raw\#### <code>glm.<code>**asinh**(**x**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Arc hyperbolic sine; returns the inverse of sinh.
+\raw\&emsp;&emsp;\raw\Arc hyperbolic sine; returns the inverse of \code\sinh\code\.
 
 \raw\#### <code>glm.<code>**asinh**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns asinh(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\asinh(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\atan() function\h3\
 \raw\#### <code>glm.<code>**atan**(**y_over_x**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Arc tangent. Returns an angle whose tangent is y_over_x. The range of values returned by
-\raw\&emsp;&emsp;\raw\this function is[-PI / 2, PI / 2].
+\raw\&emsp;&emsp;\raw\Arc tangent. Returns an angle whose tangent is \code\y_over_x\code\. The range of values returned by
+\raw\&emsp;&emsp;\raw\this function is \code\[-PI / 2, PI / 2]\code\.
 
 \raw\#### <code>glm.<code>**atan**(**y_over_x**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns atan(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\atan(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \raw\#### <code>glm.<code>**atan**(**y**: *float*, **x**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Arc tangent. Returns an angle whose tangent is y / x. The signs of x and y are used to
+\raw\&emsp;&emsp;\raw\Arc tangent. Returns an angle whose tangent is \code\y / x\code\. The signs of \code\x\code\ and \code\y\code\ are used to
 \raw\&emsp;&emsp;\raw\determine what quadrant the angle is in. The range of values returned by this function
-\raw\&emsp;&emsp;\raw\is[-PI, PI]. Results are undefined if x and y are both 0.
+\raw\&emsp;&emsp;\raw\is \code\[-PI, PI]\code\. Results are undefined if \code\x\code\ and \code\y\code\ are both \code\0\code\.
 
 \raw\#### <code>glm.<code>**atan**(**y**: *vecN*, **x**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns atan(y[i], x[i]) for every index i.
+\raw\&emsp;&emsp;\raw\Returns \code\atan(y[i], x[i])\code\ for every index \code\i\code\.
 
 \h3\atanh() function\h3\
 \raw\#### <code>glm.<code>**atanh**(**x**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Arc hyperbolic tangent; returns the inverse of tanh. Results are undefined if abs(x) >= 1.
+\raw\&emsp;&emsp;\raw\Arc hyperbolic tangent; returns the inverse of \code\tanh\code\. Results are undefined if \code\abs(x) >= 1\code\.
 
 \raw\#### <code>glm.<code>**atanh**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns atanh(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\atanh(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\cos() function\h3\
 \raw\#### <code>glm.<code>**cos**(**angle**: *float*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\The standard trigonometric cosine function. The values returned by this function will range
-\raw\&emsp;&emsp;\raw\from[-1, 1].
+\raw\&emsp;&emsp;\raw\from \code\[-1, 1]\code\.
 
 \raw\#### <code>glm.<code>**cos**(**angle**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns cos(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\cos(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\cosh() function\h3\
 \raw\#### <code>glm.<code>**cosh**(**angle**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the hyperbolic cosine function, (exp(angle) + exp(-angle)) / 2.
+\raw\&emsp;&emsp;\raw\Returns the hyperbolic cosine function, \code\(exp(angle) + exp(-angle)) / 2\code\.
 
 \raw\#### <code>glm.<code>**cosh**(**angle**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns cosh(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\cosh(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\degrees() function\h3\
 \raw\#### <code>glm.<code>**degrees**(**angle**: *float*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Converts radians to degrees and returns the result.
 
 \raw\#### <code>glm.<code>**degrees**(**angle**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns degrees(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\degrees(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\radians() function\h3\
 \raw\#### <code>glm.<code>**radians**(**angle**: *float*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Converts degrees to radians and returns the result.
 
 \raw\#### <code>glm.<code>**radians**(**angle**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns radians(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\radians(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\sin() function\h3\
 \raw\#### <code>glm.<code>**sin**(**angle**: *float*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\The standard trigonometric sine function. The values returned by this function will range
-\raw\&emsp;&emsp;\raw\from[-1, 1].
+\raw\&emsp;&emsp;\raw\from \code\[-1, 1]\code\.
 
 \raw\#### <code>glm.<code>**sin**(**angle**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns sin(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\sin(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\sinh() function\h3\
 \raw\#### <code>glm.<code>**sinh**(**angle**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the hyperbolic sine function, (exp(angle) - exp(-angle)) / 2.
+\raw\&emsp;&emsp;\raw\Returns the hyperbolic sine function, \code\(exp(angle) - exp(-angle)) / 2\code\.
 
 \raw\#### <code>glm.<code>**sinh**(**angle**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns sinh(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\sinh(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\tan() function\h3\
 \raw\#### <code>glm.<code>**tan**(**angle**: *float*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\The standard trigonometric tangent function.
 
 \raw\#### <code>glm.<code>**tan**(**angle**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns tan(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\tan(c)\code\ for every component \code\c\code\ of \code\x\code\.
 
 \h3\tanh() function\h3\
 \raw\#### <code>glm.<code>**tanh**(**angle**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the hyperbolic tangent function, sinh(angle) / cosh(angle)
+\raw\&emsp;&emsp;\raw\Returns the hyperbolic tangent function, \code\sinh(angle) / cosh(angle)\code\
 
 \raw\#### <code>glm.<code>**tanh**(**angle**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns tanh(c) for every component c of x.
+\raw\&emsp;&emsp;\raw\Returns \code\tanh(c)\code\ for every component \code\c\code\ of \code\x\code\.
 

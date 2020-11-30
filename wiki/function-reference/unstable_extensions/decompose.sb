@@ -9,5 +9,5 @@ Decomposes a model matrix to translations, rotation and scale components.
 \h3\decompose() function\h3\
 \raw\#### <code>glm.<code>**decompose**(**modelMatrix**: *mat4*, **scale**: *vec3*, **orientation**: *quat*, **translation**: *vec3*, **skew**: *vec3*, **perspective**: *vec4*) -\\> *bool*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Decomposes a model matrix to translations, rotation and scale components.
-\raw\&emsp;&emsp;\raw\Returns true on success.
+\raw\&emsp;&emsp;\raw\Returns \code\True\code\ on success.
 

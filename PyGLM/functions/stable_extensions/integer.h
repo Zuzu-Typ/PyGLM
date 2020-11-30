@@ -111,18 +111,18 @@ uround_(PyObject*, PyObject* arg) {
 
 PyDoc_STRVAR(iround_docstr,
 	"iround(x: number) -> int\n"
-	"	Returns a value equal to the nearest integer to x. The fraction 0.5 will round in a\n"
+	"	Returns a value equal to the nearest integer to `x`. The fraction `0.5` will round in a\n"
 	"	direction chosen by the implementation, presumably the direction that is fastest.\n"
 	"iround(x: vecN) -> ivecN\n"
-	"	Returns a value equal to the nearest integer to x. The fraction 0.5 will round in a\n"
+	"	Returns a value equal to the nearest integer to `x`. The fraction `0.5` will round in a\n"
 	"	direction chosen by the implementation, presumably the direction that is fastest."
 );
 PyDoc_STRVAR(uround_docstr,
 	"uround(x: number) -> int\n"
-	"	Returns a value equal to the nearest integer to x. The fraction 0.5 will round in a\n"
+	"	Returns a value equal to the nearest integer to `x`. The fraction `0.5` will round in a\n"
 	"	direction chosen by the implementation, presumably the direction that is fastest.\n"
 	"uround(x: vecN) -> uvecN\n"
-	"	Returns a value equal to the nearest integer to x. The fraction 0.5 will round in a\n"
+	"	Returns a value equal to the nearest integer to `x`. The fraction `0.5` will round in a\n"
 	"	direction chosen by the implementation, presumably the direction that is fastest."
 );
 

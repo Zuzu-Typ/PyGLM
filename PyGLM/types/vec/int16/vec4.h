@@ -38,7 +38,7 @@ static PyNumberMethods hi16vec4NumMethods = {
 	(binaryfunc)vec_add<4, glm::i16>, //nb_add
 	(binaryfunc)vec_sub<4, glm::i16>, //nb_subtract
 	(binaryfunc)vec_mul<4, glm::i16>, //nb_multiply
-	0, //nb_remainder
+	(binaryfunc)vec_mod<4, glm::i16>, //nb_remainder
 	0, //nb_divmod
 	0, //nb_power
 	(unaryfunc)vec_neg<4, glm::i16>, //nb_negative
@@ -57,7 +57,7 @@ static PyNumberMethods hi16vec4NumMethods = {
 	(binaryfunc)vec_iadd<4, glm::i16>, //nb_inplace_add
 	(binaryfunc)vec_isub<4, glm::i16>, //nb_inplace_subtract
 	(binaryfunc)vec_imul<4, glm::i16>, //nb_inplace_multiply
-	0, //nb_inplace_remainder
+	(binaryfunc)vec_imod<4, glm::i16>, //nb_inplace_remainder
 	0, //nb_inplace_power
 	0, //nb_inplace_lshift
 	0, //nb_inplace_rshift
@@ -71,47 +71,6 @@ static PyNumberMethods hi16vec4NumMethods = {
 	0, //nb_index
 	(binaryfunc)vec_matmul, //nb_matrix_multiply
 	(binaryfunc)vec_imatmul<4, glm::i16>, //nb_inplace_matrix_multiply
-};
-static PyTypeObject hi16vec4Type = {
-	PyObject_HEAD_INIT(NULL)
-	"glm.i16vec4",             /* tp_name */
-	sizeof(vec<4, glm::i16>),             /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	(destructor)vec_dealloc, /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	(reprfunc)vec4_repr<glm::i16>,                         /* tp_repr */
-	&hi16vec4NumMethods,             /* tp_as_number */
-	&hi16vec4SeqMethods,                         /* tp_as_sequence */
-	0,                         /* tp_as_mapping */
-	(hashfunc)vec_hash<4, glm::i16>,                         /* tp_hash  */
-	0,                         /* tp_call */
-	(reprfunc)vec4_str<glm::i16>,                         /* tp_str */
-	(getattrofunc)vec_getattr<4, glm::i16>,                         /* tp_getattro */
-	(setattrofunc)vec_setattr<4, glm::i16>,                         /* tp_setattro */
-	&hi16vec4BufferMethods,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"i16vec4( <vec4 compatible type(s)> )\n4 components vector of high qualifier 16 bit integer numbers.",           /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	(richcmpfunc)vec_richcompare<4, glm::i16>,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	(getiterfunc)vec_geniter<4, glm::i16>,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	hi16vec4_methods,             /* tp_methods */
-	hi16vec4_members,             /* tp_members */
-	0,           			/* tp_getset */
-	0,                         /* tp_base */
-	0,                         /* tp_dict */
-	0,                         /* tp_descr_get */
-	0,                         /* tp_descr_set */
-	0,                         /* tp_dictoffset */
-	(initproc)vec4_init<glm::i16>,      /* tp_init */
-	0,                         /* tp_alloc */
-	(newfunc)vec_new<4, glm::i16>,                 /* tp_new */
 };
 static PyTypeObject hi16vec4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
@@ -153,3 +112,55 @@ static PyTypeObject hi16vec4IterType = {
 	0,                         /* tp_alloc */
 	(newfunc)vecIter_new<4, glm::i16>,                 /* tp_new */
 };
+
+static PyGLMTypeObject hi16vec4GLMType = {
+	{
+		PyObject_HEAD_INIT(NULL)
+		"glm.i16vec4",             /* tp_name */
+		sizeof(vec<4, glm::i16>),             /* tp_basicsize */
+		0,                         /* tp_itemsize */
+		(destructor)vec_dealloc, /* tp_dealloc */
+		0,                         /* tp_print */
+		0,                         /* tp_getattr */
+		0,                         /* tp_setattr */
+		0,                         /* tp_reserved */
+		(reprfunc)vec4_repr<glm::i16>,                         /* tp_repr */
+		& hi16vec4NumMethods,             /* tp_as_number */
+		& hi16vec4SeqMethods,                         /* tp_as_sequence */
+		0,                         /* tp_as_mapping */
+		(hashfunc)vec_hash<4, glm::i16>,                         /* tp_hash  */
+		0,                         /* tp_call */
+		(reprfunc)vec4_str<glm::i16>,                         /* tp_str */
+		(getattrofunc)vec_getattr<4, glm::i16>,                         /* tp_getattro */
+		(setattrofunc)vec_setattr<4, glm::i16>,                         /* tp_setattro */
+		& hi16vec4BufferMethods,                         /* tp_as_buffer */
+		Py_TPFLAGS_DEFAULT |
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */
+		"i16vec4( <vec4 compatible type(s)> )\n4 components vector of high qualifier 16 bit integer numbers.",           /* tp_doc */
+		0,                         /* tp_traverse */
+		0,                         /* tp_clear */
+		(richcmpfunc)vec_richcompare<4, glm::i16>,                         /* tp_richcompare */
+		0,                         /* tp_weaklistoffset */
+		(getiterfunc)vec_geniter<4, glm::i16>,                         /* tp_iter */
+		0,                         /* tp_iternext */
+		hi16vec4_methods,             /* tp_methods */
+		hi16vec4_members,             /* tp_members */
+		0,           			/* tp_getset */
+		0,                         /* tp_base */
+		0,                         /* tp_dict */
+		0,                         /* tp_descr_get */
+		0,                         /* tp_descr_set */
+		0,                         /* tp_dictoffset */
+		(initproc)vec4_init<glm::i16>,      /* tp_init */
+		0,                         /* tp_alloc */
+		(newfunc)vec_new<4, glm::i16>,                 /* tp_new */
+	},
+	PyGLM_TYPE_VEC,
+	4,
+	0,
+	sizeof(int16),
+	sizeof(glm::vec<4, int16>),
+	PyGLM_FS_INT16
+};
+
+static PyTypeObject& hi16vec4Type = *((PyTypeObject*)&hi16vec4GLMType);

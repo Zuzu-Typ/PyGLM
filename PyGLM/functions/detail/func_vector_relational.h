@@ -10,34 +10,34 @@
 
 PyDoc_STRVAR(equal_docstr,
 	"equal(x: vecN, y: vecN) -> bvecN\n"
-	"	Returns the component-wise comparison of result x == y.\n"
+	"	Returns the component-wise comparison of result `x == y`.\n"
 	"equal(x: quat, y: quat) -> bvec4\n"
-	"	Returns the component-wise comparison of result x == y.\n"
+	"	Returns the component-wise comparison of result `x == y`.\n"
 	"equal(x: matNxM, y: matNxM) -> bvecN\n"
 	"	Perform a component-wise equal-to comparison of two matrices. Return a boolean vector which\n"
-	"	components value is True if this expression is satisfied per column of the matrices.\n"
+	"	components value is `True` if this expression is satisfied per column of the matrices.\n"
 	"equal(x: number, y: number, ULPs: int) -> bool\n"
-	"	Returns the component-wise comparison between two scalars in term of ULPs.\n"
+	"	Returns the component-wise comparison between two scalars in term of `ULPs`.\n"
 	"equal(x: vecN, y: vecN, ULPs: int) -> bvecN\n"
-	"	Returns the component-wise comparison between two vectors in term of ULPs.\n"
+	"	Returns the component-wise comparison between two vectors in term of `ULPs`.\n"
 	"equal(x: matNxM, y: matNxM, ULPs: int) -> bvecN\n"
-	"	Returns the component-wise comparison between two matrices in term of ULPs.\n"
+	"	Returns the component-wise comparison between two matrices in term of `ULPs`.\n"
 	"equal(x: vecN, y: vecN, ULPs: ivecN) -> bvecN\n"
-	"	Returns the component-wise comparison between two vectors in term of ULPs.\n"
+	"	Returns the component-wise comparison between two vectors in term of `ULPs`.\n"
 	"equal(x: matNxM, y: matNxM, ULPs: ivecN) -> bvecN\n"
-	"	Returns the component-wise comparison between two matrices in term of ULPs.\n"
+	"	Returns the component-wise comparison between two matrices in term of `ULPs`.\n"
 	"equal(x: number, y: number, epsilon: number) -> bool\n"
-	"	Returns the comparison of |x - y| < epsilon.\n"
+	"	Returns the comparison of `|x - y| < epsilon`.\n"
 	"equal(x: vecN, y: vecN, epsilon: number) -> bvecN\n"
-	"	Returns the component-wise comparison of |x - y| < epsilon.\n"
+	"	Returns the component-wise comparison of `|x - y| < epsilon`.\n"
 	"equal(x: quat, y: quat, epsilon: number) -> bvec4\n"
-	"	Returns the component-wise comparison of |x - y| < epsilon.\n"
+	"	Returns the component-wise comparison of `|x - y| < epsilon`.\n"
 	"equal(x: matNxM, y: matNxM, epsilon: number) -> bvecN\n"
-	"	Returns the component-wise comparison of |x - y| < epsilon.\n"
+	"	Returns the component-wise comparison of `|x - y| < epsilon`.\n"
 	"equal(x: vecN, y: vecN, epsilon: vecN) -> bvecN\n"
-	"	Returns the component-wise comparison of |x - y| < epsilon.\n"
+	"	Returns the component-wise comparison of `|x - y| < epsilon`.\n"
 	"equal(x: matNxM, y: matNxM, epsilon: vecN) -> bvecN\n"
-	"	Returns the component-wise comparison of |x - y| < epsilon."
+	"	Returns the component-wise comparison of `|x - y| < epsilon`."
 );
 static PyObject*
 equal(PyObject*, PyObject* args) {
@@ -2172,39 +2172,39 @@ notEqual(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(lessThan_docstr,
 	"lessThan(x: vecN, y: vecN) -> bvecN\n"
-	"	Returns the component-wise comparison of result x < y.\n"
+	"	Returns the component-wise comparison of result `x < y`.\n"
 	"lessThan(x: quat, y: quat) -> bvec4\n"
-	"	Returns the component-wise comparison of result x < y."
+	"	Returns the component-wise comparison of result `x < y`."
 );
 PyGLM_MAKE_GLM_FUNC_VV_QQ(lessThan)
 
 PyDoc_STRVAR(lessThanEqual_docstr,
 	"lessThanEqual(x: vecN, y: vecN) -> bvecN\n"
-	"	Returns the component-wise comparison of result x <= y.\n"
+	"	Returns the component-wise comparison of result `x <= y`.\n"
 	"lessThanEqual(x: quat, y: quat) -> bvec4\n"
-	"	Returns the component-wise comparison of result x <= y."
+	"	Returns the component-wise comparison of result `x <= y`."
 );
 PyGLM_MAKE_GLM_FUNC_VV_QQ(lessThanEqual)
 
 PyDoc_STRVAR(greaterThan_docstr,
 	"greaterThan(x: vecN, y: vecN) -> bvecN\n"
-	"	Returns the component-wise comparison of result x > y.\n"
+	"	Returns the component-wise comparison of result `x > y`.\n"
 	"greaterThan(x: quat, y: quat) -> bvec4\n"
-	"	Returns the component-wise comparison of result x > y."
+	"	Returns the component-wise comparison of result `x > y`."
 );
 PyGLM_MAKE_GLM_FUNC_VV_QQ(greaterThan)
 
 PyDoc_STRVAR(greaterThanEqual_docstr,
 	"greaterThanEqual(x: vecN, y: vecN) -> bvecN\n"
-	"	Returns the component-wise comparison of result x >= y."
+	"	Returns the component-wise comparison of result `x >= y`."
 	"greaterThanEqual(x: quat, y: quat) -> bvec4\n"
-	"	Returns the component-wise comparison of result x >= y."
+	"	Returns the component-wise comparison of result `x >= y`."
 );
 PyGLM_MAKE_GLM_FUNC_VV_QQ(greaterThanEqual)
 
 PyDoc_STRVAR(any_docstr,
 	"any(v: bvecN) -> bool\n"
-	"	Returns true if any component of x is true."
+	"	Returns `True` if any component of `x` is `True`."
 );
 static PyObject*
 any(PyObject*, PyObject* arg) {
@@ -2239,7 +2239,7 @@ any(PyObject*, PyObject* arg) {
 
 PyDoc_STRVAR(all_docstr,
 	"all(v: bvecN) -> bool\n"
-	"	Returns true if all components of x are true."
+	"	Returns `True` if all components of `x` are `True`."
 );
 static PyObject*
 all(PyObject*, PyObject* arg) {
@@ -2274,7 +2274,7 @@ all(PyObject*, PyObject* arg) {
 
 PyDoc_STRVAR(not_docstr,
 	"not_(v: bvecN) -> bool\n"
-	"	Returns the component-wise logical complement of x."
+	"	Returns the component-wise logical complement of `x`."
 );
 static PyObject*
 not_(PyObject*, PyObject* arg) {

@@ -21,10 +21,14 @@ It's mainly intended to \b\provide a way of passing multiple glm type instances\
 \--\\url #to-list--tuple\To list / tuple\url\
 \--\\url #from-numbers\From Numbers\url\
 \--\\url #as-reference\As Reference\url\
-\--\\url #zeros\Zeros\url\\list switch\
+\--\\url #zeros\Zeros\url\
+\--\\url #filter\Filter\url\
+\--\\url #map\Map\url\
+\--\\url #sort\Sort\url\
+\--\\url #concat\Concat\url\
+\--\\url #repeat\Repeat\url\\list switch\
 \-\\url #operators\Operators\url\\list switch\
-\--\\url #concat--operator\concat\url\
-\--\\url #repeat--operator\repeat\url\
+\--\\url #numeric-operations\Numeric operations\url\
 \--\\url #getitem-and-setitem--operator\getitem and setitem\url\
 \--\\url #contains-in-operator\contains\url\
 \--\\url #len\len\url\
@@ -111,7 +115,8 @@ True
 array(vec3(2, 2, 2))
 \code\
 
-\i\Note: \code\as_reference\code\ only works with array instances or buffers (e.g. \code\numpy.array\code\).\i\
+\i\Note: \code\as_reference\code\ only works with array instances or buffers (e.g. \code\numpy.array\code\).
+Also it may not always be possible to create a reference copy, in which case a normal copy is made and a warning is raised.\i\
 
 \h3\... with zeros\h3\
 You can initialize an array with any given number of zeros or a given type:
@@ -217,23 +222,129 @@ array(vec3(0, 0, 0), vec3(0, 0, 0))
 array(mat4x4((0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0)))
 \code\
 
-\h2\Operators\h2\
-\h3\concat (\code\+\code\ operator)\h3\
-Arrays can be combined / concaternated using the \code\+\code\ operator, as long as they have the same element type.
+\h3\Filter\h3\
+You can filter an array using a custom filtering function (i.e. create a new array with all of this array's elements that match a certain criteria).
+
+The filtering function is called with each element of the array and must return \code\True\code\ for the elements to keep and \code\False\code\ for the elements to discard.
+
+Example:
 \code Python\
->>> array(vec2(1, 2)) + array(vec2(3, 4))
+>>> array(c_float, 1, 2, 3, 4, 5).filter(lambda x: x > 3)
+array(c_float(4), c_float(5))
+
+>>> array(vec3(1), vec3(2), vec3(3)).filter(lambda x: x.x + x.y == 2)
+array(vec3(1, 1, 1))
+\code\
+
+\h3\Map\h3\
+You can map the elements of an array to one or any number of new values using a custom mapping function.
+
+The mapping function is supplied with the amounts of arguments that the map function is given.
+
+If the mapping function returns \code\None\code\, the element is discarded (much like filter).
+If it returns a single value, that value becomes a new element of the resulting array.
+If it returns a tuple, all of the tuple's items are added to the resulting array.
+
+Example:
+\code Python\
+>>> array(c_float, 1, 2, 3).map(lambda x: x + 1)
+array(c_float(2), c_float(3), c_float(4))
+
+>>> array(c_float, 1, 2, 3).map(vec3)
+array(vec3(1, 1, 1), vec3(2, 2, 2), vec3(3, 3, 3))
+
+>>> array(c_float, 1, 2, 3, 4, 5).map(lambda x: x if x > 3 else None)
+array(c_float(4), c_float(5))
+
+>>> array(c_float, 1, 2).map(lambda x: (x, x))
+array(c_float(1), c_float(1), c_float(2), c_float(2))
+
+>>> array(c_float, 1, 2).map(lambda x: (3, 4) if x == 1 else 5)
+array(c_float(3), c_float(4), c_float(5))
+
+>>> arr1 = array(c_float, 1, 2, 3)
+>>> arr2 = array(c_float, 4, 5, 6)
+>>> arr1.map(lambda x, y: (x + x) * y, arr2)
+array(c_float(8), c_float(20), c_float(36))
+
+>>> arr3 = array(c_float, 7, 8, 9)
+>>> arr1.map(lambda x, y, z: vec3(x, y, z), arr2, arr3)
+array(vec3(1, 4, 7), vec3(2, 5, 8), vec3(3, 6, 9))
+
+>>> arr1.map(lambda x, y, z: x * y + z, arr2, arr3)
+array(c_float(11), c_float(18), c_float(27))
+
+>>> arr4 = array(vec3(1, 2, 3), vec3( 4, 5, 6))
+>>> arr4.map(normalize)
+array(vec3(0.267261, 0.534522, 0.801784), vec3(0.455842, 0.569803, 0.683764))
+
+>>> arr5 = array(vec3(7, 8, 9), vec3(10,11,12))
+>>> arr4.map(dot, arr5)
+array(c_float(50), c_float(167))
+\code\
+
+\h3\Sort\h3\
+You can sort an array by using a custom sorting function.
+
+The sorting function is called with two elements from the array and should return \code\-1\code\ if the first element comes before the second element in order.
+Otherwise it may return any other value. Typically \code\0\code\ for equal elements and \code\1\code\ if the first element comes after the second.
+
+The sorting algorithm used is a recursive quicksort.
+
+Example:
+\code Python\
+>>> arr = array(c_float, 6, 5, 4, 3, 2, 1)
+>>> arr.sort(lambda x, y: -1 if x < y else 1)
+>>> arr
+array(c_float(1), c_float(2), c_float(3), c_float(4), c_float(5), c_float(6))
+
+>>> arr.sort(lambda x, y: int(sign(y - x)))
+>>> arr
+array(c_float(6), c_float(5), c_float(4), c_float(3), c_float(2), c_float(1))
+
+>>> arr.sort(cmp) # using glm.cmp
+>>> arr
+array(c_float(1), c_float(2), c_float(3), c_float(4), c_float(5), c_float(6))
+\code\
+
+\h3\Concat\h3\
+Arrays can be combined / concatenated using the \code\concat()\code\ method, as long as they have the same element type.
+\code Python\
+>>> array(vec2(1, 2)).concat(array(vec2(3, 4)))
 array(vec2(1, 2), vec2(3, 4))
 
->>> array(vec4()) + array(vec1())
+>>> array(vec4()).concat(array(vec1()))
 ValueError: the given arrays are incompatible
 \code\
 
-\h3\repeat (\code\*\code\ operator)\h3\
-Arrays can be repeated a given number of times using the \code\*\code\ operator.
+\h3\Repeat\h3\
+Arrays can be repeated a given number of times using the \code\repeat()\code\ method.
 \code Python\
->>> array(vec3(1, 2, 3)) * 3
+>>> array(vec3(1, 2, 3)).repeat(3)
 array(vec3(1, 2, 3), vec3(1, 2, 3), vec3(1, 2, 3))
 \code\
+
+\h2\Operators\h2\
+\h3\Numeric operations\h3\
+Arrays support a dozen numeric operations:
+\ul\
+\-\ Addition (\code\+\code\)
+\-\ Subtraction (\code\-\code\)
+\-\ Multiplication (\code\*\code\)
+\-\ Division (\code\/\code\)
+\-\ Modulus (\code\%\code\)
+\-\ Power (\code\**\code\)
+\-\ Negation (\code\-\code\)
+\-\ Absolution (\code\abs()\code\)
+\-\ Inversion (\code\~\code\)
+\-\ Left shift (\code\<<\code\)
+\-\ Right shift (\code\>>\code\)
+\-\ Bitwise and (\code\&\code\)
+\-\ Bitwise or (\code\|\code\)
+\-\ Bitwise xor (\code\^\code\)
+\ul\
+
+\i\Note: Not all types are compatible though.\i\
 
 \h3\getitem, setitem and delitem (\code\[]\code\ operator)\h3\
 You can access the individual elements of an array using indices.

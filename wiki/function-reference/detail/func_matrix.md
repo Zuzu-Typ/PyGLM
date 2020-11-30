@@ -25,15 +25,15 @@ It contains GLSL matrix functions\.
   
 ### matrixCompMult\(\) function  
 #### <code>glm.<code>**matrixCompMult**(**x**: *matNxM*, **y**: *matNxM*) -\> *matNxM*</code></code>  
-&emsp;&emsp;Multiply matrix x by matrix y component\-wise, i\.e\., result\[i\]\[j\] is the scalar product of  
-&emsp;&emsp;x\[i\]\[j\] and y\[i\]\[j\]\.  
+&emsp;&emsp;Multiply matrix ``` x ``` by matrix ``` y ``` component\-wise, i\.e\., ``` result[i][j] ``` is the scalar product of  
+&emsp;&emsp;``` x[i][j] ``` and ``` y[i][j] ```\.  
   
 ### outerProduct\(\) function  
 #### <code>glm.<code>**outerProduct**(**c**: *vecC*, **r**: *vecR*) -\> *matRxC*</code></code>  
-&emsp;&emsp;Treats the first parameter c as a column vector and the second parameter r as a row vector  
-&emsp;&emsp;and does a linear algebraic matrix multiply c \* r\.  
+&emsp;&emsp;Treats the first parameter ``` c ``` as a column vector and the second parameter ``` r ``` as a row vector  
+&emsp;&emsp;and does a linear algebraic matrix multiply ``` c * r ```\.  
   
 ### transpose\(\) function  
 #### <code>glm.<code>**transpose**(**x**: *matNxM*) -\> *matMxN*</code></code>  
-&emsp;&emsp;Returns the transposed matrix of x\.  
+&emsp;&emsp;Returns the transposed matrix of ``` x ```\.  
   

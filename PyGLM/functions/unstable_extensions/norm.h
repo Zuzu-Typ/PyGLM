@@ -45,35 +45,35 @@ lxNorm_(PyObject*, PyObject* args) {
 
 PyDoc_STRVAR(distance2_docstr,
 	"distance2(p0: vecN, p1: vecN) -> float\n"
-	"	Returns the squared distance between p0 and p1, i.e., length2(p0 - p1)."
+	"	Returns the squared distance between `p0` and `p1`, i.e., `length2(p0 - p1)`."
 );
 PyDoc_STRVAR(l1Norm_docstr,
 	"l1Norm(v: vec3) -> float\n"
-	"	Returns the L1 norm of v.\n"
+	"	Returns the L1 norm of `v`.\n"
 	"l1Norm(x: vec3, y: vec3) -> float\n"
-	"	Returns the L1 norm between x and y."
+	"	Returns the L1 norm between `x` and `y`."
 );
 PyDoc_STRVAR(l2Norm_docstr,
 	"l2Norm(v: vec3) -> float\n"
-	"	Returns the L2 norm of v.\n"
+	"	Returns the L2 norm of `v`.\n"
 	"l2Norm(x: vec3, y: vec3) -> float\n"
-	"	Returns the L2 norm between x and y."
+	"	Returns the L2 norm between `x` and `y`."
 );
 PyDoc_STRVAR(length2_docstr,
 	"length2(v: vecN) -> float\n"
-	"	Returns the squared length of x."
+	"	Returns the squared length of `x`."
 );
 PyDoc_STRVAR(lMaxNorm_docstr,
 	"lMaxNorm(v: vec3) -> float\n"
-	"	Returns the LMax norm of v.\n"
+	"	Returns the LMax norm of `v`.\n"
 	"lMaxNorm(x: vec3, y: vec3) -> float\n"
-	"	Returns the LMax norm between x and y."
+	"	Returns the LMax norm between `x` and `y`."
 );
 PyDoc_STRVAR(lxNorm_docstr,
 	"lxNorm(v: vec3, Depth: int) -> float\n"
-	"	Returns the L norm of v.\n"
+	"	Returns the L norm of `v`.\n"
 	"lxNorm(x: vec3, y: vec3, Depth: int) -> float\n"
-	"	Returns the L norm between x and y."
+	"	Returns the L norm between `x` and `y`."
 );
 
 #define NORM_METHODS \

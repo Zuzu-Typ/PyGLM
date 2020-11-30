@@ -18,9 +18,9 @@ vec_new(PyTypeObject *type, PyObject *, PyObject *)
 {
 	vec<L, T> *self = (vec<L, T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
-		constexpr uint8_t info_type = get_type_helper_type<T>();
-		constexpr uint8_t info = L | (info_type << PyGLM_TYPE_INFO_VEC_TYPE_OFFSET);
-		self->info = info;
+		//constexpr uint8_t info_type = get_type_helper_type<T>();
+		//constexpr uint8_t info = L | (info_type << PyGLM_TYPE_INFO_VEC_TYPE_OFFSET);
+		//self->info = info;
 		self->super_type = glm::vec<L, T>();
 	}
 
@@ -639,6 +639,30 @@ vec_div(PyObject *obj1, PyObject *obj2)
 	return  pack_vec<L, T>(o / o2);
 }
 
+template<int L>
+static inline glm::vec<L, float>
+vec_mod_f(glm::vec<L, float> a, glm::vec<L, float> b) {
+	return glm::mod(a, b);
+}
+
+template<int L>
+static inline glm::vec<L, double>
+vec_mod_f(glm::vec<L, double> a, glm::vec<L, double> b) {
+	return glm::mod(a, b);
+}
+
+template<int L, typename T>
+static inline glm::vec<L, T>
+vec_mod_f(glm::vec<L, T> a, glm::vec<L, T> b) {
+	glm::vec<L, T> out{};
+
+	for (int i = 0; i < L; i++) {
+		out[i] = a[i] % b[i];
+	}
+
+	return out;
+}
+
 template<int L, typename T>
 static PyObject *
 vec_mod(PyObject *obj1, PyObject *obj2)
@@ -647,7 +671,7 @@ vec_mod(PyObject *obj1, PyObject *obj2)
 		if (!glm::all((glm::vec<L, bool>)(((vec<L, T>*)obj2)->super_type))) {
 			PyGLM_ZERO_DIVISION_ERROR_T(T);
 		}
-		return pack_vec<L, T>(glm::mod(glm::vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1)), ((vec<L, T>*)obj2)->super_type));
+		return pack_vec<L, T>(vec_mod_f(glm::vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1)), ((vec<L, T>*)obj2)->super_type));
 	}
 
 	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<L, T>()));
@@ -664,7 +688,7 @@ vec_mod(PyObject *obj1, PyObject *obj2)
 		if (o2 == (T)0) {
 			PyGLM_ZERO_DIVISION_ERROR_T(T);
 		}
-		return pack_vec<L, T>(glm::mod(o, glm::vec<L, T>(o2)));
+		return pack_vec<L, T>(vec_mod_f(o, glm::vec<L, T>(o2)));
 	}
 
 	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<L, T>()));
@@ -680,7 +704,7 @@ vec_mod(PyObject *obj1, PyObject *obj2)
 	}
 
 	// obj1 and obj2 can be interpreted as a vec
-	return pack_vec<L, T>(glm::mod(o, o2));
+	return pack_vec<L, T>(vec_mod_f(o, o2));
 }
 
 template<int L, typename T>
@@ -836,7 +860,7 @@ vec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 static PyObject*
 vec_matmul(PyObject* obj1, PyObject* obj2)
 {
-	PyObject* out = PyNumber_Multiply(obj2, obj1);
+	PyObject* out = PyNumber_Multiply(obj1, obj2);
 	if (out == NULL) {
 		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
 	}
@@ -1749,10 +1773,14 @@ vec_releasebuffer(PyObject*, Py_buffer* view) {
 	PyMem_Free(view->shape);
 }
 
+
+
 static PyObject*
 generic_copy(PyObject* self, PyObject*) {
 	return PyObject_Call((PyObject*)(self->ob_type), PyTuple_Pack(1, self), NULL);
 }
+
+
 
 static PyObject*
 generic_deepcopy(PyObject* self, PyObject* memo) {

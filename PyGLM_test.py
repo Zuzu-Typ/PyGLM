@@ -1,4 +1,4 @@
-import glm, sys, random, time, copy
+import glm, sys, random, time, copy, re, math
 
 from collections import OrderedDict
 
@@ -99,6 +99,8 @@ matrix_types = []
 quat_type_dict = {}
 
 quat_types = []
+
+ctypes_types = [glm.c_float, glm.c_double, glm.c_int64, glm.c_int32, glm.c_int16, glm.c_int8, glm.c_uint64, glm.c_uint32, glm.c_uint16, glm.c_uint8, glm.c_bool]
 
 for type_id in vector_type_ids:
     vector_type_dict[type_id] = []
@@ -474,7 +476,7 @@ def test_array_types():
     assert glm.array(OrderedDict([(glm.float32, 1), (1, 2), (2, 3), (3, 4)]))
     assert glm.array(memoryview(glm.array.from_numbers(glm.float32, *range(10))))
     
-    assert glm.array.zeros(1000, glm.uint8) == glm.array.zeros(1000, glm.u8vec1) == glm.array(glm.int8, 0) * 1000
+    assert glm.array.zeros(1000, glm.uint8) == glm.array.zeros(1000, glm.u8vec1) == glm.array(glm.int8, 0).repeat(1000)
     assert glm.array.zeros(1000, glm.quat)
     assert glm.array.zeros(1000, glm.vec4)
     assert glm.array.zeros(1000, glm.mat4)
@@ -499,6 +501,38 @@ def test_array_types():
     assert arr.readonly == False
     assert arr.reference is None
 
+    arr = glm.array.from_numbers(glm.int32, 5, 4, 3, 2, 1)
+
+    assert arr.filter(lambda x: True) == arr
+    assert arr.filter(lambda x: False) == arr.repeat(0)
+    assert arr.filter(lambda x: x <= 3) == glm.array.from_numbers(glm.int32, 3, 2, 1)
+    assert arr.map(lambda x: x) == arr 
+    assert arr.map(lambda x: glm.vec3(x)) == glm.array(glm.vec3(5), glm.vec3(4), glm.vec3(3), glm.vec3(2), glm.vec3(1))
+    assert arr.map(lambda x: (x, x) if x == 1 else None) == glm.array(glm.int32, 1, 1)
+    assert arr.map(glm.add, glm.array([glm.vec2(x) for x in range(5)])) == glm.array([glm.vec2(5) for x in range(5)])
+    assert glm.array(glm.int32, 0, 1, 1, 0, 0).map(glm.if_else, arr, glm.array(glm.int32, 1, 2, 3, 4, 5)) == glm.array(glm.int32, 1, 4, 3, 4, 5)
+    assert glm.array(glm.int32, *(x * 4 for x in range(-5,5))).map(lambda *args: args if sum(args) == 0 else None, 
+                                                                glm.array(glm.int32, *(x * 3 for x in range(-5,5))), 
+                                                                glm.array(glm.int32, *(x * 2 for x in range(-5,5))),
+                                                                glm.array(glm.int32, *(x * 1 for x in range(-5,5))),
+                                                                glm.array(glm.int32, *(x * -9.4 for x in range(-5,5)))) == glm.array(glm.int32, 0, 0, 0, 0, 0)
+    assert arr.map(lambda x: None) == arr.repeat(0)
+    arr.sort(glm.cmp)
+    assert arr == glm.array.from_numbers(glm.int32, 1, 2, 3, 4, 5)
+
+    arr = glm.array(glm.vec3(5), glm.vec3(4), glm.vec3(3), glm.vec3(2), glm.vec3(1))
+
+    assert arr.filter(lambda x: True) == arr
+    assert arr.filter(lambda x: False) == arr.repeat(0)
+    assert arr.filter(lambda x: x.x <= 3) == glm.array(glm.vec3(3), glm.vec3(2), glm.vec3(1))
+    assert arr.map(lambda x: x) == arr 
+    assert arr.map(lambda x: x.xxxx) == glm.array(glm.vec4(5), glm.vec4(4), glm.vec4(3), glm.vec4(2), glm.vec4(1))
+    assert arr.map(lambda x: (x, x) if x.x == 1 else None) == glm.array(glm.vec3(1), glm.vec3(1))
+    assert arr.map(lambda x: None) == arr.repeat(0)
+    arr.sort(lambda x, y: -(glm.all(glm.lessThan(x, y))))
+    assert arr == glm.array(glm.vec3(1), glm.vec3(2), glm.vec3(3), glm.vec3(4), glm.vec3(5))
+
+
 # repr #
 def test_repr_eval():
     glm_locals = {a : getattr(glm, a) for a in dir(glm)}
@@ -518,59 +552,79 @@ def test_repr_eval():
     arr = glm.array(glm.vec4(*[1]*4), glm.vec4(*[2]*4))
     arr2 = glm.array(glm.quat(*[1]*4), glm.quat(*[2]*4))
     arr3 = glm.array(glm.mat4(*[1]*16), glm.mat4(*[2]*16))
+    arr4 = glm.array(glm.int8, *range(10))
     assert eval(repr(arr), glm_locals) == arr, (arr, repr(arr), eval(repr(arr), glm_locals))
     assert eval(repr(arr2), glm_locals) == arr2, (arr2, repr(arr2), eval(repr(arr2), glm_locals))
     assert eval(repr(arr3), glm_locals) == arr3, (arr3, repr(arr3), eval(repr(arr3), glm_locals))
+    assert eval(repr(arr4), glm_locals) == arr4, (arr4, repr(arr4), eval(repr(arr4), glm_locals))
 #/repr #
 
 # neg #
 def test_neg():
     for obj in gen_obj("#MV_M_Q__fFiqsu"):
         fassert(obj.__neg__, ())
+        assert (-glm.array(obj))[0] == -obj, obj
 #/neg #
 
 # pos #
 def test_pos():
     for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__pos__, ())
+        assert (+glm.array(obj))[0] == +obj, obj
 #/pos #
 
 # abs #
 def test_abs():
-    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
-        fassert(obj.__pos__, ())
+    for obj in gen_obj("#MV__fFiqsuIQSU"):
+        fassert(obj.__abs__, ())
+        assert (abs(glm.array(obj)))[0] == abs(obj), obj
 #/abs #
 
 # add #
 def test_add():
     for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__add__, (obj,))
+        assert (glm.array(obj) + glm.array(obj))[0] == obj + obj, obj
+        assert (glm.array(obj) + obj)[0] == obj + obj, obj
+        assert (obj + glm.array(obj))[0] == obj + obj, obj
 
     arr = glm.array(glm.mat4())
-    fassert(arr.__add__, (arr,))
-    fassert((arr+arr).__add__, (arr,))
+    fassert(arr.concat, (arr,))
+    fassert((arr.concat(arr)).concat, (arr,))
 #/add #
 
 # sub #
 def test_sub():
     for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__sub__, (obj,))
+        assert (glm.array(obj) - glm.array(obj))[0] == obj - obj, obj
+        assert (glm.array(obj) - obj)[0] == obj - obj, obj
+        assert (obj - glm.array(obj))[0] == obj - obj, obj
 #/sub #
 
 # mul #
 def test_mul():
     for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__mul__, (1,))
+        assert (glm.array(obj) * glm.array(glm.array(obj).ctype, 1))[0] == obj * 1, obj
+        assert (glm.array(obj) * 1)[0] == obj * 1, obj
+        assert (obj * glm.array(glm.array(obj).ctype, 1))[0] == obj * 1, obj
 
     arr = glm.array(glm.mat4())
-    fassert(arr.__mul__, (3,))
-    fassert((arr*4).__mul__, (2,))
+    fassert(arr.repeat, (3,))
+    fassert((arr.repeat(4)).repeat, (2,))
 #/mul #
 
 # div #
 def test_div():
     for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
         fassert(obj.__truediv__, (1,))
+
+    for obj in gen_obj("#MV_Q__fFiqsuIQSU"):
+        fassert(obj.__truediv__, (1,))
+        assert (glm.array(obj) / glm.array(glm.array(obj).ctype, 1))[0] == obj / 1, obj
+        assert (glm.array(obj) / 1)[0] == obj / 1, obj
+        assert (obj / glm.array(glm.array(obj).ctype, 1))[0] == obj / 1, obj
 
     for obj in gen_obj("V__iqsuIQSU"):
         try:
@@ -597,6 +651,11 @@ def test_div():
 def test_mod():
     for obj in gen_obj("#MV__fF"):
         fassert(obj.__mod__, (1,))
+
+    for obj in gen_obj("#MV__fF"):
+        assert (glm.array(obj) % glm.array(glm.array(obj).ctype, 1))[0] == obj % 1, obj
+        assert (glm.array(obj) % 1)[0] == obj % 1, obj
+        assert (obj % glm.array(glm.array(obj).ctype, 1))[0] == obj % 1, obj
 #/mod #
 
 # floordiv #
@@ -613,9 +672,13 @@ def test_divmod():
 
 # pow #
 def test_pow():
-    for obj in gen_obj("#MV__fF"):
+    for obj in gen_obj("#p#MV__fF"):
         fassert(obj.__pow__, (obj,))
         fassert(obj.__pow__, (obj, obj))
+
+        assert (glm.array(obj) ** glm.array(obj))[0] == obj ** obj, obj
+        assert (glm.array(obj) ** obj)[0] == obj ** obj, obj
+        assert (obj ** glm.array(obj))[0] == obj ** obj, obj
 #/pow #
 
 # matmul #
@@ -633,8 +696,8 @@ def test_iadd():
         fassert(obj.__iadd__, (obj,))
     
     arr = glm.array(glm.mat4())
-    fassert(arr.__iadd__, (arr,))
-    fassert(arr.__iadd__, (arr,))
+    fassert(arr.iconcat, (arr,))
+    fassert(arr.iconcat, (arr,))
 #/iadd #
 
 # isub #
@@ -649,8 +712,8 @@ def test_imul():
         fassert(obj.__imul__, (1,))
 
     arr = glm.array(glm.mat4())
-    fassert(arr.__imul__, (3,))
-    fassert(arr.__imul__, (3,))
+    fassert(arr.irepeat, (3,))
+    fassert(arr.irepeat, (3,))
 #/imul #
 
 # idiv #
@@ -704,7 +767,7 @@ def test_len():
         assert len(obj), obj
 
     arr = glm.array(glm.mat4())
-    arr2 = arr + arr
+    arr2 = arr.concat(arr)
     assert len(arr) == 1, arr
     assert len(arr2) == 2, arr2
 #/len #
@@ -885,46 +948,46 @@ def test_buffer_protocol():
         (glm.bvec4, (4,), "?"),
     
         (glm.mat2x2, (2, 2), "f"),
-        (glm.mat2x3, (2, 3), "f"),
-        (glm.mat2x4, (2, 4), "f"),
-        (glm.mat3x2, (3, 2), "f"),
+        (glm.mat2x3, (3, 2), "f"),
+        (glm.mat2x4, (4, 2), "f"),
+        (glm.mat3x2, (2, 3), "f"),
         (glm.mat3x3, (3, 3), "f"),
-        (glm.mat3x4, (3, 4), "f"),
-        (glm.mat4x2, (4, 2), "f"),
-        (glm.mat4x3, (4, 3), "f"),
+        (glm.mat3x4, (4, 3), "f"),
+        (glm.mat4x2, (2, 4), "f"),
+        (glm.mat4x3, (3, 4), "f"),
         (glm.mat4x4, (4, 4), "f"),
     
     
         (glm.dmat2x2, (2, 2), "d"),
-        (glm.dmat2x3, (2, 3), "d"),
-        (glm.dmat2x4, (2, 4), "d"),
-        (glm.dmat3x2, (3, 2), "d"),
+        (glm.dmat2x3, (3, 2), "d"),
+        (glm.dmat2x4, (4, 2), "d"),
+        (glm.dmat3x2, (2, 3), "d"),
         (glm.dmat3x3, (3, 3), "d"),
-        (glm.dmat3x4, (3, 4), "d"),
-        (glm.dmat4x2, (4, 2), "d"),
-        (glm.dmat4x3, (4, 3), "d"),
+        (glm.dmat3x4, (4, 3), "d"),
+        (glm.dmat4x2, (2, 4), "d"),
+        (glm.dmat4x3, (3, 4), "d"),
         (glm.dmat4x4, (4, 4), "d"),
     
     
         (glm.imat2x2, (2, 2), "i"),
-        (glm.imat2x3, (2, 3), "i"),
-        (glm.imat2x4, (2, 4), "i"),
-        (glm.imat3x2, (3, 2), "i"),
+        (glm.imat2x3, (3, 2), "i"),
+        (glm.imat2x4, (4, 2), "i"),
+        (glm.imat3x2, (2, 3), "i"),
         (glm.imat3x3, (3, 3), "i"),
-        (glm.imat3x4, (3, 4), "i"),
-        (glm.imat4x2, (4, 2), "i"),
-        (glm.imat4x3, (4, 3), "i"),
+        (glm.imat3x4, (4, 3), "i"),
+        (glm.imat4x2, (2, 4), "i"),
+        (glm.imat4x3, (3, 4), "i"),
         (glm.imat4x4, (4, 4), "i"),
     
     
         (glm.umat2x2, (2, 2), "I"),
-        (glm.umat2x3, (2, 3), "I"),
-        (glm.umat2x4, (2, 4), "I"),
-        (glm.umat3x2, (3, 2), "I"),
+        (glm.umat2x3, (3, 2), "I"),
+        (glm.umat2x4, (4, 2), "I"),
+        (glm.umat3x2, (2, 3), "I"),
         (glm.umat3x3, (3, 3), "I"),
-        (glm.umat3x4, (3, 4), "I"),
-        (glm.umat4x2, (4, 2), "I"),
-        (glm.umat4x3, (4, 3), "I"),
+        (glm.umat3x4, (4, 3), "I"),
+        (glm.umat4x2, (2, 4), "I"),
+        (glm.umat4x3, (3, 4), "I"),
         (glm.umat4x4, (4, 4), "I"),
     
         (glm.quat, (4,), "f"),
@@ -1018,6 +1081,31 @@ if (eval(os.environ.get("TEST_PICKLING", "True"))):
         arr = glm.array(glm.mat4(), glm.mat4(2))
         assert loads(dumps(arr)) == arr
 #/pickling #
+
+# other #
+def test_other():
+    test_values = [-1, 0, 2, 3]
+    assert all([(+a) == glm.pos(a) for a in test_values])
+    assert all([(-a) == glm.neg(a) for a in test_values])
+    assert all([(~a) == glm.inv(a) for a in test_values])
+
+    test_values = [(1, 2), (3, 4), (-1, 1), (0, 2)]
+    assert all([(a + b) == glm.add(a,b) for a, b in test_values])
+    assert all([(a - b) == glm.sub(a,b) for a, b in test_values])
+    assert all([(a * b) == glm.mul(a,b) for a, b in test_values])
+    assert all([(a / b) == glm.div(a,b) for a, b in test_values])
+    assert all([(a // b) == glm.floordiv(a,b) for a, b in test_values])
+    assert all([(a % b) == glm.mod(a,b) for a, b in test_values])
+    assert all([(a << b) == glm.lshift(a,b) for a, b in test_values])
+    assert all([(a >> b) == glm.rshift(a,b) for a, b in test_values])
+    assert all([(a & b) == glm.and_(a,b) for a, b in test_values])
+    assert all([(a ^ b) == glm.xor(a,b) for a, b in test_values])
+    assert all([(a | b) == glm.or_(a,b) for a, b in test_values])
+    assert all([(-1 if a < b else 1 if a > b else 0) == glm.cmp(a,b) for a, b in test_values])
+
+    test_values = [(1, 2, 3), (3, 4, 5), (-1, 1, 0), (0, 2, 3)]
+    assert all([(x if b else y) == glm.if_else(b, x, y) for b, x, y in test_values])
+#/other #
 
 ## DETAIL ##
 
@@ -1639,6 +1727,9 @@ def test_norm():
     for args in gen_args("V3V3_V3__fF"):
         fassert(glm.l2Norm, args)
 
+    for args in gen_args("V3V3_V3__fF"):
+        fassert(glm.lMaxNorm, args)
+
     for args in gen_args("#uV3V3Ni_V3Ni__fF"):
         fassert(glm.lxNorm, args)
 #/norm #
@@ -1660,4 +1751,763 @@ def test_matrix_transform_2d():
         fassert(glm.translate, args)
 #/matrix_transform_2d #
 ##/UNSTABLE EXTENSIONS ##
+
+
+
+### SPECIFIC TESTS ###
+
+def test_spec_init():
+    ## vectors ##
+    # vec1
+    for vecT in vector_length_dict[1]:
+        assert vecT() == vecT(0) and vecT(1) == vecT(1) and vecT(1).x and not vecT(0).x, vecT 
+        assert vecT(vecT(5)) == vecT(5) and vecT(vecT(4).xx) == vecT(4) and vecT(vecT(3).xxx) == vecT(3) and vecT(vecT(2).xxxx) == vecT(2), vecT
+        
+        assert vecT((8,)) == vecT(8)
+
+        for vecB in vector_length_dict[1]:
+            assert vecT(vecB(1)) == vecT(1), (vecT, vecB)
+
+        assert vecT(x = 5) == vecT(5), vecT
+
+    # vec2
+    for vecT in vector_length_dict[2]:
+        assert vecT() == vecT(0) and vecT(1) == vecT(1) and vecT(1).x and not vecT(0).x and vecT(1).y and not vecT(0).y, vecT 
+        assert vecT(vecT(5)) == vecT(5) and vecT(vecT(3).xxx) == vecT(3) and vecT(vecT(2).xxxx) == vecT(2), vecT
+        
+        assert vecT(1, 2) == vecT(vecT(1).x, vecT(2).y)
+
+        assert vecT(1, 2).yx == vecT(2, 1)
+
+        assert vecT((8, 7)) == vecT(8, 7)
+        
+        for vecB in vector_length_dict[2]:
+            assert vecT(vecB(1)) == vecT(1), (vecT, vecB)
+
+        assert vecT(y = 8, x = 5) == vecT(5, 8), vecT
+
+    # vec3
+    for vecT in vector_length_dict[3]:
+        assert vecT() == vecT(0) and vecT(1) == vecT(1) and vecT(1).x and not vecT(0).x and vecT(1).y and not vecT(0).y and vecT(1).z and not vecT(0).z, vecT 
+        assert vecT(vecT(5)) == vecT(5) and vecT(vecT(2).xxxx) == vecT(2), vecT
+        
+        assert vecT(1, 2, 3) == vecT(vecT(1).x, vecT(2).y, vecT(3).z)
+        assert vecT(1, vecT(1, 2, 3).yz) == vecT(1, 2, 3) and vecT(vecT(1, 2, 3).xy, 3) == vecT(1, 2, 3)
+
+        assert vecT(1, 2, 3).zyx == vecT(3, 2, 1)
+
+        assert vecT((8, 7, 6)) == vecT(8, 7, 6)
+        
+        for vecB in vector_length_dict[3]:
+            assert vecT(vecB(1)) == vecT(1), (vecT, vecB)
+
+        assert vecT(z = 3, y = 8, x = 5) == vecT(5, 8, 3), vecT
+
+    # vec4
+    for vecT in vector_length_dict[4]:
+        assert vecT() == vecT(0) and vecT(1) == vecT(1) and vecT(1).x and not vecT(0).x and vecT(1).y and not vecT(0).y and vecT(1).z and not vecT(0).z and vecT(1).w and not vecT(0).w, vecT 
+        assert vecT(vecT(5)) == vecT(5), vecT
+        
+        assert vecT(1, 2, 3, 4) == vecT(vecT(1).x, vecT(2).y, vecT(3).z, vecT(4).w)
+        assert vecT(1, 2, 3, 4) == vecT(1, vecT(1, 2, 3, 4).yzw) == vecT(vecT(1, 2, 3, 4).xyz, 4) == vecT(vecT(1, 2, 3, 4).xy, vecT(1, 2, 3, 4).zw) == vecT(1, vecT(1, 2, 3, 4).yz, 4)
+
+        assert vecT(1, 2, 3, 4).wzyx == vecT(4, 3, 2, 1)
+
+        assert vecT((8, 7, 6, 5)) == vecT(8, 7, 6, 5)
+        
+        for vecB in vector_length_dict[4]:
+            assert vecT(vecB(1)) == vecT(1), (vecT, vecB)
+
+        assert vecT(w = 4, z = 3, y = 8, x = 5) == vecT(5, 8, 3, 4), vecT
+    ##/vectors ##
     
+    ## matrices ##
+    # mat2x2
+    for matT in matrix_length_dict[(2, 2)]:
+        assert matT() == matT(1) == matT(1, 0, 0, 1)
+        assert matT(0) == matT(0, 0, 0, 0) and matT(2) == matT(2, 0, 0, 2)
+
+        assert matT(1, 2, 3, 4) == matT(matT(1, 2, 3, 4)[0], matT(1, 2, 3, 4)[1])
+
+        assert matT(matT(1, 2, 3, 4)) == matT(1, 2, 3, 4)
+        
+        for matB in matrix_length_dict[(2, 2)]:
+            assert matT(matB()) == matT(), (matT, matB)
+
+    # mat2x3
+    for matT in matrix_length_dict[(2, 3)]:
+        assert matT() == matT(1) == matT(1, 0, 0, 0, 1, 0)
+        assert matT(0) == matT(0, 0, 0, 0, 0, 0) and matT(2) == matT(2, 0, 0, 0, 2, 0)
+
+        assert matT(1, 2, 3, 4, 5, 6) == matT(matT(1, 2, 3, 4, 5, 6)[0], matT(1, 2, 3, 4, 5, 6)[1])
+
+        assert matT(matT(1, 2, 3, 4, 5, 6)) == matT(1, 2, 3, 4, 5, 6)
+        
+        for matB in matrix_length_dict[(2, 3)]:
+            assert matT(matB()) == matT(), (matT, matB)
+
+    # mat2x4
+    for matT in matrix_length_dict[(2, 4)]:
+        assert matT() == matT(1) == matT(1, 0, 0, 0, 0, 1, 0, 0)
+        assert matT(0) == matT(0, 0, 0, 0, 0, 0, 0, 0) and matT(2) == matT(2, 0, 0, 0, 0, 2, 0, 0)
+
+        assert matT(1, 2, 3, 4, 5, 6, 7, 8) == matT(matT(1, 2, 3, 4, 5, 6, 7, 8)[0], matT(1, 2, 3, 4, 5, 6, 7, 8)[1])
+
+        assert matT(matT(1, 2, 3, 4, 5, 6, 7, 8)) == matT(1, 2, 3, 4, 5, 6, 7, 8)
+        
+        for matB in matrix_length_dict[(2, 4)]:
+            assert matT(matB()) == matT(), (matT, matB)
+
+    # mat3x2
+    for matT in matrix_length_dict[(3, 2)]:
+        assert matT() == matT(1) == matT(1, 0, 0, 1, 0, 0)
+        assert matT(0) == matT(0, 0, 0, 0, 0, 0) and matT(2) == matT(2, 0, 0, 2, 0, 0)
+
+        assert matT(1, 2, 3, 4, 5, 6) == matT(matT(1, 2, 3, 4, 5, 6)[0], matT(1, 2, 3, 4, 5, 6)[1], matT(1, 2, 3, 4, 5, 6)[2])
+
+        assert matT(matT(1, 2, 3, 4, 5, 6)) == matT(1, 2, 3, 4, 5, 6)
+        
+        for matB in matrix_length_dict[(3, 2)]:
+            assert matT(matB()) == matT(), (matT, matB)
+
+    # mat3x3
+    for matT in matrix_length_dict[(3, 3)]:
+        assert matT() == matT(1) == matT(1, 0, 0, 0, 1, 0, 0, 0, 1)
+        assert matT(0) == matT(0, 0, 0, 0, 0, 0, 0, 0, 0) and matT(2) == matT(2, 0, 0, 0, 2, 0, 0, 0, 2)
+
+        assert matT(1, 2, 3, 4, 5, 6, 7, 8, 9) == matT(matT(1, 2, 3, 4, 5, 6, 7, 8, 9)[0], matT(1, 2, 3, 4, 5, 6, 7, 8, 9)[1], matT(1, 2, 3, 4, 5, 6, 7, 8, 9)[2])
+
+        assert matT(matT(1, 2, 3, 4, 5, 6, 7, 8, 9)) == matT(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        
+        for matB in matrix_length_dict[(3, 3)]:
+            assert matT(matB()) == matT(), (matT, matB)
+
+    # mat3x4
+    for matT in matrix_length_dict[(3, 4)]:
+        assert matT() == matT(1) == matT(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0)
+        assert matT(0) == matT(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) and matT(2) == matT(2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0)
+
+        assert matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12) == matT(matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)[0], matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)[1], matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)[2])
+
+        assert matT(matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) == matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+        
+        for matB in matrix_length_dict[(3, 4)]:
+            assert matT(matB()) == matT(), (matT, matB)
+
+    # mat4x2
+    for matT in matrix_length_dict[(4, 2)]:
+        assert matT() == matT(1) == matT(1, 0, 0, 1, 0, 0, 0, 0)
+        assert matT(0) == matT(0, 0, 0, 0, 0, 0, 0, 0) and matT(2) == matT(2, 0, 0, 2, 0, 0, 0, 0)
+
+        assert matT(1, 2, 3, 4, 5, 6, 7, 8) == matT(matT(1, 2, 3, 4, 5, 6, 7, 8)[0], matT(1, 2, 3, 4, 5, 6, 7, 8)[1], matT(1, 2, 3, 4, 5, 6, 7, 8)[2], matT(1, 2, 3, 4, 5, 6, 7, 8)[3])
+
+        assert matT(matT(1, 2, 3, 4, 5, 6, 7, 8)) == matT(1, 2, 3, 4, 5, 6, 7, 8)
+        
+        for matB in matrix_length_dict[(4, 2)]:
+            assert matT(matB()) == matT(), (matT, matB)
+
+    # mat4x3
+    for matT in matrix_length_dict[(4, 3)]:
+        assert matT() == matT(1) == matT(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+        assert matT(0) == matT(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) and matT(2) == matT(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+        assert matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12) == matT(matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)[0], matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)[1], matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)[2], matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)[3])
+
+        assert matT(matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) == matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+        
+        for matB in matrix_length_dict[(4, 3)]:
+            assert matT(matB()) == matT(), (matT, matB)
+
+    # mat4x4
+    for matT in matrix_length_dict[(4, 4)]:
+        assert matT() == matT(1) == matT(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+        assert matT(0) == matT(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) and matT(2) == matT(2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2)
+
+        assert matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16) == matT(matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)[0], matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)[1], matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)[2], matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)[3])
+
+        assert matT(matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)) == matT(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
+        
+        for matB in matrix_length_dict[(4, 4)]:
+            assert matT(matB()) == matT(), (matT, matB)
+    ##/matrices ##
+
+    ## quats ##
+    for quaT in quat_types:
+        assert quaT() == quaT(1, 0, 0, 0)
+
+        assert quaT(1, 2, 3, 4).w == 1 and quaT(1, 2, 3, 4).x == 2 and quaT(1, 2, 3, 4).y == 3 and quaT(1, 2, 3, 4).z == 4
+
+        assert quaT(1, 2, 3, 4) == quaT(quaT(1, 2, 3, 4))
+
+        for quaB in quat_types:
+            assert quaT(quaB(1, 2, 3, 4)) == quaT(1, 2, 3, 4)
+
+        assert quaT(1, 2, 3, 4) == quaT(1, (2, 3, 4))
+
+        assert all(glm.epsilonEqual(glm.vec3(1, 0, 0), glm.vec3(0, 1, 0) * glm.quat(glm.vec3(1, 0, 0), glm.vec3(0, 1, 0)), 0.00001))
+        assert all(glm.epsilonEqual(glm.dvec3(1, 0, 0), glm.dvec3(0, 1, 0) * glm.dquat(glm.dvec3(1, 0, 0), glm.dvec3(0, 1, 0)), 0.00001))
+
+        eulerAngles = glm.radians(glm.vec3(10, 20, 30))
+
+        q = glm.quat(eulerAngles)
+
+        assert glm.epsilonEqual(glm.pitch(q), glm.radians(10), 0.00001)
+        assert glm.epsilonEqual(glm.yaw(q), glm.radians(20), 0.00001)
+        assert glm.epsilonEqual(glm.roll(q), glm.radians(30), 0.00001)
+
+        eulerAngles = glm.radians(glm.dvec3(10, 20, 30))
+
+        q = glm.dquat(eulerAngles)
+
+        assert glm.epsilonEqual(glm.pitch(q), glm.radians(10), 0.00001)
+        assert glm.epsilonEqual(glm.yaw(q), glm.radians(20), 0.00001)
+        assert glm.epsilonEqual(glm.roll(q), glm.radians(30), 0.00001)
+    ##/quats ##
+
+    ## arrays ##
+    for obj in gen_obj("#MV_M_Q"):
+        assert glm.array(obj).repeat(2) == glm.array(obj, obj) == glm.array(glm.array(obj, obj)) == glm.array.as_reference(glm.array(obj, obj)) and glm.array(obj).repeat(4) == glm.array(obj, obj, obj, obj) == glm.array([obj, obj, obj, obj]) == glm.array(obj, obj).repeat(3)[:4]
+
+        assert glm.array.zeros(5, type(obj))
+
+    for T in matrix_types + vector_types:
+        assert glm.array.zeros(5, T) == glm.array([T(0)] * 5)
+
+    for obj in gen_obj("V_M_Q"):
+        assert glm.array(obj).element_type == type(obj)
+
+    for cT in ctypes_types:
+        assert glm.array(cT(2), cT(3)) == glm.array(cT, 2, 3) == glm.array.from_numbers(cT, 2, 3)
+
+        assert glm.array(cT).ctype == cT
+    ##/arrays ##
+
+def test_spec_add():
+    for vecT in vector_length_dict[1]:
+        if (vecT == glm.bvec1):
+            continue
+
+        assert vecT(1) + vecT(1) == vecT(1 + 1)          == (glm.array(vecT(1)) + glm.array(vecT(1)))[0] == (glm.array(vecT(1)) + vecT(1))[0] == (vecT(1) + glm.array(vecT(1)))[0]
+        assert vecT(2) + vecT(3) == vecT(3) + vecT(2)    == (glm.array(vecT(2)) + glm.array(vecT(3)))[0] == (glm.array(vecT(3)) + glm.array(vecT(2)))[0] 
+        assert vecT(1) + 2 == vecT(1 + 2) == 2 + vecT(1) == (glm.array(vecT(1)) + 2)[0] == (2 + glm.array(vecT(1)))[0]
+        assert vecT(0) + vecT(0) == vecT(0)              == (glm.array(vecT(0)) + glm.array(vecT(0)))[0]
+
+    for vecT in vector_length_dict[2]:
+        if (vecT == glm.bvec2):
+            continue
+
+        assert vecT(1, 2) + vecT(1, 2) == vecT(1 + 1, 2 + 2) == (glm.array(vecT(1, 2)) + glm.array(vecT(1, 2)))[0]
+        assert vecT(2) + vecT(3) == vecT(3) + vecT(2)        == (glm.array(vecT(2)) + glm.array(vecT(3)))[0] == (glm.array(vecT(3)) + glm.array(vecT(2)))[0] 
+        assert vecT(1) + 2 == vecT(1 + 2)                    == (glm.array(vecT(1)) + 2)[0] == (2 + glm.array(vecT(1)))[0]
+        assert vecT(0) + vecT(0) == vecT(0)                  == (glm.array(vecT(0)) + glm.array(vecT(0)))[0]
+
+    for vecT in vector_length_dict[3]:
+        if (vecT == glm.bvec3):
+            continue
+
+        assert vecT(1, 2, 3) + vecT(1, 2, 3) == vecT(1 + 1, 2 + 2, 3 + 3) == (glm.array(vecT(1, 2, 3)) + glm.array(vecT(1, 2, 3)))[0]
+        assert vecT(2) + vecT(3) == vecT(3) + vecT(2)                     == (glm.array(vecT(2)) + glm.array(vecT(3)))[0] == (glm.array(vecT(3)) + glm.array(vecT(2)))[0] 
+        assert vecT(1) + 2 == vecT(1 + 2)                                 == (glm.array(vecT(1)) + 2)[0] == (2 + glm.array(vecT(1)))[0]
+        assert vecT(0) + vecT(0) == vecT(0)                               == (glm.array(vecT(0)) + glm.array(vecT(0)))[0]
+
+    for vecT in vector_length_dict[4]:
+        if (vecT == glm.bvec4):
+            continue
+
+        assert vecT(1, 2, 3, 4) + vecT(1, 2, 3, 4) == vecT(1 + 1, 2 + 2, 3 + 3, 4 + 4) == (glm.array(vecT(1, 2, 3, 4)) + glm.array(vecT(1, 2, 3, 4)))[0]
+        assert vecT(2) + vecT(3) == vecT(3) + vecT(2)                                  == (glm.array(vecT(2)) + glm.array(vecT(3)))[0] == (glm.array(vecT(3)) + glm.array(vecT(2)))[0] 
+        assert vecT(1) + 2 == vecT(1 + 2)                                              == (glm.array(vecT(1)) + 2)[0] == (2 + glm.array(vecT(1)))[0]
+        assert vecT(0) + vecT(0) == vecT(0)                                            == (glm.array(vecT(0)) + glm.array(vecT(0)))[0]
+
+    for c in range(2, 5):
+        for r in range(2, 5):
+            for matT in matrix_length_dict[(c, r)]:
+                assert matT(*range(c*r)) + matT(*range(c*r)) == matT(*map(lambda x: x + x, range(c*r)))   == (glm.array(matT(*range(c*r))) + glm.array(matT(*range(c*r))))[0]
+                assert matT(2) + matT(3) == matT(3) + matT(2)                                             == (glm.array(matT(2)) + glm.array(matT(3)))[0] == (glm.array(matT(3)) + glm.array(matT(2)))[0]
+                assert matT(1) + 2 == matT(*[(1 + 2) if C==R else 2 for C in range(c) for R in range(r)]) == (glm.array(matT(1)) + 2)[0] == (2 + glm.array(matT(1)))[0]
+                assert matT(0) + matT(0) == matT(0)                                                       == (glm.array(matT(0)) + glm.array(matT(0)))[0]
+
+    for quaT in quat_types:
+        assert quaT(1, 2, 3, 4) + quaT(1, 2, 3, 4) == quaT(1 + 1, 2 + 2, 3 + 3, 4 + 4) == (glm.array(quaT(1, 2, 3, 4)) + glm.array(quaT(1, 2, 3, 4)))[0]
+        assert quaT() + quaT() == quaT(1 + 1, 0, 0, 0)                                 == (glm.array(quaT()) + glm.array(quaT()))[0]
+
+    for cT in ctypes_types:
+        assert glm.array(cT, 1, 2, 3) + glm.array(cT, 1, 2, 3) == glm.array(cT, 1 + 1, 2 + 2, 3 + 3)
+        assert glm.array(cT, 1, 2, 3) + 2 == glm.array(cT, 1 + 2, 2 + 2, 3 + 2) == 2 + glm.array(cT, 1, 2, 3)
+
+def test_spec_sub():
+    for vecT in vector_length_dict[1]:
+        if (vecT == glm.bvec1):
+            continue
+
+        assert vecT(1) - vecT(1) == vecT(1 - 1)          == (glm.array(vecT(1)) - glm.array(vecT(1)))[0] == (glm.array(vecT(1)) - vecT(1))[0] == (vecT(1) - glm.array(vecT(1)))[0]
+        assert vecT(2) - vecT(3) != vecT(3) - vecT(2)    and (glm.array(vecT(2)) - glm.array(vecT(3)))[0] != (glm.array(vecT(3)) - glm.array(vecT(2)))[0]
+        assert vecT(1) - 2 == vecT(1 - 2) == 1 - vecT(2) == (glm.array(vecT(1)) - 2)[0] == (1 - glm.array(vecT(2)))[0]
+        assert vecT(0) - vecT(0) == vecT(0)              == (glm.array(vecT(0)) - glm.array(vecT(0)))[0]
+
+    for vecT in vector_length_dict[2]:
+        if (vecT == glm.bvec2):
+            continue
+
+        assert vecT(1, 2) - vecT(1, 2) == vecT(1 - 1, 2 - 2) == (glm.array(vecT(1, 2)) - glm.array(vecT(1, 2)))[0]
+        assert vecT(2) - vecT(3) != vecT(3) - vecT(2)        and (glm.array(vecT(2)) - glm.array(vecT(3)))[0] != (glm.array(vecT(3)) - glm.array(vecT(2)))[0]
+        assert vecT(1) - 2 == vecT(1 - 2)                    == (glm.array(vecT(1)) - 2)[0] == (1 - glm.array(vecT(2)))[0]
+        assert vecT(0) - vecT(0) == vecT(0)                  == (glm.array(vecT(0)) - glm.array(vecT(0)))[0]
+
+    for vecT in vector_length_dict[3]:
+        if (vecT == glm.bvec3):
+            continue
+
+        assert vecT(1, 2, 3) - vecT(1, 2, 3) == vecT(1 - 1, 2 - 2, 3 - 3) == (glm.array(vecT(1, 2, 3)) - glm.array(vecT(1, 2, 3)))[0]
+        assert vecT(2) - vecT(3) != vecT(3) - vecT(2)                     and (glm.array(vecT(2)) - glm.array(vecT(3)))[0] != (glm.array(vecT(3)) - glm.array(vecT(2)))[0] 
+        assert vecT(1) - 2 == vecT(1 - 2)                                 == (glm.array(vecT(1)) - 2)[0] == (1 - glm.array(vecT(2)))[0]
+        assert vecT(0) - vecT(0) == vecT(0)                               == (glm.array(vecT(0)) - glm.array(vecT(0)))[0]
+
+    for vecT in vector_length_dict[4]:
+        if (vecT == glm.bvec4):
+            continue
+
+        assert vecT(1, 2, 3, 4) - vecT(1, 2, 3, 4) == vecT(1 - 1, 2 - 2, 3 - 3, 4 - 4) == (glm.array(vecT(1, 2, 3, 4)) - glm.array(vecT(1, 2, 3, 4)))[0]
+        assert vecT(2) - vecT(3) != vecT(3) - vecT(2)                                  and (glm.array(vecT(2)) - glm.array(vecT(3)))[0] != (glm.array(vecT(3)) - glm.array(vecT(2)))[0] 
+        assert vecT(1) - 2 == vecT(1 - 2)                                              == (glm.array(vecT(1)) - 2)[0] == (1 - glm.array(vecT(2)))[0]
+        assert vecT(0) - vecT(0) == vecT(0)                                            == (glm.array(vecT(0)) - glm.array(vecT(0)))[0]
+
+    for c in range(2, 5):
+        for r in range(2, 5):
+            for matT in matrix_length_dict[(c, r)]:
+                assert matT(*range(c*r)) - matT(*range(c*r)) == matT(*map(lambda x: x - x, range(c*r)))   == (glm.array(matT(*range(c*r))) - glm.array(matT(*range(c*r))))[0]
+                assert matT(2) - matT(3) != matT(3) - matT(2)                                             and (glm.array(matT(2)) - glm.array(matT(3)))[0] != (glm.array(matT(3)) - glm.array(matT(2)))[0]
+                assert matT(1) - 2 == matT(*[(1 - 2) if C==R else -2 for C in range(c) for R in range(r)]) == (glm.array(matT(1)) - 2)[0]
+                if (c==r):
+                    assert 2 - matT(1) == (2 - glm.array(matT(1)))[0]
+                assert matT(0) - matT(0) == matT(0)                                                       == (glm.array(matT(0)) - glm.array(matT(0)))[0]
+
+    for quaT in quat_types:
+        assert quaT(1, 2, 3, 4) - quaT(1, 2, 3, 4) == quaT(1 - 1, 2 - 2, 3 - 3, 4 - 4) == (glm.array(quaT(1, 2, 3, 4)) - glm.array(quaT(1, 2, 3, 4)))[0]
+        assert quaT() - quaT() == quaT(1 - 1, 0, 0, 0)                                 == (glm.array(quaT()) - glm.array(quaT()))[0]
+
+    for cT in ctypes_types:
+        if (cT == glm.c_bool):
+            continue
+        assert glm.array(cT, 1, 2, 3) - glm.array(cT, 1, 2, 3) == glm.array(cT, 1 - 1, 2 - 2, 3 - 3)
+        assert glm.array(cT, 1, 2, 3) - 2 == glm.array(cT, 1 - 2, 2 - 2, 3 - 2)
+        assert 2 - glm.array(cT, 1, 2, 3) == glm.array(cT, 2 - 1, 2 - 2, 2 - 3)
+
+def test_spec_mul():
+    for vecT in vector_length_dict[1]:
+        if (vecT == glm.bvec1):
+            continue
+
+        assert vecT(1) * vecT(1) == vecT(1 * 1)          == (glm.array(vecT(1)) * glm.array(vecT(1)))[0] == (glm.array(vecT(1)) * vecT(1))[0] == (vecT(1) * glm.array(vecT(1)))[0]
+        assert vecT(2) * vecT(3) == vecT(3) * vecT(2)    == (glm.array(vecT(2)) * glm.array(vecT(3)))[0] == (glm.array(vecT(3)) * glm.array(vecT(2)))[0] 
+        assert vecT(1) * 2 == vecT(1 * 2) == 2 * vecT(1) == (glm.array(vecT(1)) * 2)[0] == (2 * glm.array(vecT(1)))[0]
+        assert vecT(0) * vecT(0) == vecT(0)              == (glm.array(vecT(0)) * glm.array(vecT(0)))[0]
+
+    for vecT in vector_length_dict[2]:
+        if (vecT == glm.bvec2):
+            continue
+
+        assert vecT(1, 2) * vecT(1, 2) == vecT(1 * 1, 2 * 2) == (glm.array(vecT(1, 2)) * glm.array(vecT(1, 2)))[0]
+        assert vecT(2) * vecT(3) == vecT(3) * vecT(2)        == (glm.array(vecT(2)) * glm.array(vecT(3)))[0] == (glm.array(vecT(3)) * glm.array(vecT(2)))[0] 
+        assert vecT(1) * 2 == vecT(1 * 2)                    == (glm.array(vecT(1)) * 2)[0] == (2 * glm.array(vecT(1)))[0]
+        assert vecT(0) * vecT(0) == vecT(0)                  == (glm.array(vecT(0)) * glm.array(vecT(0)))[0]
+
+    for vecT in vector_length_dict[3]:
+        if (vecT == glm.bvec3):
+            continue
+
+        assert vecT(1, 2, 3) * vecT(1, 2, 3) == vecT(1 * 1, 2 * 2, 3 * 3) == (glm.array(vecT(1, 2, 3)) * glm.array(vecT(1, 2, 3)))[0]
+        assert vecT(2) * vecT(3) == vecT(3) * vecT(2)                     == (glm.array(vecT(2)) * glm.array(vecT(3)))[0] == (glm.array(vecT(3)) * glm.array(vecT(2)))[0] 
+        assert vecT(1) * 2 == vecT(1 * 2)                                 == (glm.array(vecT(1)) * 2)[0] == (2 * glm.array(vecT(1)))[0]
+        assert vecT(0) * vecT(0) == vecT(0)                               == (glm.array(vecT(0)) * glm.array(vecT(0)))[0]
+
+    for vecT in vector_length_dict[4]:
+        if (vecT == glm.bvec4):
+            continue
+
+        assert vecT(1, 2, 3, 4) * vecT(1, 2, 3, 4) == vecT(1 * 1, 2 * 2, 3 * 3, 4 * 4) == (glm.array(vecT(1, 2, 3, 4)) * glm.array(vecT(1, 2, 3, 4)))[0]
+        assert vecT(2) * vecT(3) == vecT(3) * vecT(2)                                  == (glm.array(vecT(2)) * glm.array(vecT(3)))[0] == (glm.array(vecT(3)) * glm.array(vecT(2)))[0] 
+        assert vecT(1) * 2 == vecT(1 * 2)                                              == (glm.array(vecT(1)) * 2)[0] == (2 * glm.array(vecT(1)))[0]
+        assert vecT(0) * vecT(0) == vecT(0)                                            == (glm.array(vecT(0)) * glm.array(vecT(0)))[0]
+
+    for c in range(2, 5):
+        for r in range(2, 5):
+            for matT in matrix_length_dict[(c, r)]:
+                assert matT(*range(c*r)) * glm.transpose(matT(*range(c*r)))                               == (glm.array(matT(*range(c*r))) * glm.array(glm.transpose(matT(*range(c*r)))))[0]
+                assert matT(*range(c*r)) * glm.transpose(matT(*range(c*r))) != glm.transpose(matT(*range(c*r))) * matT(*range(c*r)) and (glm.array(matT(*range(c*r))) * glm.array(glm.transpose(matT(*range(c*r)))))[0] != (glm.array(glm.transpose(matT(*range(c*r)))) * glm.array(matT(*range(c*r))))[0]
+                assert matT(1) * 2 == matT(*[(1 * 2) if C==R else 0 for C in range(c) for R in range(r)]) == (glm.array(matT(1)) * 2)[0] == (2 * glm.array(matT(1)))[0]
+
+    for quaT in quat_types:
+        assert quaT(1, 2, 3, 4) * quaT(1, 2, 3, 4) == (glm.array(quaT(1, 2, 3, 4)) * glm.array(quaT(1, 2, 3, 4)))[0]
+        assert quaT() * quaT() == quaT(1 * 1, 0, 0, 0)                                 == (glm.array(quaT()) * glm.array(quaT()))[0]
+
+    for cT in ctypes_types:
+        assert glm.array(cT, 1, 2, 3) * glm.array(cT, 1, 2, 3) == glm.array(cT, 1 * 1, 2 * 2, 3 * 3)
+        assert glm.array(cT, 1, 2, 3) * 2 == glm.array(cT, 1 * 2, 2 * 2, 3 * 2) == 2 * glm.array(cT, 1, 2, 3)
+
+def test_spec_div():
+    for vecT in vector_length_dict[1]:
+        if (vecT == glm.bvec1):
+            continue
+
+        assert vecT(1) / vecT(1) == vecT(1 / 1)          == (glm.array(vecT(1)) / glm.array(vecT(1)))[0] == (glm.array(vecT(1)) / vecT(1))[0] == (vecT(1) / glm.array(vecT(1)))[0]
+        assert vecT(2) / vecT(3) != vecT(3) / vecT(2)    and (glm.array(vecT(2)) / glm.array(vecT(3)))[0] != (glm.array(vecT(3)) / glm.array(vecT(2)))[0]
+        assert vecT(1) / 2 == vecT(1 / 2) == 1 / vecT(2) == (glm.array(vecT(1)) / 2)[0] == (1 / glm.array(vecT(2)))[0]
+        assert vecT(0) / vecT(1) == vecT(0)              == (glm.array(vecT(0)) / glm.array(vecT(1)))[0]
+
+    for vecT in vector_length_dict[2]:
+        if (vecT == glm.bvec2):
+            continue
+
+        assert vecT(1, 2) / vecT(1, 2) == vecT(1 / 1, 2 / 2) == (glm.array(vecT(1, 2)) / glm.array(vecT(1, 2)))[0]
+        assert vecT(2) / vecT(3) != vecT(3) / vecT(2)        and (glm.array(vecT(2)) / glm.array(vecT(3)))[0] != (glm.array(vecT(3)) / glm.array(vecT(2)))[0]
+        assert vecT(1) / 2 == vecT(1 / 2)                    == (glm.array(vecT(1)) / 2)[0] == (1 / glm.array(vecT(2)))[0]
+        assert vecT(0) / vecT(1) == vecT(0)                  == (glm.array(vecT(0)) / glm.array(vecT(1)))[0]
+
+    for vecT in vector_length_dict[3]:
+        if (vecT == glm.bvec3):
+            continue
+
+        assert vecT(1, 2, 3) / vecT(1, 2, 3) == vecT(1 / 1, 2 / 2, 3 / 3) == (glm.array(vecT(1, 2, 3)) / glm.array(vecT(1, 2, 3)))[0]
+        assert vecT(2) / vecT(3) != vecT(3) / vecT(2)                     and (glm.array(vecT(2)) / glm.array(vecT(3)))[0] != (glm.array(vecT(3)) / glm.array(vecT(2)))[0] 
+        assert vecT(1) / 2 == vecT(1 / 2)                                 == (glm.array(vecT(1)) / 2)[0] == (1 / glm.array(vecT(2)))[0]
+        assert vecT(0) / vecT(1) == vecT(0)                               == (glm.array(vecT(0)) / glm.array(vecT(1)))[0]
+
+    for vecT in vector_length_dict[4]:
+        if (vecT == glm.bvec4):
+            continue
+
+        assert vecT(1, 2, 3, 4) / vecT(1, 2, 3, 4) == vecT(1 / 1, 2 / 2, 3 / 3, 4 / 4) == (glm.array(vecT(1, 2, 3, 4)) / glm.array(vecT(1, 2, 3, 4)))[0]
+        assert vecT(2) / vecT(3) != vecT(3) / vecT(2)                                  and (glm.array(vecT(2)) / glm.array(vecT(3)))[0] != (glm.array(vecT(3)) / glm.array(vecT(2)))[0] 
+        assert vecT(1) / 2 == vecT(1 / 2)                                              == (glm.array(vecT(1)) / 2)[0] == (1 / glm.array(vecT(2)))[0]
+        assert vecT(0) / vecT(1) == vecT(0)                                            == (glm.array(vecT(0)) / glm.array(vecT(1)))[0]
+
+    for c in range(2, 5):
+        for r in range(2, 5):
+            for matT in matrix_length_dict[(c, r)]:
+                assert matT(*range(c*r)) / 2 == matT(*map(lambda x: x / 2, range(c*r)))
+
+    for cT in ctypes_types:
+        if (cT == glm.c_bool):
+            continue
+        assert glm.array(cT, 1, 2, 3) / glm.array(cT, 1, 2, 3) == glm.array(cT, 1 / 1, 2 / 2, 3 / 3)
+        assert glm.array(cT, 1, 2, 3) / 2 == glm.array(cT, 1 / 2, 2 / 2, 3 / 2)
+        assert 2 / glm.array(cT, 1, 2, 3) == glm.array(cT, 2 / 1, 2 / 2, 2 / 3)
+
+def test_spec_mod():
+    for vecT in vector_length_dict[1]:
+        if (vecT == glm.bvec1):
+            continue
+
+        assert vecT(1) % vecT(1) == vecT(1 % 1)          == (glm.array(vecT(1)) % glm.array(vecT(1)))[0] == (glm.array(vecT(1)) % vecT(1))[0] == (vecT(1) % glm.array(vecT(1)))[0]
+        assert vecT(2) % vecT(3) != vecT(3) % vecT(2)    and (glm.array(vecT(2)) % glm.array(vecT(3)))[0] != (glm.array(vecT(3)) % glm.array(vecT(2)))[0]
+        assert vecT(1) % 2 == vecT(1 % 2) == 1 % vecT(2) == (glm.array(vecT(1)) % 2)[0] == (1 % glm.array(vecT(2)))[0]
+        assert vecT(0) % vecT(1) == vecT(0)              == (glm.array(vecT(0)) % glm.array(vecT(1)))[0]
+
+    for vecT in vector_length_dict[2]:
+        if (vecT == glm.bvec2):
+            continue
+
+        assert vecT(1, 2) % vecT(1, 2) == vecT(1 % 1, 2 % 2) == (glm.array(vecT(1, 2)) % glm.array(vecT(1, 2)))[0]
+        assert vecT(2) % vecT(3) != vecT(3) % vecT(2)        and (glm.array(vecT(2)) % glm.array(vecT(3)))[0] != (glm.array(vecT(3)) % glm.array(vecT(2)))[0]
+        assert vecT(1) % 2 == vecT(1 % 2)                    == (glm.array(vecT(1)) % 2)[0] == (1 % glm.array(vecT(2)))[0]
+        assert vecT(0) % vecT(1) == vecT(0)                  == (glm.array(vecT(0)) % glm.array(vecT(1)))[0]
+
+    for vecT in vector_length_dict[3]:
+        if (vecT == glm.bvec3):
+            continue
+
+        assert vecT(1, 2, 3) % vecT(1, 2, 3) == vecT(1 % 1, 2 % 2, 3 % 3) == (glm.array(vecT(1, 2, 3)) % glm.array(vecT(1, 2, 3)))[0]
+        assert vecT(2) % vecT(3) != vecT(3) % vecT(2)                     and (glm.array(vecT(2)) % glm.array(vecT(3)))[0] != (glm.array(vecT(3)) % glm.array(vecT(2)))[0] 
+        assert vecT(1) % 2 == vecT(1 % 2)                                 == (glm.array(vecT(1)) % 2)[0] == (1 % glm.array(vecT(2)))[0]
+        assert vecT(0) % vecT(1) == vecT(0)                               == (glm.array(vecT(0)) % glm.array(vecT(1)))[0]
+
+    for vecT in vector_length_dict[4]:
+        if (vecT == glm.bvec4):
+            continue
+
+        assert vecT(1, 2, 3, 4) % vecT(1, 2, 3, 4) == vecT(1 % 1, 2 % 2, 3 % 3, 4 % 4) == (glm.array(vecT(1, 2, 3, 4)) % glm.array(vecT(1, 2, 3, 4)))[0]
+        assert vecT(2) % vecT(3) != vecT(3) % vecT(2)                                  and (glm.array(vecT(2)) % glm.array(vecT(3)))[0] != (glm.array(vecT(3)) % glm.array(vecT(2)))[0] 
+        assert vecT(1) % 2 == vecT(1 % 2)                                              == (glm.array(vecT(1)) % 2)[0] == (1 % glm.array(vecT(2)))[0]
+        assert vecT(0) % vecT(1) == vecT(0)                                            == (glm.array(vecT(0)) % glm.array(vecT(1)))[0]
+
+    for cT in ctypes_types:
+        if (cT == glm.c_bool):
+            continue
+        assert glm.array(cT, 1, 2, 3) % glm.array(cT, 1, 2, 3) == glm.array(cT, 1 % 1, 2 % 2, 3 % 3)
+        assert glm.array(cT, 1, 2, 3) % 2 == glm.array(cT, 1 % 2, 2 % 2, 3 % 2)
+        assert 2 % glm.array(cT, 1, 2, 3) == glm.array(cT, 2 % 1, 2 % 2, 2 % 3)
+
+def test_spec_pow():
+    for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+        assert vecT(2) ** vecT(3) == vecT(2 ** 3) == (glm.array(vecT(2)) ** glm.array(vecT(3)))[0] == (glm.array(vecT(2)) ** 3)[0] == (glm.array(vecT(2)) ** vecT(3))[0] == (vecT(2) ** glm.array(vecT(3)))[0] == (2 ** glm.array(vecT(3)))[0]
+
+    for cT in [glm.c_float, glm.c_double]:
+        assert glm.array(cT, 1, 2, 3) ** glm.array(cT, 1, 2, 3) == glm.array(cT, 1 ** 1, 2 ** 2, 3 ** 3)
+        assert glm.array(cT, 1, 2, 3) ** 2 == glm.array(cT, 1 ** 2, 2 ** 2, 3 ** 2)
+        assert 2 ** glm.array(cT, 1, 2, 3) == glm.array(cT, 2 ** 1, 2 ** 2, 2 ** 3)
+
+def test_spec_neg():
+    for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")] + vector_type_dict[datatypes.index("int")] + vector_type_dict[datatypes.index("glm::i64")] + vector_type_dict[datatypes.index("glm::i16")] + vector_type_dict[datatypes.index("glm::i8")]:
+        assert -vecT(5) == vecT(0) - vecT(5) == (-glm.array(vecT(5)))[0]
+
+    for matT in matrix_type_dict[datatypes.index("float")] + matrix_type_dict[datatypes.index("double")] + matrix_type_dict[datatypes.index("int")]:
+        assert -matT(5) == matT(0) - matT(5) == (-glm.array(matT(5)))[0]
+
+    for quaT in quat_types:
+        assert -quaT(1, 2, 3, 4) == quaT(0, 0, 0, 0) - quaT(1, 2, 3, 4) == (-glm.array(quaT(1, 2, 3, 4)))[0]
+
+    for cT in [glm.c_float, glm.c_double, glm.c_int64, glm.c_int32, glm.c_int16, glm.c_int8]:
+        assert -glm.array(cT, 1, 2, 3) == glm.array.zeros(3, cT) - glm.array(cT, 1, 2, 3)
+
+def test_spec_abs():
+    for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")] + vector_type_dict[datatypes.index("int")] + vector_type_dict[datatypes.index("glm::i64")] + vector_type_dict[datatypes.index("glm::i16")] + vector_type_dict[datatypes.index("glm::i8")]:
+        assert abs(vecT(-5)) == vecT(5) == (abs(glm.array(vecT(-5))))[0]
+
+    for matT in matrix_type_dict[datatypes.index("float")] + matrix_type_dict[datatypes.index("double")] + matrix_type_dict[datatypes.index("int")]:
+        assert matT(5) == (abs(glm.array(matT(-5))))[0]
+
+    for quaT in quat_types:
+        assert quaT(1, 2, 3, 4) == (abs(glm.array(quaT(1, -2, 3, -4))))[0]
+
+    for cT in [glm.c_float, glm.c_double, glm.c_int64, glm.c_int32, glm.c_int16, glm.c_int8]:
+        assert abs(glm.array(cT, 1, -2, -3)) == glm.array(cT, 1, 2, 3)
+
+def test_spec_array_methods():
+    assert glm.array(glm.vec3(1, 2, 3)).concat(glm.array(glm.vec3(1, 2, 3))) == glm.array(glm.vec3(1, 2, 3)).repeat(2) == glm.array(glm.vec3(1, 2, 3)).map(lambda x: (x,x)) == glm.array(glm.vec3(1, 2, 3), glm.vec3(1, 2, 3))
+
+    assert glm.array(glm.vec3(1, 2, 3)).map(lambda x: x * 2) == glm.array(glm.vec3(1, 2, 3)) * 2
+    assert glm.array(glm.vec3(1, 2, 3)).filter(lambda x: True) == glm.array(glm.vec3(1, 2, 3)).map(lambda x: x) == glm.array(glm.vec3(1, 2, 3))
+    assert glm.array(glm.vec3(1, 2, 3)).map(lambda x: None) == glm.array(glm.vec3(1, 2, 3)).filter(lambda x: False) == glm.array(glm.vec3(1, 2, 3)).repeat(0)
+
+    arr = glm.array(glm.c_float, 5, 3, 4, 2, 1)
+    arr.sort(glm.cmp)
+
+    assert arr == glm.array(glm.c_float, 1, 2, 3, 4, 5)
+
+def test_spec_common_abs():
+    for i in range(-10, 10):
+        assert glm.abs(i) == abs(i)
+
+        for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+            assert all([x == abs(i) for x in glm.abs(vecT(i))])
+
+def test_spec_common_ceil():
+    for i in range(-10, 10):
+        x = i / 10
+
+        assert glm.ceil(x) == math.ceil(x)
+
+        for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+            assert all([a == math.ceil(x) for a in glm.ceil(vecT(x))])
+
+def test_spec_common_clamp():
+    assert glm.clamp(0, 1, 2) == 1 
+    assert glm.clamp(1, 1, 2) == 1
+    assert glm.clamp(2, 1, 2) == 2
+    assert glm.clamp(3, 1, 2) == 2
+
+    for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+        assert glm.clamp(vecT(0), 1, 2) == vecT(1) 
+        assert glm.clamp(vecT(1), 1, 2) == vecT(1)
+        assert glm.clamp(vecT(2), 1, 2) == vecT(2)
+        assert glm.clamp(vecT(3), 1, 2) == vecT(2)
+
+        assert glm.clamp(vecT(0), vecT(1), vecT(2)) == vecT(1) 
+        assert glm.clamp(vecT(1), vecT(1), vecT(2)) == vecT(1)
+        assert glm.clamp(vecT(2), vecT(1), vecT(2)) == vecT(2)
+        assert glm.clamp(vecT(3), vecT(1), vecT(2)) == vecT(2)
+
+def test_spec_common_floor():
+    for i in range(-10, 10):
+        x = i / 10
+
+        assert glm.floor(x) == math.floor(x)
+
+        for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+            assert all([a == math.floor(x) for a in glm.floor(vecT(x))])
+
+def test_spec_common_fma():
+    assert glm.fma(1, 2, 3) == 1 * 2 + 3
+    assert glm.fma(4, 5, 6) == 4 * 5 + 6
+
+def test_spec_common_fmax():
+    for a in range(-2, 2):
+        for b in range(-2, 2):
+            assert glm.fmax(a, b) == max([a, b])
+
+            for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+                assert glm.fmax(vecT(a), b) == vecT(max([a,b])) == glm.fmax(vecT(a), vecT(b))
+
+    for a in range(-2, 2):
+        for b in range(-2, 2):
+            for c in range(-2, 2):
+                for d in range(-2, 2):
+                    assert glm.fmax(a, b, c, d) == max([a,b,c,d])
+                assert glm.fmax(a, b, c) == max([a,b,c])
+
+def test_spec_common_fmin():
+    for a in range(-2, 2):
+        for b in range(-2, 2):
+            assert glm.fmin(a, b) == min([a, b])
+
+            for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+                assert glm.fmin(vecT(a), b) == vecT(min([a,b])) == glm.fmin(vecT(a), vecT(b))
+
+    for a in range(-2, 2):
+        for b in range(-2, 2):
+            for c in range(-2, 2):
+                for d in range(-2, 2):
+                    assert glm.fmin(a, b, c, d) == min([a,b,c,d])
+                assert glm.fmin(a, b, c) == min([a,b,c])
+
+def test_spec_common_fract():
+    for i in range(-10, 10):
+        x = i / 10
+
+        assert glm.fract(x) == x - glm.floor(x)
+
+        for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+            assert glm.fract(vecT(x)) == vecT(x) - glm.floor(vecT(x))
+
+def test_spec_common_max():
+    for a in range(-2, 2):
+        for b in range(-2, 2):
+            assert glm.max(a, b) == max([a, b])
+
+            for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+                assert glm.max(vecT(a), b) == vecT(max([a,b])) == glm.max(vecT(a), vecT(b))
+
+    for a in range(-2, 2):
+        for b in range(-2, 2):
+            for c in range(-2, 2):
+                for d in range(-2, 2):
+                    assert glm.max(a, b, c, d) == max([a,b,c,d])
+
+                    for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+                        assert glm.max(vecT(a), vecT(b), vecT(c), vecT(d)) == vecT(max([a, b, c, d]))
+
+                assert glm.max(a, b, c) == max([a,b,c])
+
+                for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+                    assert glm.max(vecT(a), vecT(b), vecT(c)) == vecT(max([a, b, c]))
+
+def test_spec_common_min():
+    for a in range(-2, 2):
+        for b in range(-2, 2):
+            assert glm.min(a, b) == min([a, b])
+
+            for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+                assert glm.min(vecT(a), b) == vecT(min([a,b])) == glm.min(vecT(a), vecT(b))
+
+    for a in range(-2, 2):
+        for b in range(-2, 2):
+            for c in range(-2, 2):
+                for d in range(-2, 2):
+                    assert glm.min(a, b, c, d) == min([a,b,c,d])
+
+                    for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+                        assert glm.min(vecT(a), vecT(b), vecT(c), vecT(d)) == vecT(min([a, b, c, d]))
+
+                assert glm.min(a, b, c) == min([a,b,c])
+
+                for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+                    assert glm.min(vecT(a), vecT(b), vecT(c)) == vecT(min([a, b, c]))
+
+def test_spec_common_mix():
+    for a in range(-2, 2):
+        for b in range(-2, 2):
+            assert glm.mix(a, b, 0.) == a
+            assert glm.mix(a, b, 1.) == b
+            assert glm.mix(a, b, 0.5) == (a + b) / 2
+
+            assert glm.mix(a, b, True) == b
+            assert glm.mix(a, b, False) == a
+
+            for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+                assert glm.mix(vecT(a), vecT(b), [0.] * len(vecT(a))) == vecT(a)
+                assert glm.mix(vecT(a), vecT(b), [1.] * len(vecT(a))) == vecT(b)
+                assert glm.mix(vecT(a), vecT(b), [0.5] * len(vecT(a))) == vecT((a + b) / 2)
+
+                assert glm.mix(vecT(a), vecT(b), [True] * len(vecT(a))) == vecT(b)
+                assert glm.mix(vecT(a), vecT(b), [False] * len(vecT(a))) == vecT(a)
+
+def test_spec_common_round():
+    for i in range(-10, 10):
+        x = i / 10
+
+        if abs(x) == 0.5:
+            x += .05
+
+        assert glm.round(x) == round(x, 0), x
+
+        for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+            assert all([a == round(x, 0) for a in glm.round(vecT(x))])
+
+def test_spec_common_frexp():
+    for i in range(-10, 10):
+        x = i / 10
+
+        assert glm.frexp(x) == math.frexp(x)
+
+        #for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+        #    assert all([(a, b) == math.frexp(x) for a, b in glm.frexp(vecT(x))])
+
+def test_spec_exponential_exp():
+    for i in range(5):
+        assert round(glm.exp(i), 5) == round(math.exp(i), 5)
+
+        for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+            assert all([round(a, 5) == round(math.exp(i), 5) for a in glm.exp(vecT(i))])
+
+def test_spec_exponential_exp2():
+    for i in range(5):
+        assert round(glm.exp2(i), 5) == round(2 ** i, 5)
+
+        for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+            assert all([round(a, 5) == round(2 ** i, 5) for a in glm.exp2(vecT(i))])
+
+def test_spec_exponential_sqrt():
+    for i in range(1,6):
+        assert round(glm.sqrt(i), 5) == round(math.sqrt(i), 5)
+        assert round(glm.inversesqrt(i), 5) == round(1 / math.sqrt(i), 5)
+
+        for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+            assert all([round(a, 5) == round(math.sqrt(i), 5) for a in glm.sqrt(vecT(i))])
+            assert all([round(a, 5) == round(1 / math.sqrt(i), 5) for a in glm.inversesqrt(vecT(i))])
+
+def test_spec_exponential_log():
+    for i in range(1,6):
+        assert round(glm.log(i), 5) == round(math.log(i), 5)
+
+        for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+            assert all([round(a, 5) == round(math.log(i), 5) for a in glm.log(vecT(i))])
+
+def test_spec_exponential_log2():
+    for i in range(1,6):
+        assert round(glm.log2(i), 5) == round(math.log2(i), 5)
+
+        for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
+            assert all([round(a, 5) == round(math.log2(i), 5) for a in glm.log2(vecT(i))])
+
+###/SPECIFIC TESTS ###
+
+
+
+### TEST TEST ###
+    
+def test_everything_tested():
+    f = open(__file__, "r")
+    content = f.read()
+    f.close()
+
+    excluded = ["make_mat.+", "make_vec.+"]
+
+    builtin_function_or_method = type(glm.silence)
+
+    for raw in dir(glm):
+        func = getattr(glm, raw)
+        if (raw.startswith("__") and raw.endswith("__") or not isinstance(func, builtin_function_or_method)):
+            continue
+        if not raw in content and not any((re.fullmatch(ex, raw) for ex in excluded)):
+            print("{} has no test.".format(raw))

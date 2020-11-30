@@ -10,7 +10,7 @@ Provides common functions for quaternion types.
 \ul\
 \h3\conjugate() function\h3\
 \raw\#### <code>glm.<code>**conjugate**(**q**: *quat*) -\\> *quat*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns the q conjugate.
+\raw\&emsp;&emsp;\raw\Returns the \code\q\code\ conjugate.
 
 \h3\lerp() function\h3\
 \raw\#### <code>glm.<code>**lerp**(**x**: *quat*, **y**: *quat*, **a**: *float*) -\\> *quat*</code></code>\raw\

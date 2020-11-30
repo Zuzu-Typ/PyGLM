@@ -11,4 +11,6 @@
 
 #include "uint/all.h"
 
+#include "../vec/all.h"
+
 #endif

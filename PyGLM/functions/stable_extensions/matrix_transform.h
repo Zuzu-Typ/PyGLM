@@ -224,32 +224,32 @@ PyDoc_STRVAR(lookAtRH_docstr,
 );
 PyDoc_STRVAR(rotate_docstr,
 	"rotate(m: mat4x4, angle: number, axis: vec3) -> mat4x4\n"
-	"	Builds a rotation 4 * 4 matrix created from an axis vector and an angle.\n"
+	"	Builds a rotation 4 x 4 matrix created from an axis vector and an angle.\n"
 	"rotate(m: mat3x3, angle: number) -> mat3x3\n"
-	"	Builds a rotation 3 * 3 matrix created from an angle.\n"
-	"	m is the input matrix multiplied by this translation matrix"
+	"	Builds a rotation 3 x 3 matrix created from an angle.\n"
+	"	`m` is the input matrix multiplied by this translation matrix"
 );
 PyDoc_STRVAR(scale_docstr,
 	"scale(m: mat4x4, v: vec3) -> mat4x4\n"
-	"	Builds a scale 4 * 4 matrix created from 3 scalars.\n"
+	"	Builds a scale 4 x 4 matrix created from 3 scalars.\n"
 	"scale(m: mat3x3, v: vec2) -> mat3x3\n"
-	"	Builds a scale 3 * 3 matrix created from a vector of 2 components.\n"
-	"	m is the input matrix multiplied by this translation matrix"
+	"	Builds a scale 3 x 3 matrix created from a vector of 2 components.\n"
+	"	`m` is the input matrix multiplied by this translation matrix"
 );
 PyDoc_STRVAR(translate_docstr,
 	"translate(m: mat4x4, v: vec3) -> mat4x4\n"
-	"	Builds a translation 4 * 4 matrix created from a vector of 3 components.\n"
+	"	Builds a translation 4 x 4 matrix created from a vector of 3 components.\n"
 	"translate(m: mat3x3, v: vec2) -> mat3x3\n"
-	"	Builds a translation 3 * 3 matrix created from a vector of 2 components.\n"
-	"	m is the input matrix multiplied by this translation matrix"
+	"	Builds a translation 3 x 3 matrix created from a vector of 2 components.\n"
+	"	`m` is the input matrix multiplied by this translation matrix"
 );
 PyDoc_STRVAR(rotate_slow_docstr,
 	"rotate_slow(m: mat4x4, angle: number, axis: vec3) -> mat4x4\n"
-	"	Builds a rotation 4 * 4 matrix created from an axis vector and an angle."
+	"	Builds a rotation 4 x 4 matrix created from an axis vector and an angle."
 );
 PyDoc_STRVAR(scale_slow_docstr,
 	"scale_slow(m: mat4x4, v: vec3) -> mat4x4\n"
-	"	Builds a scale 4 * 4 matrix created from 3 scalars."
+	"	Builds a scale 4 x 4 matrix created from 3 scalars."
 );
 
 #define MATRIX_TRANSFORM_METHODS \

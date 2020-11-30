@@ -45,7 +45,7 @@ Define secant, cosecant and cotangent functions\.
   
 ### cot\(\) function  
 #### <code>glm.<code>**cot**(**angle**: *float*) -\> *float*</code></code>  
-&emsp;&emsp;Cotangent function\. adjacent / opposite or 1 / tan\(x\)\.  
+&emsp;&emsp;Cotangent function\. adjacent / opposite or ``` 1 / tan(x) ```\.  
   
 ### coth\(\) function  
 #### <code>glm.<code>**coth**(**angle**: *float*) -\> *float*</code></code>  
@@ -53,7 +53,7 @@ Define secant, cosecant and cotangent functions\.
   
 ### csc\(\) function  
 #### <code>glm.<code>**csc**(**angle**: *float*) -\> *float*</code></code>  
-&emsp;&emsp;Cosecant function\. hypotenuse / opposite or 1 / sin\(x\)\.  
+&emsp;&emsp;Cosecant function\. hypotenuse / opposite or ``` 1 / sin(x) ```\.  
   
 ### csch\(\) function  
 #### <code>glm.<code>**csch**(**angle**: *float*) -\> *float*</code></code>  
@@ -61,7 +61,7 @@ Define secant, cosecant and cotangent functions\.
   
 ### sec\(\) function  
 #### <code>glm.<code>**sec**(**angle**: *float*) -\> *float*</code></code>  
-&emsp;&emsp;Secant function\. hypotenuse / adjacent or 1 / cos\(x\)\.  
+&emsp;&emsp;Secant function\. hypotenuse / adjacent or ``` 1 / cos(x) ```\.  
   
 ### sech\(\) function  
 #### <code>glm.<code>**sech**(**angle**: *float*) -\> *float*</code></code>  

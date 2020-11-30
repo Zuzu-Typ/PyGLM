@@ -1,5 +1,20 @@
 \h1\Table of Contents\h1\
 \ul\
 \-\ \url other.md \other methods\ url\
+\--\ \url other.md#add-function \\b\add\b\ function \ url\
+\--\ \url other.md#and_-function \\b\and_\b\ function \ url\
+\--\ \url other.md#cmp-function \\b\cmp\b\ function \ url\
+\--\ \url other.md#div-function \\b\div\b\ function \ url\
+\--\ \url other.md#floordiv-function \\b\floordiv\b\ function \ url\
+\--\ \url other.md#if_else-function \\b\if_else\b\ function \ url\
+\--\ \url other.md#inv-function \\b\inv\b\ function \ url\
+\--\ \url other.md#lshift-function \\b\lshift\b\ function \ url\
+\--\ \url other.md#mul-function \\b\mul\b\ function \ url\
+\--\ \url other.md#neg-function \\b\neg\b\ function \ url\
+\--\ \url other.md#or_-function \\b\or_\b\ function \ url\
+\--\ \url other.md#pos-function \\b\pos\b\ function \ url\
+\--\ \url other.md#rshift-function \\b\rshift\b\ function \ url\
 \--\ \url other.md#silence-function \\b\silence\b\ function \ url\
+\--\ \url other.md#sub-function \\b\sub\b\ function \ url\
+\--\ \url other.md#xor-function \\b\xor\b\ function \ url\
 \ul\

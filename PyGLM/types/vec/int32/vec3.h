@@ -37,7 +37,7 @@ static PyNumberMethods hivec3NumMethods = {
 	(binaryfunc)vec_add<3, glm::i32>, //nb_add
 	(binaryfunc)vec_sub<3, glm::i32>, //nb_subtract
 	(binaryfunc)vec_mul<3, glm::i32>, //nb_multiply
-	0, //nb_remainder
+	(binaryfunc)vec_mod<3, glm::i32>, //nb_remainder
 	0, //nb_divmod
 	0, //nb_power
 	(unaryfunc)vec_neg<3, glm::i32>, //nb_negative
@@ -56,7 +56,7 @@ static PyNumberMethods hivec3NumMethods = {
 	(binaryfunc)vec_iadd<3, glm::i32>, //nb_inplace_add
 	(binaryfunc)vec_isub<3, glm::i32>, //nb_inplace_subtract
 	(binaryfunc)vec_imul<3, glm::i32>, //nb_inplace_multiply
-	0, //nb_inplace_remainder
+	(binaryfunc)vec_imod<3, glm::i32>, //nb_inplace_remainder
 	0, //nb_inplace_power
 	0, //nb_inplace_lshift
 	0, //nb_inplace_rshift
@@ -70,47 +70,6 @@ static PyNumberMethods hivec3NumMethods = {
 	0, //nb_index
 	(binaryfunc)vec_matmul, //nb_matrix_multiply
 	(binaryfunc)vec_imatmul<3, glm::i32>, //nb_inplace_matrix_multiply
-};
-static PyTypeObject hivec3Type = {
-	PyObject_HEAD_INIT(NULL)
-	"glm.ivec3",             /* tp_name */
-	sizeof(vec<3, glm::i32>),             /* tp_basicsize */
-	0,                         /* tp_itemsize */
-	(destructor)vec_dealloc, /* tp_dealloc */
-	0,                         /* tp_print */
-	0,                         /* tp_getattr */
-	0,                         /* tp_setattr */
-	0,                         /* tp_reserved */
-	(reprfunc)vec3_repr<glm::i32>,                         /* tp_repr */
-	&hivec3NumMethods,             /* tp_as_number */
-	&hivec3SeqMethods,                         /* tp_as_sequence */
-	0,                         /* tp_as_mapping */
-	(hashfunc)vec_hash<3, glm::i32>,                         /* tp_hash  */
-	0,                         /* tp_call */
-	(reprfunc)vec3_str<glm::i32>,                         /* tp_str */
-	(getattrofunc)vec_getattr<3, glm::i32>,                         /* tp_getattro */
-	(setattrofunc)vec_setattr<3, glm::i32>,                         /* tp_setattro */
-	&hivec3BufferMethods,                         /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT |
-	Py_TPFLAGS_BASETYPE,   /* tp_flags */
-	"ivec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier integer numbers.",           /* tp_doc */
-	0,                         /* tp_traverse */
-	0,                         /* tp_clear */
-	(richcmpfunc)vec_richcompare<3, glm::i32>,                         /* tp_richcompare */
-	0,                         /* tp_weaklistoffset */
-	(getiterfunc)vec_geniter<3, glm::i32>,                         /* tp_iter */
-	0,                         /* tp_iternext */
-	hivec3_methods,             /* tp_methods */
-	hivec3_members,             /* tp_members */
-	0,           			/* tp_getset */
-	0,                         /* tp_base */
-	0,                         /* tp_dict */
-	0,                         /* tp_descr_get */
-	0,                         /* tp_descr_set */
-	0,                         /* tp_dictoffset */
-	(initproc)vec3_init<glm::i32>,      /* tp_init */
-	0,                         /* tp_alloc */
-	(newfunc)vec_new<3, glm::i32>,                 /* tp_new */
 };
 static PyTypeObject hivec3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
@@ -152,3 +111,55 @@ static PyTypeObject hivec3IterType = {
 	0,                         /* tp_alloc */
 	(newfunc)vecIter_new<3, glm::i32>,                 /* tp_new */
 };
+
+static PyGLMTypeObject hivec3GLMType = {
+	{
+		PyObject_HEAD_INIT(NULL)
+		"glm.ivec3",             /* tp_name */
+		sizeof(vec<3, glm::i32>),             /* tp_basicsize */
+		0,                         /* tp_itemsize */
+		(destructor)vec_dealloc, /* tp_dealloc */
+		0,                         /* tp_print */
+		0,                         /* tp_getattr */
+		0,                         /* tp_setattr */
+		0,                         /* tp_reserved */
+		(reprfunc)vec3_repr<glm::i32>,                         /* tp_repr */
+		& hivec3NumMethods,             /* tp_as_number */
+		& hivec3SeqMethods,                         /* tp_as_sequence */
+		0,                         /* tp_as_mapping */
+		(hashfunc)vec_hash<3, glm::i32>,                         /* tp_hash  */
+		0,                         /* tp_call */
+		(reprfunc)vec3_str<glm::i32>,                         /* tp_str */
+		(getattrofunc)vec_getattr<3, glm::i32>,                         /* tp_getattro */
+		(setattrofunc)vec_setattr<3, glm::i32>,                         /* tp_setattro */
+		& hivec3BufferMethods,                         /* tp_as_buffer */
+		Py_TPFLAGS_DEFAULT |
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */
+		"ivec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier integer numbers.",           /* tp_doc */
+		0,                         /* tp_traverse */
+		0,                         /* tp_clear */
+		(richcmpfunc)vec_richcompare<3, glm::i32>,                         /* tp_richcompare */
+		0,                         /* tp_weaklistoffset */
+		(getiterfunc)vec_geniter<3, glm::i32>,                         /* tp_iter */
+		0,                         /* tp_iternext */
+		hivec3_methods,             /* tp_methods */
+		hivec3_members,             /* tp_members */
+		0,           			/* tp_getset */
+		0,                         /* tp_base */
+		0,                         /* tp_dict */
+		0,                         /* tp_descr_get */
+		0,                         /* tp_descr_set */
+		0,                         /* tp_dictoffset */
+		(initproc)vec3_init<glm::i32>,      /* tp_init */
+		0,                         /* tp_alloc */
+		(newfunc)vec_new<3, glm::i32>,                 /* tp_new */
+	},
+	PyGLM_TYPE_VEC,
+	3,
+	0,
+	sizeof(int32),
+	sizeof(glm::vec<3, int32>),
+	PyGLM_FS_INT32
+};
+
+static PyTypeObject& hivec3Type = *((PyTypeObject*)&hivec3GLMType);

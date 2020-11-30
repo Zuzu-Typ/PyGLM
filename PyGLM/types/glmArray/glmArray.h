@@ -2,6 +2,7 @@
 
 #include "forward_declarations.h"
 
+
 static PyMemberDef glmArray_members[] = {
 	{ (char*)"nbytes",			T_PYSSIZET,		offsetof(glmArray, nBytes),		1, (char*)"Total combined bytecount of all elements"										},
 	{ (char*)"typecode",		T_CHAR,			offsetof(glmArray, format),		1, (char*)"The typecode character of the underlying format"									},
@@ -20,16 +21,26 @@ static PyGetSetDef glmArray_getSet[] = {
 	{ (char*)"ctype",	(getter)glmArray_getCtype,	NULL, (char*)"The respective ctypes data type",								NULL },
 	{ NULL }  /* Sentinel */
 };
+
 static PyMethodDef glmArray_methods[] = {
-	{ "__copy__",		(PyCFunction)generic_copy,			METH_NOARGS,				"Create a copy of this instance"																				},
-	{ "__deepcopy__",	(PyCFunction)generic_deepcopy,		METH_O,						"Create a (deep)copy of this instance"																			},
-	{ "__getstate__",	(PyCFunction)glmArray_getstate,		METH_NOARGS,				"Returns a picklable state of this object"																		},
-	{ "__setstate__",	(PyCFunction)glmArray_setstate,		METH_O,						"Restores a state that was previously acquired"																	},
-	{ "to_list",		(PyCFunction)glmArray_to_list,		METH_NOARGS,				"Return the elements of this array as a list"																	},
-	{ "to_tuple",		(PyCFunction)glmArray_to_tuple,		METH_NOARGS,				"Return the elements of this array as a tuple"																	},
-	{ "from_numbers",	(PyCFunction)glmArray_from_numbers, METH_VARARGS | METH_STATIC,	"from_numbers(data_type: type, ...) -> array\n\tCreates an array from numbers using the specified data type"	},
-	{ "as_reference",	(PyCFunction)glmArray_as_reference, METH_O | METH_STATIC,		"as_reference(other) -> array\n\tCreates an array from another array (or a compatible buffer) as a reference"	},
-	{ "zeros",			(PyCFunction)glmArray_zeros,		METH_VARARGS | METH_STATIC,	"zeros(count: int, data_type: type) -> array\n\tCreates an array of 0s using the specified data type"			},
+	{ "__copy__",		(PyCFunction)generic_copy,				METH_NOARGS,				generic_copy_docstr },
+	{ "__deepcopy__",	(PyCFunction)generic_deepcopy,			METH_O,						generic_deepcopy_docstr },
+	{ "__getstate__",	(PyCFunction)glmArray_getstate,			METH_NOARGS,				glmArray_getstate_docstr },
+	{ "__setstate__",	(PyCFunction)glmArray_setstate,			METH_O,						glmArray_setstate_docstr },
+	{ "to_list",		(PyCFunction)glmArray_to_list,			METH_NOARGS,				glmArray_to_list_docstr },
+	{ "to_tuple",		(PyCFunction)glmArray_to_tuple,			METH_NOARGS,				glmArray_to_tuple_docstr },
+	{ "from_numbers",	(PyCFunction)glmArray_from_numbers,		METH_VARARGS | METH_STATIC,	glmArray_from_numbers_docstr },
+	{ "as_reference",	(PyCFunction)glmArray_as_reference,		METH_O | METH_STATIC,		glmArray_as_reference_docstr },
+	{ "zeros",			(PyCFunction)glmArray_zeros,			METH_VARARGS | METH_STATIC,	glmArray_zeros_docstr },
+	{ "filter",			(PyCFunction)glmArray_filter,			METH_O,						glmArray_filter_docstr },
+	{ "map",			(PyCFunction)glmArray_map,				METH_VARARGS,				glmArray_map_docstr	},
+	{ "sort",			(PyCFunction)glmArray_sort,				METH_O,						glmArray_sort_docstr },
+	{ "concat",			(PyCFunction)glmArray_concat,			METH_O,						glmArray_concat_docstr },
+	{ "iconcat",		(PyCFunction)glmArray_inplace_concat,	METH_O,						glmArray_inplace_concat_docstr },
+	{ "repeat",			(PyCFunction)glmArray_repeat,			METH_O,						glmArray_repeat_docstr },
+	{ "irepeat",		(PyCFunction)glmArray_inplace_repeat,	METH_O,						glmArray_inplace_repeat_docstr },
+	//{ "test",		(PyCFunction)glmArray_pow_T<float>,	METH_O,						glmArray_inplace_repeat_docstr			},
+	//{ "add",		(PyCFunction)glmArray_add,	METH_O,						glmArray_inplace_repeat_docstr			},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs glmArrayBufferMethods = {
@@ -38,21 +49,60 @@ static PyBufferProcs glmArrayBufferMethods = {
 };
 static PySequenceMethods glmArraySeqMethods = {
 	(lenfunc)glmArray_len,						// sq_length
-	(binaryfunc)glmArray_concat,				// sq_concat
-	(ssizeargfunc)glmArray_repeat,				// sq_repeat
+	0,//(binaryfunc)glmArray_concat,				// sq_concat
+	0,//(ssizeargfunc)glmArray_repeat,				// sq_repeat
 	(ssizeargfunc)glmArray_sq_item,				// sq_item
 	0,
 	(ssizeobjargproc)glmArray_sq_ass_item,		// sq_ass_item
 	0,
 	(objobjproc)glmArray_contains,				// sq_contains
-	(binaryfunc)glmArray_inplace_concat,		// sq_inplace_concat
-	(ssizeargfunc)glmArray_inplace_repeat,		// sq_inplace_repeat
+	0,//(binaryfunc)glmArray_inplace_concat,		// sq_inplace_concat
+	0,//(ssizeargfunc)glmArray_inplace_repeat,		// sq_inplace_repeat
 };
 static PyMappingMethods glmArrayMapMethods = {
 	(lenfunc)glmArray_len,						// mp_length
 	(binaryfunc)glmArray_mp_subscript,			// mp_subscript
 	(objobjargproc)glmArray_mp_ass_subscript,	// mp_ass_subscript
 };
+static PyNumberMethods glmArrayNumMethods = {
+	(binaryfunc)glmArray_add, //nb_add
+	(binaryfunc)glmArray_sub,//(binaryfunc)matsq_sub<2, 2, float>, //nb_subtract
+	(binaryfunc)glmArray_mul,//(binaryfunc)mat_mul<2, 2, float>, //nb_multiply
+	(binaryfunc)glmArray_mod, //nb_remainder
+	0, //nb_divmod
+	(ternaryfunc)glmArray_pow, //nb_power
+	(unaryfunc)glmArray_neg,//(unaryfunc)mat_neg<2, 2, float>, //nb_negative
+	(unaryfunc)glmArray_pos,//(unaryfunc)mat_pos<2, 2, float>, //nb_positive
+	(unaryfunc)glmArray_abs, //nb_absolute
+	0, //nb_bool
+	(unaryfunc)glmArray_inv, //nb_invert
+	(binaryfunc)glmArray_lshift, //nb_lshift
+	(binaryfunc)glmArray_rshift, //nb_rshift
+	(binaryfunc)glmArray_and, //nb_and
+	(binaryfunc)glmArray_xor, //nb_xor
+	(binaryfunc)glmArray_or, //nb_or
+	0, //nb_int
+	0, //nb_reserved
+	0, //nb_float
+	0,//(binaryfunc)matsq_iadd<2, 2, float>, //nb_inplace_add
+	0,//(binaryfunc)matsq_isub<2, 2, float>, //nb_inplace_subtract
+	0,//(binaryfunc)mat_imul<2, 2, float>, //nb_inplace_multiply
+	0, //nb_inplace_remainder
+	0, //nb_inplace_power
+	0, //nb_inplace_lshift
+	0, //nb_inplace_rshift
+	0, //nb_inplace_and
+	0, //nb_inplace_xor
+	0, //nb_inplace_or
+	0, //nb_floor_divide
+	(binaryfunc)glmArray_div,//(binaryfunc)matsq_div<2, 2, float>, //nb_true_divide
+	0, //nb_inplace_floor_divide
+	0,//(binaryfunc)matsq_idiv<2, 2, float>, //nb_inplace_true_divide
+	0, //nb_index
+	0,//(binaryfunc)mat_matmul, //nb_matrix_multiply
+	0,//(binaryfunc)mat_imatmul<2, 2, float>, //nb_inplace_matrix_multiply
+};
+
 static PyTypeObject glmArrayType = {
 	PyObject_HEAD_INIT(NULL)
 	"glm.array",						// tp_name
@@ -64,7 +114,7 @@ static PyTypeObject glmArrayType = {
 	0,	// tp_setattr 
 	0,	// tp_reserved 
 	(reprfunc)glmArray_repr,			// tp_repr 
-	0,	// tp_as_number 
+	&glmArrayNumMethods,				// tp_as_number 
 	&glmArraySeqMethods,				// tp_as_sequence 
 	&glmArrayMapMethods,				// tp_as_mapping 
 	(hashfunc)array_hash,				// tp_hash  

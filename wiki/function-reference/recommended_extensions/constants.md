@@ -38,11 +38,11 @@ Provide a list of constants and precomputed useful values\.
   
 ### e\(\) function  
 #### <code>glm.<code>**e**() -\> *float*</code></code>  
-&emsp;&emsp;Return e constant\.  
+&emsp;&emsp;Return ``` e ``` constant\.  
   
 ### epsilon\(\) function  
 #### <code>glm.<code>**epsilon**() -\> *float*</code></code>  
-&emsp;&emsp;Return the epsilon constant for floating point types\.  
+&emsp;&emsp;Return the ``` epsilon ``` constant for floating point types\.  
   
 ### euler\(\) function  
 #### <code>glm.<code>**euler**() -\> *float*</code></code>  
@@ -50,7 +50,7 @@ Provide a list of constants and precomputed useful values\.
   
 ### four\_over\_pi\(\) function  
 #### <code>glm.<code>**four_over_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return 4 / pi\.  
+&emsp;&emsp;Return ``` 4 / pi ```\.  
   
 ### golden\_ratio\(\) function  
 #### <code>glm.<code>**golden_ratio**() -\> *float*</code></code>  
@@ -58,97 +58,97 @@ Provide a list of constants and precomputed useful values\.
   
 ### half\_pi\(\) function  
 #### <code>glm.<code>**half_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return pi / 2\.  
+&emsp;&emsp;Return ``` pi / 2 ```\.  
   
 ### ln\_ln\_two\(\) function  
 #### <code>glm.<code>**ln_ln_two**() -\> *float*</code></code>  
-&emsp;&emsp;Return ln\(ln\(2\)\)\.  
+&emsp;&emsp;Return ``` ln(ln(2)) ```\.  
   
 ### ln\_ten\(\) function  
 #### <code>glm.<code>**ln_ten**() -\> *float*</code></code>  
-&emsp;&emsp;Return ln\(10\)\.  
+&emsp;&emsp;Return ``` ln(10) ```\.  
   
 ### ln\_two\(\) function  
 #### <code>glm.<code>**ln_two**() -\> *float*</code></code>  
-&emsp;&emsp;Return ln\(2\)\.  
+&emsp;&emsp;Return ``` ln(2) ```\.  
   
 ### one\(\) function  
 #### <code>glm.<code>**one**() -\> *float*</code></code>  
-&emsp;&emsp;Return 1\.  
+&emsp;&emsp;Return ``` 1 ```\.  
   
 ### one\_over\_pi\(\) function  
 #### <code>glm.<code>**one_over_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return 1 / pi\.  
+&emsp;&emsp;Return ``` 1 / pi ```\.  
   
 ### one\_over\_root\_two\(\) function  
 #### <code>glm.<code>**one_over_root_two**() -\> *float*</code></code>  
-&emsp;&emsp;Return 1 / sqrt\(2\)\.  
+&emsp;&emsp;Return ``` 1 / sqrt(2) ```\.  
   
 ### one\_over\_two\_pi\(\) function  
 #### <code>glm.<code>**one_over_two_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return 1 / \(pi \* 2\)\.  
+&emsp;&emsp;Return ``` 1 / (pi * 2) ```\.  
   
 ### pi\(\) function  
 #### <code>glm.<code>**pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return the pi constant for floating point types\.  
+&emsp;&emsp;Return the ``` pi ``` constant for floating point types\.  
   
 ### quarter\_pi\(\) function  
 #### <code>glm.<code>**quarter_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return pi / 4\.  
+&emsp;&emsp;Return ``` pi / 4 ```\.  
   
 ### root\_five\(\) function  
 #### <code>glm.<code>**root_five**() -\> *float*</code></code>  
-&emsp;&emsp;Return sqrt\(5\)\.  
+&emsp;&emsp;Return ``` sqrt(5) ```\.  
   
 ### root\_half\_pi\(\) function  
 #### <code>glm.<code>**root_half_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return sqrt\(pi / 2\)\.  
+&emsp;&emsp;Return ``` sqrt(pi / 2) ```\.  
   
 ### root\_ln\_four\(\) function  
 #### <code>glm.<code>**root_ln_four**() -\> *float*</code></code>  
-&emsp;&emsp;Return sqrt\(ln\(4\)\)\.  
+&emsp;&emsp;Return ``` sqrt(ln(4)) ```\.  
   
 ### root\_pi\(\) function  
 #### <code>glm.<code>**root_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return square root of pi\.  
+&emsp;&emsp;Return square root of ``` pi ```\.  
   
 ### root\_three\(\) function  
 #### <code>glm.<code>**root_three**() -\> *float*</code></code>  
-&emsp;&emsp;Return sqrt\(3\)\.  
+&emsp;&emsp;Return ``` sqrt(3) ```\.  
   
 ### root\_two\(\) function  
 #### <code>glm.<code>**root_two**() -\> *float*</code></code>  
-&emsp;&emsp;Return sqrt\(2\)\.  
+&emsp;&emsp;Return ``` sqrt(2) ```\.  
   
 ### root\_two\_pi\(\) function  
 #### <code>glm.<code>**root_two_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return sqrt\(2 \* pi\)\.  
+&emsp;&emsp;Return ``` sqrt(2 * pi) ```\.  
   
 ### third\(\) function  
 #### <code>glm.<code>**third**() -\> *float*</code></code>  
-&emsp;&emsp;Return 1 / 3\.  
+&emsp;&emsp;Return ``` 1 / 3 ```\.  
   
 ### three\_over\_two\_pi\(\) function  
 #### <code>glm.<code>**three_over_two_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return pi / 2 \* 3\.  
+&emsp;&emsp;Return ``` pi / 2 * 3 ```\.  
   
 ### two\_over\_pi\(\) function  
 #### <code>glm.<code>**two_over_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return 2 / pi\.  
+&emsp;&emsp;Return ``` 2 / pi ```\.  
   
 ### two\_over\_root\_pi\(\) function  
 #### <code>glm.<code>**two_over_root_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return 2 / sqrt\(pi\)\.  
+&emsp;&emsp;Return ``` 2 / sqrt(pi) ```\.  
   
 ### two\_pi\(\) function  
 #### <code>glm.<code>**two_pi**() -\> *float*</code></code>  
-&emsp;&emsp;Return pi \* 2\.  
+&emsp;&emsp;Return ``` pi * 2 ```\.  
   
 ### two\_thirds\(\) function  
 #### <code>glm.<code>**two_thirds**() -\> *float*</code></code>  
-&emsp;&emsp;Return 2 / 3\.  
+&emsp;&emsp;Return ``` 2 / 3 ```\.  
   
 ### zero\(\) function  
 #### <code>glm.<code>**zero**() -\> *float*</code></code>  
-&emsp;&emsp;Return 0\.  
+&emsp;&emsp;Return ``` 0 ```\.  
   
