@@ -4592,7 +4592,7 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 	outArray->readonly = false;
 	outArray->reference = NULL;
 
-	if (pto == NULL || arr->glmType == PyGLM_TYPE_VEC && ((pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC)) {
+	if (pto == NULL || (arr->glmType == PyGLM_TYPE_VEC && ((pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC))) {
 		outArray->glmType = arr->glmType;
 		outArray->itemSize = arr->itemSize;
 		outArray->nBytes = arr->nBytes;
@@ -5134,8 +5134,8 @@ static PyObject* glmArray_mul(PyObject* obj1, PyObject* obj2) {
 			}
 
 			if (arr1->glmType == PyGLM_TYPE_CTYPES || (arr1->glmType == PyGLM_TYPE_VEC && ((pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC || (pto->glmType == PyGLM_TYPE_MAT && arr1->shape[0] == pto->R)))
-				|| arr1->glmType == PyGLM_TYPE_MAT && (pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC && arr1->shape[0] == pto->C
-				|| arr1->glmType == PyGLM_TYPE_MAT && pto->glmType == PyGLM_TYPE_MAT && arr1->shape[0] == pto->R) {
+				|| (arr1->glmType == PyGLM_TYPE_MAT && (pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC && arr1->shape[0] == pto->C)
+				|| (arr1->glmType == PyGLM_TYPE_MAT && pto->glmType == PyGLM_TYPE_MAT && arr1->shape[0] == pto->R)) {
 				switch (arr1->format) {
 				case get_format_specifier<float>() :
 					return glmArray_mulO_T<float>(arr1, (float*)(pto->getDataOf(obj2)), pto->itemSize / pto->dtSize, pto);
@@ -5378,7 +5378,7 @@ static PyObject* glmArray_mul(PyObject* obj1, PyObject* obj2) {
 				return NULL;
 			}
 
-			if (arr2->glmType == PyGLM_TYPE_CTYPES || (pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC && (arr2->glmType == PyGLM_TYPE_VEC || (arr2->glmType == PyGLM_TYPE_MAT && pto->C == arr2->shape[1]))
+			if (arr2->glmType == PyGLM_TYPE_CTYPES || ((pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC && (arr2->glmType == PyGLM_TYPE_VEC || (arr2->glmType == PyGLM_TYPE_MAT && pto->C == arr2->shape[1])))
 				|| (pto->glmType == PyGLM_TYPE_MAT && arr2->glmType == PyGLM_TYPE_VEC && pto->C == arr2->shape[0])
 				|| (pto->glmType == PyGLM_TYPE_MAT && arr2->glmType == PyGLM_TYPE_MAT && pto->C == arr2->shape[1])) {
 				switch (arr2->format) {
