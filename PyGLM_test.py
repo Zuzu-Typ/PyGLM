@@ -240,6 +240,10 @@ def gen_args(args_string):
     elif "#d" in args_string:
         rand_func = random.random
         args_string = args_string.replace("#d", "")
+    elif "#x" in args_string:
+        res = randf()
+        rand_func = lambda: res
+        args_string = args_string.replace("#x", "")
     else:
         rand_func = None
 
