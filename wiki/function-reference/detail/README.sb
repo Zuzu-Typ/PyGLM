@@ -90,4 +90,14 @@
 \--\ \url func_trigonometric.md#sinh-function \\b\sinh\b\ function \ url\
 \--\ \url func_trigonometric.md#tan-function \\b\tan\b\ function \ url\
 \--\ \url func_trigonometric.md#tanh-function \\b\tanh\b\ function \ url\
+\-\ \url func_vector_relational.md \func_vector_relational methods\ url\
+\--\ \url func_vector_relational.md#all-function \\b\all\b\ function \ url\
+\--\ \url func_vector_relational.md#any-function \\b\any\b\ function \ url\
+\--\ \url func_vector_relational.md#equal-function \\b\equal\b\ function \ url\
+\--\ \url func_vector_relational.md#greaterThan-function \\b\greaterThan\b\ function \ url\
+\--\ \url func_vector_relational.md#greaterThanEqual-function \\b\greaterThanEqual\b\ function \ url\
+\--\ \url func_vector_relational.md#lessThan-function \\b\lessThan\b\ function \ url\
+\--\ \url func_vector_relational.md#lessThanEqual-function \\b\lessThanEqual\b\ function \ url\
+\--\ \url func_vector_relational.md#notEqual-function \\b\notEqual\b\ function \ url\
+\--\ \url func_vector_relational.md#not_-function \\b\not_\b\ function \ url\
 \ul\

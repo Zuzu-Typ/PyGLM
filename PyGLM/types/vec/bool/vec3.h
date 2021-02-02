@@ -33,6 +33,44 @@ static PySequenceMethods hbvec3SeqMethods = {
 	0, // sq_inplace_concat
 	0, // sq_inplace_repeat
 };
+static PyNumberMethods hbvec3NumMethods = {
+	(binaryfunc)bvec_add<3>, //nb_add
+	0, //nb_subtract
+	(binaryfunc)bvec_mul<3>, //nb_multiply
+	0, //nb_remainder
+	0, //nb_divmod
+	0, //nb_power
+	(unaryfunc)bvec_neg<3>, //nb_negative
+	0, //nb_positive
+	0, //nb_absolute
+	0, //nb_bool
+	0, //nb_invert
+	0, //nb_lshift
+	0, //nb_rshift
+	0, //nb_and
+	0, //nb_xor
+	0, //nb_or
+	0, //nb_int
+	0, //nb_reserved
+	0, //nb_int
+	(binaryfunc)bvec_iadd<3>, //nb_inplace_add
+	0, //nb_inplace_subtract
+	(binaryfunc)bvec_imul<3>, //nb_inplace_multiply
+	0, //nb_inplace_remainder
+	0, //nb_inplace_power
+	0, //nb_inplace_lshift
+	0, //nb_inplace_rshift
+	0, //nb_inplace_and
+	0, //nb_inplace_xor
+	0, //nb_inplace_or
+	0, //nb_floor_divide
+	0,
+	0, //nb_inplace_floor_divide
+	0, //nb_inplace_true_divide
+	0, //nb_index
+	0, //nb_matrix_multiply
+	0, //nb_inplace_matrix_multiply
+};
 static PyTypeObject hbvec3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"bvec3Iter",             /* tp_name */
@@ -86,7 +124,7 @@ static PyGLMTypeObject hbvec3GLMType = {
 		0,                         /* tp_setattr */
 		0,                         /* tp_reserved */
 		(reprfunc)vec3_repr<bool>,                         /* tp_repr */
-		0,             /* tp_as_number */
+		& hbvec3NumMethods,             /* tp_as_number */
 		& hbvec3SeqMethods,                         /* tp_as_sequence */
 		0,                         /* tp_as_mapping */
 		(hashfunc)vec_hash<3, bool>,                         /* tp_hash  */

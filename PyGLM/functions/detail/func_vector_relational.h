@@ -1104,7 +1104,8 @@ equal(PyObject*, PyObject* args) {
 }
 
 PyDoc_STRVAR(notEqual_docstr,
-	"notEqual(*args) -> not equal(*args)"
+	"notEqual(*args) -> bvecN\n"
+	"	Returns `not equal(*args)`."
 );
 static PyObject*
 notEqual(PyObject*, PyObject* args) {
@@ -2196,7 +2197,7 @@ PyGLM_MAKE_GLM_FUNC_VV_QQ(greaterThan)
 
 PyDoc_STRVAR(greaterThanEqual_docstr,
 	"greaterThanEqual(x: vecN, y: vecN) -> bvecN\n"
-	"	Returns the component-wise comparison of result `x >= y`."
+	"	Returns the component-wise comparison of result `x >= y`.\n"
 	"greaterThanEqual(x: quat, y: quat) -> bvec4\n"
 	"	Returns the component-wise comparison of result `x >= y`."
 );

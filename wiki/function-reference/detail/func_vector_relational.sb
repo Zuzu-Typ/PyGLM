@@ -1,0 +1,104 @@
+\c\This file was generated using a tool\c\
+\h1\func_vector_relational methods\h1\
+The following methods are all part of the \b\func_vector_relational methods\b\.
+Relational vector functions.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #all-function\\b\all\b\ function\url\
+\-\\url #any-function\\b\any\b\ function\url\
+\-\\url #equal-function\\b\equal\b\ function\url\
+\-\\url #greaterthan-function\\b\greaterThan\b\ function\url\
+\-\\url #greaterthanequal-function\\b\greaterThanEqual\b\ function\url\
+\-\\url #lessthan-function\\b\lessThan\b\ function\url\
+\-\\url #lessthanequal-function\\b\lessThanEqual\b\ function\url\
+\-\\url #notequal-function\\b\notEqual\b\ function\url\
+\-\\url #not_-function\\b\not_\b\ function\url\
+\ul\
+\h3\all() function\h3\
+\raw\#### <code>glm.<code>**all**(**v**: *bvecN*) -\\> *bool*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\True\code\ if all components of \code\x\code\ are \code\True\code\.
+
+\h3\any() function\h3\
+\raw\#### <code>glm.<code>**any**(**v**: *bvecN*) -\\> *bool*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\True\code\ if any component of \code\x\code\ is \code\True\code\.
+
+\h3\equal() function\h3\
+\raw\#### <code>glm.<code>**equal**(**x**: *vecN*, **y**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of result \code\x == y\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *quat*, **y**: *quat*) -\\> *bvec4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of result \code\x == y\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *matNxM*, **y**: *matNxM*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Perform a component-wise equal-to comparison of two matrices. Return a boolean vector which
+\raw\&emsp;&emsp;\raw\components value is \code\True\code\ if this expression is satisfied per column of the matrices.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *number*, **y**: *number*, **ULPs**: *int*) -\\> *bool*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison between two scalars in term of \code\ULPs\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *vecN*, **y**: *vecN*, **ULPs**: *int*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison between two vectors in term of \code\ULPs\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *matNxM*, **y**: *matNxM*, **ULPs**: *int*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison between two matrices in term of \code\ULPs\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *vecN*, **y**: *vecN*, **ULPs**: *ivecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison between two vectors in term of \code\ULPs\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *matNxM*, **y**: *matNxM*, **ULPs**: *ivecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison between two matrices in term of \code\ULPs\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *number*, **y**: *number*, **epsilon**: *number*) -\\> *bool*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the comparison of \code\|x - y| < epsilon\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *number*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| < epsilon\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *quat*, **y**: *quat*, **epsilon**: *number*) -\\> *bvec4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| < epsilon\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *matNxM*, **y**: *matNxM*, **epsilon**: *number*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| < epsilon\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| < epsilon\code\.
+
+\raw\#### <code>glm.<code>**equal**(**x**: *matNxM*, **y**: *matNxM*, **epsilon**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| < epsilon\code\.
+
+\h3\greaterThan() function\h3\
+\raw\#### <code>glm.<code>**greaterThan**(**x**: *vecN*, **y**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of result \code\x > y\code\.
+
+\raw\#### <code>glm.<code>**greaterThan**(**x**: *quat*, **y**: *quat*) -\\> *bvec4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of result \code\x > y\code\.
+
+\h3\greaterThanEqual() function\h3\
+\raw\#### <code>glm.<code>**greaterThanEqual**(**x**: *vecN*, **y**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of result \code\x >= y\code\.
+
+\raw\#### <code>glm.<code>**greaterThanEqual**(**x**: *quat*, **y**: *quat*) -\\> *bvec4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of result \code\x >= y\code\.
+
+\h3\lessThan() function\h3\
+\raw\#### <code>glm.<code>**lessThan**(**x**: *vecN*, **y**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of result \code\x < y\code\.
+
+\raw\#### <code>glm.<code>**lessThan**(**x**: *quat*, **y**: *quat*) -\\> *bvec4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of result \code\x < y\code\.
+
+\h3\lessThanEqual() function\h3\
+\raw\#### <code>glm.<code>**lessThanEqual**(**x**: *vecN*, **y**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of result \code\x <= y\code\.
+
+\raw\#### <code>glm.<code>**lessThanEqual**(**x**: *quat*, **y**: *quat*) -\\> *bvec4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of result \code\x <= y\code\.
+
+\h3\notEqual() function\h3\
+\raw\#### <code>glm.<code>**notEqual**(***args**) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\not equal(*args)\code\.
+
+\h3\not_() function\h3\
+\raw\#### <code>glm.<code>**not_**(**v**: *bvecN*) -\\> *bool*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise logical complement of \code\x\code\.
+

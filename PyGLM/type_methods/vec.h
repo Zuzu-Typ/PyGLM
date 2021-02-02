@@ -481,6 +481,13 @@ vec_neg(vec<L, T> *obj)
 	return pack_vec<L, T>(-obj->super_type);
 }
 
+template<int L>
+static PyObject* 
+bvec_neg(vec<L, bool>* obj)
+{
+	return pack_vec<L, bool>(glm::not_(obj->super_type));
+}
+
 template<int L, typename T>
 static PyObject *
 vec_pos(vec<L, T> *obj)
@@ -527,6 +534,39 @@ vec_add(PyObject *obj1, PyObject *obj2)
 
 	// obj1 and obj2 can be interpreted as a vec
 	return pack_vec<L, T>(o + o2);
+}
+
+template<int L>
+static PyObject*
+bvec_add(PyObject* obj1, PyObject* obj2)
+{
+	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
+		return pack_vec<L, bool>(glm::vec<L, bool>(PyGLM_Number_FromPyObject<bool>(obj1)) || (((vec<L, bool>*)obj2)->super_type));
+	}
+
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<L, bool>()));
+
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for +: 'glm.vec' and ", obj1);
+		return NULL;
+	}
+
+	glm::vec<L, bool> o = PyGLM_Vec_PTI_Get0(L, bool, obj1);
+
+	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
+		return pack_vec<L, bool>(o || glm::vec<L, bool>(PyGLM_Number_FromPyObject<bool>(obj2)));
+	}
+
+	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<L, bool>()));
+
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+
+	glm::vec<L, bool> o2 = PyGLM_Vec_PTI_Get1(L, bool, obj2);
+
+	// obj1 and obj2 can be interpreted as a vec
+	return pack_vec<L, bool>(o || o2);
 }
 
 template<int L, typename T>
@@ -593,6 +633,39 @@ vec_mul(PyObject *obj1, PyObject *obj2)
 
 	// obj1 and obj2 can be interpreted as a vec
 	return pack_vec<L, T>(o * o2);
+}
+
+template<int L>
+static PyObject*
+bvec_mul(PyObject* obj1, PyObject* obj2)
+{
+	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
+		return pack_vec<L, bool>(glm::vec<L, bool>(PyGLM_Number_FromPyObject<bool>(obj1)) && ((vec<L, bool>*)obj2)->super_type);
+	}
+
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<L, bool>()));
+
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for *: 'glm.vec' and ", obj1);
+		return NULL;
+	}
+
+	glm::vec<L, bool> o = PyGLM_Vec_PTI_Get0(L, bool, obj1);
+
+	if (PyGLM_Number_Check(obj2)) { // obj1 is self, obj2 is a scalar
+		return pack_vec<L, bool>(o && glm::vec<L, bool>(PyGLM_Number_FromPyObject<bool>(obj2)));
+	}
+
+	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<L, bool>()));
+
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+
+	glm::vec<L, bool> o2 = PyGLM_Vec_PTI_Get1(L, bool, obj2);
+
+	// obj1 and obj2 can be interpreted as a vec
+	return pack_vec<L, bool>(o && o2);
 }
 
 template<int L, typename T>
@@ -884,6 +957,21 @@ vec_iadd(vec<L, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+template<int L>
+static PyObject*
+bvec_iadd(vec<L, bool>* self, PyObject* obj)
+{
+	vec<L, bool>* temp = (vec<L, bool>*)bvec_add<L>((PyObject*)self, obj);
+
+	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
+
+	self->super_type = temp->super_type;
+
+	Py_DECREF(temp);
+	Py_INCREF(self);
+	return (PyObject*)self;
+}
+
 template<int L, typename T>
 static PyObject *
 vec_isub(vec<L, T> *self, PyObject *obj)
@@ -904,6 +992,21 @@ static PyObject *
 vec_imul(vec<L, T> *self, PyObject *obj)
 {
 	vec<L, T> * temp = (vec<L, T>*)vec_mul<L, T>((PyObject*)self, obj);
+
+	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
+
+	self->super_type = temp->super_type;
+
+	Py_DECREF(temp);
+	Py_INCREF(self);
+	return (PyObject*)self;
+}
+
+template<int L>
+static PyObject*
+bvec_imul(vec<L, bool>* self, PyObject* obj)
+{
+	vec<L, bool>* temp = (vec<L, bool>*)bvec_mul<L>((PyObject*)self, obj);
 
 	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 

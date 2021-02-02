@@ -61,11 +61,17 @@ static int vec_contains(vec<L, T> * self, PyObject * value);
 template<int L, typename T>
 static PyObject * vec_add(PyObject *obj1, PyObject *obj2);
 
+template<int L>
+static PyObject* bvec_add(PyObject* obj1, PyObject* obj2);
+
 template<int L, typename T>
 static PyObject * vec_sub(PyObject *obj1, PyObject *obj2);
 
 template<int L, typename T>
 static PyObject * vec_mul(PyObject *obj1, PyObject *obj2);
+
+template<int L>
+static PyObject* bvec_mul(PyObject* obj1, PyObject* obj2);
 
 template<int L, typename T>
 static PyObject * vec_mod(PyObject *obj1, PyObject *obj2);
@@ -79,6 +85,9 @@ static PyObject * vec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3);
 template<int L, typename T>
 static PyObject * vec_neg(vec<L, T> *obj);
 
+template<int L>
+static PyObject* bvec_neg(vec<L, bool>* obj);
+
 template<int L, typename T>
 static PyObject * vec_pos(vec<L, T> *obj);
 
@@ -90,11 +99,17 @@ static PyObject* vec_matmul(PyObject* obj1, PyObject* obj2);
 template<int L, typename T>
 static PyObject * vec_iadd(vec<L, T>* self, PyObject *obj);
 
+template<int L>
+static PyObject* bvec_iadd(vec<L, bool>* self, PyObject* obj);
+
 template<int L, typename T>
 static PyObject * vec_isub(vec<L, T>* self, PyObject *obj);
 
 template<int L, typename T>
 static PyObject * vec_imul(vec<L, T>* self, PyObject *obj);
+
+template<int L>
+static PyObject* bvec_imul(vec<L, bool>* self, PyObject* obj);
 
 template<int L, typename T>
 static PyObject * vec_imod(vec<L, T>* self, PyObject *obj);
