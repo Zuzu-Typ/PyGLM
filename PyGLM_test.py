@@ -195,7 +195,10 @@ def get_args(arg_string, type_, rand_func=None):
                 T = prefixes[suffixes.index(type_)]
 
             L = int(arg[1])
-            args.append(getattr(glm, "{T}vec{L}".format(T=T, L=L))(*([rand_func()] * L)))
+            rf = rand_func
+            if T == "b":
+                rf = lambda: random.choice((True, False))
+            args.append(getattr(glm, "{T}vec{L}".format(T=T, L=L))(*(rf() for x in range(L))))
 
         elif "P" in arg:
             if len(arg) == 3 and arg[2] in "fFi":
@@ -561,7 +564,7 @@ def test_repr_eval():
 
 # neg #
 def test_neg():
-    for obj in gen_obj("#MV_M_Q__fFiqsu"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuB"):
         fassert(obj.__neg__, ())
         assert (-glm.array(obj))[0] == -obj, obj
 #/neg #
@@ -582,7 +585,7 @@ def test_abs():
 
 # add #
 def test_add():
-    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSUB"):
         fassert(obj.__add__, (obj,))
         assert (glm.array(obj) + glm.array(obj))[0] == obj + obj, obj
         assert (glm.array(obj) + obj)[0] == obj + obj, obj
@@ -604,7 +607,7 @@ def test_sub():
 
 # mul #
 def test_mul():
-    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSUB"):
         fassert(obj.__mul__, (1,))
         assert (glm.array(obj) * glm.array(glm.array(obj).ctype, 1))[0] == obj * 1, obj
         assert (glm.array(obj) * 1)[0] == obj * 1, obj
@@ -692,7 +695,7 @@ def test_matmul():
 
 # iadd #
 def test_iadd():
-    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSUB"):
         fassert(obj.__iadd__, (obj,))
     
     arr = glm.array(glm.mat4())
@@ -708,7 +711,7 @@ def test_isub():
 
 # imul #
 def test_imul():
-    for obj in gen_obj("#MV_M_Q__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M_Q__fFiqsuIQSUB"):
         fassert(obj.__imul__, (1,))
 
     arr = glm.array(glm.mat4())
@@ -1613,7 +1616,7 @@ def test_packing():
 
 # random #
 def test_random():
-    for args in gen_args("NN_VV__fFiqsuIQSU"):
+    for args in gen_args("#xNN_VV__fFiqsuIQSU"):
         comp = args[0] > args[1]
         if type(comp) != bool: comp = any(comp)
         if len(args) == 2 and comp:
