@@ -34,7 +34,7 @@ static PyMethodDef glmArray_methods[] = {
 	{ "as_reference",	(PyCFunction)glmArray_as_reference,		METH_O | METH_STATIC,		glmArray_as_reference_docstr },
 	{ "zeros",			(PyCFunction)glmArray_zeros,			METH_VARARGS | METH_STATIC,	glmArray_zeros_docstr },
 	{ "filter",			(PyCFunction)glmArray_filter,			METH_O,						glmArray_filter_docstr },
-	{ "map",			(PyCFunction)glmArray_map,				METH_VARARGS,				glmArray_map_docstr	},
+	{ "map",			(PyCFunction)glmArray_map,              METH_VARARGS|METH_KEYWORDS, glmArray_map_docstr	},
 	{ "sort",			(PyCFunction)glmArray_sort,				METH_O,						glmArray_sort_docstr },
 	{ "concat",			(PyCFunction)glmArray_concat,			METH_O,						glmArray_concat_docstr },
 	{ "iconcat",		(PyCFunction)glmArray_inplace_concat,	METH_O,						glmArray_inplace_concat_docstr },

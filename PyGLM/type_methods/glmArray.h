@@ -1478,9 +1478,9 @@ static PyObject*
 glmArray_repr_vec(glmArray* self) {
 	const int L = self->getShape();
 
-	const char* subtypeName = self->subtype->tp_name + 4;
+	const char* subtypeName = PyGLM_GET_NAME(self->subtype->tp_name);
 
-	const char* arrayTypeName = glmArrayType.tp_name + 4;
+	const char* arrayTypeName = PyGLM_GET_NAME(glmArrayType.tp_name);
 
 	const uint64 arrayNameLength = strlen(arrayTypeName);
 	const uint64 subtypeNameLength = strlen(subtypeName);
@@ -3080,7 +3080,7 @@ static PyObject* glmArray_filter(glmArray* self, PyObject* func) {
 	return NULL;
 }
 
-static PyObject* glmArray_map_binary(glmArray* self, PyObject* func, PyObject* arg) {
+static PyObject* glmArray_map_binary(glmArray* self, PyObject* func, PyObject* arg, PyObject* requested_ctypes_type) {
 	std::vector<PyObject*> outObjects{};
 
 	PyObject* argTuple = PyTuple_New(2);
@@ -3171,8 +3171,11 @@ static PyObject* glmArray_map_binary(glmArray* self, PyObject* func, PyObject* a
 			PyObject* firstOutObject = outObjects[0];
 			if (PyLong_CheckExact(firstOutObject) || PyFloat_CheckExact(firstOutObject) || PyBool_Check(firstOutObject)) {
 				// for number values
+				if (requested_ctypes_type == NULL) {
+					requested_ctypes_type = glmArray_getCtype(self, NULL);
+				}
 				PyObject* fromNumbersArgs = PyTuple_New(outObjectsSize + 1);
-				PyTuple_SET_ITEM(fromNumbersArgs, 0, glmArray_getCtype(self, NULL));
+				PyTuple_SET_ITEM(fromNumbersArgs, 0, requested_ctypes_type);
 
 				for (size_t i = 0; i < outObjectsSize; i++) {
 					PyTuple_SET_ITEM(fromNumbersArgs, i + 1, outObjects[i]);
@@ -3215,7 +3218,7 @@ static PyObject* glmArray_map_binary(glmArray* self, PyObject* func, PyObject* a
 	return NULL;
 }
 
-static PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* arg1, PyObject* arg2) {
+static PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* arg1, PyObject* arg2, PyObject* requested_ctypes_type) {
 	std::vector<PyObject*> outObjects{};
 
 	PyObject* argTuple = PyTuple_New(3);
@@ -3399,8 +3402,11 @@ static PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* 
 			PyObject* firstOutObject = outObjects[0];
 			if (PyLong_CheckExact(firstOutObject) || PyFloat_CheckExact(firstOutObject) || PyBool_Check(firstOutObject)) {
 				// for number values
+				if (requested_ctypes_type == NULL) {
+					requested_ctypes_type = glmArray_getCtype(self, NULL);
+				}
 				PyObject* fromNumbersArgs = PyTuple_New(outObjectsSize + 1);
-				PyTuple_SET_ITEM(fromNumbersArgs, 0, glmArray_getCtype(self, NULL));
+				PyTuple_SET_ITEM(fromNumbersArgs, 0, requested_ctypes_type);
 
 				for (size_t i = 0; i < outObjectsSize; i++) {
 					PyTuple_SET_ITEM(fromNumbersArgs, i + 1, outObjects[i]);
@@ -3443,7 +3449,7 @@ static PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* 
 	return NULL;
 }
 
-static PyObject* glmArray_map_varargs(glmArray* self, PyObject* args) {
+static PyObject* glmArray_map_varargs(glmArray* self, PyObject* args, PyObject* requested_ctypes_type) {
 	Py_ssize_t argsSize = PyTuple_GET_SIZE(args);
 
 	PyObject* func = PyTuple_GET_ITEM(args, 0);
@@ -3525,8 +3531,11 @@ static PyObject* glmArray_map_varargs(glmArray* self, PyObject* args) {
 			PyObject* firstOutObject = outObjects[0];
 			if (PyLong_CheckExact(firstOutObject) || PyFloat_CheckExact(firstOutObject) || PyBool_Check(firstOutObject)) {
 				// for number values
+				if (requested_ctypes_type == NULL) {
+					requested_ctypes_type = glmArray_getCtype(self, NULL);
+				}
 				PyObject* fromNumbersArgs = PyTuple_New(outObjectsSize + 1);
-				PyTuple_SET_ITEM(fromNumbersArgs, 0, glmArray_getCtype(self, NULL));
+				PyTuple_SET_ITEM(fromNumbersArgs, 0, requested_ctypes_type);
 
 				for (size_t i = 0; i < outObjectsSize; i++) {
 					PyTuple_SET_ITEM(fromNumbersArgs, i + 1, outObjects[i]);
@@ -3571,7 +3580,19 @@ static PyObject* glmArray_map_varargs(glmArray* self, PyObject* args) {
 
 
 
-static PyObject* glmArray_map(glmArray* self, PyObject* args) {
+static PyObject* glmArray_map(glmArray* self, PyObject* args, PyObject* kwargs) {
+	PyObject* requested_ctypes_type = NULL;
+
+	if (kwargs != NULL) {
+		PyGLM_ASSERT(PyDict_Size(kwargs) == 1, "Invalid keyword arguments for map()");
+
+		requested_ctypes_type = PyDict_GetItemString(kwargs, "ctype");
+
+		PyGLM_ASSERT(requested_ctypes_type != NULL, "Invalid keyword argument for map()");
+
+		PyGLM_ASSERT(PyType_Check(requested_ctypes_type) && ((PyTypeObject*)requested_ctypes_type)->tp_dealloc == ctypes_dealloc, "Invalid argument value for 'ctype'. Expected a ctypes data type.");
+	}
+
 	Py_ssize_t argsSize = PyTuple_GET_SIZE(args);
 
 	switch (argsSize) {
@@ -3581,11 +3602,11 @@ static PyObject* glmArray_map(glmArray* self, PyObject* args) {
 	case 1:
 		break;
 	case 2:
-		return glmArray_map_binary(self, PyTuple_GET_ITEM(args, 0), PyTuple_GET_ITEM(args, 1));
+		return glmArray_map_binary(self, PyTuple_GET_ITEM(args, 0), PyTuple_GET_ITEM(args, 1), requested_ctypes_type);
 	case 3:
-		return glmArray_map_ternary(self, PyTuple_GET_ITEM(args, 0), PyTuple_GET_ITEM(args, 1), PyTuple_GET_ITEM(args, 2));
+		return glmArray_map_ternary(self, PyTuple_GET_ITEM(args, 0), PyTuple_GET_ITEM(args, 1), PyTuple_GET_ITEM(args, 2), requested_ctypes_type);
 	default:
-		return glmArray_map_varargs(self, args);
+		return glmArray_map_varargs(self, args, requested_ctypes_type);
 	}
 
 	PyObject* func = PyTuple_GET_ITEM(args, 0);
@@ -3635,8 +3656,11 @@ static PyObject* glmArray_map(glmArray* self, PyObject* args) {
 			PyObject* firstOutObject = outObjects[0];
 			if (PyLong_CheckExact(firstOutObject) || PyFloat_CheckExact(firstOutObject) || PyBool_Check(firstOutObject)) {
 				// for number values
+				if (requested_ctypes_type == NULL) {
+					requested_ctypes_type = glmArray_getCtype(self, NULL);
+				}
 				PyObject* fromNumbersArgs = PyTuple_New(outObjectsSize + 1);
-				PyTuple_SET_ITEM(fromNumbersArgs, 0, glmArray_getCtype(self, NULL));
+				PyTuple_SET_ITEM(fromNumbersArgs, 0, requested_ctypes_type);
 
 				for (size_t i = 0; i < outObjectsSize; i++) {
 					PyTuple_SET_ITEM(fromNumbersArgs, i + 1, outObjects[i]);

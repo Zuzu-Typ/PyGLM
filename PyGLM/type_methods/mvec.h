@@ -531,10 +531,10 @@ template<typename T>
 static PyObject *
 mvec2_str(mvec<2, T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 32 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 32 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %12.6g, %12.6g )", &name[4], (double)self->super_type->x, (double)self->super_type->y);
+	snprintf(out, required_space, "%s( %12.6g, %12.6g )", name, (double)self->super_type->x, (double)self->super_type->y);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -544,10 +544,10 @@ template<typename T>
 static PyObject *
 mvec3_str(mvec<3, T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 46 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 46 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type->x, (double)self->super_type->y, (double)self->super_type->z);
+	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g )", name, (double)self->super_type->x, (double)self->super_type->y, (double)self->super_type->z);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -557,10 +557,10 @@ template<typename T>
 static PyObject *
 mvec4_str(mvec<4, T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 60 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 60 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type->x, (double)self->super_type->y, (double)self->super_type->z, (double)self->super_type->w);
+	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", name, (double)self->super_type->x, (double)self->super_type->y, (double)self->super_type->z, (double)self->super_type->w);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;

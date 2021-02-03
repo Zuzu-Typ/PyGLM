@@ -1102,10 +1102,10 @@ template<typename T>
 static PyObject *
 vec1_str(vec<1, T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 17 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 17 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %12.6g )", &name[4], (double)self->super_type.x);
+	snprintf(out, required_space, "%s( %12.6g )", name, (double)self->super_type.x);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1115,10 +1115,10 @@ template<typename T>
 static PyObject *
 vec2_str(vec<2, T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 31 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 31 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %12.6g, %12.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y);
+	snprintf(out, required_space, "%s( %12.6g, %12.6g )", name, (double)self->super_type.x, (double)self->super_type.y);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1128,10 +1128,10 @@ template<typename T>
 static PyObject *
 vec3_str(vec<3, T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 45 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 45 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
+	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g )", name, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1141,10 +1141,10 @@ template<typename T>
 static PyObject *
 vec4_str(vec<4, T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 59 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 59 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
+	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", name, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1154,10 +1154,10 @@ template<typename T>
 static PyObject *
 vec1_repr(vec<1, T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 17 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 17 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g )", &name[4], (double)self->super_type.x);
+	snprintf(out, required_space, "%s( %.6g )", name, (double)self->super_type.x);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1167,10 +1167,10 @@ template<typename T>
 static PyObject *
 vec2_repr(vec<2, T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 31 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 31 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y);
+	snprintf(out, required_space, "%s( %.6g, %.6g )", name, (double)self->super_type.x, (double)self->super_type.y);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1180,10 +1180,10 @@ template<typename T>
 static PyObject *
 vec3_repr(vec<3, T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 45 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 45 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g )", name, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -1193,10 +1193,10 @@ template<typename T>
 static PyObject *
 vec4_repr(vec<4, T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 59 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 59 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g )", name, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z, (double)self->super_type.w);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
