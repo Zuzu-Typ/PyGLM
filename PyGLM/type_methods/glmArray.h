@@ -3583,7 +3583,7 @@ static PyObject* glmArray_map_varargs(glmArray* self, PyObject* args, PyObject* 
 static PyObject* glmArray_map(glmArray* self, PyObject* args, PyObject* kwargs) {
 	PyObject* requested_ctypes_type = NULL;
 
-	if (kwargs != NULL) {
+	if (kwargs != NULL && PyDict_Size(kwargs) != 0) {
 		PyGLM_ASSERT(PyDict_Size(kwargs) == 1, "Invalid keyword arguments for map()");
 
 		requested_ctypes_type = PyDict_GetItemString(kwargs, "ctype");
