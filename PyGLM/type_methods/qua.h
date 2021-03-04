@@ -350,10 +350,10 @@ template<typename T>
 static PyObject *
 qua_str(qua<T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 59 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 59 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", &name[4], (double)self->super_type.w, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
+	snprintf(out, required_space, "%s( %12.6g, %12.6g, %12.6g, %12.6g )", name, (double)self->super_type.w, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;
@@ -363,10 +363,10 @@ template<typename T>
 static PyObject *
 qua_repr(qua<T>* self)
 {
-	const char* name = ((PyObject*)self)->ob_type->tp_name;
-	size_t required_space = 59 + strlen(name) - 4;
+	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
+	size_t required_space = 59 + strlen(name);
 	char * out = (char*)PyMem_Malloc((required_space) * sizeof(char));
-	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g )", &name[4], (double)self->super_type.w, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
+	snprintf(out, required_space, "%s( %.6g, %.6g, %.6g, %.6g )", name, (double)self->super_type.w, (double)self->super_type.x, (double)self->super_type.y, (double)self->super_type.z);
 	PyObject* po = PyUnicode_FromString(out);
 	PyMem_Free(out);
 	return po;

@@ -245,6 +245,9 @@ If the mapping function returns \code\None\code\, the element is discarded (much
 If it returns a single value, that value becomes a new element of the resulting array.
 If it returns a tuple, all of the tuple's items are added to the resulting array.
 
+When the mapping function returns numbers, they are interpreted as ctypes numbers of the same type as the array that \code\map\code\ was called on.
+If you want to specify a custom ctypes type to use, there is a keyword argument called \code\ctype\code\ that can be used to do that.
+
 Example:
 \code Python\
 >>> array(c_float, 1, 2, 3).map(lambda x: x + 1)
@@ -281,6 +284,9 @@ array(vec3(0.267261, 0.534522, 0.801784), vec3(0.455842, 0.569803, 0.683764))
 >>> arr5 = array(vec3(7, 8, 9), vec3(10,11,12))
 >>> arr4.map(dot, arr5)
 array(c_float(50), c_float(167))
+
+>>> arr4.map(dot, arr5, ctype = c_int32)
+array(c_int32(50), c_int32(167))
 \code\
 
 \h3\Sort\h3\

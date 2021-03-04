@@ -147,14 +147,15 @@ PyDoc_STRVAR(glmArray_filter_docstr,
 static PyObject* glmArray_filter(glmArray* self, PyObject* func);
 
 PyDoc_STRVAR(glmArray_map_docstr,
-	"map(func: callable) -> array\n"
+	"map(func: callable[, *args, ctype: type = None]) -> array\n"
 	"	Maps all elements of this array to the result of `func`.\n"
 	"	i.e. `func` is called with every element of the source array and the return value is used\n"
 	"	to construct the new array. Return values of `None` are discarded and when the return value\n"
-	"	is a tuple, the elements of the tuple are all added to the target array."
+	"	is a tuple, the elements of the tuple are all added to the target array.\n"
+	"	`ctype` can be used to specify which ctypes type to use when `func` outputs numbers."
 );
 
-static PyObject* glmArray_map(glmArray* self, PyObject* func);
+static PyObject* glmArray_map(glmArray* self, PyObject* func, PyObject* kwargs);
 
 PyDoc_STRVAR(glmArray_sort_docstr,
 	"sort(func: callable) -> array\n"
