@@ -28,7 +28,29 @@ lerp_(PyObject*, PyObject* args) {
 	return NULL;
 }
 
-PyGLM_MAKE_GLM_FUNC_QQN__tfF(slerp)
+static PyObject*
+slerp_(PyObject*, PyObject * args) {
+	PyObject *arg1, *arg2, *arg3;
+	PyGLM_Arg_Unpack_3O(args, "slerp", arg1, arg2, arg3);
+	if (PyGLM_Number_Check(arg3)) {
+		PyGLM_PTI_Init0(arg1, PyGLM_T_QUA | PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);
+		PyGLM_PTI_Init1(arg2, PyGLM_T_QUA | PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);
+		if (PyGLM_Qua_PTI_Check0(float, arg1) && PyGLM_Qua_PTI_Check1(float, arg2)) {
+			return pack(glm::slerp(PyGLM_Qua_PTI_Get0(float, arg1), PyGLM_Qua_PTI_Get1(float, arg2), PyGLM_Number_FromPyObject<float>(arg3)));
+		}
+		if (PyGLM_Qua_PTI_Check0(double, arg1) && PyGLM_Qua_PTI_Check1(double, arg2)) {
+			return pack(glm::slerp(PyGLM_Qua_PTI_Get0(double, arg1), PyGLM_Qua_PTI_Get1(double, arg2), PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
+			return pack(glm::slerp(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2), PyGLM_Number_FromPyObject<float>(arg3)));
+		}
+		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
+			return pack(glm::slerp(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2), PyGLM_Number_FromPyObject<double>(arg3)));
+		}
+	}
+	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for slerp()");
+	return NULL;
+}
 
 PyGLM_MAKE_GLM_FUNC_Q(conjugate)
 
@@ -43,7 +65,9 @@ PyDoc_STRVAR(lerp_docstr,
 PyDoc_STRVAR(slerp_docstr,
 	"slerp(x: quat, y: quat, a: float) -> quat\n"
 	"	Spherical linear interpolation of two quaternions. The interpolation always take the short\n"
-	"	path and the rotation is performed at constant speed."
+	"	path and the rotation is performed at constant speed.\n"
+	"slerp(x: vec3, y: vec3, a: float) -> vec3\n"
+	"	Returns Spherical interpolation between two vectors."
 );
 
 #define QUATERNION_COMMON_METHODS \

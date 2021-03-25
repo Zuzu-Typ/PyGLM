@@ -23,3 +23,6 @@ Provides common functions for quaternion types\.
 &emsp;&emsp;Spherical linear interpolation of two quaternions\. The interpolation always take the short  
 &emsp;&emsp;path and the rotation is performed at constant speed\.  
   
+#### <code>glm.<code>**slerp**(**x**: *vec3*, **y**: *vec3*, **a**: *float*) -\> *vec3*</code></code>  
+&emsp;&emsp;Returns Spherical interpolation between two vectors\.  
+  

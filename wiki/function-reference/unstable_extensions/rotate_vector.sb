@@ -1,0 +1,66 @@
+\c\This file was generated using a tool\c\
+\h1\rotate_vector methods\h1\
+The following methods are all part of the \b\rotate_vector methods\b\.
+Function to directly rotate a vector.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #orientation-function\\b\orientation\b\ function\url\
+\-\\url #rotate-function\\b\rotate\b\ function\url\
+\-\\url #rotatex-function\\b\rotateX\b\ function\url\
+\-\\url #rotatey-function\\b\rotateY\b\ function\url\
+\-\\url #rotatez-function\\b\rotateZ\b\ function\url\
+\-\\url #slerp-function\\b\slerp\b\ function\url\
+\ul\
+\h3\orientation() function\h3\
+\raw\#### <code>glm.<code>**orientation**(**Normal**: *vec3*, **Up**: *vec3*) -\\> *mat4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Build a rotation matrix from a normal and a up vector.
+
+\h3\rotate() function\h3\
+\raw\#### <code>glm.<code>**rotate**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a rotation 4 x 4 matrix created from an axis vector and an angle.
+
+\raw\#### <code>glm.<code>**rotate**(**m**: *mat3x3*, **angle**: *number*) -\\> *mat3x3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a rotation 3 x 3 matrix created from an angle.
+\raw\&emsp;&emsp;\raw\\code\m\code\ is the input matrix multiplied by this translation matrix
+
+\raw\#### <code>glm.<code>**rotate**(**v**: *vec2*, **angle**: *float*) -\\> *vec2*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a two dimensional vector.
+
+\raw\#### <code>glm.<code>**rotate**(**v**: *vec3*, **angle**: *float*, **normal**: *vec3*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a three dimensional vector around an axis.
+
+\raw\#### <code>glm.<code>**rotate**(**v**: *vec4*, **angle**: *float*, **normal**: *vec3*) -\\> *vec4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a four dimensional vector around an axis.
+
+\raw\#### <code>glm.<code>**rotate**(**q**: *quat*, **angle**: *float*, **axis**: *vec3*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotates a quaternion from a vector of 3 components axis and an angle.
+
+\h3\rotateX() function\h3\
+\raw\#### <code>glm.<code>**rotateX**(**v**: *vec3*, **angle**: *float*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a three dimensional vector around the X axis.
+
+\raw\#### <code>glm.<code>**rotateX**(**v**: *vec4*, **angle**: *float*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a four dimensional vector around the X axis.
+
+\h3\rotateY() function\h3\
+\raw\#### <code>glm.<code>**rotateY**(**v**: *vec3*, **angle**: *float*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a three dimensional vector around the Y axis.
+
+\raw\#### <code>glm.<code>**rotateY**(**v**: *vec4*, **angle**: *float*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a four dimensional vector around the Y axis.
+
+\h3\rotateZ() function\h3\
+\raw\#### <code>glm.<code>**rotateZ**(**v**: *vec3*, **angle**: *float*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a three dimensional vector around the Z axis.
+
+\raw\#### <code>glm.<code>**rotateZ**(**v**: *vec4*, **angle**: *float*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a four dimensional vector around the Z axis.
+
+\h3\slerp() function\h3\
+\raw\#### <code>glm.<code>**slerp**(**x**: *quat*, **y**: *quat*, **a**: *float*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Spherical linear interpolation of two quaternions. The interpolation always take the short
+\raw\&emsp;&emsp;\raw\path and the rotation is performed at constant speed.
+
+\raw\#### <code>glm.<code>**slerp**(**x**: *vec3*, **y**: *vec3*, **a**: *float*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns Spherical interpolation between two vectors.
+

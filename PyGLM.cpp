@@ -149,6 +149,9 @@ static PyMethodDef glmmethods[] = {
 	// matrix_transform_2d
 	MATRIX_TRANSFORM_2D_METHODS,
 
+	// rotate_vector
+	ROTATE_VECTOR_METHODS,
+
 	// unary
 	UNARY_METHODS,
 

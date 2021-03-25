@@ -20,6 +20,18 @@ Defines functions that generate common 2d transformation matrices\.
 &emsp;&emsp;Builds a rotation 3 x 3 matrix created from an angle\.  
 &emsp;&emsp;``` m ``` is the input matrix multiplied by this translation matrix  
   
+#### <code>glm.<code>**rotate**(**v**: *vec2*, **angle**: *float*) -\> *vec2*</code></code>  
+&emsp;&emsp;Rotate a two dimensional vector\.  
+  
+#### <code>glm.<code>**rotate**(**v**: *vec3*, **angle**: *float*, **normal**: *vec3*) -\> *vec3*</code></code>  
+&emsp;&emsp;Rotate a three dimensional vector around an axis\.  
+  
+#### <code>glm.<code>**rotate**(**v**: *vec4*, **angle**: *float*, **normal**: *vec3*) -\> *vec4*</code></code>  
+&emsp;&emsp;Rotate a four dimensional vector around an axis\.  
+  
+#### <code>glm.<code>**rotate**(**q**: *quat*, **angle**: *float*, **axis**: *vec3*) -\> *quat*</code></code>  
+&emsp;&emsp;Rotates a quaternion from a vector of 3 components axis and an angle\.  
+  
 ### scale\(\) function  
 #### <code>glm.<code>**scale**(**m**: *mat4x4*, **v**: *vec3*) -\> *mat4x4*</code></code>  
 &emsp;&emsp;Builds a scale 4 x 4 matrix created from 3 scalars\.  
