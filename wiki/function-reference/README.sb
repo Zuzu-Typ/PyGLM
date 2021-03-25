@@ -400,6 +400,13 @@ This means that you can call the \code\glm.abs\code\ function with a \code\float
 \---\ \url unstable_extensions/matrix_transform_2d.md#shearX-function \\b\shearX\b\ function \ url\
 \---\ \url unstable_extensions/matrix_transform_2d.md#shearY-function \\b\shearY\b\ function \ url\
 \---\ \url unstable_extensions/matrix_transform_2d.md#translate-function \\b\translate\b\ function \ url\
+\--\ \url unstable_extensions/rotate_vector.md \rotate_vector methods\ url\
+\---\ \url unstable_extensions/rotate_vector.md#orientation-function \\b\orientation\b\ function \ url\
+\---\ \url unstable_extensions/rotate_vector.md#rotate-function \\b\rotate\b\ function \ url\
+\---\ \url unstable_extensions/rotate_vector.md#rotateX-function \\b\rotateX\b\ function \ url\
+\---\ \url unstable_extensions/rotate_vector.md#rotateY-function \\b\rotateY\b\ function \ url\
+\---\ \url unstable_extensions/rotate_vector.md#rotateZ-function \\b\rotateZ\b\ function \ url\
+\---\ \url unstable_extensions/rotate_vector.md#slerp-function \\b\slerp\b\ function \ url\
 \-\ \url other/README.md\other\url\
 \--\ \url other/other.md \other methods\ url\
 \---\ \url other/other.md#add-function \\b\add\b\ function \ url\

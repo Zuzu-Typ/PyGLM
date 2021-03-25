@@ -2,7 +2,7 @@
 
 #include "../all.h"
 
-static PyObject*\
+static PyObject*
 decompose_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3, *arg4, *arg5, *arg6;
 	PyGLM_Arg_Unpack_6O(args, "decompose", arg1, arg2, arg3, arg4, arg5, arg6);

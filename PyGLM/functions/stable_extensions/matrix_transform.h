@@ -134,7 +134,7 @@ rotate_(PyObject*, PyObject* args) {
 	if (!PyArg_UnpackTuple(args, "rotate", 2, 3, &arg1, &arg2, &arg3)) return NULL;
 	if (arg3 == NULL) {
 		if (PyGLM_Number_Check(arg2)) {
-			PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FD);
+			PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_T_MAT | PyGLM_SHAPE_2 | PyGLM_SHAPE_3x3 | PyGLM_DT_FD);
 			if (PyGLM_Mat_PTI_Check0(3, 3, float, arg1)) {
 				glm::mat<3, 3, float> m = PyGLM_Mat_PTI_Get0(3, 3, float, arg1);
 				return pack(glm::rotate(m, PyGLM_Number_FromPyObject<float>(arg2)));
@@ -143,10 +143,16 @@ rotate_(PyObject*, PyObject* args) {
 				glm::mat<3, 3, double> m = PyGLM_Mat_PTI_Get0(3, 3, double, arg1);
 				return pack(glm::rotate(m, PyGLM_Number_FromPyObject<double>(arg2)));
 			}
+			if (PyGLM_Vec_PTI_Check0(2, float, arg1)) {
+				return pack(glm::rotate(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
+			}
+			if (PyGLM_Vec_PTI_Check0(2, double, arg1)) {
+				return pack(glm::rotate(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
+			}
 		}
 	}
 	else if (PyGLM_Number_Check(arg2)) {
-		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_T_QUA | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);
+		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_T_MAT | PyGLM_T_QUA | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);
 		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);
 		if (PyGLM_Mat_PTI_Check0(4, 4, float, arg1) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
 			glm::mat4x4 m = PyGLM_Mat_PTI_Get0(4, 4, float, arg1);
@@ -167,6 +173,18 @@ rotate_(PyObject*, PyObject* args) {
 			glm::dquat q = PyGLM_Qua_PTI_Get0(float, arg1);
 			glm::dvec3 axis = PyGLM_Vec_PTI_Get2(3, double, arg3);
 			return pack_qua(glm::rotate(q, PyGLM_Number_FromPyObject<double>(arg2), axis));
+		}
+		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
+			return pack(glm::rotate(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Vec_PTI_Get2(3, float, arg3)));
+		}
+		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
+			return pack(glm::rotate(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Vec_PTI_Get2(3, double, arg3)));
+		}
+		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
+			return pack(glm::rotate(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Vec_PTI_Get2(3, float, arg3)));
+		}
+		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
+			return pack(glm::rotate(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Vec_PTI_Get2(3, double, arg3)));
 		}
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for rotate()");
@@ -227,7 +245,15 @@ PyDoc_STRVAR(rotate_docstr,
 	"	Builds a rotation 4 x 4 matrix created from an axis vector and an angle.\n"
 	"rotate(m: mat3x3, angle: number) -> mat3x3\n"
 	"	Builds a rotation 3 x 3 matrix created from an angle.\n"
-	"	`m` is the input matrix multiplied by this translation matrix"
+	"	`m` is the input matrix multiplied by this translation matrix\n"
+	"rotate(v: vec2, angle: float) -> vec2\n"
+	"	Rotate a two dimensional vector.\n"
+	"rotate(v: vec3, angle: float, normal: vec3) -> vec3\n"
+	"	Rotate a three dimensional vector around an axis.\n"
+	"rotate(v: vec4, angle: float, normal: vec3) -> vec4\n"
+	"	Rotate a four dimensional vector around an axis.\n"
+	"rotate(q: quat, angle: float, axis: vec3) -> quat\n"
+	"	Rotates a quaternion from a vector of 3 components axis and an angle."
 );
 PyDoc_STRVAR(scale_docstr,
 	"scale(m: mat4x4, v: vec3) -> mat4x4\n"

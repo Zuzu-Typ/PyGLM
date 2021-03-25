@@ -21,3 +21,6 @@ Provides common functions for quaternion types.
 \raw\&emsp;&emsp;\raw\Spherical linear interpolation of two quaternions. The interpolation always take the short
 \raw\&emsp;&emsp;\raw\path and the rotation is performed at constant speed.
 
+\raw\#### <code>glm.<code>**slerp**(**x**: *vec3*, **y**: *vec3*, **a**: *float*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns Spherical interpolation between two vectors.
+

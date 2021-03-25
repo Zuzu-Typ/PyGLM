@@ -38,6 +38,18 @@ Defines functions that generate common transformation matrices.
 \raw\&emsp;&emsp;\raw\Builds a rotation 3 x 3 matrix created from an angle.
 \raw\&emsp;&emsp;\raw\\code\m\code\ is the input matrix multiplied by this translation matrix
 
+\raw\#### <code>glm.<code>**rotate**(**v**: *vec2*, **angle**: *float*) -\\> *vec2*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a two dimensional vector.
+
+\raw\#### <code>glm.<code>**rotate**(**v**: *vec3*, **angle**: *float*, **normal**: *vec3*) -\\> *vec3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a three dimensional vector around an axis.
+
+\raw\#### <code>glm.<code>**rotate**(**v**: *vec4*, **angle**: *float*, **normal**: *vec3*) -\\> *vec4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotate a four dimensional vector around an axis.
+
+\raw\#### <code>glm.<code>**rotate**(**q**: *quat*, **angle**: *float*, **axis**: *vec3*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Rotates a quaternion from a vector of 3 components axis and an angle.
+
 \h3\rotate_slow() function\h3\
 \raw\#### <code>glm.<code>**rotate_slow**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\\> *mat4x4*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a rotation 4 x 4 matrix created from an axis vector and an angle.

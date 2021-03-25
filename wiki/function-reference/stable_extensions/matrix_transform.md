@@ -40,6 +40,18 @@ Defines functions that generate common transformation matrices\.
 &emsp;&emsp;Builds a rotation 3 x 3 matrix created from an angle\.  
 &emsp;&emsp;``` m ``` is the input matrix multiplied by this translation matrix  
   
+#### <code>glm.<code>**rotate**(**v**: *vec2*, **angle**: *float*) -\> *vec2*</code></code>  
+&emsp;&emsp;Rotate a two dimensional vector\.  
+  
+#### <code>glm.<code>**rotate**(**v**: *vec3*, **angle**: *float*, **normal**: *vec3*) -\> *vec3*</code></code>  
+&emsp;&emsp;Rotate a three dimensional vector around an axis\.  
+  
+#### <code>glm.<code>**rotate**(**v**: *vec4*, **angle**: *float*, **normal**: *vec3*) -\> *vec4*</code></code>  
+&emsp;&emsp;Rotate a four dimensional vector around an axis\.  
+  
+#### <code>glm.<code>**rotate**(**q**: *quat*, **angle**: *float*, **axis**: *vec3*) -\> *quat*</code></code>  
+&emsp;&emsp;Rotates a quaternion from a vector of 3 components axis and an angle\.  
+  
 ### rotate\_slow\(\) function  
 #### <code>glm.<code>**rotate_slow**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\> *mat4x4*</code></code>  
 &emsp;&emsp;Builds a rotation 4 x 4 matrix created from an axis vector and an angle\.  

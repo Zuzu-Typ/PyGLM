@@ -20,4 +20,11 @@
     *  [**shearX** function ](matrix_transform_2d.md#shearX-function)  
     *  [**shearY** function ](matrix_transform_2d.md#shearY-function)  
     *  [**translate** function ](matrix_transform_2d.md#translate-function)  
+*  [rotate\_vector methods](rotate_vector.md)  
+    *  [**orientation** function ](rotate_vector.md#orientation-function)  
+    *  [**rotate** function ](rotate_vector.md#rotate-function)  
+    *  [**rotateX** function ](rotate_vector.md#rotateX-function)  
+    *  [**rotateY** function ](rotate_vector.md#rotateY-function)  
+    *  [**rotateZ** function ](rotate_vector.md#rotateZ-function)  
+    *  [**slerp** function ](rotate_vector.md#slerp-function)  
   

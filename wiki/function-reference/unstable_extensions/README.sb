@@ -18,4 +18,11 @@
 \--\ \url matrix_transform_2d.md#shearX-function \\b\shearX\b\ function \ url\
 \--\ \url matrix_transform_2d.md#shearY-function \\b\shearY\b\ function \ url\
 \--\ \url matrix_transform_2d.md#translate-function \\b\translate\b\ function \ url\
+\-\ \url rotate_vector.md \rotate_vector methods\ url\
+\--\ \url rotate_vector.md#orientation-function \\b\orientation\b\ function \ url\
+\--\ \url rotate_vector.md#rotate-function \\b\rotate\b\ function \ url\
+\--\ \url rotate_vector.md#rotateX-function \\b\rotateX\b\ function \ url\
+\--\ \url rotate_vector.md#rotateY-function \\b\rotateY\b\ function \ url\
+\--\ \url rotate_vector.md#rotateZ-function \\b\rotateZ\b\ function \ url\
+\--\ \url rotate_vector.md#slerp-function \\b\slerp\b\ function \ url\
 \ul\
