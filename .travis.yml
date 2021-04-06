@@ -81,7 +81,7 @@ deploy:
     
 env:
   global:
-  - CIBW_SKIP="cp34-*
+  - CIBW_SKIP=cp34-*
   - CIBW_BUILD=cp3?-*
   - CIBW_TEST_REQUIRES=pytest
   - CIBW_TEST_COMMAND="pytest {project}/PyGLM_test.py -v"
