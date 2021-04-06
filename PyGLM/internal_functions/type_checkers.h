@@ -405,10 +405,9 @@ struct PyGLMTypeInfo {
 		info = 0;
 
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
-		if (PyObject_CheckBuffer(obj)) {
+		if (obj->ob_type != &glmArrayType && PyObject_CheckBuffer(obj)) {
 			Py_buffer view;
-			if (PyObject_GetBuffer(obj, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1) {
-				PyBuffer_Release(&view);
+			if (PyObject_GetBuffer(obj, &view, PyBUF_RECORDS_RO | PyBUF_F_CONTIGUOUS) == -1) {
 				PyErr_Clear();
 				return;
 			}
