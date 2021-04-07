@@ -21,9 +21,6 @@ stages:
   - name: deploy
     #if: tag IS PRESENT AND repo = Zuzu-Typ/PyGLM
 
-stages:  
-  - deploy
-
 jobs:
   include:    
   - os: windows
