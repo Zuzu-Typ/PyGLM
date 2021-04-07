@@ -1,4 +1,10 @@
 language: python
+python:
+  - 3.5
+  - 3.6
+  - 3.7
+  - 3.8
+  - 3.9
   
 before_install:
   - |
@@ -9,14 +15,25 @@ before_install:
         ln -s /c/Python39/python.exe /c/Python39/python3.exe
     fi
     
-install:
-- python -m pip install twine cibuildwheel
+stages:
+  - test
+  
+  - name: deploy
+    #if: tag IS PRESENT AND repo = Zuzu-Typ/PyGLM
 
 stages:  
   - deploy
 
 jobs:
   include:    
+  - os: windows
+    language: shell
+    name: Test on Windows
+    
+  - os: osx
+    language: shell
+    name: Test on MacOS
+    
   - stage: deploy
     dist: focal
     services: docker
