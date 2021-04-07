@@ -15,6 +15,14 @@ before_install:
         ln -s /c/Python39/python.exe /c/Python39/python3.exe
     fi
     
+install:
+  - python -m pip install twine cibuildwheel
+    
+script:
+  - python3 setup.py install
+  - python3 -m pip install pytest
+  - pytest PyGLM_test.py -v
+    
 stages:
   - test
   
