@@ -1,3 +1,17 @@
+language: python
+  
+before_install:
+  - |
+    if [[ "$TRAVIS_OS_NAME" = windows ]]; then
+        choco install python --version 3.9.0
+        export PATH="/c/Python39:/c/Python39/Scripts:$PATH"
+        # make sure it's on PATH as 'python3'
+        ln -s /c/Python39/python.exe /c/Python39/python3.exe
+    fi
+    
+install:
+- python -m pip install twine cibuildwheel
+
 stages:  
   - deploy
 
