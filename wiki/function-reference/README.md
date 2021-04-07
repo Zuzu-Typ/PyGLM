@@ -23,11 +23,11 @@ If different combinations of input arguments are possible, **multiple ways to ca
   
 Example:  
 #### <code>glm.<code>**abs**(**x**: *float*) -\> *float*</code></code>  
-&emsp;&emsp;Returns x if x &gt;= 0; otherwise it returns \-x\.  
+&emsp;&emsp;Returns ``` x ``` if ``` x >= 0 ```; otherwise it returns ``` -x ```\.  
   
 #### <code>glm.<code>**abs**(**x**: *vecN*) -\> *vecN*</code></code>  
-&emsp;&emsp;For each component c of x,  
-&emsp;&emsp;Returns c if c &gt;= 0; otherwise it returns \-c\.  
+&emsp;&emsp;For each component ``` c ``` of ``` x ```,  
+&emsp;&emsp;Returns ``` c ``` if ``` c >= 0 ```; otherwise it returns ``` -c ```\.  
   
 This means that you can call the ``` glm.abs ``` function with a ``` float ``` ``` "x" ``` and it will return a ``` float ``` value  
 \(as you can tell by the <code> -> *float*</code>\), or you can call it with a vector, e\.g\. a ``` vec3 ``` and get a vector \(``` vec3 ``` in this case\) back\.  

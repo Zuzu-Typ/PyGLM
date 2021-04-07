@@ -20,11 +20,11 @@ If different combinations of input arguments are possible, \b\multiple ways to c
 
 Example:
 \raw\#### <code>glm.<code>**abs**(**x**: *float*) -\\> *float*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns x if x >= 0; otherwise it returns -x.
+\raw\&emsp;&emsp;\raw\Returns \code\x\code\ if \code\x >= 0\code\; otherwise it returns \code\-x\code\.
 
 \raw\#### <code>glm.<code>**abs**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\For each component c of x,
-\raw\&emsp;&emsp;\raw\Returns c if c >= 0; otherwise it returns -c.
+\raw\&emsp;&emsp;\raw\For each component \code\c\code\ of \code\x\code\,
+\raw\&emsp;&emsp;\raw\Returns \code\c\code\ if \code\c >= 0\code\; otherwise it returns \code\-c\code\.
 
 This means that you can call the \code\glm.abs\code\ function with a \code\float\code\ \code\"x"\code\ and it will return a \code\float\code\ value
 (as you can tell by the \raw\<code> -> *float*</code>\raw\), or you can call it with a vector, e.g. a \code\vec3\code\ and get a vector (\code\vec3\code\ in this case) back.
