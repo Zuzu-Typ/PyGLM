@@ -27,7 +27,7 @@ stages:
   - test
   
   - name: deploy
-    #if: tag IS PRESENT AND repo = Zuzu-Typ/PyGLM
+    if: tag IS PRESENT AND repo = Zuzu-Typ/PyGLM
 
 jobs:
   include:    
