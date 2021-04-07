@@ -9,20 +9,20 @@ python:
 before_install:
   - |
     if [[ "$TRAVIS_OS_NAME" = windows ]]; then
-        choco install python --version 3.8.0
-        export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
+        choco install python --version 3.9.0
+        export PATH="/c/Python39:/c/Python39/Scripts:$PATH"
         # make sure it's on PATH as 'python3'
-        ln -s /c/Python38/python.exe /c/Python38/python3.exe
+        ln -s /c/Python39/python.exe /c/Python39/python3.exe
     fi
     
 install:
-- python -m pip install twine cibuildwheel
-
+  - python -m pip install twine cibuildwheel
+    
 script:
   - python3 setup.py install
   - python3 -m pip install pytest
   - pytest PyGLM_test.py -v
-  
+    
 stages:
   - test
   
@@ -30,7 +30,7 @@ stages:
     if: tag IS PRESENT AND repo = Zuzu-Typ/PyGLM
 
 jobs:
-  include:
+  include:    
   - os: windows
     language: shell
     name: Test on Windows
@@ -40,7 +40,28 @@ jobs:
     name: Test on MacOS
     
   - stage: deploy
+    dist: focal
     services: docker
+    python:
+    - 3.9
+    env:
+    - CIBW_MANYLINUX_X86_64_IMAGE=manylinux2010
+    - CIBW_MANYLINUX_I686_IMAGE=manylinux2010
+    install: python3 -m pip install twine cibuildwheel
+    script:
+    - python3 -m cibuildwheel --output-dir ./wheelhouse
+    - python3 setup.py sdist -d ./wheelhouse
+    - ls wheelhouse
+    after_success: |
+      if [[ $TRAVIS_TAG ]]; then python3 -m pip install twine; python3 -m twine upload --skip-existing wheelhouse/*; fi
+  - stage: deploy
+    dist: focal
+    services: docker
+    python:
+    - 3.9
+    env:
+    - CIBW_MANYLINUX_X86_64_IMAGE=manylinux_2_24
+    - CIBW_MANYLINUX_I686_IMAGE=manylinux_2_24
     install: python3 -m pip install twine cibuildwheel
     script:
     - python3 -m cibuildwheel --output-dir ./wheelhouse
@@ -85,8 +106,6 @@ env:
   - CIBW_BUILD=cp3?-*
   - CIBW_TEST_REQUIRES=pytest
   - CIBW_TEST_COMMAND="pytest {project}/PyGLM_test.py -v"
-  - CIBW_MANYLINUX_X86_64_IMAGE=manylinux2010
-  - CIBW_MANYLINUX_I686_IMAGE=manylinux2010
   - TWINE_USERNAME=__token__
   # TWINE_PASSWORD
   - secure: gI7OeZLn0Xd8Z7Wd9wGoPwwzKVb+AoKD5LA0cCh/DGcWQU3bo79EB8B+gx9I2B+lxXUviQS9K5EhUfs0jof4Mjh7fGuYLFrznbtAqLl9g3lBmHGpFeFqqHzcCSYPcxbPRnuIrgUhQ07RHcZSPWKwFqdpCXajPC3W+i52NZ0DKT9G2c0u9QUigLfjhVC9IJbd7CZaGlFBnNWuRC0FhbDXvJYhNZctEXKXgtBjpAkOQfqfl/l1e51qVTcl1KDK8fLERCOpO9TGwpmfdzkwD7T49z+1Dwev1EfPvu9FLezWTWir9G7HP+LobUZpgnFS87HCbKGFzVvtcLiboyQgRd7iYDYfXImrwiyuLduGsvXFYXI7Dj3QMY8aJ/ochyCQPHnUu55ThasCr4TKHTm8sKDgrsnppiqLlObT/jNi0qhcEoLCxI7nb9tDBKu3NWqRmUOOPy3wUA73dJ/E8vAYlfMJKewzZemSdfddir3Mv+G4ZowZZXtBxRnByrrJUavdEUwmxObq6d1VPMfXcnZ5QxIotIZSzuEHToKy+DhyHxX6ET2jnlrgMBO0nHN11I2v/h4b6Mv6RIzfIVvBhB9JzBdlNFFHFbkvHUXlDkqWRacmpPRxtiHKVXDH7YHGGc1R8EjXn/l/fhTgPMhEXPViE3wnBO5JQyyxULSL47Y5wkEUiaE=
