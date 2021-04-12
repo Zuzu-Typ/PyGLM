@@ -2727,7 +2727,7 @@ mat_getbuffer(mat<C, R, T>* self, Py_buffer* view, int flags) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
 		return -1;
 	}
-	if ((flags & PyBUF_C_CONTIGUOUS) == PyBUF_C_CONTIGUOUS || (flags & PyBUF_STRIDES) != PyBUF_STRIDES) {
+	if ((flags & PyBUF_C_CONTIGUOUS) == PyBUF_C_CONTIGUOUS) {
 		PyErr_SetString(PyExc_BufferError, "This type of buffer is not supported.");
 		view->obj = NULL;
 		return -1;

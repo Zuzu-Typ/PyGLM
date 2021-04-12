@@ -1136,11 +1136,6 @@ mvec_getbuffer(mvec<L, T>* self, Py_buffer* view, int flags) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
 		return -1;
 	}
-	if ((flags & PyBUF_F_CONTIGUOUS) == PyBUF_F_CONTIGUOUS) {
-		PyErr_SetString(PyExc_BufferError, "This type of buffer is not supported.");
-		view->obj = NULL;
-		return -1;
-	}
 	view->obj = (PyObject*)self;
 	view->buf = (void*)self->super_type;
 	view->len = sizeof(glm::vec<L, T>);
