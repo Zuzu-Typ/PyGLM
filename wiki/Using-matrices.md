@@ -36,18 +36,20 @@ This results in a diagonal line of ones from top left to bottom right\.&nbsp;&nb
 Example:  
 ``` Python
 >>> print(glm.mat2())
-[ 1 | 0 ]
-[ 0 | 1 ]
+[            1 ][            0 ]
+[            0 ][            1 ]
 
 >>> print(glm.mat4())
-[ 1 | 0 | 0 | 0 ]
-[ 0 | 1 | 0 | 0 ]
-[ 0 | 0 | 1 | 0 ]
-[ 0 | 0 | 0 | 1 ]
+[            1 ][            0 ][            0 ][            0 ]
+[            0 ][            1 ][            0 ][            0 ]
+[            0 ][            0 ][            1 ][            0 ]
+[            0 ][            0 ][            0 ][            1 ]
 
 >>> print(glm.mat2x4())
-[ 1 | 0 | 0 | 0 ]
-[ 0 | 1 | 0 | 0 ]
+[            1 ][            0 ]
+[            0 ][            1 ]
+[            0 ][            0 ]
+[            0 ][            0 ]
  ```  
 #### Initialization with a single number  
 Initializing a matrix with a single number returns a matrix similar to the identity matrices shown above\.&nbsp;&nbsp;  
@@ -55,51 +57,55 @@ The only difference is that instead of setting equal column and row indices to `
 Example:  
 ``` Python
 >>> print(glm.mat2(3))
-[ 3 | 0 ]
-[ 0 | 3 ]
+[            3 ][            0 ]
+[            0 ][            3 ]
 
 >>> print(glm.mat4(0))
-[ 0 | 0 | 0 | 0 ]
-[ 0 | 0 | 0 | 0 ]
-[ 0 | 0 | 0 | 0 ]
-[ 0 | 0 | 0 | 0 ]
+[            0 ][            0 ][            0 ][            0 ]
+[            0 ][            0 ][            0 ][            0 ]
+[            0 ][            0 ][            0 ][            0 ]
+[            0 ][            0 ][            0 ][            0 ]
 
 >>> print(glm.mat2x4(1.5))
-[ 1.5 |   0 | 0 | 0 ]
-[   0 | 1.5 | 0 | 0 ]
+[          1.5 ][            0 ]
+[            0 ][          1.5 ]
+[            0 ][            0 ]
+[            0 ][            0 ]
  ```  
 #### Initializing the matrix diagonal with custom values  
 You can initialize a matrix' diagonal with custom values\.  
 Example:  
 ``` Python
 >>> print(glm.mat2(1, 2))
-[ 1 | 0 ]
-[ 0 | 2 ]
+[            1 ][            0 ]
+[            0 ][            2 ]
 
 >>> print(glm.mat4(1, 2, 3, 4))
-[ 1 | 0 | 0 | 0 ]
-[ 0 | 2 | 0 | 0 ]
-[ 0 | 0 | 3 | 0 ]
-[ 0 | 0 | 0 | 4 ]
+[            1 ][            0 ][            0 ][            0 ]
+[            0 ][            2 ][            0 ][            0 ]
+[            0 ][            0 ][            3 ][            0 ]
+[            0 ][            0 ][            0 ][            4 ]
 
 >>> print(glm.mat2x4(1, 2))
-[ 1 | 0 | 0 | 0 ]
-[ 0 | 2 | 0 | 0 ]
+[            1 ][            0 ]
+[            0 ][            2 ]
+[            0 ][            0 ]
+[            0 ][            0 ]
  ```  
-I\.e\. a ``` matNxM ``` matrix can be initialized with ``` int(sqrt(N * M)) ``` numbers\.  
+i\.e\. a ``` matNxM ``` matrix can be initialized with ``` int(sqrt(N * M)) ``` numbers\.  
 #### Initializing all components with numbers  
 A matrix ``` matNxM ``` can be initialized with *N* x *M* numbers, which will be copied \(or may be converted\) to their respective components\.&nbsp;&nbsp;  
 Example:  
 ``` Python
 >>> print(glm.mat2(1, 2, 3, 4))
-[ 1 | 2 ]
-[ 3 | 4 ]
+[            1 ][            3 ]
+[            2 ][            4 ]
 
 >>> print(glm.mat4(*range(16)))
-[  0 |  1 |  2 |  3 ]
-[  4 |  5 |  6 |  7 ]
-[  8 |  9 | 10 | 11 ]
-[ 12 | 13 | 14 | 15 ]
+[            0 ][            4 ][            8 ][           12 ]
+[            1 ][            5 ][            9 ][           13 ]
+[            2 ][            6 ][           10 ][           14 ]
+[            3 ][            7 ][           11 ][           15 ]
  ```  
 #### Copying a matrix  
 A copy of a matrix can be obtained by initializing a matrix with an instance of a matrix\.&nbsp;&nbsp;  
@@ -111,58 +117,58 @@ Any values that don't fit into the new matrix are discarded and any values that 
 Example:&nbsp;&nbsp;  
 ``` Python
 >>> print(glm.mat4( glm.mat2(9, 8, 7, 6) ))
-[ 9 | 8 | 0 | 0 ]
-[ 7 | 6 | 0 | 0 ]
-[ 0 | 0 | 1 | 0 ]
-[ 0 | 0 | 0 | 1 ]
+[            9 ][            7 ][            0 ][            0 ]
+[            8 ][            6 ][            0 ][            0 ]
+[            0 ][            0 ][            1 ][            0 ]
+[            0 ][            0 ][            0 ][            1 ]
 
 >>> m44 = glm.mat4(*range(16))
 >>> print(m44)
-[  0 |  1 |  2 |  3 ]
-[  4 |  5 |  6 |  7 ]
-[  8 |  9 | 10 | 11 ]
-[ 12 | 13 | 14 | 15 ]
+[            0 ][            4 ][            8 ][           12 ]
+[            1 ][            5 ][            9 ][           13 ]
+[            2 ][            6 ][           10 ][           14 ]
+[            3 ][            7 ][           11 ][           15 ]
 
 >>> print(glm.mat2(m44))
-[ 0 | 1 ]
-[ 4 | 5 ]
+[            0 ][            4 ]
+[            1 ][            5 ]
 
 >>> m32 = glm.mat3x2(6, 5, 4, 3, 2, 1)
 >>> print(m32)
-[ 6 | 5 ]
-[ 4 | 3 ]
-[ 2 | 1 ]
+[            6 ][            4 ][            2 ]
+[            5 ][            3 ][            1 ]
 
 >>> print(glm.mat2x3(m32))
-[ 6 | 5 | 0 ]
-[ 4 | 3 | 0 ]
+[            6 ][            4 ]
+[            5 ][            3 ]
+[            0 ][            0 ]
 
 >>> print(glm.mat3(m32))
-[ 6 | 5 | 0 ]
-[ 4 | 3 | 0 ]
-[ 2 | 1 | 1 ]
+[            6 ][            4 ][            2 ]
+[            5 ][            3 ][            1 ]
+[            0 ][            0 ][            1 ]
 
 >>> print(glm.imat2(glm.dmat2(7.9)))
-[ 7 | 0 ]
-[ 0 | 7 ]
+[            7 ][            0 ]
+[            0 ][            7 ]
  ```  
 #### Constructing matrices from vectors  
 You can construct a ``` matNxM ``` from *N* vectors of length *M*, if they share the same datatype\.  
 Example:  
 ``` Python
 >>> print(glm.mat2( glm.vec2(1, 2), glm.vec2(3, 4) )) # 2 vectors of length 2
-[ 1 | 2 ]
-[ 3 | 4 ]
+[            1 ][            3 ]
+[            2 ][            4 ]
 
 >>> print(glm.mat2x4( glm.vec4(1, 2, 3, 4), glm.vec4(5, 6, 7, 8) )) # 2 vectors of length 4
-[ 1 | 2 | 3 | 4 ]
-[ 5 | 6 | 7 | 8 ]
+[            1 ][            5 ]
+[            2 ][            6 ]
+[            3 ][            7 ]
+[            4 ][            8 ]
 
 >>> print(glm.mat4x2( glm.vec2(1, 2), glm.vec2(3, 4), glm.vec2(5, 6), glm.vec2(7, 8) )) # 4 vectors of length 2
-[ 1 | 2 ]
-[ 3 | 4 ]
-[ 5 | 6 ]
-[ 7 | 8 ]
+[            1 ][            3 ][            5 ][            7 ]
+[            2 ][            4 ][            6 ][            8 ]
  ```  
   
 ### Lists \(and other iterables\)  
@@ -170,25 +176,25 @@ Instead of using matrices, you can use matrix\-like lists / tuples in most cases
 For example, you can initialize a matrix with a matrix\-like tuple:  
 ``` Python
 >>> print(glm.mat2( ((1, 2), (3, 4)) ))
-[ 1 | 2 ]
-[ 3 | 4 ]
+[            1 ][            3 ]
+[            2 ][            4 ]
  ```   
 Or use it on one handside of a numeric operator:  
 ``` Python
 >>> m22 = glm.mat2()
 >>> print(m22)
-[ 1 | 0 ]
-[ 0 | 1 ]
+[            1 ][            0 ]
+[            0 ][            1 ]
 
 >>> print(m22 + ((4, 3), (2, 1)))
-[ 5 | 3 ]
-[ 2 | 2 ]
+[            5 ][            2 ]
+[            3 ][            2 ]
  ```  
 It is also accepted by most functions:  
 ``` Python
 >>> print(glm.inverse( ((1,2),(3,4)) ))
-[   -2 |    1 ]
-[  1.5 | -0.5 ]
+[           -2 ][          1.5 ]
+[            1 ][         -0.5 ]
  ```   
   
 ### Objects that support the buffer protocol \(numpy, bytes\)  
@@ -205,10 +211,10 @@ Examples:
  [0. 0. 0. 1.]]
  
 >>> print(glm.mat4(narr))
-[ 1 | 0 | 0 | 0 ]
-[ 0 | 1 | 0 | 0 ]
-[ 0 | 0 | 1 | 0 ]
-[ 0 | 0 | 0 | 1 ]
+[            1 ][            0 ][            0 ][            0 ]
+[            0 ][            1 ][            0 ][            0 ]
+[            0 ][            0 ][            1 ][            0 ]
+[            0 ][            0 ][            0 ][            1 ]
  ```  
   
 *Note: objects that use the buffer protocol may request a reference instead of a copy of the object, meaning that if you change the 'copy', you'll also change the original\.*  
@@ -313,15 +319,19 @@ Lets try to visualize it using an example:
 ``` Python
 >>> m24 = glm.mat2x4(1, 2, 3, 4, 5, 6, 7, 8)
 >>> print(m24)
-[ 1 | 2 | 3 | 4 ]
-[ 5 | 6 | 7 | 8 ]
+[            1 ][            5 ]
+[            2 ][            6 ]
+[            3 ][            7 ]
+[            4 ][            8 ]
 >>> m22 = glm.mat2(4, 3, 2, 1)
 >>> print(m22)
-[ 4 | 3 ]
-[ 2 | 1 ]
+[            4 ][            2 ]
+[            3 ][            1 ]
 >>> print(m24 * m22)
-[ 19 | 26 | 33 | 40 ]
-[  7 | 10 | 13 | 16 ]
+[           19 ][            7 ]
+[           26 ][           10 ]
+[           33 ][           13 ]
+[           40 ][           16 ]
 
 result = mat2x4(
 		(
@@ -339,26 +349,14 @@ result = mat2x4(
 	)
  ```   
 ### matmul \(``` @ ``` operator\)  
-Has the same effects as the ``` * ``` operator, but with the arguments switched\.  
-``` Python
->>> m23 = mat2x3(1, 2, 3, 4, 5, 6)
->>> m32 = mat3x2(1, 2, 3, 4, 5, 6)
->>> m23 * m32
-mat3x3(( 9, 12, 15 ), ( 19, 26, 33 ), ( 29, 40, 51 ))
->>> m23 @ m32
-mat2x2(( 22, 28 ), ( 49, 64 ))
->>> m32 * m23
-mat2x2(( 22, 28 ), ( 49, 64 ))
->>> m32 @ m23
-mat3x3(( 9, 12, 15 ), ( 19, 26, 33 ), ( 29, 40, 51 ))
- ```  
+Has the same effects as the ``` * ``` operator\.  
 ### div \(``` / ``` operator\)  
 Matrices support division with numbers, vectors and other matrices\.&nbsp;&nbsp;  
 ``` Python
 quot = mat2(1, 2, 3, 4) / 2 # returns mat2(0.5, 1, 1.5, 2)
  ```  
 Only square matrices can support division with other matrices and vectors\.  
-If a matrix is divided by a vectore or vice versa, the matrix is simply inversed \(*LINK GOES HERE*\) and multiplied with that vector instead\.  
+If a matrix is divided by a vector or vice versa, the matrix is simply inversed and multiplied with that vector instead\.  
 ``` Python
 >>> m22 = mat2(1, 2, 3, 4)
 >>> v2 = vec2(5, 6)
@@ -372,11 +370,10 @@ The right handside matrix is inversed and then multiplied by the other matrix\.
 ``` Python
 >>> m22 = mat2(1, 2, 3, 4)
 >>> m22 / mat2(8, 7, 6, 5)
-[   8 |   9 ]
-[  -9 | -10 ]
+mat2x2(( 8, 9 ), ( -9, -10 ))
+
 >>> m22 * glm.inverse(mat2(8, 7, 6, 5))
-[   8 |   9 ]
-[  -9 | -10 ]
+mat2x2(( 8, 9 ), ( -9, -10 ))
  ```  
 ### len  
 The length of a matrix \(i\.e\. the column count\) can be queried using ``` len() ```\.  
@@ -400,8 +397,8 @@ You can also set the values\.
 >>> m    = mat2(1, 2, 3, 4)
 >>> m[0] = vec2(5, 6)
 >>> print(m)
-[ 5 | 6 ]
-[ 3 | 4 ]
+[            5 ][            3 ]
+[            6 ][            4 ]
  ```  
 ### contains \(``` in ``` operator\)  
 You can query wether or not a value is contained by a matrix using the ``` in ``` operator\.  
