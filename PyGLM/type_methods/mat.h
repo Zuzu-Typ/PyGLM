@@ -118,6 +118,12 @@ mat2x2_init(mat<2, 2, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg3 == NULL) {
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
+			T o = PyGLM_Number_FromPyObject<T>(arg1);
+			T o2 = PyGLM_Number_FromPyObject<T>(arg2);
+			self->super_type = glm::mat<2, 2, T>(o, (T)0, (T)0, o2);
+			return 0;
+		}
 		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<2, T>()));
 		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<2, T>()));
 		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1)) {
@@ -230,6 +236,12 @@ mat2x3_init(mat<2, 3, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg3 == NULL) {
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
+			T o = PyGLM_Number_FromPyObject<T>(arg1);
+			T o2 = PyGLM_Number_FromPyObject<T>(arg2);
+			self->super_type = glm::mat<2, 3, T>(o, (T)0, (T)0, (T)0, o2, (T)0);
+			return 0;
+		}
 		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<3, T>()));
 		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<3, T>()));
 		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1)) {
@@ -344,6 +356,12 @@ mat2x4_init(mat<2, 4, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg3 == NULL) {
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
+			T o = PyGLM_Number_FromPyObject<T>(arg1);
+			T o2 = PyGLM_Number_FromPyObject<T>(arg2);
+			self->super_type = glm::mat<2, 4, T>(o, (T)0, (T)0, (T)0, (T)0, o2, (T)0, (T)0);
+			return 0;
+		}
 		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<4, T>()));
 		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<4, T>()));
 		if (PyGLM_PTI_IsNone(0) || PyGLM_PTI_IsNone(1)) {
@@ -456,6 +474,12 @@ mat3x2_init(mat<3, 2, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg3 == NULL) {
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
+			T o = PyGLM_Number_FromPyObject<T>(arg1);
+			T o2 = PyGLM_Number_FromPyObject<T>(arg2);
+			self->super_type = glm::mat<3, 2, T>(o, (T)0, (T)0, o2, (T)0, (T)0);
+			return 0;
+		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x2()");
 		return -1;
 	}
@@ -583,6 +607,13 @@ mat3x3_init(mat<3, 3, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg4 == NULL) {
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
+			T o = PyGLM_Number_FromPyObject<T>(arg1);
+			T o2 = PyGLM_Number_FromPyObject<T>(arg2);
+			T o3 = PyGLM_Number_FromPyObject<T>(arg3);
+			self->super_type = glm::mat<3, 3, T>(o, (T)0, (T)0, (T)0, o2, (T)0, (T)0, (T)0, o3);
+			return 0;
+		}
 		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<3, T>()));
 		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<3, T>()));
 		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<3, T>()));
@@ -708,6 +739,13 @@ mat3x4_init(mat<3, 4, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg4 == NULL) {
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
+			T o = PyGLM_Number_FromPyObject<T>(arg1);
+			T o2 = PyGLM_Number_FromPyObject<T>(arg2);
+			T o3 = PyGLM_Number_FromPyObject<T>(arg3);
+			self->super_type = glm::mat<3, 4, T>(o, (T)0, (T)0, (T)0, (T)0, o2, (T)0, (T)0, (T)0, (T)0, o3, (T)0);
+			return 0;
+		}
 		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<4, T>()));
 		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<4, T>()));
 		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<4, T>()));
@@ -823,7 +861,18 @@ mat4x2_init(mat<4, 2, T> *self, PyObject *args, PyObject *)
 		return -1;
 	}
 
-	if (arg3 == NULL || arg4 == NULL) {
+	if (arg3 == NULL) {
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
+			T o = PyGLM_Number_FromPyObject<T>(arg1);
+			T o2 = PyGLM_Number_FromPyObject<T>(arg2);
+			self->super_type = glm::mat<4, 2, T>(o, (T)0, (T)0, o2, (T)0, (T)0, (T)0, (T)0);
+			return 0;
+		}
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x2()");
+		return -1;
+	}
+
+	if (arg4 == NULL) {
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x2()");
 		return -1;
 	}
@@ -950,7 +999,19 @@ mat4x3_init(mat<4, 3, T> *self, PyObject *args, PyObject *)
 		return -1;
 	}
 
-	if (arg3 == NULL || arg4 == NULL) {
+	if (arg3 == NULL) {
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x3()");
+		return -1;
+	}
+
+	if (arg4 == NULL) {
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
+			T o = PyGLM_Number_FromPyObject<T>(arg1);
+			T o2 = PyGLM_Number_FromPyObject<T>(arg2);
+			T o3 = PyGLM_Number_FromPyObject<T>(arg3);
+			self->super_type = glm::mat<4, 3, T>(o, (T)0, (T)0, (T)0, o2, (T)0, (T)0, (T)0, o3, (T)0, (T)0, (T)0);
+			return 0;
+		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x3()");
 		return -1;
 	}
@@ -1087,6 +1148,14 @@ mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 	}
 
 	if (arg5 == NULL) {
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3) && PyGLM_Number_Check(arg4)) {
+			T o = PyGLM_Number_FromPyObject<T>(arg1);
+			T o2 = PyGLM_Number_FromPyObject<T>(arg2);
+			T o3 = PyGLM_Number_FromPyObject<T>(arg3);
+			T o4 = PyGLM_Number_FromPyObject<T>(arg4);
+			self->super_type = glm::mat<4, 4, T>(o, (T)0, (T)0, (T)0, (T)0, o2, (T)0, (T)0, (T)0, (T)0, o3, (T)0, (T)0, (T)0, (T)0, o4);
+			return 0;
+		}
 		PyGLM_PTI_Init0(arg1, (get_vec_PTI_info<4, T>()));
 		PyGLM_PTI_Init1(arg2, (get_vec_PTI_info<4, T>()));
 		PyGLM_PTI_Init2(arg3, (get_vec_PTI_info<4, T>()));
