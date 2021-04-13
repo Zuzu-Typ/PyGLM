@@ -435,7 +435,7 @@ def test_vec4_types():
 def test_mat_types():
     for C in range(2, 5):
         for R in range(2, 5):
-            for args in gen_args("#u-_N_" + "N"*(C*R) + "_M{C}{R}__fFiI".format(C=C, R=R)): # need support for _M
+            for args in gen_args("#u-_N_" + "N"*(C*R) + "_" + "N"*(int(math.sqrt(C*R))) + "_M{C}{R}__fFiI".format(C=C, R=R)): # need support for _M
                 for T in matrix_length_dict[(C,R)]:
                     fassert(T, args)
 
@@ -1758,6 +1758,20 @@ def test_matrix_transform_2d():
         fassert(glm.scale, args)
         fassert(glm.translate, args)
 #/matrix_transform_2d #
+
+# rotate_vector #
+def test_rotate_vector():
+    for args in gen_args("V3V3__fF"):
+        fassert(glm.orientation, args)
+    for args in gen_args("V2N_V3NV3_V4NV3__fF"):
+        fassert(glm.rotate, args)
+    for args in gen_args("V3N_V4N__fF"):
+        fassert(glm.rotateX, args)
+        fassert(glm.rotateY, args)
+        fassert(glm.rotateZ, args)
+    for args in gen_args("V3V3N__fF"):
+        fassert(glm.slerp, args)
+#/rotate_vector #
 ##/UNSTABLE EXTENSIONS ##
 
 

@@ -2,19 +2,20 @@
 
 # Using Matrices  
   
-1.  [Initialization](#Initialization)  
+1.  [Initialization](#initialization)  
     *  [with no arguments](#initialization-with-no-arguments)  
-    *  [with single number](#Initialization-with-a-single-number)  
-    *  [all components with numbers](#Initializing-all-components-with-numbers)  
-    *  [copying a matrix](#Copying-a-matrix)  
-    *  [with vectors](#Constructing-matrices-from-vectors)  
+    *  [with single number](#initialization-with-a-single-number)  
+    *  [with custom diagonal values](#initializing-the-matrix-diagonal-with-custom-values)  
+    *  [all components with numbers](#initializing-all-components-with-numbers)  
+    *  [copying a matrix](#copying-a-matrix)  
+    *  [with vectors](#constructing-matrices-from-vectors)  
     *  [Lists \(and other iterables\)](#lists-and-other-iterables)  
     *  [Buffer protocol \(numpy, bytes\)](#objects-that-support-the-buffer-protocol-numpy-bytes)  
-2.  [Methods](#Methods)  
+2.  [Methods](#methods)  
     *  [The copy protocol](#the-copy-protocol)  
     *  [Pickling](#pickling)  
     *  [To list / tuple](#to-list--tuple)  
-3.  [Operators](#Operators)  
+3.  [Operators](#operators)  
     *  [add](#add--operator)  
     *  [sub](#sub--operator)  
     *  [mul](#mul--operator)  
@@ -67,6 +68,25 @@ Example:
 [ 1.5 |   0 | 0 | 0 ]
 [   0 | 1.5 | 0 | 0 ]
  ```  
+#### Initializing the matrix diagonal with custom values  
+You can initialize a matrix' diagonal with custom values\.  
+Example:  
+``` Python
+>>> print(glm.mat2(1, 2))
+[ 1 | 0 ]
+[ 0 | 2 ]
+
+>>> print(glm.mat4(1, 2, 3, 4))
+[ 1 | 0 | 0 | 0 ]
+[ 0 | 2 | 0 | 0 ]
+[ 0 | 0 | 3 | 0 ]
+[ 0 | 0 | 0 | 4 ]
+
+>>> print(glm.mat2x4(1, 2))
+[ 1 | 0 | 0 | 0 ]
+[ 0 | 2 | 0 | 0 ]
+ ```  
+I\.e\. a ``` matNxM ``` matrix can be initialized with ``` int(sqrt(N * M)) ``` numbers\.  
 #### Initializing all components with numbers  
 A matrix ``` matNxM ``` can be initialized with *N* x *M* numbers, which will be copied \(or may be converted\) to their respective components\.&nbsp;&nbsp;  
 Example:  

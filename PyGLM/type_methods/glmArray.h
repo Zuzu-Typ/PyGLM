@@ -510,11 +510,6 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
 		return -1;
 	}
-	if ((flags & PyBUF_STRIDES) != PyBUF_STRIDES || (flags & PyBUF_C_CONTIGUOUS) == PyBUF_C_CONTIGUOUS) {
-		PyErr_SetString(PyExc_BufferError, "This type of buffer is not supported.");
-		view->obj = NULL;
-		return -1;
-	}
 
 	view->obj = (PyObject*)self;
 	view->buf = self->data;
@@ -534,75 +529,152 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 		const int R = self->getShape(1);
 
 		view->ndim = 3;
-		if (flags & PyBUF_ND) {
+		if (flags == 0 || (flags & (PyBUF_ANY_CONTIGUOUS | PyBUF_F_CONTIGUOUS | PyBUF_C_CONTIGUOUS)) == PyBUF_STRIDES) { // strided, non contiguous buffer
 			view->shape = (Py_ssize_t*)PyMem_Malloc(3 * sizeof(Py_ssize_t));
 			if (view->shape != NULL) {
 				view->shape[0] = self->itemCount;
 				view->shape[1] = R;
 				view->shape[2] = C;
 			}
-		}
-		else {
-			view->shape = NULL;
-		}
-		if ((flags & PyBUF_STRIDES) == PyBUF_STRIDES) {
+
 			view->strides = (Py_ssize_t*)PyMem_Malloc(3 * sizeof(Py_ssize_t));
 			if (view->strides != NULL) {
-				view->strides[0] =  self->dtSize * C * R;
+				view->strides[0] = self->dtSize * C * R;
 				view->strides[1] = self->dtSize;
 				view->strides[2] = R * self->dtSize;
 			}
 		}
+		else if ((flags & PyBUF_WRITABLE) == 0 && ((flags & PyBUF_STRIDES) == PyBUF_ND || (flags & PyBUF_ANY_CONTIGUOUS) == PyBUF_ANY_CONTIGUOUS || (flags & PyBUF_C_CONTIGUOUS) == PyBUF_C_CONTIGUOUS)) {
+			view->shape = (Py_ssize_t*)PyMem_Malloc(3 * sizeof(Py_ssize_t));
+			if (view->shape != NULL) {
+				view->shape[0] = self->itemCount;
+				view->shape[1] = R;
+				view->shape[2] = C;
+			}
+
+			view->strides = (Py_ssize_t*)PyMem_Malloc(3 * sizeof(Py_ssize_t));
+			if (view->strides != NULL) {
+				view->strides[0] = self->dtSize * C * R;
+				view->strides[1] = C * self->dtSize;
+				view->strides[2] = self->dtSize;
+			}
+
+			view->readonly = 1;
+			view->buf = PyMem_Malloc(self->nBytes);
+			if (view->buf != NULL) {
+				const ssize_t dataStride0 = self->dtSize * C * R;
+				const ssize_t bufStride0 = self->dtSize * C * R;
+				const ssize_t dataStride1 = self->dtSize;
+				const ssize_t bufStride1 = self->dtSize * C;
+				const ssize_t dataStride2 = self->dtSize * R;
+				const ssize_t bufStride2 = self->dtSize;
+
+				for (ssize_t i = 0; i < self->itemCount; i++) {
+					for (ssize_t c = 0; c < C; c++) {
+						for (ssize_t r = 0; r < R; r++) {
+							memcpy(((char*)view->buf) + (i * bufStride0 + r * bufStride1 + c * bufStride2), ((char*)self->data) + (i * dataStride0 + r * dataStride1 + c * dataStride2), self->dtSize);
+						}
+					}
+				}
+			}
+		}
+		else if ((flags & PyBUF_WRITABLE) == 0 && (flags & PyBUF_F_CONTIGUOUS) == PyBUF_F_CONTIGUOUS) {
+			view->shape = (Py_ssize_t*)PyMem_Malloc(3 * sizeof(Py_ssize_t));
+			if (view->shape != NULL) {
+				view->shape[0] = self->itemCount;
+				view->shape[1] = R;
+				view->shape[2] = C;
+			}
+
+			view->strides = (Py_ssize_t*)PyMem_Malloc(3 * sizeof(Py_ssize_t));
+			if (view->strides != NULL) {
+				view->strides[0] = self->dtSize;
+				view->strides[1] = C * self->dtSize;
+				view->strides[2] = self->dtSize * C * R;
+			}
+
+			view->readonly = 1;
+			view->buf = PyMem_Malloc(self->nBytes);
+			if (view->buf != NULL) {
+				const ssize_t dataStride0 = self->dtSize * C * R;
+				const ssize_t bufStride0 = self->dtSize;
+				const ssize_t dataStride1 = self->dtSize;
+				const ssize_t bufStride1 = self->dtSize * C;
+				const ssize_t dataStride2 = self->dtSize * R;
+				const ssize_t bufStride2 = self->dtSize * C * R;
+
+				for (ssize_t i = 0; i < self->itemCount; i++) {
+					for (ssize_t c = 0; c < C; c++) {
+						for (ssize_t r = 0; r < R; r++) {
+							memcpy(((char*)view->buf) + (i * bufStride0 + r * bufStride1 + c * bufStride2), ((char*)self->data) + (i * dataStride0 + r * dataStride1 + c * dataStride2), self->dtSize);
+						}
+					}
+				}
+			}
+		}
 		else {
-			view->strides = NULL;
+			PyErr_SetString(PyExc_BufferError, "This type of buffer is not supported.");
+			PyMem_Free(view->format);
+			view->format = NULL;
+			view->obj = NULL;
+			view->buf = NULL;
+			return -1;
 		}
 	}
-	else if (self->glmType == PyGLM_TYPE_VEC) {
-		const int L = self->getShape();
+	else if (self->glmType == PyGLM_TYPE_VEC || self->glmType == PyGLM_TYPE_QUA) {
+		const int L = (self->glmType == PyGLM_TYPE_VEC) ? self->getShape() : 4;
 
 		view->ndim = 2;
-		if (flags & PyBUF_ND) {
+		if ((flags & PyBUF_F_CONTIGUOUS) == PyBUF_F_CONTIGUOUS && ((flags & PyBUF_WRITABLE) || L == 1)) {
 			view->shape = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
 			if (view->shape != NULL) {
 				view->shape[0] = self->itemCount;
 				view->shape[1] = L;
 			}
-		}
-		else {
-			view->shape = NULL;
-		}
-		if ((flags & PyBUF_STRIDES) == PyBUF_STRIDES) {
 			view->strides = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
 			if (view->strides != NULL) {
-				view->strides[0] = L * self->dtSize;
-				view->strides[1] = self->dtSize;
+				view->strides[0] = self->dtSize;
+				view->strides[1] = L * self->dtSize;
+			}
+
+			if (L != 1) {
+				view->readonly = 1;
+				view->buf = PyMem_Malloc(view->len);
+				if (view->buf != NULL) {
+					const ssize_t dataStride0 = self->dtSize * L;
+					const ssize_t bufStride0 = self->dtSize;
+					const ssize_t dataStride1 = self->dtSize;
+					const ssize_t bufStride1 = self->dtSize * L;
+
+					for (ssize_t i = 0; i < self->itemCount; i++) {
+						for (ssize_t l = 0; l < L; l++) {
+							memcpy(((char*)view->buf) + (i * bufStride0 + l * bufStride1), ((char*)self->data) + (i * dataStride0 + l * dataStride1), self->dtSize);
+						}
+					}
+				}
 			}
 		}
 		else {
-			view->strides = NULL;
-		}
-	}
-	else if (self->glmType == PyGLM_TYPE_QUA) {
-		view->ndim = 2;
-		if (flags & PyBUF_ND) {
-			view->shape = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
-			if (view->shape != NULL) {
-				view->shape[0] = self->itemCount;
-				view->shape[1] = 4;
+			if (flags & PyBUF_ND) {
+				view->shape = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
+				if (view->shape != NULL) {
+					view->shape[0] = self->itemCount;
+					view->shape[1] = L;
+				}
 			}
-		}
-		else {
-			view->shape = NULL;
-		}
-		if ((flags & PyBUF_STRIDES) == PyBUF_STRIDES) {
-			view->strides = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
-			if (view->strides != NULL) {
-				view->strides[0] = 4 * self->dtSize;
-				view->strides[1] = self->dtSize;
+			else {
+				view->shape = NULL;
 			}
-		}
-		else {
-			view->strides = NULL;
+			if ((flags & PyBUF_STRIDES) == PyBUF_STRIDES) {
+				view->strides = (Py_ssize_t*)PyMem_Malloc(2 * sizeof(Py_ssize_t));
+				if (view->strides != NULL) {
+					view->strides[0] = L * self->dtSize;
+					view->strides[1] = self->dtSize;
+				}
+			}
+			else {
+				view->strides = NULL;
+			}
 		}
 	}
 	else if (self->glmType == PyGLM_TYPE_CTYPES) {
@@ -638,6 +710,10 @@ glmArray_releasebuffer(PyObject* self, Py_buffer* view) {
 	PyMem_Free(view->shape);
 	PyMem_Free(view->strides);
 	PyMem_Free(view->format);
+
+	if (view->readonly) {
+		PyMem_Free(view->buf);
+	}
 }
 
 
@@ -2286,8 +2362,9 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 		// buffer protocol
 		if (PyObject_CheckBuffer(firstElement)) {
 			Py_buffer view;
-			if (PyObject_GetBuffer(firstElement, &view, PyBUF_RECORDS_RO) == -1) {
+			if (PyObject_GetBuffer(firstElement, &view, PyBUF_RECORDS_RO) == -1 || view.buf == NULL || view.format == NULL || view.shape == NULL || view.strides == NULL) {
 				PyBuffer_Release(&view);
+				PyErr_SetString(PyExc_BufferError, "invalid buffer");
 				return -1;
 			}
 			if (view.ndim == 1) {
@@ -2399,7 +2476,7 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 						for (ssize_t i1 = 0; i1 < R; i1++) {
 							for (ssize_t i2 = 0; i2 < C; i2++) {
 								ssize_t origOffset = (view.strides[0] * i0 + view.strides[1] * i1 + view.strides[2] * i2);
-								ssize_t targetOffset = (self->itemCount * C * R * i0 + view.itemsize * i1 + view.itemsize * R * i2);
+								ssize_t targetOffset = (view.itemsize * C * R * i0 + view.itemsize * i1 + view.itemsize * R * i2);
 								memcpy(dataPtr + targetOffset, bufPtr + origOffset, view.itemsize);
 							}
 						}
