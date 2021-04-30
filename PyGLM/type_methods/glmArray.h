@@ -740,6 +740,65 @@ glmArray_to_tuple(glmArray* self, PyObject*) {
 	return out;
 }
 
+static PyObject* 
+glmArray_split_components(glmArray* self, PyObject*) {
+	if (self->glmType == PyGLM_TYPE_CTYPES) {
+		PyErr_SetString(PyExc_NotImplementedError, "split_components() is not defined for ctypes arrays");
+		return NULL;
+	}
+
+	const uint8 componentCount = self->shape[0];
+
+	PyTypeObject* subtype = (self->glmType == PyGLM_TYPE_MAT) ? PyGLM_PYOBJECT_MAT_GET_COLUMN_TYPE((PyGLMTypeObject*)(self->subtype)) :
+		PyGLM_PYOBJECT_VEC_QUAT_COMPONENT_TYPE((PyGLMTypeObject*)(self->subtype));
+
+	const uint8 glmType = (self->glmType == PyGLM_TYPE_MAT) ? PyGLM_TYPE_VEC : PyGLM_TYPE_CTYPES;
+
+	PyObject* out = PyTuple_New(componentCount);
+	for (uint8 i = 0; i < componentCount; i++) {
+		glmArray* arr = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
+
+		if (arr == NULL) {
+			PyErr_SetString(PyExc_MemoryError, "Out of memory");
+			Py_DECREF(out);
+			return NULL;
+		}
+
+		arr->subtype = subtype;
+		arr->glmType = glmType;
+		arr->readonly = false;
+		arr->reference = NULL;
+
+		arr->dtSize = self->dtSize;
+		arr->format = self->format;
+		arr->itemCount = self->itemCount;
+		arr->itemSize = self->itemSize / componentCount;
+		arr->nBytes = self->nBytes / componentCount;
+
+		arr->shape[0] = self->shape[1];
+
+		arr->data = PyMem_Malloc(arr->nBytes);
+
+		if (arr->data == NULL) {
+			PyErr_SetString(PyExc_MemoryError, "Out of memory");
+			Py_DECREF(arr);
+			Py_DECREF(out);
+			return NULL;
+		}
+
+		char* selfDataPtr = (char*)self->data + (i * arr->itemSize);
+		char* arrDataPtr = (char*)arr->data;
+		for (ssize_t j = 0; j < self->itemCount; j++) {
+			memcpy(arrDataPtr, selfDataPtr, arr->itemSize);
+			selfDataPtr += self->itemSize;
+			arrDataPtr += arr->itemSize;
+		}
+
+		PyTuple_SET_ITEM(out, i, ((PyObject*)arr));
+	}
+	return out;
+}
+
 template<typename T>
 static bool
 glmArray_from_numbers_init_iter(glmArray* out, PyObject* iterator, Py_ssize_t& argCount) {

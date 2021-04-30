@@ -20,6 +20,14 @@ PyDoc_STRVAR(glmArray_to_tuple_docstr,
 
 static PyObject* glmArray_to_tuple(glmArray* self, PyObject*);
 
+PyDoc_STRVAR(glmArray_split_components_docstr,
+	"Splits each element of this array into it's components.\n"
+	"Returns one or multiple arrays wrapped in a tuple.\n"
+	"For vector, quaternion and matrix arrays only!"
+);
+
+static PyObject* glmArray_split_components(glmArray* self, PyObject*);
+
 PyDoc_STRVAR(glmArray_from_numbers_docstr,
 	"from_numbers(data_type: type, *numbers: number) -> array\n"
 	"	Creates an array of numbers, using the specified data type and `numbers` as the values.\n"

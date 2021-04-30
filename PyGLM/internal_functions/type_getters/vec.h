@@ -4,6 +4,8 @@
 
 #include "../../types/all.h"
 
+#include "ctypes_datatypes.h"
+
 template<int L, typename T>
 static constexpr PyTypeObject* PyGLM_VEC_TYPE() {
 	return (std::is_same<vec<L, T>, vec<1, float> >::value) ? (PyTypeObject*)&hfvec1Type :
@@ -60,4 +62,32 @@ static constexpr PyTypeObject* PyGLM_VEC_TYPE_T_ONLY(int L) {
 		(L == 3) ? PyGLM_VEC_TYPE<3, T>() : 
 		(L == 4) ? PyGLM_VEC_TYPE<4, T>() : 
 		NULL;
+}
+
+static PyTypeObject* PyGLM_PYOBJECT_VEC_QUAT_COMPONENT_TYPE(PyGLMTypeObject* vec) {
+	switch (vec->format) {
+	case PyGLM_FS_FLOAT:
+		return PyGLM_CTYPES_TYPE<float>();
+	case PyGLM_FS_DOUBLE:
+		return PyGLM_CTYPES_TYPE<double>();
+	case PyGLM_FS_INT64:
+		return PyGLM_CTYPES_TYPE<int64>();
+	case PyGLM_FS_UINT64:
+		return PyGLM_CTYPES_TYPE<uint64>();
+	case PyGLM_FS_INT32:
+		return PyGLM_CTYPES_TYPE<int32>();
+	case PyGLM_FS_UINT32:
+		return PyGLM_CTYPES_TYPE<uint32>();
+	case PyGLM_FS_INT16:
+		return PyGLM_CTYPES_TYPE<int16>();
+	case PyGLM_FS_UINT16:
+		return PyGLM_CTYPES_TYPE<uint16>();
+	case PyGLM_FS_INT8:
+		return PyGLM_CTYPES_TYPE<int8>();
+	case PyGLM_FS_UINT8:
+		return PyGLM_CTYPES_TYPE<uint8>();
+	case PyGLM_FS_BOOL:
+		return PyGLM_CTYPES_TYPE<bool>();
+	}
+	return NULL;
 }
