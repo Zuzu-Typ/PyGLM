@@ -2,10 +2,12 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<3, glm::i8> vec3_int8_t;
+
 static PyMemberDef hi8vec3_members[] = {
-	{ (char*)"x", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.x), 0, (char*)"i8vec3.x" },
-	{ (char*)"y", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.y), 0, (char*)"i8vec3.y" },
-	{ (char*)"z", T_BYTE, offsetof(UNBRACKET(vec<3, glm::i8>), super_type.z), 0, (char*)"i8vec3.z" },
+	{ (char*)"x", T_BYTE, offsetof(vec3_int8_t, super_type.x), 0, (char*)"i8vec3.x" },
+	{ (char*)"y", T_BYTE, offsetof(vec3_int8_t, super_type.y), 0, (char*)"i8vec3.y" },
+	{ (char*)"z", T_BYTE, offsetof(vec3_int8_t, super_type.z), 0, (char*)"i8vec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hi8vec3_methods[] = {

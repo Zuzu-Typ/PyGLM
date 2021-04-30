@@ -2,11 +2,13 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<4, glm::i64> vec4_int64_t;
+
 static PyMemberDef hi64vec4_members[] = {
-	{ (char*)"x", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.x), 0, (char*)"i64vec4.x" },
-	{ (char*)"y", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.y), 0, (char*)"i64vec4.y" },
-	{ (char*)"z", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.z), 0, (char*)"i64vec4.z" },
-	{ (char*)"w", T_LONGLONG, offsetof(UNBRACKET(vec<4, glm::i64>), super_type.w), 0, (char*)"i64vec4.w" },
+	{ (char*)"x", T_LONGLONG, offsetof(vec4_int64_t, super_type.x), 0, (char*)"i64vec4.x" },
+	{ (char*)"y", T_LONGLONG, offsetof(vec4_int64_t, super_type.y), 0, (char*)"i64vec4.y" },
+	{ (char*)"z", T_LONGLONG, offsetof(vec4_int64_t, super_type.z), 0, (char*)"i64vec4.z" },
+	{ (char*)"w", T_LONGLONG, offsetof(vec4_int64_t, super_type.w), 0, (char*)"i64vec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hi64vec4_methods[] = {

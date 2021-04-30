@@ -2,10 +2,12 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<3, glm::i16> vec3_int16_t;
+
 static PyMemberDef hi16vec3_members[] = {
-	{ (char*)"x", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.x), 0, (char*)"i16vec3.x" },
-	{ (char*)"y", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.y), 0, (char*)"i16vec3.y" },
-	{ (char*)"z", T_SHORT, offsetof(UNBRACKET(vec<3, glm::i16>), super_type.z), 0, (char*)"i16vec3.z" },
+	{ (char*)"x", T_SHORT, offsetof(vec3_int16_t, super_type.x), 0, (char*)"i16vec3.x" },
+	{ (char*)"y", T_SHORT, offsetof(vec3_int16_t, super_type.y), 0, (char*)"i16vec3.y" },
+	{ (char*)"z", T_SHORT, offsetof(vec3_int16_t, super_type.z), 0, (char*)"i16vec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hi16vec3_methods[] = {

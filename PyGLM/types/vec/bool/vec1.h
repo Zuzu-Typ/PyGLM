@@ -2,8 +2,10 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<1, bool> vec1_bool_t;
+
 static PyMemberDef hbvec1_members[] = {
-	{ (char*)"x", T_BOOL, offsetof(UNBRACKET(vec<1, bool>), super_type.x), 0, (char*)"bvec1.x" },
+	{ (char*)"x", T_BOOL, offsetof(vec1_bool_t, super_type.x), 0, (char*)"bvec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hbvec1_methods[] = {
