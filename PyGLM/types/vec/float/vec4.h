@@ -2,11 +2,13 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<4, float> vec4_float_t;
+
 static PyMemberDef hfvec4_members[] = {
-	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.x), 0, (char*)"vec4.x" },
-	{ (char*)"y", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.y), 0, (char*)"vec4.y" },
-	{ (char*)"z", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.z), 0, (char*)"vec4.z" },
-	{ (char*)"w", T_FLOAT, offsetof(UNBRACKET(vec<4, float>), super_type.w), 0, (char*)"vec4.w" },
+	{ (char*)"x", T_FLOAT, offsetof(vec4_float_t, super_type.x), 0, (char*)"vec4.x" },
+	{ (char*)"y", T_FLOAT, offsetof(vec4_float_t, super_type.y), 0, (char*)"vec4.y" },
+	{ (char*)"z", T_FLOAT, offsetof(vec4_float_t, super_type.z), 0, (char*)"vec4.z" },
+	{ (char*)"w", T_FLOAT, offsetof(vec4_float_t, super_type.w), 0, (char*)"vec4.w" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hfvec4_methods[] = {

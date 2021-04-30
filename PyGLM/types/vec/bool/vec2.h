@@ -2,9 +2,11 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<2, bool> vec2_bool_t;
+
 static PyMemberDef hbvec2_members[] = {
-	{ (char*)"x", T_BOOL, offsetof(UNBRACKET(vec<2, bool>), super_type.x), 0, (char*)"bvec2.x" },
-	{ (char*)"y", T_BOOL, offsetof(UNBRACKET(vec<2, bool>), super_type.y), 0, (char*)"bvec2.y" },
+	{ (char*)"x", T_BOOL, offsetof(vec2_bool_t, super_type.x), 0, (char*)"bvec2.x" },
+	{ (char*)"y", T_BOOL, offsetof(vec2_bool_t, super_type.y), 0, (char*)"bvec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hbvec2_methods[] = {

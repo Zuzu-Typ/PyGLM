@@ -2,10 +2,12 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<3, bool> vec3_bool_t;
+
 static PyMemberDef hbvec3_members[] = {
-	{ (char*)"x", T_BOOL, offsetof(UNBRACKET(vec<3, bool>), super_type.x), 0, (char*)"bvec3.x" },
-	{ (char*)"y", T_BOOL, offsetof(UNBRACKET(vec<3, bool>), super_type.y), 0, (char*)"bvec3.y" },
-	{ (char*)"z", T_BOOL, offsetof(UNBRACKET(vec<3, bool>), super_type.z), 0, (char*)"bvec3.z" },
+	{ (char*)"x", T_BOOL, offsetof(vec3_bool_t, super_type.x), 0, (char*)"bvec3.x" },
+	{ (char*)"y", T_BOOL, offsetof(vec3_bool_t, super_type.y), 0, (char*)"bvec3.y" },
+	{ (char*)"z", T_BOOL, offsetof(vec3_bool_t, super_type.z), 0, (char*)"bvec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hbvec3_methods[] = {

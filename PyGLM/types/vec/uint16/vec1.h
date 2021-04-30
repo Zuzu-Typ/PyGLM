@@ -2,8 +2,10 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<1, glm::u16> vec1_uint16_t;
+
 static PyMemberDef hu16vec1_members[] = {
-	{ (char*)"x", T_USHORT, offsetof(UNBRACKET(vec<1, glm::u16>), super_type.x), 0, (char*)"u16vec1.x" },
+	{ (char*)"x", T_USHORT, offsetof(vec1_uint16_t, super_type.x), 0, (char*)"u16vec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hu16vec1_methods[] = {

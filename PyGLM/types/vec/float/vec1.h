@@ -2,8 +2,10 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<1, float> vec1_float_t;
+
 static PyMemberDef hfvec1_members[] = {
-	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(vec<1, float>), super_type.x), 0, (char*)"vec1.x" },
+	{ (char*)"x", T_FLOAT, offsetof(vec1_float_t, super_type.x), 0, (char*)"vec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hfvec1_methods[] = {

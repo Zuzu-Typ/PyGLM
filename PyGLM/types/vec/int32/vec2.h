@@ -2,9 +2,11 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<2, glm::i32> vec2_int32_t;
+
 static PyMemberDef hivec2_members[] = {
-	{ (char*)"x", T_INT, offsetof(UNBRACKET(vec<2, glm::i32>), super_type.x), 0, (char*)"ivec2.x" },
-	{ (char*)"y", T_INT, offsetof(UNBRACKET(vec<2, glm::i32>), super_type.y), 0, (char*)"ivec2.y" },
+	{ (char*)"x", T_INT, offsetof(vec2_int32_t, super_type.x), 0, (char*)"ivec2.x" },
+	{ (char*)"y", T_INT, offsetof(vec2_int32_t, super_type.y), 0, (char*)"ivec2.y" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hivec2_methods[] = {

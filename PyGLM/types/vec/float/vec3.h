@@ -2,10 +2,12 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<3, float> vec3_float_t;
+
 static PyMemberDef hfvec3_members[] = {
-	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.x), 0, (char*)"vec3.x" },
-	{ (char*)"y", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.y), 0, (char*)"vec3.y" },
-	{ (char*)"z", T_FLOAT, offsetof(UNBRACKET(vec<3, float>), super_type.z), 0, (char*)"vec3.z" },
+	{ (char*)"x", T_FLOAT, offsetof(vec3_float_t, super_type.x), 0, (char*)"vec3.x" },
+	{ (char*)"y", T_FLOAT, offsetof(vec3_float_t, super_type.y), 0, (char*)"vec3.y" },
+	{ (char*)"z", T_FLOAT, offsetof(vec3_float_t, super_type.z), 0, (char*)"vec3.z" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hfvec3_methods[] = {

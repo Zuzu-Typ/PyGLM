@@ -2,8 +2,10 @@
 
 #include "../forward_declarations.h"
 
+typedef vec<1, glm::u64> vec1_uint64_t;
+
 static PyMemberDef hu64vec1_members[] = {
-	{ (char*)"x", T_ULONGLONG, offsetof(UNBRACKET(vec<1, glm::u64>), super_type.x), 0, (char*)"u64vec1.x" },
+	{ (char*)"x", T_ULONGLONG, offsetof(vec1_uint64_t, super_type.x), 0, (char*)"u64vec1.x" },
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hu64vec1_methods[] = {
