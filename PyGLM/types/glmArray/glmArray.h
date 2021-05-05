@@ -31,6 +31,7 @@ static PyMethodDef glmArray_methods[] = {
 	{ "to_list",		(PyCFunction)glmArray_to_list,			METH_NOARGS,				glmArray_to_list_docstr },
 	{ "to_tuple",		(PyCFunction)glmArray_to_tuple,			METH_NOARGS,				glmArray_to_tuple_docstr },
 	{ "split_components",(PyCFunction)glmArray_split_components,METH_NOARGS,				glmArray_split_components_docstr },
+	{ "reduce",			(PyCFunction)glmArray_reduce,			METH_VARARGS,				glmArray_reduce_docstr },
 	{ "from_numbers",	(PyCFunction)glmArray_from_numbers,		METH_VARARGS | METH_STATIC,	glmArray_from_numbers_docstr },
 	{ "as_reference",	(PyCFunction)glmArray_as_reference,		METH_O | METH_STATIC,		glmArray_as_reference_docstr },
 	{ "zeros",			(PyCFunction)glmArray_zeros,			METH_VARARGS | METH_STATIC,	glmArray_zeros_docstr },

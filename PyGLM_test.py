@@ -2307,6 +2307,14 @@ def test_spec_array_methods():
 
     assert arr == glm.array(glm.c_float, 1, 2, 3, 4, 5)
 
+    assert glm.array(glm.vec3(1, 2, 3)).split_components() == (glm.array(glm.float32, 1), glm.array(glm.float32, 2), glm.array(glm.float32, 3))
+    assert glm.array(glm.vec4(1, 2, 3, 4), glm.vec4(6, 7, 8, 9)).split_components() == (glm.array(glm.float32, 1, 6), glm.array(glm.float32, 2, 7), glm.array(glm.float32, 3, 8), glm.array(glm.float32, 4, 9))
+    assert glm.array(glm.mat2(1, 2, 3, 4)).split_components() == (glm.array(glm.vec2(1, 2)), glm.array(glm.vec2(3, 4)))
+
+    assert glm.array(glm.vec4(1, 2, 3, 4), glm.vec4(6, 7, 8, 9)).reduce(glm.add) == glm.vec4(7, 9, 11, 13)
+    assert glm.array(glm.c_float, 5, 3, 4, 2, 1).reduce(glm.add) == 15
+    assert glm.array(glm.c_float, 5, 3, 4, 2, 1).reduce(glm.add, 20) == 35
+
 def test_spec_common_abs():
     for i in range(-10, 10):
         assert glm.abs(i) == abs(i)

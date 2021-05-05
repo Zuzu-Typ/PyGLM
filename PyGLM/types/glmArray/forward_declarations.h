@@ -28,6 +28,16 @@ PyDoc_STRVAR(glmArray_split_components_docstr,
 
 static PyObject* glmArray_split_components(glmArray* self, PyObject*);
 
+PyDoc_STRVAR(glmArray_reduce_docstr,
+	"reduce(function[, initializer])\n"
+	"	Applies the binary `function` to this array's elements cumulatively, reducing the array to\n"
+	"	a single value. If initializer is set, it is placed before the first element.\n"
+	"	Example: array.from_numbers(int32, 1, 2, 3, 4).reduce(add) -> (((1+2)+3)+4)\n"
+	"	Or with an initializer: arr.reduce(add, 6) -> ((((6+1)+2)+3)+4)"
+);
+
+static PyObject* glmArray_reduce(glmArray* self, PyObject* args);
+
 PyDoc_STRVAR(glmArray_from_numbers_docstr,
 	"from_numbers(data_type: type, *numbers: number) -> array\n"
 	"	Creates an array of numbers, using the specified data type and `numbers` as the values.\n"
