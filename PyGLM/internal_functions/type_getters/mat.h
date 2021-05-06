@@ -67,3 +67,84 @@ static PyTypeObject* PyGLM_MAT_TYPE_T_ONLY(int C, int R) {
 		) :
 		NULL;
 }
+
+static PyTypeObject* PyGLM_PYOBJECT_MAT_GET_COLUMN_TYPE(PyGLMTypeObject* mat) {
+	switch (mat->C) {
+	case 2:
+		switch (mat->format) {
+		case PyGLM_FS_FLOAT:
+			return PyGLM_VEC_TYPE<2, float>();
+		case PyGLM_FS_DOUBLE:
+			return PyGLM_VEC_TYPE<2, double>();
+		case PyGLM_FS_INT64:
+			return PyGLM_VEC_TYPE<2, int64>();
+		case PyGLM_FS_UINT64:
+			return PyGLM_VEC_TYPE<2, uint64>();
+		case PyGLM_FS_INT32:
+			return PyGLM_VEC_TYPE<2, int32>();
+		case PyGLM_FS_UINT32:
+			return PyGLM_VEC_TYPE<2, uint32>();
+		case PyGLM_FS_INT16:
+			return PyGLM_VEC_TYPE<2, int16>();
+		case PyGLM_FS_UINT16:
+			return PyGLM_VEC_TYPE<2, uint16>();
+		case PyGLM_FS_INT8:
+			return PyGLM_VEC_TYPE<2, int8>();
+		case PyGLM_FS_UINT8:
+			return PyGLM_VEC_TYPE<2, uint8>();
+		case PyGLM_FS_BOOL:
+			return PyGLM_VEC_TYPE<2, bool>();
+		}
+	case 3:
+		switch (mat->format) {
+		case PyGLM_FS_FLOAT:
+			return PyGLM_VEC_TYPE<3, float>();
+		case PyGLM_FS_DOUBLE:
+			return PyGLM_VEC_TYPE<3, double>();
+		case PyGLM_FS_INT64:
+			return PyGLM_VEC_TYPE<3, int64>();
+		case PyGLM_FS_UINT64:
+			return PyGLM_VEC_TYPE<3, uint64>();
+		case PyGLM_FS_INT32:
+			return PyGLM_VEC_TYPE<3, int32>();
+		case PyGLM_FS_UINT32:
+			return PyGLM_VEC_TYPE<3, uint32>();
+		case PyGLM_FS_INT16:
+			return PyGLM_VEC_TYPE<3, int16>();
+		case PyGLM_FS_UINT16:
+			return PyGLM_VEC_TYPE<3, uint16>();
+		case PyGLM_FS_INT8:
+			return PyGLM_VEC_TYPE<3, int8>();
+		case PyGLM_FS_UINT8:
+			return PyGLM_VEC_TYPE<3, uint8>();
+		case PyGLM_FS_BOOL:
+			return PyGLM_VEC_TYPE<3, bool>();
+		}
+	case 4:
+		switch (mat->format) {
+		case PyGLM_FS_FLOAT:
+			return PyGLM_VEC_TYPE<4, float>();
+		case PyGLM_FS_DOUBLE:
+			return PyGLM_VEC_TYPE<4, double>();
+		case PyGLM_FS_INT64:
+			return PyGLM_VEC_TYPE<4, int64>();
+		case PyGLM_FS_UINT64:
+			return PyGLM_VEC_TYPE<4, uint64>();
+		case PyGLM_FS_INT32:
+			return PyGLM_VEC_TYPE<4, int32>();
+		case PyGLM_FS_UINT32:
+			return PyGLM_VEC_TYPE<4, uint32>();
+		case PyGLM_FS_INT16:
+			return PyGLM_VEC_TYPE<4, int16>();
+		case PyGLM_FS_UINT16:
+			return PyGLM_VEC_TYPE<4, uint16>();
+		case PyGLM_FS_INT8:
+			return PyGLM_VEC_TYPE<4, int8>();
+		case PyGLM_FS_UINT8:
+			return PyGLM_VEC_TYPE<4, uint8>();
+		case PyGLM_FS_BOOL:
+			return PyGLM_VEC_TYPE<4, bool>();
+		}
+	}
+	return NULL;
+}

@@ -740,6 +740,130 @@ glmArray_to_tuple(glmArray* self, PyObject*) {
 	return out;
 }
 
+static PyObject* 
+glmArray_split_components(glmArray* self, PyObject*) {
+	if (self->glmType == PyGLM_TYPE_CTYPES) {
+		PyErr_SetString(PyExc_NotImplementedError, "split_components() is not defined for ctypes arrays");
+		return NULL;
+	}
+
+	const uint8 componentCount = self->shape[0];
+
+	PyTypeObject* subtype = (self->glmType == PyGLM_TYPE_MAT) ? PyGLM_PYOBJECT_MAT_GET_COLUMN_TYPE((PyGLMTypeObject*)(self->subtype)) :
+		PyGLM_PYOBJECT_VEC_QUAT_COMPONENT_TYPE((PyGLMTypeObject*)(self->subtype));
+
+	const uint8 glmType = (self->glmType == PyGLM_TYPE_MAT) ? PyGLM_TYPE_VEC : PyGLM_TYPE_CTYPES;
+
+	PyObject* out = PyTuple_New(componentCount);
+	for (uint8 i = 0; i < componentCount; i++) {
+		glmArray* arr = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
+
+		if (arr == NULL) {
+			PyErr_SetString(PyExc_MemoryError, "Out of memory");
+			Py_DECREF(out);
+			return NULL;
+		}
+
+		arr->subtype = subtype;
+		arr->glmType = glmType;
+		arr->readonly = false;
+		arr->reference = NULL;
+
+		arr->dtSize = self->dtSize;
+		arr->format = self->format;
+		arr->itemCount = self->itemCount;
+		arr->itemSize = self->itemSize / componentCount;
+		arr->nBytes = self->nBytes / componentCount;
+
+		arr->shape[0] = self->shape[1];
+
+		arr->data = PyMem_Malloc(arr->nBytes);
+
+		if (arr->data == NULL) {
+			PyErr_SetString(PyExc_MemoryError, "Out of memory");
+			Py_DECREF(arr);
+			Py_DECREF(out);
+			return NULL;
+		}
+
+		char* selfDataPtr = (char*)self->data + (i * arr->itemSize);
+		char* arrDataPtr = (char*)arr->data;
+		for (ssize_t j = 0; j < self->itemCount; j++) {
+			memcpy(arrDataPtr, selfDataPtr, arr->itemSize);
+			selfDataPtr += self->itemSize;
+			arrDataPtr += arr->itemSize;
+		}
+
+		PyTuple_SET_ITEM(out, i, ((PyObject*)arr));
+	}
+	return out;
+}
+
+static PyObject* do_reduce(std::vector<PyObject*> objects, PyObject* callable) {
+	const size_t object_count = objects.size();
+
+	PyObject* result = objects[0];
+
+	PyObject* args = PyTuple_New(2);
+
+	for (size_t i = 1; i < object_count; i++) {
+		PyObject* nextObj = objects[i];
+
+		PyTuple_SET_ITEM(args, 0, result);
+
+		PyTuple_SET_ITEM(args, 1, nextObj);
+
+		PyObject* newResult = PyObject_Call(callable, args, NULL);
+
+		Py_DECREF(result);
+		Py_DECREF(nextObj);
+
+		if (newResult == NULL) {
+			PyTuple_SET_ITEM(args, 0, NULL);
+			PyTuple_SET_ITEM(args, 1, NULL);
+			Py_DECREF(args);
+			return NULL;
+		}
+
+		result = newResult;
+	}
+
+	PyTuple_SET_ITEM(args, 0, NULL);
+	PyTuple_SET_ITEM(args, 1, NULL);
+	Py_DECREF(args);
+
+	return result;
+}
+
+static PyObject* glmArray_reduce(glmArray* self, PyObject* args) {
+	PyObject* arg1, * arg2 = NULL;
+	if (!PyArg_UnpackTuple(args, "reduce", 1, 2, &arg1, &arg2)) return NULL;
+
+	if (!PyCallable_Check(arg1)) {
+		PyGLM_TYPEERROR_O("reduce() requires a function or callable as it's first argument. Got ", arg1);
+		return NULL;
+	}
+
+	std::vector<PyObject*> objects;
+
+	if (arg2 != NULL) { // initializer
+		if (!((self->glmType == PyGLM_TYPE_CTYPES && PyGLM_Number_Check(arg2)) || PyObject_TypeCheck(arg2, self->subtype))) {
+			PyGLM_TYPEERROR_O("Invalid argument type for initializer of reduce(): ", arg2);
+			return NULL;
+		}
+		Py_INCREF(arg2);
+		objects.push_back(arg2);
+	}
+
+	PyGLM_ASSERT((self->itemCount + objects.size() > 0), "Cannot reduce an empty array with no initializer.");
+
+	for (ssize_t i = 0; i < self->itemCount; i++) {
+		objects.push_back(glmArray_get(self, i));
+	}
+
+	return do_reduce(objects, arg1);
+}
+
 template<typename T>
 static bool
 glmArray_from_numbers_init_iter(glmArray* out, PyObject* iterator, Py_ssize_t& argCount) {

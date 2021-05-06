@@ -27,6 +27,8 @@ It's mainly intended to **provide a way of passing multiple glm type instances**
     * [Filter](#filter)  
     * [Map](#map)  
     * [Sort](#sort)  
+    * [Split components](#split-components)  
+    * [Reduce](#reduce)  
     * [Concat](#concat)  
     * [Repeat](#repeat)  
 5. [Operators](#operators)  
@@ -314,6 +316,49 @@ array(c_float(6), c_float(5), c_float(4), c_float(3), c_float(2), c_float(1))
 >>> arr.sort(cmp) # using glm.cmp
 >>> arr
 array(c_float(1), c_float(2), c_float(3), c_float(4), c_float(5), c_float(6))
+ ```  
+  
+### Split components  
+You can split an array into the components of it's elements using the ``` split_components() ``` method\.  
+  
+Splits each element of this array into it's components\.  
+Returns one or multiple arrays wrapped in a tuple\.  
+  
+Example:  
+``` Python
+>>> arr = array(vec3(1, 2, 3), vec3(4, 5, 6))
+>>> arr.split_components()
+(array(c_float(1), c_float(4)), 
+ array(c_float(2), c_float(5)), 
+ array(c_float(3), c_float(6)))
+ 
+>>> arr = array(mat2((1,2),(3,4)), mat2((5,6),(7,8)), mat2((9,10),(11,12)))
+>>> arr.split_components()
+(array(vec2(1, 2), vec2(5, 6), vec2(9, 10)), 
+ array(vec2(3, 4), vec2(7, 8), vec2(11, 12)))
+ 
+>>> arr = array(c_float, 6, 5, 4, 3, 2, 1) # doesn't have any components
+>>> arr.split_components()
+NotImplementedError: split_components() is not defined for ctypes arrays
+ ```  
+  
+### Reduce  
+Used to apply a binary function to this array's elements cumulatively, reducing the array to a single value\. If an optional initializer is given, it is placed before the first element\.  
+  
+Example:  
+``` Python
+>>> arr = array(c_float, 6, 5, 4, 3, 2, 1)
+>>> arr.reduce(lambda x, y: x + y) # (((((6+5)+4)+3)+2)+1)
+21.0
+
+>>> arr.reduce(mul) # (((((6*5)*4)*3)*2)*1)
+720.0
+
+>>> arr.reduce(sub) # (((((6-5)-4)-3)-2)-1)
+-9.0
+
+>>> arr.reduce(sub, 21) # with initializer: ((((((21-6)-5)-4)-3)-2)-1)
+0.0
  ```  
   
 ### Concat  
