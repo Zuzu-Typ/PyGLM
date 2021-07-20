@@ -1,19 +1,13 @@
 name: Build and upload to PyPI
 
-on: [push, pull_request]
-#on:
-#  push:
-#  pull_request:
-#  release:
-#    types:
-#      - published
-
+on:
+  release:
+    types: [published]
+    
 env:
   CIBW_BUILD: cp39-*
   CIBW_TEST_REQUIRES: pytest
   CIBW_TEST_COMMAND: pytest {project}/PyGLM_test.py -v
-  TWINE_USERNAME: __token__
-  TWINE_PASSWORD: ${{ secrets.pypi_password }}
 
 jobs:
   build_wheels_win_mac:
@@ -83,7 +77,7 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
-    needs: [build_sdist]
+    needs: [build_wheels_win_mac, build_wheels_manylinux, build_sdist]
     runs-on: ubuntu-latest
     
     #if: github.event_name == 'release' && github.event.action == 'published'
@@ -97,5 +91,6 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@v1.4.2
         with:
           user: __token__
-          password: ${{ secrets.testpypi_password }}
-          repository_url: https://test.pypi.org/legacy/
+          password: ${{ secrets.pypi_password }}
+          #password: ${{ secrets.testpypi_password }}
+          #repository_url: https://test.pypi.org/legacy/
