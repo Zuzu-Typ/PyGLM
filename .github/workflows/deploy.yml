@@ -89,7 +89,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: artifact
+          name: release
           path: dist
 
       - uses: pypa/gh-action-pypi-publish@v1.4.2
