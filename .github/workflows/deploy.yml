@@ -9,18 +9,43 @@ on: [push, pull_request]
 #      - published
 
 env:
-  CIBW_SKIP: cp34-*
   CIBW_BUILD: cp3?-*
   CIBW_TEST_REQUIRES: pytest
   CIBW_TEST_COMMAND: pytest {project}/PyGLM_test.py -v
 
 jobs:
-  build_wheels:
+  build_wheels_win_mac:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: '3.9'
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.0.0
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ./wheelhouse/*.whl
+          
+  build_wheels_manylinux:
+    name: Build wheels on ${{ matrix.distro }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro: [manylinux2010, manylinux_2_24]
+        
+    env:
+      CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.distro }}
+      CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.distro }}
 
     steps:
       - uses: actions/checkout@v2
