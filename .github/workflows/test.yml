@@ -23,13 +23,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Build PyGLM
-        run: |
-          python setup.py install
+        run: python setup.py install
       - name: Install pytest
         run: |
           python -m pip install pip --upgrade
           pip install pytest
       - name: Test with pytest
-        run: |
-          pytest PyGLM_test.py -v
+        run: pytest PyGLM_test.py -v
   
