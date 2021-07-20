@@ -26,7 +26,7 @@ pickMatrix_(PyObject*, PyObject* args) {
 		PyGLM_Vec_PTI_Assign0(2, float);
 		PyGLM_Vec_PTI_Assign1(2, float);
 		PyGLM_Vec_PTI_Assign2(4, float);
-		if (!(o.x > 0.0f && o.y > 0.0f)) {
+		if (!(o2.x > 0.0f && o2.y > 0.0f)) {
 			PyErr_SetString(PyExc_ValueError, "delta has to be greater than 0 for pickMatrix()");
 			return NULL;
 		}
@@ -36,7 +36,7 @@ pickMatrix_(PyObject*, PyObject* args) {
 		PyGLM_Vec_PTI_Assign0(2, double);
 		PyGLM_Vec_PTI_Assign1(2, double);
 		PyGLM_Vec_PTI_Assign2(4, double);
-		if (!(o.x > 0.0 && o.y > 0.0)) {
+		if (!(o2.x > 0.0 && o2.y > 0.0)) {
 			PyErr_SetString(PyExc_ValueError, "delta has to be greater than 0 for pickMatrix()");
 			return NULL;
 		}
