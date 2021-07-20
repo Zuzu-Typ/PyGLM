@@ -1,0 +1,96 @@
+name: Build and upload to PyPI
+
+on:
+  release:
+    types: [published]
+    
+env:
+  CIBW_BUILD: cp39-*
+  CIBW_TEST_REQUIRES: pytest
+  CIBW_TEST_COMMAND: pytest {project}/PyGLM_test.py -v
+
+jobs:
+  build_wheels_win_mac:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: '3.9'
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.0.0
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ./wheelhouse/*.whl
+          
+  build_wheels_manylinux:
+    name: Build wheels on ${{ matrix.distro }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro: [manylinux2010, manylinux_2_24]
+        
+    env:
+      CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.distro }}
+      CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.distro }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: '3.9'
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.0.0
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ./wheelhouse/*.whl
+
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: '3.9'
+
+      - name: Build sdist
+        run: python setup.py sdist
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: dist/*.tar.gz
+
+  upload_pypi:
+    needs: [build_wheels_win_mac, build_wheels_manylinux, build_sdist]
+    runs-on: ubuntu-latest
+    
+    #if: github.event_name == 'release' && github.event.action == 'published'
+    
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: artifact
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@v1.4.2
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
+          #password: ${{ secrets.testpypi_password }}
+          #repository_url: https://test.pypi.org/legacy/
