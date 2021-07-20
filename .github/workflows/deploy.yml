@@ -84,7 +84,7 @@ jobs:
     needs: [build_wheels_win_mac, build_wheels_manylinux, build_sdist]
     runs-on: ubuntu-latest
     
-    if: github.event_name == 'release' && github.event.action == 'published'
+    #if: github.event_name == 'release' && github.event.action == 'published'
     
     steps:
       - uses: actions/download-artifact@v2
