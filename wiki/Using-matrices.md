@@ -15,6 +15,7 @@
     *  [The copy protocol](#the-copy-protocol)  
     *  [Pickling](#pickling)  
     *  [To list / tuple](#to-list--tuple)  
+    *  [To and from bytes](#to-and-from-bytes)  
 3.  [Operators](#operators)  
     *  [add](#add--operator)  
     *  [sub](#sub--operator)  
@@ -234,7 +235,7 @@ You can use ``` copy.copy(<matrix>) ``` or ``` copy.deepcopy(<matrix>) ``` to ge
 Matrices support [pickling](https://docs.python.org/3/library/pickle.html#module-interface) \(as of PyGLM 2\.0\.0\), which is Python's serialization method\.  
   
 ### To list / tuple  
-Any matrix type has a ``` to_list() ``` and a ``` to_tuple() ``` function, which returns the vector's data represented as a list or tuple respectively\.  
+Any matrix type has a ``` to_list() ``` and a ``` to_tuple() ``` function, which returns the matrix' data represented as a list or tuple respectively\.  
 Example:  
 ``` Python
 >>> print(glm.mat4().to_list())
@@ -243,6 +244,11 @@ Example:
 >>> print(glm.mat4().to_tuple())
 ((1.0, 0.0, 0.0, 0.0), (0.0, 1.0, 0.0, 0.0), (0.0, 0.0, 1.0, 0.0), (0.0, 0.0, 0.0, 1.0))
  ```  
+  
+  
+### To and from bytes  
+All matrices have a ``` to_bytes() ``` and a ``` from_bytes() ``` method, which allows for conversion of the matrix' data to and from bytes strings\.  
+  
 ## Operators  
 Matrix types support a bunch of operators\.  
 ### add \(``` + ``` operator\)  
@@ -336,7 +342,7 @@ Lets try to visualize it using an example:
 result = mat2x4(
 		(
             m24[0, 0] * m22[0, 0] + m24[1, 0] * m22[0, 1],
-		    m24[0, 1] * m22[0, 0] + m24[1, 1] * m22[0, 1],
+            m24[0, 1] * m22[0, 0] + m24[1, 1] * m22[0, 1],
 		    m24[0, 2] * m22[0, 0] + m24[1, 2] * m22[0, 1],
 		    m24[0, 3] * m22[0, 0] + m24[1, 3] * m22[0, 1]
 		),

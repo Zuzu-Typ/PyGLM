@@ -19,6 +19,7 @@ It's mainly intended to \b\provide a way of passing multiple glm type instances\
 \--\\url #the-copy-protocol\The copy protocol\url\
 \--\ \url #pickling \Pickling\ url\
 \--\\url #to-list--tuple\To list / tuple\url\
+\--\\url #to-and-from-bytes\To and from bytes\url\
 \--\\url #from-numbers\From Numbers\url\
 \--\\url #as-reference\As Reference\url\
 \--\\url #zeros\Zeros\url\
@@ -175,6 +176,26 @@ Arrays support \url https://docs.python.org/3/library/pickle.html#module-interfa
 
 \h3\To list / tuple\h3\
 Any array has a \code\to_list()\code\ and a \code\to_tuple()\code\ function, which return's the arrays's data represented as a list or tuple respectively.
+
+\h3\To and from bytes\h3\
+Any array has a \code\to_bytes()\code\ and a static \code\from_bytes()\code\ method, which allows for conversion of the array's data to and from bytes strings.
+
+The \code\from_bytes()\code\ method takes the bytes string and a target type (\code\uint8\code\ by default) as arguments.
+
+Example:
+\code Python\
+>>> array(uint8(1), uint8(2)).to_bytes()
+b'\\x01\\x02'
+
+>>> array.from_bytes(b"\\x01\\x02\\x03", uint8)
+array(c_uint8(1), c_uint8(2), c_uint8(3))
+
+>>> array.from_bytes(b"\\x00\\x00\\x00\\x00", vec1)
+array(vec1(0))
+
+>>> array.from_bytes(b"\\x00\\x00\\x00\\x00" * 8, vec1)
+array(vec1(0), vec1(0), vec1(0), vec1(0), vec1(0), vec1(0), vec1(0), vec1(0))
+\code\
 
 \h3\From Numbers\h3\
 The array class has a static \code\from_numbers\code\ method, which allows for creation of a one-dimensional array of numbers.
@@ -373,6 +394,18 @@ Arrays can be repeated a given number of times using the \code\repeat()\code\ me
 \code Python\
 >>> array(vec3(1, 2, 3)).repeat(3)
 array(vec3(1, 2, 3), vec3(1, 2, 3), vec3(1, 2, 3))
+\code\
+
+\h3\Reinterpret cast\h3\
+You can reinterpret the data of an array as a different element type using the \code\reinterpret_cast()\code\ method.
+
+Example:
+\code Python\
+>>> array(vec3(1, 2, 3)).reinterpret_cast(float32)
+array(c_float(1), c_float(2), c_float(3))
+
+>>> array.from_numbers(float32, 1, 2, 3, 4, 5, 6, 7, 8, 9).reinterpret_cast(vec3)
+array(vec3(1, 2, 3), vec3(4, 5, 6), vec3(7, 8, 9))
 \code\
 
 \h2\Operators\h2\

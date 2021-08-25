@@ -21,6 +21,7 @@ It's mainly intended to **provide a way of passing multiple glm type instances**
     * [The copy protocol](#the-copy-protocol)  
     *  [Pickling](#pickling)  
     * [To list / tuple](#to-list--tuple)  
+    * [To and from bytes](#to-and-from-bytes)  
     * [From Numbers](#from-numbers)  
     * [As Reference](#as-reference)  
     * [Zeros](#zeros)  
@@ -178,6 +179,26 @@ Arrays support [pickling](https://docs.python.org/3/library/pickle.html#module-i
   
 ### To list / tuple  
 Any array has a ``` to_list() ``` and a ``` to_tuple() ``` function, which return's the arrays's data represented as a list or tuple respectively\.  
+  
+### To and from bytes  
+Any array has a ``` to_bytes() ``` and a static ``` from_bytes() ``` method, which allows for conversion of the array's data to and from bytes strings\.  
+  
+The ``` from_bytes() ``` method takes the bytes string and a target type \(``` uint8 ``` by default\) as arguments\.  
+  
+Example:  
+``` Python
+>>> array(uint8(1), uint8(2)).to_bytes()
+b'\x01\x02'
+
+>>> array.from_bytes(b"\x01\x02\x03", uint8)
+array(c_uint8(1), c_uint8(2), c_uint8(3))
+
+>>> array.from_bytes(b"\x00\x00\x00\x00", vec1)
+array(vec1(0))
+
+>>> array.from_bytes(b"\x00\x00\x00\x00" * 8, vec1)
+array(vec1(0), vec1(0), vec1(0), vec1(0), vec1(0), vec1(0), vec1(0), vec1(0))
+ ```  
   
 ### From Numbers  
 The array class has a static ``` from_numbers ``` method, which allows for creation of a one\-dimensional array of numbers\.  
@@ -376,6 +397,18 @@ Arrays can be repeated a given number of times using the ``` repeat() ``` method
 ``` Python
 >>> array(vec3(1, 2, 3)).repeat(3)
 array(vec3(1, 2, 3), vec3(1, 2, 3), vec3(1, 2, 3))
+ ```  
+  
+### Reinterpret cast  
+You can reinterpret the data of an array as a different element type using the ``` reinterpret_cast() ``` method\.  
+  
+Example:  
+``` Python
+>>> array(vec3(1, 2, 3)).reinterpret_cast(float32)
+array(c_float(1), c_float(2), c_float(3))
+
+>>> array.from_numbers(float32, 1, 2, 3, 4, 5, 6, 7, 8, 9).reinterpret_cast(vec3)
+array(vec3(1, 2, 3), vec3(4, 5, 6), vec3(7, 8, 9))
  ```  
   
 ## Operators  

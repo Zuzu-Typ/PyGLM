@@ -2,23 +2,23 @@
 
 # Using Quaternions  
   
-1.  [Initialization](#Initialization)  
+1.  [Initialization](#initialization)  
     *  [with no arguments](#initialization-with-no-arguments)  
-    *  [all components with numbers](#Initializing-all-components-with-numbers)  
-    *  [copying a quaternion](#Copying-a-quaternion)  
-    *  [converting a quaternion](#Converting-a-quaternion)  
-    *  [with vectors](#Initializing-quaternions-with-vectors)  
-        *  [scalar and vector](#Initialization-with-a-scalar-and-a-vector)  
-        *  [two vec3s](#Constructing-quaternions-from-two-vec3s)  
-        *  [euler angles](#Constructing-quaternions-from-euler-angles)  
-    *  [conversion from mat3 or mat4](#Converting-a-mat3-or-mat4-to-a-quaternion)  
+    *  [all components with numbers](#initializing-all-components-with-numbers)  
+    *  [copying a quaternion](#copying-a-quaternion)  
+    *  [converting a quaternion](#converting-a-quaternion)  
+    *  [with vectors](#initializing-quaternions-with-vectors)  
+        *  [scalar and vector](#initialization-with-a-scalar-and-a-vector)  
+        *  [two vec3s](#constructing-quaternions-from-two-vec3s)  
+        *  [euler angles](#constructing-quaternions-from-euler-angles)  
+    *  [conversion from mat3 or mat4](#converting-a-mat3-or-mat4-to-a-quaternion)  
     *  [lists \(and other iterables\)](#lists-and-other-iterables)  
     *  [buffer protocol \(numpy, bytes\)](#objects-that-support-the-buffer-protocol-numpy-bytes)  
-2.  [Members](#Members)  
-3.  [Methods](#Methods)  
+2.  [Members](#members)  
+3.  [Methods](#methods)  
     *  [The copy protocol](#the-copy-protocol)  
     *  [Pickling](#pickling)  
-4.  [Operators](#Operators)  
+4.  [Operators](#operators)  
     *  [add](#add--operator)  
     *  [sub](#sub--operator)  
     *  [mul](#mul--operator)  
@@ -139,6 +139,8 @@ Method|Description
 -|-
 to\_list|Returns a list containing each component of the quaternion
 to\_tuple|Returns a tuple containing each component of the quaternion
+to\_bytes|Returns the data of the quaternion as a bytes string
+from\_bytes|\(static\) Creates a quaternion from a bytes string
   
   
 ### The copy protocol  

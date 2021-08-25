@@ -12,7 +12,8 @@
 \-\ \url #methods \Methods\ url\\list switch\
 \--\ \url #the-copy-protocol \The copy protocol\ url\
 \--\ \url #pickling \Pickling\ url\
-\--\ \url #to-list--tuple \To list / tuple\ url\\list switch\
+\--\ \url #to-list--tuple \To list / tuple\ url\
+\--\ \url #to-and-from-bytes \To and from bytes\ url\\list switch\
 \-\ \url #operators \Operators\ url\\list switch\
 \--\ \url #add--operator \add\ url\
 \--\ \url #sub--operator \sub\ url\
@@ -232,7 +233,7 @@ You can use \code\copy.copy(<matrix>)\code\ or \code\copy.deepcopy(<matrix>)\cod
 Matrices support \url https://docs.python.org/3/library/pickle.html#module-interface \pickling\url\ (as of PyGLM 2.0.0), which is Python's serialization method.
 
 \h3 \To list / tuple\ h3\
-Any matrix type has a \code\to_list()\code\ and a \code\to_tuple()\code\ function, which returns the vector's data represented as a list or tuple respectively.
+Any matrix type has a \code\to_list()\code\ and a \code\to_tuple()\code\ function, which returns the matrix' data represented as a list or tuple respectively.
 Example:
 \code Python \
 >>> print(glm.mat4().to_list())
@@ -241,6 +242,11 @@ Example:
 >>> print(glm.mat4().to_tuple())
 ((1.0, 0.0, 0.0, 0.0), (0.0, 1.0, 0.0, 0.0), (0.0, 0.0, 1.0, 0.0), (0.0, 0.0, 0.0, 1.0))
 \ code\
+
+
+\h3\To and from bytes\h3\
+All matrices have a \code\to_bytes()\code\ and a \code\from_bytes()\code\ method, which allows for conversion of the matrix' data to and from bytes strings.
+
 \h2 \Operators\ h2\
 Matrix types support a bunch of operators.
 \h3 \add (\code\+\code\ operator)\ h3\

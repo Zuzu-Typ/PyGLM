@@ -1,22 +1,22 @@
 \h1\Using Quaternions\h1\
 \lo \
-\-\ \url #Initialization \Initialization\ url\\list switch\
+\-\ \url #initialization \Initialization\ url\\list switch\
 \--\ \url #initialization-with-no-arguments \with no arguments\ url\
-\--\ \url #Initializing-all-components-with-numbers \all components with numbers\ url\
-\--\ \url #Copying-a-quaternion \copying a quaternion\ url\
-\--\ \url #Converting-a-quaternion \converting a quaternion\ url\
-\--\ \url #Initializing-quaternions-with-vectors \with vectors\ url\
-\---\ \url #Initialization-with-a-scalar-and-a-vector \scalar and vector\ url\
-\---\ \url #Constructing-quaternions-from-two-vec3s \two vec3s\ url\
-\---\ \url #Constructing-quaternions-from-euler-angles \euler angles\ url\
-\--\ \url #Converting-a-mat3-or-mat4-to-a-quaternion \conversion from mat3 or mat4\ url\
+\--\ \url #initializing-all-components-with-numbers \all components with numbers\ url\
+\--\ \url #copying-a-quaternion \copying a quaternion\ url\
+\--\ \url #converting-a-quaternion \converting a quaternion\ url\
+\--\ \url #initializing-quaternions-with-vectors \with vectors\ url\
+\---\ \url #initialization-with-a-scalar-and-a-vector \scalar and vector\ url\
+\---\ \url #constructing-quaternions-from-two-vec3s \two vec3s\ url\
+\---\ \url #constructing-quaternions-from-euler-angles \euler angles\ url\
+\--\ \url #converting-a-mat3-or-mat4-to-a-quaternion \conversion from mat3 or mat4\ url\
 \--\ \url #lists-and-other-iterables \lists (and other iterables)\ url\
 \--\ \url #objects-that-support-the-buffer-protocol-numpy-bytes \buffer protocol (numpy, bytes)\ url\\list switch\
-\-\ \url #Members \Members\ url\
-\-\ \url #Methods \Methods\ url\\list switch\
+\-\ \url #members \Members\ url\
+\-\ \url #methods \Methods\ url\\list switch\
 \--\ \url #the-copy-protocol \The copy protocol\ url\
 \--\ \url #pickling \Pickling\ url\\list switch\
-\-\ \url #Operators \Operators\ url\\list switch\
+\-\ \url #operators \Operators\ url\\list switch\
 \--\ \url #add--operator \add\ url\
 \--\ \url #sub--operator \sub\ url\
 \--\ \url #mul--operator \mul\ url\
@@ -135,6 +135,8 @@ Any quaternion type implements the following methods:
 Method\-\Description
 to_list\-\Returns a list containing each component of the quaternion
 to_tuple\-\Returns a tuple containing each component of the quaternion
+to_bytes\-\Returns the data of the quaternion as a bytes string
+from_bytes\-\(static) Creates a quaternion from a bytes string
 \tbl\
 
 \h3\The copy protocol\h3\

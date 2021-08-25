@@ -16,6 +16,7 @@
     *  [The copy protocol](#the-copy-protocol)  
     *  [Pickling](#pickling)  
     *  [To list / tuple](#to-list--tuple)  
+    *  [To and from bytes](#to-and-from-bytes)  
 4.  [Operators](#Operators)  
     *  [add](#add--operator)  
     *  [sub](#sub--operator)  
@@ -107,6 +108,9 @@ Vectors support [pickling](https://docs.python.org/3/library/pickle.html#module-
   
 ### To list / tuple  
 Any vector type has a ``` to_list() ``` and a ``` to_tuple() ``` function, which return's the vector's data represented as a list or tuple respectively\.  
+  
+### To and from bytes  
+All vectors have a ``` to_bytes() ``` and a ``` from_bytes() ``` method, which allows for conversion of the vector's data to and from bytes strings\.  
   
 ## Operators  
 Vector types support a *lot* of operators\.  

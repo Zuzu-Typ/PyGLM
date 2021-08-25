@@ -13,7 +13,8 @@
 \-\ \url #Methods \Methods\ url\\list switch\
 \--\ \url #the-copy-protocol \The copy protocol\ url\
 \--\ \url #pickling \Pickling\ url\
-\--\ \url #to-list--tuple \To list / tuple\ url\\list switch\
+\--\ \url #to-list--tuple \To list / tuple\ url\
+\--\ \url #to-and-from-bytes \To and from bytes\ url\\list switch\
 \-\ \url #Operators \Operators\ url\\list switch\
 \--\ \url #add--operator \add\ url\
 \--\ \url #sub--operator \sub\ url\
@@ -105,6 +106,9 @@ Vectors support \url https://docs.python.org/3/library/pickle.html#module-interf
 
 \h3\To list / tuple\h3\
 Any vector type has a \code\to_list()\code\ and a \code\to_tuple()\code\ function, which return's the vector's data represented as a list or tuple respectively.
+
+\h3\To and from bytes\h3\
+All vectors have a \code\to_bytes()\code\ and a \code\from_bytes()\code\ method, which allows for conversion of the vector's data to and from bytes strings.
 
 \h2\Operators\h2\
 Vector types support a \i\lot\i\ of operators.
