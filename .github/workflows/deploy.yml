@@ -5,7 +5,7 @@ on:
     types: [published]
     
 env:
-  CIBW_BUILD: cp39-*
+  CIBW_BUILD: cp3?-*
   CIBW_TEST_REQUIRES: pytest
   CIBW_TEST_COMMAND: pytest {project}/PyGLM_test.py -v
 
