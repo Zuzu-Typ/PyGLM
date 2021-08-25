@@ -16,6 +16,8 @@ static PyMethodDef hu16vec2_methods[] = {
 	{ "__setstate__", (PyCFunction)vec2_setstate<glm::u16>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)vec2_to_list<glm::u16>, METH_NOARGS, "Return the components of this vector as a list"},
 	{ "to_tuple", (PyCFunction)vec2_to_tuple<glm::u16>, METH_NOARGS, "Return the components of this vector as a tuple"},
+	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
+	{ "from_bytes", (PyCFunction)vec_from_bytes<2, glm::u16>, METH_O | METH_STATIC, "Create a vector from a bytes string"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hu16vec2BufferMethods = {

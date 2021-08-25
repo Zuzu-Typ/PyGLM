@@ -7,6 +7,27 @@ static int glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags);
 
 void glmArray_releasebuffer(PyObject* self, Py_buffer* view);
 
+PyDoc_STRVAR(glmArray_to_bytes_docstr,
+	"Return the data of this array as a bytes string"
+);
+
+static PyObject* glmArray_to_bytes(glmArray* self, PyObject*);
+
+PyDoc_STRVAR(glmArray_from_bytes_docstr,
+	"from_bytes(bytes_object: bytes, type_object: type = uint8) -> array\n"
+	"	Creates an array with the data given by `bytes_object`, using `type_object` as the element type.\n"
+	"	(The resulting array is a reference copy)"
+);
+
+static PyObject* glmArray_from_bytes(PyObject*, PyObject* args);
+
+PyDoc_STRVAR(glmArray_reinterpret_cast_docstr,
+	"reinterpret_cast(type_object: type) -> array\n"
+	"	Creates an array with the same data as this one, using `type_object` as the new element type.\n"
+	"	(The resulting array is a reference copy)"
+);
+
+static PyObject* glmArray_reinterpret_cast(glmArray* self, PyObject* arg);
 
 PyDoc_STRVAR(glmArray_to_list_docstr,
 	"Return the elements of this array as a list"

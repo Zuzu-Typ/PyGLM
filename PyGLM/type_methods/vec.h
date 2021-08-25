@@ -1873,18 +1873,19 @@ vec_releasebuffer(PyObject*, Py_buffer* view) {
 
 
 
+
+template<int L, typename T>
 static PyObject*
-generic_copy(PyObject* self, PyObject*) {
-	return PyObject_Call((PyObject*)(self->ob_type), PyTuple_Pack(1, self), NULL);
-}
-
-
-
-static PyObject*
-generic_deepcopy(PyObject* self, PyObject* memo) {
-	PyObject* copy = generic_copy(self, NULL);
-	PyDict_SetItem(memo, PyLong_FromVoidPtr((void*)self), copy);
-	return copy;
+vec_from_bytes(PyObject*, PyObject* arg) {
+	PyTypeObject* type = PyGLM_VEC_TYPE<L, T>();
+	if (PyBytes_Check(arg) && PyBytes_GET_SIZE(arg) == ((PyGLMTypeObject*)type)->itemSize) {
+		char* bytesAsString = PyBytes_AS_STRING(arg);
+		vec<L, T>* self = (vec<L, T> *)type->tp_alloc(type, 0);
+		self->super_type = *(glm::vec<L, T>*)bytesAsString;
+		return (PyObject*)self;
+	}
+	PyGLM_TYPEERROR_O("Invalid argument type for from_bytes(). Expected bytes, got ", arg);
+	return NULL;
 }
 
 template<int L, typename T>

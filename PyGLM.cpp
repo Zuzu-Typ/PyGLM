@@ -22,32 +22,8 @@
 // PyGLM FUNCTIONS
 #include "PyGLM/functions/all.h"
 
-
-//static PyObject*
-//_get_type_info(PyObject*, PyObject* args) {
-//	PyObject *arg1, *arg2;
-//	PyGLM_Arg_Unpack_2O(args, "_get_type_info", arg1, arg2);
-//	PyGLMTypeInfo pti(PyGLM_Number_AsLong(arg1), arg2);
-//	return PyLong_FromLong(pti.info);
-//}
-//
-
-
-
 //static PyObject*
 //test(PyObject*, PyObject* arg) {
-//
-//
-//	uint64 ptr1 = reinterpret_cast<uint64>(&hbvec1Type);
-//	uint64 ptr2 = reinterpret_cast<uint64>(&hbvec1GLMType.typeObject);
-//
-//	PyGLMTypeObject* ptr3 =(&hbvec1GLMType);
-//	PyGLMTypeObject* ptr4 =((PyGLMTypeObject*)(&hbvec1Type));
-//	
-//	//PyGLMTypeInfo pti(PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLMTypeInfo::getDT<float>(), arg);
-//	////return pack(*((glm::mat<4,4, float>*)pti.data));
-//	//return PyLong_FromLong(pti.info);
-//	Py_RETURN_FALSE;
 //}
 //#define HAS_TEST
 //#define TEST_FUNC_TYPE METH_O
@@ -385,15 +361,6 @@ extern "C" {
 		module_glm = PyModule_Create(&glmmodule);
 		if (module_glm == NULL)
 			return NULL;
-
-//#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
-//		// backwards compatibility
-//		Py_INCREF(module_glm);
-//		PyModule_AddObject(module_glm, "detail", module_glm);
-//
-//		Py_INCREF(module_glm);
-//		PyModule_AddObject(module_glm, "gtc", module_glm);
-//#endif
 
 		// float
 		PyModule_AddObject(module_glm, "c_float", ctypes_float);

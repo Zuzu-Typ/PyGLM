@@ -13,3 +13,5 @@ PyDoc_STRVAR(generic_deepcopy_docstr,
 );
 
 static PyObject* generic_deepcopy(PyObject* self, PyObject* memo);
+
+static PyObject* generic_to_bytes(PyObject* self, PyObject*);

@@ -10,6 +10,8 @@ static PyMethodDef hdqua_methods[] = {
 	{ "__setstate__", (PyCFunction)qua_setstate<double>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)qua_to_list<double>, METH_NOARGS, "Return the components of this quaterion as a list"},
 	{ "to_tuple", (PyCFunction)qua_to_tuple<double>, METH_NOARGS, "Return the components of this quaterion as a tuple"},
+	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
+	{ "from_bytes", (PyCFunction)qua_from_bytes<double>, METH_O | METH_STATIC, "Create a quaternion from a bytes string"},
 	{ NULL }
 };
 

@@ -1073,6 +1073,26 @@ def test_to_tuple():
     assert arr.to_tuple() == (glm.mat4(), glm.mat4(2))
 #/to_tuple #
 
+# to/from_bytes #
+def test_to_from_bytes():
+    for obj in gen_obj("V_M_Q"):
+        assert type(obj).from_bytes(obj.to_bytes()) == obj, repr(obj)
+    for obj in gen_obj("#MV"):
+        assert obj.to_bytes() == bytes(obj), repr(obj)
+
+    for args in gen_args("VVV_MMM_QQQ"):
+        arr = glm.array(args)
+        assert arr.from_bytes(arr.to_bytes(), arr.element_type) == arr
+#/to/from_bytes #
+
+# reinterpret_cast #
+def test_reinterpret_cast():
+    arr = glm.array.zeros(8*3*3*4*4, glm.uint8)
+
+    for type_ in (vector_types + matrix_types + quat_types + ctypes_types):
+        assert arr.reinterpret_cast(type_).element_type == type_
+#/reinterpret_cast #
+
 # pickling #
 import os
 if (eval(os.environ.get("TEST_PICKLING", "True"))):
