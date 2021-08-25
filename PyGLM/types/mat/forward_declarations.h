@@ -188,6 +188,9 @@ template<int C, int R, typename T>
 static PyObject* matIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
 
 template<int C, int R, typename T>
+static PyObject* mat_from_bytes(PyObject*, PyObject* arg);
+
+template<int C, int R, typename T>
 static Py_hash_t mat_hash(mat<C, R, T>* self, PyObject*);
 
 template<int C, int R, typename T>

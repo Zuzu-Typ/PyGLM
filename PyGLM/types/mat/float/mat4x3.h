@@ -10,6 +10,8 @@ static PyMethodDef hfmat4x3_methods[] = {
 	{ "__setstate__", (PyCFunction)mat_setstate<4, 3, float>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)mat_to_list<4, 3, float>, METH_NOARGS, "Return the components of this matrix as a nested list"},
 	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 3, float>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
+	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
+	{ "from_bytes", (PyCFunction)mat_from_bytes<4, 3, float>, METH_O | METH_STATIC, "Create a matrix from a bytes string"},
 	{ NULL }
 };
 static PyBufferProcs hfmat4x3BufferMethods = {

@@ -2850,6 +2850,20 @@ mat_releasebuffer(PyObject*, Py_buffer* view) {
 }
 
 template<int C, int R, typename T>
+static PyObject*
+mat_from_bytes(PyObject*, PyObject* arg) {
+	PyTypeObject* type = PyGLM_MAT_TYPE<C, R, T>();
+	if (PyBytes_Check(arg) && PyBytes_GET_SIZE(arg) == ((PyGLMTypeObject*)type)->itemSize) {
+		char* bytesAsString = PyBytes_AS_STRING(arg);
+		mat<C, R, T>* self = (mat<C, R, T> *)type->tp_alloc(type, 0);
+		self->super_type = *(glm::mat<C, R, T>*)bytesAsString;
+		return (PyObject*)self;
+	}
+	PyGLM_TYPEERROR_O("Invalid argument type for from_bytes(). Expected bytes, got ", arg);
+	return NULL;
+}
+
+template<int C, int R, typename T>
 static Py_hash_t
 mat_hash(mat<C, R, T>* self, PyObject*) {
 	std::hash<glm::mat<C, R, T>> hasher;

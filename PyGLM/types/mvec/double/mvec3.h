@@ -11,6 +11,7 @@ static PyMethodDef hdmvec3_methods[] = {
 	{ "__setstate__", (PyCFunction)mvec3_setstate<double>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)mvec3_to_list<double>, METH_NOARGS, "Return the components of this vector as a list"},
 	{ "to_tuple", (PyCFunction)mvec3_to_tuple<double>, METH_NOARGS, "Return the components of this vector as a tuple"},
+	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hdmvec3BufferMethods = {

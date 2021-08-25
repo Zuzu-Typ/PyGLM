@@ -6,9 +6,284 @@
 
 #include "../types/glmArray/glmArray.h"
 
+#include "../internal_functions/type_checkers.h"
+
 static PyObject*
 glmArray_getPtr(glmArray* self, void*) {
 	return PyGLM_CtypesVoidP_FromVoidP(self->data);
+}
+
+static PyObject*
+glmArray_to_bytes(glmArray* self, PyObject*) {
+	return PyBytes_FromStringAndSize((char*)self->data, self->nBytes);
+}
+
+static PyObject*
+glmArray_from_bytes(PyObject*, PyObject* args) {
+	PyObject* bytesObj, *typeObj = NULL;
+
+	if (!PyArg_UnpackTuple(args, "from_bytes", 1, 2, &bytesObj, &typeObj)) return NULL;
+
+	if (typeObj == NULL) {
+		typeObj = ctypes_uint8;
+	}
+
+	if (PyBytes_Check(bytesObj) && PyType_Check(typeObj)) {
+		if (PyGLM_Is_PyGLM_Type(typeObj)) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)typeObj;
+
+			Py_ssize_t& nBytes = PyBytes_GET_SIZE(bytesObj);
+
+			PyGLM_ASSERT((nBytes > 0 && nBytes % pto->itemSize == 0), "Invalid bytes string length");
+
+			glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
+
+			if (out == NULL) {
+				PyErr_SetString(PyExc_MemoryError, "Out of memory");
+				return NULL;
+			}
+
+			out->data = reinterpret_cast<void*>(PyBytes_AS_STRING(bytesObj));
+
+			out->dtSize = pto->dtSize;
+
+			out->format = pto->format;
+
+			out->glmType = pto->glmType;
+
+			out->itemSize = pto->itemSize;
+
+			out->nBytes = PyBytes_GET_SIZE(bytesObj);
+
+			out->itemCount = out->nBytes / out->itemSize;
+
+			out->readonly = 0;
+
+			out->reference = PyGLM_INCREF(bytesObj);
+
+			out->subtype = pto->subtype;
+
+			out->setShape(pto->C, pto->R);
+
+			return (PyObject*)out;
+		}
+
+		if (PyGLM_Ctypes_Check(typeObj)) {
+			glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
+
+			if (out == NULL) {
+				PyErr_SetString(PyExc_MemoryError, "Out of memory");
+				return NULL;
+			}
+
+			out->data = reinterpret_cast<void*>(PyBytes_AS_STRING(bytesObj));
+
+			out->reference = PyGLM_INCREF(bytesObj);
+
+			out->subtype = (PyTypeObject*)typeObj;
+
+			if (typeObj == ctypes_double) {
+				out->dtSize = sizeof(double);
+				out->format = PyGLM_FS_DOUBLE;
+			} 
+			else if (typeObj == ctypes_float) {
+				out->dtSize = sizeof(float);
+				out->format = PyGLM_FS_FLOAT;
+			} 
+			else if (typeObj == ctypes_int64) {
+				out->dtSize = sizeof(int64);
+				out->format = PyGLM_FS_INT64;
+			}
+			else if (typeObj == ctypes_int32) {
+				out->dtSize = sizeof(int32);
+				out->format = PyGLM_FS_INT32;
+			}
+			else if (typeObj == ctypes_int16) {
+				out->dtSize = sizeof(int16);
+				out->format = PyGLM_FS_INT16;
+			}
+			else if (typeObj == ctypes_int8) {
+				out->dtSize = sizeof(int8);
+				out->format = PyGLM_FS_INT8;
+			}
+			else if (typeObj == ctypes_uint64) {
+				out->dtSize = sizeof(uint64);
+				out->format = PyGLM_FS_UINT64;
+			}
+			else if (typeObj == ctypes_uint32) {
+				out->dtSize = sizeof(uint32);
+				out->format = PyGLM_FS_UINT32;
+			}
+			else if (typeObj == ctypes_uint16) {
+				out->dtSize = sizeof(uint16);
+				out->format = PyGLM_FS_UINT16;
+			}
+			else if (typeObj == ctypes_uint8) {
+				out->dtSize = sizeof(uint8);
+				out->format = PyGLM_FS_UINT8;
+			}
+			else if (typeObj == ctypes_bool) {
+				out->dtSize = sizeof(bool);
+				out->format = PyGLM_FS_BOOL;
+			}
+			else {
+				Py_DECREF(out);
+				PyGLM_TYPEERROR_O("from_bytes() expects a GLM or ctypes number type, not ", typeObj);
+				return NULL;
+			}
+
+			out->itemSize = out->dtSize;
+
+			out->glmType = PyGLM_TYPE_CTYPES;
+
+			out->nBytes = PyBytes_GET_SIZE(bytesObj);
+
+			out->itemCount = out->nBytes / out->itemSize;
+
+			out->readonly = 0;
+
+			out->setShape(0);
+
+			if ((out->nBytes == 0 || out->nBytes % out->itemSize != 0)) {
+				Py_DECREF(out);
+				PyErr_SetString(PyExc_AssertionError, "Invalid bytes string length");
+				return NULL;
+			}
+
+			return (PyObject*)out;
+		}
+	}
+	PyGLM_TYPEERROR_2O("from_bytes() expects a bytes string and a GLM or ctypes type, not ", bytesObj, typeObj);
+	return NULL;
+}
+
+static PyObject*
+glmArray_reinterpret_cast(glmArray* self, PyObject* arg) {
+	if (PyType_Check(arg)) {
+		if (PyGLM_Is_PyGLM_Type(arg)) {
+			PyGLMTypeObject* pto = (PyGLMTypeObject*)arg;
+
+			PyGLM_ASSERT((self->nBytes % pto->itemSize == 0), "Invalid bytes string length");
+
+			glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
+
+			if (out == NULL) {
+				PyErr_SetString(PyExc_MemoryError, "Out of memory");
+				return NULL;
+			}
+
+			out->data = self->data;
+
+			out->dtSize = pto->dtSize;
+
+			out->format = pto->format;
+
+			out->glmType = pto->glmType;
+
+			out->itemSize = pto->itemSize;
+
+			out->nBytes = self->nBytes;
+
+			out->itemCount = out->nBytes / out->itemSize;
+
+			out->readonly = 0;
+
+			out->reference = PyGLM_INCREF(((PyObject*)self));
+
+			out->subtype = pto->subtype;
+
+			out->setShape(pto->C, pto->R);
+
+			return (PyObject*)out;
+		}
+
+		if (PyGLM_Ctypes_Check(arg)) {
+			glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
+
+			if (out == NULL) {
+				PyErr_SetString(PyExc_MemoryError, "Out of memory");
+				return NULL;
+			}
+
+			out->data = self->data;
+
+			out->reference = PyGLM_INCREF(((PyObject*)self));
+
+			out->subtype = (PyTypeObject*)arg;
+
+			if (arg == ctypes_double) {
+				out->dtSize = sizeof(double);
+				out->format = PyGLM_FS_DOUBLE;
+			}
+			else if (arg == ctypes_float) {
+				out->dtSize = sizeof(float);
+				out->format = PyGLM_FS_FLOAT;
+			}
+			else if (arg == ctypes_int64) {
+				out->dtSize = sizeof(int64);
+				out->format = PyGLM_FS_INT64;
+			}
+			else if (arg == ctypes_int32) {
+				out->dtSize = sizeof(int32);
+				out->format = PyGLM_FS_INT32;
+			}
+			else if (arg == ctypes_int16) {
+				out->dtSize = sizeof(int16);
+				out->format = PyGLM_FS_INT16;
+			}
+			else if (arg == ctypes_int8) {
+				out->dtSize = sizeof(int8);
+				out->format = PyGLM_FS_INT8;
+			}
+			else if (arg == ctypes_uint64) {
+				out->dtSize = sizeof(uint64);
+				out->format = PyGLM_FS_UINT64;
+			}
+			else if (arg == ctypes_uint32) {
+				out->dtSize = sizeof(uint32);
+				out->format = PyGLM_FS_UINT32;
+			}
+			else if (arg == ctypes_uint16) {
+				out->dtSize = sizeof(uint16);
+				out->format = PyGLM_FS_UINT16;
+			}
+			else if (arg == ctypes_uint8) {
+				out->dtSize = sizeof(uint8);
+				out->format = PyGLM_FS_UINT8;
+			}
+			else if (arg == ctypes_bool) {
+				out->dtSize = sizeof(bool);
+				out->format = PyGLM_FS_BOOL;
+			}
+			else {
+				Py_DECREF(out);
+				PyGLM_TYPEERROR_O("reinterpret_cast() expects a GLM or ctypes number type, not ", arg);
+				return NULL;
+			}
+
+			out->itemSize = out->dtSize;
+
+			out->glmType = PyGLM_TYPE_CTYPES;
+
+			out->nBytes = self->nBytes;
+
+			out->itemCount = out->nBytes / out->itemSize;
+
+			out->readonly = 0;
+
+			out->setShape(0);
+
+			if ((out->nBytes == 0 || out->nBytes % out->itemSize != 0)) {
+				Py_DECREF(out);
+				PyErr_SetString(PyExc_AssertionError, "Invalid bytes string length");
+				return NULL;
+			}
+
+			return (PyObject*)out;
+		}
+	}
+	PyGLM_TYPEERROR_O("reinterpret_cast() expects a GLM or ctypes type, not ", arg);
+	return NULL;
 }
 
 static PyObject* 
@@ -2359,7 +2634,7 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 	}
 
 	// ctypes
-	if (firstElementType->tp_dealloc == ctypes_dealloc) {
+	if (PyGLM_Ctypes_Check(firstElementType)) {
 		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(float);
 		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(double);
 		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(int8);
@@ -2456,7 +2731,7 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 	// others
 	if (argCount == 1) {
 		// arrays
-		if (firstElementType == &glmArrayType) {
+		if (PyGLM_Array_Check(firstElementType)) {
 			glmArray* other = (glmArray*)firstElement;
 			if (other == self) {
 				return 0;
@@ -2699,7 +2974,7 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 			}
 
 			// ctypes
-			if (firstElementType->tp_dealloc == ctypes_dealloc) {
+			if (PyGLM_Ctypes_Check(firstElementType)) {
 				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(float);
 				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(double);
 				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(int8);

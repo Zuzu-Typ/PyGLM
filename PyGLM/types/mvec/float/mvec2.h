@@ -11,6 +11,7 @@ static PyMethodDef hfmvec2_methods[] = {
 	{ "__setstate__", (PyCFunction)mvec2_setstate<float>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)mvec2_to_list<float>, METH_NOARGS, "Return the components of this vector as a list"},
 	{ "to_tuple", (PyCFunction)mvec2_to_tuple<float>, METH_NOARGS, "Return the components of this vector as a tuple"},
+	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs hfmvec2BufferMethods = {

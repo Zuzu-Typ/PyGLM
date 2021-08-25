@@ -191,4 +191,7 @@ template<int L, typename T>
 static PyObject* vecIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
 
 template<int L, typename T>
+static PyObject* vec_from_bytes(PyObject*, PyObject* arg);
+
+template<int L, typename T>
 static Py_hash_t vec_hash(vec<L, T>* self, PyObject*);

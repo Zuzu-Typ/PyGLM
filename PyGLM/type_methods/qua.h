@@ -553,6 +553,20 @@ qua_releasebuffer(PyObject*, Py_buffer* view) {
 }
 
 template<typename T>
+static PyObject*
+qua_from_bytes(PyObject*, PyObject* arg) {
+	PyTypeObject* type = PyGLM_QUA_TYPE<T>();
+	if (PyBytes_Check(arg) && PyBytes_GET_SIZE(arg) == ((PyGLMTypeObject*)type)->itemSize) {
+		char* bytesAsString = PyBytes_AS_STRING(arg);
+		qua<T>* self = (qua<T> *)type->tp_alloc(type, 0);
+		self->super_type = *(glm::qua<T>*)bytesAsString;
+		return (PyObject*)self;
+	}
+	PyGLM_TYPEERROR_O("Invalid argument type for from_bytes(). Expected bytes, got ", arg);
+	return NULL;
+}
+
+template<typename T>
 static Py_hash_t
 qua_hash(qua<T>* self, PyObject*) {
 	std::hash<glm::qua<T>> hasher;
