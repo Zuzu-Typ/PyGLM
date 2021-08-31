@@ -68,9 +68,7 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
 
-    - run: |
-        python setup.py build
-        cp build/*.pyd out.so
+    - run: python setup.py build
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
