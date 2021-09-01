@@ -228,7 +228,7 @@ namespace detail
 			w = x1 * x1 + x2 * x2;
 		} while(w > genType(1));
 
-		return static_cast<genType>(x2 * Deviation * Deviation * sqrt(((double) genType(-2) * log(w)) / w) + Mean);
+		return static_cast<genType>((double)x2 * (double)Deviation * (double)Deviation * sqrt(((double) genType(-2) * log(w)) / w) + Mean);
 	}
 
 	template<length_t L, typename T, qualifier Q>
