@@ -127,7 +127,7 @@ vec4(            9,            9,            9,            9 )
 \h3\PyGLM in action\h3\
 Wanna see what PyGLM can do?
 Take a look at the \url https://github.com/Zuzu-Typ/LearnOpenGL-Python\examples\ url\ from the popular LearnOpenGL tutorials by Joey De Vries running in Python using PyGLM.
-\raw\![LearnOpenGL](LearnOpenGL.png)\raw\
+\raw\![LearnOpenGL](https://raw.githubusercontent.com/Zuzu-Typ/PyGLM/master/LearnOpenGL.png)\raw\
 
 \h3 \Speed comparison to numpy\ h3\
 \code \

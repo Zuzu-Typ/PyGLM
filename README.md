@@ -129,7 +129,7 @@ vec4(            9,            9,            9,            9 )
 ### PyGLM in action  
 Wanna see what PyGLM can do?  
 Take a look at the [examples](https://github.com/Zuzu-Typ/LearnOpenGL-Python) from the popular LearnOpenGL tutorials by Joey De Vries running in Python using PyGLM\.  
-![LearnOpenGL](LearnOpenGL.png)  
+![LearnOpenGL](https://raw.githubusercontent.com/Zuzu-Typ/PyGLM/master/LearnOpenGL.png)  
   
 ### Speed comparison to numpy  
 ``` 
