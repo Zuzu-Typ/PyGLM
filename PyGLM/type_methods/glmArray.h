@@ -517,7 +517,7 @@ if (PyGLM_Number_Check(value)) {\
 PyGLM_TYPEERROR_O("invalid assignment type ", value); \
 return -1;
 
-int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
+int glmArray_set(glmArray* self, Py_ssize_t index, PyObject* value) {
 	if (index >= self->itemCount || index < -self->itemCount) {
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return -1;
@@ -534,7 +534,7 @@ int glmArray_set(glmArray* self, ssize_t index, PyObject* value) {
 
 		memcpy(tempDataCopy, self->data, self->nBytes);
 
-		ssize_t outItemCount = (self->itemCount - 1);
+		Py_ssize_t outItemCount = (self->itemCount - 1);
 
 		self->data = PyMem_Realloc(self->data, outItemCount * self->itemSize);
 
@@ -688,7 +688,7 @@ return PyGLM_PyObject_FromNumber<T>(*(((T*)self->data) + index));
 
 #define GLM_ARRAY_GET_IF_IS_QUA(T) return pack(*(((glm::qua<T>*)self->data) + index));
 
-PyObject* glmArray_get(glmArray* self, ssize_t index) {
+PyObject* glmArray_get(glmArray* self, Py_ssize_t index) {
 	if (index >= self->itemCount || index < -self->itemCount) {
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return NULL;
@@ -837,16 +837,16 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 			view->readonly = 1;
 			view->buf = PyMem_Malloc(self->nBytes);
 			if (view->buf != NULL) {
-				const ssize_t dataStride0 = self->dtSize * C * R;
-				const ssize_t bufStride0 = self->dtSize * C * R;
-				const ssize_t dataStride1 = self->dtSize;
-				const ssize_t bufStride1 = self->dtSize * C;
-				const ssize_t dataStride2 = self->dtSize * R;
-				const ssize_t bufStride2 = self->dtSize;
+				const Py_ssize_t dataStride0 = self->dtSize * C * R;
+				const Py_ssize_t bufStride0 = self->dtSize * C * R;
+				const Py_ssize_t dataStride1 = self->dtSize;
+				const Py_ssize_t bufStride1 = self->dtSize * C;
+				const Py_ssize_t dataStride2 = self->dtSize * R;
+				const Py_ssize_t bufStride2 = self->dtSize;
 
-				for (ssize_t i = 0; i < self->itemCount; i++) {
-					for (ssize_t c = 0; c < C; c++) {
-						for (ssize_t r = 0; r < R; r++) {
+				for (Py_ssize_t i = 0; i < self->itemCount; i++) {
+					for (Py_ssize_t c = 0; c < C; c++) {
+						for (Py_ssize_t r = 0; r < R; r++) {
 							memcpy(((char*)view->buf) + (i * bufStride0 + r * bufStride1 + c * bufStride2), ((char*)self->data) + (i * dataStride0 + r * dataStride1 + c * dataStride2), self->dtSize);
 						}
 					}
@@ -871,16 +871,16 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 			view->readonly = 1;
 			view->buf = PyMem_Malloc(self->nBytes);
 			if (view->buf != NULL) {
-				const ssize_t dataStride0 = self->dtSize * C * R;
-				const ssize_t bufStride0 = self->dtSize;
-				const ssize_t dataStride1 = self->dtSize;
-				const ssize_t bufStride1 = self->dtSize * C;
-				const ssize_t dataStride2 = self->dtSize * R;
-				const ssize_t bufStride2 = self->dtSize * C * R;
+				const Py_ssize_t dataStride0 = self->dtSize * C * R;
+				const Py_ssize_t bufStride0 = self->dtSize;
+				const Py_ssize_t dataStride1 = self->dtSize;
+				const Py_ssize_t bufStride1 = self->dtSize * C;
+				const Py_ssize_t dataStride2 = self->dtSize * R;
+				const Py_ssize_t bufStride2 = self->dtSize * C * R;
 
-				for (ssize_t i = 0; i < self->itemCount; i++) {
-					for (ssize_t c = 0; c < C; c++) {
-						for (ssize_t r = 0; r < R; r++) {
+				for (Py_ssize_t i = 0; i < self->itemCount; i++) {
+					for (Py_ssize_t c = 0; c < C; c++) {
+						for (Py_ssize_t r = 0; r < R; r++) {
 							memcpy(((char*)view->buf) + (i * bufStride0 + r * bufStride1 + c * bufStride2), ((char*)self->data) + (i * dataStride0 + r * dataStride1 + c * dataStride2), self->dtSize);
 						}
 					}
@@ -916,13 +916,13 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 				view->readonly = 1;
 				view->buf = PyMem_Malloc(view->len);
 				if (view->buf != NULL) {
-					const ssize_t dataStride0 = self->dtSize * L;
-					const ssize_t bufStride0 = self->dtSize;
-					const ssize_t dataStride1 = self->dtSize;
-					const ssize_t bufStride1 = self->dtSize * L;
+					const Py_ssize_t dataStride0 = self->dtSize * L;
+					const Py_ssize_t bufStride0 = self->dtSize;
+					const Py_ssize_t dataStride1 = self->dtSize;
+					const Py_ssize_t bufStride1 = self->dtSize * L;
 
-					for (ssize_t i = 0; i < self->itemCount; i++) {
-						for (ssize_t l = 0; l < L; l++) {
+					for (Py_ssize_t i = 0; i < self->itemCount; i++) {
+						for (Py_ssize_t l = 0; l < L; l++) {
 							memcpy(((char*)view->buf) + (i * bufStride0 + l * bufStride1), ((char*)self->data) + (i * dataStride0 + l * dataStride1), self->dtSize);
 						}
 					}
@@ -997,7 +997,7 @@ glmArray_releasebuffer(PyObject* self, Py_buffer* view) {
 static PyObject* 
 glmArray_to_list(glmArray* self, PyObject*) {
 	PyObject* out = PyList_New(self->itemCount);
-	for (ssize_t i = 0; i < self->itemCount; i++) {
+	for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 		PyList_SET_ITEM(out, i, glmArray_get(self, i));
 	}
 	return out;
@@ -1009,7 +1009,7 @@ glmArray_to_list(glmArray* self, PyObject*) {
 static PyObject* 
 glmArray_to_tuple(glmArray* self, PyObject*) {
 	PyObject* out = PyTuple_New(self->itemCount);
-	for (ssize_t i = 0; i < self->itemCount; i++) {
+	for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 		PyTuple_SET_ITEM(out, i, glmArray_get(self, i));
 	}
 	return out;
@@ -1063,7 +1063,7 @@ glmArray_split_components(glmArray* self, PyObject*) {
 
 		char* selfDataPtr = (char*)self->data + (i * arr->itemSize);
 		char* arrDataPtr = (char*)arr->data;
-		for (ssize_t j = 0; j < self->itemCount; j++) {
+		for (Py_ssize_t j = 0; j < self->itemCount; j++) {
 			memcpy(arrDataPtr, selfDataPtr, arr->itemSize);
 			selfDataPtr += self->itemSize;
 			arrDataPtr += arr->itemSize;
@@ -1132,7 +1132,7 @@ static PyObject* glmArray_reduce(glmArray* self, PyObject* args) {
 
 	PyGLM_ASSERT((self->itemCount + objects.size() > 0), "Cannot reduce an empty array with no initializer.");
 
-	for (ssize_t i = 0; i < self->itemCount; i++) {
+	for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 		objects.push_back(glmArray_get(self, i));
 	}
 
@@ -1291,7 +1291,7 @@ PyBuffer_Release(&view);\
 return (PyObject*)out
 
 #define GLM_ARRAY_AS_REFERENCE_IF_IS_MAT_BUFFER(T) \
-out->itemSize = (ssize_t)C * (ssize_t)R * out->dtSize;\
+out->itemSize = (Py_ssize_t)C * (Py_ssize_t)R * out->dtSize;\
 out->subtype = (C == 2) ? (R == 2) ? PyGLM_MAT_TYPE<2, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<2, 3, T>() : PyGLM_MAT_TYPE<2, 4, T>() :\
 (C == 3) ? (R == 2) ? PyGLM_MAT_TYPE<3, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<3, 3, T>() : PyGLM_MAT_TYPE<3, 4, T>() :\
 (R == 2) ? PyGLM_MAT_TYPE<4, 2, T>() : (R == 3) ? PyGLM_MAT_TYPE<4, 3, T>() : PyGLM_MAT_TYPE<4, 4, T>();\
@@ -1460,11 +1460,11 @@ glmArray_as_reference(PyObject*, PyObject* arg) {
 				char* dataPtr = (char*)out->data;
 				char* bufPtr = (char*)view.buf;
 
-				for (ssize_t i0 = 0; i0 < out->itemCount; i0++) {
-					for (ssize_t i1 = 0; i1 < R; i1++) {
-						for (ssize_t i2 = 0; i2 < C; i2++) {
-							ssize_t origOffset = (view.strides[0] * i0 + view.strides[1] * i1 + view.strides[2] * i2);
-							ssize_t targetOffset = (out->itemCount * C * R * i0 + view.itemsize * i1 + view.itemsize * R * i2);
+				for (Py_ssize_t i0 = 0; i0 < out->itemCount; i0++) {
+					for (Py_ssize_t i1 = 0; i1 < R; i1++) {
+						for (Py_ssize_t i2 = 0; i2 < C; i2++) {
+							Py_ssize_t origOffset = (view.strides[0] * i0 + view.strides[1] * i1 + view.strides[2] * i2);
+							Py_ssize_t targetOffset = (out->itemCount * C * R * i0 + view.itemsize * i1 + view.itemsize * R * i2);
 							memcpy(dataPtr + targetOffset, bufPtr + origOffset, view.itemsize);
 						}
 					}
@@ -1600,12 +1600,12 @@ static PyObject*
 glmArray_getstate(glmArray* self, PyObject*) {
 	return PyTuple_Pack(10,
 		glmArray_to_tuple(self, NULL),
-		PyGLM_PyObject_FromNumber<ssize_t>(self->dtSize),
+		PyGLM_PyObject_FromNumber<Py_ssize_t>(self->dtSize),
 		PyGLM_PyObject_FromNumber<char>(self->format),
 		PyGLM_PyObject_FromNumber<uint8>(self->glmType),
-		PyGLM_PyObject_FromNumber<ssize_t>(self->itemCount),
-		PyGLM_PyObject_FromNumber<ssize_t>(self->itemSize),
-		PyGLM_PyObject_FromNumber<ssize_t>(self->nBytes),
+		PyGLM_PyObject_FromNumber<Py_ssize_t>(self->itemCount),
+		PyGLM_PyObject_FromNumber<Py_ssize_t>(self->itemSize),
+		PyGLM_PyObject_FromNumber<Py_ssize_t>(self->nBytes),
 		PyGLM_PyObject_FromNumber<uint8>(self->shape[0]),
 		PyGLM_PyObject_FromNumber<uint8>(self->shape[1]),
 		self->subtype
@@ -1618,12 +1618,12 @@ static PyObject*
 glmArray_setstate(glmArray* self, PyObject* state) {
 	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 10, "Invalid state. Expected length 10 tuple.");
 	PyObject* dataTuple = PyTuple_GET_ITEM(state, 0);
-	self->dtSize = PyGLM_Number_FromPyObject<ssize_t>(PyTuple_GET_ITEM(state, 1));
+	self->dtSize = PyGLM_Number_FromPyObject<Py_ssize_t>(PyTuple_GET_ITEM(state, 1));
 	self->format = PyGLM_Number_FromPyObject<char>(PyTuple_GET_ITEM(state, 2));
 	self->glmType = PyGLM_Number_FromPyObject<uint8>(PyTuple_GET_ITEM(state, 3));
-	self->itemCount = PyGLM_Number_FromPyObject<ssize_t>(PyTuple_GET_ITEM(state, 4));
-	self->itemSize = PyGLM_Number_FromPyObject<ssize_t>(PyTuple_GET_ITEM(state, 5));
-	self->nBytes = PyGLM_Number_FromPyObject<ssize_t>(PyTuple_GET_ITEM(state, 6));
+	self->itemCount = PyGLM_Number_FromPyObject<Py_ssize_t>(PyTuple_GET_ITEM(state, 4));
+	self->itemSize = PyGLM_Number_FromPyObject<Py_ssize_t>(PyTuple_GET_ITEM(state, 5));
+	self->nBytes = PyGLM_Number_FromPyObject<Py_ssize_t>(PyTuple_GET_ITEM(state, 6));
 	self->shape[0] = PyGLM_Number_FromPyObject<uint8>(PyTuple_GET_ITEM(state, 7));
 	self->shape[1] = PyGLM_Number_FromPyObject<uint8>(PyTuple_GET_ITEM(state, 8));
 	self->subtype = (PyTypeObject*)PyTuple_GET_ITEM(state, 9);
@@ -1632,7 +1632,7 @@ glmArray_setstate(glmArray* self, PyObject* state) {
 
 	self->data = PyMem_MALLOC(self->nBytes);
 
-	for (ssize_t i = 0; i < self->itemCount; i++) {
+	for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 		glmArray_set(self, i, PyTuple_GET_ITEM(dataTuple, i));
 	}
 	Py_RETURN_NONE;
@@ -1714,9 +1714,9 @@ static PyObject* glmArray_repeat(glmArray* self, PyObject* count) {
 		if (countAsSsizet >= 1) {
 			memcpy(out->data, self->data, self->nBytes);
 		}
-		for (ssize_t i = 1; i < countAsSsizet;) {
-			ssize_t destOffset = i * self->nBytes;
-			ssize_t copyCount = std::min(i, countAsSsizet - i);
+		for (Py_ssize_t i = 1; i < countAsSsizet;) {
+			Py_ssize_t destOffset = i * self->nBytes;
+			Py_ssize_t copyCount = std::min(i, countAsSsizet - i);
 			size_t copySize = (size_t)copyCount * (size_t)self->nBytes;
 			memcpy(((char*)out->data) + destOffset, out->data, copySize);
 			i += copyCount;
@@ -1843,7 +1843,7 @@ glmArray_mp_ass_subscript(glmArray* self, PyObject* key, PyObject* value) {
 
 			memcpy(tempDataCopy, self->data, self->nBytes);
 
-			ssize_t outItemCount = (self->itemCount - slicelength);
+			Py_ssize_t outItemCount = (self->itemCount - slicelength);
 
 			self->data = PyMem_Realloc(self->data, outItemCount * self->itemSize);
 
@@ -1882,7 +1882,7 @@ glmArray_mp_ass_subscript(glmArray* self, PyObject* key, PyObject* value) {
 
 static int 
 glmArray_contains(glmArray* self, PyObject* value) {
-	for (ssize_t i = 0; i < self->itemCount; i++) {
+	for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 		PyObject* itemAtIndex = glmArray_get(self, i);
 		int cmp = PyObject_RichCompareBool(itemAtIndex, value, Py_EQ);
 		if (cmp == 1) {
@@ -1927,12 +1927,12 @@ glmArray_str_vec(glmArray* self) {
 	snprintf(currentIndex, 2 + 1, "[\n");
 	currentIndex += 2;
 
-	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+	for (Py_ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
 		T* values = &((T*)self->data)[itemIndex * L];
 		snprintf(currentIndex, 3 + 12 + 1, " [ %12.6g", static_cast<double>(values[0]));
 		currentIndex += 3 + 12;
 
-		for (ssize_t valueIndex = 1; valueIndex < L; valueIndex++) {
+		for (Py_ssize_t valueIndex = 1; valueIndex < L; valueIndex++) {
 			snprintf(currentIndex, 2 + 12 + 1, ", %12.6g", static_cast<double>(values[valueIndex]));
 			currentIndex += 2 + 12;
 		}
@@ -1973,12 +1973,12 @@ glmArray_repr_vec(glmArray* self) {
 	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", arrayTypeName);
 	currentIndex += arrayNameLength + 1;
 
-	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+	for (Py_ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
 		T* values = &((T*)self->data)[itemIndex * L];
 		snprintf(currentIndex, subtypeNameLength + 1 + 12 + 1, "%s(%g", subtypeName, static_cast<double>(values[0]));
 		currentIndex += strlen(currentIndex);
 
-		for (ssize_t valueIndex = 1; valueIndex < L; valueIndex++) {
+		for (Py_ssize_t valueIndex = 1; valueIndex < L; valueIndex++) {
 			snprintf(currentIndex, 2 + 12 + 1, ", %g", static_cast<double>(values[valueIndex]));
 			currentIndex += strlen(currentIndex);
 		}
@@ -2019,17 +2019,17 @@ glmArray_str_mat(glmArray* self) {
 
 	snprintf(currentIndex, 2 + 1, "[\n");
 	currentIndex += 2;
-	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+	for (Py_ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
 		snprintf(currentIndex, 3 + 1, " [\n");
 		currentIndex += 3;
 
 		T* values = &((T*)self->data)[itemIndex * (C * R)];
 
-		for (ssize_t rowIndex = 0; rowIndex < R; rowIndex++) {
+		for (Py_ssize_t rowIndex = 0; rowIndex < R; rowIndex++) {
 			snprintf(currentIndex, 4 + 12 + 1, "  [ %12.6g", static_cast<double>(values[rowIndex]));
 			currentIndex += 4 + 12;
 
-			for (ssize_t valueIndex = 1; valueIndex < C; valueIndex++) {
+			for (Py_ssize_t valueIndex = 1; valueIndex < C; valueIndex++) {
 				snprintf(currentIndex, 2 + 12 + 1, ", %12.6g", static_cast<double>(values[valueIndex * R + rowIndex]));
 				currentIndex += 2 + 12;
 			}
@@ -2076,16 +2076,16 @@ glmArray_repr_mat(glmArray* self) {
 
 	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", arrayTypeName);
 	currentIndex += arrayNameLength + 1;
-	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+	for (Py_ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
 		snprintf(currentIndex, subtypeNameLength + 1 + 1, "%s(", subtypeName);
 		currentIndex += subtypeNameLength + 1;
 
-		for (ssize_t columnIndex = 0; columnIndex < C; columnIndex++) {
+		for (Py_ssize_t columnIndex = 0; columnIndex < C; columnIndex++) {
 			T* values = &((T*)self->data)[itemIndex * (C * R) + columnIndex * R];
 			snprintf(currentIndex, 1 + 12 + 1, "(%g", static_cast<double>(values[0]));
 			currentIndex += strlen(currentIndex);
 
-			for (ssize_t valueIndex = 1; valueIndex < R; valueIndex++) {
+			for (Py_ssize_t valueIndex = 1; valueIndex < R; valueIndex++) {
 				snprintf(currentIndex, 2 + 12 + 1, ", %g", static_cast<double>(values[valueIndex]));
 				currentIndex += strlen(currentIndex);
 			}
@@ -2133,7 +2133,7 @@ glmArray_str_qua(glmArray* self) {
 	snprintf(currentIndex, 2 + 1, "[\n");
 	currentIndex += 2;
 
-	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+	for (Py_ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
 		T* values = &((T*)self->data)[itemIndex * 4];
 		snprintf(currentIndex, 13 + 12 * 4 + 1, " [ %12.6g, %12.6g, %12.6g, %12.6g ],\n", 
 			static_cast<double>(values[0]),
@@ -2173,7 +2173,7 @@ glmArray_repr_qua(glmArray* self) {
 	snprintf(currentIndex, arrayNameLength + 1 + 1, "%s(", arrayTypeName);
 	currentIndex += arrayNameLength + 1;
 
-	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+	for (Py_ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
 		T* values = &((T*)self->data)[itemIndex * 4];
 		if (itemIndex < self->itemCount - 1) {
 			snprintf(currentIndex, itemSize + 2 + 1, "%s(%g, %g, %g, %g), ",
@@ -2219,7 +2219,7 @@ glmArray_str_ctypes(glmArray* self) {
 
 	T* values = reinterpret_cast<T*>(self->data);
 
-	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+	for (Py_ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
 		snprintf(currentIndex, 1 + 12 + 2 + 1, " %12.6g,\n", static_cast<double>(values[itemIndex]));
 		currentIndex += 1 + 12 + 2;
 	}
@@ -2256,7 +2256,7 @@ glmArray_repr_ctypes(glmArray* self) {
 
 	T* values = reinterpret_cast<T*>(self->data);
 
-	for (ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
+	for (Py_ssize_t itemIndex = 0; itemIndex < self->itemCount; itemIndex++) {
 		snprintf(currentIndex, subtypeNameLength + 1 + 12 + 1, "%s(%g", subtypeName, static_cast<double>(values[itemIndex]));
 		currentIndex += strlen(currentIndex);
 
@@ -2871,11 +2871,11 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 					char* dataPtr = (char*)self->data;
 					char* bufPtr = (char*)view.buf;
 
-					for (ssize_t i0 = 0; i0 < self->itemCount; i0++) {
-						for (ssize_t i1 = 0; i1 < R; i1++) {
-							for (ssize_t i2 = 0; i2 < C; i2++) {
-								ssize_t origOffset = (view.strides[0] * i0 + view.strides[1] * i1 + view.strides[2] * i2);
-								ssize_t targetOffset = (view.itemsize * C * R * i0 + view.itemsize * i1 + view.itemsize * R * i2);
+					for (Py_ssize_t i0 = 0; i0 < self->itemCount; i0++) {
+						for (Py_ssize_t i1 = 0; i1 < R; i1++) {
+							for (Py_ssize_t i2 = 0; i2 < C; i2++) {
+								Py_ssize_t origOffset = (view.strides[0] * i0 + view.strides[1] * i1 + view.strides[2] * i2);
+								Py_ssize_t targetOffset = (view.itemsize * C * R * i0 + view.itemsize * i1 + view.itemsize * R * i2);
 								memcpy(dataPtr + targetOffset, bufPtr + origOffset, view.itemsize);
 							}
 						}
@@ -3128,12 +3128,12 @@ glmArrayIter_new(PyTypeObject* type, PyObject* args, PyObject* kwargs) {
 
 template<typename T>
 static Py_hash_t
-array_hash_ctypes(T* data, ssize_t count) {
+array_hash_ctypes(T* data, Py_ssize_t count) {
 	std::hash<T> hasher;
 
 	size_t seed = 0;
 
-	for (ssize_t i = 0; i < count; i++) {
+	for (Py_ssize_t i = 0; i < count; i++) {
 		glm::detail::hash_combine(seed, hasher(data[i]));
 	}
 
@@ -3146,12 +3146,12 @@ array_hash_ctypes(T* data, ssize_t count) {
 
 template<int L, typename T>
 static Py_hash_t
-array_hash_vec(glm::vec<L, T>* data, ssize_t count) {
+array_hash_vec(glm::vec<L, T>* data, Py_ssize_t count) {
 	std::hash<glm::vec<L, T>> hasher;
 
 	size_t seed = 0;
 
-	for (ssize_t i = 0; i < count; i++) {
+	for (Py_ssize_t i = 0; i < count; i++) {
 		glm::detail::hash_combine(seed, hasher(data[i]));
 	}
 
@@ -3164,12 +3164,12 @@ array_hash_vec(glm::vec<L, T>* data, ssize_t count) {
 
 template<int C, int R, typename T>
 static Py_hash_t
-array_hash_mat(glm::mat<C, R, T>* data, ssize_t count) {
+array_hash_mat(glm::mat<C, R, T>* data, Py_ssize_t count) {
 	std::hash<glm::mat<C, R, T>> hasher;
 
 	size_t seed = 0;
 
-	for (ssize_t i = 0; i < count; i++) {
+	for (Py_ssize_t i = 0; i < count; i++) {
 		glm::detail::hash_combine(seed, hasher(data[i]));
 	}
 
@@ -3182,12 +3182,12 @@ array_hash_mat(glm::mat<C, R, T>* data, ssize_t count) {
 
 template<typename T>
 static Py_hash_t
-array_hash_qua(glm::qua<T>* data, ssize_t count) {
+array_hash_qua(glm::qua<T>* data, Py_ssize_t count) {
 	std::hash<glm::qua<T>> hasher;
 
 	size_t seed = 0;
 
-	for (ssize_t i = 0; i < count; i++) {
+	for (Py_ssize_t i = 0; i < count; i++) {
 		glm::detail::hash_combine(seed, hasher(data[i]));
 	}
 
@@ -3462,7 +3462,7 @@ static PyObject* glmArray_filter(glmArray* self, PyObject* func) {
 	if (PyCallable_Check(func)) {
 		PyObject* argTuple = PyTuple_New(1);
 
-		for (ssize_t i = 0; i < self->itemCount; i++) {
+		for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 			PyObject* currentItem = glmArray_get(self, i);
 
 			// Abusing the SET_ITEM macro for increased performance
@@ -3570,7 +3570,7 @@ static PyObject* glmArray_map_binary(glmArray* self, PyObject* func, PyObject* a
 				return NULL;
 			}
 
-			for (ssize_t i = 0; i < self->itemCount; i++) {
+			for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 				PyObject* currentItem1 = glmArray_get(self, i);
 				PyObject* currentItem2 = glmArray_get(other, i);
 
@@ -3604,7 +3604,7 @@ static PyObject* glmArray_map_binary(glmArray* self, PyObject* func, PyObject* a
 		}
 		else { // arg is a constant second argument
 			PyTuple_SET_ITEM(argTuple, 1, arg);
-			for (ssize_t i = 0; i < self->itemCount; i++) {
+			for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 				PyObject* currentItem = glmArray_get(self, i);
 
 				// Abusing the SET_ITEM macro for increased performance
@@ -3716,7 +3716,7 @@ static PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* 
 					return NULL;
 				}
 
-				for (ssize_t i = 0; i < self->itemCount; i++) {
+				for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 					PyObject* currentItem1 = glmArray_get(self, i);
 					PyObject* currentItem2 = glmArray_get(other1, i);
 					PyObject* currentItem3 = glmArray_get(other2, i);
@@ -3754,7 +3754,7 @@ static PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* 
 			else { // arg2 is a constant third argument
 				PyTuple_SET_ITEM(argTuple, 2, arg2);
 
-				for (ssize_t i = 0; i < self->itemCount; i++) {
+				for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 					PyObject* currentItem1 = glmArray_get(self, i);
 					PyObject* currentItem2 = glmArray_get(other1, i);
 
@@ -3798,7 +3798,7 @@ static PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* 
 					return NULL;
 				}
 
-				for (ssize_t i = 0; i < self->itemCount; i++) {
+				for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 					PyObject* currentItem1 = glmArray_get(self, i);
 					PyObject* currentItem3 = glmArray_get(other, i);
 
@@ -3833,7 +3833,7 @@ static PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* 
 			else {
 				PyTuple_SET_ITEM(argTuple, 2, arg2);
 
-				for (ssize_t i = 0; i < self->itemCount; i++) {
+				for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 					PyObject* currentItem = glmArray_get(self, i);
 
 					// Abusing the SET_ITEM macro for increased performance
@@ -3952,7 +3952,7 @@ static PyObject* glmArray_map_varargs(glmArray* self, PyObject* args, PyObject* 
 			}
 		}
 
-		for (ssize_t i = 0; i < self->itemCount; i++) {
+		for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 			PyObject* currentItemSelf = glmArray_get(self, i);
 
 			// Abusing the SET_ITEM macro for increased performance
@@ -4092,7 +4092,7 @@ static PyObject* glmArray_map(glmArray* self, PyObject* args, PyObject* kwargs) 
 	PyObject* argTuple = PyTuple_New(1);
 
 	if (PyCallable_Check(func)) {
-		for (ssize_t i = 0; i < self->itemCount; i++) {
+		for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 			PyObject* currentItem = glmArray_get(self, i);
 
 			// Abusing the SET_ITEM macro for increased performance
@@ -4279,7 +4279,7 @@ static PyObject* glmArray_sort(glmArray* self, PyObject* func) {
 	if (PyCallable_Check(func)) {
 		std::vector<PyObject*> inObjects{};
 
-		for (ssize_t i = 0; i < self->itemCount; i++) {
+		for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 			inObjects.push_back(glmArray_get(self, i));
 		}
 
@@ -4287,7 +4287,7 @@ static PyObject* glmArray_sort(glmArray* self, PyObject* func) {
 			return NULL;
 		}
 
-		for (ssize_t i = 0; i < self->itemCount; i++) {
+		for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 			glmArray_set(self, i, inObjects[i]);
 			Py_DECREF(inObjects[i]);
 		}
@@ -4336,14 +4336,14 @@ static PyObject* glmArray_add_T(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		Py_ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] + arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
 		}
 	}
@@ -4352,7 +4352,7 @@ static PyObject* glmArray_add_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_addO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_addO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -4389,13 +4389,13 @@ static PyObject* glmArray_addO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] + o[j % o_size];
 		}
 	}
@@ -4589,14 +4589,14 @@ static PyObject* glmArray_sub_T(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		Py_ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] - arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
 		}
 	}
@@ -4605,7 +4605,7 @@ static PyObject* glmArray_sub_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_subO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_subO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -4642,13 +4642,13 @@ static PyObject* glmArray_subO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] - o[j % o_size];
 		}
 	}
@@ -4657,7 +4657,7 @@ static PyObject* glmArray_subO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 }
 
 template<typename T>
-static PyObject* glmArray_rsubO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_rsubO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -4694,13 +4694,13 @@ static PyObject* glmArray_rsubO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = o[j % o_size] - arrDataPtr[i * arrRatio + (j % arrRatio)];
 		}
 	}
@@ -4983,14 +4983,14 @@ static PyObject* glmArray_mul_T_SEQ(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		Py_ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] * arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
 		}
 	}
@@ -5007,7 +5007,7 @@ static PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
 	outArray->readonly = false;
 	outArray->reference = NULL;
 
-	ssize_t n, arr1Stride, arr2Stride, trueShape1;
+	Py_ssize_t n, arr1Stride, arr2Stride, trueShape1;
 
 	if (arr1->glmType == PyGLM_TYPE_VEC) {
 		n = arr1->shape[0];
@@ -5064,13 +5064,13 @@ static PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
-	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+	Py_ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T result = (T)0;
-			for (ssize_t k = 0; k < n; k++) {
+			for (Py_ssize_t k = 0; k < n; k++) {
 				T a = arr1DataPtr[k * arr1Stride + j % trueShape1];
 				T b = arr2DataPtr[k + (j / trueShape1) * arr2Stride];
 
@@ -5084,7 +5084,7 @@ static PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_mulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_mulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -5111,12 +5111,12 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 		T* outArrayDataPtr = (T*)outArray->data;
 
-		ssize_t outArrayIndex = 0;
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+		Py_ssize_t outArrayIndex = 0;
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t i = 0; i < outArray->itemCount; i++) {
-			for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+			for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 				outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] * o[j % o_size];
 			}
 		}
@@ -5143,12 +5143,12 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 		T* outArrayDataPtr = (T*)outArray->data;
 
-		ssize_t outArrayIndex = 0;
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+		Py_ssize_t outArrayIndex = 0;
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t i = 0; i < outArray->itemCount; i++) {
-			for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+			for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 				outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] * o[j % o_size];
 			}
 		}
@@ -5156,7 +5156,7 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 		return (PyObject*)outArray;
 	}
 
-	ssize_t n, arrStride, oStride, trueShape1;
+	Py_ssize_t n, arrStride, oStride, trueShape1;
 
 	if (arr->glmType == PyGLM_TYPE_VEC) {
 		n = arr->shape[0];
@@ -5212,13 +5212,13 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
-	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+	Py_ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T result = (T)0;
-			for (ssize_t k = 0; k < n; k++) {
+			for (Py_ssize_t k = 0; k < n; k++) {
 				T a = arrDataPtr[k * arrStride + j % trueShape1];
 				T b = o[k + (j / trueShape1) * oStride];
 
@@ -5232,7 +5232,7 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 }
 
 template<typename T>
-static PyObject* glmArray_rmulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_rmulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	if (pto == NULL || arr->glmType == PyGLM_TYPE_CTYPES || (arr->glmType == PyGLM_TYPE_VEC && (pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC)) {
 		return glmArray_mulO_T(arr, o, o_size, pto);
 	}
@@ -5244,7 +5244,7 @@ static PyObject* glmArray_rmulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 	outArray->readonly = false;
 	outArray->reference = NULL;
 
-	ssize_t n, arrStride, oStride, trueShape1;
+	Py_ssize_t n, arrStride, oStride, trueShape1;
 
 	if ((pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC) {
 		n = pto->C;
@@ -5300,13 +5300,13 @@ static PyObject* glmArray_rmulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
-	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+	Py_ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T result = (T)0;
-			for (ssize_t k = 0; k < n; k++) {
+			for (Py_ssize_t k = 0; k < n; k++) {
 				T a = o[k * oStride + j % trueShape1];
 				T b = arrDataPtr[k + (j / trueShape1) * arrStride];
 
@@ -5320,43 +5320,43 @@ static PyObject* glmArray_rmulO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 }
 
 template<typename V, typename Q>
-static void glmArray_mul_Q(V* vecs, Q* quas, V* out, ssize_t len) {
-	for (ssize_t i = 0; i < len; i++) {
+static void glmArray_mul_Q(V* vecs, Q* quas, V* out, Py_ssize_t len) {
+	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = vecs[i] * quas[i];
 	}
 }
 
 template<typename V, typename Q>
-static void glmArray_rmul_Q(Q* quas, V* vecs, V* out, ssize_t len) {
-	for (ssize_t i = 0; i < len; i++) {
+static void glmArray_rmul_Q(Q* quas, V* vecs, V* out, Py_ssize_t len) {
+	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = quas[i] * vecs[i];
 	}
 }
 
 template<typename V, typename Q>
-static void glmArray_mul_Q(V vec, Q* quas, V* out, ssize_t len) {
-	for (ssize_t i = 0; i < len; i++) {
+static void glmArray_mul_Q(V vec, Q* quas, V* out, Py_ssize_t len) {
+	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = vec * quas[i];
 	}
 }
 
 template<typename V, typename Q>
-static void glmArray_mul_Q(V* vecs, Q qua, V* out, ssize_t len) {
-	for (ssize_t i = 0; i < len; i++) {
+static void glmArray_mul_Q(V* vecs, Q qua, V* out, Py_ssize_t len) {
+	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = vecs[i] * qua;
 	}
 }
 
 template<typename V, typename Q>
-static void glmArray_rmul_Q(Q* quas, V vec, V* out, ssize_t len) {
-	for (ssize_t i = 0; i < len; i++) {
+static void glmArray_rmul_Q(Q* quas, V vec, V* out, Py_ssize_t len) {
+	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = quas[i] * vec;
 	}
 }
 
 template<typename V, typename Q>
-static void glmArray_rmul_Q(Q qua, V* vecs, V* out, ssize_t len) {
-	for (ssize_t i = 0; i < len; i++) {
+static void glmArray_rmul_Q(Q qua, V* vecs, V* out, Py_ssize_t len) {
+	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = qua * vecs[i];
 	}
 }
@@ -6115,14 +6115,14 @@ static PyObject* glmArray_mod_T(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		Py_ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T b = arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
 
 			if (b == (T)0) {
@@ -6137,7 +6137,7 @@ static PyObject* glmArray_mod_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_modO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_modO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -6174,13 +6174,13 @@ static PyObject* glmArray_modO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T b = o[j % o_size];
 
 			if (b == (T)0) {
@@ -6195,7 +6195,7 @@ static PyObject* glmArray_modO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 }
 
 template<typename T>
-static PyObject* glmArray_rmodO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_rmodO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -6232,13 +6232,13 @@ static PyObject* glmArray_rmodO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T b = arrDataPtr[i * arrRatio + (j % arrRatio)];
 			
 			if (b == (T)0) {
@@ -6538,14 +6538,14 @@ static PyObject* glmArray_pow_T(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		Py_ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			
 			outArrayDataPtr[outArrayIndex++] = std::pow(arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)], arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)]);
 		}
@@ -6555,7 +6555,7 @@ static PyObject* glmArray_pow_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_powO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_powO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -6592,13 +6592,13 @@ static PyObject* glmArray_powO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = std::pow(arrDataPtr[i * arrRatio + (j % arrRatio)], o[j % o_size]);
 		}
 	}
@@ -6607,7 +6607,7 @@ static PyObject* glmArray_powO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 }
 
 template<typename T>
-static PyObject* glmArray_rpowO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_rpowO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -6644,13 +6644,13 @@ static PyObject* glmArray_rpowO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = std::pow(o[j % o_size], arrDataPtr[i * arrRatio + (j % arrRatio)]);
 		}
 	}
@@ -6841,9 +6841,9 @@ static PyObject* glmArray_neg_T(glmArray* arr) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+	Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
 
-	for (ssize_t i = 0; i < outArray->itemCount * outArrayRatio; i++) {
+	for (Py_ssize_t i = 0; i < outArray->itemCount * outArrayRatio; i++) {
 		outArrayDataPtr[i] = negT(arrDataPtr[i]);
 	}
 
@@ -6921,9 +6921,9 @@ static PyObject* glmArray_abs_T(glmArray* arr) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+	Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
 
-	for (ssize_t i = 0; i < outArray->itemCount * outArrayRatio; i++) {
+	for (Py_ssize_t i = 0; i < outArray->itemCount * outArrayRatio; i++) {
 		outArrayDataPtr[i] = glmArray_abs_f(arrDataPtr[i]);
 	}
 
@@ -6981,9 +6981,9 @@ static PyObject* glmArray_inv_T(glmArray* arr) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+	Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
 
-	for (ssize_t i = 0; i < outArray->itemCount * outArrayRatio; i++) {
+	for (Py_ssize_t i = 0; i < outArray->itemCount * outArrayRatio; i++) {
 		outArrayDataPtr[i] = ~(arrDataPtr[i]);
 	}
 
@@ -7051,14 +7051,14 @@ static PyObject* glmArray_lshift_T(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		Py_ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] << arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
 		}
 	}
@@ -7067,7 +7067,7 @@ static PyObject* glmArray_lshift_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_lshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_lshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7104,13 +7104,13 @@ static PyObject* glmArray_lshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTy
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] << o[j % o_size];
 		}
 	}
@@ -7119,7 +7119,7 @@ static PyObject* glmArray_lshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTy
 }
 
 template<typename T>
-static PyObject* glmArray_rlshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_rlshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7156,13 +7156,13 @@ static PyObject* glmArray_rlshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMT
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = o[j % o_size] << arrDataPtr[i * arrRatio + (j % arrRatio)];
 		}
 	}
@@ -7428,14 +7428,14 @@ static PyObject* glmArray_rshift_T(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		Py_ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] >> arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
 		}
 	}
@@ -7444,7 +7444,7 @@ static PyObject* glmArray_rshift_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_rshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_rshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7481,13 +7481,13 @@ static PyObject* glmArray_rshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTy
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] >> o[j % o_size];
 		}
 	}
@@ -7496,7 +7496,7 @@ static PyObject* glmArray_rshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTy
 }
 
 template<typename T>
-static PyObject* glmArray_rrshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_rrshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7533,13 +7533,13 @@ static PyObject* glmArray_rrshiftO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMT
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = o[j % o_size] >> arrDataPtr[i * arrRatio + (j % arrRatio)];
 		}
 	}
@@ -7805,14 +7805,14 @@ static PyObject* glmArray_and_T(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		Py_ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] & arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
 		}
 	}
@@ -7821,7 +7821,7 @@ static PyObject* glmArray_and_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_andO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_andO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7858,13 +7858,13 @@ static PyObject* glmArray_andO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] & o[j % o_size];
 		}
 	}
@@ -7873,7 +7873,7 @@ static PyObject* glmArray_andO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 }
 
 template<typename T>
-static PyObject* glmArray_randO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_randO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7910,13 +7910,13 @@ static PyObject* glmArray_randO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = o[j % o_size] & arrDataPtr[i * arrRatio + (j % arrRatio)];
 		}
 	}
@@ -8182,14 +8182,14 @@ static PyObject* glmArray_xor_T(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		Py_ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] ^ arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
 		}
 	}
@@ -8198,7 +8198,7 @@ static PyObject* glmArray_xor_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_xorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_xorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -8235,13 +8235,13 @@ static PyObject* glmArray_xorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] ^ o[j % o_size];
 		}
 	}
@@ -8250,7 +8250,7 @@ static PyObject* glmArray_xorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 }
 
 template<typename T>
-static PyObject* glmArray_rxorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_rxorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -8287,13 +8287,13 @@ static PyObject* glmArray_rxorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = o[j % o_size] ^ arrDataPtr[i * arrRatio + (j % arrRatio)];
 		}
 	}
@@ -8559,14 +8559,14 @@ static PyObject* glmArray_or_T(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		Py_ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arr1DataPtr[i * arr1Ratio + (j % arr1Ratio)] | arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
 		}
 	}
@@ -8575,7 +8575,7 @@ static PyObject* glmArray_or_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_orO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_orO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -8612,13 +8612,13 @@ static PyObject* glmArray_orO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeOb
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = arrDataPtr[i * arrRatio + (j % arrRatio)] | o[j % o_size];
 		}
 	}
@@ -8627,7 +8627,7 @@ static PyObject* glmArray_orO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeOb
 }
 
 template<typename T>
-static PyObject* glmArray_rorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_rorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -8664,13 +8664,13 @@ static PyObject* glmArray_rorO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			outArrayDataPtr[outArrayIndex++] = o[j % o_size] | arrDataPtr[i * arrRatio + (j % arrRatio)];
 		}
 	}
@@ -8936,14 +8936,14 @@ static PyObject* glmArray_div_T(glmArray* arr1, glmArray* arr2) {
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
-		ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arr1Ratio = arr1->itemSize / outArray->dtSize;
+		Py_ssize_t arr2Ratio = arr2->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T b = arr2DataPtr[i * arr2Ratio + (j % arr2Ratio)];
 
 			if (b == (T)0) {
@@ -8958,7 +8958,7 @@ static PyObject* glmArray_div_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_divO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_divO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -8995,13 +8995,13 @@ static PyObject* glmArray_divO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T b = o[j % o_size];
 
 			if (b == (T)0) {
@@ -9016,7 +9016,7 @@ static PyObject* glmArray_divO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeO
 }
 
 template<typename T>
-static PyObject* glmArray_rdivO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMTypeObject* pto) {
+static PyObject* glmArray_rdivO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -9053,13 +9053,13 @@ static PyObject* glmArray_rdivO_T(glmArray* arr, T* o, ssize_t o_size, PyGLMType
 
 	T* outArrayDataPtr = (T*)outArray->data;
 
-	ssize_t outArrayIndex = 0;
+	Py_ssize_t outArrayIndex = 0;
 
-	for (ssize_t i = 0; i < outArray->itemCount; i++) {
-		ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
-		ssize_t arrRatio = arr->itemSize / outArray->dtSize;
+	for (Py_ssize_t i = 0; i < outArray->itemCount; i++) {
+		Py_ssize_t outArrayRatio = outArray->itemSize / outArray->dtSize;
+		Py_ssize_t arrRatio = arr->itemSize / outArray->dtSize;
 
-		for (ssize_t j = 0; j < outArrayRatio; j++) {
+		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T b = arrDataPtr[i * arrRatio + (j % arrRatio)];
 			
 			if (b == (T)0) {

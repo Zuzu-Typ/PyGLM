@@ -293,10 +293,10 @@ struct glmArray {
 		char format;
 	uint8 shape[2];
 	uint8 glmType;
-	ssize_t nBytes;
-	ssize_t itemCount;
-	ssize_t dtSize;
-	ssize_t itemSize;
+	Py_ssize_t nBytes;
+	Py_ssize_t itemCount;
+	Py_ssize_t dtSize;
+	Py_ssize_t itemSize;
 	PyTypeObject* subtype;
 	PyObject* reference;
 	bool readonly;
@@ -325,7 +325,7 @@ struct glmArray {
 
 struct glmArrayIter {
 	PyObject_VAR_HEAD
-		ssize_t seq_index;
+		Py_ssize_t seq_index;
 	glmArray* sequence;
 };
 
@@ -335,18 +335,18 @@ struct PyGLMTypeObject {
 	uint8 glmType;
 	uint8 C;
 	uint8 R;
-	ssize_t dtSize;
-	ssize_t itemSize;
+	Py_ssize_t dtSize;
+	Py_ssize_t itemSize;
 	char format;
 	char reserved = '\x00';
 
 	int PTI_info;
 
 	PyTypeObject* subtype;
-	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, ssize_t dtSize, ssize_t itemSize, char format) :
+	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, Py_ssize_t dtSize, Py_ssize_t itemSize, char format) :
 		PyGLMTypeObject(typeObject, glmType, C, R, dtSize, itemSize, format, (PyTypeObject*)this) {}
 
-	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, ssize_t dtSize, ssize_t itemSize, char format, PyTypeObject* subtype)
+	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, Py_ssize_t dtSize, Py_ssize_t itemSize, char format, PyTypeObject* subtype)
 		: typeObject(typeObject), glmType(glmType), C(C), R(R), dtSize(dtSize), itemSize(itemSize), format(format), subtype(subtype) {
 
 		if (glmType == PyGLM_TYPE_VEC) {
