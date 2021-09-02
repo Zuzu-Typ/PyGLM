@@ -78,7 +78,7 @@ def test_func(description, glm_func, glm_args, numpy_func, numpy_args):
     #Thread(target=measure_function_glm, args=[glm_func] + list(glm_args)).start()
     #Thread(target=measure_function_numpy, args=[numpy_func] + list(numpy_args)).start()
     #print_percentage()
-    print("\nTimes ran:\n\tPyGLM: {:.2f}s\n\tNumPy: {:.2f}s\n".format(glm_counter, numpy_counter))
+    print("\nTimes ran:\n\tPyGLM: {:.2f}x\n\tNumPy: {:.2f}x\n".format(glm_counter, numpy_counter))
     print("{}.\n".format(get_evaluation_string(glm_counter, numpy_counter)))
 
     results.append((description, glm_counter, numpy_counter))
@@ -94,7 +94,7 @@ def test_operation(description, operation, format_, glm_args, numpy_args):
     #Thread(target=measure_function_glm, args=[operation] + list(glm_args)).start()
     #Thread(target=measure_function_numpy, args=[operation] + list(numpy_args)).start()
     #print_percentage()
-    print("\nTimes ran:\n\tPyGLM: {:.2f}s\n\tNumPy: {:.2f}s\n".format(glm_counter, numpy_counter))
+    print("\nTimes ran:\n\tPyGLM: {:.2f}x\n\tNumPy: {:.2f}x\n".format(glm_counter, numpy_counter))
     print("{}.\n".format(get_evaluation_string(glm_counter, numpy_counter)))
 
     results.append((description, glm_counter, numpy_counter))

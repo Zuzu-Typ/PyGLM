@@ -17,7 +17,7 @@ If you encounter any issues or want to request a feature, please create an issue
 Besides the obvious \- being mostly compatible with **GLM** \- PyGLM offers a variety of features for **vector** and **matrix manipulation**\.  
 It has a lot of possible use cases, including **3D\-Graphics** \(OpenGL, DirectX, \.\.\.\), **Physics** and more\.  
   
-At the same time, it has **great performance**, being between **1\.5x and 100x as fast as numpy\!** \(see [end of page](#speed-comparison-to-numpy)\)  
+At the same time, it has **great performance**, usually being **twice as fast as numpy\!** \(see [end of page](#speed-comparison-to-numpy)\)  
 \(*depending on the individual function*\)  
 ### Installation  
 **PyGLM** supports **Windows**, **Linux**, **MacOS** and other operating systems with either x86 \(**32\-bit**\) or x64 \(**64\-bit**\) architecture,   
@@ -134,35 +134,35 @@ Take a look at the [examples](https://github.com/Zuzu-Typ/LearnOpenGL-Python) fr
 ### Speed comparison to numpy  
 ``` 
 The following chart shows the results of running "PyGLM vs NumPy.py".
-Each of the instructions were ran for 1 second to get more accurate results.
+Each of the instructions ran for 1 second to get more accurate results.
 
 +----------------------------------------+------------+------------+-----------+
 | Description                            | PyGLM runs | NumPy runs | ratio     |
 +----------------------------------------+------------+------------+-----------+
-| 3 component vector creation            |    3.555M  |    2.410M  |     1.47x |
+| 3 component vector creation            |    3.031M  |    2.426M  |     1.25x |
 +----------------------------------------+------------+------------+-----------+
 | 3 component vector creation with       |            |            |           |
-| custom components                      |    3.293M  |  716,951   |     4.59x |
+| custom components                      |    2.730M  |    1.046M  |     2.61x |
 +----------------------------------------+------------+------------+-----------+
-| dot product                            |    4.334M  |  900,117   |     4.82x |
+| dot product                            |    3.360M  |  702,325   |     4.79x |
 +----------------------------------------+------------+------------+-----------+
-| cross product                          |    4.143M  |   42,090   |    98.45x |
+| cross product                          |    3.271M  |   45,358   |    72.14x |
 +----------------------------------------+------------+------------+-----------+
-| L2-Norm of 3 component vector          |    4.685M  |  278,776   |    16.81x |
+| L2-Norm of 3 component vector          |    3.605M  |  284,225   |    12.69x |
 +----------------------------------------+------------+------------+-----------+
-| 4x4 matrix creation                    |    3.982M  |    2.387M  |     1.67x |
+| 4x4 matrix creation                    |    3.238M  |    2.371M  |     1.37x |
 +----------------------------------------+------------+------------+-----------+
-| 4x4 identity matrix creation           |    4.077M  |  453,426   |     8.99x |
+| 4x4 identity matrix creation           |    3.203M  |  487,035   |     6.58x |
 +----------------------------------------+------------+------------+-----------+
-| 4x4 matrix transposition               |    3.960M  |    1.254M  |     3.16x |
+| 4x4 matrix transposition               |    3.115M  |    1.176M  |     2.65x |
 +----------------------------------------+------------+------------+-----------+
-| 4x4 matrix multiplicative inverse      |    3.727M  |   36,977   |   100.81x |
+| 4x4 matrix multiplicative inverse      |    3.116M  |  189,735   |    16.43x |
 +----------------------------------------+------------+------------+-----------+
-| 3 component vector addition            |    3.585M  |    1.432M  |     2.50x |
+| 3 component vector addition            |    2.921M  |    1.310M  |     2.23x |
 +----------------------------------------+------------+------------+-----------+
-| 4x4 matrix multiplication              |    3.096M  |    1.349M  |     2.29x |
+| 4x4 matrix multiplication              |    2.454M  |    1.276M  |     1.92x |
 +----------------------------------------+------------+------------+-----------+
 | 4x4 matrix - 4 component vector        |            |            |           |
-| multiplication                         |    3.278M  |  681,509   |     4.81x |
+| multiplication                         |    2.825M  |  615,594   |     4.59x |
 +----------------------------------------+------------+------------+-----------+
  ```
