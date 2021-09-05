@@ -46,12 +46,12 @@ static PyNumberMethods hi16vec1NumMethods = {
 	(unaryfunc)vec_pos<1, glm::i16>, //nb_positive
 	(unaryfunc)vec_abs<1, glm::i16>, //nb_absolute
 	0, //nb_bool
-	0, //nb_invert
-	0, //nb_lshift
-	0, //nb_rshift
-	0, //nb_and
-	0, //nb_xor
-	0, //nb_or
+	(unaryfunc)vec_invert<1, glm::i16>, //nb_invert
+	(binaryfunc)vec_lshift<1, glm::i16>, //nb_lshift
+	(binaryfunc)vec_rshift<1, glm::i16>, //nb_rshift
+	(binaryfunc)vec_and<1, glm::i16>, //nb_and
+	(binaryfunc)vec_xor<1, glm::i16>, //nb_xor
+	(binaryfunc)vec_or<1, glm::i16>, //nb_or
 	0, //nb_int
 	0, //nb_reserved
 	0, //nb_int
@@ -60,11 +60,11 @@ static PyNumberMethods hi16vec1NumMethods = {
 	(binaryfunc)vec_imul<1, glm::i16>, //nb_inplace_multiply
 	(binaryfunc)vec_imod<1, glm::i16>, //nb_inplace_remainder
 	0, //nb_inplace_power
-	0, //nb_inplace_lshift
-	0, //nb_inplace_rshift
-	0, //nb_inplace_and
-	0, //nb_inplace_xor
-	0, //nb_inplace_or
+	(binaryfunc)vec_ilshift<1, glm::i16>, //nb_inplace_lshift
+	(binaryfunc)vec_irshift<1, glm::i16>, //nb_inplace_rshift
+	(binaryfunc)vec_iand<1, glm::i16>, //nb_inplace_and
+	(binaryfunc)vec_ixor<1, glm::i16>, //nb_inplace_xor
+	(binaryfunc)vec_ior<1, glm::i16>, //nb_inplace_or
 	0, //nb_floor_divide
 	(binaryfunc)vec_div<1, glm::i16>,
 	0, //nb_inplace_floor_divide

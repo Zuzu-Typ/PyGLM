@@ -588,6 +588,13 @@ def test_abs():
         assert (abs(glm.array(obj)))[0] == abs(obj), obj
 #/abs #
 
+# invert #
+def test_invert():
+    for obj in gen_obj("#MV__iqsuIQSU"):
+        fassert(obj.__invert__, ())
+        assert (abs(glm.array(obj)))[0] == abs(obj), obj
+#/invert #
+
 # add #
 def test_add():
     for obj in gen_obj("#MV_M_Q__fFiqsuIQSUB"):
@@ -677,6 +684,41 @@ def test_divmod():
     for obj in gen_obj("#MV__fF"):
         fassert(obj.__divmod__, (1,))
 #/divmod #
+
+# lshift #
+def test_lshift():
+    for obj in gen_obj("#MV__iqsuIQSU"):
+        fassert(obj.__lshift__, (1,))
+        fassert(obj.__lshift__, (obj,))
+#/lshift #
+
+# rshift #
+def test_rshift():
+    for obj in gen_obj("#MV__iqsuIQSU"):
+        fassert(obj.__rshift__, (1,))
+        fassert(obj.__rshift__, (obj,))
+#/rshift #
+
+# and #
+def test_and():
+    for obj in gen_obj("#MV__iqsuIQSU"):
+        fassert(obj.__and__, (1,))
+        fassert(obj.__and__, (obj,))
+#/and #
+
+# or #
+def test_or():
+    for obj in gen_obj("#MV__iqsuIQSU"):
+        fassert(obj.__or__, (1,))
+        fassert(obj.__or__, (obj,))
+#/or #
+
+# xor #
+def test_xor():
+    for obj in gen_obj("#MV__iqsuIQSU"):
+        fassert(obj.__xor__, (1,))
+        fassert(obj.__xor__, (obj,))
+#/xor #
 
 # pow #
 def test_pow():
