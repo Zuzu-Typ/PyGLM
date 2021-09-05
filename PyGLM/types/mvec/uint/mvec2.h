@@ -41,12 +41,12 @@ static PyNumberMethods humvec2NumMethods = {
 	(unaryfunc)mvec_pos<2, glm::u32>, //nb_positive
 	(unaryfunc)mvec_abs<2, glm::u32>, //nb_absolute
 	0, //nb_bool
-	0, //nb_invert
-	0, //nb_lshift
-	0, //nb_rshift
-	0, //nb_and
-	0, //nb_xor
-	0, //nb_or
+	(unaryfunc)mvec_invert<2, glm::u32>, //nb_invert
+	(binaryfunc)mvec_lshift<2, glm::u32>, //nb_lshift
+	(binaryfunc)mvec_rshift<2, glm::u32>, //nb_rshift
+	(binaryfunc)mvec_and<2, glm::u32>, //nb_and
+	(binaryfunc)mvec_xor<2, glm::u32>, //nb_xor
+	(binaryfunc)mvec_or<2, glm::u32>, //nb_or
 	0, //nb_int
 	0, //nb_reserved
 	0, //nb_int
@@ -55,11 +55,11 @@ static PyNumberMethods humvec2NumMethods = {
 	(binaryfunc)mvec_imul<2, glm::u32>, //nb_inplace_multiply
 	0, //nb_inplace_remainder
 	0, //nb_inplace_power
-	0, //nb_inplace_lshift
-	0, //nb_inplace_rshift
-	0, //nb_inplace_and
-	0, //nb_inplace_xor
-	0, //nb_inplace_or
+	(binaryfunc)mvec_ilshift<2, glm::u32>, //nb_inplace_lshift
+	(binaryfunc)mvec_irshift<2, glm::u32>, //nb_inplace_rshift
+	(binaryfunc)mvec_iand<2, glm::u32>, //nb_inplace_and
+	(binaryfunc)mvec_ixor<2, glm::u32>, //nb_inplace_xor
+	(binaryfunc)mvec_ior<2, glm::u32>, //nb_inplace_or
 	0, //nb_floor_divide
 	(binaryfunc)mvec_div<2, glm::u32>,
 	0, //nb_inplace_floor_divide

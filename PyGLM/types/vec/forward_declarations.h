@@ -80,6 +80,21 @@ template<int L, typename T>
 static PyObject * vec_divmod(PyObject *obj1, PyObject *obj2);
 
 template<int L, typename T>
+static PyObject* vec_lshift(PyObject* obj1, PyObject* obj2);
+
+template<int L, typename T>
+static PyObject* vec_rshift(PyObject* obj1, PyObject* obj2);
+
+template<int L, typename T>
+static PyObject* vec_and(PyObject* obj1, PyObject* obj2);
+
+template<int L, typename T>
+static PyObject* vec_xor(PyObject* obj1, PyObject* obj2);
+
+template<int L, typename T>
+static PyObject * vec_or(PyObject* obj1, PyObject* obj2);
+
+template<int L, typename T>
 static PyObject * vec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3);
 
 template<int L, typename T>
@@ -93,6 +108,9 @@ static PyObject * vec_pos(vec<L, T> *obj);
 
 template<int L, typename T>
 static PyObject * vec_abs(vec<L, T> *obj);
+
+template<int L, typename T>
+static PyObject* vec_invert(vec<L, T>* obj);
 
 static PyObject* vec_matmul(PyObject* obj1, PyObject* obj2);
 
@@ -113,6 +131,21 @@ static PyObject* bvec_imul(vec<L, bool>* self, PyObject* obj);
 
 template<int L, typename T>
 static PyObject * vec_imod(vec<L, T>* self, PyObject *obj);
+
+template<int L, typename T>
+static PyObject* vec_ilshift(vec<L, T>* self, PyObject* obj);
+
+template<int L, typename T>
+static PyObject* vec_irshift(vec<L, T>* self, PyObject* obj);
+
+template<int L, typename T>
+static PyObject* vec_iand(vec<L, T>* self, PyObject* obj);
+
+template<int L, typename T>
+static PyObject* vec_ixor(vec<L, T>* self, PyObject* obj);
+
+template<int L, typename T>
+static PyObject* vec_ior(vec<L, T>* self, PyObject* obj);
 
 template<int L, typename T>
 static PyObject * vec_ipow(vec<L, T>* self, PyObject * obj2, PyObject * obj3);

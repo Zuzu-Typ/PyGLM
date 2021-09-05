@@ -67,6 +67,21 @@ template<int L, typename T>
 static PyObject * mvec_divmod(PyObject *obj1, PyObject *obj2);
 
 template<int L, typename T>
+static PyObject* mvec_lshift(PyObject* obj1, PyObject* obj2);
+
+template<int L, typename T>
+static PyObject* mvec_rshift(PyObject* obj1, PyObject* obj2);
+
+template<int L, typename T>
+static PyObject* mvec_and(PyObject* obj1, PyObject* obj2);
+
+template<int L, typename T>
+static PyObject* mvec_xor(PyObject* obj1, PyObject* obj2);
+
+template<int L, typename T>
+static PyObject* mvec_or(PyObject* obj1, PyObject* obj2);
+
+template<int L, typename T>
 static PyObject * mvec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3);
 
 template<int L, typename T>
@@ -77,6 +92,9 @@ static PyObject * mvec_pos(mvec<L, T> *obj);
 
 template<int L, typename T>
 static PyObject * mvec_abs(mvec<L, T> *obj);
+
+template<int L, typename T>
+static PyObject* mvec_invert(mvec<L, T>* obj);
 
 static PyObject* mvec_matmul(PyObject* obj1, PyObject* obj2);
 
@@ -109,6 +127,21 @@ static PyObject * mvec_idiv(mvec<L, T>* self, PyObject *obj);
 
 template<int L, typename T>
 static PyObject* mvec_imatmul(mvec<L, T>* self, PyObject* obj);
+
+template<int L, typename T>
+static PyObject* mvec_ilshift(mvec<L, T>* self, PyObject* obj);
+
+template<int L, typename T>
+static PyObject* mvec_irshift(mvec<L, T>* self, PyObject* obj);
+
+template<int L, typename T>
+static PyObject* mvec_iand(mvec<L, T>* self, PyObject* obj);
+
+template<int L, typename T>
+static PyObject* mvec_ixor(mvec<L, T>* self, PyObject* obj);
+
+template<int L, typename T>
+static PyObject* mvec_ior(mvec<L, T>* self, PyObject* obj);
 
 static void mvec_dealloc(PyObject* self);
 
