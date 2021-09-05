@@ -537,7 +537,7 @@ def test_array_types():
     assert arr.map(lambda x: (x, x) if x.x == 1 else None) == glm.array(glm.vec3(1), glm.vec3(1))
     assert arr.map(lambda x: None) == arr.repeat(0)
     assert arr.map(lambda x: (x.x), ctype = glm.int32) == glm.array.from_numbers(glm.int32, 5, 4, 3, 2, 1)
-    arr.sort(lambda x, y: -(glm.all(glm.lessThan(x, y))))
+    arr.sort(lambda x, y: glm.cmp(x.x, y.x))
     assert arr == glm.array(glm.vec3(1), glm.vec3(2), glm.vec3(3), glm.vec3(4), glm.vec3(5))
 
 

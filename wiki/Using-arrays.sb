@@ -316,14 +316,14 @@ array(c_int32(50), c_int32(167))
 You can sort an array by using a custom sorting function.
 
 The sorting function is called with two elements from the array and should return \code\-1\code\ if the first element comes before the second element in order.
-Otherwise it may return any other value. Typically \code\0\code\ for equal elements and \code\1\code\ if the first element comes after the second.
+Otherwise it should return \code\0\code\ for equal elements and \code\1\code\ if the first element comes after the second.
 
 The sorting algorithm used is a recursive quicksort.
 
 Example:
 \code Python\
 >>> arr = array(c_float, 6, 5, 4, 3, 2, 1)
->>> arr.sort(lambda x, y: -1 if x < y else 1)
+>>> arr.sort(lambda x, y: -1 if x < y else 0 if x == y else 1)
 >>> arr
 array(c_float(1), c_float(2), c_float(3), c_float(4), c_float(5), c_float(6))
 

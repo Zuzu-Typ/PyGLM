@@ -4179,76 +4179,147 @@ static PyObject* glmArray_map(glmArray* self, PyObject* args, PyObject* kwargs) 
 	return NULL;
 }
 
-static int quickSort(std::vector<PyObject*>& in, PyObject* func) {
+static int compare(PyObject* func, PyObject* funcArgs, long& cmp) {
+	PyObject* comparisonResult = PyObject_CallObject(func, funcArgs);
+	if (comparisonResult == NULL) {
+		PyTuple_SET_ITEM(funcArgs, 0, NULL);
+		PyTuple_SET_ITEM(funcArgs, 1, NULL);
+		Py_DECREF(funcArgs);
+		return -1;
+	}
+	if (!PyLong_Check(comparisonResult)) {
+		PyGLM_TYPEERROR_O("The ordering function returned an invalid argument of type ", comparisonResult);
+		Py_DECREF(comparisonResult);
+		PyTuple_SET_ITEM(funcArgs, 0, NULL);
+		PyTuple_SET_ITEM(funcArgs, 1, NULL);
+		Py_DECREF(funcArgs);
+		return -1;
+	}
+
+	cmp = PyLong_AS_LONG(comparisonResult);
+	Py_DECREF(comparisonResult);
+
+	return 0;
+}
+
+static int insertionSort(std::vector<PyObject*>& in, PyObject* func) {
 	const size_t inSize = in.size();
+
+	PyObject* x, * y;
+
+	PyObject* funcArgs = PyTuple_New(2);
+
+	int i, j;
+	long cmp;
+	for (i = 1; i < inSize; i++)
+	{
+		x = in[i];
+		j = i - 1;
+
+		PyTuple_SET_ITEM(funcArgs, 0, x);
+
+		while (j >= 0)
+		{
+			y = in[j];
+			PyTuple_SET_ITEM(funcArgs, 1, y);
+
+			if (compare(func, funcArgs, cmp) < 0) {
+				return -1;
+			}
+			if (cmp < 0) {
+				in[j + 1] = in[j];
+				j--;
+			}
+			else {
+				break;
+			}
+		}
+		in[j + 1] = x;
+	}
+
+	PyTuple_SET_ITEM(funcArgs, 0, NULL);
+	PyTuple_SET_ITEM(funcArgs, 1, NULL);
+	Py_DECREF(funcArgs);
+
+	return 0;
+}
+
+
+static inline void qs_swap(std::vector<PyObject*>& in, int i, int j) {
+	if (i != j) {
+		PyObject* t = in[i];
+		in[i] = in[j];
+		in[j] = t;
+	}
+}
+
+static int iquickSort(std::vector<PyObject*>& in, PyObject* func) {
+	const size_t inSize = in.size();
+
+	int l = 0;
+	int h = static_cast<int>(inSize) - 1;
 
 	if (inSize <= 1) {
 		return 0;
 	}
 
-	size_t pivotIndex = inSize / 2;
+	int* stack = reinterpret_cast<int*>(PyMem_Malloc(inSize * sizeof(int)));
 
-	PyObject* pivot = in[pivotIndex];
-
-	std::vector<PyObject*> lessThan{};
-	std::vector<PyObject*> greaterThanEqual{};
-
-	PyObject* funcArgs = PyTuple_New(2);
-	PyTuple_SET_ITEM(funcArgs, 1, pivot);
-
-	for (size_t i = 0; i < pivotIndex; i++) {
-		PyObject* currentElement = in[i];
-		PyTuple_SET_ITEM(funcArgs, 0, currentElement);
-
-		PyObject* comparisonResult = PyObject_CallObject(func, funcArgs);
-
-		if (comparisonResult == NULL) {
-			Py_DECREF(funcArgs);
-			return -1;
-		}
-		if (!PyLong_Check(comparisonResult)) {
-			PyGLM_TYPEERROR_O("The ordering function returned an invalid argument of type ", comparisonResult);
-			Py_DECREF(comparisonResult);
-			Py_DECREF(funcArgs);
-			return -1;
-		}
-
-		long cmp = PyLong_AS_LONG(comparisonResult);
-		Py_DECREF(comparisonResult);
-
-		if (cmp == -1) {
-			lessThan.push_back(currentElement);
-		}
-		else {
-			greaterThanEqual.push_back(currentElement);
-		}
+	if (stack == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "Out of memory");
+		return -1;
 	}
 
-	for (size_t i = pivotIndex + 1; i < inSize; i++) {
-		PyObject* currentElement = in[i];
-		PyTuple_SET_ITEM(funcArgs, 0, currentElement);
+	int top = 0;
 
-		PyObject* comparisonResult = PyObject_CallObject(func, funcArgs);
+	stack[top] = l;
+	stack[++top] = h;
 
-		if (comparisonResult == NULL) {
-			Py_DECREF(funcArgs);
-			return -1;
+	int p, i, pivot;
+	long cmp;
+	PyObject* x, *y;
+
+	PyObject* funcArgs = PyTuple_New(2);
+
+	while (top >= 0) {
+		h = stack[top--];
+		l = stack[top--];
+
+		pivot = (h + l) / 2;
+
+		qs_swap(in, pivot, h);
+
+		y = in[h];
+
+		i = l;
+
+		PyTuple_SET_ITEM(funcArgs, 1, y);
+
+		for (int j = l; j < h; j++) {
+			x = in[j];
+			PyTuple_SET_ITEM(funcArgs, 0, x);
+
+			if (compare(func, funcArgs, cmp) < 0) {
+				PyMem_Free(stack);
+				return -1;
+			}
+
+			if (cmp < 0) {
+				qs_swap(in, i++, j);
+			}
 		}
-		if (!PyLong_Check(comparisonResult)) {
-			Py_DECREF(comparisonResult);
-			Py_DECREF(funcArgs);
-			PyGLM_TYPEERROR_O("The ordering function returned an invalid argument of type ", comparisonResult);
-			return -1;
+
+		p = i;
+		qs_swap(in, p, h);
+
+		if (p - 1 > l) {
+			stack[++top] = l;
+			stack[++top] = p - 1;
 		}
 
-		long cmp = PyLong_AS_LONG(comparisonResult);
-		Py_DECREF(comparisonResult);
-
-		if (cmp == -1) {
-			lessThan.push_back(currentElement);
-		}
-		else {
-			greaterThanEqual.push_back(currentElement);
+		if (p + 1 < h) {
+			stack[++top] = p + 1;
+			stack[++top] = h;
 		}
 	}
 
@@ -4256,35 +4327,93 @@ static int quickSort(std::vector<PyObject*>& in, PyObject* func) {
 	PyTuple_SET_ITEM(funcArgs, 1, NULL);
 	Py_DECREF(funcArgs);
 
-	if (quickSort(lessThan, func) == -1) {
-		return -1;
-	}
-	if (quickSort(greaterThanEqual, func) == -1) {
-		return -1;
-	}
-	size_t i = 0;
-	for (; i < lessThan.size(); i++) {
-		in[i] = lessThan[i];
-	}
-	in[i++] = pivot;
-	for (size_t j = 0; j + i < inSize; j++) {
-		in[i + j] = greaterThanEqual[j];
-	}
+	PyMem_Free(stack);
+
 	return 0;
 }
 
+static Py_ssize_t getSortedElementCount(std::vector<PyObject*>& in, PyObject* func) {
+	const size_t inSize = in.size();
 
+	Py_ssize_t sortedCount = 0;
+
+	PyObject* funcArgs = PyTuple_New(2);
+
+	long cmp;
+
+	for (size_t i = 0; i < inSize - 1; i++) {
+		PyTuple_SET_ITEM(funcArgs, 0, in[i]);
+		PyTuple_SET_ITEM(funcArgs, 1, in[i + 1]);
+
+		if (compare(func, funcArgs, cmp) < 0) {
+			return -1;
+		}
+
+		if (cmp <= 0) {
+			sortedCount++;
+		}
+	}
+
+	PyTuple_SET_ITEM(funcArgs, 0, NULL);
+	PyTuple_SET_ITEM(funcArgs, 1, NULL);
+	Py_DECREF(funcArgs);
+
+	return sortedCount;
+}
 
 static PyObject* glmArray_sort(glmArray* self, PyObject* func) {
 	if (PyCallable_Check(func)) {
 		std::vector<PyObject*> inObjects{};
 
 		for (Py_ssize_t i = 0; i < self->itemCount; i++) {
-			inObjects.push_back(glmArray_get(self, i));
+			PyObject* tmp = glmArray_get(self, i);
+			if (tmp == NULL) {
+				for (size_t i = 0; i < inObjects.size(); i++) {
+					Py_DECREF(inObjects[i]);
+				}
+				return NULL;
+			}
+			inObjects.push_back(tmp);
 		}
 
-		if (quickSort(inObjects, func) == -1) {
+		Py_ssize_t sortedCount = getSortedElementCount(inObjects, func);
+
+		Py_ssize_t toBeSortedCount = (self->itemCount - 1) - sortedCount;
+
+		if (sortedCount == -1) {
+			for (Py_ssize_t i = 0; i < self->itemCount; i++) {
+				Py_DECREF(inObjects[i]);
+			}
 			return NULL;
+		}
+
+		if (toBeSortedCount == 0) {
+			// already sorted
+		}
+		else if (sortedCount == 0) {
+			std::reverse(inObjects.begin(), inObjects.end());
+		}
+		else {
+			if (std::min(sortedCount, toBeSortedCount) <= 100) { // little to sort. Use insertion sort
+				if (sortedCount < toBeSortedCount) { // reverse if fewer sorted than to be sorted
+					std::reverse(inObjects.begin(), inObjects.end());
+				}
+				if (insertionSort(inObjects, func) == -1) {
+					for (Py_ssize_t i = 0; i < self->itemCount; i++) {
+						Py_DECREF(inObjects[i]);
+					}
+					return NULL;
+				}
+			}
+			
+			else { // otherwise, use quicksort
+				if (iquickSort(inObjects, func) == -1) {
+					for (Py_ssize_t i = 0; i < self->itemCount; i++) {
+						Py_DECREF(inObjects[i]);
+					}
+					return NULL;
+				}
+			}
 		}
 
 		for (Py_ssize_t i = 0; i < self->itemCount; i++) {

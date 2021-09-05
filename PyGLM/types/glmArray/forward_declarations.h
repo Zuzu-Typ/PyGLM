@@ -200,8 +200,9 @@ PyDoc_STRVAR(glmArray_sort_docstr,
 	"sort(func: callable) -> array\n"
 	"	Sorts all elements in the array using the supplied ordering function.\n"
 	"	`func` will be called with two elements from the array and should return `-1` if\n"
-	"	the first argument is ordered before the second argument and a value greater than `-1`\n"
-	"	otherwise (e.g. `glm.cmp`). `sort` uses a custom quicksort implementation."
+	"	the first argument is ordered before the second argument, `0` if they are ordered at the\n"
+	"	same position and `1` if the first argument is ordered after the second (e.g. `glm.cmp`).\n"
+	"	`sort` uses a quicksort or insertion sort."
 );
 
 static PyObject* glmArray_sort(glmArray* self, PyObject* func);
