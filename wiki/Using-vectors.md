@@ -26,6 +26,11 @@
     *  [mod](#mod--operator)  
     *  [floordiv](#floordiv--operator)  
     *  [divmod](#divmod)  
+    *  [lshift](#lshift--operator)  
+    *  [rshift](#rshift--operator)  
+    *  [and](#and--operator)  
+    *  [or](#or--operator)  
+    *  [xor](#xor--operator)  
     *  [pow](#pow--operator)  
     *  [len](#len)  
     *  [getitem and setitem](#getitem-and-setitem--operator)  
@@ -158,6 +163,46 @@ Vectors support combined floor division and modulo operations with other vectors
 ``` Python
 divmod1 = divmod(vec2(1, 2), vec2(4, 2)) # returns (vec2(0, 1), vec2(1, 0))
 divmod2 = divmod(vec2(1, 2), 4)          # returns (vec2(0, 0), vec2(1, 2))
+ ```  
+### lshift \(``` << ``` operator\)  
+Integer vectors support the bitwise left shift operator\.&nbsp;&nbsp;  
+``` Python
+>>> ivec3(1, 2, 3) << 4
+ivec3( 16, 32, 48 )
+>>> uvec3(1, 2, 3) << uvec3(1, 2, 3)
+uvec3( 2, 8, 24 )
+ ```  
+### rshift \(``` >> ``` operator\)  
+Integer vectors support the bitwise right shift operator\.&nbsp;&nbsp;  
+``` Python
+>>> ivec3(16, 32, 48) >> 4
+ivec3( 1, 2, 3 )
+>>> uvec3(2, 8, 24) >> uvec3(1, 2, 3)
+uvec3( 1, 2, 3 )
+ ```  
+### and \(``` & ``` operator\)  
+Integer vectors support the bitwise and operator\.&nbsp;&nbsp;  
+``` Python
+>>> ivec3(1, 2, 3) & 2
+ivec3( 0, 2, 2 )
+>>> uvec3(1, 2, 3) & uvec3(3, 2, 1)
+uvec3( 1, 2, 1 )
+ ```  
+### or \(``` | ``` operator\)  
+Integer vectors support the bitwise or operator\.&nbsp;&nbsp;  
+``` Python
+>>> ivec3(1, 2, 3) | 2
+ivec3( 3, 2, 3 )
+>>> uvec3(1, 2, 3) | uvec3(6, 5, 4)
+uvec3( 7, 7, 7 )
+ ```  
+### xor \(``` ^ ``` operator\)  
+Integer vectors support the bitwise xor operator\.&nbsp;&nbsp;  
+``` Python
+>>> ivec3(1, 2, 3) ^ 2
+ivec3( 3, 0, 1 )
+>>> uvec3(1, 2, 3) ^ uvec3(3, 2, 1)
+uvec3( 2, 0, 2 )
  ```  
 ### pow \(``` ** ``` operator\)  
 Vectors support pow operations with other vectors and numbers\.&nbsp;&nbsp;  
