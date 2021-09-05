@@ -589,6 +589,7 @@ def test_abs():
 #/abs #
 
 # invert #
+def test_invert():
     for obj in gen_obj("#MV__iqsuIQSU"):
         fassert(obj.__invert__, ())
         assert (abs(glm.array(obj)))[0] == abs(obj), obj
