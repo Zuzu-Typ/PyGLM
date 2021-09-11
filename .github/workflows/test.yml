@@ -29,5 +29,5 @@ jobs:
           python -m pip install pip --upgrade
           pip install pytest
       - name: Test with pytest
-        run: pytest PyGLM_test.py -v
+        run: pytest test/PyGLM_test.py -v
   
