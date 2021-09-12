@@ -2349,7 +2349,7 @@ bool GET_PTI_COMPATIBLE_SIMPLE(PyObject* o, int accepted_types) {
 	else if (o->ob_type->tp_dealloc == (destructor)qua_dealloc) {if (GET_PTI_COMPATIBLE_SIMPLE(o, accepted_types)) {sourceType ## N = PyGLM_QUA;} else {sourceType ## N = NONE;}}\
 	else if (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) {if (GET_PTI_COMPATIBLE_SIMPLE(o, accepted_types)) {sourceType ## N = PyGLM_MVEC;} else {sourceType ## N = NONE;}}\
 	else { PTI ## N = PyGLMTypeInfo(accepted_types, o); if (PTI ## N.info == 0) sourceType ## N = NONE; else sourceType ## N = PTI;};\
-	if (N == 0 && !ARGUSED) throw; ARG ## N = o; ARGUSED = false;
+	if (N == 0 && !ARGUSED) throw; ARG ## N = o; if (N == 0 && sourceType ## N != NONE) {ARGUSED = false;};
 
 bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
 	if (o != arg) {

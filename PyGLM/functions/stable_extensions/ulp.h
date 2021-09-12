@@ -112,6 +112,7 @@ static PyObject*
 prev_float_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2 = NULL;
 	if (!PyArg_UnpackTuple(args, "prev_float", 1, 2, &arg1, &arg2)) return NULL;
+	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
 	if (arg2 == NULL) {
 		if (PyGLM_Number_Check(arg1)) {
 			return pack(glm::prev_float(PyGLM_Number_FromPyObject<double>(arg1)));
@@ -175,6 +176,7 @@ prev_float_(PyObject*, PyObject* args) {
 		}
 	}
 	else {
+		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_INT);
 		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2)) {
 			return pack(glm::prev_float(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, int, arg2)));
 		}

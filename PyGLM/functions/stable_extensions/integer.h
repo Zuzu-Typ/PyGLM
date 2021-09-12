@@ -65,6 +65,7 @@ uround_(PyObject*, PyObject* arg) {
 		PyGLM_ASSERT((0.0 <= d), "x has to be greater than or equal to 0");
 		return pack(glm::uround(d));
 	}
+	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
 	if (PyGLM_Vec_PTI_Check0(1, float, arg)) {
 		glm::vec<1, float> o = PyGLM_Vec_PTI_Get0(1, float, arg);
 		PyGLM_ASSERT((glm::all(glm::lessThanEqual(glm::vec<1, float>(0), o))), "x has to be greater than or equal to 0");
