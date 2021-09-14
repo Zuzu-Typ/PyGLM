@@ -18,8 +18,15 @@ Function to directly rotate a vector\.
 &emsp;&emsp;Build a rotation matrix from a normal and a up vector\.  
   
 ### rotate\(\) function  
+#### <code>glm.<code>**rotate**(**angle**: *number*, **axis**: *vec3*) -\> *mat4x4*</code></code>  
+&emsp;&emsp;Builds a rotation 4 x 4 matrix created from an axis vector and an angle\.  
+  
+#### <code>glm.<code>**rotate**(**angle**: *number*) -\> *mat3x3*</code></code>  
+&emsp;&emsp;Builds a rotation 3 x 3 matrix created from an angle\.  
+  
 #### <code>glm.<code>**rotate**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\> *mat4x4*</code></code>  
 &emsp;&emsp;Builds a rotation 4 x 4 matrix created from an axis vector and an angle\.  
+&emsp;&emsp;``` m ``` is the input matrix multiplied by this translation matrix  
   
 #### <code>glm.<code>**rotate**(**m**: *mat3x3*, **angle**: *number*) -\> *mat3x3*</code></code>  
 &emsp;&emsp;Builds a rotation 3 x 3 matrix created from an angle\.  

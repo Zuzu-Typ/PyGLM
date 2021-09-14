@@ -31,8 +31,15 @@ Defines functions that generate common transformation matrices.
 \raw\&emsp;&emsp;\raw\Build a right handed look at view matrix.
 
 \h3\rotate() function\h3\
+\raw\#### <code>glm.<code>**rotate**(**angle**: *number*, **axis**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a rotation 4 x 4 matrix created from an axis vector and an angle.
+
+\raw\#### <code>glm.<code>**rotate**(**angle**: *number*) -\\> *mat3x3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a rotation 3 x 3 matrix created from an angle.
+
 \raw\#### <code>glm.<code>**rotate**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\\> *mat4x4*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a rotation 4 x 4 matrix created from an axis vector and an angle.
+\raw\&emsp;&emsp;\raw\\code\m\code\ is the input matrix multiplied by this translation matrix
 
 \raw\#### <code>glm.<code>**rotate**(**m**: *mat3x3*, **angle**: *number*) -\\> *mat3x3*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a rotation 3 x 3 matrix created from an angle.
@@ -55,8 +62,15 @@ Defines functions that generate common transformation matrices.
 \raw\&emsp;&emsp;\raw\Builds a rotation 4 x 4 matrix created from an axis vector and an angle.
 
 \h3\scale() function\h3\
+\raw\#### <code>glm.<code>**scale**(**v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a scale 4 x 4 matrix created from 3 scalars.
+
+\raw\#### <code>glm.<code>**scale**(**v**: *vec2*) -\\> *mat3x3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a scale 3 x 3 matrix created from a vector of 2 components.
+
 \raw\#### <code>glm.<code>**scale**(**m**: *mat4x4*, **v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a scale 4 x 4 matrix created from 3 scalars.
+\raw\&emsp;&emsp;\raw\\code\m\code\ is the input matrix multiplied by this translation matrix
 
 \raw\#### <code>glm.<code>**scale**(**m**: *mat3x3*, **v**: *vec2*) -\\> *mat3x3*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a scale 3 x 3 matrix created from a vector of 2 components.
@@ -67,8 +81,15 @@ Defines functions that generate common transformation matrices.
 \raw\&emsp;&emsp;\raw\Builds a scale 4 x 4 matrix created from 3 scalars.
 
 \h3\translate() function\h3\
+\raw\#### <code>glm.<code>**translate**(**v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a translation 4 x 4 matrix created from a vector of 3 components.
+
+\raw\#### <code>glm.<code>**translate**(**v**: *vec2*) -\\> *mat3x3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a translation 3 x 3 matrix created from a vector of 2 components.
+
 \raw\#### <code>glm.<code>**translate**(**m**: *mat4x4*, **v**: *vec3*) -\\> *mat4x4*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a translation 4 x 4 matrix created from a vector of 3 components.
+\raw\&emsp;&emsp;\raw\\code\m\code\ is the input matrix multiplied by this translation matrix
 
 \raw\#### <code>glm.<code>**translate**(**m**: *mat3x3*, **v**: *vec2*) -\\> *mat3x3*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a translation 3 x 3 matrix created from a vector of 2 components.
