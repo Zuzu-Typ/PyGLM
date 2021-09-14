@@ -7,7 +7,7 @@ on:
 env:
   CIBW_BUILD: cp3?-*
   CIBW_TEST_REQUIRES: pytest
-  CIBW_TEST_COMMAND: pytest {project}/PyGLM_test.py -v
+  CIBW_TEST_COMMAND: pytest {project}/test/PyGLM_test.py -v
 
 jobs:
   build_wheels_win_mac:
