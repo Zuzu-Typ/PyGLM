@@ -16,8 +16,15 @@ Function to directly rotate a vector.
 \raw\&emsp;&emsp;\raw\Build a rotation matrix from a normal and a up vector.
 
 \h3\rotate() function\h3\
+\raw\#### <code>glm.<code>**rotate**(**angle**: *number*, **axis**: *vec3*) -\\> *mat4x4*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a rotation 4 x 4 matrix created from an axis vector and an angle.
+
+\raw\#### <code>glm.<code>**rotate**(**angle**: *number*) -\\> *mat3x3*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Builds a rotation 3 x 3 matrix created from an angle.
+
 \raw\#### <code>glm.<code>**rotate**(**m**: *mat4x4*, **angle**: *number*, **axis**: *vec3*) -\\> *mat4x4*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a rotation 4 x 4 matrix created from an axis vector and an angle.
+\raw\&emsp;&emsp;\raw\\code\m\code\ is the input matrix multiplied by this translation matrix
 
 \raw\#### <code>glm.<code>**rotate**(**m**: *mat3x3*, **angle**: *number*) -\\> *mat3x3*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a rotation 3 x 3 matrix created from an angle.
