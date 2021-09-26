@@ -1,168 +1,242 @@
-from threading import Thread
+import timeit, sys
+import glm, numpy
 
-import time, math
+ON_WINDOWS = sys.platform == 'win32'
 
-glm_counter = 0
-numpy_counter = 0
+print_horizontal_rule = lambda: print("+----------------------------------------+------------+------------+-----------+")
 
-glm_time = 0
-numpy_time = 0
+pad_with_spaces = lambda text, length, align="left": text + " " * (length - len(text)) if align == "left" else " " * (length - len(text)) + text
 
-test_duration = 1
+seconds_to_milliseconds = lambda seconds: int(round(seconds * 1000, 0))
 
-display_update_delay = 1 / 10
+pyglm_total_time = 0
+numpy_total_time = 0
 
-results = []
+def word_wrap(text, max_length):
+    out = []
+    current_word = []
+    current_length = 0
+    for c in text:
+        if current_length >= max_length:
+            out.append("\n")
+            current_length = len(current_word)
 
-def measure_function_glm(func, *args, **kw):
-    global glm_counter
-    glm_counter = 0
-    start = time.time()
-    last_print = 0
-    while True:
-        func(*args, **kw)
-        glm_counter += 1
-        now = time.time()
-        if now >= start + test_duration:
-            break
-        if now - last_print > display_update_delay:
-            last_print = now
-            print("\rPyGLM: {: 9d}x".format(glm_counter), end="")
-    print("\rPyGLM: {: 9d}x".format(glm_counter))
+        if c == " ":
+            out.append("".join(current_word))
+            if (current_length < max_length):
+                out.append(" ")
+            current_word = []
+        elif c == "\n":
+            out.append("".join(current_word))
+            out.append("\n")
+            current_word = []
+            current_length = 0
+        else:
+            current_word.append(c)
 
-def measure_function_numpy(func, *args, **kw):
-    global numpy_counter
-    numpy_counter = 0
-    start = time.time()
-    last_print = 0
-    while True:
-        func(*args, **kw)
-        numpy_counter += 1
-        now = time.time()
-        if now >= start + test_duration:
-            break
-        if now - last_print > display_update_delay:
-            last_print = now
-            print("\rNumPy: {: 9d}x".format(numpy_counter), end="")
-    print("\rNumPy: {: 9d}x".format(numpy_counter))
+        current_length += 1
 
-"""
-def print_percentage():
-    global glm_counter, numpy_counter
-    start = time.time()
-    last_print = 0
-    while glm_counter < repititions or numpy_counter < repititions:
-        print("\rPyGLM: {: 4d}%, NumPy: {: 4d}%".format(int(glm_counter / repititions * 100), int(numpy_counter / repititions * 100)), end="")
-    print("\rPyGLM: {: 4d}%, NumPy: {: 4d}%".format(int(glm_counter / repititions * 100), int(numpy_counter / repititions * 100)))
-"""
+    if current_word:
+        out.append("".join(current_word))
 
-def arg_to_string(arg):
-    if isinstance(arg, type):
-        return "{}.{}".format(arg.__module__, arg.__name__)
-    return repr(arg)
+    return "".join(out).rstrip()
 
-def get_evaluation_string(glm_counter, numpy_counter):
-    if (glm_counter > numpy_counter):
-        return "PyGLM was {:.2f}x as fast as NumPy".format(glm_counter / numpy_counter)
-    else:
-        return "NumPy was {:.2f}x as fast as PyGLM".format(numpy_counter / glm_counter)
-        
-def test_func(description, glm_func, glm_args, numpy_func, numpy_args):
-    print("-"*80)
-    print("Comparing {}.\n".format(description))
-    print("PyGLM instruction:\n\t{}.{}({})\n".format(glm_func.__module__, glm_func.__name__, ", ".join([arg_to_string(x) for x in glm_args])))
-    print("NumPy instruction:\n\t{}.{}({})\n".format(numpy_func.__module__, numpy_func.__name__, ", ".join([arg_to_string(x) for x in numpy_args])))
-    print("Running for {} seconds...".format(test_duration))
-    measure_function_glm(glm_func, *glm_args)
-    measure_function_numpy(numpy_func, *numpy_args)
-    #Thread(target=measure_function_glm, args=[glm_func] + list(glm_args)).start()
-    #Thread(target=measure_function_numpy, args=[numpy_func] + list(numpy_args)).start()
-    #print_percentage()
-    print("\nTimes ran:\n\tPyGLM: {:.2f}x\n\tNumPy: {:.2f}x\n".format(glm_counter, numpy_counter))
-    print("{}.\n".format(get_evaluation_string(glm_counter, numpy_counter)))
+def print_row(descr, pyglm, numpy, ratio, print_header=True, end="\n"):
+    descr = word_wrap(descr, 38)
 
-    results.append((description, glm_counter, numpy_counter))
+    descr_lines = descr.split("\n")
 
-def test_operation(description, operation, format_, glm_args, numpy_args):
-    print("-"*80)
-    print("Comparing {}.\n".format(description))
-    print("PyGLM instruction:\n\t{}\n".format(format_.format(*[arg_to_string(x) for x in glm_args])))
-    print("NumPy instruction:\n\t{}\n".format(format_.format(*[arg_to_string(x) for x in numpy_args])))
-    print("Running for {} second(s)...".format(test_duration))
-    measure_function_glm(operation, *glm_args)
-    measure_function_numpy(operation, *numpy_args)
-    #Thread(target=measure_function_glm, args=[operation] + list(glm_args)).start()
-    #Thread(target=measure_function_numpy, args=[operation] + list(numpy_args)).start()
-    #print_percentage()
-    print("\nTimes ran:\n\tPyGLM: {:.2f}x\n\tNumPy: {:.2f}x\n".format(glm_counter, numpy_counter))
-    print("{}.\n".format(get_evaluation_string(glm_counter, numpy_counter)))
+    if print_header:
+        for line in descr_lines[:-1]:
+            print(f"| {pad_with_spaces(line, 38)} | {' ' * 10} | {' ' * 10} | {' ' * 9} |")
 
-    results.append((description, glm_counter, numpy_counter))
-
-def print_table_row(descr, glm_time, numpy_time, ratio):
-    while len(descr) > 38:
-        last_space = descr[:38].rfind(" ")
-        print(("| {} | " + " " * 10 + " | " + " " * 10 + " | " + " " * 9 + " |").format(descr[:last_space] + (38 - last_space) * " "))
-        descr = descr[last_space + 1:]
-    print("| {} | {} | {} | {} |".format(descr + (38 - len(descr)) * " ", glm_time, numpy_time, ratio))
+    descr_last_line = descr_lines[-1]
     
-def format_large_num(num):
-    log10 = int(math.log10(num))
-    if log10 <= 5:
-        out = "{:,} ".format(num)
-    elif log10 <= 8:
-        out = "{:,}M".format(num // 1000).replace(",", ".")
-    else:
-        out = "{:,}B".format(num // 1000000).replace(",", ".")
-        
-    return " " * (9 - len(out)) + out
+    print(f"| {pad_with_spaces(descr_last_line, 38)} | {pad_with_spaces(pyglm, 10, align='right')} | {pad_with_spaces(numpy, 10, align='right')} | {pad_with_spaces(ratio, 9, align='right')} |", end=end)
+
+def run_test(descr, pyglm_setup_code, pyglm_code, numpy_setup_code, numpy_code, number):
+    global pyglm_total_time, numpy_total_time
+
+    descr += f"\n({number:,} times)"
     
-
-def print_results():
-    for description, glm_counter, numpy_counter in results:
-        print_table_row(description, "{} ".format(format_large_num(glm_counter)), "{} ".format(format_large_num(numpy_counter)), "{: 8.2f}x".format(glm_counter / numpy_counter))
-        print("+----------------------------------------+------------+------------+-----------+")
+    if ON_WINDOWS:
+        print_row(descr, "", "", "", end="\r")
     
-import glm, numpy       
-"""
-print("-"*80)
-print("Comparing import speed.")
-start = time.time()
-import glm
-glm_time = time.time() - start
+    pyglm_result = min(timeit.repeat(pyglm_code, pyglm_setup_code, number=number))
+    
+    if ON_WINDOWS:
+        print_row(descr, "{}ms".format(seconds_to_milliseconds(pyglm_result)), "", "", end="\r", print_header=False)
+    
+    numpy_result = min(timeit.repeat(numpy_code, numpy_setup_code, number=number))
 
-start = time.time()
-import numpy
-numpy_time = time.time() - start
+    pyglm_total_time += pyglm_result
+    numpy_total_time += numpy_result
+    
+    print_row(descr, "{:d}ms".format(seconds_to_milliseconds(pyglm_result)), "{}ms".format(seconds_to_milliseconds(numpy_result)),  "{:.02f}x".format(numpy_result / pyglm_result), print_header=not ON_WINDOWS)
+    print_horizontal_rule()
 
-results.append(("import", numpy_time, glm_time))
 
-print("\nTime taken:\n\tPyGLM: {:.2f}s\n\tNumPy: {:.2f}s\n".format(glm_time, numpy_time))
-print("{}.\n".format(get_evaluation_string(numpy_time, glm_time)))
-"""
+############################
+# Actual tests start here: #
+############################
 
-test_func("3 component vector creation", glm.vec3, [0], numpy.zeros, [(3,), numpy.float32])
-test_func("3 component vector creation with custom components", glm.vec3, [1, 2, 3], numpy.array, [(1, 2, 3), numpy.float32])
-test_func("dot product", glm.dot, [glm.vec3(), glm.vec3()], numpy.dot, [numpy.zeros((3,)), numpy.zeros((3,))])
-repititions = 100_000
-test_func("cross product", glm.cross, [glm.vec3(1), glm.vec3(1,2,3)], numpy.cross, [numpy.array((1,1,1), numpy.float32), numpy.array((1,2,3), numpy.float32)])
-test_func("L2-Norm of 3 component vector", glm.l2Norm, [glm.vec3(1,2,3)], numpy.linalg.norm, [numpy.array((1,2,3), numpy.float32)])
-repititions = 1_000_000
-test_func("4x4 matrix creation", glm.mat4, [0], numpy.zeros, [(4,4), numpy.float32])
-test_func("4x4 identity matrix creation", glm.identity, [glm.mat4], numpy.identity, [4, numpy.float32])
-test_func("4x4 matrix transposition", glm.transpose, [glm.mat4()], numpy.transpose, [numpy.identity(4, numpy.float32)])
-repititions = 100_000
-test_func("4x4 matrix multiplicative inverse", glm.inverse, [glm.mat4()], numpy.linalg.inv, [numpy.identity(4, numpy.float32)])
-repititions = 1_000_000
-test_operation("3 component vector addition", lambda x, y: (x+y), "{} + {}", [glm.vec3(), glm.vec3()], [numpy.zeros(3, numpy.float32), numpy.zeros(3, numpy.float32)])
-test_operation("4x4 matrix multiplication", lambda x, y: (x*y), "{} * {}", [glm.mat4(), glm.mat4()], [numpy.identity(4, numpy.float32), numpy.identity(4, numpy.float32)])
-test_operation("4x4 matrix - 4 component vector multiplication", lambda x, y: (x*y), "{} * {}", [glm.mat4(), glm.vec4()], [numpy.identity(4, numpy.float32), numpy.zeros(4, numpy.float32)])
+print(f"""Evaluating performance of PyGLM compared to NumPy.
 
-print("#" *80)
-print("RESULTS:\n")
+Running on platform '{sys.platform}'.
 
-print("+----------------------------------------+------------+------------+-----------+")
-print("| Description                            | PyGLM runs | NumPy runs | ratio     |")
-print("+----------------------------------------+------------+------------+-----------+")
+Python version:
+{sys.version}
 
-print_results()
+Comparing the following module versions:
+{glm.version}
+ vs
+NumPy {numpy.__version__}
+________________________________________________________________________________
+
+The following table shows information about a task to be achieved and the time
+it took when using the given module. Lower time is better.
+Each task is repeated five times per module, only showing the best (i.e. lowest)
+value.
+
+""")
+
+print_horizontal_rule()
+print_row("Description", "PyGLM time", "NumPy time", "ratio")
+print_horizontal_rule()
+
+run_test("3 component vector creation",
+         
+         "import glm",
+         "glm.vec3()",
+
+         "import numpy",
+         "numpy.zeros((3,), numpy.float32)",
+
+         100000
+)
+
+run_test("3 component vector creation with custom components",
+         
+         "import glm",
+         "glm.vec3(1,2,3)",
+
+         "import numpy",
+         "numpy.array((1,2,3), numpy.float32)",
+
+         50000
+)
+
+run_test("dot product",
+         
+         "import glm; v1 = glm.vec3(); v2 = glm.vec3()",
+         "glm.dot(v1, v2)",
+         
+         "import numpy; v1 = numpy.zeros((3,), numpy.float32); v2 = numpy.zeros((3,), numpy.float32)",
+         "numpy.dot(v1, v2)",
+
+         50000
+)
+
+run_test("cross product",
+         
+         "import glm; v1 = glm.vec3(1); v2 = glm.vec3(1,2,3)",
+         "glm.cross(v1, v2)",
+
+         "import numpy; v1 = numpy.array((1,1,1), numpy.float32); v2 = numpy.array((1,2,3), numpy.float32)",
+         "numpy.cross(v1, v2)",
+
+         25000
+)
+
+run_test("L2-Norm of 3 component vector",
+         
+         "import glm; v = glm.vec3(1,2,3)",
+         "glm.l2Norm(v)",
+         
+         "import numpy; v = numpy.array((1,1,1), numpy.float32)",
+         "numpy.linalg.norm(v)",
+
+         100000
+)
+
+run_test("4x4 matrix creation",
+         
+         "import glm",
+         "glm.mat4(0)",
+         
+         "import numpy",
+         "numpy.zeros((4,4), numpy.float32)",
+
+         50000
+)
+run_test("4x4 identity matrix creation",
+         
+         "import glm",
+         "glm.mat4()",
+         
+         "import numpy",
+         "numpy.identity(4, numpy.float32)",
+
+         100000
+)
+
+run_test("4x4 matrix transposition",
+         
+         "import glm; m = glm.mat4()",
+         "glm.transpose(m)",
+         
+         "import numpy; m = numpy.identity(4, numpy.float32)",
+         "numpy.transpose(m)",
+
+         50000
+)
+
+run_test("4x4 multiplicative inverse",
+         
+         "import glm; m = glm.mat4()",
+         "glm.inverse(m)",
+         
+         "import numpy; m = numpy.identity(4, numpy.float32)",
+         "numpy.linalg.inv(m)",
+
+         50000
+)
+
+run_test("3 component vector addition",
+         
+         "import glm; v1 = glm.vec3(1); v2 = glm.vec3(1,2,3)",
+         "v1 + v2",
+         
+         "import numpy; v1 = numpy.array((1,1,1), numpy.float32); v2 = numpy.array((1,2,3), numpy.float32)",
+         "v1 + v2",
+
+         100000
+)
+
+run_test("4x4 matrix multiplication",
+         
+         "import glm; m1 = glm.mat4(); m2 = glm.mat4(2)",
+         "m1 * m2",
+         
+         "import numpy; m1 = numpy.identity(4, numpy.float32); m2 = numpy.identity(4, numpy.float32) * 2",
+         "m1 * m2",
+
+         100000
+)
+
+run_test("4x4 matrix x vector multiplication",
+         
+         "import glm; m = glm.mat4(); v = glm.vec4()",
+         "m * v",
+         
+         "import numpy; m = numpy.identity(4, numpy.float32); v = numpy.zeros((4,), numpy.float32)",
+         "m * v",
+
+         100000
+)
+
+print_row("TOTAL",
+          "{:.02f}s".format(pyglm_total_time),
+          "{:.02f}s".format(numpy_total_time),
+          "{:.02f}x".format(numpy_total_time / pyglm_total_time))
+print_horizontal_rule()
