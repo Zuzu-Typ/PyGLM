@@ -1286,6 +1286,10 @@ def test_func_common():
         fassert(glm.min, args)
         fassert(glm.max, args)
 
+    for args in gen_args("NN_VV_NNN_VVV_NNNN_VVVV_NNNNNNNNNNNN_VVVVVVVVVVVV__fFiqsuIQSU"):
+        fassert(glm.min, (args,))
+        fassert(glm.max, (args,))
+
     for args in gen_args("NN_VV_VN_NNN_VVV_NNNN_VVVV__fF"):
         fassert(glm.fmin, args)
         fassert(glm.fmax, args)

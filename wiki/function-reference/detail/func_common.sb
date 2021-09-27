@@ -227,6 +227,9 @@ It contains common GLSL functions.
 \raw\#### <code>glm.<code>**max**(**a**: *vecN*, **b**: *vecN*, **c**: *vecN*, **d**: *vecN*) -\\> *vecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns the maximum component wise value of 4 inputs.
 
+\raw\#### <code>glm.<code>**max**(**iterable**) -\\> *any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the greatest number or the maximum component wise value respectively.
+
 \h3\min() function\h3\
 \raw\#### <code>glm.<code>**min**(**x**: *number*, **y**: *number*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\y\code\ if \code\y < x\code\; otherwise, it returns \code\x\code\.
@@ -248,6 +251,9 @@ It contains common GLSL functions.
 
 \raw\#### <code>glm.<code>**min**(**a**: *vecN*, **b**: *vecN*, **c**: *vecN*, **d**: *vecN*) -\\> *vecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns the minimum component wise value of 4 inputs.
+
+\raw\#### <code>glm.<code>**min**(**iterable**) -\\> *any*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the smallest number or the minimum component wise value respectively.
 
 \h3\mix() function\h3\
 \raw\#### <code>glm.<code>**mix**(**x**: *number*, **y**: *number*, **a**: *float*) -\\> *number*</code></code>\raw\

@@ -73,25 +73,25 @@ pack_qua(glm::qua<T> value) {
 }
 
 template<typename T>
-static PyObject*
+static inline PyObject*
 pack(T value) {
 	return PyGLM_PyObject_FromNumber(value);
 }
 
 template<int L, typename T>
-static PyObject*
+static inline PyObject*
 pack(glm::vec<L, T> value) {
 	return pack_vec(value);
 }
 
 template<int C, int R, typename T>
-static PyObject*
+static inline PyObject*
 pack(glm::mat<C, R, T> value) {
 	return pack_mat(value);
 }
 
 template<typename T>
-static PyObject*
+static inline PyObject*
 pack(glm::qua<T> value) {
 	return pack_qua(value);
 }
