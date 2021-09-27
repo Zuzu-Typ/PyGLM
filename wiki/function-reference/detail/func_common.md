@@ -229,6 +229,9 @@ It contains common GLSL functions\.
 #### <code>glm.<code>**max**(**a**: *vecN*, **b**: *vecN*, **c**: *vecN*, **d**: *vecN*) -\> *vecN*</code></code>  
 &emsp;&emsp;Returns the maximum component wise value of 4 inputs\.  
   
+#### <code>glm.<code>**max**(**iterable**) -\> *any*</code></code>  
+&emsp;&emsp;Returns the greatest number or the maximum component wise value respectively\.  
+  
 ### min\(\) function  
 #### <code>glm.<code>**min**(**x**: *number*, **y**: *number*) -\> *float*</code></code>  
 &emsp;&emsp;Returns ``` y ``` if ``` y < x ```; otherwise, it returns ``` x ```\.  
@@ -250,6 +253,9 @@ It contains common GLSL functions\.
   
 #### <code>glm.<code>**min**(**a**: *vecN*, **b**: *vecN*, **c**: *vecN*, **d**: *vecN*) -\> *vecN*</code></code>  
 &emsp;&emsp;Returns the minimum component wise value of 4 inputs\.  
+  
+#### <code>glm.<code>**min**(**iterable**) -\> *any*</code></code>  
+&emsp;&emsp;Returns the smallest number or the minimum component wise value respectively\.  
   
 ### mix\(\) function  
 #### <code>glm.<code>**mix**(**x**: *number*, **y**: *number*, **a**: *float*) -\> *number*</code></code>  

@@ -110,12 +110,158 @@ PyDoc_STRVAR(min_docstr,
 	"min(a: number, b: number, c: number, d: number) -> float\n"
 	"	Returns the minimum value of 4 inputs.\n"
 	"min(a: vecN, b: vecN, c: vecN, d: vecN) -> vecN\n"
-	"	Returns the minimum component wise value of 4 inputs."
+	"	Returns the minimum component wise value of 4 inputs.\n"
+	"min(iterable) -> any\n"
+	"	Returns the smallest number or the minimum component wise value respectively."
 );
+
+template<typename T>
+static T
+apply_min(std::vector<T>& items) {
+	T minimum = items[0];
+	for (T item : items) {
+		if (item == minimum) {
+			continue;
+		}
+		minimum = glm::min(item, minimum);
+	}
+	return minimum;
+}
+
+template<typename T>
+static inline PyObject*
+apply_min_from_PyObject_number_vector(std::vector<PyObject*>& items) {
+	std::vector<T> itemsAsT = std::vector<T>(items.size());
+
+	for (size_t i = 0; i < items.size(); i++) {
+		PyObject* item = items[i];
+		itemsAsT[i] = PyGLM_Number_FromPyObject<T>(item);
+		Py_DECREF(item);
+	}
+
+	return pack(apply_min(itemsAsT));
+}
+
+template<int L, typename T>
+static inline PyObject*
+apply_min_from_PyObject_vector_vector(std::vector<PyObject*>& items) {
+	std::vector<glm::vec<L, T>> itemsAsVecT = std::vector<glm::vec<L, T>>(items.size());
+
+	for (size_t i = 0; i < items.size(); i++) {
+		PyObject* item = items[i];
+		itemsAsVecT[i] = reinterpret_cast<vec<L, T>*>(item)->super_type;
+		Py_DECREF(item);
+	}
+
+	return pack(apply_min(itemsAsVecT));
+}
+
+#define min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(L) \
+switch (pti->format) { \
+case get_format_specifier<float>(): \
+	return apply_min_from_PyObject_vector_vector<L, float>(items); \
+case get_format_specifier<double>(): \
+	return apply_min_from_PyObject_vector_vector<L, double>(items); \
+case get_format_specifier<int32>(): \
+	return apply_min_from_PyObject_vector_vector<L, int32>(items); \
+case get_format_specifier<uint32>(): \
+	return apply_min_from_PyObject_vector_vector<L, uint32>(items); \
+case get_format_specifier<int64>(): \
+	return apply_min_from_PyObject_vector_vector<L, int64>(items); \
+case get_format_specifier<uint64>(): \
+	return apply_min_from_PyObject_vector_vector<L, uint64>(items); \
+case get_format_specifier<int16>(): \
+	return apply_min_from_PyObject_vector_vector<L, int16>(items); \
+case get_format_specifier<uint16>(): \
+	return apply_min_from_PyObject_vector_vector<L, uint16>(items); \
+case get_format_specifier<int8>(): \
+	return apply_min_from_PyObject_vector_vector<L, int8>(items); \
+case get_format_specifier<uint8>(): \
+	return apply_min_from_PyObject_vector_vector<L, uint8>(items); \
+case get_format_specifier<bool>(): \
+	return apply_min_from_PyObject_vector_vector<L, bool>(items); \
+}
+
 static PyObject*
 min_(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2, *arg3 = NULL, *arg4 = NULL;
-	if (!PyArg_UnpackTuple(args, "min", 2, 4, &arg1, &arg2, &arg3, &arg4)) return NULL;
+	PyObject *arg1, *arg2 = NULL, *arg3 = NULL, *arg4 = NULL;
+	if (!PyArg_UnpackTuple(args, "min", 1, 4, &arg1, &arg2, &arg3, &arg4)) return NULL;
+	if (arg2 == NULL) {
+		if (PyObject_IterCheck(arg1)) {
+			PyObject* iterator = PyObject_GetIter(arg1);
+
+			std::vector<PyObject*> items{};
+
+			PyTypeObject* type = NULL;
+
+			PyObject* currentItem;
+			while ((currentItem = PyIter_Next(iterator))) {
+				if (type == NULL) {
+					if ((currentItem->ob_type->tp_dealloc != (destructor)vec_dealloc) && !PyLong_Check(currentItem) && !PyFloat_Check(currentItem) && !PyBool_Check(currentItem)) {
+						Py_DECREF(currentItem);
+						Py_DECREF(iterator);
+						PyGLM_TYPEERROR_O("invalid item type(s) for 'min()'. Expected number or PyGLM type, got ", currentItem);
+						return NULL;
+					}
+					type = Py_TYPE(currentItem);
+				}
+				else if (type != Py_TYPE(currentItem)) {
+					Py_DECREF(currentItem);
+					for (PyObject* item : items) {
+						Py_DECREF(item);
+					}
+					Py_DECREF(iterator);
+					PyGLM_TYPEERROR_2O("invalid item type(s) for 'min()'. Expected items of equal type, got ", currentItem, items[0]);
+					return NULL;
+				}
+				items.push_back(currentItem);
+			}
+
+			Py_DECREF(iterator);
+
+			if (PyErr_Occurred()) {
+				for (PyObject* item : items) {
+					Py_DECREF(item);
+				}
+				return NULL;
+			}
+
+			if (items.size() == 0) {
+				PyErr_SetString(PyExc_ValueError, "invalid argument value for 'min()'. Iterable has no items.");
+				return NULL;
+			}
+
+			if (type == &PyLong_Type) {
+				return apply_min_from_PyObject_number_vector<long>(items);
+			}
+			else if (type == &PyFloat_Type) {
+				return apply_min_from_PyObject_number_vector<double>(items);
+			}
+			else if (type == &PyBool_Type) {
+				return apply_min_from_PyObject_number_vector<bool>(items);
+			}
+			else {
+				PyGLMTypeObject* pti = (PyGLMTypeObject*)type;
+
+				switch (pti->C) {
+				case 1:
+					min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(1);
+					break;
+				case 2:
+					min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(2);
+					break;
+				case 3:
+					min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(3);
+					break;
+				case 4:
+					min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(4);
+					break;
+				}
+			}
+		}
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for min()");
+		return NULL;
+	}
 	if (arg3 == NULL) {
 		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 			return pack(glm::min(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));
@@ -652,12 +798,157 @@ PyDoc_STRVAR(max_docstr,
 	"max(a: number, b: number, c: number, d: number) -> float\n"
 	"	Returns the maximum value of 4 inputs.\n"
 	"max(a: vecN, b: vecN, c: vecN, d: vecN) -> vecN\n"
-	"	Returns the maximum component wise value of 4 inputs."
+	"	Returns the maximum component wise value of 4 inputs.\n"
+	"max(iterable) -> any\n"
+	"	Returns the greatest number or the maximum component wise value respectively."
 );
+template<typename T>
+static T
+apply_max(std::vector<T>& items) {
+	T maximum = items[0];
+	for (T item : items) {
+		if (item == maximum) {
+			continue;
+		}
+		maximum = glm::max(item, maximum);
+	}
+	return maximum;
+}
+
+template<typename T>
+static inline PyObject*
+apply_max_from_PyObject_number_vector(std::vector<PyObject*>& items) {
+	std::vector<T> itemsAsT = std::vector<T>(items.size());
+
+	for (size_t i = 0; i < items.size(); i++) {
+		PyObject* item = items[i];
+		itemsAsT[i] = PyGLM_Number_FromPyObject<T>(item);
+		Py_DECREF(item);
+	}
+
+	return pack(apply_max(itemsAsT));
+}
+
+template<int L, typename T>
+static inline PyObject*
+apply_max_from_PyObject_vector_vector(std::vector<PyObject*>& items) {
+	std::vector<glm::vec<L, T>> itemsAsVecT = std::vector<glm::vec<L, T>>(items.size());
+
+	for (size_t i = 0; i < items.size(); i++) {
+		PyObject* item = items[i];
+		itemsAsVecT[i] = reinterpret_cast<vec<L, T>*>(item)->super_type;
+		Py_DECREF(item);
+	}
+
+	return pack(apply_max(itemsAsVecT));
+}
+
+#define max_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(L) \
+switch (pti->format) { \
+case get_format_specifier<float>(): \
+	return apply_max_from_PyObject_vector_vector<L, float>(items); \
+case get_format_specifier<double>(): \
+	return apply_max_from_PyObject_vector_vector<L, double>(items); \
+case get_format_specifier<int32>(): \
+	return apply_max_from_PyObject_vector_vector<L, int32>(items); \
+case get_format_specifier<uint32>(): \
+	return apply_max_from_PyObject_vector_vector<L, uint32>(items); \
+case get_format_specifier<int64>(): \
+	return apply_max_from_PyObject_vector_vector<L, int64>(items); \
+case get_format_specifier<uint64>(): \
+	return apply_max_from_PyObject_vector_vector<L, uint64>(items); \
+case get_format_specifier<int16>(): \
+	return apply_max_from_PyObject_vector_vector<L, int16>(items); \
+case get_format_specifier<uint16>(): \
+	return apply_max_from_PyObject_vector_vector<L, uint16>(items); \
+case get_format_specifier<int8>(): \
+	return apply_max_from_PyObject_vector_vector<L, int8>(items); \
+case get_format_specifier<uint8>(): \
+	return apply_max_from_PyObject_vector_vector<L, uint8>(items); \
+case get_format_specifier<bool>(): \
+	return apply_max_from_PyObject_vector_vector<L, bool>(items); \
+}
+
 static PyObject*
 max_(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2, *arg3 = NULL, *arg4 = NULL;
-	if (!PyArg_UnpackTuple(args, "max", 2, 4, &arg1, &arg2, &arg3, &arg4)) return NULL;
+	PyObject *arg1, *arg2 = NULL, *arg3 = NULL, *arg4 = NULL;
+	if (!PyArg_UnpackTuple(args, "max", 1, 4, &arg1, &arg2, &arg3, &arg4)) return NULL;
+	if (arg2 == NULL) {
+		if (PyObject_IterCheck(arg1)) {
+			PyObject* iterator = PyObject_GetIter(arg1);
+
+			std::vector<PyObject*> items{};
+
+			PyTypeObject* type = NULL;
+
+			PyObject* currentItem;
+			while ((currentItem = PyIter_Next(iterator))) {
+				if (type == NULL) {
+					if ((currentItem->ob_type->tp_dealloc != (destructor)vec_dealloc) && !PyLong_Check(currentItem) && !PyFloat_Check(currentItem) && !PyBool_Check(currentItem)) {
+						Py_DECREF(currentItem);
+						Py_DECREF(iterator);
+						PyGLM_TYPEERROR_O("invalid item type(s) for 'max()'. Expected number or PyGLM type, got ", currentItem);
+						return NULL;
+					}
+					type = Py_TYPE(currentItem);
+				}
+				else if (type != Py_TYPE(currentItem)) {
+					Py_DECREF(currentItem);
+					for (PyObject* item : items) {
+						Py_DECREF(item);
+					}
+					Py_DECREF(iterator);
+					PyGLM_TYPEERROR_2O("invalid item type(s) for 'max()'. Expected items of equal type, got ", currentItem, items[0]);
+					return NULL;
+				}
+				items.push_back(currentItem);
+			}
+
+			Py_DECREF(iterator);
+
+			if (PyErr_Occurred()) {
+				for (PyObject* item : items) {
+					Py_DECREF(item);
+				}
+				return NULL;
+			}
+
+			if (items.size() == 0) {
+				PyErr_SetString(PyExc_ValueError, "invalid argument value for 'max()'. Iterable has no items.");
+				return NULL;
+			}
+
+			if (type == &PyLong_Type) {
+				return apply_max_from_PyObject_number_vector<long>(items);
+			}
+			else if (type == &PyFloat_Type) {
+				return apply_max_from_PyObject_number_vector<double>(items);
+			}
+			else if (type == &PyBool_Type) {
+				return apply_max_from_PyObject_number_vector<bool>(items);
+			}
+			else {
+				PyGLMTypeObject* pti = (PyGLMTypeObject*)type;
+
+				switch (pti->C) {
+				case 1:
+					max_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(1);
+					break;
+				case 2:
+					max_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(2);
+					break;
+				case 3:
+					max_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(3);
+					break;
+				case 4:
+					max_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(4);
+					break;
+				}
+			}
+		}
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for max()");
+		return NULL;
+	}
 	if (arg3 == NULL) {
 		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 			return pack(glm::max(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));
