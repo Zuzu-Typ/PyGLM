@@ -5,6 +5,7 @@
 1.  [Initialization](#initialization)  
     *  [with no arguments](#initialization-with-no-arguments)  
     *  [with single number](#initialization-with-a-single-number)  
+    *  [with quaternion](#initialization-with-a-quaternion)  
     *  [with custom diagonal values](#initializing-the-matrix-diagonal-with-custom-values)  
     *  [all components with numbers](#initializing-all-components-with-numbers)  
     *  [copying a matrix](#copying-a-matrix)  
@@ -72,6 +73,23 @@ Example:
 [            0 ][          1.5 ]
 [            0 ][            0 ]
 [            0 ][            0 ]
+ ```  
+#### Initialization with a quaternion  
+Initializing a 3x3 or 4x4 matrix with a quaternion yields a matrix with the same basic rotational properties as the quaternion\.  
+Example:  
+``` Python
+>>> q = glm.quat(glm.vec3(0, 0, glm.radians(90))) # rotate 90 degrees around the Z axis
+>>> print(glm.mat4(q))
+[  5.96046e-08 ][           -1 ][            0 ][            0 ]
+[            1 ][  5.96046e-08 ][            0 ][            0 ]
+[            0 ][            0 ][            1 ][            0 ]
+[            0 ][            0 ][            0 ][            1 ]
+
+>>> print(glm.rotate(glm.radians(90), glm.vec3(0, 0, 1)))
+[ -4.37114e-08 ][           -1 ][            0 ][            0 ]
+[            1 ][ -4.37114e-08 ][            0 ][            0 ]
+[            0 ][            0 ][            1 ][            0 ]
+[            0 ][            0 ][            0 ][            1 ]
  ```  
 #### Initializing the matrix diagonal with custom values  
 You can initialize a matrix' diagonal with custom values\.  
@@ -305,6 +323,19 @@ prodx = mat3x4((m00, m01, m02, m03), (m10, m11, m12, m13), (m20, m21, m22, m23))
 #      a * m12 + b * m12 + c * m22,
 #      a * m13 + b * m13 + c * m23
 #    )
+ ```  
+For multiplication of square matrices with vectors using homogenous coordinates, PyGLM provides a shorthand:  
+``` Python
+m = rotate(radians(90), vec3(0, 1, 0)) # creates a 4x4 rotation matrix
+v = vec3(1, 2, 3) # some 3D vector
+
+# This is what you would normally have to do to apply the rotation to v:
+
+v_rotated = vec3(m * vec4(v, 1)) # returns vec3( 3, 2, -1 )
+
+# This is the shorthand:
+
+v_rotated = m * v # returns vec3( 3, 2, -1 )
  ```  
 Now for the most complex part\.  
 Matrix\-matrix multiplication\.  
