@@ -442,6 +442,14 @@ def test_mat_types():
             for args in gen_args("#uM{C}{R}".format(C=C, R=R) + "V{R}".format(R=R)*C + "_" + "_".join(["M{C}{R}M{c}{r}".format(C=C, R=R, c=c, r=r) for c in range(2, 5) for r in range(2,5)]) + "__fFiI"):
                 fassert(type(args[0]), args[1:])
 
+    for args in gen_args("Q__f"):
+        fassert(glm.mat3, args)
+        fassert(glm.mat4, args)
+
+    for args in gen_args("Q__F"):
+        fassert(glm.dmat3, args)
+        fassert(glm.dmat4, args)
+
 ## quat
 def test_quat_types():
     for args in gen_args("#u-_V3_M33_M44_NV3_V3V3_NNNN_Q__f"): # need support for conversion constructors
