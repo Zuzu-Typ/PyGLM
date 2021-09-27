@@ -597,6 +597,13 @@ mat3x3_init(mat<3, 3, T> *self, PyObject *args, PyObject *)
 			self->super_type = PyGLM_Mat_PTI_Get0(3, 3, uint32, arg1);
 			return 0;
 		}
+
+		// quaternions
+		PyGLM_PTI_Init0(arg1, PyGLM_T_QUA | PyGLM_PTI_GetDT(T));
+		if (!PyGLM_PTI_IsNone(0)) {
+			self->super_type = glm::mat3_cast(PyGLM_Qua_PTI_Get0(T, arg1));
+			return 0;
+		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat3x3()");
 		return -1;
 	}
@@ -1136,6 +1143,13 @@ mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 		}
 		if (PyGLM_Mat_PTI_Check0(4, 4, uint32, arg1)) {
 			self->super_type = PyGLM_Mat_PTI_Get0(4, 4, uint32, arg1);
+			return 0;
+		}
+
+		// quaternions
+		PyGLM_PTI_Init0(arg1, PyGLM_T_QUA | PyGLM_PTI_GetDT(T));
+		if (!PyGLM_PTI_IsNone(0)) {
+			self->super_type = glm::mat4_cast(PyGLM_Qua_PTI_Get0(T, arg1));
 			return 0;
 		}
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mat4x4()");
