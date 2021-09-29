@@ -407,9 +407,27 @@ struct PyGLMTypeInfo {
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
 		if (obj->ob_type != &glmArrayType && PyObject_CheckBuffer(obj)) {
 			Py_buffer view;
+			char* customDataBuffer = NULL;
 			if (PyObject_GetBuffer(obj, &view, PyBUF_RECORDS_RO | PyBUF_F_CONTIGUOUS) == -1) {
 				PyErr_Clear();
-				return;
+				if (PyObject_GetBuffer(obj, &view, PyBUF_RECORDS_RO | PyBUF_C_CONTIGUOUS) == -1) {
+					PyErr_Clear();
+					return;
+				}
+				if (view.ndim != 2) {
+					PyBuffer_Release(&view);
+					return;
+				}
+				char* oldBuffer = reinterpret_cast<char*>(view.buf);
+				customDataBuffer = reinterpret_cast<char*>(dataArray);
+				for (Py_ssize_t R = 0; R < view.shape[0]; R++) {
+					for (Py_ssize_t C = 0; C < view.shape[1]; C++) {
+						memcpy(customDataBuffer + (C * view.shape[0] * view.itemsize) + (R * view.itemsize), oldBuffer, view.itemsize);
+						oldBuffer += view.itemsize;
+					}
+				}
+
+				view.readonly = -1;
 			}
 			switch (view.ndim) {
 			case 1: // one dimensional array (vec / qua)
@@ -794,13 +812,13 @@ struct PyGLMTypeInfo {
 					PyBuffer_Release(&view);
 					return;
 				}
-				switch (view.shape[0]) {
+				switch (view.shape[1]) {
 				case 2: // mat2xM's
 					if (!(accepted_types & PyGLM_SHAPE_2xM)) {
 						PyBuffer_Release(&view);
 						return;
 					}
-					switch (view.shape[1]) {
+					switch (view.shape[0]) {
 					case 2: // mat2x2's
 						if (!(accepted_types & PyGLM_SHAPE_2x2)) {
 							PyBuffer_Release(&view);
@@ -934,7 +952,7 @@ struct PyGLMTypeInfo {
 						PyBuffer_Release(&view);
 						return;
 					}
-					switch (view.shape[1]) {
+					switch (view.shape[0]) {
 					case 2: // mat3x2's
 						if (!(accepted_types & PyGLM_SHAPE_3x2)) {
 							PyBuffer_Release(&view);
@@ -1068,7 +1086,7 @@ struct PyGLMTypeInfo {
 						PyBuffer_Release(&view);
 						return;
 					}
-					switch (view.shape[1]) {
+					switch (view.shape[0]) {
 					case 2: // mat4x2's
 						if (!(accepted_types & PyGLM_SHAPE_4x2)) {
 							PyBuffer_Release(&view);
@@ -1209,7 +1227,7 @@ struct PyGLMTypeInfo {
 			if (view.readonly == 0) {
 				data = view.buf;
 			}
-			else {
+			else if (!customDataBuffer) {
 				allocate(sizeof(view.len));
 				memcpy(data, view.buf, sizeof(view.len));
 			}
