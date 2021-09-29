@@ -2286,6 +2286,11 @@ constexpr int get_qua_PTI_info() {
 		get_PTI_type<T>();
 }
 
+bool GET_PTI_COMPATIBLE_SIMPLE(PyObject* o, int accepted_types) {
+	int& PTI_info = ((PyGLMTypeObject*)(o->ob_type))->PTI_info;
+	return (PTI_info & accepted_types) == PTI_info;
+}
+
 #if !(PyGLM_BUILD & PyGLM_NO_ITER_TYPECHECKING)
 template<typename T>
 static bool get_view_format_equal(char* value) {
@@ -2354,11 +2359,6 @@ PyObject* ARG3 = NULL;
 
 bool ARGUSED = true;
 #endif
-
-bool GET_PTI_COMPATIBLE_SIMPLE(PyObject* o, int accepted_types) {
-	int& PTI_info = ((PyGLMTypeObject*)(o->ob_type))->PTI_info;
-	return (PTI_info & accepted_types) == PTI_info;
-}
 
 #ifdef PyGLM_DEBUG
 #define PyGLM_PTI_InitN(N, o, accepted_types) \
@@ -2472,10 +2472,10 @@ SourceType sourceType2;
 SourceType sourceType3;
 
 #define PyGLM_PTI_InitN(N, o, accepted_types) \
-	if (o->ob_type->tp_dealloc == (destructor)vec_dealloc){if (get_vec_PTI_compatible(o, accepted_types)) {sourceType ## N = PyGLM_VEC;} else {sourceType ## N = NONE;}}\
-	else if (o->ob_type->tp_dealloc == (destructor)mat_dealloc) {if (get_mat_PTI_compatible(o, accepted_types)) {sourceType ## N = PyGLM_MAT;} else {sourceType ## N = NONE;}} \
-	else if (o->ob_type->tp_dealloc == (destructor)qua_dealloc) {if (get_qua_PTI_compatible(o, accepted_types)) {sourceType ## N = PyGLM_QUA;} else {sourceType ## N = NONE;}}\
-	else if (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) {if (get_vec_PTI_compatible(o, accepted_types)) {sourceType ## N = PyGLM_MVEC;} else {sourceType ## N = NONE;}}\
+	if (o->ob_type->tp_dealloc == (destructor)vec_dealloc){if (GET_PTI_COMPATIBLE_SIMPLE(o, accepted_types)) {sourceType ## N = PyGLM_VEC;} else {sourceType ## N = NONE;}}\
+	else if (o->ob_type->tp_dealloc == (destructor)mat_dealloc) {if (GET_PTI_COMPATIBLE_SIMPLE(o, accepted_types)) {sourceType ## N = PyGLM_MAT;} else {sourceType ## N = NONE;}} \
+	else if (o->ob_type->tp_dealloc == (destructor)qua_dealloc) {if (GET_PTI_COMPATIBLE_SIMPLE(o, accepted_types)) {sourceType ## N = PyGLM_QUA;} else {sourceType ## N = NONE;}}\
+	else if (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) {if (GET_PTI_COMPATIBLE_SIMPLE(o, accepted_types)) {sourceType ## N = PyGLM_MVEC;} else {sourceType ## N = NONE;}}\
 	else sourceType ## N = NONE;
 
 

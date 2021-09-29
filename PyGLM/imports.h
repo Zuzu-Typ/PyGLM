@@ -21,6 +21,7 @@
 
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_integer.hpp>
+#include <glm/gtx/hash.hpp>
 
 #if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 
@@ -64,7 +65,6 @@
 #include <glm/gtx/polar_coordinates.hpp>
 #include <glm/gtx/norm.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
-#include <glm/gtx/hash.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 

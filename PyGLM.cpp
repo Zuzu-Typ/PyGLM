@@ -161,9 +161,9 @@ static void glm_clear(PyObject*) {
 	Py_XDECREF(ctypes_uint16_p);
 	Py_XDECREF(ctypes_uint8_p);
 	Py_XDECREF(ctypes_bool_p);
+#endif
 	Py_XDECREF(ctypes_cast);
 	Py_XDECREF(ctypes_void_p);
-#endif
 	Py_XDECREF(PyGLM_VERSION_STRING);
 	Py_XDECREF(PyGLM_LICENSE_STRING);
 #if !(PyGLM_NO_ITER_TYPECHECKING & PyGLM_BUILD)
@@ -215,10 +215,11 @@ extern "C" {
 
 		ctypes_dealloc = ((PyTypeObject*)ctypes_float)->tp_dealloc;
 
-#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 		ctypes_cast = PyObject_GetAttrString(ctypes_module, "cast");
 
 		ctypes_void_p = PyObject_GetAttrString(ctypes_module, "c_void_p");
+
+#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 
 		PyObject* ctypes_POINTER = PyObject_GetAttrString(ctypes_module, "POINTER");
 
