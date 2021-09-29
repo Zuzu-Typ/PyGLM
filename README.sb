@@ -140,14 +140,14 @@ Python version:
 3.9.0 (tags/v3.9.0:9cf6752, Oct  5 2020, 15:34:40) [MSC v.1927 64 bit (AMD64)]
 
 Comparing the following module versions:
-PyGLM (DEFAULT) version 2.4.0
+PyGLM (DEFAULT) version 2.5.0
  vs
-NumPy 1.21.2
+NumPy version 1.21.2
 ________________________________________________________________________________
 
 The following table shows information about a task to be achieved and the time
 it took when using the given module. Lower time is better.
-Each task is repeated five times per module, only showing the best (i.e. lowest)
+Each task is repeated ten times per module, only showing the best (i.e. lowest)
 value.
 
 
@@ -155,42 +155,42 @@ value.
 | Description                            | PyGLM time | NumPy time |     ratio |
 +----------------------------------------+------------+------------+-----------+
 | 3 component vector creation            |            |            |           |
-| (100,000 times)                        |        8ms |       19ms |     2.52x |
+| (100,000 times)                        |        8ms |       20ms |     2.62x |
 +----------------------------------------+------------+------------+-----------+
 | 3 component vector creation with       |            |            |           |
 | custom components                      |            |            |           |
-| (50,000 times)                         |        8ms |       36ms |     4.47x |
+| (50,000 times)                         |        7ms |       35ms |     4.82x |
 +----------------------------------------+------------+------------+-----------+
 | dot product                            |            |            |           |
-| (50,000 times)                         |        3ms |       51ms |    15.76x |
+| (50,000 times)                         |        3ms |       51ms |    15.73x |
 +----------------------------------------+------------+------------+-----------+
 | cross product                          |            |            |           |
-| (25,000 times)                         |        2ms |      538ms |   243.93x |
+| (25,000 times)                         |        2ms |      514ms |   235.45x |
 +----------------------------------------+------------+------------+-----------+
 | L2-Norm of 3 component vector          |            |            |           |
-| (100,000 times)                        |        6ms |      317ms |    57.05x |
+| (100,000 times)                        |        5ms |      305ms |    58.37x |
 +----------------------------------------+------------+------------+-----------+
 | 4x4 matrix creation                    |            |            |           |
-| (50,000 times)                         |        4ms |       10ms |     2.35x |
+| (50,000 times)                         |        5ms |       10ms |     2.24x |
 +----------------------------------------+------------+------------+-----------+
 | 4x4 identity matrix creation           |            |            |           |
-| (100,000 times)                        |        7ms |      183ms |    27.83x |
+| (100,000 times)                        |        7ms |      171ms |    25.45x |
 +----------------------------------------+------------+------------+-----------+
 | 4x4 matrix transposition               |            |            |           |
-| (50,000 times)                         |        5ms |       33ms |     6.86x |
+| (50,000 times)                         |        4ms |       31ms |     7.15x |
 +----------------------------------------+------------+------------+-----------+
 | 4x4 multiplicative inverse             |            |            |           |
-| (50,000 times)                         |        5ms |     1627ms |   322.14x |
+| (50,000 times)                         |        4ms |     1527ms |   359.99x |
 +----------------------------------------+------------+------------+-----------+
 | 3 component vector addition            |            |            |           |
-| (100,000 times)                        |        4ms |       40ms |     9.26x |
+| (100,000 times)                        |        5ms |       39ms |     8.70x |
 +----------------------------------------+------------+------------+-----------+
 | 4x4 matrix multiplication              |            |            |           |
-| (100,000 times)                        |        8ms |       40ms |     5.13x |
+| (100,000 times)                        |        7ms |       40ms |     5.59x |
 +----------------------------------------+------------+------------+-----------+
 | 4x4 matrix x vector multiplication     |            |            |           |
-| (100,000 times)                        |        6ms |      119ms |    21.61x |
+| (100,000 times)                        |        5ms |      122ms |    22.18x |
 +----------------------------------------+------------+------------+-----------+
-| TOTAL                                  |      0.07s |      3.01s |    46.17x |
+| TOTAL                                  |      0.06s |      2.87s |    45.62x |
 +----------------------------------------+------------+------------+-----------+
 \ code\
