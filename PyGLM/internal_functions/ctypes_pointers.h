@@ -16,24 +16,8 @@ PyObject* ctypes_bool;
 
 destructor ctypes_dealloc;
 
-#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
 PyObject* ctypes_void_p = NULL;
 PyObject* ctypes_cast = NULL;
-PyObject* ctypes_float_p = NULL;
-PyObject* ctypes_double_p = NULL;
-PyObject* ctypes_int64_p = NULL;
-PyObject* ctypes_int32_p = NULL;
-PyObject* ctypes_int16_p = NULL;
-PyObject* ctypes_int8_p = NULL;
-PyObject* ctypes_uint64_p = NULL;
-PyObject* ctypes_uint32_p = NULL;
-PyObject* ctypes_uint16_p = NULL;
-PyObject* ctypes_uint8_p = NULL;
-PyObject* ctypes_bool_p = NULL;
-
-
-
-
 
 #if defined(_M_IX86) || defined(__i386__)
 PyObject* PyGLM_CtypesVoidP_FromVoidP(void* p) {
@@ -66,6 +50,26 @@ unsigned long long PyGLM_UnsignedLongLong_FromCtypesP(PyObject* ptr) {
 	return out;
 }
 #endif
+
+#if !(PyGLM_BUILD & PyGLM_NO_FUNCTIONS)
+
+PyObject* ctypes_float_p = NULL;
+PyObject* ctypes_double_p = NULL;
+PyObject* ctypes_int64_p = NULL;
+PyObject* ctypes_int32_p = NULL;
+PyObject* ctypes_int16_p = NULL;
+PyObject* ctypes_int8_p = NULL;
+PyObject* ctypes_uint64_p = NULL;
+PyObject* ctypes_uint32_p = NULL;
+PyObject* ctypes_uint16_p = NULL;
+PyObject* ctypes_uint8_p = NULL;
+PyObject* ctypes_bool_p = NULL;
+
+
+
+
+
+
 
 PyObject* PyGLM_ToCtypesP(float* ptr) {
 	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP((void*)ptr);
