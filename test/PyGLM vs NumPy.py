@@ -1,4 +1,4 @@
-import timeit, sys
+import timeit, sys, random
 import glm, numpy
 
 ON_WINDOWS = sys.platform == 'win32'
@@ -62,23 +62,28 @@ def run_test(descr, pyglm_setup_code, pyglm_code, numpy_setup_code, numpy_code, 
     if ON_WINDOWS:
         print_row(descr, "", "", "", end="\r")
     
-    pyglm_result = min(timeit.repeat(pyglm_code, pyglm_setup_code, number=number))
+    pyglm_result = 2**31
+    numpy_result = 2**31
+
+    for i in range(10):
+        run_pyglm_first = random.choice((True,False))
+
+        if run_pyglm_first:
+            pyglm_result = min(pyglm_result, timeit.timeit(pyglm_code, pyglm_setup_code, number=number))
+            numpy_result = min(numpy_result, timeit.timeit(numpy_code, numpy_setup_code, number=number))
+        else:
+            numpy_result = min(numpy_result, timeit.timeit(numpy_code, numpy_setup_code, number=number))
+            pyglm_result = min(pyglm_result, timeit.timeit(pyglm_code, pyglm_setup_code, number=number))
+            
     
-    if ON_WINDOWS:
-        print_row(descr, "{}ms".format(seconds_to_milliseconds(pyglm_result)), "", "", end="\r", print_header=False)
-    
-    numpy_result = min(timeit.repeat(numpy_code, numpy_setup_code, number=number))
+        if ON_WINDOWS:
+            print_row(descr, "{}ms".format(seconds_to_milliseconds(pyglm_result)), "{}ms".format(seconds_to_milliseconds(numpy_result)),  "{:.02f}x".format(numpy_result / pyglm_result), end="\r", print_header=False)
 
     pyglm_total_time += pyglm_result
     numpy_total_time += numpy_result
     
-    print_row(descr, "{:d}ms".format(seconds_to_milliseconds(pyglm_result)), "{}ms".format(seconds_to_milliseconds(numpy_result)),  "{:.02f}x".format(numpy_result / pyglm_result), print_header=not ON_WINDOWS)
+    print_row(descr, "{}ms".format(seconds_to_milliseconds(pyglm_result)), "{}ms".format(seconds_to_milliseconds(numpy_result)),  "{:.02f}x".format(numpy_result / pyglm_result), print_header=not ON_WINDOWS)
     print_horizontal_rule()
-
-
-############################
-# Actual tests start here: #
-############################
 
 print(f"""Evaluating performance of PyGLM compared to NumPy.
 
@@ -90,12 +95,12 @@ Python version:
 Comparing the following module versions:
 {glm.version}
  vs
-NumPy {numpy.__version__}
+NumPy version {numpy.__version__}
 ________________________________________________________________________________
 
 The following table shows information about a task to be achieved and the time
 it took when using the given module. Lower time is better.
-Each task is repeated five times per module, only showing the best (i.e. lowest)
+Each task is repeated ten times per module, only showing the best (i.e. lowest)
 value.
 
 """)
@@ -103,6 +108,10 @@ value.
 print_horizontal_rule()
 print_row("Description", "PyGLM time", "NumPy time", "ratio")
 print_horizontal_rule()
+
+############################
+# Actual tests start here: #
+############################
 
 run_test("3 component vector creation",
          
