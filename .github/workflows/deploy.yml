@@ -23,10 +23,10 @@ jobs:
       - uses: actions/setup-python@v2
         name: Install Python
         with:
-          python-version: '3.9'
+          python-version: '3.10'
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.0.0
+        uses: pypa/cibuildwheel@v2.1.3
 
       - uses: actions/upload-artifact@v2
         with:
@@ -49,10 +49,10 @@ jobs:
       - uses: actions/setup-python@v2
         name: Install Python
         with:
-          python-version: '3.9'
+          python-version: '3.10'
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.0.0
+        uses: pypa/cibuildwheel@v2.1.3
 
       - uses: actions/upload-artifact@v2
         with:
@@ -67,7 +67,7 @@ jobs:
       - uses: actions/setup-python@v2
         name: Install Python
         with:
-          python-version: '3.9'
+          python-version: '3.10'
 
       - name: Build sdist
         run: python setup.py sdist
