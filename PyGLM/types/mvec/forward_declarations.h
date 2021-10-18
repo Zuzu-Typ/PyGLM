@@ -31,6 +31,9 @@ static PyObject* mvec4_setstate(mvec<4, T>* self, PyObject* state);
 template<int L, typename T>
 static PyObject* mvec_new(PyTypeObject* type, PyObject*, PyObject*);
 
+template<int L, typename T>
+static int mvec_init(mvec<L, T>* self, PyObject* args, PyObject* kwds);
+
 template<int L>
 static Py_ssize_t mvec_len(PyObject* self);
 

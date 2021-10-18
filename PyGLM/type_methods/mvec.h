@@ -29,6 +29,26 @@ mvec_new(PyTypeObject* type, PyObject*, PyObject*)
 	return (PyObject*)self;
 }
 
+template<int L, typename T>
+static int
+mvec_init(mvec<L, T>* self, PyObject* args, PyObject* kwds)
+{
+	if (PyTuple_GET_SIZE(args) == 1 && Py_TYPE(PyTuple_GET_ITEM(args, 0)) == PyGLM_VEC_TYPE<L, T>()) {
+		self->master = PyGLM_INCREF(PyTuple_GET_ITEM(args, 0));
+	}
+	else {
+		if (PyTuple_GET_SIZE(args) || kwds) {
+			PyErr_SetString(PyExc_TypeError, "Invalid arguments for mvec(). Expected no arguments or a vector to reference.");
+			return -1;
+		}
+		self->master = vec_new<L, T>(PyGLM_VEC_TYPE<L, T>(), NULL, NULL);
+	}
+	
+	self->super_type = &((vec<L, T>*)self->master)->super_type;
+
+	return 0;
+}
+
 // unaryfunc
 template<int L, typename T>
 static PyObject *

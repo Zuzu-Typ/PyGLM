@@ -147,7 +147,7 @@ static PyGLMTypeObject hdmvec3GLMType = {
 		0,                         /* tp_descr_get */
 		0,                         /* tp_descr_set */
 		0,                         /* tp_dictoffset */
-		0,      /* tp_init */
+		(initproc)mvec_init<3, double>,      /* tp_init */
 		0,                         /* tp_alloc */
 		(newfunc)mvec_new<3, double>,                 /* tp_new */
 	},

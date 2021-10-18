@@ -147,7 +147,7 @@ static PyGLMTypeObject himvec2GLMType = {
 		0,                         /* tp_descr_get */
 		0,                         /* tp_descr_set */
 		0,                         /* tp_dictoffset */
-		0,      /* tp_init */
+		(initproc)mvec_init<2, glm::i32>,      /* tp_init */
 		0,                         /* tp_alloc */
 		(newfunc)mvec_new<2, glm::i32>,                 /* tp_new */
 	},
