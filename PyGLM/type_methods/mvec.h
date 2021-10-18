@@ -22,8 +22,8 @@ mvec_new(PyTypeObject* type, PyObject*, PyObject*)
 		//constexpr uint8_t info_type = get_type_helper_type<T>();
 		//constexpr uint8_t info = L | (info_type << PyGLM_TYPE_INFO_VEC_TYPE_OFFSET);
 		//self->info = info;
-		self->master = NULL;
-		self->super_type = NULL;
+		self->master = vec_new<L, T>(PyGLM_VEC_TYPE<L, T>(), NULL, NULL);
+		self->super_type = &((vec<L, T>*)self->master)->super_type;
 	}
 
 	return (PyObject*)self;
