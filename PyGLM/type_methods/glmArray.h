@@ -4203,7 +4203,7 @@ static int compare(PyObject* func, PyObject* funcArgs, long& cmp) {
 }
 
 static int insertionSort(std::vector<PyObject*>& in, PyObject* func) {
-	const size_t inSize = in.size();
+	const Py_ssize_t inSize = in.size();
 
 	PyObject* x, * y;
 
