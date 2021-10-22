@@ -111,6 +111,9 @@ struct PyGLMSingleTypeHolder { // supposed to only hold a single data type
 			if (highest_type < dt) {
 				highest_type = dt;
 			}
+			else if (dt == DType::NONE) {
+				return -1;
+			}
 		}
 
 		if (highest_type == DType::BOOL && (accepted_types & PyGLM_DT_BOOL)) {
@@ -163,7 +166,7 @@ struct PyGLMSingleTypeHolder { // supposed to only hold a single data type
 		if (accepted_types & PyGLM_DT_BOOL)
 			return PyGLM_DT_BOOL;
 
-		return 0;
+		return -1;
 	}
 
 	double asDouble() {
@@ -1244,6 +1247,11 @@ struct PyGLMTypeInfo {
 
 				int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype });
 
+				if (out_type == -1) {
+					data = NULL;
+					return;
+				}
+
 				setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | out_type);
 
 				switch (out_type) {
@@ -1316,6 +1324,11 @@ struct PyGLMTypeInfo {
 
 						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype });
 
+						if (out_type == -1) {
+							data = NULL;
+							return;
+						}
+
 						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | out_type);
 
 						switch (out_type) {
@@ -1381,6 +1394,11 @@ struct PyGLMTypeInfo {
 						PyGLMSingleTypeHolder innerItem6Out = PyGLMSingleTypeHolder(innerItem6);
 
 						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype });
+
+						if (out_type == -1) {
+							data = NULL;
+							return;
+						}
 
 						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | out_type);
 
@@ -1452,6 +1470,11 @@ struct PyGLMTypeInfo {
 
 						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype });
 
+						if (out_type == -1) {
+							data = NULL;
+							return;
+						}
+
 						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | out_type);
 
 						switch (out_type) {
@@ -1507,6 +1530,11 @@ struct PyGLMTypeInfo {
 					PyGLMSingleTypeHolder item2Out = PyGLMSingleTypeHolder(item2);
 
 					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype });
+
+					if (out_type == -1) {
+						data = NULL;
+						return;
+					}
 
 					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | out_type);
 
@@ -1586,6 +1614,11 @@ struct PyGLMTypeInfo {
 
 						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype });
 
+						if (out_type == -1) {
+							data = NULL;
+							return;
+						}
+
 						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | out_type);
 
 						switch (out_type) {
@@ -1657,6 +1690,11 @@ struct PyGLMTypeInfo {
 						PyGLMSingleTypeHolder innerItem9Out = PyGLMSingleTypeHolder(innerItem9);
 
 						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype });
+
+						if (out_type == -1) {
+							data = NULL;
+							return;
+						}
 
 						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | out_type);
 
@@ -1736,6 +1774,11 @@ struct PyGLMTypeInfo {
 
 						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype, innerItem10Out.dtype, innerItem11Out.dtype, innerItem12Out.dtype });
 
+						if (out_type == -1) {
+							data = NULL;
+							return;
+						}
+
 						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | out_type);
 
 						switch (out_type) {
@@ -1794,6 +1837,11 @@ struct PyGLMTypeInfo {
 					PyGLMSingleTypeHolder item3Out = PyGLMSingleTypeHolder(item3);
 
 					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype, item3Out.dtype });
+
+					if (out_type == -1) {
+						data = NULL;
+						return;
+					}
 
 					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | out_type);
 
@@ -1877,6 +1925,11 @@ struct PyGLMTypeInfo {
 
 						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype });
 
+						if (out_type == -1) {
+							data = NULL;
+							return;
+						}
+
 						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | out_type);
 
 						switch (out_type) {
@@ -1954,6 +2007,11 @@ struct PyGLMTypeInfo {
 						PyGLMSingleTypeHolder innerItem12Out = PyGLMSingleTypeHolder(innerItem12);
 
 						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype, innerItem10Out.dtype, innerItem11Out.dtype, innerItem12Out.dtype });
+
+						if (out_type == -1) {
+							data = NULL;
+							return;
+						}
 
 						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | out_type);
 
@@ -2041,6 +2099,11 @@ struct PyGLMTypeInfo {
 
 						int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { innerItem1Out.dtype, innerItem2Out.dtype, innerItem3Out.dtype, innerItem4Out.dtype, innerItem5Out.dtype, innerItem6Out.dtype, innerItem7Out.dtype, innerItem8Out.dtype, innerItem9Out.dtype, innerItem10Out.dtype, innerItem11Out.dtype, innerItem12Out.dtype, innerItem13Out.dtype, innerItem14Out.dtype, innerItem15Out.dtype, innerItem16Out.dtype });
 
+						if (out_type == -1) {
+							data = NULL;
+							return;
+						}
+
 						setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | out_type);
 
 						switch (out_type) {
@@ -2101,6 +2164,11 @@ struct PyGLMTypeInfo {
 
 					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype, item3Out.dtype, item4Out.dtype });
 
+					if (out_type == -1) {
+						data = NULL;
+						return;
+					}
+
 					setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | out_type);
 
 					switch (out_type) {
@@ -2158,6 +2226,11 @@ struct PyGLMTypeInfo {
 					PyGLMSingleTypeHolder item4Out = PyGLMSingleTypeHolder(item4);
 
 					int out_type = PyGLMSingleTypeHolder::getMostImportantType(accepted_types, { item1Out.dtype, item2Out.dtype, item3Out.dtype, item4Out.dtype });
+
+					if (out_type == -1) {
+						data = NULL;
+						return;
+					}
 
 					setInfo(PyGLM_T_QUA | out_type);
 
