@@ -7,7 +7,7 @@
 #define PyGLM_NO_REFERENCE_POSSIBLE_WARNING	0x4
 #define PyGLM_OPERATOR_DEPRECATION_WARNING	0x8
 
-unsigned long long PyGLM_SHOW_WARNINGS = -1;
+unsigned long long PyGLM_SHOW_WARNINGS = 18446744073709551615ull;
 
 PyDoc_STRVAR(silence_docstr,
 	"silence(ID: int) -> None\n"
