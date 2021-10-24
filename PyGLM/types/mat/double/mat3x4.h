@@ -99,7 +99,7 @@ static PyTypeObject hdmat3x4IterType = {
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
 	0,                         /* tp_weaklistoffset */
-	0,                         /* tp_iter */
+	(getiterfunc)generic_id,  /* tp_iter */
 	(iternextfunc)matIter_next<3, 4, double>,                         /* tp_iternext */
 	0,             /* tp_methods */
 	0,             /* tp_members */

@@ -94,7 +94,7 @@ static PyTypeObject hdmvec4IterType = {
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
 	0,                         /* tp_weaklistoffset */
-	0,                         /* tp_iter */
+	(getiterfunc)generic_id,  /* tp_iter */
 	(iternextfunc)mvec4Iter_next<double>,                         /* tp_iternext */
 	0,             /* tp_methods */
 	0,             /* tp_members */
