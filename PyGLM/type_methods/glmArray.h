@@ -1443,9 +1443,7 @@ glmArray_as_reference(PyObject*, PyObject* arg) {
 			int C = static_cast<int>(view.shape[2]);
 
 			if (view.strides[0] != view.itemsize * C * R || view.strides[1] != view.itemsize || view.strides[2] != view.itemsize * R) {
-				if (PyGLM_SHOW_WARNINGS & PyGLM_NO_REFERENCE_POSSIBLE_WARNING) {
-					PyErr_WarnEx(PyExc_UserWarning, "The given array has an incompatible memory layout, therefore it will be copied!\n(You can silence this warning using glm.silence(3))", 1);
-				}
+				PyGLM_WARN(PyGLM_NO_REFERENCE_POSSIBLE_WARNING, 3, "The given array has an incompatible memory layout, therefore it will be copied!");
 
 				Py_DECREF(out->reference);
 				out->reference = NULL;

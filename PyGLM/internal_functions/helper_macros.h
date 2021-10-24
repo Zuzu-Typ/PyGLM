@@ -24,6 +24,13 @@
 
 #define PyGLM_TupleOrList_GET_ITEM(op, i) ((PyTuple_Check(op)) ? (((PyTupleObject *)(op))->ob_item[i]) : (((PyListObject *)(op))->ob_item[i]))
 
+#define PyGLM_PREPROCESSOR_TOSTRING_ID(x)  #x
+#define PyGLM_PREPROCESSOR_TOSTRING(x)  PyGLM_PREPROCESSOR_TOSTRING_ID(x)
+
+#define PyGLM_WARN(flag, id, msg) PyGLM_WARN_TYPE(flag, id, PyExc_UserWarning, msg)
+
+#define PyGLM_WARN_TYPE(flag, id, type, msg) if (PyGLM_SHOW_WARNINGS & flag) PyErr_WarnEx(type, msg "\nYou can silence this warning by calling glm.silence(" PyGLM_PREPROCESSOR_TOSTRING(id) ")", 1)
+
 #define PyGLM_free(ptr) PyMem_Free(ptr); ptr = NULL;
 
 #define PyGLM_INCREF(ob) (Py_INCREF(ob), ob)

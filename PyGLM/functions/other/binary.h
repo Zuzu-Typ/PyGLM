@@ -12,6 +12,8 @@ binary_add(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "add", arg1, arg2);
 
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.add is deprecated. Use operator.add instead");
+
 	return PyNumber_Add(arg1, arg2);
 }
 
@@ -23,6 +25,8 @@ static PyObject*
 binary_sub(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "sub", arg1, arg2);
+
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.sub is deprecated. Use operator.sub instead");
 
 	return PyNumber_Subtract(arg1, arg2);
 }
@@ -36,6 +40,8 @@ binary_mul(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "mul", arg1, arg2);
 
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.mul is deprecated. Use operator.mul instead");
+
 	return PyNumber_Multiply(arg1, arg2);
 }
 
@@ -47,6 +53,8 @@ static PyObject*
 binary_div(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "div", arg1, arg2);
+
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.div is deprecated. Use operator.truediv instead");
 
 	return PyNumber_TrueDivide(arg1, arg2);
 }
@@ -60,6 +68,8 @@ binary_floordiv(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "floordiv", arg1, arg2);
 
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.floordiv is deprecated. Use operator.floordiv instead");
+
 	return PyNumber_FloorDivide(arg1, arg2);
 }
 
@@ -71,6 +81,8 @@ static PyObject*
 binary_mod(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "mod", arg1, arg2);
+
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.mod is deprecated. Use operator.mod instead");
 
 	return PyNumber_Remainder(arg1, arg2);
 }
@@ -84,6 +96,8 @@ binary_lshift(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "lshift", arg1, arg2);
 
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.lshift is deprecated. Use operator.lshift instead");
+
 	return PyNumber_Lshift(arg1, arg2);
 }
 
@@ -95,6 +109,8 @@ static PyObject*
 binary_rshift(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "rshift", arg1, arg2);
+
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.rshift is deprecated. Use operator.rshift instead");
 
 	return PyNumber_Rshift(arg1, arg2);
 }
@@ -108,6 +124,8 @@ binary_and(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "band", arg1, arg2);
 
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.band is deprecated. Use operator.and_ instead");
+
 	return PyNumber_And(arg1, arg2);
 }
 
@@ -120,6 +138,8 @@ binary_xor(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "bxor", arg1, arg2);
 
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.bxor is deprecated. Use operator.xor instead");
+
 	return PyNumber_Xor(arg1, arg2);
 }
 
@@ -131,6 +151,8 @@ static PyObject*
 binary_or(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "bor", arg1, arg2);
+
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.bor is deprecated. Use operator.or_ instead");
 
 	return PyNumber_Or(arg1, arg2);
 }
