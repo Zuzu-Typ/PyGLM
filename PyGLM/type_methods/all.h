@@ -27,3 +27,8 @@ generic_deepcopy(PyObject* self, PyObject* memo) {
 	PyDict_SetItem(memo, PyLong_FromVoidPtr((void*)self), copy);
 	return copy;
 }
+
+static PyObject*
+generic_id(PyObject* self) {
+	return PyGLM_INCREF(self);
+}

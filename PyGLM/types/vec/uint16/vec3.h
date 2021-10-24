@@ -101,7 +101,7 @@ static PyTypeObject hu16vec3IterType = {
 	0,                         /* tp_clear */
 	0,                         /* tp_richcompare */
 	0,                         /* tp_weaklistoffset */
-	0,                         /* tp_iter */
+	(getiterfunc)generic_id,  /* tp_iter */
 	(iternextfunc)vec3Iter_next<glm::u16>,                         /* tp_iternext */
 	0,             /* tp_methods */
 	0,             /* tp_members */
