@@ -4260,7 +4260,7 @@ frexp_(PyObject*, PyObject* args) {
 	if (PyTuple_Check(args) && PyTuple_GET_SIZE(args) == 1) {
 		PyObject* arg = PyTuple_GET_ITEM(args, 0);
 		if (PyGLM_Number_Check(arg)) {
-			if (PyGLM_SHOW_WARNINGS & PyGLM_FREXP_WARNING) PyErr_WarnEx(PyExc_UserWarning, "This function will return this pair: (m, e), which differs from glm behaviour. You can silence this warning by calling glm.silence(1)", 1);
+			PyGLM_WARN(PyGLM_FREXP_WARNING, 1, "This function will return this pair: (m, e), which differs from glm behaviour.");
 			int e;
 			double m = glm::frexp(PyGLM_Number_FromPyObject<double>(arg), e);
 			return Py_BuildValue("(d, i)", m, e);

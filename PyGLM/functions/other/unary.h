@@ -14,6 +14,7 @@ PyDoc_STRVAR(unary_pos_docstr,
 );
 static PyObject* 
 unary_pos(PyObject*, PyObject* arg) {
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.pos is deprecated. Use operator.pos instead");
 	return PyNumber_Positive(arg);
 }
 
@@ -23,6 +24,7 @@ PyDoc_STRVAR(unary_neg_docstr,
 );
 static PyObject*
 unary_neg(PyObject*, PyObject* arg) {
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.neg is deprecated. Use operator.neg instead");
 	return PyNumber_Negative(arg);
 }
 
@@ -32,6 +34,7 @@ PyDoc_STRVAR(unary_inv_docstr,
 );
 static PyObject*
 unary_inv(PyObject*, PyObject* arg) {
+	PyGLM_WARN_TYPE(PyGLM_OPERATOR_DEPRECATION_WARNING, 4, PyExc_DeprecationWarning, "glm.inv is deprecated. Use operator.invert instead");
 	return PyNumber_Invert(arg);
 }
 
