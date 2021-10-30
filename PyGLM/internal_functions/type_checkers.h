@@ -1234,6 +1234,7 @@ struct PyGLMTypeInfo {
 				allocate(sizeof(view.len));
 				memcpy(data, view.buf, sizeof(view.len));
 			}
+			PyBuffer_Release(&view);
 			return;
 		} // end of getbuffer checking
 
