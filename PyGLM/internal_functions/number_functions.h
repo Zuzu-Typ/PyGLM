@@ -215,6 +215,12 @@ static PyObject* PyGLM_PyObject_FromNumber(T value) {
 	if (std::numeric_limits<T>::is_iec559) {
 		return PyFloat_FromDouble(static_cast<double>(value));
 	}
+	else if (std::is_same<T, bool>::value) {
+		if (value) {
+			Py_RETURN_TRUE;
+		}
+		Py_RETURN_FALSE;
+	}
 	else if (std::numeric_limits<T>::is_integer) {
 		if (std::is_same<T, long long>::value) {
 			return PyLong_FromLongLong((long long)value);
@@ -226,12 +232,6 @@ static PyObject* PyGLM_PyObject_FromNumber(T value) {
 			return PyLong_FromUnsignedLong((unsigned long)value);
 		}
 		return PyLong_FromLong((long)value);
-	}
-	else if (std::is_same<T, bool>::value) {
-		if (value) {
-			Py_RETURN_TRUE;
-		}
-		Py_RETURN_FALSE;
 	}
 	return NULL;
 }

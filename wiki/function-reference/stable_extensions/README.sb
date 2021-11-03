@@ -67,4 +67,9 @@
 \--\ \url quaternion_trigonometric.md#angle-function \\b\angle\b\ function \ url\
 \--\ \url quaternion_trigonometric.md#angleAxis-function \\b\angleAxis\b\ function \ url\
 \--\ \url quaternion_trigonometric.md#axis-function \\b\axis\b\ function \ url\
+\-\ \url compatibility.md \compatibility methods\ url\
+\--\ \url compatibility.md#atan2-function \\b\atan2\b\ function \ url\
+\--\ \url compatibility.md#isfinite-function \\b\isfinite\b\ function \ url\
+\--\ \url compatibility.md#lerp-function \\b\lerp\b\ function \ url\
+\--\ \url compatibility.md#saturate-function \\b\saturate\b\ function \ url\
 \ul\

@@ -381,6 +381,11 @@ This means that you can call the \code\glm.abs\code\ function with a \code\float
 \---\ \url stable_extensions/quaternion_trigonometric.md#angle-function \\b\angle\b\ function \ url\
 \---\ \url stable_extensions/quaternion_trigonometric.md#angleAxis-function \\b\angleAxis\b\ function \ url\
 \---\ \url stable_extensions/quaternion_trigonometric.md#axis-function \\b\axis\b\ function \ url\
+\--\ \url stable_extensions/compatibility.md \compatibility methods\ url\
+\---\ \url stable_extensions/compatibility.md#atan2-function \\b\atan2\b\ function \ url\
+\---\ \url stable_extensions/compatibility.md#isfinite-function \\b\isfinite\b\ function \ url\
+\---\ \url stable_extensions/compatibility.md#lerp-function \\b\lerp\b\ function \ url\
+\---\ \url stable_extensions/compatibility.md#saturate-function \\b\saturate\b\ function \ url\
 \-\ \url unstable_extensions/README.md\unstable_extensions\url\
 \--\ \url unstable_extensions/decompose.md \decompose methods\ url\
 \---\ \url unstable_extensions/decompose.md#decompose-function \\b\decompose\b\ function \ url\

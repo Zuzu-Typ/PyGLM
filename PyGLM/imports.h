@@ -67,6 +67,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>
 #include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/compatibility.hpp>
 
 #endif
 
