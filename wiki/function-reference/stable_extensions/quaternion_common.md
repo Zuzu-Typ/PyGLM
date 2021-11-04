@@ -15,6 +15,18 @@ Provides common functions for quaternion types\.
 &emsp;&emsp;Returns the ``` q ``` conjugate\.  
   
 ### lerp\(\) function  
+#### <code>glm.<code>**lerp**(**x**: *float*, **y**: *float*, **a**: *float*) -\> *float*</code></code>  
+&emsp;&emsp;Returns ``` x * (1.0 - a) + y * a ```, i\.e\., the linear blend of ``` x ``` and ``` y ``` using the  
+&emsp;&emsp;floating\-point value ``` a ```\. The value for ``` a ``` is not restricted to the range ``` [0, 1] ```\.  
+  
+#### <code>glm.<code>**lerp**(**x**: *vecN*, **y**: *vecN*, **a**: *float*) -\> *vecN*</code></code>  
+&emsp;&emsp;Returns ``` x * (1.0 - a) + y * a ```, i\.e\., the linear blend of ``` x ``` and ``` y ``` using the  
+&emsp;&emsp;floating\-point value ``` a ```\. The value for ``` a ``` is not restricted to the range ``` [0, 1] ```\.  
+  
+#### <code>glm.<code>**lerp**(**x**: *vecN*, **y**: *vecN*, **a**: *vecN*) -\> *vecN*</code></code>  
+&emsp;&emsp;Returns ``` x * (1.0 - a) + y * a ```, i\.e\., the linear blend of ``` x ``` and ``` y ``` using the  
+&emsp;&emsp;vector ``` a ```\. The value for ``` a ``` is not restricted to the range ``` [0, 1] ```\.  
+  
 #### <code>glm.<code>**lerp**(**x**: *quat*, **y**: *quat*, **a**: *float*) -\> *quat*</code></code>  
 &emsp;&emsp;Linear interpolation of two quaternions\. The interpolation is oriented\.  
   

@@ -69,4 +69,9 @@
     *  [**angle** function ](quaternion_trigonometric.md#angle-function)  
     *  [**angleAxis** function ](quaternion_trigonometric.md#angleAxis-function)  
     *  [**axis** function ](quaternion_trigonometric.md#axis-function)  
+*  [compatibility methods](compatibility.md)  
+    *  [**atan2** function ](compatibility.md#atan2-function)  
+    *  [**isfinite** function ](compatibility.md#isfinite-function)  
+    *  [**lerp** function ](compatibility.md#lerp-function)  
+    *  [**saturate** function ](compatibility.md#saturate-function)  
   

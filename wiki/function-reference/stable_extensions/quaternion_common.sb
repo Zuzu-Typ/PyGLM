@@ -13,6 +13,18 @@ Provides common functions for quaternion types.
 \raw\&emsp;&emsp;\raw\Returns the \code\q\code\ conjugate.
 
 \h3\lerp() function\h3\
+\raw\#### <code>glm.<code>**lerp**(**x**: *float*, **y**: *float*, **a**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the
+\raw\&emsp;&emsp;\raw\floating-point value \code\a\code\. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
+
+\raw\#### <code>glm.<code>**lerp**(**x**: *vecN*, **y**: *vecN*, **a**: *float*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the
+\raw\&emsp;&emsp;\raw\floating-point value \code\a\code\. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
+
+\raw\#### <code>glm.<code>**lerp**(**x**: *vecN*, **y**: *vecN*, **a**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the
+\raw\&emsp;&emsp;\raw\vector \code\a\code\. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
+
 \raw\#### <code>glm.<code>**lerp**(**x**: *quat*, **y**: *quat*, **a**: *float*) -\\> *quat*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Linear interpolation of two quaternions. The interpolation is oriented.
 

@@ -1,0 +1,52 @@
+\c\This file was generated using a tool\c\
+\h1\compatibility methods\h1\
+The following methods are all part of the \b\compatibility methods\b\.
+Provide functions to increase the compatibility with Cg and HLSL languages.
+\h2\Table of contents\h2\
+\ul\
+\-\\url #atan2-function\\b\atan2\b\ function\url\
+\-\\url #isfinite-function\\b\isfinite\b\ function\url\
+\-\\url #lerp-function\\b\lerp\b\ function\url\
+\-\\url #saturate-function\\b\saturate\b\ function\url\
+\ul\
+\h3\atan2() function\h3\
+\raw\#### <code>glm.<code>**atan2**(**y**: *float*, **x**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Arc tangent. Returns an angle whose tangent is \code\y / x\code\. The signs of \code\x\code\ and \code\y\code\ are used to
+\raw\&emsp;&emsp;\raw\determine what quadrant the angle is in. The range of values returned by this function
+\raw\&emsp;&emsp;\raw\is \code\[-PI, PI]\code\. Results are undefined if \code\x\code\ and \code\y\code\ are both \code\0\code\.
+\raw\&emsp;&emsp;\raw\Alias for \code\atan\code\.
+
+\raw\#### <code>glm.<code>**atan2**(**y**: *vecN*, **x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\atan(y[i], x[i])\code\ for every index \code\i\code\.
+\raw\&emsp;&emsp;\raw\Alias for \code\atan\code\.
+
+\h3\isfinite() function\h3\
+\raw\#### <code>glm.<code>**isfinite**(**x**: *float*) -\\> *bool*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Test whether or not a scalar is a finite value.
+
+\raw\#### <code>glm.<code>**isfinite**(**x**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Test whether or not each vector component is a finite value.
+
+\h3\lerp() function\h3\
+\raw\#### <code>glm.<code>**lerp**(**x**: *float*, **y**: *float*, **a**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the
+\raw\&emsp;&emsp;\raw\floating-point value \code\a\code\. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
+
+\raw\#### <code>glm.<code>**lerp**(**x**: *vecN*, **y**: *vecN*, **a**: *float*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the
+\raw\&emsp;&emsp;\raw\floating-point value \code\a\code\. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
+
+\raw\#### <code>glm.<code>**lerp**(**x**: *vecN*, **y**: *vecN*, **a**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the
+\raw\&emsp;&emsp;\raw\vector \code\a\code\. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
+
+\raw\#### <code>glm.<code>**lerp**(**x**: *quat*, **y**: *quat*, **a**: *float*) -\\> *quat*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Linear interpolation of two quaternions. The interpolation is oriented.
+
+\h3\saturate() function\h3\
+\raw\#### <code>glm.<code>**saturate**(**x**: *float*) -\\> *float*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\clamp(x, 0, 1)\code\.
+
+\raw\#### <code>glm.<code>**saturate**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\clamp(x, 0, 1)\code\.
+

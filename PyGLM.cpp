@@ -128,6 +128,9 @@ static PyMethodDef glmmethods[] = {
 	// rotate_vector
 	ROTATE_VECTOR_METHODS,
 
+	// compatibility
+	COMPATIBILITY_METHODS,
+
 	// unary
 	UNARY_METHODS,
 

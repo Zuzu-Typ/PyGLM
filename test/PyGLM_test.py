@@ -207,9 +207,15 @@ def get_args(arg_string, type_, rand_func=None):
                 T = prefixes[suffixes.index(type_)]
 
             L = int(arg[1])
+
+            if not type_ in "fFiI" or L < 2:
+                continue
+
             args.append(mvec_mats["{T}{L}".format(T=T, L=L)][0])
 
         elif arg == "Q":
+            if not type_ in "fF":
+                continue
             args.append(getattr(glm, "{T}quat".format(T=prefixes[suffixes.index(type_)]))(rand_func(), rand_func(), rand_func(), rand_func()))
 
         elif "M" in arg:
@@ -218,12 +224,14 @@ def get_args(arg_string, type_, rand_func=None):
             else:
                 T = prefixes[suffixes.index(type_)]
 
+            if not type_ in "fFiI":
+                continue
+
             n = int(arg[1])
             m = int(arg[2])
             args.append(getattr(glm, "{T}mat{n}x{m}".format(T=prefixes[suffixes.index(type_)], n=n, m=m))(*[rand_func() for i in range(n*m)]))
 
     return args
-
 
 def gen_args(args_string):
     if "#M" in args_string:
@@ -348,6 +356,55 @@ def gen_obj(args_string):
         yield args[0]
 
 
+possible_arg_combinations = ['-', 'M', 'M22', 'M22M22', 'M22M23', 'M22M24', 'M22M32', 'M22M33', 'M22M34', 'M22M42', 'M22M43', 'M22M44', 'M22V2V2', 'M23', 'M23M22', 'M23M23', 'M23M24', 'M23M32', 'M23M33', 'M23M34', 'M23M42', 'M23M43', 'M23M44', 'M23V3V3', 'M24', 'M24M22', 'M24M23', 'M24M24', 'M24M32', 'M24M33', 'M24M34', 'M24M42', 'M24M43', 'M24M44', 'M24V4V4', 'M32', 'M32M22', 'M32M23', 'M32M24', 'M32M32', 'M32M33', 'M32M34', 'M32M42', 'M32M43', 'M32M44', 'M32V2V2V2', 'M33', 'M33M22', 'M33M23', 'M33M24', 'M33M32', 'M33M33', 'M33M34', 'M33M42', 'M33M43', 'M33M44', 'M33N', 'M33V2', 'M33V3V3V3', 'M34', 'M34M22', 'M34M23', 'M34M24', 'M34M32', 'M34M33', 'M34M34', 'M34M42', 'M34M43', 'M34M44', 'M34V4V4V4', 'M42', 'M42M22', 'M42M23', 'M42M24', 'M42M32', 'M42M33', 'M42M34', 'M42M42', 'M42M43', 'M42M44', 'M42V2V2V2V2', 'M43', 'M43M22', 'M43M23', 'M43M24', 'M43M32', 'M43M33', 'M43M34', 'M43M42', 'M43M43', 'M43M44', 'M43V3V3V3V3', 'M44', 'M44M22', 'M44M23', 'M44M24', 'M44M32', 'M44M33', 'M44M34', 'M44M42', 'M44M43', 'M44M44', 'M44NV3', 'M44V3', 'M44V3QV3V3V4', 'M44V4V4V4V4', 'MFMFNi', 'MM', 'MMM', 'MfMfNi', 'N', 'NN', 'NNN', 'NNNB', 'NNNN', 'NNNNN', 'NNNNNN', 'NNNNNNNN', 'NNNNNNNNN', 'NNNNNNNNNNNN', 'NNNNNNNNNNNNNNNN', 'NNNi', 'NNV', 'NNi', 'NV', 'NV3', 'P', 'Q', 'QN', 'QNV3', 'QQ', 'QQN', 'QQQ', 'V', 'V1', 'V2', 'V2N', 'V2V2', 'V2V2V4', 'V2V3', 'V2V4', 'V3', 'V3M44M44V4', 'V3N', 'V3NV2', 'V3NV3', 'V3Ni', 'V3V2', 'V3V2N', 'V3V3', 'V3V3N', 'V3V3Ni', 'V3V3V3', 'V3V4', 'V4', 'V4N', 'V4NNV2', 'V4NV2N', 'V4NV3', 'V4V2', 'V4V2NN', 'V4V3', 'V4V3N', 'V4V4', 'VFVFNi', 'VN', 'VNN', 'VNi', 'VV', 'VVN', 'VVNN', 'VVV', 'VVVB', 'VVVF', 'VVVV', 'VVVVVVVVVVVV', 'VVVf', 'VVi', 'VfVfNi']
+
+def gen_anti_args(args_string):
+    yield None,
+    yield None, None
+    yield None, None, None
+    yield None, None, None, None
+    yield None, None, None, None, None
+    yield None, None, None, None, None, None
+    yield object,
+    yield object, object
+    yield object, object, object
+    yield object, object, object, object
+    yield object, object, object, object, object
+    yield object, object, object, object, object, object
+    yield (),
+    yield (), ()
+    yield (), (), ()
+    yield (), (), (), ()
+    yield (), (), (), (), ()
+    yield (), (), (), (), (), ()
+    yield [],
+    yield [], []
+    yield [], [], []
+    yield [], [], [], []
+    yield [], [], [], [], []
+    yield [], [], [], [], [], []
+    yield {},
+    yield {}, {}
+    yield {}, {}, {}
+    yield {}, {}, {}, {}
+    yield {}, {}, {}, {}, {}
+    yield {}, {}, {}, {}, {}, {}
+
+    arg_combis = possible_arg_combinations #random.sample(possible_arg_combinations, 20)
+
+    all_types = "fFiqsuIQSUB"
+
+    args_string = re.sub("#.", "", args_string)
+
+    args_string, types = args_string.split("__") if "__" in args_string else (args_string, None)
+
+    args = args_string.split("_")
+
+    anti_args_string = "#M" + "_".join(filter(lambda possible_arg_combi: possible_arg_combi not in args, arg_combis)) + "__" +  all_types
+
+    for arg in gen_args(anti_args_string):
+        yield arg
+
 #v1 = glm.vec1()
 #v2 = glm.vec2()
 #v3 = glm.vec3()
@@ -388,6 +445,13 @@ def fassert(func, args):
     except:
         raise FAssertionError("{} raised {} with {}".format(func, sys.exc_info()[1], repr(args)))
 
+def fnassert(func, args):
+    try:
+        func(*args)
+        raise FAssertionError("{} raised nothing with {}".format(func, repr(args)))
+    except:
+        pass
+
 def fail(*args):
     raise FAssertionError("Failed with " + str(args)) 
 
@@ -404,6 +468,10 @@ def test_vec1_types():
         for T in vector_length_dict[1]:
             fassert(T, args)
 
+    for args in gen_anti_args("#u-_N_V1"):
+        for T in vector_length_dict[1]:
+            fnassert(T, args)
+
 ## vec2
 def test_vec2_types():
     for args in gen_args("#u-_N_NN_V2"):
@@ -412,6 +480,10 @@ def test_vec2_types():
 
     for args in gen_args("#uV2V3_V2V4"):
         fassert(type(args[0]), args[1:])
+
+    for args in gen_anti_args("#u-_N_NN_V2"):
+        for T in vector_length_dict[2]:
+            fnassert(T, args)
 
 ## vec3
 def test_vec3_types():
@@ -1846,6 +1918,18 @@ def test_rotate_vector():
     for args in gen_args("V3V3N__fF"):
         fassert(glm.slerp, args)
 #/rotate_vector #
+
+# compatibility #
+def test_compatibility():
+    for args in gen_args("NNN_V2V2N_V3V3N_V4V4N_V2V2V2_V3V3V3_V4V4V4__fF"):
+        fassert(glm.lerp, args)
+    for args in gen_args("N_V__fF"):
+        fassert(glm.isfinite, args)
+    for args in gen_args("N_V2_V3_V4__fF"):
+        fassert(glm.saturate, args)
+    for args in gen_args("NN_VV_N_V__fF"):
+        fassert(glm.atan2, args)
+#/compatibility #
 ##/UNSTABLE EXTENSIONS ##
 
 
