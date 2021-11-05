@@ -33,7 +33,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-      
+      with:
+        submodules: recursive
     
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
