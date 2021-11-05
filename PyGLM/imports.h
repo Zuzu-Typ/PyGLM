@@ -28,6 +28,7 @@
 // Stable extensions
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_common.hpp>
+#include <glm/ext/matrix_integer.hpp>
 #include <glm/ext/matrix_projection.hpp>
 #include <glm/ext/matrix_relational.hpp>
 #include <glm/ext/matrix_transform.hpp>
