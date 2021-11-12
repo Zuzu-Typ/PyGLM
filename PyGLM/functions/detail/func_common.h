@@ -24,7 +24,87 @@ PyDoc_STRVAR(sign_docstr,
 	"	For every component `c` of `x`:\n"
 	"	Returns `1.0` if `x > 0`, `0.0` if `x == 0`, or `-1.0` if `x < 0`."
 );
-PyGLM_MAKE_GLM_FUNC_N_V__tfF(sign)
+static PyObject*
+sign_(PyObject*, PyObject* arg) {
+	if (PyGLM_Number_Check(arg)) {
+		return pack(glm::sign(PyGLM_Number_FromPyObject<double>(arg)));
+	}
+	PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD | PyGLM_DT_INT | PyGLM_DT_INT64 | PyGLM_DT_INT16 | PyGLM_DT_INT8);
+	if (PyGLM_Vec_PTI_Check0(1, float, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, float, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(1, double, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, double, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(1, int32, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, int32, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(1, int64, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, int64, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(1, int16, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, int16, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(1, int8, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, int8, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(2, float, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, float, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(2, double, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, double, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(2, int32, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, int32, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(2, int64, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, int64, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(2, int16, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, int16, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(2, int8, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, int8, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(3, float, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, float, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(3, double, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, double, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(3, int32, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, int32, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(3, int64, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, int64, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(3, int16, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, int16, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(3, int8, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, int8, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(4, float, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, float, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(4, double, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, double, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(4, int32, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, int32, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(4, int64, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, int64, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(4, int16, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, int16, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(4, int8, arg)) {
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, int8, arg)));
+	}
+	PyGLM_TYPEERROR_O("invalid argument type for sign(): ", arg);
+	return NULL;
+}
 
 PyDoc_STRVAR(floor_docstr,
 	"floor(x: float) -> float\n"
@@ -4260,7 +4340,6 @@ frexp_(PyObject*, PyObject* args) {
 	if (PyTuple_Check(args) && PyTuple_GET_SIZE(args) == 1) {
 		PyObject* arg = PyTuple_GET_ITEM(args, 0);
 		if (PyGLM_Number_Check(arg)) {
-			PyGLM_WARN(PyGLM_FREXP_WARNING, 1, "This function will return this pair: (m, e), which differs from glm behaviour.");
 			int e;
 			double m = glm::frexp(PyGLM_Number_FromPyObject<double>(arg), e);
 			return Py_BuildValue("(d, i)", m, e);
