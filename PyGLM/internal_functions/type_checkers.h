@@ -1231,8 +1231,8 @@ struct PyGLMTypeInfo {
 				data = view.buf;
 			}
 			else if (!customDataBuffer) {
-				allocate(sizeof(view.len));
-				memcpy(data, view.buf, sizeof(view.len));
+				allocate(view.len);
+				memcpy(data, view.buf, view.len);
 			}
 			PyBuffer_Release(&view);
 			return;
