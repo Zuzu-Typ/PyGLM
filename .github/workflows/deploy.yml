@@ -1,8 +1,8 @@
 name: Build and upload to PyPI
 
-on:
-  release:
-    types: [published]
+on: push
+  #release:
+  #  types: [published]
     
 env:
   CIBW_BUILD: cp3*
@@ -10,12 +10,15 @@ env:
   CIBW_TEST_COMMAND: pytest {project}/test/PyGLM_test.py -v
 
 jobs:
-  build_wheels_win_mac:
-    name: Build wheels on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+  build_wheels_windows:
+    name: Build wheels on Windows (${{ matrix.arch }})
+    runs-on: windows-latest
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        arch: [AMD64, x86]
+        
+    env:
+      CIBW_ARCHS: ${{matrix.arch}}
 
     steps:
       - uses: actions/checkout@v2
@@ -28,7 +31,34 @@ jobs:
           python-version: '3.10'
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.1.3
+        uses: pypa/cibuildwheel@v2.2.2
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ./wheelhouse/*.whl
+          
+  build_wheels_mac:
+    name: Build wheels on MacOS (${{ matrix.arch }})
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        arch: [x86_64, arm64]
+        
+    env:
+      CIBW_ARCHS: ${{matrix.arch}}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+            submodules: recursive
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: '3.10'
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.2.2
 
       - uses: actions/upload-artifact@v2
         with:
@@ -40,15 +70,21 @@ jobs:
     strategy:
       matrix:
         distro: [manylinux2010, manylinux_2_24]
-        arch: [auto]
+        arch: [x86_64, i686]
         include:
-          - distro: manylinux2014
+          - distro: manylinux_2_24
             arch: aarch64
+          - distro: manylinux_2_24
+            arch: ppc64le
+          - distro: manylinux_2_24
+            arch: s390x
         
     env:
       CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.distro }}
       CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.distro }}
       CIBW_MANYLINUX_AARCH64_IMAGE: ${{ matrix.distro }}
+      CIBW_MANYLINUX_PPC64LE_IMAGE: ${{ matrix.distro }}
+      CIBW_MANYLINUX_S390X_IMAGE: ${{ matrix.distro }}
       CIBW_ARCHS: ${{matrix.arch}}
 
     steps:
@@ -57,7 +93,7 @@ jobs:
             submodules: recursive
 
       - name: Set up QEMU
-        if: ${{ matrix.arch == 'aarch64' }}
+        if: ${{ matrix.arch != 'x86_64' && matrix.arch != 'i686' }}
         uses: docker/setup-qemu-action@v1
 
       - uses: actions/setup-python@v2
@@ -66,7 +102,7 @@ jobs:
           python-version: '3.10'
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.1.3
+        uses: pypa/cibuildwheel@v2.2.2
 
       - uses: actions/upload-artifact@v2
         with:
@@ -93,7 +129,7 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
-    needs: [build_wheels_win_mac, build_wheels_manylinux, build_sdist]
+    needs: [build_wheels_windows, build_wheels_mac, build_wheels_manylinux, build_sdist]
     runs-on: ubuntu-latest
     
     #if: github.event_name == 'release' && github.event.action == 'published'
@@ -107,6 +143,6 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@v1.4.2
         with:
           user: __token__
-          password: ${{ secrets.pypi_password }}
-          #password: ${{ secrets.testpypi_password }}
-          #repository_url: https://test.pypi.org/legacy/
+          #password: ${{ secrets.pypi_password }}
+          password: ${{ secrets.testpypi_password }}
+          repository_url: https://test.pypi.org/legacy/
