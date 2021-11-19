@@ -110,19 +110,18 @@ jobs:
           path: ./wheelhouse/*.whl
           
   build_wheels_musllinux:
-    name: Build wheels on ${{ matrix.distro }} for ${{ matrix.arch }}
+    name: Build wheels on musllinux_1_1 for ${{ matrix.arch }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: musllinux_1_1
         arch: [x86_64, i686, aarch64, ppc64le, s390x]
         
     env:
-      CIBW_MUSLLINUX_X86_64_IMAGE: ${{ matrix.distro }}
-      CIBW_MUSLLINUX_I686_IMAGE: ${{ matrix.distro }}
-      CIBW_MUSLLINUX_AARCH64_IMAGE: ${{ matrix.distro }}
-      CIBW_MUSLLINUX_PPC64LE_IMAGE: ${{ matrix.distro }}
-      CIBW_MUSLLINUX_S390X_IMAGE: ${{ matrix.distro }}
+      CIBW_MUSLLINUX_X86_64_IMAGE: musllinux_1_1
+      CIBW_MUSLLINUX_I686_IMAGE: musllinux_1_1
+      CIBW_MUSLLINUX_AARCH64_IMAGE: musllinux_1_1
+      CIBW_MUSLLINUX_PPC64LE_IMAGE: musllinux_1_1
+      CIBW_MUSLLINUX_S390X_IMAGE: musllinux_1_1
       CIBW_BUILD: cp3*-musllinux*
       CIBW_ARCHS: ${{matrix.arch}}
 
