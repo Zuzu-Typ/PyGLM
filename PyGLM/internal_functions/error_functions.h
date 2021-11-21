@@ -8,7 +8,7 @@
 
 #define PyGLM_ZERO_DIVISION_ERROR PyErr_SetString(PyExc_ZeroDivisionError, "Whoopsie. Integers can't divide by zero (:")
 
-#define PyGLM_ZERO_DIVISION_ERROR_T(T) if (std::numeric_limits<T>::is_iec559) { PyGLM_WARN(PyGLM_FLOAT_ZERO_DIVISION_WARNING, 2, "Uh oh.. There is a float division by zero here. I hope that's intended!"); } else { PyGLM_ZERO_DIVISION_ERROR; return NULL; }
+#define PyGLM_ZERO_DIVISION_ERROR_T(T) if (std::numeric_limits<T>::is_iec559) { PyGLM_WARN(PyGLM_FLOAT_ZERO_DIVISION_WARNING, "Uh oh.. There is a float division by zero here. I hope that's intended!"); } else { PyGLM_ZERO_DIVISION_ERROR; return NULL; }
 
 #define PyGLM_Arg_Unpack_1O(args, name, arg1) if(!PyArg_UnpackTuple(args, name, 1, 1, &arg1)) return NULL
 #define PyGLM_Arg_Unpack_2O(args, name, arg1, arg2) if(!PyArg_UnpackTuple(args, name, 2, 2, &arg1, &arg2)) return NULL

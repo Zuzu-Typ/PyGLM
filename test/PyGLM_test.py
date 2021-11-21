@@ -355,6 +355,23 @@ def gen_obj(args_string):
     for args in gen_args(args_string):
         yield args[0]
 
+def gen_type(args_string):
+    for obj in gen_obj(args_string):
+        yield type(obj)
+
+def get_len_of_type(type_):
+    return len(type_())
+
+def optional_any(x):
+    if hasattr(x, "__len__"):
+        return glm.any(x)
+    return bool(x)
+
+def optional_all(x):
+    if hasattr(x, "__len__"):
+        return glm.all(x)
+    return bool(x)
+
 
 possible_arg_combinations = ['-', 'M', 'M22', 'M22M22', 'M22M23', 'M22M24', 'M22M32', 'M22M33', 'M22M34', 'M22M42', 'M22M43', 'M22M44', 'M22V2V2', 'M23', 'M23M22', 'M23M23', 'M23M24', 'M23M32', 'M23M33', 'M23M34', 'M23M42', 'M23M43', 'M23M44', 'M23V3V3', 'M24', 'M24M22', 'M24M23', 'M24M24', 'M24M32', 'M24M33', 'M24M34', 'M24M42', 'M24M43', 'M24M44', 'M24V4V4', 'M32', 'M32M22', 'M32M23', 'M32M24', 'M32M32', 'M32M33', 'M32M34', 'M32M42', 'M32M43', 'M32M44', 'M32V2V2V2', 'M33', 'M33M22', 'M33M23', 'M33M24', 'M33M32', 'M33M33', 'M33M34', 'M33M42', 'M33M43', 'M33M44', 'M33N', 'M33V2', 'M33V3V3V3', 'M34', 'M34M22', 'M34M23', 'M34M24', 'M34M32', 'M34M33', 'M34M34', 'M34M42', 'M34M43', 'M34M44', 'M34V4V4V4', 'M42', 'M42M22', 'M42M23', 'M42M24', 'M42M32', 'M42M33', 'M42M34', 'M42M42', 'M42M43', 'M42M44', 'M42V2V2V2V2', 'M43', 'M43M22', 'M43M23', 'M43M24', 'M43M32', 'M43M33', 'M43M34', 'M43M42', 'M43M43', 'M43M44', 'M43V3V3V3V3', 'M44', 'M44M22', 'M44M23', 'M44M24', 'M44M32', 'M44M33', 'M44M34', 'M44M42', 'M44M43', 'M44M44', 'M44NV3', 'M44V3', 'M44V3QV3V3V4', 'M44V4V4V4V4', 'MFMFNi', 'MM', 'MMM', 'MfMfNi', 'N', 'NN', 'NNN', 'NNNB', 'NNNN', 'NNNNN', 'NNNNNN', 'NNNNNNNN', 'NNNNNNNNN', 'NNNNNNNNNNNN', 'NNNNNNNNNNNNNNNN', 'NNNi', 'NNV', 'NNi', 'NV', 'NV3', 'P', 'Q', 'QN', 'QNV3', 'QQ', 'QQN', 'QQQ', 'V', 'V1', 'V2', 'V2N', 'V2V2', 'V2V2V4', 'V2V3', 'V2V4', 'V3', 'V3M44M44V4', 'V3N', 'V3NV2', 'V3NV3', 'V3Ni', 'V3V2', 'V3V2N', 'V3V3', 'V3V3N', 'V3V3Ni', 'V3V3V3', 'V3V4', 'V4', 'V4N', 'V4NNV2', 'V4NV2N', 'V4NV3', 'V4V2', 'V4V2NN', 'V4V3', 'V4V3N', 'V4V4', 'VFVFNi', 'VN', 'VNN', 'VNi', 'VV', 'VVN', 'VVNN', 'VVV', 'VVVB', 'VVVF', 'VVVV', 'VVVVVVVVVVVV', 'VVVf', 'VVi', 'VfVfNi']
 
@@ -1343,13 +1360,15 @@ def test_func_exponential():
 def test_func_common():
     for args in gen_args("N_V__fF"):
         fassert(glm.abs, args)
-        fassert(glm.sign, args)
         fassert(glm.floor, args)
         fassert(glm.trunc, args)
         fassert(glm.round, args)
         fassert(glm.roundEven, args)
         fassert(glm.ceil, args)
         fassert(glm.fract, args)
+
+    for args in gen_args("N_V__fFiqsu"):
+        fassert(glm.sign, args)
 
     for args in gen_args("NN_VV_VN__fF"):
         fassert(glm.mod, args)
@@ -2679,6 +2698,881 @@ def test_spec_exponential_log2():
             assert all([round(a, 5) == round(math.log2(i), 5) for a in glm.log2(vecT(i))])
 
 ###/SPECIFIC TESTS ###
+
+### GLM TESTS ###
+## core_func_common ##
+def test_floor(): 
+    A = 1.1
+    B = glm.floor(A)
+    assert glm.equal(B, 1., 0.0001)
+    
+    for T in gen_type("V__fF"):
+        A = T(1.1)
+        B = glm.floor(A)
+        assert glm.all(glm.equal(B, T(1), 0.0001))
+
+def test_modf():
+    X = 1.5
+    A, I = glm.modf(X)
+    assert glm.equal(I, 1.0, 0.0001)
+    assert glm.equal(A, 0.5, 0.0001)
+
+    for T in gen_type("V4__fF"):
+        X = T(1.1, 1.2, 1.5, 1.7)
+        I = T()
+        A = glm.modf(X, I)
+        assert glm.ivec4(I) == glm.ivec4(1)
+        assert glm.all(glm.equal(A, T(0.1, 0.2, 0.5, 0.7), 0.00001))
+
+def test_mod():
+    A = 1.5
+    B = 1.0
+    C = glm.mod(A, B)
+    assert glm.equal(C, 0.5, 0.00001)
+
+    A = -0.2
+    B = 1.0
+    C = glm.mod(A, B)
+    assert glm.equal(C, 0.8, 0.00001)
+
+    A = 3.0
+    B = 2.0
+    C = glm.mod(A, B)
+    assert glm.equal(C, 1.0, 0.00001)
+    
+    for T in gen_type("V__fF"):
+        A = T(3.0)
+        B = 2.0
+        C = glm.mod(A, B)
+        assert glm.all(glm.equal(C, T(1.0), 0.00001))
+
+        A = T(3.0)
+        B = T(2.0)
+        C = glm.mod(A, B)
+        assert glm.all(glm.equal(C, T(1.0), 0.00001))
+
+def test_floatBitsToInt():
+    A = 1.0
+    B = glm.floatBitsToInt(A)
+    C = glm.intBitsToFloat(B)
+    assert A == C
+
+    values = [1, 2, 3, 4]
+
+    for T in gen_type("V2_V3_V4__f"):
+        A = T(values)
+        B = glm.floatBitsToInt(A)
+        C = glm.intBitsToFloat(B)
+        assert A == C
+
+def test_floatBitsToUint():
+    A = 1.0
+    B = glm.floatBitsToUint(A)
+    C = glm.uintBitsToFloat(B)
+    assert A == C
+
+    values = [1, 2, 3, 4]
+
+    for T in gen_type("V2_V3_V4__f"):
+        A = T(values)
+        B = glm.floatBitsToUint(A)
+        C = glm.uintBitsToFloat(B)
+        assert A == C
+
+def test_min(): # improved these a little
+
+    for T in gen_type("V__fF"):
+        A0 = glm.min(T(1), T(2))
+        A1 = glm.min(T(1), 2)
+        A2 = glm.min(T(2), 1)
+        A3 = T(glm.min(1, 2))
+        assert A0 == A1 == A2 == A3 == T(1)
+
+def test_max(): # improved these a little
+    for T in gen_type("V__fF"):
+        A0 = glm.max(T(1), T(2))
+        A1 = glm.max(T(1), 2)
+        A2 = glm.max(T(2), 1)
+        A3 = T(glm.max(1, 2))
+        assert A0 == A1 == A2 == A3 == T(2)
+
+def test_clamp(): # filled this one
+    assert glm.clamp( -1, 0, 1) == 0
+    assert glm.clamp(  2, 0, 1) == 1
+    assert glm.clamp(0.5, 0, 1) == 0.5
+
+    for T in gen_type("V__fF"):
+        assert glm.clamp(T( -1), 0, 1) == T(0)
+        assert glm.clamp(T(  2), 0, 1) == T(1)
+        assert glm.clamp(T(0.5), 0, 1) == T(0.5)
+
+        assert glm.clamp(T( -1), T(0), T(1)) == T(0)
+        assert glm.clamp(T(  2), T(0), T(1)) == T(1)
+        assert glm.clamp(T(0.5), T(0), T(1)) == T(0.5)
+
+def test_mix():
+    cases = [
+        # bool
+        ( 0, 1, False,  0),
+        ( 0, 1,  True,  1),
+        (-1, 1, False, -1),
+        (-1, 1,  True,  1),
+
+        # float
+        ( 0, 1, 0,  0),
+        ( 0, 1, 1,  1),
+        (-1, 1, 0, -1),
+        (-1, 1, 1,  1),
+    ] + [
+        # vec bool
+        (T(x), T(y), z, T(w)) for x,y,z,w in
+        (( 0, 1, False,  0),
+         ( 0, 1,  True,  1),
+         (-1, 1, False, -1),
+         (-1, 1,  True,  1)) for T in gen_type("V2_V3_V4__fF")
+    ] + [
+        # vec bvec
+        (T(x), T(y), (getattr(glm, "bvec{L}".format(L=get_len_of_type(T))))(z), T(w)) for x,y,z,w in
+        (( 0, 1, False,  0),
+         ( 0, 1,  True,  1),
+         (-1, 1, False, -1),
+         (-1, 1,  True,  1)) for T in gen_type("V2_V3_V4__fF")
+    ]
+    for x, y, a, expected in cases:
+        result = glm.mix(x, y, a)
+        assert result == expected, (x, y, a, expected, result)
+
+def test_step():
+    cases = [
+        # scalar
+        (2, 1, 0),
+        (2, 3, 1),
+        (2, 2, 1),
+    ] + [
+        # vec scalar
+        (edge, T(x), T(result)) for edge, x, result in
+        ((1, ( 1,  2,  3,  4), 1),
+         (0, ( 1,  2,  3,  4), 1),
+         (0, (-1, -2, -3, -4), 0)) for T in gen_type("V2_V3_V4__fF")
+    ] + [
+        # vec vec
+        (T(edge), T(x), T(result)) for edge, x, result in
+        ((1, ( 1,  2,  3,  4), 1),
+         (0, ( 1,  2,  3,  4), 1),
+         (0, (-1, -2, -3, -4), 0)) for T in gen_type("V2_V3_V4__fF")
+    ]
+    for edge, x, expected in cases:
+        result = glm.step(edge, x)
+        assert result == expected
+
+def test_round():
+    cases = [
+        (T(x), T(result)) for x, result in
+        ((   0,  0),
+         ( 0.5,  1),
+         (   1,  1),
+         ( 0.1,  0),
+         ( 0.9,  1),
+         ( 1.5,  2),
+         ( 1.9,  2),
+         (-  0,  0),
+         (-0.5, -1),
+         (-  1, -1),
+         (-0.1,  0),
+         (-0.9, -1),
+         (-1.5, -2),
+         (-1.9, -2)) for T in gen_type("N_V__fF")
+    ]
+    for x, expected in cases:
+        result = glm.round(x)
+        assert result == expected
+
+def test_roundEven():
+    cases = [
+        (T(x), T(result)) for x, result in
+        ((   0,  0),
+         ( 0.5,  0),
+         ( 1.5,  2),
+         ( 2.5,  2),
+         ( 3.5,  4),
+         ( 4.5,  4),
+         ( 5.4,  5),
+         (-  0, -0),
+         (-0.5, -0),
+         (-1.5, -2),
+         (-2.5, -2),
+         (-3.5, -4),
+         (-4.5, -4),
+         (-5.4, -5)) for T in gen_type("N_V__fF")
+    ]
+    for x, expected in cases:
+        result = glm.roundEven(x)
+        assert result == expected
+
+def test_isnan():
+    for T in gen_type("N_V2_V3_V4__fF"):
+        assert optional_all(glm.isnan(T(float("NaN"))))
+        assert not optional_any(glm.isnan(T(1)))
+
+def test_isinf():
+    for T in gen_type("N_V2_V3_V4__fF"):
+        assert optional_all(glm.isinf(T(float("infinity"))))
+        assert optional_all(glm.isinf(T(float("-infinity"))))
+        assert not optional_any(glm.isinf(T(1)))
+
+def test_sign():
+    cases = [
+        (T(x), T(result)) for x, result in
+        ((   0,  0),
+         (   1,  1),
+         ( 2.5,  1),
+         ( 3.5,  1),
+         (-  1, -1),
+         (-2.5, -1),
+         (-3.5, -1)) for T in gen_type("N_V__fFiqsu")
+    ]
+    for x, expected in cases:
+        result = glm.sign(x)
+        assert result == expected, (x, expected, result)
+
+def test_frexp():
+    sig, exp = glm.frexp(1024)
+    assert glm.equal(sig, 0.5, 0.00001)
+    assert exp == 11
+
+    x = glm.vec1(1024)
+    exp = glm.ivec1()
+    sig = glm.frexp(x, exp)
+    assert glm.all(glm.equal(sig, glm.vec1(0.5), 0.00001))
+    assert exp == glm.ivec1(11)
+
+    x = glm.vec2(1024, 0.24)
+    exp = glm.ivec2()
+    sig = glm.frexp(x, exp)
+    assert glm.all(glm.equal(sig, glm.vec2(0.5, 0.96), 0.00001))
+    assert exp == glm.ivec2(11, -2)
+
+    x = glm.vec3(1024, 0.24, 0)
+    exp = glm.ivec3()
+    sig = glm.frexp(x, exp)
+    assert glm.all(glm.equal(sig, glm.vec3(0.5, 0.96, 0.0), 0.00001))
+    assert exp == glm.ivec3(11, -2, 0)
+
+    x = glm.vec4(1024, 0.24, 0, -1.33)
+    exp = glm.ivec4()
+    sig = glm.frexp(x, exp)
+    assert glm.all(glm.equal(sig, glm.vec4(0.5, 0.96, 0.0, -0.665), 0.00001))
+    assert exp == glm.ivec4(11, -2, 0, 1)
+
+def test_ldexp():
+    assert glm.equal(glm.ldexp(0.5, 11), 1024, 0.00001)
+
+    sig = glm.vec1(0.5)
+    exp = glm.ivec1(11)
+    x = glm.ldexp(sig, exp)
+    assert glm.all(glm.equal(x, glm.vec1(1024), 0.00001))
+
+    sig = glm.vec2(0.5, 0.96)
+    exp = glm.ivec2(11, -2)
+    x = glm.ldexp(sig, exp)
+    assert glm.all(glm.equal(x, glm.vec2(1024, 0.24), 0.00001))
+
+    sig = glm.vec3(0.5, 0.96, 0)
+    exp = glm.ivec3(11, -2, 0)
+    x = glm.ldexp(sig, exp)
+    assert glm.all(glm.equal(x, glm.vec3(1024, 0.24, 0), 0.00001))
+
+    sig = glm.vec4(0.5, 0.96, 0.0, -0.665)
+    exp = glm.ivec4(11, -2, 0, 1)
+    x = glm.ldexp(sig, exp)
+    assert glm.all(glm.equal(x, glm.vec4(1024, 0.24, 0, -1.33), 0.00001))
+##/core_func_common ##
+
+## core_func_exponential ##
+def test_pow():
+    for T in gen_type("N_V__fF"):
+        assert optional_all(glm.equal(glm.pow(T(2), T(2)), T(4), 0.00001))
+
+def test_sqrt():
+    for T in gen_type("N_V__fF"):
+        assert optional_all(glm.equal(glm.sqrt(T(4)), T(2), 0.00001))
+
+def test_log():
+    for T in gen_type("N_V__fF"):
+        assert optional_all(glm.equal(glm.log(T(glm.e())), T(1), 0.01))
+
+def test_exp2():
+    for T in gen_type("N_V__fF"):
+        assert optional_all(glm.equal(glm.exp2(T(4)), T(16), 0.00001))
+
+def test_log2():
+    for T in gen_type("N_V__fF"):
+        assert optional_all(glm.equal(glm.log2(T(16)), T(4), 0.01))
+
+def test_inversesqrt():
+    for T in gen_type("N_V__fF"):
+        assert optional_all(glm.equal(glm.inversesqrt(T(16)) * glm.sqrt(T(16)), T(1), 0.001))
+##/core_func_exponential ##
+
+## core_func_geometric ##
+def test_length():
+    assert 1 == glm.length(glm.vec1(1)) == glm.length(glm.vec2(1, 0)) == glm.length(glm.vec3(1, 0, 0)) == glm.length(glm.vec4(1, 0, 0, 0))
+
+def test_distance():
+    assert 0 == glm.distance(glm.vec1(1), glm.vec1(1)) == \
+        glm.distance(glm.vec2(1, 0), glm.vec2(1, 0)) == \
+        glm.distance(glm.vec3(1, 0, 0), glm.vec3(1, 0, 0)) == \
+        glm.distance(glm.vec4(1, 0, 0, 0), glm.vec4(1, 0, 0, 0))
+
+def test_dot():
+    assert glm.dot(glm.vec1(1), glm.vec1(1)) == 1
+    assert glm.dot(glm.vec2(1), glm.vec2(1)) == 2
+    assert glm.dot(glm.vec3(1), glm.vec3(1)) == 3
+    assert glm.dot(glm.vec4(1), glm.vec4(1)) == 4
+
+def test_cross():
+    Cross1 = glm.cross(glm.vec3(1, 0, 0), glm.vec3(0, 1, 0))
+    Cross2 = glm.cross(glm.vec3(0, 1, 0), glm.vec3(1, 0, 0))
+
+    glm.all(glm.lessThan(glm.abs(Cross1 - glm.vec3(0, 0, 1)), glm.vec3(0.0001)))
+    glm.all(glm.lessThan(glm.abs(Cross2 - glm.vec3(0, 0,-1)), glm.vec3(0.0001)))
+
+def test_normalize():
+    Normalize1 = glm.normalize(glm.vec3(1, 0, 0))
+    Normalize2 = glm.normalize(glm.vec3(2, 0, 0))
+    
+    Normalize3 = glm.normalize(glm.vec3(-0.6, 0.7, -0.5))
+
+    glm.all(glm.lessThan(glm.abs(Normalize1 - glm.vec3(1, 0, 0)), glm.vec3(0.0001)))
+    glm.all(glm.lessThan(glm.abs(Normalize2 - glm.vec3(1, 0, 0)), glm.vec3(0.0001)))
+    glm.all(glm.lessThan(glm.abs(Normalize3 - glm.normalize((-1.2,1.4,-1))), glm.vec3(0.0001)))
+
+def test_faceforward():
+    N = glm.vec3(0.0, 0.0, 1.0)
+    I = glm.vec3(1.0, 0.0, 1.0)
+    Nref = glm.vec3(0.0, 0.0, 1.0)
+    F = glm.faceforward(N, I, Nref)
+
+    assert glm.equal(F, (0,0,-1), 0.0001)
+
+def test_reflect():
+    A = glm.vec2(1.0,-1.0)
+    B = glm.vec2(0.0, 1.0)
+    C = glm.reflect(A, B)
+    
+    assert glm.all(glm.equal(C, glm.vec2(1.0, 1.0), 0.0001))
+
+def test_refract():
+    A = glm.vec2(0.0,-1.0)
+    B = glm.vec2(0.0, 1.0)
+    C = glm.refract(A, B, 0.5)
+    
+    assert glm.all(glm.equal(C, glm.vec2(0.0, -1.0), 0.0001))
+##/core_func_geometric ##
+
+## core_func_integer ##
+def test_bitfieldInsert():
+    cases = [
+        (T(base), T(insert), offset, bits, T(expected)) for base, insert, offset, bits, expected in
+        ((0x00000000, 0xffffffff,  0, 32, 0xffffffff),
+         (0x00000000, 0xffffffff,  0, 31, 0x7fffffff),
+         (0x00000000, 0xffffffff,  0,  0, 0x00000000),
+         (0xff000000, 0x000000ff,  8,  8, 0xff00ff00),
+         (0xffff0000, 0xffff0000, 16, 16, 0x00000000),
+         (0x0000ffff, 0x0000ffff, 16, 16, 0xffffffff)) for T in gen_type("V__iI")
+    ] + [
+        (T(base), T(insert), offset, bits, T(expected).value) for base, insert, offset, bits, expected in
+        ((0x00000000, 0xffffffff,  0, 32, 0xffffffff),
+         (0x00000000, 0xffffffff,  0, 31, 0x7fffffff),
+         (0x00000000, 0xffffffff,  0,  0, 0x00000000),
+         (0xff000000, 0x000000ff,  8,  8, 0xff00ff00),
+         (0xffff0000, 0xffff0000, 16, 16, 0x00000000),
+         (0x0000ffff, 0x0000ffff, 16, 16, 0xffffffff)) for T in [glm.int32, glm.uint32]
+    ]
+
+    for base, insert, offset, bits, expected in cases:
+        result = glm.bitfieldInsert(base, insert, offset, bits)
+        assert result == expected, (result, expected)
+        
+def test_bitfieldExtract():
+    cases = [
+        (T(value), offset, bits, T(expected)) for value, offset, bits, expected in
+        ((0xffffffff, 0,32, 0xffffffff),
+         (0xffffffff, 8, 0, 0x00000000),
+         (0x00000000, 0,32, 0x00000000),
+         (0x0f0f0f0f, 0,32, 0x0f0f0f0f),
+         (0x00000000, 8, 0, 0x00000000),
+         (0x80000000,31, 1, 0x00000001),
+         (0x7fffffff,31, 1, 0x00000000),
+         (0x00000300, 8, 8, 0x00000003),
+         (0x0000ff00, 8, 8, 0x000000ff),
+         (0xfffffff0, 0, 5, 0x00000010),
+         (0x000000ff, 1, 3, 0x00000007),
+         (0x000000ff, 0, 3, 0x00000007),
+         (0x00000000, 0, 2, 0x00000000),
+         (0xffffffff, 0, 8, 0x000000ff),
+         (0xffff0000,16,16, 0x0000ffff)) for T in gen_type("V__iI")
+    ] + [
+        (T(value), offset, bits, T(expected).value) for value, offset, bits, expected in
+        ((0xffffffff, 0,32, 0xffffffff),
+         (0xffffffff, 8, 0, 0x00000000),
+         (0x00000000, 0,32, 0x00000000),
+         (0x0f0f0f0f, 0,32, 0x0f0f0f0f),
+         (0x00000000, 8, 0, 0x00000000),
+         (0x80000000,31, 1, 0x00000001),
+         (0x7fffffff,31, 1, 0x00000000),
+         (0x00000300, 8, 8, 0x00000003),
+         (0x0000ff00, 8, 8, 0x000000ff),
+         (0xfffffff0, 0, 5, 0x00000010),
+         (0x000000ff, 1, 3, 0x00000007),
+         (0x000000ff, 0, 3, 0x00000007),
+         (0x00000000, 0, 2, 0x00000000),
+         (0xffffffff, 0, 8, 0x000000ff),
+         (0xffff0000,16,16, 0x0000ffff)) for T in [glm.int32, glm.uint32]
+    ]
+
+    for value, offset, bits, expected in cases:
+        result = glm.bitfieldExtract(value, offset, bits)
+        assert result == expected, (result, expected, (value, offset, bits))
+
+def test_bitfieldReverse():
+    cases = [
+        (T(value), T(expected)) for value, expected in
+        ((0x00000001, 0x80000000),
+         (0x0000000f, 0xf0000000),
+         (0x000000ff, 0xff000000),
+         (0xf0000000, 0x0000000f),
+         (0xff000000, 0x000000ff),
+         (0xffffffff, 0xffffffff),
+         (0x00000000, 0x00000000)) for T in gen_type("V__I")
+    ] + [
+        (T(value), T(expected)) for value, expected in
+        ((0x00000000000000ff, 0xff00000000000000),
+         (0x000000000000000f, 0xf000000000000000),
+         (0xf000000000000000, 0x000000000000000f),
+         (0xffffffffffffffff, 0xffffffffffffffff),
+         (0x0000000000000000, 0x0000000000000000)) for T in gen_type("V__Q")
+    ] + [
+        (T(value), T(expected).value) for value, expected in
+        ((0x00000001, 0x80000000),
+         (0x0000000f, 0xf0000000),
+         (0x000000ff, 0xff000000),
+         (0xf0000000, 0x0000000f),
+         (0xff000000, 0x000000ff),
+         (0xffffffff, 0xffffffff),
+         (0x00000000, 0x00000000)) for T in [glm.uint32]
+    ] + [
+        (T(value), T(expected).value) for value, expected in
+        ((0x00000000000000ff, 0xff00000000000000),
+         (0x000000000000000f, 0xf000000000000000),
+         (0xf000000000000000, 0x000000000000000f),
+         (0xffffffffffffffff, 0xffffffffffffffff),
+         (0x0000000000000000, 0x0000000000000000)) for T in [glm.uint64]
+    ]
+
+    for value, expected in cases:
+        result = glm.bitfieldReverse(value)
+        assert result == expected, (result, expected, value)
+
+def test_findMSB():
+    cases = [
+        (T(value), getattr(glm, f"ivec{get_len_of_type(T)}")(expected)) for value, expected in
+        ((0x00000000, -1),
+		 (0x00000001,  0),
+		 (0x00000002,  1),
+		 (0x00000003,  1),
+		 (0x00000004,  2),
+		 (0x00000005,  2),
+		 (0x00000007,  2),
+		 (0x00000008,  3),
+		 (0x00000010,  4),
+		 (0x00000020,  5),
+		 (0x00000040,  6),
+		 (0x00000080,  7),
+		 (0x00000100,  8),
+		 (0x00000200,  9),
+		 (0x00000400, 10),
+		 (0x00000800, 11),
+		 (0x00001000, 12),
+		 (0x00002000, 13),
+		 (0x00004000, 14),
+		 (0x00008000, 15),
+		 (0x00010000, 16),
+		 (0x00020000, 17),
+		 (0x00040000, 18),
+		 (0x00080000, 19),
+		 (0x00100000, 20),
+		 (0x00200000, 21),
+		 (0x00400000, 22),
+		 (0x00800000, 23),
+		 (0x01000000, 24),
+		 (0x02000000, 25),
+		 (0x04000000, 26),
+		 (0x08000000, 27),
+		 (0x10000000, 28),
+		 (0x20000000, 29),
+		 (0x40000000, 30)) for T in gen_type("V__iIqQ")
+    ] + [
+        (0x00000000, -1),
+		(0x00000001,  0),
+		(0x00000002,  1),
+		(0x00000003,  1),
+		(0x00000004,  2),
+		(0x00000005,  2),
+		(0x00000007,  2),
+		(0x00000008,  3),
+		(0x00000010,  4),
+		(0x00000020,  5),
+		(0x00000040,  6),
+		(0x00000080,  7),
+		(0x00000100,  8),
+		(0x00000200,  9),
+		(0x00000400, 10),
+		(0x00000800, 11),
+		(0x00001000, 12),
+		(0x00002000, 13),
+		(0x00004000, 14),
+		(0x00008000, 15),
+		(0x00010000, 16),
+		(0x00020000, 17),
+		(0x00040000, 18),
+		(0x00080000, 19),
+		(0x00100000, 20),
+		(0x00200000, 21),
+		(0x00400000, 22),
+		(0x00800000, 23),
+		(0x01000000, 24),
+		(0x02000000, 25),
+		(0x04000000, 26),
+		(0x08000000, 27),
+		(0x10000000, 28),
+		(0x20000000, 29),
+		(0x40000000, 30)
+    ]
+
+    for value, expected in cases:
+        result = glm.findMSB(value)
+        assert result == expected, (result, expected, value)
+
+def test_findLSB():
+    cases = [
+        (T(value), getattr(glm, f"ivec{get_len_of_type(T)}")(expected)) for value, expected in
+        ((0x00000001,  0),
+		 (0x00000003,  0),
+		 (0x00000002,  1),
+		 (0x00010000, 16),
+		 (0x7FFF0000, 16),
+		 (0x7F000000, 24),
+		 (0x7F00FF00,  8),
+		 (0x00000000, -1)) for T in gen_type("V__iIqQ")
+    ] + [
+        (0x00000001,  0),
+        (0x00000003,  0),
+        (0x00000002,  1),
+        (0x00010000, 16),
+        (0x7FFF0000, 16),
+        (0x7F000000, 24),
+        (0x7F00FF00,  8),
+        (0x00000000, -1)
+    ]
+
+    for value, expected in cases:
+        result = glm.findLSB(value)
+        assert result == expected, (result, expected, value)
+
+def test_uaddCarry():
+    cases = [
+        (glm.uint32(x).value, glm.uint32(y).value, glm.uint32(expected_result).value, glm.uint32(expected_carry).value) for x, y, expected_result, expected_carry in
+        ((-1, 0, -1, 0),
+         (-1, 1,  0, 1))
+    ]
+
+    for x, y, expected_result, expected_carry in cases:
+        result, carry = glm.uaddCarry(x, y)
+        assert result == expected_result, (result, expected_result, (x,y))
+        assert carry == expected_carry, (carry, expected_carry, (x,y))
+
+        for T in [getattr(glm, f"uvec{l}") for l in range(1,5)]:
+            carry = T(0)
+            result = glm.uaddCarry(T(x), T(y), carry)
+            assert result == T(expected_result), (result, expected_result, (x,y))
+            assert carry == T(expected_carry), (carry, expected_carry, (x,y))
+
+def test_usubBorrow():
+    cases = [
+        (glm.uint32(x).value, glm.uint32(y).value, glm.uint32(expected_result).value, glm.uint32(expected_borrow).value) for x, y, expected_result, expected_borrow in
+        ((16, 17, 1, 1),)
+    ]
+
+    for x, y, expected_result, expected_borrow in cases:
+        result, borrow = glm.usubBorrow(x, y)
+        assert result == expected_result, (result, expected_result, (x,y))
+        assert borrow == expected_borrow, (borrow, expected_borrow, (x,y))
+
+        for T in [getattr(glm, f"uvec{l}") for l in range(1,5)]:
+            borrow = T(0)
+            result = glm.usubBorrow(T(x), T(y), borrow)
+            assert result == T(expected_result), (result, expected_result, (x,y))
+            assert borrow == T(expected_borrow), (carry, expected_borrow, (x,y))
+
+def test_umulExtended():
+    cases = [
+        (2, 3, 0, 6)
+    ]
+
+    for x, y, expected_msb, expected_lsb in cases:
+        msb, lsb = glm.umulExtended(x, y)
+        assert msb == expected_msb, (msb, expected_msb, (x,y))
+        assert lsb == expected_lsb, (lsb, expected_lsb, (x,y))
+
+        for T in [getattr(glm, f"uvec{l}") for l in range(1,5)]:
+            msb = T(0)
+            lsb = T(0)
+            result = glm.umulExtended(T(x), T(y), msb, lsb)
+            assert msb == T(expected_msb), (msb, expected_msb, (x,y))
+            assert lsb == T(expected_lsb), (lsb, expected_lsb, (x,y))
+
+def test_imulExtended():
+    cases = [
+        (2, 3, 0, 6)
+    ]
+
+    for x, y, expected_msb, expected_lsb in cases:
+        msb, lsb = glm.imulExtended(x, y)
+        assert msb == expected_msb, (msb, expected_msb, (x,y))
+        assert lsb == expected_lsb, (lsb, expected_lsb, (x,y))
+
+        for T in [getattr(glm, f"ivec{l}") for l in range(1,5)]:
+            msb = T(0)
+            lsb = T(0)
+            result = glm.imulExtended(T(x), T(y), msb, lsb)
+            assert msb == T(expected_msb), (msb, expected_msb, (x,y))
+            assert lsb == T(expected_lsb), (lsb, expected_lsb, (x,y))
+
+def test_bitCount():
+    cases = [
+        (T(value), getattr(glm, f"ivec{get_len_of_type(T)}")(expected)) for value, expected in
+        ((0x00000001,  1),
+		 (0x00000003,  2),
+		 (0x00000002,  1),
+		 (0x000000ff,  8),
+		 (0x00000000,  0)) for T in gen_type("V__sSuU")
+    ] + [
+        (T(value), getattr(glm, f"ivec{get_len_of_type(T)}")(expected)) for value, expected in
+        ((0x00000001,  1),
+		 (0x00000003,  2),
+		 (0x00000002,  1),
+		 (0x7fffffff, 31),
+		 (0x00000000,  0)) for T in gen_type("V__iIqQ")
+    ] + [
+        (0x00000001,  1),
+		(0x00000003,  2),
+		(0x00000002,  1),
+		(0x7fffffff, 31),
+		(0x00000000,  0)
+    ]
+
+    for value, expected in cases:
+        result = glm.bitCount(value)
+        assert result == expected, (result, expected, value)
+##/core_func_integer ##
+
+## core_func_matrix ##
+def test_matrixCompMult():
+    for T in gen_type("M__fF"):
+        m = T(((0, 1, 2, 3), (4, 5, 6, 7), (8, 9, 10, 11), (12, 13, 14, 15)))
+        n = glm.matrixCompMult(m, m)
+        assert n == T(((0, 1, 4, 9), (16, 25, 36, 49), (64, 81, 100, 121), (144, 169, 196, 225)))
+
+def test_outerProduct():
+    for c in (range(2), range(3), range(4)):
+        for r in (range(4,6), range(4,7), range(4,8)):
+            result = glm.outerProduct(tuple(c), tuple(r))
+            l = [e for l in result for e in l]
+            for i in range(len(l)):
+                assert l[i] == (c[i % len(c)]) * (r[i // len(c)]), (l, c, r, i)
+
+def test_determinant():
+    for T in gen_type("M22_M33_M44__fF"):
+        L = get_len_of_type(T)
+        args = list(range(1, L + 1))
+        prod = 1
+        for arg in args:
+            prod *= arg
+
+        assert glm.determinant(T(*args)) == prod, T(*args)
+
+def test_inverse():
+    for T in gen_type("M22_M33_M44__fF"):
+        m = T(((0, 1, 2, 3), (4, 5, 6, 7), (8, 9, 10, 11), (12, 13, 14, 15)))
+        i = glm.inverse(m)
+        p = m * i
+        assert glm.equal(m, i, 0.00001)
+##/core_func_matrix ##
+
+## core_func_packing ##
+def test_packUnorm2x16():
+    cases = [
+        glm.vec2(1.0, 0.0),
+        glm.vec2(0.5, 0.7),
+        glm.vec2(0.1, 0.2)
+    ]
+
+    for case in cases:
+        packed = glm.packUnorm2x16(case)
+        unpacked = glm.unpackUnorm2x16(packed)
+        assert glm.equal(case, unpacked, 1 / 65535)
+
+def test_packSnorm2x16():
+    cases = [
+        glm.vec2( 1.0, 0.0),
+        glm.vec2(-0.5,-0.7),
+        glm.vec2(-0.1, 0.1)
+    ]
+
+    for case in cases:
+        packed = glm.packSnorm2x16(case)
+        unpacked = glm.unpackSnorm2x16(packed)
+        assert glm.equal(case, unpacked, 1 / 32767)
+
+def test_packUnorm4x8():
+    cases = [
+        glm.vec4(1.0, 0.7, 0.3, 0.0),
+        glm.vec4(0.5, 0.1, 0.2, 0.3)
+    ]
+
+    for case in cases:
+        packed = glm.packUnorm4x8(case)
+        unpacked = glm.unpackUnorm4x8(packed)
+        assert glm.equal(case, unpacked, 1 / 255)
+
+def test_packSnorm4x8():
+    cases = [
+        glm.vec4( 1.0, 0.0,-0.5,-1.0),
+        glm.vec4(-0.7,-0.1, 0.1, 0.7)
+    ]
+
+    for case in cases:
+        packed = glm.packSnorm4x8(case)
+        unpacked = glm.unpackSnorm4x8(packed)
+        assert glm.equal(case, unpacked, 1 / 127)
+
+def test_packHalf2x16():
+    cases = [
+        glm.vec2( 1.0, 2.0),
+        glm.vec2(-1.0,-2.0),
+        glm.vec2(-1.1, 1.1)
+    ]
+
+    for case in cases:
+        packed = glm.packHalf2x16(case)
+        unpacked = glm.unpackHalf2x16(packed)
+        assert glm.equal(case, unpacked, 1 / 127)
+
+def test_packDouble2x32():
+    cases = [
+        glm.uvec2( 1, 2),
+        glm.uvec2(-1,-2),
+        glm.uvec2(-1000, 1100)
+    ]
+
+    for case in cases:
+        packed = glm.packDouble2x32(case)
+        unpacked = glm.unpackDouble2x32(packed)
+        assert case == unpacked, (case, unpacked)
+##/core_func_packing ##
+
+## core_func_trigonometric ##
+def test_sin():
+    for T in gen_type("V_N__fF"):
+        v = glm.radians(glm.degrees(random.random()))
+        assert glm.equal(glm.asin(glm.sin(T(v))), T(v), 0.0001), v
+        assert glm.equal(glm.sin(T(v)), T(math.sin(v)), 0.0001), v
+        
+def test_cos():
+    for T in gen_type("V_N__fF"):
+        v = glm.radians(glm.degrees(random.random()))
+        assert glm.equal(glm.acos(glm.cos(T(v))), T(v), 0.0001), v
+        assert glm.equal(glm.cos(T(v)), T(math.cos(v)), 0.0001), v
+        
+def test_tan():
+    for T in gen_type("V_N__fF"):
+        v = glm.radians(glm.degrees(random.random()))
+        assert glm.equal(glm.atan(glm.tan(T(v))), T(v), 0.0001), v
+        assert glm.equal(glm.tan(T(v)), T(math.tan(v)), 0.0001), v
+
+def test_sinh():
+    for T in gen_type("V_N__fF"):
+        v = glm.radians(glm.degrees(random.random()))
+        assert glm.equal(glm.asinh(glm.sinh(T(v))), T(v), 0.0001), v
+        assert glm.equal(glm.sinh(T(v)), T(math.sinh(v)), 0.0001), v
+        
+def test_cosh():
+    for T in gen_type("V_N__fF"):
+        v = glm.radians(glm.degrees(random.random()))
+        assert glm.equal(glm.acosh(glm.cosh(T(v))), T(v), 0.0001), v
+        assert glm.equal(glm.cosh(T(v)), T(math.cosh(v)), 0.0001), v
+        
+def test_tanh():
+    for T in gen_type("V_N__fF"):
+        v = glm.radians(glm.degrees(random.random()))
+        assert glm.equal(glm.atanh(glm.tanh(T(v))), T(v), 0.0001), v
+        assert glm.equal(glm.tanh(T(v)), T(math.tanh(v)), 0.0001), v
+##/core_func_trigonometric ##
+
+## core_func_vector_relational ##
+def test_not():
+    for T in gen_type("V__B"):
+        b = T(False)
+        assert glm.all(glm.not_(b))
+
+def test_less():
+    for T in gen_type("V"):
+        v = T(0)
+        vp1 = v + 1 
+
+        assert glm.all(glm.lessThan(v, vp1))
+        assert glm.all(glm.lessThanEqual(v, vp1))
+        assert glm.all(glm.lessThanEqual(v, v))
+
+        assert not glm.any(glm.lessThan(vp1, v))
+        assert not glm.any(glm.lessThanEqual(vp1, v))
+
+def test_greater():
+    for T in gen_type("V"):
+        v = T(0)
+        vp1 = v + 1 
+
+        assert glm.all(glm.greaterThan(vp1, v))
+        assert glm.all(glm.greaterThanEqual(vp1, v))
+        assert glm.all(glm.greaterThanEqual(v, v))
+
+        assert not glm.any(glm.greaterThan(v, vp1))
+        assert not glm.any(glm.greaterThanEqual(v, vp1))
+
+def test_equal():
+    for T in gen_type("V"):
+        assert glm.all(glm.equal(T(0), T(0)))
+        assert not glm.any(glm.notEqual(T(0), T(0)))
+##/core_func_vector_relational ##
+
+## core_type_mat2x2 ##
+def test_mat2x2():
+    l = glm.mat2x2(1)
+    m = glm.mat2x2(1)
+    u = glm.vec2(1)
+    v = glm.vec2(1)
+    x = 1
+    a = m * u
+    b = v * m
+    n = x / m
+    o = m / x
+    p = x * m
+    q = m * x
+    assert not glm.any(glm.notEqual(m, q, 0.00001))
+    assert glm.all(glm.equal(m, l, 0.00001));
+##/core_type_mat2x2 ##
+###/GLM TESTS ###
 
 
 

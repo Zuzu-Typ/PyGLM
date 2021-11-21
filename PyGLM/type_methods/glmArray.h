@@ -68,7 +68,7 @@ glmArray_from_bytes(PyObject*, PyObject* args) {
 			return (PyObject*)out;
 		}
 
-		if (PyGLM_Ctypes_Check(typeObj)) {
+		if (PyGLM_Ctypes_CheckType(typeObj)) {
 			glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
 
 			if (out == NULL) {
@@ -197,7 +197,7 @@ glmArray_reinterpret_cast(glmArray* self, PyObject* arg) {
 			return (PyObject*)out;
 		}
 
-		if (PyGLM_Ctypes_Check(arg)) {
+		if (PyGLM_Ctypes_CheckType(arg)) {
 			glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
 
 			if (out == NULL) {
@@ -1443,7 +1443,7 @@ glmArray_as_reference(PyObject*, PyObject* arg) {
 			int C = static_cast<int>(view.shape[2]);
 
 			if (view.strides[0] != view.itemsize * C * R || view.strides[1] != view.itemsize || view.strides[2] != view.itemsize * R) {
-				PyGLM_WARN(PyGLM_NO_REFERENCE_POSSIBLE_WARNING, 3, "The given array has an incompatible memory layout, therefore it will be copied!");
+				PyGLM_WARN(PyGLM_NO_REFERENCE_POSSIBLE_WARNING, "The given array has an incompatible memory layout, therefore it will be copied!");
 
 				Py_DECREF(out->reference);
 				out->reference = NULL;
@@ -2632,7 +2632,7 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 	}
 
 	// ctypes
-	if (PyGLM_Ctypes_Check(firstElementType)) {
+	if (PyGLM_Ctypes_CheckType(firstElementType)) {
 		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(float);
 		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(double);
 		GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(int8);
@@ -2972,7 +2972,7 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 			}
 
 			// ctypes
-			if (PyGLM_Ctypes_Check(firstElementType)) {
+			if (PyGLM_Ctypes_CheckType(firstElementType)) {
 				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(float);
 				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(double);
 				GLM_ARRAY_INIT_IF_IS_CTYPES_ITER(int8);

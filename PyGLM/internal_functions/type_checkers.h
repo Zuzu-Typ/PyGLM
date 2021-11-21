@@ -2287,7 +2287,9 @@ private:
 
 #define	PyGLM_Is_PyGLM_Type(o) (((PyTypeObject*)(o))->tp_dealloc == (destructor)vec_dealloc || ((PyTypeObject*)(o))->tp_dealloc == (destructor)mvec_dealloc || ((PyTypeObject*)(o))->tp_dealloc == (destructor)mat_dealloc || ((PyTypeObject*)(o))->tp_dealloc == (destructor)qua_dealloc)
 
-#define PyGLM_Ctypes_Check(o) (((PyTypeObject*)(o))->tp_dealloc == ctypes_dealloc)
+#define PyGLM_Ctypes_CheckType(o) (((PyTypeObject*)(o))->tp_dealloc == ctypes_dealloc)
+
+#define PyGLM_Ctypes_Check(o) PyGLM_Ctypes_CheckType(Py_TYPE(o))
 
 #define PyGLM_Array_Check(o) (((PyTypeObject*)(o)) == &glmArrayType)
 

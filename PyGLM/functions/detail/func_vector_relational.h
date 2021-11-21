@@ -640,10 +640,20 @@ equal(PyObject*, PyObject* args) {
 
 	if (PyGLM_Number_Check(arg3)) {
 		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
-			pack(glm::equal(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));
+			return pack(glm::equal(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));
 		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_T_MAT | PyGLM_T_QUA | PyGLM_SHAPE_NxM | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_FD);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_T_MAT | PyGLM_T_QUA | PyGLM_SHAPE_NxM | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_FD);
+		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_T_MAT | PyGLM_T_QUA | PyGLM_SHAPE_NxM | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
+		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_T_MAT | PyGLM_T_QUA | PyGLM_SHAPE_NxM | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
+		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {
+			glm::vec<1, float> o = PyGLM_Vec_PTI_Get0(1, float, arg1);
+			glm::vec<1, float> o2 = PyGLM_Vec_PTI_Get1(1, float, arg2);
+			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
+		}
+		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2)) {
+			glm::vec<1, double> o = PyGLM_Vec_PTI_Get0(1, double, arg1);
+			glm::vec<1, double> o2 = PyGLM_Vec_PTI_Get1(1, double, arg2);
+			return pack(glm::equal(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+		}
 		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
 			glm::vec<2, float> o = PyGLM_Vec_PTI_Get0(2, float, arg1);
 			glm::vec<2, float> o2 = PyGLM_Vec_PTI_Get1(2, float, arg2);
@@ -779,7 +789,26 @@ equal(PyObject*, PyObject* args) {
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for equal()");
 		return NULL;
 	}
-	PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_INT | PyGLM_DT_FD)
+	PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_INT | PyGLM_DT_FD);
+
+	if (PyGLM_Vec_PTI_Check2(1, int, arg3)) {
+		glm::vec<1, int> o3 = PyGLM_Vec_PTI_Get2(1, int, arg3);
+		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD);
+		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD);
+		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {
+			glm::vec<1, float> o = PyGLM_Vec_PTI_Get0(1, float, arg1);
+			glm::vec<1, float> o2 = PyGLM_Vec_PTI_Get1(1, float, arg2);
+			return pack(glm::equal(o, o2, o3));
+		}
+		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2)) {
+			glm::vec<1, double> o = PyGLM_Vec_PTI_Get0(1, double, arg1);
+			glm::vec<1, double> o2 = PyGLM_Vec_PTI_Get1(1, double, arg2);
+			return pack(glm::equal(o, o2, o3));
+		}
+		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for equal()");
+		return NULL;
+	}
+
 	if (PyGLM_Vec_PTI_Check2(2, int, arg3)) {
 		glm::vec<2, int> o3 = PyGLM_Vec_PTI_Get2(2, int, arg3);
 		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_T_MAT | PyGLM_SHAPE_2 | PyGLM_SHAPE_2xM | PyGLM_DT_FD);

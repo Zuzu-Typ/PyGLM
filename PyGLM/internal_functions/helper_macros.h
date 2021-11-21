@@ -16,6 +16,10 @@
 
 #define PyGLM_TypeCheck(op, tp) (Py_TYPE(op) == tp) 
 
+#define PyGLM_Ctypes_TypeCheck(op, tp) PyGLM_TypeCheck(op, PyGLM_CTYPES_TYPE<tp>())
+
+#define PyGLM_Ctypes_Get(op, tp) (*reinterpret_cast<tp*>(reinterpret_cast<ctypes_helper*>(op)->b_ptr))
+
 #define PyGLM_FITS_IN_FLOAT(value) ((FLT_MAX >= value && value >= FLT_MIN) || (-FLT_MIN >= value && value >= -FLT_MAX))
 
 #define PyGLM_TupleOrList_Check(op) PyType_FastSubclass(Py_TYPE(op), (Py_TPFLAGS_TUPLE_SUBCLASS | Py_TPFLAGS_LIST_SUBCLASS))
@@ -27,9 +31,9 @@
 #define PyGLM_PREPROCESSOR_TOSTRING_ID(x)  #x
 #define PyGLM_PREPROCESSOR_TOSTRING(x)  PyGLM_PREPROCESSOR_TOSTRING_ID(x)
 
-#define PyGLM_WARN(flag, id, msg) PyGLM_WARN_TYPE(flag, id, PyExc_UserWarning, msg)
+#define PyGLM_WARN(id, msg) PyGLM_WARN_TYPE(id, PyExc_UserWarning, msg)
 
-#define PyGLM_WARN_TYPE(flag, id, type, msg) if (PyGLM_SHOW_WARNINGS & flag) PyErr_WarnEx(type, msg "\nYou can silence this warning by calling glm.silence(" PyGLM_PREPROCESSOR_TOSTRING(id) ")", 1)
+#define PyGLM_WARN_TYPE(id, type, msg) if (PyGLM_SHOW_WARNINGS & (1ull << id)) PyErr_WarnEx(type, msg "\nYou can silence this warning by calling glm.silence(" PyGLM_PREPROCESSOR_TOSTRING(id) ")", 1)
 
 #define PyGLM_free(ptr) PyMem_Free(ptr); ptr = NULL;
 
