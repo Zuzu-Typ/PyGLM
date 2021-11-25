@@ -13,7 +13,7 @@ ceilMultiple_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2;
 	PyGLM_Arg_Unpack_2O(args, "ceilMultiple", arg1, arg2);
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
-		int64 o2 = PyGLM_Number_FromPyObject<int64>(arg2);
+		int64 o2 = _PyGLM_Long_As_Number_No_Error<int64>(arg2);
 		PyGLM_ASSERT((o2 > 0), "Invalid Multiple. Must be positive");
 		return pack(glm::ceilMultiple(PyGLM_Number_FromPyObject<int64>(arg1), o2));
 	}
