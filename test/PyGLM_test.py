@@ -3555,23 +3555,6 @@ def test_equal():
         assert glm.all(glm.equal(T(0), T(0)))
         assert not glm.any(glm.notEqual(T(0), T(0)))
 ##/core_func_vector_relational ##
-
-## core_type_mat2x2 ##
-def test_mat2x2():
-    l = glm.mat2x2(1)
-    m = glm.mat2x2(1)
-    u = glm.vec2(1)
-    v = glm.vec2(1)
-    x = 1
-    a = m * u
-    b = v * m
-    n = x / m
-    o = m / x
-    p = x * m
-    q = m * x
-    assert not glm.any(glm.notEqual(m, q, 0.00001))
-    assert glm.all(glm.equal(m, l, 0.00001));
-##/core_type_mat2x2 ##
 ###/GLM TESTS ###
 
 

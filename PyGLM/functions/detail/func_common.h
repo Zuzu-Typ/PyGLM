@@ -1863,7 +1863,7 @@ clamp_(PyObject*, PyObject* args) {
 		return pack(glm::clamp(PyFloat_AS_DOUBLE(arg1), PyFloat_AS_DOUBLE(arg2), PyFloat_AS_DOUBLE(arg3)));
 	}
 	if (PyLong_Check(arg1) && PyLong_Check(arg2) && PyLong_Check(arg3)) {
-		return pack(glm::clamp(PyLong_AS_LONG(arg1), PyLong_AS_LONG(arg2), PyLong_AS_LONG(arg3)));
+		return pack(glm::clamp(_PyGLM_Long_As_Number_No_Error<int64>(arg1), _PyGLM_Long_As_Number_No_Error<int64>(arg2), _PyGLM_Long_As_Number_No_Error<int64>(arg3)));
 	}
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
 		return pack(glm::clamp(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));
@@ -4523,7 +4523,7 @@ PyDoc_STRVAR(intBitsToFloat_docstr,
 static PyObject*
 intBitsToFloat_(PyObject*, PyObject* arg) {
 	if (PyLong_Check(arg)) {
-		int i = static_cast<int>(PyLong_AS_LONG(arg));
+		int i = static_cast<int>(_PyGLM_Long_As_Number_No_Error<long>(arg));
 		return PyGLM_PyObject_FromNumber<float>(glm::intBitsToFloat(i));
 	}
 	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_INT);
@@ -4560,7 +4560,7 @@ PyDoc_STRVAR(uintBitsToFloat_docstr,
 static PyObject*
 uintBitsToFloat_(PyObject*, PyObject* arg) {
 	if (PyLong_Check(arg)) {
-		unsigned int i = static_cast<unsigned int>(PyLong_AsUnsignedLong(arg));
+		unsigned int i = static_cast<unsigned int>(_PyGLM_Long_As_Number_No_Error<unsigned long>(arg));
 		return PyGLM_PyObject_FromNumber<float>(glm::uintBitsToFloat(i));
 	}
 	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_UINT);
@@ -4602,7 +4602,7 @@ modf_(PyObject*, PyObject* args) {
 
 			return Py_BuildValue("(d, d)", f, i);
 		}
-		PyGLM_TYPEERROR_O("invalid argument type(s) for intBitsToFloat(): ", arg);
+		PyGLM_TYPEERROR_O("invalid argument type(s) for modf(): ", arg);
 		return NULL;
 	}
 	PyObject *arg1, *arg2;

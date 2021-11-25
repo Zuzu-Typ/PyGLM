@@ -83,7 +83,7 @@ PyDoc_STRVAR(atan_docstr,
 );
 static PyObject*
 atan_(PyObject*, PyObject* args) {
-	PyObject* arg1 = NULL, *arg2 = NULL;
+	PyObject* arg1, *arg2 = NULL;
 	if (!PyArg_UnpackTuple(args, "atan", 1, 2, &arg1, &arg2)) {
 		PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for atan()");
 		return NULL;
