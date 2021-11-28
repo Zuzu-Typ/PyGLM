@@ -1,1 +1,1 @@
-#define PyGLM_VERSION "2.5.6"
+#define PyGLM_VERSION "2.5.7"
