@@ -136,6 +136,8 @@ For Qua:
 #define PyGLM_SHAPE_3		0x0400000
 #define PyGLM_SHAPE_4		0x0800000
 
+#define PyGLM_SHAPE_VEC_ALL (PyGLM_SHAPE_1 | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4)
+
 #define PyGLM_T_VEC_ONLY	0x1000000
 #define PyGLM_T_MVEC		0x2000000
 #define PyGLM_T_VEC			(PyGLM_T_VEC_ONLY | PyGLM_T_MVEC)
@@ -175,6 +177,8 @@ typedef int32_t		int32;
 typedef uint32_t	uint32;
 typedef int64_t		int64;
 typedef uint64_t	uint64;
+
+enum SourceType { NONE, PyGLM_VEC, PyGLM_MVEC, PyGLM_MAT, PyGLM_QUA, PTI };
 
 template<typename T>
 constexpr uint8_t get_type_helper_type() {
@@ -329,7 +333,6 @@ struct glmArrayIter {
 	glmArray* sequence;
 };
 
-
 struct PyGLMTypeObject {
 	PyTypeObject typeObject;
 	uint8 glmType;
@@ -343,6 +346,9 @@ struct PyGLMTypeObject {
 	int PTI_info;
 
 	PyTypeObject* subtype;
+
+	SourceType sourceType;
+
 	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, Py_ssize_t dtSize, Py_ssize_t itemSize, char format) :
 		PyGLMTypeObject(typeObject, glmType, C, R, dtSize, itemSize, format, (PyTypeObject*)this) {}
 
@@ -350,6 +356,8 @@ struct PyGLMTypeObject {
 		: typeObject(typeObject), glmType(glmType), C(C), R(R), dtSize(dtSize), itemSize(itemSize), format(format), subtype(subtype) {
 
 		if (glmType == PyGLM_TYPE_VEC) {
+			sourceType = SourceType::PyGLM_VEC;
+
 			int shape = (C == 1) ? PyGLM_SHAPE_1 : (C == 2) ? PyGLM_SHAPE_2 : (C == 3) ? PyGLM_SHAPE_3 : PyGLM_SHAPE_4;
 
 			int type_info = (format == PyGLM_FS_FLOAT) ? PyGLM_DT_FLOAT :
@@ -367,6 +375,8 @@ struct PyGLMTypeObject {
 			PTI_info = shape | type_info | PyGLM_T_VEC;
 		}
 		else if (glmType == PyGLM_TYPE_MAT) {
+			sourceType = SourceType::PyGLM_MAT;
+
 			int shape = (C == 2) ? (R == 2) ? PyGLM_SHAPE_2x2 : (R == 3) ? PyGLM_SHAPE_2x3 : PyGLM_SHAPE_2x4 :
 				(C == 3) ? (R == 2) ? PyGLM_SHAPE_3x2 : (R == 3) ? PyGLM_SHAPE_3x3 : PyGLM_SHAPE_3x4 :
 				(R == 2) ? PyGLM_SHAPE_4x2 : (R == 3) ? PyGLM_SHAPE_4x3 : PyGLM_SHAPE_4x4;
@@ -379,12 +389,16 @@ struct PyGLMTypeObject {
 			PTI_info = shape | type_info | PyGLM_T_MAT;
 		}
 		else if (glmType == PyGLM_TYPE_QUA) {
+			sourceType = SourceType::PyGLM_QUA;
+
 			int type_info = (format == PyGLM_FS_FLOAT) ? PyGLM_DT_FLOAT :
 				PyGLM_DT_DOUBLE;
 
 			PTI_info = type_info | PyGLM_T_QUA;
 		}
 		else {
+			sourceType = SourceType::PyGLM_MVEC;
+
 			int shape = (C == 1) ? PyGLM_SHAPE_1 : (C == 2) ? PyGLM_SHAPE_2 : (C == 3) ? PyGLM_SHAPE_3 : PyGLM_SHAPE_4;
 
 			int type_info = (format == PyGLM_FS_FLOAT) ? PyGLM_DT_FLOAT :

@@ -6,6 +6,83 @@
 
 #include "../internal_functions/all.h"
 
+// Repeats the code with T in [float, double, int32, uint32, int64, uint64, int16, uint16, int8, uint8, bool]
+#define PyGLM_CODEGEN_PARAM_T_Vec_ALL(MACRO, L)\
+MACRO(L, float)\
+MACRO(L, double)\
+MACRO(L, int32)\
+MACRO(L, uint32)\
+MACRO(L, int64)\
+MACRO(L, uint64)\
+MACRO(L, int16)\
+MACRO(L, uint16)\
+MACRO(L, int8)\
+MACRO(L, uint8)\
+MACRO(L, bool)
+
+// Repeats the code with T in [float, double, int32, uint32, int64, uint64, int16, uint16, int8, uint8]
+#define PyGLM_CODEGEN_PARAM_T_Vec_fFiqsuIQSU(MACRO, L)\
+MACRO(L, float)\
+MACRO(L, double)\
+MACRO(L, int32)\
+MACRO(L, uint32)\
+MACRO(L, int64)\
+MACRO(L, uint64)\
+MACRO(L, int16)\
+MACRO(L, uint16)\
+MACRO(L, int8)\
+MACRO(L, uint8)
+
+// Repeats the code with T in [float, double, int32, int64, int16, int8]
+#define PyGLM_CODEGEN_PARAM_T_Vec_fFiqsu(MACRO, L)\
+MACRO(L, float)\
+MACRO(L, double)\
+MACRO(L, int32)\
+MACRO(L, int64)\
+MACRO(L, int16)\
+MACRO(L, int8)
+
+// Repeats the code with T in [float, double, int32, uint32]
+#define PyGLM_CODEGEN_PARAM_T_Mat_fFiI(MACRO, C, R)\
+MACRO(C, R, float)\
+MACRO(C, R, double)\
+MACRO(C, R, int32)\
+MACRO(C, R, uint32)
+
+// Repeats the code with T in [float, double]
+#define PyGLM_CODEGEN_PARAM_T_Vec_fF(MACRO, L)\
+MACRO(L, float)\
+MACRO(L, double)
+
+// Repeats the code with T in [float, double]
+#define PyGLM_CODEGEN_PARAM_T_Qua_fF(MACRO)\
+MACRO(float)\
+MACRO(double)
+
+// Runs T_MACRO(CODE_MACRO, L) for L in [1, 2, 3, 4]
+#define PyGLM_CODEGEN_PARAM_L_ALL(T_MACRO, CODE_MACRO)\
+T_MACRO(CODE_MACRO, 1) \
+T_MACRO(CODE_MACRO, 2) \
+T_MACRO(CODE_MACRO, 3) \
+T_MACRO(CODE_MACRO, 4)
+
+// Runs T_MACRO(CODE_MACRO, S, S) for S in [2, 3, 4]
+#define PyGLM_CODEGEN_PARAM_S_ALL(T_MACRO, CODE_MACRO)\
+T_MACRO(CODE_MACRO, 2, 2) \
+T_MACRO(CODE_MACRO, 3, 3) \
+T_MACRO(CODE_MACRO, 4, 4)
+
+// Runs T_MACRO(CODE_MACRO, C, R) for R in [2, 3, 4]
+#define PyGLM_CODEGEN_PARAM_R_ALL(C, T_MACRO, CODE_MACRO)\
+T_MACRO(CODE_MACRO, C, 2) \
+T_MACRO(CODE_MACRO, C, 3) \
+T_MACRO(CODE_MACRO, C, 4)
+
+// Runs R_MACRO(C, T_MACRO, CODE_MACRO) for C in [2, 3, 4]
+#define PyGLM_CODEGEN_PARAM_C_ALL(R_MACRO, T_MACRO, CODE_MACRO)\
+R_MACRO(2, T_MACRO, CODE_MACRO) \
+R_MACRO(3, T_MACRO, CODE_MACRO) \
+R_MACRO(4, T_MACRO, CODE_MACRO)
 
 #define PyGLM_MAKE_GLM_FUNC_V3__tfF(NAME)\
 static PyObject*\

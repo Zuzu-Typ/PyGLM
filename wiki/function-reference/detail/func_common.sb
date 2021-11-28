@@ -36,29 +36,34 @@ It contains common GLSL functions.
 \raw\#### <code>glm.<code>**abs**(**x**: *float*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\x\code\ if \code\x >= 0\code\; otherwise it returns \code\-x\code\.
 
-\raw\#### <code>glm.<code>**abs**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**abs**(**x**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\For each component \code\c\code\ of \code\x\code\,
 \raw\&emsp;&emsp;\raw\Returns \code\c\code\ if \code\c >= 0\code\; otherwise it returns \code\-c\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\ceil() function\h3\
 \raw\#### <code>glm.<code>**ceil**(**x**: *float*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer that is greater than or equal to \code\x\code\.
 
-\raw\#### <code>glm.<code>**ceil**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**ceil**(**x**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\For each component \code\c\code\ of \code\x\code\,
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer that is greater than or equal to \code\c\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\clamp() function\h3\
-\raw\#### <code>glm.<code>**clamp**(**x**: *number*, **minVal**: *number*, **maxVal**: *number*) -\\> *number*</code></code>\raw\
+\raw\#### <code>glm.<code>**clamp**(**x**: *N*, **minVal**: *N*, **maxVal**: *N*) -\\> *N*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\min(max(x, minVal), maxVal)\code\.
+\raw\&emsp;&emsp;\raw\\code\N is float or int\code\
 
-\raw\#### <code>glm.<code>**clamp**(**x**: *vecN*, **minVal**: *number*, **maxVal**: *number*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**clamp**(**x**: *TvecN*, **minVal**: *number*, **maxVal**: *number*) -\\> *TvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\min(max(x, minVal), maxVal)\code\ for each component in \code\x\code\ using the floating-point values
 \raw\&emsp;&emsp;\raw\\code\minVal\code\ and \code\maxVal\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***T*** in [**f**, **d**, **i32**, **u32**, **i64**, **u64**, **i16**, **u16**, **i8**, **u8**]</code>\raw\
 
-\raw\#### <code>glm.<code>**clamp**(**x**: *vecN*, **minVal**: *vecN*, **maxVal**: *vecN*) -\\> *vecN*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns \code\min(max(x, minVal), maxVal)\code\ for each component in \code\x\code\ using the floating-point values
+\raw\#### <code>glm.<code>**clamp**(**x**: *TvecN*, **minVal**: *TvecN*, **maxVal**: *TvecN*) -\\> *TvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\min(max(x, minVal), maxVal)\code\ for each component in \code\x\code\ using the values
 \raw\&emsp;&emsp;\raw\\code\minVal\code\ and \code\maxVal\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***T*** in [**f**, **d**, **i32**, **u32**, **i64**, **u64**, **i16**, **u16**, **i8**, **u8**]</code>\raw\
 
 \h3\floatBitsToInt() function\h3\
 \raw\#### <code>glm.<code>**floatBitsToInt**(**v**: *float*) -\\> *int*</code></code>\raw\
@@ -82,9 +87,10 @@ It contains common GLSL functions.
 \raw\#### <code>glm.<code>**floor**(**x**: *float*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer that is less then or equal to \code\x\code\.
 
-\raw\#### <code>glm.<code>**floor**(**v**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**floor**(**v**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\For each component \code\c\code\ of \code\v\code\:
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer that is less then or equal to \code\c\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\fma() function\h3\
 \raw\#### <code>glm.<code>**fma**(**a**: *float*, **b**: *float*, **c**: *float*) -\\> *float*</code></code>\raw\
@@ -95,61 +101,71 @@ It contains common GLSL functions.
 \raw\&emsp;&emsp;\raw\Returns \code\y\code\ if \code\x < y\code\; otherwise, it returns \code\x\code\. If one of the two arguments is \code\NaN\code\, the value
 \raw\&emsp;&emsp;\raw\of the other argument is returned.
 
-\raw\#### <code>glm.<code>**fmax**(**x**: *vecN*, **y**: *number*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**fmax**(**x**: *FvecN*, **y**: *number*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\For each component \code\c\code\ of \code\x\code\:
 \raw\&emsp;&emsp;\raw\Returns \code\y\code\ if \code\c < y\code\; otherwise, it returns \code\c\code\. If one of the two arguments is \code\NaN\code\, the value
 \raw\&emsp;&emsp;\raw\of the other argument is returned.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
-\raw\#### <code>glm.<code>**fmax**(**x**: *vecN*, **y**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**fmax**(**x**: *FvecN*, **y**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\For every index \code\i\code\:
 \raw\&emsp;&emsp;\raw\Returns \code\y[i]\code\ if \code\x[i] < y[i]\code\; otherwise, it returns \code\x[i]\code\. If one of the two arguments is
 \raw\&emsp;&emsp;\raw\\code\NaN\code\, the value of the other argument is returned.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
-\raw\#### <code>glm.<code>**fmax**(**a**: *vecN*, **b**: *vecN*, **c**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**fmax**(**a**: *FvecN*, **b**: *FvecN*, **c**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\fmax(fmax(a, b), c)\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
-\raw\#### <code>glm.<code>**fmax**(**a**: *vecN*, **b**: *vecN*, **c**: *vecN*, **d**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**fmax**(**a**: *FvecN*, **b**: *FvecN*, **c**: *FvecN*, **d**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\fmax(fmax(a, b), fmax(c, d))\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\fmin() function\h3\
 \raw\#### <code>glm.<code>**fmin**(**x**: *number*, **y**: *number*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\y\code\ if \code\y < x\code\; otherwise, it returns \code\x\code\. If one of the two arguments is \code\NaN\code\, the value
 \raw\&emsp;&emsp;\raw\of the other argument is returned.
 
-\raw\#### <code>glm.<code>**fmin**(**x**: *vecN*, **y**: *number*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**fmin**(**x**: *FvecN*, **y**: *number*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\For each component \code\c\code\ of \code\x\code\:
 \raw\&emsp;&emsp;\raw\Returns \code\y\code\ if \code\y < c\code\; otherwise, it returns \code\c\code\. If one of the two arguments is \code\NaN\code\, the value
 \raw\&emsp;&emsp;\raw\of the other argument is returned.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
-\raw\#### <code>glm.<code>**fmin**(**x**: *vecN*, **y**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**fmin**(**x**: *FvecN*, **y**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\For every index \code\i\code\:
 \raw\&emsp;&emsp;\raw\Returns \code\y[i]\code\ if \code\y[i] < x[i]\code\; otherwise, it returns \code\x[i]\code\. If one of the two arguments is
 \raw\&emsp;&emsp;\raw\\code\NaN\code\, the value of the other argument is returned.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
-\raw\#### <code>glm.<code>**fmin**(**a**: *vecN*, **b**: *vecN*, **c **: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**fmin**(**a**: *FvecN*, **b**: *FvecN*, **c **: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\fmin(fmin(a, b), c)\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
-\raw\#### <code>glm.<code>**fmin**(**a**: *vecN*, **b**: *vecN*, **c **: *vecN*, **d**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**fmin**(**a**: *FvecN*, **b**: *FvecN*, **c **: *FvecN*, **d**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\fmin(fmin(a, b), fmin(c, d))\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\fract() function\h3\
 \raw\#### <code>glm.<code>**fract**(**x**: *float*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\x - floor(x)\code\.
 
-\raw\#### <code>glm.<code>**fract**(**c**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**fract**(**c**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\x - floor(x)\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\frexp() function\h3\
 \raw\#### <code>glm.<code>**frexp**(**x**: *float*) -\\> *(significant: float, exponent: int)*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Splits \code\x\code\ into a floating-point significand in the range \code\[0.5, 1.0)\code\ and an integral exponent
 \raw\&emsp;&emsp;\raw\of two, such that: \code\x = significand * exp(2, exponent)\code\
 
-\raw\#### <code>glm.<code>**frexp**(**x**: *vecN*, **exp**: *ivecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**frexp**(**x**: *FvecN*, **exp**: *ivecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Splits \code\x\code\ into a floating-point significand in the range \code\[0.5, 1.0)\code\ and an integral exponent
 \raw\&emsp;&emsp;\raw\of two, such that: \code\x = significand * exp(2, exponent)\code\
 \raw\&emsp;&emsp;\raw\The significand is returned by the function and the exponent is returned in the parameter
 \raw\&emsp;&emsp;\raw\\code\exp\code\. For a floating-point value of zero, the significantand exponent are both zero. For a
 \raw\&emsp;&emsp;\raw\floating-point value that is an infinity or is not a number, the results are undefined.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\intBitsToFloat() function\h3\
 \raw\#### <code>glm.<code>**intBitsToFloat**(**v**: *int*) -\\> *float*</code></code>\raw\
@@ -168,10 +184,11 @@ It contains common GLSL functions.
 \raw\&emsp;&emsp;\raw\underlying implementation's set of floating point representations.
 \raw\&emsp;&emsp;\raw\Returns \code\False\code\ otherwise, including for implementations with no infinity representations.
 
-\raw\#### <code>glm.<code>**isinf**(**x**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**isinf**(**x**: *FvecN*) -\\> *bvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\True\code\ if \code\x\code\ holds a positive infinity or negative infinity representation in the
 \raw\&emsp;&emsp;\raw\underlying implementation's set of floating point representations.
 \raw\&emsp;&emsp;\raw\Returns \code\False\code\ otherwise, including for implementations with no infinity representations.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \raw\#### <code>glm.<code>**isinf**(**x**: *quat*) -\\> *bvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\True\code\ if \code\x\code\ holds a positive infinity or negative infinity representation in the
@@ -184,10 +201,11 @@ It contains common GLSL functions.
 \raw\&emsp;&emsp;\raw\implementation's set of floating point representations.
 \raw\&emsp;&emsp;\raw\Returns \code\False\code\ otherwise, including for implementations with no \code\NaN\code\ representations.
 
-\raw\#### <code>glm.<code>**isnan**(**x**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**isnan**(**x**: *FvecN*) -\\> *bvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\True\code\ if \code\x\code\ holds a \code\NaN\code\ (not a number) representation in the underlying
 \raw\&emsp;&emsp;\raw\implementation's set of floating point representations.
 \raw\&emsp;&emsp;\raw\Returns \code\False\code\ otherwise, including for implementations with no \code\NaN\code\ representations.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \raw\#### <code>glm.<code>**isnan**(**x**: *quat*) -\\> *bvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\True\code\ if \code\x\code\ holds a \code\NaN\code\ (not a number) representation in the underlying
@@ -200,10 +218,11 @@ It contains common GLSL functions.
 \raw\&emsp;&emsp;\raw\\code\exp\code\, returning: \code\significand * exp(2, exponent)\code\. If this product is too large to be
 \raw\&emsp;&emsp;\raw\represented in the floating-point type, the result is undefined.
 
-\raw\#### <code>glm.<code>**ldexp**(**x**: *vecN*, **exp**: *ivecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**ldexp**(**x**: *FvecN*, **exp**: *ivecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Builds a floating-point number from \code\x\code\ and the corresponding integral exponent of two in
 \raw\&emsp;&emsp;\raw\\code\exp\code\, returning: \code\significand * exp(2, exponent)\code\. If this product is too large to be
 \raw\&emsp;&emsp;\raw\represented in the floating-point type, the result is undefined.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\max() function\h3\
 \raw\#### <code>glm.<code>**max**(**x**: *number*, **y**: *number*) -\\> *float*</code></code>\raw\
@@ -256,30 +275,33 @@ It contains common GLSL functions.
 \raw\&emsp;&emsp;\raw\Returns the smallest number or the minimum component wise value respectively.
 
 \h3\mix() function\h3\
-\raw\#### <code>glm.<code>**mix**(**x**: *number*, **y**: *number*, **a**: *float*) -\\> *number*</code></code>\raw\
+\raw\#### <code>glm.<code>**mix**(**x**: *number*, **y**: *number*, **a**: *N*) -\\> *number*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the floating-point
 \raw\&emsp;&emsp;\raw\value \code\a\code\. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***N*** in [**float**, **int**]</code>\raw\
 
 \raw\#### <code>glm.<code>**mix**(**x**: *number*, **y**: *number*, **a**: *bool*) -\\> *number*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\y\code\ if \code\a\code\ is \code\True\code\ and \code\x\code\ otherwise.
 
-\raw\#### <code>glm.<code>**mix**(**x**: *vecN*, **y**: *vecN*, **a**: *fvecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**mix**(**x**: *vecN*, **y**: *vecN*, **a**: *FvecN*) -\\> *vecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the floating-point
 \raw\&emsp;&emsp;\raw\value \code\a\code\. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \raw\#### <code>glm.<code>**mix**(**x**: *vecN*, **y**: *vecN*, **a**: *bvecN*) -\\> *vecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\For each component index \code\i\code\:
 \raw\&emsp;&emsp;\raw\Returns \code\y[i]\code\ if \code\a[i]\code\ is \code\True\code\ and \code\x[i]\code\ otherwise.
 
-\raw\#### <code>glm.<code>**mix**(**x**: *matNxM*, **y**: *matNxM*, **a**: *fmatNxM*) -\\> *matNxM*</code></code>\raw\
+\raw\#### <code>glm.<code>**mix**(**x**: *matSxS*, **y**: *matSxS*, **a**: *FmatSxS*) -\\> *matSxS*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the floating-point
+\raw\&emsp;&emsp;\raw\value \code\a\code\ for each component. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
+
+\raw\#### <code>glm.<code>**mix**(**x**: *matSxS*, **y**: *matSxS*, **a**: *number*) -\\> *matSxS*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the floating-point
 \raw\&emsp;&emsp;\raw\value \code\a\code\ for each component. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
 
-\raw\#### <code>glm.<code>**mix**(**x**: *matNxM*, **y**: *matNxM*, **a**: *float*) -\\> *matNxM*</code></code>\raw\
-\raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the floating-point
-\raw\&emsp;&emsp;\raw\value \code\a\code\ for each component. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
-
-\raw\#### <code>glm.<code>**mix**(**x**: *quat*, **y**: *quat*, **a**: *float*) -\\> *quat*</code></code>\raw\
+\raw\#### <code>glm.<code>**mix**(**x**: *quat*, **y**: *quat*, **a**: *number*) -\\> *quat*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Spherical linear interpolation of two quaternions. The interpolation is oriented and the
 \raw\&emsp;&emsp;\raw\rotation is performed at constant speed. For short path spherical linear interpolation, use
 \raw\&emsp;&emsp;\raw\the \code\slerp\code\ function.
@@ -292,9 +314,10 @@ It contains common GLSL functions.
 \raw\#### <code>glm.<code>**modf**(**x**: *float*) -\\> *(fraction, integer)*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns the fractional part of \code\x\code\ and the integer part (as a whole number floating point value).
 
-\raw\#### <code>glm.<code>**modf**(**x**: *vecN*, **i**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**modf**(**x**: *FvecN*, **i**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns the fractional part of \code\x\code\ and sets \code\i\code\ to the integer part (as a whole number floating
 \raw\&emsp;&emsp;\raw\point value).
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\round() function\h3\
 \raw\#### <code>glm.<code>**round**(**x**: *number*) -\\> *float*</code></code>\raw\
@@ -302,28 +325,31 @@ It contains common GLSL functions.
 \raw\&emsp;&emsp;\raw\direction chosen by the implementation, presumably the direction that is fastest. This
 \raw\&emsp;&emsp;\raw\includes the possibility that \code\round(x)\code\ returns the same value as \code\roundEven(x)\code\
 
-\raw\#### <code>glm.<code>**round**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**round**(**x**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer to \code\x\code\. The fraction \code\0.5\code\ will round in a
 \raw\&emsp;&emsp;\raw\direction chosen by the implementation, presumably the direction that is fastest. This
 \raw\&emsp;&emsp;\raw\includes the possibility that \code\round(x)\code\ returns the same value as \code\roundEven(x)\code\ for all
 \raw\&emsp;&emsp;\raw\values of \code\x\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\roundEven() function\h3\
 \raw\#### <code>glm.<code>**roundEven**(**x**: *number*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer to \code\x\code\. A fractional part of \code\0.5\code\ will round
 \raw\&emsp;&emsp;\raw\toward the nearest even integer. (Both \code\3.5\code\ and \code\4.5\code\ for \code\x\code\ will return \code\4.0\code\.)
 
-\raw\#### <code>glm.<code>**roundEven**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**roundEven**(**x**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer to \code\x\code\. A fractional part of \code\0.5\code\ will round
 \raw\&emsp;&emsp;\raw\toward the nearest even integer. (Both \code\3.5\code\ and \code\4.5\code\ for \code\x\code\ will return \code\4.0\code\.)
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\sign() function\h3\
 \raw\#### <code>glm.<code>**sign**(**x**: *number*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\1.0\code\ if \code\x > 0\code\, \code\0.0\code\ if \code\x == 0\code\, or \code\-1.0\code\ if \code\x < 0\code\.
 
-\raw\#### <code>glm.<code>**sign**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**sign**(**x**: *TvecN*) -\\> *TvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\For every component \code\c\code\ of \code\x\code\:
 \raw\&emsp;&emsp;\raw\Returns \code\1.0\code\ if \code\x > 0\code\, \code\0.0\code\ if \code\x == 0\code\, or \code\-1.0\code\ if \code\x < 0\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***T*** in [**f**, **d**, **i8**, **i16**, **i32**, **i64**]</code>\raw\
 
 \h3\smoothstep() function\h3\
 \raw\#### <code>glm.<code>**smoothstep**(**edge0**: *number*, **edge1**: *number*, **x**: *number*) -\\> *float*</code></code>\raw\
@@ -334,21 +360,23 @@ It contains common GLSL functions.
 \raw\&emsp;&emsp;\raw\\code\return t * t * (3 - 2 * t)\code\
 \raw\&emsp;&emsp;\raw\Results are undefined if \code\edge0 >= edge1\code\.
 
-\raw\#### <code>glm.<code>**smoothstep**(**edge0**: *number*, **edge1**: *number*, **x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**smoothstep**(**edge0**: *number*, **edge1**: *number*, **x**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\0.0\code\ if \code\x <= edge0\code\ and \code\1.0\code\ if \code\x >= edge1\code\ and performs smooth Hermite interpolation
 \raw\&emsp;&emsp;\raw\between \code\0\code\ and \code\1\code\ when \code\edge0 < x < edge1\code\. This is useful in cases where you would want a
 \raw\&emsp;&emsp;\raw\threshold function with a smooth transition. This is equivalent to :
 \raw\&emsp;&emsp;\raw\\code\t = clamp((x - edge0) / (edge1 - edge0), 0, 1)\code\
 \raw\&emsp;&emsp;\raw\\code\return t * t * (3 - 2 * t)\code\
 \raw\&emsp;&emsp;\raw\Results are undefined if \code\edge0 >= edge1\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
-\raw\#### <code>glm.<code>**smoothstep**(**edge0**: *vecN*, **edge1**: *vecN*, **x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**smoothstep**(**edge0**: *FvecN*, **edge1**: *FvecN*, **x**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\0.0\code\ if \code\x <= edge0\code\ and \code\1.0\code\ if \code\x >= edge1\code\ and performs smooth Hermite interpolation
 \raw\&emsp;&emsp;\raw\between \code\0\code\ and \code\1\code\ when \code\edge0 < x < edge1\code\. This is useful in cases where you would want a
 \raw\&emsp;&emsp;\raw\threshold function with a smooth transition. This is equivalent to :
 \raw\&emsp;&emsp;\raw\\code\t = clamp((x - edge0) / (edge1 - edge0), 0, 1)\code\
 \raw\&emsp;&emsp;\raw\\code\return t * t * (3 - 2 * t)\code\
 \raw\&emsp;&emsp;\raw\Results are undefined if \code\edge0 >= edge1\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\step() function\h3\
 \raw\#### <code>glm.<code>**step**(**edge**: *number*, **x**: *number*) -\\> *float*</code></code>\raw\
@@ -367,10 +395,11 @@ It contains common GLSL functions.
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer to \code\x\code\ whose absolute value is not larger than
 \raw\&emsp;&emsp;\raw\the absolute value of \code\x\code\.
 
-\raw\#### <code>glm.<code>**trunc**(**x**: *vecN*) -\\> *vecN*</code></code>\raw\
+\raw\#### <code>glm.<code>**trunc**(**x**: *FvecN*) -\\> *FvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\For every component \code\c\code\ of \code\x\code\:
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer to \code\c\code\ whose absolute value is not larger than
 \raw\&emsp;&emsp;\raw\the absolute value of \code\c\code\.
+\raw\&emsp;&emsp;\raw\\raw\<code>***F*** in [**f**, **d**]</code>\raw\
 
 \h3\uintBitsToFloat() function\h3\
 \raw\#### <code>glm.<code>**uintBitsToFloat**(**v**: *int*) -\\> *float*</code></code>\raw\

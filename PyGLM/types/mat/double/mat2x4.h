@@ -3,6 +3,7 @@
 #include "../forward_declarations.h"
 
 static PyMethodDef hdmat2x4_methods[] = {
+	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<2>, METH_NOARGS, "returns the length of glm::dmat2x4"},
@@ -10,7 +11,6 @@ static PyMethodDef hdmat2x4_methods[] = {
 	{ "__setstate__", (PyCFunction)mat_setstate<2, 4, double>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)mat_to_list<2, 4, double>, METH_NOARGS, "Return the components of this matrix as a nested list"},
 	{ "to_tuple", (PyCFunction)mat_to_tuple<2, 4, double>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
-	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ "from_bytes", (PyCFunction)mat_from_bytes<2, 4, double>, METH_O | METH_STATIC, "Create a matrix from a bytes string"},
 	{ NULL }
 };

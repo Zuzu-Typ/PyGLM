@@ -5,13 +5,13 @@
 #include "../../vec/all.h"
 
 static PyMethodDef himvec4_methods[] = {
+	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ "__copy__", (PyCFunction)mvec_copy<4, glm::i32>, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<4, glm::i32>, METH_O, "Create a (deep)copy of this instance"},
 	{ "__getstate__", (PyCFunction)mvec4_to_tuple<glm::i32>, METH_NOARGS, "Returns a picklable state of this object"},
 	{ "__setstate__", (PyCFunction)mvec4_setstate<glm::i32>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)mvec4_to_list<glm::i32>, METH_NOARGS, "Return the components of this vector as a list"},
 	{ "to_tuple", (PyCFunction)mvec4_to_tuple<glm::i32>, METH_NOARGS, "Return the components of this vector as a tuple"},
-	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ NULL }  /* Sentinel */
 };
 static PyBufferProcs himvec4BufferMethods = {

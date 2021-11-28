@@ -3,6 +3,7 @@
 #include "../forward_declarations.h"
 
 static PyMethodDef humat4x3_methods[] = {
+	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::umat4x3"},
@@ -10,7 +11,6 @@ static PyMethodDef humat4x3_methods[] = {
 	{ "__setstate__", (PyCFunction)mat_setstate<4, 3, glm::u32>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)mat_to_list<4, 3, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested list"},
 	{ "to_tuple", (PyCFunction)mat_to_tuple<4, 3, glm::u32>, METH_NOARGS, "Return the components of this matrix as a nested tuple"},
-	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ "from_bytes", (PyCFunction)mat_from_bytes<4, 3, glm::u32>, METH_O | METH_STATIC, "Create a matrix from a bytes string"},
 	{ NULL }
 };

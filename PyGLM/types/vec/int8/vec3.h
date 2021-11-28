@@ -11,13 +11,13 @@ static PyMemberDef hi8vec3_members[] = {
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef hi8vec3_methods[] = {
+	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ "__getstate__", (PyCFunction)vec3_to_tuple<glm::i8>, METH_NOARGS, "Returns a picklable state of this object"},
 	{ "__setstate__", (PyCFunction)vec3_setstate<glm::i8>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)vec3_to_list<glm::i8>, METH_NOARGS, "Return the components of this vector as a list"},
 	{ "to_tuple", (PyCFunction)vec3_to_tuple<glm::i8>, METH_NOARGS, "Return the components of this vector as a tuple"},
-	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ "from_bytes", (PyCFunction)vec_from_bytes<3, glm::i8>, METH_O | METH_STATIC, "Create a vector from a bytes string"},
 	{ NULL }  /* Sentinel */
 };

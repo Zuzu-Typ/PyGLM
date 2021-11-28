@@ -10,13 +10,13 @@ static PyMemberDef huvec2_members[] = {
 	{ NULL }  /* Sentinel */
 };
 static PyMethodDef huvec2_methods[] = {
+	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{ "__getstate__", (PyCFunction)vec2_to_tuple<glm::u32>, METH_NOARGS, "Returns a picklable state of this object"},
 	{ "__setstate__", (PyCFunction)vec2_setstate<glm::u32>, METH_O, "Restores a state that was previously acquired"},
 	{ "to_list", (PyCFunction)vec2_to_list<glm::u32>, METH_NOARGS, "Return the components of this vector as a list"},
 	{ "to_tuple", (PyCFunction)vec2_to_tuple<glm::u32>, METH_NOARGS, "Return the components of this vector as a tuple"},
-	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ "from_bytes", (PyCFunction)vec_from_bytes<2, glm::u32>, METH_O | METH_STATIC, "Create a vector from a bytes string"},
 	{ NULL }  /* Sentinel */
 };

@@ -11,18 +11,20 @@
 PyDoc_STRVAR(abs_docstr,
 	"abs(x: float) -> float\n"
 	"	Returns `x` if `x >= 0`; otherwise it returns `-x`.\n"
-	"abs(x: vecN) -> vecN\n"
+	"abs(x: FvecN) -> FvecN\n"
 	"	For each component `c` of `x`,\n"
 	"	Returns `c` if `c >= 0`; otherwise it returns `-c`.\n"
+	"	`F in [f, d]`"
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(abs)
 
 PyDoc_STRVAR(sign_docstr,
 	"sign(x: number) -> float\n"
 	"	Returns `1.0` if `x > 0`, `0.0` if `x == 0`, or `-1.0` if `x < 0`.\n"
-	"sign(x: vecN) -> vecN\n"
+	"sign(x: TvecN) -> TvecN\n"
 	"	For every component `c` of `x`:\n"
-	"	Returns `1.0` if `x > 0`, `0.0` if `x == 0`, or `-1.0` if `x < 0`."
+	"	Returns `1.0` if `x > 0`, `0.0` if `x == 0`, or `-1.0` if `x < 0`.\n"
+	"	`T in [f, d, i8, i16, i32, i64]`"
 );
 static PyObject*
 sign_(PyObject*, PyObject* arg) {
@@ -30,78 +32,16 @@ sign_(PyObject*, PyObject* arg) {
 		return pack(glm::sign(PyGLM_Number_FromPyObject<double>(arg)));
 	}
 	PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD | PyGLM_DT_INT | PyGLM_DT_INT64 | PyGLM_DT_INT16 | PyGLM_DT_INT8);
-	if (PyGLM_Vec_PTI_Check0(1, float, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, float, arg)));
+
+	// template with parameters (L)ength and (T)ype
+#	define PyGLM_SIGN_FUNC_TEMPLATE_VEC(L, T) \
+	if (PyGLM_Vec_PTI_Check0(L, T, arg)) {\
+		return pack(glm::sign(PyGLM_Vec_PTI_Get0(L, T, arg)));\
 	}
-	if (PyGLM_Vec_PTI_Check0(1, double, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, double, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int32, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, int32, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int64, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, int64, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int16, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, int16, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int8, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(1, int8, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, float, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, float, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, double, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int32, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, int32, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int64, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, int64, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int16, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, int16, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int8, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(2, int8, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, float, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, float, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, double, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int32, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, int32, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int64, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, int64, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int16, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, int16, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int8, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(3, int8, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, float, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, float, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, double, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, double, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int32, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, int32, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int64, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, int64, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int16, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, int16, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int8, arg)) {
-		return pack(glm::sign(PyGLM_Vec_PTI_Get0(4, int8, arg)));
-	}
+
+	// Expands the code above
+	PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fFiqsu, PyGLM_SIGN_FUNC_TEMPLATE_VEC);
+
 	PyGLM_TYPEERROR_O("invalid argument type for sign(): ", arg);
 	return NULL;
 }
@@ -109,9 +49,10 @@ sign_(PyObject*, PyObject* arg) {
 PyDoc_STRVAR(floor_docstr,
 	"floor(x: float) -> float\n"
 	"	Returns a value equal to the nearest integer that is less then or equal to `x`.\n"
-	"floor(v: vecN) -> vecN\n"
+	"floor(v: FvecN) -> FvecN\n"
 	"	For each component `c` of `v`:\n"
-	"	Returns a value equal to the nearest integer that is less then or equal to `c`."
+	"	Returns a value equal to the nearest integer that is less then or equal to `c`.\n"
+	"	`F in [f, d]`"
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(floor)
 
@@ -119,10 +60,11 @@ PyDoc_STRVAR(trunc_docstr,
 	"trunc(x: number) -> float\n"
 	"	Returns a value equal to the nearest integer to `x` whose absolute value is not larger than\n"
 	"	the absolute value of `x`.\n"
-	"trunc(x: vecN) -> vecN\n"
+	"trunc(x: FvecN) -> FvecN\n"
 	"	For every component `c` of `x`:\n"
 	"	Returns a value equal to the nearest integer to `c` whose absolute value is not larger than\n"
-	"	the absolute value of `c`."
+	"	the absolute value of `c`.\n"
+	"	`F in [f, d]`"
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(trunc)
 
@@ -131,11 +73,12 @@ PyDoc_STRVAR(round_docstr,
 	"	Returns a value equal to the nearest integer to `x`. The fraction `0.5` will round in a\n"
 	"	direction chosen by the implementation, presumably the direction that is fastest. This\n"
 	"	includes the possibility that `round(x)` returns the same value as `roundEven(x)`\n"
-	"round(x: vecN) -> vecN\n"
+	"round(x: FvecN) -> FvecN\n"
 	"	Returns a value equal to the nearest integer to `x`. The fraction `0.5` will round in a\n"
 	"	direction chosen by the implementation, presumably the direction that is fastest. This\n"
 	"	includes the possibility that `round(x)` returns the same value as `roundEven(x)` for all\n"
-	"	values of `x`."
+	"	values of `x`.\n"
+	"	`F in [f, d]`"
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(round)
 
@@ -143,34 +86,39 @@ PyDoc_STRVAR(roundEven_docstr,
 	"roundEven(x: number) -> float\n"
 	"	Returns a value equal to the nearest integer to `x`. A fractional part of `0.5` will round\n"
 	"	toward the nearest even integer. (Both `3.5` and `4.5` for `x` will return `4.0`.)\n"
-	"roundEven(x: vecN) -> vecN\n"
+	"roundEven(x: FvecN) -> FvecN\n"
 	"	Returns a value equal to the nearest integer to `x`. A fractional part of `0.5` will round\n"
-	"	toward the nearest even integer. (Both `3.5` and `4.5` for `x` will return `4.0`.)"
+	"	toward the nearest even integer. (Both `3.5` and `4.5` for `x` will return `4.0`.)\n"
+	"	`F in [f, d]`"
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(roundEven)
 
 PyDoc_STRVAR(ceil_docstr,
 	"ceil(x: float) -> float\n"
 	"	Returns a value equal to the nearest integer that is greater than or equal to `x`.\n"
-	"ceil(x: vecN) -> vecN\n"
+	"ceil(x: FvecN) -> FvecN\n"
 	"	For each component `c` of `x`,\n"
 	"	Returns a value equal to the nearest integer that is greater than or equal to `c`.\n"
+	"	`F in [f, d]`"
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(ceil)
 
 PyDoc_STRVAR(fract_docstr,
 	"fract(x: float) -> float\n"
 	"	Returns `x - floor(x)`.\n"
-	"fract(c: vecN) -> vecN\n"
-	"	Returns `x - floor(x)`."
+	"fract(c: FvecN) -> FvecN\n"
+	"	Returns `x - floor(x)`.\n"
+	"	`F in [f, d]`"
 );
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(fract)
 
 PyDoc_STRVAR(mod_docstr,
-	"mod(x: vecN, y: vecN) -> vecN\n"
+	"mod(x: FvecN, y: FvecN) -> FvecN\n"
 	"	Returns `x - y * floor(x / y)` for each component in `x` using the floating point value `y`.\n"
-	"mod(x: vecN, y: number) -> vecN\n"
+	"	`F in [f, d]`\n"
+	"mod(x: FvecN, y: number) -> FvecN\n"
 	"	Returns `x - y * floor(x / y)` for each component in `x` using the floating point value `y`.\n"
+	"	`F in [f, d]`\n"
 	"mod(x: number, y: number) -> number\n"
 	"	Returns `x - y * floor(x / y)` for each component in `x` using the floating point value `y`."
 );
@@ -277,7 +225,7 @@ min_(PyObject*, PyObject* args) {
 			PyObject* currentItem;
 			while ((currentItem = PyIter_Next(iterator))) {
 				if (type == NULL) {
-					if ((currentItem->ob_type->tp_dealloc != (destructor)vec_dealloc) && !PyLong_Check(currentItem) && !PyFloat_Check(currentItem) && !PyBool_Check(currentItem)) {
+					if ((currentItem->ob_type->tp_dealloc != (destructor)vec_dealloc) && !PyGLM_Number_Check(currentItem)) {
 						Py_DECREF(currentItem);
 						Py_DECREF(iterator);
 						PyGLM_TYPEERROR_O("invalid item type(s) for 'min()'. Expected number or PyGLM type, got ", currentItem);
@@ -346,259 +294,30 @@ min_(PyObject*, PyObject* args) {
 		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 			return pack(glm::min(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));
 		}
+
 		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, int, arg1), PyGLM_Vec_PTI_Get1(1, int, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(1, glm::uint, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::uint, arg1), PyGLM_Vec_PTI_Get1(1, glm::uint, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i64, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i64, arg1), PyGLM_Vec_PTI_Get1(1, glm::i64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u64, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u64, arg1), PyGLM_Vec_PTI_Get1(1, glm::u64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i16, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i16, arg1), PyGLM_Vec_PTI_Get1(1, glm::i16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u16, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u16, arg1), PyGLM_Vec_PTI_Get1(1, glm::u16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i8, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i8, arg1), PyGLM_Vec_PTI_Get1(1, glm::i8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u8, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u8, arg1), PyGLM_Vec_PTI_Get1(1, glm::u8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, bool, arg1) && PyGLM_Vec_PTI_Check1(1, bool, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, bool, arg1), PyGLM_Vec_PTI_Get1(1, bool, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Vec_PTI_Check1(2, int, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, int, arg1), PyGLM_Vec_PTI_Get1(2, int, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(2, glm::uint, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::uint, arg1), PyGLM_Vec_PTI_Get1(2, glm::uint, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i64, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i64, arg1), PyGLM_Vec_PTI_Get1(2, glm::i64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u64, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u64, arg1), PyGLM_Vec_PTI_Get1(2, glm::u64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i16, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i16, arg1), PyGLM_Vec_PTI_Get1(2, glm::i16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u16, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u16, arg1), PyGLM_Vec_PTI_Get1(2, glm::u16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i8, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i8, arg1), PyGLM_Vec_PTI_Get1(2, glm::i8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u8, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u8, arg1), PyGLM_Vec_PTI_Get1(2, glm::u8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, bool, arg1) && PyGLM_Vec_PTI_Check1(2, bool, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, bool, arg1), PyGLM_Vec_PTI_Get1(2, bool, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, int, arg1), PyGLM_Vec_PTI_Get1(3, int, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(3, glm::uint, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::uint, arg1), PyGLM_Vec_PTI_Get1(3, glm::uint, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i64, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i64, arg1), PyGLM_Vec_PTI_Get1(3, glm::i64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u64, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u64, arg1), PyGLM_Vec_PTI_Get1(3, glm::u64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i16, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i16, arg1), PyGLM_Vec_PTI_Get1(3, glm::i16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u16, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u16, arg1), PyGLM_Vec_PTI_Get1(3, glm::u16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i8, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i8, arg1), PyGLM_Vec_PTI_Get1(3, glm::i8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u8, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u8, arg1), PyGLM_Vec_PTI_Get1(3, glm::u8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, bool, arg1) && PyGLM_Vec_PTI_Check1(3, bool, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, bool, arg1), PyGLM_Vec_PTI_Get1(3, bool, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Vec_PTI_Check1(4, int, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, int, arg1), PyGLM_Vec_PTI_Get1(4, int, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(4, glm::uint, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::uint, arg1), PyGLM_Vec_PTI_Get1(4, glm::uint, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i64, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i64, arg1), PyGLM_Vec_PTI_Get1(4, glm::i64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u64, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u64, arg1), PyGLM_Vec_PTI_Get1(4, glm::u64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i16, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i16, arg1), PyGLM_Vec_PTI_Get1(4, glm::i16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u16, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u16, arg1), PyGLM_Vec_PTI_Get1(4, glm::u16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i8, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i8, arg1), PyGLM_Vec_PTI_Get1(4, glm::i8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u8, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u8, arg1), PyGLM_Vec_PTI_Get1(4, glm::u8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, bool, arg1) && PyGLM_Vec_PTI_Check1(4, bool, arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, bool, arg1), PyGLM_Vec_PTI_Get1(4, bool, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, int, arg1), PyGLM_Number_FromPyObject<int>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, int, arg1), PyGLM_Number_FromPyObject<int>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, int, arg1), PyGLM_Number_FromPyObject<int>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, int, arg1), PyGLM_Number_FromPyObject<int>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2)));
+
+		if (PyGLM_Number_Check(arg2)) {
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_MIN_FUNC_TEMPLATE_Vec_Number(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1)) {\
+				return pack(glm::min(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Number_FromPyObject<T>(arg2)));\
+			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_ALL, PyGLM_MIN_FUNC_TEMPLATE_Vec_Number);
+		}
+		else {
+			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_MIN_FUNC_TEMPLATE_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2)) {\
+				return pack(glm::min(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2)));\
+			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_ALL, PyGLM_MIN_FUNC_TEMPLATE_Vec_Vec);
 		}
 	}
 	else { 
@@ -609,126 +328,15 @@ min_(PyObject*, PyObject* args) {
 			PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
 			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
 			PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
-			if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2) && PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2), PyGLM_Vec_PTI_Get2(1, float, arg3)));
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_MIN_FUNC_TEMPLATE_Vec_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2) && PyGLM_Vec_PTI_Check2(L, T, arg3)) {\
+				return pack(glm::min(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2), PyGLM_Vec_PTI_Get2(L, T, arg3)));\
 			}
-			if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2) && PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2), PyGLM_Vec_PTI_Get2(1, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2) && PyGLM_Vec_PTI_Check2(1, int, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, int, arg1), PyGLM_Vec_PTI_Get1(1, int, arg2), PyGLM_Vec_PTI_Get2(1, int, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(1, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(1, glm::uint, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::uint, arg1), PyGLM_Vec_PTI_Get1(1, glm::uint, arg2), PyGLM_Vec_PTI_Get2(1, glm::uint, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i64, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i64, arg1), PyGLM_Vec_PTI_Get1(1, glm::i64, arg2), PyGLM_Vec_PTI_Get2(1, glm::i64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u64, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u64, arg1), PyGLM_Vec_PTI_Get1(1, glm::u64, arg2), PyGLM_Vec_PTI_Get2(1, glm::u64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i16, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i16, arg1), PyGLM_Vec_PTI_Get1(1, glm::i16, arg2), PyGLM_Vec_PTI_Get2(1, glm::i16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u16, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u16, arg1), PyGLM_Vec_PTI_Get1(1, glm::u16, arg2), PyGLM_Vec_PTI_Get2(1, glm::u16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i8, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i8, arg1), PyGLM_Vec_PTI_Get1(1, glm::i8, arg2), PyGLM_Vec_PTI_Get2(1, glm::i8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u8, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u8, arg1), PyGLM_Vec_PTI_Get1(1, glm::u8, arg2), PyGLM_Vec_PTI_Get2(1, glm::u8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2), PyGLM_Vec_PTI_Get2(2, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2), PyGLM_Vec_PTI_Get2(2, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Vec_PTI_Check1(2, int, arg2) && PyGLM_Vec_PTI_Check2(2, int, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, int, arg1), PyGLM_Vec_PTI_Get1(2, int, arg2), PyGLM_Vec_PTI_Get2(2, int, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(2, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(2, glm::uint, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::uint, arg1), PyGLM_Vec_PTI_Get1(2, glm::uint, arg2), PyGLM_Vec_PTI_Get2(2, glm::uint, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i64, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i64, arg1), PyGLM_Vec_PTI_Get1(2, glm::i64, arg2), PyGLM_Vec_PTI_Get2(2, glm::i64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u64, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u64, arg1), PyGLM_Vec_PTI_Get1(2, glm::u64, arg2), PyGLM_Vec_PTI_Get2(2, glm::u64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i16, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i16, arg1), PyGLM_Vec_PTI_Get1(2, glm::i16, arg2), PyGLM_Vec_PTI_Get2(2, glm::i16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u16, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u16, arg1), PyGLM_Vec_PTI_Get1(2, glm::u16, arg2), PyGLM_Vec_PTI_Get2(2, glm::u16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i8, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i8, arg1), PyGLM_Vec_PTI_Get1(2, glm::i8, arg2), PyGLM_Vec_PTI_Get2(2, glm::i8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u8, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u8, arg1), PyGLM_Vec_PTI_Get1(2, glm::u8, arg2), PyGLM_Vec_PTI_Get2(2, glm::u8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2), PyGLM_Vec_PTI_Get2(3, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2), PyGLM_Vec_PTI_Get2(3, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2) && PyGLM_Vec_PTI_Check2(3, int, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, int, arg1), PyGLM_Vec_PTI_Get1(3, int, arg2), PyGLM_Vec_PTI_Get2(3, int, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(3, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(3, glm::uint, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::uint, arg1), PyGLM_Vec_PTI_Get1(3, glm::uint, arg2), PyGLM_Vec_PTI_Get2(3, glm::uint, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i64, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i64, arg1), PyGLM_Vec_PTI_Get1(3, glm::i64, arg2), PyGLM_Vec_PTI_Get2(3, glm::i64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u64, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u64, arg1), PyGLM_Vec_PTI_Get1(3, glm::u64, arg2), PyGLM_Vec_PTI_Get2(3, glm::u64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i16, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i16, arg1), PyGLM_Vec_PTI_Get1(3, glm::i16, arg2), PyGLM_Vec_PTI_Get2(3, glm::i16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u16, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u16, arg1), PyGLM_Vec_PTI_Get1(3, glm::u16, arg2), PyGLM_Vec_PTI_Get2(3, glm::u16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i8, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i8, arg1), PyGLM_Vec_PTI_Get1(3, glm::i8, arg2), PyGLM_Vec_PTI_Get2(3, glm::i8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u8, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u8, arg1), PyGLM_Vec_PTI_Get1(3, glm::u8, arg2), PyGLM_Vec_PTI_Get2(3, glm::u8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2), PyGLM_Vec_PTI_Get2(4, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2), PyGLM_Vec_PTI_Get2(4, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Vec_PTI_Check1(4, int, arg2) && PyGLM_Vec_PTI_Check2(4, int, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, int, arg1), PyGLM_Vec_PTI_Get1(4, int, arg2), PyGLM_Vec_PTI_Get2(4, int, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(4, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(4, glm::uint, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::uint, arg1), PyGLM_Vec_PTI_Get1(4, glm::uint, arg2), PyGLM_Vec_PTI_Get2(4, glm::uint, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i64, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i64, arg1), PyGLM_Vec_PTI_Get1(4, glm::i64, arg2), PyGLM_Vec_PTI_Get2(4, glm::i64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u64, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u64, arg1), PyGLM_Vec_PTI_Get1(4, glm::u64, arg2), PyGLM_Vec_PTI_Get2(4, glm::u64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i16, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i16, arg1), PyGLM_Vec_PTI_Get1(4, glm::i16, arg2), PyGLM_Vec_PTI_Get2(4, glm::i16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u16, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u16, arg1), PyGLM_Vec_PTI_Get1(4, glm::u16, arg2), PyGLM_Vec_PTI_Get2(4, glm::u16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i8, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i8, arg1), PyGLM_Vec_PTI_Get1(4, glm::i8, arg2), PyGLM_Vec_PTI_Get2(4, glm::i8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u8, arg3)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u8, arg1), PyGLM_Vec_PTI_Get1(4, glm::u8, arg2), PyGLM_Vec_PTI_Get2(4, glm::u8, arg3)));
-			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fFiqsuIQSU, PyGLM_MIN_FUNC_TEMPLATE_Vec_Vec_Vec);
 		}
 		else {
 			if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3) && PyGLM_Number_Check(arg4)) {
@@ -738,126 +346,15 @@ min_(PyObject*, PyObject* args) {
 			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
 			PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
 			PyGLM_PTI_Init3(arg4, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
-			if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2) && PyGLM_Vec_PTI_Check2(1, float, arg3) && PyGLM_Vec_PTI_Check3(1, float, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2), PyGLM_Vec_PTI_Get2(1, float, arg3), PyGLM_Vec_PTI_Get3(1, float, arg4)));
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_MIN_FUNC_TEMPLATE_Vec_Vec_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2) && PyGLM_Vec_PTI_Check2(L, T, arg3) && PyGLM_Vec_PTI_Check3(L, T, arg4)) {\
+				return pack(glm::min(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2), PyGLM_Vec_PTI_Get2(L, T, arg3), PyGLM_Vec_PTI_Get3(L, T, arg4)));\
 			}
-			if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2) && PyGLM_Vec_PTI_Check2(1, double, arg3) && PyGLM_Vec_PTI_Check3(1, double, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2), PyGLM_Vec_PTI_Get2(1, double, arg3), PyGLM_Vec_PTI_Get3(1, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2) && PyGLM_Vec_PTI_Check2(1, int, arg3) && PyGLM_Vec_PTI_Check3(1, int, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, int, arg1), PyGLM_Vec_PTI_Get1(1, int, arg2), PyGLM_Vec_PTI_Get2(1, int, arg3), PyGLM_Vec_PTI_Get3(1, int, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(1, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(1, glm::uint, arg3) && PyGLM_Vec_PTI_Check3(1, glm::uint, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::uint, arg1), PyGLM_Vec_PTI_Get1(1, glm::uint, arg2), PyGLM_Vec_PTI_Get2(1, glm::uint, arg3), PyGLM_Vec_PTI_Get3(1, glm::uint, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i64, arg3) && PyGLM_Vec_PTI_Check3(1, glm::i64, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i64, arg1), PyGLM_Vec_PTI_Get1(1, glm::i64, arg2), PyGLM_Vec_PTI_Get2(1, glm::i64, arg3), PyGLM_Vec_PTI_Get3(1, glm::i64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u64, arg3) && PyGLM_Vec_PTI_Check3(1, glm::u64, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u64, arg1), PyGLM_Vec_PTI_Get1(1, glm::u64, arg2), PyGLM_Vec_PTI_Get2(1, glm::u64, arg3), PyGLM_Vec_PTI_Get3(1, glm::u64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i16, arg3) && PyGLM_Vec_PTI_Check3(1, glm::i16, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i16, arg1), PyGLM_Vec_PTI_Get1(1, glm::i16, arg2), PyGLM_Vec_PTI_Get2(1, glm::i16, arg3), PyGLM_Vec_PTI_Get3(1, glm::i16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u16, arg3) && PyGLM_Vec_PTI_Check3(1, glm::u16, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u16, arg1), PyGLM_Vec_PTI_Get1(1, glm::u16, arg2), PyGLM_Vec_PTI_Get2(1, glm::u16, arg3), PyGLM_Vec_PTI_Get3(1, glm::u16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i8, arg3) && PyGLM_Vec_PTI_Check3(1, glm::i8, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::i8, arg1), PyGLM_Vec_PTI_Get1(1, glm::i8, arg2), PyGLM_Vec_PTI_Get2(1, glm::i8, arg3), PyGLM_Vec_PTI_Get3(1, glm::i8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u8, arg3) && PyGLM_Vec_PTI_Check3(1, glm::u8, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(1, glm::u8, arg1), PyGLM_Vec_PTI_Get1(1, glm::u8, arg2), PyGLM_Vec_PTI_Get2(1, glm::u8, arg3), PyGLM_Vec_PTI_Get3(1, glm::u8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(2, float, arg3) && PyGLM_Vec_PTI_Check3(2, float, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2), PyGLM_Vec_PTI_Get2(2, float, arg3), PyGLM_Vec_PTI_Get3(2, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(2, double, arg3) && PyGLM_Vec_PTI_Check3(2, double, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2), PyGLM_Vec_PTI_Get2(2, double, arg3), PyGLM_Vec_PTI_Get3(2, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Vec_PTI_Check1(2, int, arg2) && PyGLM_Vec_PTI_Check2(2, int, arg3) && PyGLM_Vec_PTI_Check3(2, int, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, int, arg1), PyGLM_Vec_PTI_Get1(2, int, arg2), PyGLM_Vec_PTI_Get2(2, int, arg3), PyGLM_Vec_PTI_Get3(2, int, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(2, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(2, glm::uint, arg3) && PyGLM_Vec_PTI_Check3(2, glm::uint, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::uint, arg1), PyGLM_Vec_PTI_Get1(2, glm::uint, arg2), PyGLM_Vec_PTI_Get2(2, glm::uint, arg3), PyGLM_Vec_PTI_Get3(2, glm::uint, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i64, arg3) && PyGLM_Vec_PTI_Check3(2, glm::i64, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i64, arg1), PyGLM_Vec_PTI_Get1(2, glm::i64, arg2), PyGLM_Vec_PTI_Get2(2, glm::i64, arg3), PyGLM_Vec_PTI_Get3(2, glm::i64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u64, arg3) && PyGLM_Vec_PTI_Check3(2, glm::u64, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u64, arg1), PyGLM_Vec_PTI_Get1(2, glm::u64, arg2), PyGLM_Vec_PTI_Get2(2, glm::u64, arg3), PyGLM_Vec_PTI_Get3(2, glm::u64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i16, arg3) && PyGLM_Vec_PTI_Check3(2, glm::i16, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i16, arg1), PyGLM_Vec_PTI_Get1(2, glm::i16, arg2), PyGLM_Vec_PTI_Get2(2, glm::i16, arg3), PyGLM_Vec_PTI_Get3(2, glm::i16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u16, arg3) && PyGLM_Vec_PTI_Check3(2, glm::u16, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u16, arg1), PyGLM_Vec_PTI_Get1(2, glm::u16, arg2), PyGLM_Vec_PTI_Get2(2, glm::u16, arg3), PyGLM_Vec_PTI_Get3(2, glm::u16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i8, arg3) && PyGLM_Vec_PTI_Check3(2, glm::i8, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::i8, arg1), PyGLM_Vec_PTI_Get1(2, glm::i8, arg2), PyGLM_Vec_PTI_Get2(2, glm::i8, arg3), PyGLM_Vec_PTI_Get3(2, glm::i8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u8, arg3) && PyGLM_Vec_PTI_Check3(2, glm::u8, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(2, glm::u8, arg1), PyGLM_Vec_PTI_Get1(2, glm::u8, arg2), PyGLM_Vec_PTI_Get2(2, glm::u8, arg3), PyGLM_Vec_PTI_Get3(2, glm::u8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2) && PyGLM_Vec_PTI_Check2(3, float, arg3) && PyGLM_Vec_PTI_Check3(3, float, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2), PyGLM_Vec_PTI_Get2(3, float, arg3), PyGLM_Vec_PTI_Get3(3, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2) && PyGLM_Vec_PTI_Check2(3, double, arg3) && PyGLM_Vec_PTI_Check3(3, double, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2), PyGLM_Vec_PTI_Get2(3, double, arg3), PyGLM_Vec_PTI_Get3(3, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2) && PyGLM_Vec_PTI_Check2(3, int, arg3) && PyGLM_Vec_PTI_Check3(3, int, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, int, arg1), PyGLM_Vec_PTI_Get1(3, int, arg2), PyGLM_Vec_PTI_Get2(3, int, arg3), PyGLM_Vec_PTI_Get3(3, int, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(3, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(3, glm::uint, arg3) && PyGLM_Vec_PTI_Check3(3, glm::uint, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::uint, arg1), PyGLM_Vec_PTI_Get1(3, glm::uint, arg2), PyGLM_Vec_PTI_Get2(3, glm::uint, arg3), PyGLM_Vec_PTI_Get3(3, glm::uint, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i64, arg3) && PyGLM_Vec_PTI_Check3(3, glm::i64, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i64, arg1), PyGLM_Vec_PTI_Get1(3, glm::i64, arg2), PyGLM_Vec_PTI_Get2(3, glm::i64, arg3), PyGLM_Vec_PTI_Get3(3, glm::i64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u64, arg3) && PyGLM_Vec_PTI_Check3(3, glm::u64, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u64, arg1), PyGLM_Vec_PTI_Get1(3, glm::u64, arg2), PyGLM_Vec_PTI_Get2(3, glm::u64, arg3), PyGLM_Vec_PTI_Get3(3, glm::u64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i16, arg3) && PyGLM_Vec_PTI_Check3(3, glm::i16, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i16, arg1), PyGLM_Vec_PTI_Get1(3, glm::i16, arg2), PyGLM_Vec_PTI_Get2(3, glm::i16, arg3), PyGLM_Vec_PTI_Get3(3, glm::i16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u16, arg3) && PyGLM_Vec_PTI_Check3(3, glm::u16, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u16, arg1), PyGLM_Vec_PTI_Get1(3, glm::u16, arg2), PyGLM_Vec_PTI_Get2(3, glm::u16, arg3), PyGLM_Vec_PTI_Get3(3, glm::u16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i8, arg3) && PyGLM_Vec_PTI_Check3(3, glm::i8, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::i8, arg1), PyGLM_Vec_PTI_Get1(3, glm::i8, arg2), PyGLM_Vec_PTI_Get2(3, glm::i8, arg3), PyGLM_Vec_PTI_Get3(3, glm::i8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u8, arg3) && PyGLM_Vec_PTI_Check3(3, glm::u8, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(3, glm::u8, arg1), PyGLM_Vec_PTI_Get1(3, glm::u8, arg2), PyGLM_Vec_PTI_Get2(3, glm::u8, arg3), PyGLM_Vec_PTI_Get3(3, glm::u8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3) && PyGLM_Vec_PTI_Check3(4, float, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2), PyGLM_Vec_PTI_Get2(4, float, arg3), PyGLM_Vec_PTI_Get3(4, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3) && PyGLM_Vec_PTI_Check3(4, double, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2), PyGLM_Vec_PTI_Get2(4, double, arg3), PyGLM_Vec_PTI_Get3(4, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Vec_PTI_Check1(4, int, arg2) && PyGLM_Vec_PTI_Check2(4, int, arg3) && PyGLM_Vec_PTI_Check3(4, int, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, int, arg1), PyGLM_Vec_PTI_Get1(4, int, arg2), PyGLM_Vec_PTI_Get2(4, int, arg3), PyGLM_Vec_PTI_Get3(4, int, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(4, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(4, glm::uint, arg3) && PyGLM_Vec_PTI_Check3(4, glm::uint, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::uint, arg1), PyGLM_Vec_PTI_Get1(4, glm::uint, arg2), PyGLM_Vec_PTI_Get2(4, glm::uint, arg3), PyGLM_Vec_PTI_Get3(4, glm::uint, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i64, arg3) && PyGLM_Vec_PTI_Check3(4, glm::i64, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i64, arg1), PyGLM_Vec_PTI_Get1(4, glm::i64, arg2), PyGLM_Vec_PTI_Get2(4, glm::i64, arg3), PyGLM_Vec_PTI_Get3(4, glm::i64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u64, arg3) && PyGLM_Vec_PTI_Check3(4, glm::u64, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u64, arg1), PyGLM_Vec_PTI_Get1(4, glm::u64, arg2), PyGLM_Vec_PTI_Get2(4, glm::u64, arg3), PyGLM_Vec_PTI_Get3(4, glm::u64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i16, arg3) && PyGLM_Vec_PTI_Check3(4, glm::i16, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i16, arg1), PyGLM_Vec_PTI_Get1(4, glm::i16, arg2), PyGLM_Vec_PTI_Get2(4, glm::i16, arg3), PyGLM_Vec_PTI_Get3(4, glm::i16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u16, arg3) && PyGLM_Vec_PTI_Check3(4, glm::u16, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u16, arg1), PyGLM_Vec_PTI_Get1(4, glm::u16, arg2), PyGLM_Vec_PTI_Get2(4, glm::u16, arg3), PyGLM_Vec_PTI_Get3(4, glm::u16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i8, arg3) && PyGLM_Vec_PTI_Check3(4, glm::i8, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::i8, arg1), PyGLM_Vec_PTI_Get1(4, glm::i8, arg2), PyGLM_Vec_PTI_Get2(4, glm::i8, arg3), PyGLM_Vec_PTI_Get3(4, glm::i8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u8, arg3) && PyGLM_Vec_PTI_Check3(4, glm::u8, arg4)) {
-				return pack(glm::min(PyGLM_Vec_PTI_Get0(4, glm::u8, arg1), PyGLM_Vec_PTI_Get1(4, glm::u8, arg2), PyGLM_Vec_PTI_Get2(4, glm::u8, arg3), PyGLM_Vec_PTI_Get3(4, glm::u8, arg4)));
-			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fFiqsuIQSU, PyGLM_MIN_FUNC_TEMPLATE_Vec_Vec_Vec_Vec);
 		}
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for min()");
@@ -951,7 +448,7 @@ case get_format_specifier<bool>(): \
 
 static PyObject*
 max_(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2 = NULL, *arg3 = NULL, *arg4 = NULL;
+	PyObject* arg1, * arg2 = NULL, * arg3 = NULL, * arg4 = NULL;
 	if (!PyArg_UnpackTuple(args, "max", 1, 4, &arg1, &arg2, &arg3, &arg4)) return NULL;
 	if (arg2 == NULL) {
 		if (PyObject_IterCheck(arg1)) {
@@ -964,7 +461,7 @@ max_(PyObject*, PyObject* args) {
 			PyObject* currentItem;
 			while ((currentItem = PyIter_Next(iterator))) {
 				if (type == NULL) {
-					if ((currentItem->ob_type->tp_dealloc != (destructor)vec_dealloc) && !PyLong_Check(currentItem) && !PyFloat_Check(currentItem) && !PyBool_Check(currentItem)) {
+					if ((currentItem->ob_type->tp_dealloc != (destructor)vec_dealloc) && !PyGLM_Number_Check(currentItem)) {
 						Py_DECREF(currentItem);
 						Py_DECREF(iterator);
 						PyGLM_TYPEERROR_O("invalid item type(s) for 'max()'. Expected number or PyGLM type, got ", currentItem);
@@ -1033,259 +530,30 @@ max_(PyObject*, PyObject* args) {
 		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 			return pack(glm::max(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));
 		}
+
 		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, int, arg1), PyGLM_Vec_PTI_Get1(1, int, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(1, glm::uint, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::uint, arg1), PyGLM_Vec_PTI_Get1(1, glm::uint, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i64, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i64, arg1), PyGLM_Vec_PTI_Get1(1, glm::i64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u64, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u64, arg1), PyGLM_Vec_PTI_Get1(1, glm::u64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i16, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i16, arg1), PyGLM_Vec_PTI_Get1(1, glm::i16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u16, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u16, arg1), PyGLM_Vec_PTI_Get1(1, glm::u16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i8, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i8, arg1), PyGLM_Vec_PTI_Get1(1, glm::i8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u8, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u8, arg1), PyGLM_Vec_PTI_Get1(1, glm::u8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, bool, arg1) && PyGLM_Vec_PTI_Check1(1, bool, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, bool, arg1), PyGLM_Vec_PTI_Get1(1, bool, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Vec_PTI_Check1(2, int, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, int, arg1), PyGLM_Vec_PTI_Get1(2, int, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(2, glm::uint, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::uint, arg1), PyGLM_Vec_PTI_Get1(2, glm::uint, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i64, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i64, arg1), PyGLM_Vec_PTI_Get1(2, glm::i64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u64, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u64, arg1), PyGLM_Vec_PTI_Get1(2, glm::u64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i16, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i16, arg1), PyGLM_Vec_PTI_Get1(2, glm::i16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u16, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u16, arg1), PyGLM_Vec_PTI_Get1(2, glm::u16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i8, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i8, arg1), PyGLM_Vec_PTI_Get1(2, glm::i8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u8, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u8, arg1), PyGLM_Vec_PTI_Get1(2, glm::u8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, bool, arg1) && PyGLM_Vec_PTI_Check1(2, bool, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, bool, arg1), PyGLM_Vec_PTI_Get1(2, bool, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, int, arg1), PyGLM_Vec_PTI_Get1(3, int, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(3, glm::uint, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::uint, arg1), PyGLM_Vec_PTI_Get1(3, glm::uint, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i64, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i64, arg1), PyGLM_Vec_PTI_Get1(3, glm::i64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u64, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u64, arg1), PyGLM_Vec_PTI_Get1(3, glm::u64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i16, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i16, arg1), PyGLM_Vec_PTI_Get1(3, glm::i16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u16, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u16, arg1), PyGLM_Vec_PTI_Get1(3, glm::u16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i8, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i8, arg1), PyGLM_Vec_PTI_Get1(3, glm::i8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u8, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u8, arg1), PyGLM_Vec_PTI_Get1(3, glm::u8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, bool, arg1) && PyGLM_Vec_PTI_Check1(3, bool, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, bool, arg1), PyGLM_Vec_PTI_Get1(3, bool, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Vec_PTI_Check1(4, int, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, int, arg1), PyGLM_Vec_PTI_Get1(4, int, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(4, glm::uint, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::uint, arg1), PyGLM_Vec_PTI_Get1(4, glm::uint, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i64, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i64, arg1), PyGLM_Vec_PTI_Get1(4, glm::i64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u64, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u64, arg1), PyGLM_Vec_PTI_Get1(4, glm::u64, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i16, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i16, arg1), PyGLM_Vec_PTI_Get1(4, glm::i16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u16, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u16, arg1), PyGLM_Vec_PTI_Get1(4, glm::u16, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i8, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i8, arg1), PyGLM_Vec_PTI_Get1(4, glm::i8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u8, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u8, arg1), PyGLM_Vec_PTI_Get1(4, glm::u8, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, bool, arg1) && PyGLM_Vec_PTI_Check1(4, bool, arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, bool, arg1), PyGLM_Vec_PTI_Get1(4, bool, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, int, arg1), PyGLM_Number_FromPyObject<int>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, int, arg1), PyGLM_Number_FromPyObject<int>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, int, arg1), PyGLM_Number_FromPyObject<int>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, int, arg1), PyGLM_Number_FromPyObject<int>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2)));
+
+		if (PyGLM_Number_Check(arg2)) {
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_MAX_FUNC_TEMPLATE_Vec_Number(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1)) {\
+				return pack(glm::max(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Number_FromPyObject<T>(arg2)));\
+			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_ALL, PyGLM_MAX_FUNC_TEMPLATE_Vec_Number);
+		}
+		else {
+			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_MAX_FUNC_TEMPLATE_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2)) {\
+				return pack(glm::max(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2)));\
+			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_ALL, PyGLM_MAX_FUNC_TEMPLATE_Vec_Vec);
 		}
 	}
 	else {
@@ -1296,126 +564,15 @@ max_(PyObject*, PyObject* args) {
 			PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
 			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
 			PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
-			if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2) && PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2), PyGLM_Vec_PTI_Get2(1, float, arg3)));
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_MAX_FUNC_TEMPLATE_Vec_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2) && PyGLM_Vec_PTI_Check2(L, T, arg3)) {\
+				return pack(glm::max(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2), PyGLM_Vec_PTI_Get2(L, T, arg3)));\
 			}
-			if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2) && PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2), PyGLM_Vec_PTI_Get2(1, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2) && PyGLM_Vec_PTI_Check2(1, int, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, int, arg1), PyGLM_Vec_PTI_Get1(1, int, arg2), PyGLM_Vec_PTI_Get2(1, int, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(1, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(1, glm::uint, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::uint, arg1), PyGLM_Vec_PTI_Get1(1, glm::uint, arg2), PyGLM_Vec_PTI_Get2(1, glm::uint, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i64, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i64, arg1), PyGLM_Vec_PTI_Get1(1, glm::i64, arg2), PyGLM_Vec_PTI_Get2(1, glm::i64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u64, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u64, arg1), PyGLM_Vec_PTI_Get1(1, glm::u64, arg2), PyGLM_Vec_PTI_Get2(1, glm::u64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i16, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i16, arg1), PyGLM_Vec_PTI_Get1(1, glm::i16, arg2), PyGLM_Vec_PTI_Get2(1, glm::i16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u16, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u16, arg1), PyGLM_Vec_PTI_Get1(1, glm::u16, arg2), PyGLM_Vec_PTI_Get2(1, glm::u16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i8, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i8, arg1), PyGLM_Vec_PTI_Get1(1, glm::i8, arg2), PyGLM_Vec_PTI_Get2(1, glm::i8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u8, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u8, arg1), PyGLM_Vec_PTI_Get1(1, glm::u8, arg2), PyGLM_Vec_PTI_Get2(1, glm::u8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2), PyGLM_Vec_PTI_Get2(2, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2), PyGLM_Vec_PTI_Get2(2, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Vec_PTI_Check1(2, int, arg2) && PyGLM_Vec_PTI_Check2(2, int, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, int, arg1), PyGLM_Vec_PTI_Get1(2, int, arg2), PyGLM_Vec_PTI_Get2(2, int, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(2, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(2, glm::uint, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::uint, arg1), PyGLM_Vec_PTI_Get1(2, glm::uint, arg2), PyGLM_Vec_PTI_Get2(2, glm::uint, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i64, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i64, arg1), PyGLM_Vec_PTI_Get1(2, glm::i64, arg2), PyGLM_Vec_PTI_Get2(2, glm::i64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u64, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u64, arg1), PyGLM_Vec_PTI_Get1(2, glm::u64, arg2), PyGLM_Vec_PTI_Get2(2, glm::u64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i16, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i16, arg1), PyGLM_Vec_PTI_Get1(2, glm::i16, arg2), PyGLM_Vec_PTI_Get2(2, glm::i16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u16, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u16, arg1), PyGLM_Vec_PTI_Get1(2, glm::u16, arg2), PyGLM_Vec_PTI_Get2(2, glm::u16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i8, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i8, arg1), PyGLM_Vec_PTI_Get1(2, glm::i8, arg2), PyGLM_Vec_PTI_Get2(2, glm::i8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u8, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u8, arg1), PyGLM_Vec_PTI_Get1(2, glm::u8, arg2), PyGLM_Vec_PTI_Get2(2, glm::u8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2), PyGLM_Vec_PTI_Get2(3, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2), PyGLM_Vec_PTI_Get2(3, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2) && PyGLM_Vec_PTI_Check2(3, int, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, int, arg1), PyGLM_Vec_PTI_Get1(3, int, arg2), PyGLM_Vec_PTI_Get2(3, int, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(3, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(3, glm::uint, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::uint, arg1), PyGLM_Vec_PTI_Get1(3, glm::uint, arg2), PyGLM_Vec_PTI_Get2(3, glm::uint, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i64, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i64, arg1), PyGLM_Vec_PTI_Get1(3, glm::i64, arg2), PyGLM_Vec_PTI_Get2(3, glm::i64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u64, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u64, arg1), PyGLM_Vec_PTI_Get1(3, glm::u64, arg2), PyGLM_Vec_PTI_Get2(3, glm::u64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i16, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i16, arg1), PyGLM_Vec_PTI_Get1(3, glm::i16, arg2), PyGLM_Vec_PTI_Get2(3, glm::i16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u16, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u16, arg1), PyGLM_Vec_PTI_Get1(3, glm::u16, arg2), PyGLM_Vec_PTI_Get2(3, glm::u16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i8, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i8, arg1), PyGLM_Vec_PTI_Get1(3, glm::i8, arg2), PyGLM_Vec_PTI_Get2(3, glm::i8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u8, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u8, arg1), PyGLM_Vec_PTI_Get1(3, glm::u8, arg2), PyGLM_Vec_PTI_Get2(3, glm::u8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2), PyGLM_Vec_PTI_Get2(4, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2), PyGLM_Vec_PTI_Get2(4, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Vec_PTI_Check1(4, int, arg2) && PyGLM_Vec_PTI_Check2(4, int, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, int, arg1), PyGLM_Vec_PTI_Get1(4, int, arg2), PyGLM_Vec_PTI_Get2(4, int, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(4, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(4, glm::uint, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::uint, arg1), PyGLM_Vec_PTI_Get1(4, glm::uint, arg2), PyGLM_Vec_PTI_Get2(4, glm::uint, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i64, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i64, arg1), PyGLM_Vec_PTI_Get1(4, glm::i64, arg2), PyGLM_Vec_PTI_Get2(4, glm::i64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u64, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u64, arg1), PyGLM_Vec_PTI_Get1(4, glm::u64, arg2), PyGLM_Vec_PTI_Get2(4, glm::u64, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i16, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i16, arg1), PyGLM_Vec_PTI_Get1(4, glm::i16, arg2), PyGLM_Vec_PTI_Get2(4, glm::i16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u16, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u16, arg1), PyGLM_Vec_PTI_Get1(4, glm::u16, arg2), PyGLM_Vec_PTI_Get2(4, glm::u16, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i8, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i8, arg1), PyGLM_Vec_PTI_Get1(4, glm::i8, arg2), PyGLM_Vec_PTI_Get2(4, glm::i8, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u8, arg3)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u8, arg1), PyGLM_Vec_PTI_Get1(4, glm::u8, arg2), PyGLM_Vec_PTI_Get2(4, glm::u8, arg3)));
-			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fFiqsuIQSU, PyGLM_MAX_FUNC_TEMPLATE_Vec_Vec_Vec);
 		}
 		else {
 			if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3) && PyGLM_Number_Check(arg4)) {
@@ -1425,126 +582,15 @@ max_(PyObject*, PyObject* args) {
 			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
 			PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
 			PyGLM_PTI_Init3(arg4, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
-			if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2) && PyGLM_Vec_PTI_Check2(1, float, arg3) && PyGLM_Vec_PTI_Check3(1, float, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2), PyGLM_Vec_PTI_Get2(1, float, arg3), PyGLM_Vec_PTI_Get3(1, float, arg4)));
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_MAX_FUNC_TEMPLATE_Vec_Vec_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2) && PyGLM_Vec_PTI_Check2(L, T, arg3) && PyGLM_Vec_PTI_Check3(L, T, arg4)) {\
+				return pack(glm::max(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2), PyGLM_Vec_PTI_Get2(L, T, arg3), PyGLM_Vec_PTI_Get3(L, T, arg4)));\
 			}
-			if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2) && PyGLM_Vec_PTI_Check2(1, double, arg3) && PyGLM_Vec_PTI_Check3(1, double, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2), PyGLM_Vec_PTI_Get2(1, double, arg3), PyGLM_Vec_PTI_Get3(1, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2) && PyGLM_Vec_PTI_Check2(1, int, arg3) && PyGLM_Vec_PTI_Check3(1, int, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, int, arg1), PyGLM_Vec_PTI_Get1(1, int, arg2), PyGLM_Vec_PTI_Get2(1, int, arg3), PyGLM_Vec_PTI_Get3(1, int, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(1, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(1, glm::uint, arg3) && PyGLM_Vec_PTI_Check3(1, glm::uint, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::uint, arg1), PyGLM_Vec_PTI_Get1(1, glm::uint, arg2), PyGLM_Vec_PTI_Get2(1, glm::uint, arg3), PyGLM_Vec_PTI_Get3(1, glm::uint, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i64, arg3) && PyGLM_Vec_PTI_Check3(1, glm::i64, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i64, arg1), PyGLM_Vec_PTI_Get1(1, glm::i64, arg2), PyGLM_Vec_PTI_Get2(1, glm::i64, arg3), PyGLM_Vec_PTI_Get3(1, glm::i64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u64, arg3) && PyGLM_Vec_PTI_Check3(1, glm::u64, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u64, arg1), PyGLM_Vec_PTI_Get1(1, glm::u64, arg2), PyGLM_Vec_PTI_Get2(1, glm::u64, arg3), PyGLM_Vec_PTI_Get3(1, glm::u64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i16, arg3) && PyGLM_Vec_PTI_Check3(1, glm::i16, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i16, arg1), PyGLM_Vec_PTI_Get1(1, glm::i16, arg2), PyGLM_Vec_PTI_Get2(1, glm::i16, arg3), PyGLM_Vec_PTI_Get3(1, glm::i16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u16, arg3) && PyGLM_Vec_PTI_Check3(1, glm::u16, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u16, arg1), PyGLM_Vec_PTI_Get1(1, glm::u16, arg2), PyGLM_Vec_PTI_Get2(1, glm::u16, arg3), PyGLM_Vec_PTI_Get3(1, glm::u16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i8, arg3) && PyGLM_Vec_PTI_Check3(1, glm::i8, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::i8, arg1), PyGLM_Vec_PTI_Get1(1, glm::i8, arg2), PyGLM_Vec_PTI_Get2(1, glm::i8, arg3), PyGLM_Vec_PTI_Get3(1, glm::i8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u8, arg3) && PyGLM_Vec_PTI_Check3(1, glm::u8, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(1, glm::u8, arg1), PyGLM_Vec_PTI_Get1(1, glm::u8, arg2), PyGLM_Vec_PTI_Get2(1, glm::u8, arg3), PyGLM_Vec_PTI_Get3(1, glm::u8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(2, float, arg3) && PyGLM_Vec_PTI_Check3(2, float, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2), PyGLM_Vec_PTI_Get2(2, float, arg3), PyGLM_Vec_PTI_Get3(2, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(2, double, arg3) && PyGLM_Vec_PTI_Check3(2, double, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2), PyGLM_Vec_PTI_Get2(2, double, arg3), PyGLM_Vec_PTI_Get3(2, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Vec_PTI_Check1(2, int, arg2) && PyGLM_Vec_PTI_Check2(2, int, arg3) && PyGLM_Vec_PTI_Check3(2, int, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, int, arg1), PyGLM_Vec_PTI_Get1(2, int, arg2), PyGLM_Vec_PTI_Get2(2, int, arg3), PyGLM_Vec_PTI_Get3(2, int, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(2, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(2, glm::uint, arg3) && PyGLM_Vec_PTI_Check3(2, glm::uint, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::uint, arg1), PyGLM_Vec_PTI_Get1(2, glm::uint, arg2), PyGLM_Vec_PTI_Get2(2, glm::uint, arg3), PyGLM_Vec_PTI_Get3(2, glm::uint, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i64, arg3) && PyGLM_Vec_PTI_Check3(2, glm::i64, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i64, arg1), PyGLM_Vec_PTI_Get1(2, glm::i64, arg2), PyGLM_Vec_PTI_Get2(2, glm::i64, arg3), PyGLM_Vec_PTI_Get3(2, glm::i64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u64, arg3) && PyGLM_Vec_PTI_Check3(2, glm::u64, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u64, arg1), PyGLM_Vec_PTI_Get1(2, glm::u64, arg2), PyGLM_Vec_PTI_Get2(2, glm::u64, arg3), PyGLM_Vec_PTI_Get3(2, glm::u64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i16, arg3) && PyGLM_Vec_PTI_Check3(2, glm::i16, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i16, arg1), PyGLM_Vec_PTI_Get1(2, glm::i16, arg2), PyGLM_Vec_PTI_Get2(2, glm::i16, arg3), PyGLM_Vec_PTI_Get3(2, glm::i16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u16, arg3) && PyGLM_Vec_PTI_Check3(2, glm::u16, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u16, arg1), PyGLM_Vec_PTI_Get1(2, glm::u16, arg2), PyGLM_Vec_PTI_Get2(2, glm::u16, arg3), PyGLM_Vec_PTI_Get3(2, glm::u16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i8, arg3) && PyGLM_Vec_PTI_Check3(2, glm::i8, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::i8, arg1), PyGLM_Vec_PTI_Get1(2, glm::i8, arg2), PyGLM_Vec_PTI_Get2(2, glm::i8, arg3), PyGLM_Vec_PTI_Get3(2, glm::i8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u8, arg3) && PyGLM_Vec_PTI_Check3(2, glm::u8, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(2, glm::u8, arg1), PyGLM_Vec_PTI_Get1(2, glm::u8, arg2), PyGLM_Vec_PTI_Get2(2, glm::u8, arg3), PyGLM_Vec_PTI_Get3(2, glm::u8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2) && PyGLM_Vec_PTI_Check2(3, float, arg3) && PyGLM_Vec_PTI_Check3(3, float, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2), PyGLM_Vec_PTI_Get2(3, float, arg3), PyGLM_Vec_PTI_Get3(3, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2) && PyGLM_Vec_PTI_Check2(3, double, arg3) && PyGLM_Vec_PTI_Check3(3, double, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2), PyGLM_Vec_PTI_Get2(3, double, arg3), PyGLM_Vec_PTI_Get3(3, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2) && PyGLM_Vec_PTI_Check2(3, int, arg3) && PyGLM_Vec_PTI_Check3(3, int, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, int, arg1), PyGLM_Vec_PTI_Get1(3, int, arg2), PyGLM_Vec_PTI_Get2(3, int, arg3), PyGLM_Vec_PTI_Get3(3, int, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(3, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(3, glm::uint, arg3) && PyGLM_Vec_PTI_Check3(3, glm::uint, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::uint, arg1), PyGLM_Vec_PTI_Get1(3, glm::uint, arg2), PyGLM_Vec_PTI_Get2(3, glm::uint, arg3), PyGLM_Vec_PTI_Get3(3, glm::uint, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i64, arg3) && PyGLM_Vec_PTI_Check3(3, glm::i64, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i64, arg1), PyGLM_Vec_PTI_Get1(3, glm::i64, arg2), PyGLM_Vec_PTI_Get2(3, glm::i64, arg3), PyGLM_Vec_PTI_Get3(3, glm::i64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u64, arg3) && PyGLM_Vec_PTI_Check3(3, glm::u64, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u64, arg1), PyGLM_Vec_PTI_Get1(3, glm::u64, arg2), PyGLM_Vec_PTI_Get2(3, glm::u64, arg3), PyGLM_Vec_PTI_Get3(3, glm::u64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i16, arg3) && PyGLM_Vec_PTI_Check3(3, glm::i16, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i16, arg1), PyGLM_Vec_PTI_Get1(3, glm::i16, arg2), PyGLM_Vec_PTI_Get2(3, glm::i16, arg3), PyGLM_Vec_PTI_Get3(3, glm::i16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u16, arg3) && PyGLM_Vec_PTI_Check3(3, glm::u16, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u16, arg1), PyGLM_Vec_PTI_Get1(3, glm::u16, arg2), PyGLM_Vec_PTI_Get2(3, glm::u16, arg3), PyGLM_Vec_PTI_Get3(3, glm::u16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i8, arg3) && PyGLM_Vec_PTI_Check3(3, glm::i8, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::i8, arg1), PyGLM_Vec_PTI_Get1(3, glm::i8, arg2), PyGLM_Vec_PTI_Get2(3, glm::i8, arg3), PyGLM_Vec_PTI_Get3(3, glm::i8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u8, arg3) && PyGLM_Vec_PTI_Check3(3, glm::u8, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(3, glm::u8, arg1), PyGLM_Vec_PTI_Get1(3, glm::u8, arg2), PyGLM_Vec_PTI_Get2(3, glm::u8, arg3), PyGLM_Vec_PTI_Get3(3, glm::u8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3) && PyGLM_Vec_PTI_Check3(4, float, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2), PyGLM_Vec_PTI_Get2(4, float, arg3), PyGLM_Vec_PTI_Get3(4, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3) && PyGLM_Vec_PTI_Check3(4, double, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2), PyGLM_Vec_PTI_Get2(4, double, arg3), PyGLM_Vec_PTI_Get3(4, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Vec_PTI_Check1(4, int, arg2) && PyGLM_Vec_PTI_Check2(4, int, arg3) && PyGLM_Vec_PTI_Check3(4, int, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, int, arg1), PyGLM_Vec_PTI_Get1(4, int, arg2), PyGLM_Vec_PTI_Get2(4, int, arg3), PyGLM_Vec_PTI_Get3(4, int, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(4, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(4, glm::uint, arg3) && PyGLM_Vec_PTI_Check3(4, glm::uint, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::uint, arg1), PyGLM_Vec_PTI_Get1(4, glm::uint, arg2), PyGLM_Vec_PTI_Get2(4, glm::uint, arg3), PyGLM_Vec_PTI_Get3(4, glm::uint, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i64, arg3) && PyGLM_Vec_PTI_Check3(4, glm::i64, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i64, arg1), PyGLM_Vec_PTI_Get1(4, glm::i64, arg2), PyGLM_Vec_PTI_Get2(4, glm::i64, arg3), PyGLM_Vec_PTI_Get3(4, glm::i64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u64, arg3) && PyGLM_Vec_PTI_Check3(4, glm::u64, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u64, arg1), PyGLM_Vec_PTI_Get1(4, glm::u64, arg2), PyGLM_Vec_PTI_Get2(4, glm::u64, arg3), PyGLM_Vec_PTI_Get3(4, glm::u64, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i16, arg3) && PyGLM_Vec_PTI_Check3(4, glm::i16, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i16, arg1), PyGLM_Vec_PTI_Get1(4, glm::i16, arg2), PyGLM_Vec_PTI_Get2(4, glm::i16, arg3), PyGLM_Vec_PTI_Get3(4, glm::i16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u16, arg3) && PyGLM_Vec_PTI_Check3(4, glm::u16, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u16, arg1), PyGLM_Vec_PTI_Get1(4, glm::u16, arg2), PyGLM_Vec_PTI_Get2(4, glm::u16, arg3), PyGLM_Vec_PTI_Get3(4, glm::u16, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i8, arg3) && PyGLM_Vec_PTI_Check3(4, glm::i8, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::i8, arg1), PyGLM_Vec_PTI_Get1(4, glm::i8, arg2), PyGLM_Vec_PTI_Get2(4, glm::i8, arg3), PyGLM_Vec_PTI_Get3(4, glm::i8, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u8, arg3) && PyGLM_Vec_PTI_Check3(4, glm::u8, arg4)) {
-				return pack(glm::max(PyGLM_Vec_PTI_Get0(4, glm::u8, arg1), PyGLM_Vec_PTI_Get1(4, glm::u8, arg2), PyGLM_Vec_PTI_Get2(4, glm::u8, arg3), PyGLM_Vec_PTI_Get3(4, glm::u8, arg4)));
-			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fFiqsuIQSU, PyGLM_MAX_FUNC_TEMPLATE_Vec_Vec_Vec_Vec);
 		}
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for max()");
@@ -1555,18 +601,22 @@ PyDoc_STRVAR(fmin_docstr,
 	"fmin(x: number, y: number) -> float\n"
 	"	Returns `y` if `y < x`; otherwise, it returns `x`. If one of the two arguments is `NaN`, the value\n"
 	"	of the other argument is returned.\n"
-	"fmin(x: vecN, y: number) -> vecN\n"
+	"fmin(x: FvecN, y: number) -> FvecN\n"
 	"	For each component `c` of `x`:\n"
 	"	Returns `y` if `y < c`; otherwise, it returns `c`. If one of the two arguments is `NaN`, the value\n"
 	"	of the other argument is returned.\n"
-	"fmin(x: vecN, y: vecN) -> vecN\n"
+	"	`F in [f, d]`\n"
+	"fmin(x: FvecN, y: FvecN) -> FvecN\n"
 	"	For every index `i`:\n"
 	"	Returns `y[i]` if `y[i] < x[i]`; otherwise, it returns `x[i]`. If one of the two arguments is\n"
 	"	`NaN`, the value of the other argument is returned.\n"
-	"fmin(a: vecN, b: vecN, c : vecN) -> vecN\n"
+	"	`F in [f, d]`\n"
+	"fmin(a: FvecN, b: FvecN, c : FvecN) -> FvecN\n"
 	"	Returns `fmin(fmin(a, b), c)`.\n"
-	"fmin(a: vecN, b: vecN, c : vecN, d: vecN) -> vecN\n"
-	"	Returns `fmin(fmin(a, b), fmin(c, d))`."
+	"	`F in [f, d]`\n"
+	"fmin(a: FvecN, b: FvecN, c : FvecN, d: FvecN) -> FvecN\n"
+	"	Returns `fmin(fmin(a, b), fmin(c, d))`.\n"
+	"	`F in [f, d]`"
 );
 static PyObject*
 fmin_(PyObject*, PyObject* args) {
@@ -1577,54 +627,28 @@ fmin_(PyObject*, PyObject* args) {
 			return pack(glm::fmin(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));
 		}
 		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2)));
+
+		if (PyGLM_Number_Check(arg2)) {
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_FMIN_FUNC_TEMPLATE_Vec_Number(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1)) {\
+				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Number_FromPyObject<T>(arg2)));\
+			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FMIN_FUNC_TEMPLATE_Vec_Number);
 		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmin(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
+		else {
+			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_FMIN_FUNC_TEMPLATE_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2)) {\
+				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2)));\
+			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FMIN_FUNC_TEMPLATE_Vec_Vec);
 		}
 	}
 	else {
@@ -1635,30 +659,15 @@ fmin_(PyObject*, PyObject* args) {
 			PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
 			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
 			PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-			if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2) && PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2), PyGLM_Vec_PTI_Get2(1, float, arg3)));
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_FMIN_FUNC_TEMPLATE_Vec_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2) && PyGLM_Vec_PTI_Check2(L, T, arg3)) {\
+				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2), PyGLM_Vec_PTI_Get2(L, T, arg3)));\
 			}
-			if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2) && PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2), PyGLM_Vec_PTI_Get2(1, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2), PyGLM_Vec_PTI_Get2(2, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2), PyGLM_Vec_PTI_Get2(2, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2), PyGLM_Vec_PTI_Get2(3, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2), PyGLM_Vec_PTI_Get2(3, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2), PyGLM_Vec_PTI_Get2(4, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2), PyGLM_Vec_PTI_Get2(4, double, arg3)));
-			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FMIN_FUNC_TEMPLATE_Vec_Vec_Vec);
 		}
 		else {
 			if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3) && PyGLM_Number_Check(arg4)) {
@@ -1668,30 +677,15 @@ fmin_(PyObject*, PyObject* args) {
 			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
 			PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
 			PyGLM_PTI_Init3(arg4, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-			if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2) && PyGLM_Vec_PTI_Check2(1, float, arg3) && PyGLM_Vec_PTI_Check3(1, float, arg4)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2), PyGLM_Vec_PTI_Get2(1, float, arg3), PyGLM_Vec_PTI_Get3(1, float, arg4)));
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_FMIN_FUNC_TEMPLATE_Vec_Vec_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2) && PyGLM_Vec_PTI_Check2(L, T, arg3) && PyGLM_Vec_PTI_Check3(L, T, arg4)) {\
+				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2), PyGLM_Vec_PTI_Get2(L, T, arg3), PyGLM_Vec_PTI_Get3(L, T, arg4)));\
 			}
-			if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2) && PyGLM_Vec_PTI_Check2(1, double, arg3) && PyGLM_Vec_PTI_Check3(1, double, arg4)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2), PyGLM_Vec_PTI_Get2(1, double, arg3), PyGLM_Vec_PTI_Get3(1, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(2, float, arg3) && PyGLM_Vec_PTI_Check3(2, float, arg4)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2), PyGLM_Vec_PTI_Get2(2, float, arg3), PyGLM_Vec_PTI_Get3(2, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(2, double, arg3) && PyGLM_Vec_PTI_Check3(2, double, arg4)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2), PyGLM_Vec_PTI_Get2(2, double, arg3), PyGLM_Vec_PTI_Get3(2, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2) && PyGLM_Vec_PTI_Check2(3, float, arg3) && PyGLM_Vec_PTI_Check3(3, float, arg4)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2), PyGLM_Vec_PTI_Get2(3, float, arg3), PyGLM_Vec_PTI_Get3(3, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2) && PyGLM_Vec_PTI_Check2(3, double, arg3) && PyGLM_Vec_PTI_Check3(3, double, arg4)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2), PyGLM_Vec_PTI_Get2(3, double, arg3), PyGLM_Vec_PTI_Get3(3, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3) && PyGLM_Vec_PTI_Check3(4, float, arg4)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2), PyGLM_Vec_PTI_Get2(4, float, arg3), PyGLM_Vec_PTI_Get3(4, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3) && PyGLM_Vec_PTI_Check3(4, double, arg4)) {
-				return pack(glm::fmin(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2), PyGLM_Vec_PTI_Get2(4, double, arg3), PyGLM_Vec_PTI_Get3(4, double, arg4)));
-			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FMIN_FUNC_TEMPLATE_Vec_Vec_Vec_Vec);
 		}
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for fmin()");
@@ -1702,76 +696,54 @@ PyDoc_STRVAR(fmax_docstr,
 	"fmax(x: number, y: number) -> float\n"
 	"	Returns `y` if `x < y`; otherwise, it returns `x`. If one of the two arguments is `NaN`, the value\n"
 	"	of the other argument is returned.\n"
-	"fmax(x: vecN, y: number) -> vecN\n"
+	"fmax(x: FvecN, y: number) -> FvecN\n"
 	"	For each component `c` of `x`:\n"
 	"	Returns `y` if `c < y`; otherwise, it returns `c`. If one of the two arguments is `NaN`, the value\n"
 	"	of the other argument is returned.\n"
-	"fmax(x: vecN, y: vecN) -> vecN\n"
+	"	`F in [f, d]`\n"
+	"fmax(x: FvecN, y: FvecN) -> FvecN\n"
 	"	For every index `i`:\n"
 	"	Returns `y[i]` if `x[i] < y[i]`; otherwise, it returns `x[i]`. If one of the two arguments is\n"
 	"	`NaN`, the value of the other argument is returned.\n"
-	"fmax(a: vecN, b: vecN, c: vecN) -> vecN\n"
+	"	`F in [f, d]`\n"
+	"fmax(a: FvecN, b: FvecN, c: FvecN) -> FvecN\n"
 	"	Returns `fmax(fmax(a, b), c)`.\n"
-	"fmax(a: vecN, b: vecN, c: vecN, d: vecN) -> vecN\n"
-	"	Returns `fmax(fmax(a, b), fmax(c, d))`."
+	"	`F in [f, d]`\n"
+	"fmax(a: FvecN, b: FvecN, c: FvecN, d: FvecN) -> FvecN\n"
+	"	Returns `fmax(fmax(a, b), fmax(c, d))`.\n"
+	"	`F in [f, d]`"
 );
 static PyObject*
 fmax_(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2, *arg3 = NULL, *arg4 = NULL;
+	PyObject* arg1, * arg2, * arg3 = NULL, * arg4 = NULL;
 	if (!PyArg_UnpackTuple(args, "fmax", 2, 4, &arg1, &arg2, &arg3, &arg4)) return NULL;
 	if (arg3 == NULL) {
 		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 			return pack(glm::fmax(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));
 		}
 		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2)));
+
+		if (PyGLM_Number_Check(arg2)) {
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_FMAX_FUNC_TEMPLATE_Vec_Number(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1)) {\
+				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Number_FromPyObject<T>(arg2)));\
+			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FMAX_FUNC_TEMPLATE_Vec_Number);
 		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Number_FromPyObject<float>(arg2)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Number_Check(arg2)) {
-			return pack(glm::fmax(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Number_FromPyObject<double>(arg2)));
+		else {
+			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_FMAX_FUNC_TEMPLATE_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2)) {\
+				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2)));\
+			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FMAX_FUNC_TEMPLATE_Vec_Vec);
 		}
 	}
 	else {
@@ -1782,30 +754,15 @@ fmax_(PyObject*, PyObject* args) {
 			PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
 			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
 			PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-			if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2) && PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2), PyGLM_Vec_PTI_Get2(1, float, arg3)));
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_FMAX_FUNC_TEMPLATE_Vec_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2) && PyGLM_Vec_PTI_Check2(L, T, arg3)) {\
+				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2), PyGLM_Vec_PTI_Get2(L, T, arg3)));\
 			}
-			if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2) && PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2), PyGLM_Vec_PTI_Get2(1, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2), PyGLM_Vec_PTI_Get2(2, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2), PyGLM_Vec_PTI_Get2(2, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2), PyGLM_Vec_PTI_Get2(3, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2), PyGLM_Vec_PTI_Get2(3, double, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2), PyGLM_Vec_PTI_Get2(4, float, arg3)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2), PyGLM_Vec_PTI_Get2(4, double, arg3)));
-			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FMAX_FUNC_TEMPLATE_Vec_Vec_Vec);
 		}
 		else {
 			if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3) && PyGLM_Number_Check(arg4)) {
@@ -1815,30 +772,15 @@ fmax_(PyObject*, PyObject* args) {
 			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
 			PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
 			PyGLM_PTI_Init3(arg4, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-			if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2) && PyGLM_Vec_PTI_Check2(1, float, arg3) && PyGLM_Vec_PTI_Check3(1, float, arg4)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2), PyGLM_Vec_PTI_Get2(1, float, arg3), PyGLM_Vec_PTI_Get3(1, float, arg4)));
+
+			// template with parameters (L)ength and (T)ype
+#			define PyGLM_FMAX_FUNC_TEMPLATE_Vec_Vec_Vec_Vec(L, T) \
+			if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2) && PyGLM_Vec_PTI_Check2(L, T, arg3) && PyGLM_Vec_PTI_Check3(L, T, arg4)) {\
+				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2), PyGLM_Vec_PTI_Get2(L, T, arg3), PyGLM_Vec_PTI_Get3(L, T, arg4)));\
 			}
-			if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2) && PyGLM_Vec_PTI_Check2(1, double, arg3) && PyGLM_Vec_PTI_Check3(1, double, arg4)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2), PyGLM_Vec_PTI_Get2(1, double, arg3), PyGLM_Vec_PTI_Get3(1, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(2, float, arg3) && PyGLM_Vec_PTI_Check3(2, float, arg4)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2), PyGLM_Vec_PTI_Get2(2, float, arg3), PyGLM_Vec_PTI_Get3(2, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(2, double, arg3) && PyGLM_Vec_PTI_Check3(2, double, arg4)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2), PyGLM_Vec_PTI_Get2(2, double, arg3), PyGLM_Vec_PTI_Get3(2, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2) && PyGLM_Vec_PTI_Check2(3, float, arg3) && PyGLM_Vec_PTI_Check3(3, float, arg4)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2), PyGLM_Vec_PTI_Get2(3, float, arg3), PyGLM_Vec_PTI_Get3(3, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2) && PyGLM_Vec_PTI_Check2(3, double, arg3) && PyGLM_Vec_PTI_Check3(3, double, arg4)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2), PyGLM_Vec_PTI_Get2(3, double, arg3), PyGLM_Vec_PTI_Get3(3, double, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3) && PyGLM_Vec_PTI_Check3(4, float, arg4)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2), PyGLM_Vec_PTI_Get2(4, float, arg3), PyGLM_Vec_PTI_Get3(4, float, arg4)));
-			}
-			if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3) && PyGLM_Vec_PTI_Check3(4, double, arg4)) {
-				return pack(glm::fmax(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2), PyGLM_Vec_PTI_Get2(4, double, arg3), PyGLM_Vec_PTI_Get3(4, double, arg4)));
-			}
+
+			// Expands the code above
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FMAX_FUNC_TEMPLATE_Vec_Vec_Vec_Vec);
 		}
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for fmax()");
@@ -1846,14 +788,17 @@ fmax_(PyObject*, PyObject* args) {
 }
 
 PyDoc_STRVAR(clamp_docstr,
-	"clamp(x: number, minVal: number, maxVal: number) -> number\n"
+	"clamp(x: N, minVal: N, maxVal: N) -> N\n"
 	"	Returns `min(max(x, minVal), maxVal)`.\n"
-	"clamp(x: vecN, minVal: number, maxVal: number) -> vecN\n"
+	"	`N is float or int`\n"
+	"clamp(x: TvecN, minVal: number, maxVal: number) -> TvecN\n"
 	"	Returns `min(max(x, minVal), maxVal)` for each component in `x` using the floating-point values\n"
 	"	`minVal` and `maxVal`.\n"
-	"clamp(x: vecN, minVal: vecN, maxVal: vecN) -> vecN\n"
-	"	Returns `min(max(x, minVal), maxVal)` for each component in `x` using the floating-point values\n"
+	"	`T in [f, d, i32, u32, i64, u64, i16, u16, i8, u8]`\n"
+	"clamp(x: TvecN, minVal: TvecN, maxVal: TvecN) -> TvecN\n"
+	"	Returns `min(max(x, minVal), maxVal)` for each component in `x` using the values\n"
 	"	`minVal` and `maxVal`.\n"
+	"	`T in [f, d, i32, u32, i64, u64, i16, u16, i8, u8]`"
 );
 static PyObject*
 clamp_(PyObject*, PyObject* args) {
@@ -1870,270 +815,55 @@ clamp_(PyObject*, PyObject* args) {
 	}
 	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
 	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
-	PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2) && PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Vec_PTI_Get1(1, float, arg2), PyGLM_Vec_PTI_Get2(1, float, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Vec_PTI_Get1(2, float, arg2), PyGLM_Vec_PTI_Get2(2, float, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2), PyGLM_Vec_PTI_Get2(3, float, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Vec_PTI_Get1(4, float, arg2), PyGLM_Vec_PTI_Get2(4, float, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, float, arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, float, arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, float, arg1), PyGLM_Number_FromPyObject<float>(arg2), PyGLM_Number_FromPyObject<float>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2) && PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Vec_PTI_Get1(1, double, arg2), PyGLM_Vec_PTI_Get2(1, double, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2), PyGLM_Vec_PTI_Get2(2, double, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2), PyGLM_Vec_PTI_Get2(3, double, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Vec_PTI_Get1(4, double, arg2), PyGLM_Vec_PTI_Get2(4, double, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, double, arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, double, arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, double, arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2) && PyGLM_Vec_PTI_Check2(1, int, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, int, arg1), PyGLM_Vec_PTI_Get1(1, int, arg2), PyGLM_Vec_PTI_Get2(1, int, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Vec_PTI_Check1(2, int, arg2) && PyGLM_Vec_PTI_Check2(2, int, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, int, arg1), PyGLM_Vec_PTI_Get1(2, int, arg2), PyGLM_Vec_PTI_Get2(2, int, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2) && PyGLM_Vec_PTI_Check2(3, int, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, int, arg1), PyGLM_Vec_PTI_Get1(3, int, arg2), PyGLM_Vec_PTI_Get2(3, int, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Vec_PTI_Check1(4, int, arg2) && PyGLM_Vec_PTI_Check2(4, int, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, int, arg1), PyGLM_Vec_PTI_Get1(4, int, arg2), PyGLM_Vec_PTI_Get2(4, int, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, int, arg1), PyGLM_Number_FromPyObject<int>(arg2), PyGLM_Number_FromPyObject<int>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, int, arg1), PyGLM_Number_FromPyObject<int>(arg2), PyGLM_Number_FromPyObject<int>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, int, arg1), PyGLM_Number_FromPyObject<int>(arg2), PyGLM_Number_FromPyObject<int>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, int, arg1), PyGLM_Number_FromPyObject<int>(arg2), PyGLM_Number_FromPyObject<int>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(1, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(1, glm::uint, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::uint, arg1), PyGLM_Vec_PTI_Get1(1, glm::uint, arg2), PyGLM_Vec_PTI_Get2(1, glm::uint, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(2, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(2, glm::uint, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::uint, arg1), PyGLM_Vec_PTI_Get1(2, glm::uint, arg2), PyGLM_Vec_PTI_Get2(2, glm::uint, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(3, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(3, glm::uint, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::uint, arg1), PyGLM_Vec_PTI_Get1(3, glm::uint, arg2), PyGLM_Vec_PTI_Get2(3, glm::uint, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(4, glm::uint, arg2) && PyGLM_Vec_PTI_Check2(4, glm::uint, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::uint, arg1), PyGLM_Vec_PTI_Get1(4, glm::uint, arg2), PyGLM_Vec_PTI_Get2(4, glm::uint, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2), PyGLM_Number_FromPyObject<glm::uint>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2), PyGLM_Number_FromPyObject<glm::uint>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2), PyGLM_Number_FromPyObject<glm::uint>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::uint, arg1), PyGLM_Number_FromPyObject<glm::uint>(arg2), PyGLM_Number_FromPyObject<glm::uint>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i64, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::i64, arg1), PyGLM_Vec_PTI_Get1(1, glm::i64, arg2), PyGLM_Vec_PTI_Get2(1, glm::i64, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i64, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::i64, arg1), PyGLM_Vec_PTI_Get1(2, glm::i64, arg2), PyGLM_Vec_PTI_Get2(2, glm::i64, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i64, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::i64, arg1), PyGLM_Vec_PTI_Get1(3, glm::i64, arg2), PyGLM_Vec_PTI_Get2(3, glm::i64, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i64, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i64, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::i64, arg1), PyGLM_Vec_PTI_Get1(4, glm::i64, arg2), PyGLM_Vec_PTI_Get2(4, glm::i64, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2), PyGLM_Number_FromPyObject<glm::i64>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2), PyGLM_Number_FromPyObject<glm::i64>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2), PyGLM_Number_FromPyObject<glm::i64>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::i64, arg1), PyGLM_Number_FromPyObject<glm::i64>(arg2), PyGLM_Number_FromPyObject<glm::i64>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u64, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::u64, arg1), PyGLM_Vec_PTI_Get1(1, glm::u64, arg2), PyGLM_Vec_PTI_Get2(1, glm::u64, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u64, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::u64, arg1), PyGLM_Vec_PTI_Get1(2, glm::u64, arg2), PyGLM_Vec_PTI_Get2(2, glm::u64, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u64, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::u64, arg1), PyGLM_Vec_PTI_Get1(3, glm::u64, arg2), PyGLM_Vec_PTI_Get2(3, glm::u64, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u64, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u64, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::u64, arg1), PyGLM_Vec_PTI_Get1(4, glm::u64, arg2), PyGLM_Vec_PTI_Get2(4, glm::u64, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2), PyGLM_Number_FromPyObject<glm::u64>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2), PyGLM_Number_FromPyObject<glm::u64>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2), PyGLM_Number_FromPyObject<glm::u64>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::u64, arg1), PyGLM_Number_FromPyObject<glm::u64>(arg2), PyGLM_Number_FromPyObject<glm::u64>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i16, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::i16, arg1), PyGLM_Vec_PTI_Get1(1, glm::i16, arg2), PyGLM_Vec_PTI_Get2(1, glm::i16, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i16, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::i16, arg1), PyGLM_Vec_PTI_Get1(2, glm::i16, arg2), PyGLM_Vec_PTI_Get2(2, glm::i16, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i16, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::i16, arg1), PyGLM_Vec_PTI_Get1(3, glm::i16, arg2), PyGLM_Vec_PTI_Get2(3, glm::i16, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i16, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i16, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::i16, arg1), PyGLM_Vec_PTI_Get1(4, glm::i16, arg2), PyGLM_Vec_PTI_Get2(4, glm::i16, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2), PyGLM_Number_FromPyObject<glm::i16>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2), PyGLM_Number_FromPyObject<glm::i16>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2), PyGLM_Number_FromPyObject<glm::i16>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::i16, arg1), PyGLM_Number_FromPyObject<glm::i16>(arg2), PyGLM_Number_FromPyObject<glm::i16>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u16, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::u16, arg1), PyGLM_Vec_PTI_Get1(1, glm::u16, arg2), PyGLM_Vec_PTI_Get2(1, glm::u16, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u16, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::u16, arg1), PyGLM_Vec_PTI_Get1(2, glm::u16, arg2), PyGLM_Vec_PTI_Get2(2, glm::u16, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u16, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::u16, arg1), PyGLM_Vec_PTI_Get1(3, glm::u16, arg2), PyGLM_Vec_PTI_Get2(3, glm::u16, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u16, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u16, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::u16, arg1), PyGLM_Vec_PTI_Get1(4, glm::u16, arg2), PyGLM_Vec_PTI_Get2(4, glm::u16, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2), PyGLM_Number_FromPyObject<glm::u16>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2), PyGLM_Number_FromPyObject<glm::u16>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2), PyGLM_Number_FromPyObject<glm::u16>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::u16, arg1), PyGLM_Number_FromPyObject<glm::u16>(arg2), PyGLM_Number_FromPyObject<glm::u16>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(1, glm::i8, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::i8, arg1), PyGLM_Vec_PTI_Get1(1, glm::i8, arg2), PyGLM_Vec_PTI_Get2(1, glm::i8, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(2, glm::i8, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::i8, arg1), PyGLM_Vec_PTI_Get1(2, glm::i8, arg2), PyGLM_Vec_PTI_Get2(2, glm::i8, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(3, glm::i8, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::i8, arg1), PyGLM_Vec_PTI_Get1(3, glm::i8, arg2), PyGLM_Vec_PTI_Get2(3, glm::i8, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i8, arg2) && PyGLM_Vec_PTI_Check2(4, glm::i8, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::i8, arg1), PyGLM_Vec_PTI_Get1(4, glm::i8, arg2), PyGLM_Vec_PTI_Get2(4, glm::i8, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2), PyGLM_Number_FromPyObject<glm::i8>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2), PyGLM_Number_FromPyObject<glm::i8>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2), PyGLM_Number_FromPyObject<glm::i8>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::i8, arg1), PyGLM_Number_FromPyObject<glm::i8>(arg2), PyGLM_Number_FromPyObject<glm::i8>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(1, glm::u8, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::u8, arg1), PyGLM_Vec_PTI_Get1(1, glm::u8, arg2), PyGLM_Vec_PTI_Get2(1, glm::u8, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(2, glm::u8, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::u8, arg1), PyGLM_Vec_PTI_Get1(2, glm::u8, arg2), PyGLM_Vec_PTI_Get2(2, glm::u8, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(3, glm::u8, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::u8, arg1), PyGLM_Vec_PTI_Get1(3, glm::u8, arg2), PyGLM_Vec_PTI_Get2(3, glm::u8, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u8, arg2) && PyGLM_Vec_PTI_Check2(4, glm::u8, arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::u8, arg1), PyGLM_Vec_PTI_Get1(4, glm::u8, arg2), PyGLM_Vec_PTI_Get2(4, glm::u8, arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(1, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2), PyGLM_Number_FromPyObject<glm::u8>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(2, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2), PyGLM_Number_FromPyObject<glm::u8>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(3, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2), PyGLM_Number_FromPyObject<glm::u8>(arg3)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1) && PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
-		return pack(glm::clamp(PyGLM_Vec_PTI_Get0(4, glm::u8, arg1), PyGLM_Number_FromPyObject<glm::u8>(arg2), PyGLM_Number_FromPyObject<glm::u8>(arg3)));
-	}
-	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for " "clamp" "()");
+
+	if (PyGLM_Number_Check(arg2) && PyGLM_Number_Check(arg3)) {
+		// template with parameters (L)ength and (T)ype
+#		define PyGLM_CLAMP_FUNC_TEMPLATE_Vec_Number_Number(L, T) \
+		if (PyGLM_Vec_PTI_Check0(L, T, arg1)) {\
+			return pack(glm::clamp(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Number_FromPyObject<T>(arg2), PyGLM_Number_FromPyObject<T>(arg3)));\
+		}
+
+		// Expands the code above
+		PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fFiqsuIQSU, PyGLM_CLAMP_FUNC_TEMPLATE_Vec_Number_Number);
+	}
+	else {
+		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_I | PyGLM_DT_FD);
+
+		// template with parameters (L)ength and (T)ype
+#		define PyGLM_CLAMP_FUNC_TEMPLATE_Vec_Vec_Vec(L, T) \
+		if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2) && PyGLM_Vec_PTI_Check2(L, T, arg3)) {\
+			return pack(glm::clamp(PyGLM_Vec_PTI_Get0(L, T, arg1), PyGLM_Vec_PTI_Get1(L, T, arg2), PyGLM_Vec_PTI_Get2(L, T, arg3)));\
+		}
+
+		// Expands the code above
+		PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fFiqsuIQSU, PyGLM_CLAMP_FUNC_TEMPLATE_Vec_Vec_Vec);
+	}
+	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for clamp()");
 	return NULL;
 }
 
 PyDoc_STRVAR(mix_docstr,
-	"mix(x: number, y: number, a: float) -> number\n"
+	"mix(x: number, y: number, a: N) -> number\n"
 	"	Returns `x * (1.0 - a) + y * a`, i.e., the linear blend of `x` and `y` using the floating-point\n"
 	"	value `a`. The value for `a` is not restricted to the range `[0, 1]`.\n"
+	"	`N in [float, int]`\n"
 	"mix(x: number, y: number, a: bool) -> number\n"
 	"	Returns `y` if `a` is `True` and `x` otherwise.\n"
-	"mix(x: vecN, y: vecN, a: fvecN) -> vecN\n"
+	"mix(x: vecN, y: vecN, a: FvecN) -> vecN\n"
 	"	Returns `x * (1.0 - a) + y * a`, i.e., the linear blend of `x` and `y` using the floating-point\n"
 	"	value `a`. The value for `a` is not restricted to the range `[0, 1]`.\n"
+	"	`F in [f, d]`\n"
 	"mix(x: vecN, y: vecN, a: bvecN) -> vecN\n"
 	"	For each component index `i`:\n"
 	"	Returns `y[i]` if `a[i]` is `True` and `x[i]` otherwise.\n"
-	"mix(x: matNxM, y: matNxM, a: fmatNxM) -> matNxM\n"
+	"mix(x: matSxS, y: matSxS, a: FmatSxS) -> matSxS\n"
 	"	Returns `x * (1.0 - a) + y * a`, i.e., the linear blend of `x` and `y` using the floating-point\n"
 	"	value `a` for each component. The value for `a` is not restricted to the range `[0, 1]`.\n"
-	"mix(x: matNxM, y: matNxM, a: float) -> matNxM\n"
+	"	`F in [f, d]`\n"
+	"mix(x: matSxS, y: matSxS, a: number) -> matSxS\n"
 	"	Returns `x * (1.0 - a) + y * a`, i.e., the linear blend of `x` and `y` using the floating-point\n"
 	"	value `a` for each component. The value for `a` is not restricted to the range `[0, 1]`.\n"
-	"mix(x: quat, y: quat, a: float) -> quat\n"
+	"mix(x: quat, y: quat, a: number) -> quat\n"
 	"	Spherical linear interpolation of two quaternions. The interpolation is oriented and the\n"
 	"	rotation is performed at constant speed. For short path spherical linear interpolation, use\n"
 	"	the `slerp` function."
@@ -2151,1525 +881,68 @@ mix_(PyObject*, PyObject* args) {
 		return PyGLM_PyObject_FromNumber(glm::mix(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));
 	}
 
-	PyGLM_PTI_Init0(arg1, PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);
-	PyGLM_PTI_Init1(arg2, PyGLM_T_ALL | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);
+	PyGLM_PTI_Init0(arg1, PyGLM_T_ALL | PyGLM_SHAPE_VEC_ALL | PyGLM_SHAPE_SQUARE | PyGLM_DT_ALL);
+	PyGLM_PTI_Init1(arg2, PyGLM_T_ALL | PyGLM_SHAPE_VEC_ALL | PyGLM_SHAPE_SQUARE | PyGLM_DT_ALL);
 
-	if (PyGLM_Qua_PTI_Check0(float, arg1) && PyGLM_Qua_PTI_Check1(float, arg2) && PyGLM_Number_Check(arg3)) {
-		glm::quat o = PyGLM_Qua_PTI_Get0(float, arg1);
-		glm::quat o2 = PyGLM_Qua_PTI_Get1(float, arg2);
-		return pack_qua(glm::mix(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
-	}
-	if (PyGLM_Qua_PTI_Check0(double, arg1) && PyGLM_Qua_PTI_Check1(double, arg2) && PyGLM_Number_Check(arg3)) {
-		glm::dquat o = PyGLM_Qua_PTI_Get0(double, arg1);
-		glm::dquat o2 = PyGLM_Qua_PTI_Get1(double, arg2);
-		return pack_qua(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
+	// template with parameters (T)ype
+#	define PyGLM_MIX_FUNC_TEMPLATE_Qua_Qua_Number(T) \
+	if (PyGLM_Qua_PTI_Check0(T, arg1) && PyGLM_Qua_PTI_Check1(T, arg2) && PyGLM_Number_Check(arg3)) {\
+		return pack_qua(glm::mix(PyGLM_Qua_PTI_Get0(T, arg1), PyGLM_Qua_PTI_Get1(T, arg2), PyGLM_Number_FromPyObject<T>(arg3)));\
 	}
 
-	if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {
-		glm::vec<1, float> o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-		glm::vec<1, float> o2 = PyGLM_Vec_PTI_Get1(1, float, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, bool, arg3)) {
-			glm::vec<1, bool> o3 = PyGLM_Vec_PTI_Get2(1, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2)) {
-		glm::vec<1, double> o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-		glm::vec<1, double> o2 = PyGLM_Vec_PTI_Get1(1, double, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, bool, arg3)) {
-			glm::vec<1, bool> o3 = PyGLM_Vec_PTI_Get2(1, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2)) {
-		glm::vec<1, int> o = PyGLM_Vec_PTI_Get0(1, int, arg1);
-		glm::vec<1, int> o2 = PyGLM_Vec_PTI_Get1(1, int, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, bool, arg3)) {
-			glm::vec<1, bool> o3 = PyGLM_Vec_PTI_Get2(1, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(1, glm::uint, arg2)) {
-		glm::vec<1, glm::uint> o = PyGLM_Vec_PTI_Get0(1, glm::uint, arg1);
-		glm::vec<1, glm::uint> o2 = PyGLM_Vec_PTI_Get1(1, glm::uint, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, bool, arg3)) {
-			glm::vec<1, bool> o3 = PyGLM_Vec_PTI_Get2(1, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i64, arg2)) {
-		glm::vec<1, glm::i64> o = PyGLM_Vec_PTI_Get0(1, glm::i64, arg1);
-		glm::vec<1, glm::i64> o2 = PyGLM_Vec_PTI_Get1(1, glm::i64, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, bool, arg3)) {
-			glm::vec<1, bool> o3 = PyGLM_Vec_PTI_Get2(1, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u64, arg2)) {
-		glm::vec<1, glm::u64> o = PyGLM_Vec_PTI_Get0(1, glm::u64, arg1);
-		glm::vec<1, glm::u64> o2 = PyGLM_Vec_PTI_Get1(1, glm::u64, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, bool, arg3)) {
-			glm::vec<1, bool> o3 = PyGLM_Vec_PTI_Get2(1, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i16, arg2)) {
-		glm::vec<1, glm::i16> o = PyGLM_Vec_PTI_Get0(1, glm::i16, arg1);
-		glm::vec<1, glm::i16> o2 = PyGLM_Vec_PTI_Get1(1, glm::i16, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, bool, arg3)) {
-			glm::vec<1, bool> o3 = PyGLM_Vec_PTI_Get2(1, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u16, arg2)) {
-		glm::vec<1, glm::u16> o = PyGLM_Vec_PTI_Get0(1, glm::u16, arg1);
-		glm::vec<1, glm::u16> o2 = PyGLM_Vec_PTI_Get1(1, glm::u16, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, bool, arg3)) {
-			glm::vec<1, bool> o3 = PyGLM_Vec_PTI_Get2(1, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::i8, arg2)) {
-		glm::vec<1, glm::i8> o = PyGLM_Vec_PTI_Get0(1, glm::i8, arg1);
-		glm::vec<1, glm::i8> o2 = PyGLM_Vec_PTI_Get1(1, glm::i8, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, bool, arg3)) {
-			glm::vec<1, bool> o3 = PyGLM_Vec_PTI_Get2(1, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(1, glm::u8, arg2)) {
-		glm::vec<1, glm::u8> o = PyGLM_Vec_PTI_Get0(1, glm::u8, arg1);
-		glm::vec<1, glm::u8> o2 = PyGLM_Vec_PTI_Get1(1, glm::u8, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, bool, arg3)) {
-			glm::vec<1, bool> o3 = PyGLM_Vec_PTI_Get2(1, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(1, bool, arg1) && PyGLM_Vec_PTI_Check1(1, bool, arg2)) {
-		glm::vec<1, bool> o = PyGLM_Vec_PTI_Get0(1, bool, arg1);
-		glm::vec<1, bool> o2 = PyGLM_Vec_PTI_Get1(1, bool, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(1, bool, arg3)) {
-			glm::vec<1, bool> o3 = PyGLM_Vec_PTI_Get2(1, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
-		glm::vec<2, float> o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-		glm::vec<2, float> o2 = PyGLM_Vec_PTI_Get1(2, float, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, bool, arg3)) {
-			glm::vec<2, bool> o3 = PyGLM_Vec_PTI_Get2(2, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
-		glm::vec<2, double> o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-		glm::vec<2, double> o2 = PyGLM_Vec_PTI_Get1(2, double, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, bool, arg3)) {
-			glm::vec<2, bool> o3 = PyGLM_Vec_PTI_Get2(2, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Vec_PTI_Check1(2, int, arg2)) {
-		glm::vec<2, int> o = PyGLM_Vec_PTI_Get0(2, int, arg1);
-		glm::vec<2, int> o2 = PyGLM_Vec_PTI_Get1(2, int, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, bool, arg3)) {
-			glm::vec<2, bool> o3 = PyGLM_Vec_PTI_Get2(2, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(2, glm::uint, arg2)) {
-		glm::vec<2, glm::uint> o = PyGLM_Vec_PTI_Get0(2, glm::uint, arg1);
-		glm::vec<2, glm::uint> o2 = PyGLM_Vec_PTI_Get1(2, glm::uint, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, bool, arg3)) {
-			glm::vec<2, bool> o3 = PyGLM_Vec_PTI_Get2(2, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i64, arg2)) {
-		glm::vec<2, glm::i64> o = PyGLM_Vec_PTI_Get0(2, glm::i64, arg1);
-		glm::vec<2, glm::i64> o2 = PyGLM_Vec_PTI_Get1(2, glm::i64, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, bool, arg3)) {
-			glm::vec<2, bool> o3 = PyGLM_Vec_PTI_Get2(2, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u64, arg2)) {
-		glm::vec<2, glm::u64> o = PyGLM_Vec_PTI_Get0(2, glm::u64, arg1);
-		glm::vec<2, glm::u64> o2 = PyGLM_Vec_PTI_Get1(2, glm::u64, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, bool, arg3)) {
-			glm::vec<2, bool> o3 = PyGLM_Vec_PTI_Get2(2, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i16, arg2)) {
-		glm::vec<2, glm::i16> o = PyGLM_Vec_PTI_Get0(2, glm::i16, arg1);
-		glm::vec<2, glm::i16> o2 = PyGLM_Vec_PTI_Get1(2, glm::i16, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, bool, arg3)) {
-			glm::vec<2, bool> o3 = PyGLM_Vec_PTI_Get2(2, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u16, arg2)) {
-		glm::vec<2, glm::u16> o = PyGLM_Vec_PTI_Get0(2, glm::u16, arg1);
-		glm::vec<2, glm::u16> o2 = PyGLM_Vec_PTI_Get1(2, glm::u16, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, bool, arg3)) {
-			glm::vec<2, bool> o3 = PyGLM_Vec_PTI_Get2(2, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::i8, arg2)) {
-		glm::vec<2, glm::i8> o = PyGLM_Vec_PTI_Get0(2, glm::i8, arg1);
-		glm::vec<2, glm::i8> o2 = PyGLM_Vec_PTI_Get1(2, glm::i8, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, bool, arg3)) {
-			glm::vec<2, bool> o3 = PyGLM_Vec_PTI_Get2(2, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(2, glm::u8, arg2)) {
-		glm::vec<2, glm::u8> o = PyGLM_Vec_PTI_Get0(2, glm::u8, arg1);
-		glm::vec<2, glm::u8> o2 = PyGLM_Vec_PTI_Get1(2, glm::u8, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, bool, arg3)) {
-			glm::vec<2, bool> o3 = PyGLM_Vec_PTI_Get2(2, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(2, bool, arg1) && PyGLM_Vec_PTI_Check1(2, bool, arg2)) {
-		glm::vec<2, bool> o = PyGLM_Vec_PTI_Get0(2, bool, arg1);
-		glm::vec<2, bool> o2 = PyGLM_Vec_PTI_Get1(2, bool, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(2, bool, arg3)) {
-			glm::vec<2, bool> o3 = PyGLM_Vec_PTI_Get2(2, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-		glm::vec<3, float> o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-		glm::vec<3, float> o2 = PyGLM_Vec_PTI_Get1(3, float, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, bool, arg3)) {
-			glm::vec<3, bool> o3 = PyGLM_Vec_PTI_Get2(3, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-		glm::vec<3, double> o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-		glm::vec<3, double> o2 = PyGLM_Vec_PTI_Get1(3, double, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, bool, arg3)) {
-			glm::vec<3, bool> o3 = PyGLM_Vec_PTI_Get2(3, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2)) {
-		glm::vec<3, int> o = PyGLM_Vec_PTI_Get0(3, int, arg1);
-		glm::vec<3, int> o2 = PyGLM_Vec_PTI_Get1(3, int, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, bool, arg3)) {
-			glm::vec<3, bool> o3 = PyGLM_Vec_PTI_Get2(3, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(3, glm::uint, arg2)) {
-		glm::vec<3, glm::uint> o = PyGLM_Vec_PTI_Get0(3, glm::uint, arg1);
-		glm::vec<3, glm::uint> o2 = PyGLM_Vec_PTI_Get1(3, glm::uint, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, bool, arg3)) {
-			glm::vec<3, bool> o3 = PyGLM_Vec_PTI_Get2(3, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i64, arg2)) {
-		glm::vec<3, glm::i64> o = PyGLM_Vec_PTI_Get0(3, glm::i64, arg1);
-		glm::vec<3, glm::i64> o2 = PyGLM_Vec_PTI_Get1(3, glm::i64, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, bool, arg3)) {
-			glm::vec<3, bool> o3 = PyGLM_Vec_PTI_Get2(3, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u64, arg2)) {
-		glm::vec<3, glm::u64> o = PyGLM_Vec_PTI_Get0(3, glm::u64, arg1);
-		glm::vec<3, glm::u64> o2 = PyGLM_Vec_PTI_Get1(3, glm::u64, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, bool, arg3)) {
-			glm::vec<3, bool> o3 = PyGLM_Vec_PTI_Get2(3, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i16, arg2)) {
-		glm::vec<3, glm::i16> o = PyGLM_Vec_PTI_Get0(3, glm::i16, arg1);
-		glm::vec<3, glm::i16> o2 = PyGLM_Vec_PTI_Get1(3, glm::i16, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, bool, arg3)) {
-			glm::vec<3, bool> o3 = PyGLM_Vec_PTI_Get2(3, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u16, arg2)) {
-		glm::vec<3, glm::u16> o = PyGLM_Vec_PTI_Get0(3, glm::u16, arg1);
-		glm::vec<3, glm::u16> o2 = PyGLM_Vec_PTI_Get1(3, glm::u16, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, bool, arg3)) {
-			glm::vec<3, bool> o3 = PyGLM_Vec_PTI_Get2(3, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::i8, arg2)) {
-		glm::vec<3, glm::i8> o = PyGLM_Vec_PTI_Get0(3, glm::i8, arg1);
-		glm::vec<3, glm::i8> o2 = PyGLM_Vec_PTI_Get1(3, glm::i8, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, bool, arg3)) {
-			glm::vec<3, bool> o3 = PyGLM_Vec_PTI_Get2(3, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(3, glm::u8, arg2)) {
-		glm::vec<3, glm::u8> o = PyGLM_Vec_PTI_Get0(3, glm::u8, arg1);
-		glm::vec<3, glm::u8> o2 = PyGLM_Vec_PTI_Get1(3, glm::u8, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, bool, arg3)) {
-			glm::vec<3, bool> o3 = PyGLM_Vec_PTI_Get2(3, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(3, bool, arg1) && PyGLM_Vec_PTI_Check1(3, bool, arg2)) {
-		glm::vec<3, bool> o = PyGLM_Vec_PTI_Get0(3, bool, arg1);
-		glm::vec<3, bool> o2 = PyGLM_Vec_PTI_Get1(3, bool, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(3, bool, arg3)) {
-			glm::vec<3, bool> o3 = PyGLM_Vec_PTI_Get2(3, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2)) {
-		glm::vec<4, float> o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-		glm::vec<4, float> o2 = PyGLM_Vec_PTI_Get1(4, float, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, bool, arg3)) {
-			glm::vec<4, bool> o3 = PyGLM_Vec_PTI_Get2(4, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2)) {
-		glm::vec<4, double> o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-		glm::vec<4, double> o2 = PyGLM_Vec_PTI_Get1(4, double, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, bool, arg3)) {
-			glm::vec<4, bool> o3 = PyGLM_Vec_PTI_Get2(4, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Vec_PTI_Check1(4, int, arg2)) {
-		glm::vec<4, int> o = PyGLM_Vec_PTI_Get0(4, int, arg1);
-		glm::vec<4, int> o2 = PyGLM_Vec_PTI_Get1(4, int, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, bool, arg3)) {
-			glm::vec<4, bool> o3 = PyGLM_Vec_PTI_Get2(4, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1) && PyGLM_Vec_PTI_Check1(4, glm::uint, arg2)) {
-		glm::vec<4, glm::uint> o = PyGLM_Vec_PTI_Get0(4, glm::uint, arg1);
-		glm::vec<4, glm::uint> o2 = PyGLM_Vec_PTI_Get1(4, glm::uint, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, bool, arg3)) {
-			glm::vec<4, bool> o3 = PyGLM_Vec_PTI_Get2(4, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i64, arg2)) {
-		glm::vec<4, glm::i64> o = PyGLM_Vec_PTI_Get0(4, glm::i64, arg1);
-		glm::vec<4, glm::i64> o2 = PyGLM_Vec_PTI_Get1(4, glm::i64, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, bool, arg3)) {
-			glm::vec<4, bool> o3 = PyGLM_Vec_PTI_Get2(4, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u64, arg2)) {
-		glm::vec<4, glm::u64> o = PyGLM_Vec_PTI_Get0(4, glm::u64, arg1);
-		glm::vec<4, glm::u64> o2 = PyGLM_Vec_PTI_Get1(4, glm::u64, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, bool, arg3)) {
-			glm::vec<4, bool> o3 = PyGLM_Vec_PTI_Get2(4, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i16, arg2)) {
-		glm::vec<4, glm::i16> o = PyGLM_Vec_PTI_Get0(4, glm::i16, arg1);
-		glm::vec<4, glm::i16> o2 = PyGLM_Vec_PTI_Get1(4, glm::i16, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, bool, arg3)) {
-			glm::vec<4, bool> o3 = PyGLM_Vec_PTI_Get2(4, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u16, arg2)) {
-		glm::vec<4, glm::u16> o = PyGLM_Vec_PTI_Get0(4, glm::u16, arg1);
-		glm::vec<4, glm::u16> o2 = PyGLM_Vec_PTI_Get1(4, glm::u16, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, bool, arg3)) {
-			glm::vec<4, bool> o3 = PyGLM_Vec_PTI_Get2(4, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::i8, arg2)) {
-		glm::vec<4, glm::i8> o = PyGLM_Vec_PTI_Get0(4, glm::i8, arg1);
-		glm::vec<4, glm::i8> o2 = PyGLM_Vec_PTI_Get1(4, glm::i8, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, bool, arg3)) {
-			glm::vec<4, bool> o3 = PyGLM_Vec_PTI_Get2(4, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1) && PyGLM_Vec_PTI_Check1(4, glm::u8, arg2)) {
-		glm::vec<4, glm::u8> o = PyGLM_Vec_PTI_Get0(4, glm::u8, arg1);
-		glm::vec<4, glm::u8> o2 = PyGLM_Vec_PTI_Get1(4, glm::u8, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, bool, arg3)) {
-			glm::vec<4, bool> o3 = PyGLM_Vec_PTI_Get2(4, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check0(4, bool, arg1) && PyGLM_Vec_PTI_Check1(4, bool, arg2)) {
-		glm::vec<4, bool> o = PyGLM_Vec_PTI_Get0(4, bool, arg1);
-		glm::vec<4, bool> o2 = PyGLM_Vec_PTI_Get1(4, bool, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD | PyGLM_DT_BOOL);
-		if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check2(4, bool, arg3)) {
-			glm::vec<4, bool> o3 = PyGLM_Vec_PTI_Get2(4, bool, arg3);
-			return pack_vec(glm::mix(o, o2, o3));
-		}
+	// Expands the code above
+	PyGLM_CODEGEN_PARAM_T_Qua_fF(PyGLM_MIX_FUNC_TEMPLATE_Qua_Qua_Number);
+
+
+	// template with parameters (L)ength and (T)ype
+#	define PyGLM_MIX_FUNC_TEMPLATE_Vec_Vec_Any(L, T) \
+	if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2)) {\
+		glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, arg1);\
+		glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, arg2);\
+		if (PyGLM_Number_Check(arg3)) {\
+			return pack_vec(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));\
+		}\
+		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_FD | PyGLM_DT_BOOL);\
+		if (PyGLM_Vec_PTI_Check2(L, float, arg3)) {\
+			glm::vec<L, float> o3 = PyGLM_Vec_PTI_Get2(L, float, arg3);\
+			return pack_vec(glm::mix(o, o2, o3));\
+		}\
+		if (PyGLM_Vec_PTI_Check2(L, double, arg3)) {\
+			glm::vec<L, double> o3 = PyGLM_Vec_PTI_Get2(L, double, arg3);\
+			return pack_vec(glm::mix(o, o2, o3));\
+		}\
+		if (PyGLM_Vec_PTI_Check2(L, bool, arg3)) {\
+			glm::vec<L, bool> o3 = PyGLM_Vec_PTI_Get2(L, bool, arg3);\
+			return pack_vec(glm::mix(o, o2, o3));\
+		}\
 	}
 
-	if (PyGLM_Mat_PTI_Check0(2, 2, float, arg1) && PyGLM_Mat_PTI_Check1(2, 2, float, arg2)) {
-		glm::mat<2, 2, float> o = PyGLM_Mat_PTI_Get0(2, 2, float, arg1);
-		glm::mat<2, 2, float> o2 = PyGLM_Mat_PTI_Get1(2, 2, float, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(2, 2, float, arg3)) {
-			glm::mat<2, 2, float> o3 = PyGLM_Mat_PTI_Get2(2, 2, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(2, 2, double, arg3)) {
-			glm::mat<2, 2, double> o3 = PyGLM_Mat_PTI_Get2(2, 2, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
+	// Expands the code above
+	PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_ALL, PyGLM_MIX_FUNC_TEMPLATE_Vec_Vec_Any);
+
+
+	// template with parameters (C)olumns (R)ows and (T)ype
+#	define PyGLM_MIX_FUNC_TEMPLATE_Mat_Mat_Any(C, R, T) \
+	if (PyGLM_Mat_PTI_Check0(C, R, T, arg1) && PyGLM_Mat_PTI_Check1(C, R, T, arg2)) {\
+		glm::mat<C, R, T> o = PyGLM_Mat_PTI_Get0(C, R, T, arg1);\
+		glm::mat<C, R, T> o2 = PyGLM_Mat_PTI_Get1(C, R, T, arg2);\
+		if (PyGLM_Number_Check(arg3)) {\
+			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));\
+		}\
+		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_ ## C ## x ## R | PyGLM_DT_FD);\
+		if (PyGLM_Mat_PTI_Check2(C, R, float, arg3)) {\
+			glm::mat<C, R, float> o3 = PyGLM_Mat_PTI_Get2(C, R, float, arg3);\
+			return pack(glm::mix(o, o2, o3));\
+		}\
+		if (PyGLM_Mat_PTI_Check2(C, R, double, arg3)) {\
+			glm::mat<C, R, double> o3 = PyGLM_Mat_PTI_Get2(C, R, double, arg3);\
+			return pack(glm::mix(o, o2, o3));\
+		}\
 	}
-	if (PyGLM_Mat_PTI_Check0(2, 2, double, arg1) && PyGLM_Mat_PTI_Check1(2, 2, double, arg2)) {
-		glm::mat<2, 2, double> o = PyGLM_Mat_PTI_Get0(2, 2, double, arg1);
-		glm::mat<2, 2, double> o2 = PyGLM_Mat_PTI_Get1(2, 2, double, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(2, 2, float, arg3)) {
-			glm::mat<2, 2, float> o3 = PyGLM_Mat_PTI_Get2(2, 2, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(2, 2, double, arg3)) {
-			glm::mat<2, 2, double> o3 = PyGLM_Mat_PTI_Get2(2, 2, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_PTI_Check0(2, 2, int, arg1) && PyGLM_Mat_PTI_Check1(2, 2, int, arg2)) {
-		glm::mat<2, 2, int> o = PyGLM_Mat_PTI_Get0(2, 2, int, arg1);
-		glm::mat<2, 2, int> o2 = PyGLM_Mat_PTI_Get1(2, 2, int, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(2, 2, float, arg3)) {
-			glm::mat<2, 2, float> o3 = PyGLM_Mat_PTI_Get2(2, 2, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(2, 2, double, arg3)) {
-			glm::mat<2, 2, double> o3 = PyGLM_Mat_PTI_Get2(2, 2, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_PTI_Check0(2, 2, glm::uint, arg1) && PyGLM_Mat_PTI_Check1(2, 2, glm::uint, arg2)) {
-		glm::mat<2, 2, glm::uint> o = PyGLM_Mat_PTI_Get0(2, 2, glm::uint, arg1);
-		glm::mat<2, 2, glm::uint> o2 = PyGLM_Mat_PTI_Get1(2, 2, glm::uint, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(2, 2, float, arg3)) {
-			glm::mat<2, 2, float> o3 = PyGLM_Mat_PTI_Get2(2, 2, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(2, 2, double, arg3)) {
-			glm::mat<2, 2, double> o3 = PyGLM_Mat_PTI_Get2(2, 2, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	//if (PyGLM_Mat_PTI_Check0(2, 3, float, arg1) && PyGLM_Mat_PTI_Check0(2, 3, float, arg2)) {
-	//	glm::mat<2, 3, float> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 3, float, arg3)) {
-	//		glm::mat<2, 3, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 3, double, arg3)) {
-	//		glm::mat<2, 3, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(2, 3, double, arg1) && PyGLM_Mat_PTI_Check0(2, 3, double, arg2)) {
-	//	glm::mat<2, 3, double> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 3, float, arg3)) {
-	//		glm::mat<2, 3, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 3, double, arg3)) {
-	//		glm::mat<2, 3, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(2, 3, int, arg1) && PyGLM_Mat_PTI_Check0(2, 3, int, arg2)) {
-	//	glm::mat<2, 3, int> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 3, float, arg3)) {
-	//		glm::mat<2, 3, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 3, double, arg3)) {
-	//		glm::mat<2, 3, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(2, 3, glm::uint, arg1) && PyGLM_Mat_PTI_Check0(2, 3, glm::uint, arg2)) {
-	//	glm::mat<2, 3, glm::uint> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 3, float, arg3)) {
-	//		glm::mat<2, 3, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 3, double, arg3)) {
-	//		glm::mat<2, 3, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(2, 4, float, arg1) && PyGLM_Mat_PTI_Check0(2, 4, float, arg2)) {
-	//	glm::mat<2, 4, float> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 4, float, arg3)) {
-	//		glm::mat<2, 4, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 4, double, arg3)) {
-	//		glm::mat<2, 4, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(2, 4, double, arg1) && PyGLM_Mat_PTI_Check0(2, 4, double, arg2)) {
-	//	glm::mat<2, 4, double> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 4, float, arg3)) {
-	//		glm::mat<2, 4, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 4, double, arg3)) {
-	//		glm::mat<2, 4, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(2, 4, int, arg1) && PyGLM_Mat_PTI_Check0(2, 4, int, arg2)) {
-	//	glm::mat<2, 4, int> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 4, float, arg3)) {
-	//		glm::mat<2, 4, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 4, double, arg3)) {
-	//		glm::mat<2, 4, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(2, 4, glm::uint, arg1) && PyGLM_Mat_PTI_Check0(2, 4, glm::uint, arg2)) {
-	//	glm::mat<2, 4, glm::uint> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 4, float, arg3)) {
-	//		glm::mat<2, 4, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(2, 4, double, arg3)) {
-	//		glm::mat<2, 4, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(3, 2, float, arg1) && PyGLM_Mat_PTI_Check0(3, 2, float, arg2)) {
-	//	glm::mat<3, 2, float> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 2, float, arg3)) {
-	//		glm::mat<3, 2, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 2, double, arg3)) {
-	//		glm::mat<3, 2, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(3, 2, double, arg1) && PyGLM_Mat_PTI_Check0(3, 2, double, arg2)) {
-	//	glm::mat<3, 2, double> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 2, float, arg3)) {
-	//		glm::mat<3, 2, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 2, double, arg3)) {
-	//		glm::mat<3, 2, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(3, 2, int, arg1) && PyGLM_Mat_PTI_Check0(3, 2, int, arg2)) {
-	//	glm::mat<3, 2, int> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 2, float, arg3)) {
-	//		glm::mat<3, 2, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 2, double, arg3)) {
-	//		glm::mat<3, 2, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(3, 2, glm::uint, arg1) && PyGLM_Mat_PTI_Check0(3, 2, glm::uint, arg2)) {
-	//	glm::mat<3, 2, glm::uint> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 2, float, arg3)) {
-	//		glm::mat<3, 2, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 2, double, arg3)) {
-	//		glm::mat<3, 2, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	if (PyGLM_Mat_PTI_Check0(3, 3, float, arg1) && PyGLM_Mat_PTI_Check1(3, 3, float, arg2)) {
-		glm::mat<3, 3, float> o = PyGLM_Mat_PTI_Get0(3, 3, float, arg1);
-		glm::mat<3, 3, float> o2 = PyGLM_Mat_PTI_Get1(3, 3, float, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(3, 3, float, arg3)) {
-			glm::mat<3, 3, float> o3 = PyGLM_Mat_PTI_Get2(3, 3, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(3, 3, double, arg3)) {
-			glm::mat<3, 3, double> o3 = PyGLM_Mat_PTI_Get2(3, 3, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_PTI_Check0(3, 3, double, arg1) && PyGLM_Mat_PTI_Check1(3, 3, double, arg2)) {
-		glm::mat<3, 3, double> o = PyGLM_Mat_PTI_Get0(3, 3, double, arg1);
-		glm::mat<3, 3, double> o2 = PyGLM_Mat_PTI_Get1(3, 3, double, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(3, 3, float, arg3)) {
-			glm::mat<3, 3, float> o3 = PyGLM_Mat_PTI_Get2(3, 3, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(3, 3, double, arg3)) {
-			glm::mat<3, 3, double> o3 = PyGLM_Mat_PTI_Get2(3, 3, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_PTI_Check0(3, 3, int, arg1) && PyGLM_Mat_PTI_Check1(3, 3, int, arg2)) {
-		glm::mat<3, 3, int> o = PyGLM_Mat_PTI_Get0(3, 3, int, arg1);
-		glm::mat<3, 3, int> o2 = PyGLM_Mat_PTI_Get1(3, 3, int, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(3, 3, float, arg3)) {
-			glm::mat<3, 3, float> o3 = PyGLM_Mat_PTI_Get2(3, 3, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(3, 3, double, arg3)) {
-			glm::mat<3, 3, double> o3 = PyGLM_Mat_PTI_Get2(3, 3, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_PTI_Check0(3, 3, glm::uint, arg1) && PyGLM_Mat_PTI_Check1(3, 3, glm::uint, arg2)) {
-		glm::mat<3, 3, glm::uint> o = PyGLM_Mat_PTI_Get0(3, 3, glm::uint, arg1);
-		glm::mat<3, 3, glm::uint> o2 = PyGLM_Mat_PTI_Get1(3, 3, glm::uint, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(3, 3, float, arg3)) {
-			glm::mat<3, 3, float> o3 = PyGLM_Mat_PTI_Get2(3, 3, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(3, 3, double, arg3)) {
-			glm::mat<3, 3, double> o3 = PyGLM_Mat_PTI_Get2(3, 3, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	//if (PyGLM_Mat_PTI_Check0(3, 4, float, arg1) && PyGLM_Mat_PTI_Check0(3, 4, float, arg2)) {
-	//	glm::mat<3, 4, float> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 4, float, arg3)) {
-	//		glm::mat<3, 4, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 4, double, arg3)) {
-	//		glm::mat<3, 4, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(3, 4, double, arg1) && PyGLM_Mat_PTI_Check0(3, 4, double, arg2)) {
-	//	glm::mat<3, 4, double> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 4, float, arg3)) {
-	//		glm::mat<3, 4, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 4, double, arg3)) {
-	//		glm::mat<3, 4, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(3, 4, int, arg1) && PyGLM_Mat_PTI_Check0(3, 4, int, arg2)) {
-	//	glm::mat<3, 4, int> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 4, float, arg3)) {
-	//		glm::mat<3, 4, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 4, double, arg3)) {
-	//		glm::mat<3, 4, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(3, 4, glm::uint, arg1) && PyGLM_Mat_PTI_Check0(3, 4, glm::uint, arg2)) {
-	//	glm::mat<3, 4, glm::uint> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 4, float, arg3)) {
-	//		glm::mat<3, 4, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(3, 4, double, arg3)) {
-	//		glm::mat<3, 4, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(4, 2, float, arg1) && PyGLM_Mat_PTI_Check0(4, 2, float, arg2)) {
-	//	glm::mat<4, 2, float> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 2, float, arg3)) {
-	//		glm::mat<4, 2, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 2, double, arg3)) {
-	//		glm::mat<4, 2, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(4, 2, double, arg1) && PyGLM_Mat_PTI_Check0(4, 2, double, arg2)) {
-	//	glm::mat<4, 2, double> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 2, float, arg3)) {
-	//		glm::mat<4, 2, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 2, double, arg3)) {
-	//		glm::mat<4, 2, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(4, 2, int, arg1) && PyGLM_Mat_PTI_Check0(4, 2, int, arg2)) {
-	//	glm::mat<4, 2, int> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 2, float, arg3)) {
-	//		glm::mat<4, 2, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 2, double, arg3)) {
-	//		glm::mat<4, 2, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(4, 2, glm::uint, arg1) && PyGLM_Mat_PTI_Check0(4, 2, glm::uint, arg2)) {
-	//	glm::mat<4, 2, glm::uint> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 2, float, arg3)) {
-	//		glm::mat<4, 2, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 2, double, arg3)) {
-	//		glm::mat<4, 2, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(4, 3, float, arg1) && PyGLM_Mat_PTI_Check0(4, 3, float, arg2)) {
-	//	glm::mat<4, 3, float> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 3, float, arg3)) {
-	//		glm::mat<4, 3, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 3, double, arg3)) {
-	//		glm::mat<4, 3, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(4, 3, double, arg1) && PyGLM_Mat_PTI_Check0(4, 3, double, arg2)) {
-	//	glm::mat<4, 3, double> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 3, float, arg3)) {
-	//		glm::mat<4, 3, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 3, double, arg3)) {
-	//		glm::mat<4, 3, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(4, 3, int, arg1) && PyGLM_Mat_PTI_Check0(4, 3, int, arg2)) {
-	//	glm::mat<4, 3, int> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 3, float, arg3)) {
-	//		glm::mat<4, 3, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 3, double, arg3)) {
-	//		glm::mat<4, 3, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	//if (PyGLM_Mat_PTI_Check0(4, 3, glm::uint, arg1) && PyGLM_Mat_PTI_Check0(4, 3, glm::uint, arg2)) {
-	//	glm::mat<4, 3, glm::uint> o, o2;
-	//	unpack_mat(arg1, o);
-	//	unpack_mat(arg2, o2);
-	//	if (PyGLM_Number_Check(arg3)) {
-	//		return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 3, float, arg3)) {
-	//		glm::mat<4, 3, float> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//	if (PyGLM_Mat_PTI_Check0(4, 3, double, arg3)) {
-	//		glm::mat<4, 3, double> o3;
-	//		unpack_mat(arg3, o3);
-	//		return pack(glm::mix(o, o2, o3));
-	//	}
-	//}
-	if (PyGLM_Mat_PTI_Check0(4, 4, float, arg1) && PyGLM_Mat_PTI_Check1(4, 4, float, arg2)) {
-		glm::mat<4, 4, float> o = PyGLM_Mat_PTI_Get0(4, 4, float, arg1);
-		glm::mat<4, 4, float> o2 = PyGLM_Mat_PTI_Get1(4, 4, float, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(4, 4, float, arg3)) {
-			glm::mat<4, 4, float> o3 = PyGLM_Mat_PTI_Get2(4, 4, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(4, 4, double, arg3)) {
-			glm::mat<4, 4, double> o3 = PyGLM_Mat_PTI_Get2(4, 4, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_PTI_Check0(4, 4, double, arg1) && PyGLM_Mat_PTI_Check1(4, 4, double, arg2)) {
-		glm::mat<4, 4, double> o = PyGLM_Mat_PTI_Get0(4, 4, double, arg1);
-		glm::mat<4, 4, double> o2 = PyGLM_Mat_PTI_Get1(4, 4, double, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(4, 4, float, arg3)) {
-			glm::mat<4, 4, float> o3 = PyGLM_Mat_PTI_Get2(4, 4, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(4, 4, double, arg3)) {
-			glm::mat<4, 4, double> o3 = PyGLM_Mat_PTI_Get2(4, 4, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_PTI_Check0(4, 4, int, arg1) && PyGLM_Mat_PTI_Check1(4, 4, int, arg2)) {
-		glm::mat<4, 4, int> o = PyGLM_Mat_PTI_Get0(4, 4, int, arg1);
-		glm::mat<4, 4, int> o2 = PyGLM_Mat_PTI_Get1(4, 4, int, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(4, 4, float, arg3)) {
-			glm::mat<4, 4, float> o3 = PyGLM_Mat_PTI_Get2(4, 4, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(4, 4, double, arg3)) {
-			glm::mat<4, 4, double> o3 = PyGLM_Mat_PTI_Get2(4, 4, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
-	if (PyGLM_Mat_PTI_Check0(4, 4, glm::uint, arg1) && PyGLM_Mat_PTI_Check1(4, 4, glm::uint, arg2)) {
-		glm::mat<4, 4, glm::uint> o = PyGLM_Mat_PTI_Get0(4, 4, glm::uint, arg1);
-		glm::mat<4, 4, glm::uint> o2 = PyGLM_Mat_PTI_Get1(4, 4, glm::uint, arg2);
-		if (PyGLM_Number_Check(arg3)) {
-			return pack(glm::mix(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		PyGLM_PTI_Init2(arg3, PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);
-		if (PyGLM_Mat_PTI_Check2(4, 4, float, arg3)) {
-			glm::mat<4, 4, float> o3 = PyGLM_Mat_PTI_Get2(4, 4, float, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-		if (PyGLM_Mat_PTI_Check2(4, 4, double, arg3)) {
-			glm::mat<4, 4, double> o3 = PyGLM_Mat_PTI_Get2(4, 4, double, arg3);
-			return pack(glm::mix(o, o2, o3));
-		}
-	}
+
+	// Expands the code above
+	PyGLM_CODEGEN_PARAM_S_ALL(PyGLM_CODEGEN_PARAM_T_Mat_fFiI, PyGLM_MIX_FUNC_TEMPLATE_Mat_Mat_Any);
+	//PyGLM_CODEGEN_PARAM_C_ALL(PyGLM_CODEGEN_PARAM_R_ALL, PyGLM_CODEGEN_PARAM_T_Mat_fFiI, PyGLM_MIX_FUNC_TEMPLATE_Mat_Mat_Any);
 
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for mix()");
 	return NULL;
@@ -3692,448 +965,25 @@ step_(PyObject*, PyObject* args) {
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 		return PyGLM_PyObject_FromNumber(glm::step(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));
 	}
-	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);
 	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);
-	if (PyGLM_Vec_PTI_Check1(1, float, arg2)) {
-		glm::vec<1, float> o2 = PyGLM_Vec_PTI_Get1(1, float, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<float>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1)) {
-			glm::vec<1, float> o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
+
+	// template with parameters (L)ength and (T)ype
+#	define PyGLM_STEP_FUNC_TEMPLATE_Any_Vec(L, T) \
+	if (PyGLM_Vec_PTI_Check1(L, T, arg2)) {\
+		glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, arg2);\
+		if (PyGLM_Number_Check(arg1)) {\
+			return pack_vec(glm::step(PyGLM_Number_FromPyObject<T>(arg1), o2));\
+		}\
+		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_ ## T);\
+		if (PyGLM_Vec_PTI_Check0(L, T, arg1)) {\
+			glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, arg1);\
+			return pack_vec(glm::step(o, o2));\
+		}\
 	}
-	if (PyGLM_Vec_PTI_Check1(1, double, arg2)) {
-		glm::vec<1, double> o2 = PyGLM_Vec_PTI_Get1(1, double, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<double>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1)) {
-			glm::vec<1, double> o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(1, int, arg2)) {
-		glm::vec<1, int> o2 = PyGLM_Vec_PTI_Get1(1, int, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<int>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, int, arg1)) {
-			glm::vec<1, int> o = PyGLM_Vec_PTI_Get0(1, int, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(1, glm::uint, arg2)) {
-		glm::vec<1, glm::uint> o2 = PyGLM_Vec_PTI_Get1(1, glm::uint, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::uint>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::uint, arg1)) {
-			glm::vec<1, glm::uint> o = PyGLM_Vec_PTI_Get0(1, glm::uint, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(1, glm::i64, arg2)) {
-		glm::vec<1, glm::i64> o2 = PyGLM_Vec_PTI_Get1(1, glm::i64, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i64>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i64, arg1)) {
-			glm::vec<1, glm::i64> o = PyGLM_Vec_PTI_Get0(1, glm::i64, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(1, glm::u64, arg2)) {
-		glm::vec<1, glm::u64> o2 = PyGLM_Vec_PTI_Get1(1, glm::u64, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u64>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u64, arg1)) {
-			glm::vec<1, glm::u64> o = PyGLM_Vec_PTI_Get0(1, glm::u64, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(1, glm::i16, arg2)) {
-		glm::vec<1, glm::i16> o2 = PyGLM_Vec_PTI_Get1(1, glm::i16, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i16>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i16, arg1)) {
-			glm::vec<1, glm::i16> o = PyGLM_Vec_PTI_Get0(1, glm::i16, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(1, glm::u16, arg2)) {
-		glm::vec<1, glm::u16> o2 = PyGLM_Vec_PTI_Get1(1, glm::u16, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u16>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u16, arg1)) {
-			glm::vec<1, glm::u16> o = PyGLM_Vec_PTI_Get0(1, glm::u16, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(1, glm::i8, arg2)) {
-		glm::vec<1, glm::i8> o2 = PyGLM_Vec_PTI_Get1(1, glm::i8, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i8>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::i8, arg1)) {
-			glm::vec<1, glm::i8> o = PyGLM_Vec_PTI_Get0(1, glm::i8, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(1, glm::u8, arg2)) {
-		glm::vec<1, glm::u8> o2 = PyGLM_Vec_PTI_Get1(1, glm::u8, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u8>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, glm::u8, arg1)) {
-			glm::vec<1, glm::u8> o = PyGLM_Vec_PTI_Get0(1, glm::u8, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(1, bool, arg2)) {
-		glm::vec<1, bool> o2 = PyGLM_Vec_PTI_Get1(1, bool, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<bool>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, bool, arg1)) {
-			glm::vec<1, bool> o = PyGLM_Vec_PTI_Get0(1, bool, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(2, float, arg2)) {
-		glm::vec<2, float> o2 = PyGLM_Vec_PTI_Get1(2, float, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<float>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1)) {
-			glm::vec<2, float> o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(2, double, arg2)) {
-		glm::vec<2, double> o2 = PyGLM_Vec_PTI_Get1(2, double, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<double>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1)) {
-			glm::vec<2, double> o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(2, int, arg2)) {
-		glm::vec<2, int> o2 = PyGLM_Vec_PTI_Get1(2, int, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<int>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, int, arg1)) {
-			glm::vec<2, int> o = PyGLM_Vec_PTI_Get0(2, int, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(2, glm::uint, arg2)) {
-		glm::vec<2, glm::uint> o2 = PyGLM_Vec_PTI_Get1(2, glm::uint, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::uint>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg1)) {
-			glm::vec<2, glm::uint> o = PyGLM_Vec_PTI_Get0(2, glm::uint, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(2, glm::i64, arg2)) {
-		glm::vec<2, glm::i64> o2 = PyGLM_Vec_PTI_Get1(2, glm::i64, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i64>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i64, arg1)) {
-			glm::vec<2, glm::i64> o = PyGLM_Vec_PTI_Get0(2, glm::i64, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(2, glm::u64, arg2)) {
-		glm::vec<2, glm::u64> o2 = PyGLM_Vec_PTI_Get1(2, glm::u64, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u64>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u64, arg1)) {
-			glm::vec<2, glm::u64> o = PyGLM_Vec_PTI_Get0(2, glm::u64, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(2, glm::i16, arg2)) {
-		glm::vec<2, glm::i16> o2 = PyGLM_Vec_PTI_Get1(2, glm::i16, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i16>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i16, arg1)) {
-			glm::vec<2, glm::i16> o = PyGLM_Vec_PTI_Get0(2, glm::i16, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(2, glm::u16, arg2)) {
-		glm::vec<2, glm::u16> o2 = PyGLM_Vec_PTI_Get1(2, glm::u16, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u16>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u16, arg1)) {
-			glm::vec<2, glm::u16> o = PyGLM_Vec_PTI_Get0(2, glm::u16, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(2, glm::i8, arg2)) {
-		glm::vec<2, glm::i8> o2 = PyGLM_Vec_PTI_Get1(2, glm::i8, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i8>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::i8, arg1)) {
-			glm::vec<2, glm::i8> o = PyGLM_Vec_PTI_Get0(2, glm::i8, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(2, glm::u8, arg2)) {
-		glm::vec<2, glm::u8> o2 = PyGLM_Vec_PTI_Get1(2, glm::u8, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u8>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, glm::u8, arg1)) {
-			glm::vec<2, glm::u8> o = PyGLM_Vec_PTI_Get0(2, glm::u8, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(2, bool, arg2)) {
-		glm::vec<2, bool> o2 = PyGLM_Vec_PTI_Get1(2, bool, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<bool>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, bool, arg1)) {
-			glm::vec<2, bool> o = PyGLM_Vec_PTI_Get0(2, bool, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-		glm::vec<3, float> o2 = PyGLM_Vec_PTI_Get1(3, float, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<float>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1)) {
-			glm::vec<3, float> o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-		glm::vec<3, double> o2 = PyGLM_Vec_PTI_Get1(3, double, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<double>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1)) {
-			glm::vec<3, double> o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(3, int, arg2)) {
-		glm::vec<3, int> o2 = PyGLM_Vec_PTI_Get1(3, int, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<int>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, int, arg1)) {
-			glm::vec<3, int> o = PyGLM_Vec_PTI_Get0(3, int, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(3, glm::uint, arg2)) {
-		glm::vec<3, glm::uint> o2 = PyGLM_Vec_PTI_Get1(3, glm::uint, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::uint>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::uint, arg1)) {
-			glm::vec<3, glm::uint> o = PyGLM_Vec_PTI_Get0(3, glm::uint, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(3, glm::i64, arg2)) {
-		glm::vec<3, glm::i64> o2 = PyGLM_Vec_PTI_Get1(3, glm::i64, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i64>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i64, arg1)) {
-			glm::vec<3, glm::i64> o = PyGLM_Vec_PTI_Get0(3, glm::i64, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(3, glm::u64, arg2)) {
-		glm::vec<3, glm::u64> o2 = PyGLM_Vec_PTI_Get1(3, glm::u64, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u64>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u64, arg1)) {
-			glm::vec<3, glm::u64> o = PyGLM_Vec_PTI_Get0(3, glm::u64, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(3, glm::i16, arg2)) {
-		glm::vec<3, glm::i16> o2 = PyGLM_Vec_PTI_Get1(3, glm::i16, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i16>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i16, arg1)) {
-			glm::vec<3, glm::i16> o = PyGLM_Vec_PTI_Get0(3, glm::i16, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(3, glm::u16, arg2)) {
-		glm::vec<3, glm::u16> o2 = PyGLM_Vec_PTI_Get1(3, glm::u16, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u16>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u16, arg1)) {
-			glm::vec<3, glm::u16> o = PyGLM_Vec_PTI_Get0(3, glm::u16, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(3, glm::i8, arg2)) {
-		glm::vec<3, glm::i8> o2 = PyGLM_Vec_PTI_Get1(3, glm::i8, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i8>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::i8, arg1)) {
-			glm::vec<3, glm::i8> o = PyGLM_Vec_PTI_Get0(3, glm::i8, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(3, glm::u8, arg2)) {
-		glm::vec<3, glm::u8> o2 = PyGLM_Vec_PTI_Get1(3, glm::u8, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u8>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, glm::u8, arg1)) {
-			glm::vec<3, glm::u8> o = PyGLM_Vec_PTI_Get0(3, glm::u8, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(3, bool, arg2)) {
-		glm::vec<3, bool> o2 = PyGLM_Vec_PTI_Get1(3, bool, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<bool>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, bool, arg1)) {
-			glm::vec<3, bool> o = PyGLM_Vec_PTI_Get0(3, bool, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(4, float, arg2)) {
-		glm::vec<4, float> o2 = PyGLM_Vec_PTI_Get1(4, float, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<float>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1)) {
-			glm::vec<4, float> o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(4, double, arg2)) {
-		glm::vec<4, double> o2 = PyGLM_Vec_PTI_Get1(4, double, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<double>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1)) {
-			glm::vec<4, double> o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(4, int, arg2)) {
-		glm::vec<4, int> o2 = PyGLM_Vec_PTI_Get1(4, int, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<int>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, int, arg1)) {
-			glm::vec<4, int> o = PyGLM_Vec_PTI_Get0(4, int, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(4, glm::uint, arg2)) {
-		glm::vec<4, glm::uint> o2 = PyGLM_Vec_PTI_Get1(4, glm::uint, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::uint>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::uint, arg1)) {
-			glm::vec<4, glm::uint> o = PyGLM_Vec_PTI_Get0(4, glm::uint, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(4, glm::i64, arg2)) {
-		glm::vec<4, glm::i64> o2 = PyGLM_Vec_PTI_Get1(4, glm::i64, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i64>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i64, arg1)) {
-			glm::vec<4, glm::i64> o = PyGLM_Vec_PTI_Get0(4, glm::i64, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(4, glm::u64, arg2)) {
-		glm::vec<4, glm::u64> o2 = PyGLM_Vec_PTI_Get1(4, glm::u64, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u64>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u64, arg1)) {
-			glm::vec<4, glm::u64> o = PyGLM_Vec_PTI_Get0(4, glm::u64, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(4, glm::i16, arg2)) {
-		glm::vec<4, glm::i16> o2 = PyGLM_Vec_PTI_Get1(4, glm::i16, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i16>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i16, arg1)) {
-			glm::vec<4, glm::i16> o = PyGLM_Vec_PTI_Get0(4, glm::i16, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(4, glm::u16, arg2)) {
-		glm::vec<4, glm::u16> o2 = PyGLM_Vec_PTI_Get1(4, glm::u16, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u16>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u16, arg1)) {
-			glm::vec<4, glm::u16> o = PyGLM_Vec_PTI_Get0(4, glm::u16, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(4, glm::i8, arg2)) {
-		glm::vec<4, glm::i8> o2 = PyGLM_Vec_PTI_Get1(4, glm::i8, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::i8>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::i8, arg1)) {
-			glm::vec<4, glm::i8> o = PyGLM_Vec_PTI_Get0(4, glm::i8, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(4, glm::u8, arg2)) {
-		glm::vec<4, glm::u8> o2 = PyGLM_Vec_PTI_Get1(4, glm::u8, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<glm::u8>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, glm::u8, arg1)) {
-			glm::vec<4, glm::u8> o = PyGLM_Vec_PTI_Get0(4, glm::u8, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check1(4, bool, arg2)) {
-		glm::vec<4, bool> o2 = PyGLM_Vec_PTI_Get1(4, bool, arg2);
-		if (PyGLM_Number_Check(arg1)) {
-			return pack_vec(glm::step(PyGLM_Number_FromPyObject<bool>(arg1), o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, bool, arg1)) {
-			glm::vec<4, bool> o = PyGLM_Vec_PTI_Get0(4, bool, arg1);
-			return pack_vec(glm::step(o, o2));
-		}
-	}
+
+	// Expands the code above
+	PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_ALL, PyGLM_STEP_FUNC_TEMPLATE_Any_Vec);
+
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for step(): ", arg1, arg2);
 	return NULL;
 }
@@ -4146,20 +996,22 @@ PyDoc_STRVAR(smoothstep_docstr,
 	"	`t = clamp((x - edge0) / (edge1 - edge0), 0, 1)`\n"
 	"	`return t * t * (3 - 2 * t)`\n"
 	"	Results are undefined if `edge0 >= edge1`.\n"
-	"smoothstep(edge0: number, edge1: number, x: vecN) -> vecN\n"
+	"smoothstep(edge0: number, edge1: number, x: FvecN) -> FvecN\n"
 	"	Returns `0.0` if `x <= edge0` and `1.0` if `x >= edge1` and performs smooth Hermite interpolation\n"
 	"	between `0` and `1` when `edge0 < x < edge1`. This is useful in cases where you would want a\n"
 	"	threshold function with a smooth transition. This is equivalent to :\n"
 	"	`t = clamp((x - edge0) / (edge1 - edge0), 0, 1)`\n"
 	"	`return t * t * (3 - 2 * t)`\n"
 	"	Results are undefined if `edge0 >= edge1`.\n"
-	"smoothstep(edge0: vecN, edge1: vecN, x: vecN) -> vecN\n"
+	"	`F in [f, d]`\n"
+	"smoothstep(edge0: FvecN, edge1: FvecN, x: FvecN) -> FvecN\n"
 	"	Returns `0.0` if `x <= edge0` and `1.0` if `x >= edge1` and performs smooth Hermite interpolation\n"
 	"	between `0` and `1` when `edge0 < x < edge1`. This is useful in cases where you would want a\n"
 	"	threshold function with a smooth transition. This is equivalent to :\n"
 	"	`t = clamp((x - edge0) / (edge1 - edge0), 0, 1)`\n"
 	"	`return t * t * (3 - 2 * t)`\n"
-	"	Results are undefined if `edge0 >= edge1`."
+	"	Results are undefined if `edge0 >= edge1`.\n"
+	"	`F in [f, d]`"
 );
 static PyObject*
 smoothstep_(PyObject*, PyObject* args) {
@@ -4169,110 +1021,26 @@ smoothstep_(PyObject*, PyObject* args) {
 		return PyGLM_PyObject_FromNumber(glm::smoothstep(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));
 	}
 	PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-		glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
-			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), o3));
-		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FLOAT);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_FLOAT);
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {
-			glm::vec<1, float> o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-			glm::vec<1, float> o2 = PyGLM_Vec_PTI_Get1(1, float, arg2);
-			return pack_vec(glm::smoothstep(o, o2, o3));
-		}
+
+	// template with parameters (L)ength and (T)ype
+#	define PyGLM_SMOOTHSTEP_FUNC_TEMPLATE_Any_Any_Vec(L, T) \
+	if (PyGLM_Vec_PTI_Check2(L, T, arg3)) {\
+		glm::vec<L, T> o3 = PyGLM_Vec_PTI_Get2(L, T, arg3);\
+		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {\
+			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<T>(arg1), PyGLM_Number_FromPyObject<T>(arg2), o3));\
+		}\
+		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_ ## T);\
+		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ ## L | PyGLM_DT_ ## T);\
+		if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyGLM_Vec_PTI_Check1(L, T, arg2)) {\
+			glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, arg1);\
+			glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, arg2);\
+			return pack_vec(glm::smoothstep(o, o2, o3));\
+		}\
 	}
-	if (PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-		glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
-			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), o3));
-		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_DOUBLE);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_DOUBLE);
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2)) {
-			glm::vec<1, double> o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-			glm::vec<1, double> o2 = PyGLM_Vec_PTI_Get1(1, double, arg2);
-			return pack_vec(glm::smoothstep(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-		glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
-			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), o3));
-		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FLOAT);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FLOAT);
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
-			glm::vec<2, float> o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-			glm::vec<2, float> o2 = PyGLM_Vec_PTI_Get1(2, float, arg2);
-			return pack_vec(glm::smoothstep(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-		glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
-			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), o3));
-		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_DOUBLE);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_DOUBLE);
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
-			glm::vec<2, double> o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-			glm::vec<2, double> o2 = PyGLM_Vec_PTI_Get1(2, double, arg2);
-			return pack_vec(glm::smoothstep(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-		glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
-			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), o3));
-		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FLOAT);
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-			glm::vec<3, float> o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-			glm::vec<3, float> o2 = PyGLM_Vec_PTI_Get1(3, float, arg2);
-			return pack_vec(glm::smoothstep(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-		glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
-			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), o3));
-		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_DOUBLE);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_DOUBLE);
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-			glm::vec<3, double> o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-			glm::vec<3, double> o2 = PyGLM_Vec_PTI_Get1(3, double, arg2);
-			return pack_vec(glm::smoothstep(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-		glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
-			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<float>(arg1), PyGLM_Number_FromPyObject<float>(arg2), o3));
-		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FLOAT);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FLOAT);
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2)) {
-			glm::vec<4, float> o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-			glm::vec<4, float> o2 = PyGLM_Vec_PTI_Get1(4, float, arg2);
-			return pack_vec(glm::smoothstep(o, o2, o3));
-		}
-	}
-	if (PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-		glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
-			return pack_vec(glm::smoothstep(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), o3));
-		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_DOUBLE);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_DOUBLE);
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2)) {
-			glm::vec<4, double> o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-			glm::vec<4, double> o2 = PyGLM_Vec_PTI_Get1(4, double, arg2);
-			return pack_vec(glm::smoothstep(o, o2, o3));
-		}
-	}
+
+	// Expands the code above
+	PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_SMOOTHSTEP_FUNC_TEMPLATE_Any_Any_Vec);
+
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for smoothstep()");
 	return NULL;
 }
@@ -4282,10 +1050,11 @@ PyDoc_STRVAR(isnan_docstr,
 	"	Returns `True` if `x` holds a `NaN` (not a number) representation in the underlying\n"
 	"	implementation's set of floating point representations.\n"
 	"	Returns `False` otherwise, including for implementations with no `NaN` representations.\n"
-	"isnan(x: vecN) -> bvecN\n"
+	"isnan(x: FvecN) -> bvecN\n"
 	"	Returns `True` if `x` holds a `NaN` (not a number) representation in the underlying\n"
 	"	implementation's set of floating point representations.\n"
 	"	Returns `False` otherwise, including for implementations with no `NaN` representations.\n"
+	"	`F in [f, d]`\n"
 	"isnan(x: quat) -> bvecN\n"
 	"	Returns `True` if `x` holds a `NaN` (not a number) representation in the underlying\n"
 	"	implementation's set of floating point representations.\n"
@@ -4298,10 +1067,11 @@ PyDoc_STRVAR(isinf_docstr,
 	"	Returns `True` if `x` holds a positive infinity or negative infinity representation in the\n"
 	"	underlying implementation's set of floating point representations.\n"
 	"	Returns `False` otherwise, including for implementations with no infinity representations.\n"
-	"isinf(x: vecN) -> bvecN\n"
+	"isinf(x: FvecN) -> bvecN\n"
 	"	Returns `True` if `x` holds a positive infinity or negative infinity representation in the\n"
 	"	underlying implementation's set of floating point representations.\n"
 	"	Returns `False` otherwise, including for implementations with no infinity representations.\n"
+	"	`F in [f, d]`\n"
 	"isinf(x: quat) -> bvecN\n"
 	"	Returns `True` if `x` holds a positive infinity or negative infinity representation in the\n"
 	"	underlying implementation's set of floating point representations.\n"
@@ -4317,8 +1087,8 @@ static PyObject*
 fma_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3;
 	PyGLM_Arg_Unpack_3O(args, "fma", arg1, arg2, arg3);
-	if (PyGLM_Number_Check(arg1), PyGLM_Number_Check(arg2), PyGLM_Number_Check(arg3)) {
-		return PyGLM_PyObject_FromNumber(glm::fma(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3)));
+	if (PyFloat_Check(arg1) && PyFloat_Check(arg2) && PyFloat_Check(arg3)) {
+		return PyFloat_FromDouble(glm::fma(PyFloat_AS_DOUBLE(arg1), PyFloat_AS_DOUBLE(arg2), PyFloat_AS_DOUBLE(arg3)));
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for fma()");
 	return NULL;
@@ -4328,12 +1098,13 @@ PyDoc_STRVAR(frexp_docstr,
 	"frexp(x: float) -> (significant: float, exponent: int)\n"
 	"	Splits `x` into a floating-point significand in the range `[0.5, 1.0)` and an integral exponent\n"
 	"	of two, such that: `x = significand * exp(2, exponent)`\n"
-	"frexp(x: vecN, exp: ivecN) -> vecN\n"
+	"frexp(x: FvecN, exp: ivecN) -> FvecN\n"
 	"	Splits `x` into a floating-point significand in the range `[0.5, 1.0)` and an integral exponent\n"
 	"	of two, such that: `x = significand * exp(2, exponent)`\n"
 	"	The significand is returned by the function and the exponent is returned in the parameter\n"
 	"	`exp`. For a floating-point value of zero, the significantand exponent are both zero. For a\n"
-	"	floating-point value that is an infinity or is not a number, the results are undefined."
+	"	floating-point value that is an infinity or is not a number, the results are undefined.\n"
+	"	`F in [f, d]`"
 );
 static PyObject*
 frexp_(PyObject*, PyObject* args) {
@@ -4350,38 +1121,17 @@ frexp_(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "frexp", arg1, arg2);
 	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyObject_TypeCheck(arg2, &hivec1Type)) {
-		glm::vec<1, float> o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-		return pack_vec(glm::frexp(o, ((vec<1, int>*)arg2)->super_type));
+
+	// template with parameters (L)ength and (T)ype
+#	define PyGLM_FREXP_FUNC_TEMPLATE_Vec(L, T) \
+	if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyObject_TypeCheck(arg2, &hivec ## L ## Type)) {\
+		glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, arg1);\
+		return pack_vec(glm::frexp(o, ((vec<L, int>*)arg2)->super_type));\
 	}
-	if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyObject_TypeCheck(arg2, &hivec1Type)) {
-		glm::vec<1, double> o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-		return pack_vec(glm::frexp(o, ((vec<1, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyObject_TypeCheck(arg2, &hivec2Type)) {
-		glm::vec<2, float> o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-		return pack_vec(glm::frexp(o, ((vec<2, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyObject_TypeCheck(arg2, &hivec2Type)) {
-		glm::vec<2, double> o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-		return pack_vec(glm::frexp(o, ((vec<2, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyObject_TypeCheck(arg2, &hivec3Type)) {
-		glm::vec<3, float> o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-		return pack_vec(glm::frexp(o, ((vec<3, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyObject_TypeCheck(arg2, &hivec3Type)) {
-		glm::vec<3, double> o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-		return pack_vec(glm::frexp(o, ((vec<3, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyObject_TypeCheck(arg2, &hivec4Type)) {
-		glm::vec<4, float> o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-		return pack_vec(glm::frexp(o, ((vec<4, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyObject_TypeCheck(arg2, &hivec4Type)) {
-		glm::vec<4, double> o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-		return pack_vec(glm::frexp(o, ((vec<4, int>*)arg2)->super_type));
-	}
+
+	// Expands the code above
+	PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FREXP_FUNC_TEMPLATE_Vec);
+
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for frexp(): ", arg1, arg2);
 	return NULL;
 }
@@ -4391,10 +1141,11 @@ PyDoc_STRVAR(ldexp_docstr,
 	"	Builds a floating-point number from `x` and the corresponding integral exponent of two in\n"
 	"	`exp`, returning: `significand * exp(2, exponent)`. If this product is too large to be\n"
 	"	represented in the floating-point type, the result is undefined.\n"
-	"ldexp(x: vecN, exp: ivecN) -> vecN\n"
+	"ldexp(x: FvecN, exp: ivecN) -> FvecN\n"
 	"	Builds a floating-point number from `x` and the corresponding integral exponent of two in\n"
 	"	`exp`, returning: `significand * exp(2, exponent)`. If this product is too large to be\n"
-	"	represented in the floating-point type, the result is undefined."
+	"	represented in the floating-point type, the result is undefined.\n"
+	"	`F in [f, d]`"
 );
 static PyObject*
 ldexp_(PyObject*, PyObject* args) {
@@ -4404,38 +1155,17 @@ ldexp_(PyObject*, PyObject* args) {
 		return PyGLM_PyObject_FromNumber(glm::ldexp(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<int>(arg2)));
 	}
 	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyObject_TypeCheck(arg2, &hivec1Type)) {
-		glm::vec<1, float> o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-		return pack_vec(glm::ldexp(o, ((vec<1, int>*)arg2)->super_type));
+
+	// template with parameters (L)ength and (T)ype
+#	define PyGLM_LDEXP_FUNC_TEMPLATE_Vec(L, T) \
+	if (PyGLM_Vec_PTI_Check0(L, T, arg1) && PyObject_TypeCheck(arg2, &hivec ## L ## Type)) {\
+		glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, arg1);\
+		return pack_vec(glm::ldexp(o, ((vec<L, int>*)arg2)->super_type));\
 	}
-	if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyObject_TypeCheck(arg2, &hivec1Type)) {
-		glm::vec<1, double> o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-		return pack_vec(glm::ldexp(o, ((vec<1, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyObject_TypeCheck(arg2, &hivec2Type)) {
-		glm::vec<2, float> o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-		return pack_vec(glm::ldexp(o, ((vec<2, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyObject_TypeCheck(arg2, &hivec2Type)) {
-		glm::vec<2, double> o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-		return pack_vec(glm::ldexp(o, ((vec<2, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyObject_TypeCheck(arg2, &hivec3Type)) {
-		glm::vec<3, float> o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-		return pack_vec(glm::ldexp(o, ((vec<3, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyObject_TypeCheck(arg2, &hivec3Type)) {
-		glm::vec<3, double> o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-		return pack_vec(glm::ldexp(o, ((vec<3, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyObject_TypeCheck(arg2, &hivec4Type)) {
-		glm::vec<4, float> o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-		return pack_vec(glm::ldexp(o, ((vec<4, int>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyObject_TypeCheck(arg2, &hivec4Type)) {
-		glm::vec<4, double> o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-		return pack_vec(glm::ldexp(o, ((vec<4, int>*)arg2)->super_type));
-	}
+
+	// Expands the code above
+	PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_LDEXP_FUNC_TEMPLATE_Vec);
+
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for ldexp(): ", arg1, arg2);
 	return NULL;
 }
@@ -4587,9 +1317,10 @@ uintBitsToFloat_(PyObject*, PyObject* arg) {
 PyDoc_STRVAR(modf_docstr,
 	"modf(x: float) -> (fraction, integer)\n"
 	"	Returns the fractional part of `x` and the integer part (as a whole number floating point value).\n"
-	"modf(x: vecN, i: vecN) -> vecN\n"
+	"modf(x: FvecN, i: FvecN) -> FvecN\n"
 	"	Returns the fractional part of `x` and sets `i` to the integer part (as a whole number floating\n"
-	"	point value)."
+	"	point value).\n"
+	"	`F in [f, d]`"
 );
 static PyObject*
 modf_(PyObject*, PyObject* args) {
@@ -4608,38 +1339,17 @@ modf_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2;
 	PyGLM_Arg_Unpack_2O(args, "modf", arg1, arg2);
 	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyObject_TypeCheck(arg2, &hfvec1Type)) {
-		glm::vec<1, float> o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-		return pack_vec(glm::modf(o, ((vec<1, float>*)arg2)->super_type));
+
+	// template with parameters (L)ength and (T)ype
+#	define PyGLM_MODF_FUNC_TEMPLATE_Vec(L, T) \
+	if (PyGLM_Vec_PTI_Check0(L, T, arg1) && Py_TYPE(arg2) == PyGLM_VEC_TYPE<L, T>()) {\
+		glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, arg1);\
+		return pack_vec(glm::modf(o, ((vec<L, T>*)arg2)->super_type));\
 	}
-	if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyObject_TypeCheck(arg2, &hdvec1Type)) {
-		glm::vec<1, double> o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-		return pack_vec(glm::modf(o, ((vec<1, double>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyObject_TypeCheck(arg2, &hfvec2Type)) {
-		glm::vec<2, float> o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-		return pack_vec(glm::modf(o, ((vec<2, float>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyObject_TypeCheck(arg2, &hdvec2Type)) {
-		glm::vec<2, double> o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-		return pack_vec(glm::modf(o, ((vec<2, double>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyObject_TypeCheck(arg2, &hfvec3Type)) {
-		glm::vec<3, float> o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-		return pack_vec(glm::modf(o, ((vec<3, float>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyObject_TypeCheck(arg2, &hdvec3Type)) {
-		glm::vec<3, double> o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-		return pack_vec(glm::modf(o, ((vec<3, double>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyObject_TypeCheck(arg2, &hfvec4Type)) {
-		glm::vec<4, float> o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-		return pack_vec(glm::modf(o, ((vec<4, float>*)arg2)->super_type));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyObject_TypeCheck(arg2, &hdvec4Type)) {
-		glm::vec<4, double> o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-		return pack_vec(glm::modf(o, ((vec<4, double>*)arg2)->super_type));
-	}
+
+	// Expands the code above
+	PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_MODF_FUNC_TEMPLATE_Vec);
+
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for modf(): ", arg1, arg2);
 	return NULL;
 

@@ -2535,8 +2535,8 @@ def test_spec_common_floor():
             assert all([a == math.floor(x) for a in glm.floor(vecT(x))])
 
 def test_spec_common_fma():
-    assert glm.fma(1, 2, 3) == 1 * 2 + 3
-    assert glm.fma(4, 5, 6) == 4 * 5 + 6
+    assert glm.fma(1., 2., 3.) == 1 * 2 + 3
+    assert glm.fma(4., 5., 6.) == 4 * 5 + 6
 
 def test_spec_common_fmax():
     for a in range(-2, 2):
