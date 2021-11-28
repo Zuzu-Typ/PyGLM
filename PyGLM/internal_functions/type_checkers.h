@@ -2267,8 +2267,9 @@ struct PyGLMTypeInfo {
 	}
 
 private:
-	void allocate(size_t size) {
+	inline void allocate(size_t size) {
 		assert(size <= 128);
+		data = &dataArray;
 	}
 
 	void setInfo(int info) {
