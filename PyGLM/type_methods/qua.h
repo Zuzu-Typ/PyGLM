@@ -6,19 +6,12 @@
 
 #include "../types/qua/all.h"
 
-static PyObject* qua_length(PyObject*, PyObject*) {
-	return PyLong_FromLong(4);
-}
+PyObject* qua_length(PyObject*, PyObject*);
 
-static void
-qua_dealloc(PyObject* self)
-{
-	if (self != NULL) Py_TYPE(self)->tp_free(self);
-}
+void qua_dealloc(PyObject* self);
 
 template<typename T>
-static PyObject *
-qua_new(PyTypeObject *type, PyObject *, PyObject *)
+PyObject* qua_new(PyTypeObject *type, PyObject *, PyObject *)
 {
 	qua<T> *self = (qua<T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
@@ -31,9 +24,11 @@ qua_new(PyTypeObject *type, PyObject *, PyObject *)
 	return (PyObject *)self;
 }
 
+#define qua_new_TEMPLATE(T) template PyObject* qua_new<T>(PyTypeObject *type, PyObject *, PyObject *)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_new_TEMPLATE);
+
 template<typename T>
-static int
-qua_init(qua<T> *self, PyObject *args, PyObject *kwds)
+int qua_init(qua<T> *self, PyObject *args, PyObject *kwds)
 {
 	const char *kwlist[] = { "w", "x", "y", "z", NULL };
 
@@ -112,25 +107,31 @@ qua_init(qua<T> *self, PyObject *args, PyObject *kwds)
 	return -1;
 }
 
+#define qua_init_TEMPLATE(T) template int qua_init(qua<T> *self, PyObject *args, PyObject *kwds)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_init_TEMPLATE);
+
 // unaryfunc
 template<typename T>
-static PyObject *
-qua_neg(qua<T> *obj)
+PyObject* qua_neg(qua<T> *obj)
 {
 	return pack_qua<T>(-obj->super_type);
 }
 
+#define qua_neg_TEMPLATE(T) template PyObject* qua_neg(qua<T> *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_neg_TEMPLATE);
+
 template<typename T>
-static PyObject *
-qua_pos(qua<T> *obj)
+PyObject* qua_pos(qua<T> *obj)
 {
 	return pack_qua<T>(obj->super_type);
 }
 
+#define qua_pos_TEMPLATE(T) template PyObject* qua_pos(qua<T> *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_pos_TEMPLATE);
+
 // binaryfunc
 template<typename T>
-static PyObject *
-qua_add(PyObject *obj1, PyObject *obj2)
+PyObject* qua_add(PyObject *obj1, PyObject *obj2)
 {
 	PyGLM_PTI_Init0(obj1, (get_qua_PTI_info<T>()));
 
@@ -152,9 +153,11 @@ qua_add(PyObject *obj1, PyObject *obj2)
 	return pack_qua<T>(o + o2);
 }
 
+#define qua_add_TEMPLATE(T) template PyObject* qua_add<T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_add_TEMPLATE);
+
 template<typename T>
-static PyObject *
-qua_sub(PyObject *obj1, PyObject *obj2)
+PyObject* qua_sub(PyObject *obj1, PyObject *obj2)
 {
 	PyGLM_PTI_Init0(obj1, (get_qua_PTI_info<T>()));
 
@@ -176,9 +179,11 @@ qua_sub(PyObject *obj1, PyObject *obj2)
 	return pack_qua<T>(o - o2);
 }
 
+#define qua_sub_TEMPLATE(T) template PyObject* qua_sub<T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_sub_TEMPLATE);
+
 template<typename T>
-static PyObject *
-qua_mul(PyObject *obj1, PyObject *obj2)
+PyObject* qua_mul(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		return pack_qua<T>(PyGLM_Number_FromPyObject<T>(obj1) * ((qua<T>*)obj2)->super_type);
@@ -225,9 +230,11 @@ qua_mul(PyObject *obj1, PyObject *obj2)
 	return pack_qua<T>(o * o2);
 }
 
+#define qua_mul_TEMPLATE(T) template PyObject* qua_mul<T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_mul_TEMPLATE);
+
 template<typename T>
-static PyObject *
-qua_div(PyObject *obj1, PyObject *obj2)
+PyObject* qua_div(PyObject *obj1, PyObject *obj2)
 {
 	PyGLM_PTI_Init0(obj1, (get_qua_PTI_info<T>()));
 
@@ -249,21 +256,15 @@ qua_div(PyObject *obj1, PyObject *obj2)
 	Py_RETURN_NOTIMPLEMENTED;
 }
 
-static PyObject*
-qua_matmul(PyObject* obj1, PyObject* obj2)
-{
-	PyObject* out = PyNumber_Multiply(obj1, obj2);
-	if (out == NULL) {
-		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
-	}
-	return out;
-}
+#define qua_div_TEMPLATE(T) template PyObject* qua_div<T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_div_TEMPLATE);
+
+PyObject* qua_matmul(PyObject* obj1, PyObject* obj2);
 
 // inplace
 // binaryfunc
 template<typename T>
-static PyObject *
-qua_iadd(qua<T> *self, PyObject *obj)
+PyObject* qua_iadd(qua<T> *self, PyObject *obj)
 {
 	qua<T> * temp = (qua<T>*)qua_add<T>((PyObject*)self, obj);
 
@@ -276,9 +277,11 @@ qua_iadd(qua<T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define qua_iadd_TEMPLATE(T) template PyObject* qua_iadd(qua<T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_iadd_TEMPLATE);
+
 template<typename T>
-static PyObject *
-qua_isub(qua<T> *self, PyObject *obj)
+PyObject* qua_isub(qua<T> *self, PyObject *obj)
 {
 	qua<T> * temp = (qua<T>*)qua_sub<T>((PyObject*)self, obj);
 
@@ -291,9 +294,11 @@ qua_isub(qua<T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define qua_isub_TEMPLATE(T) template PyObject* qua_isub(qua<T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_isub_TEMPLATE);
+
 template<typename T>
-static PyObject *
-qua_imul(qua<T> *self, PyObject *obj)
+PyObject* qua_imul(qua<T> *self, PyObject *obj)
 {
 	qua<T> * temp = (qua<T>*)qua_mul<T>((PyObject*)self, obj);
 
@@ -311,9 +316,11 @@ qua_imul(qua<T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define qua_imul_TEMPLATE(T) template PyObject* qua_imul(qua<T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_imul_TEMPLATE);
+
 template<typename T>
-static PyObject *
-qua_idiv(qua<T> *self, PyObject *obj)
+PyObject* qua_idiv(qua<T> *self, PyObject *obj)
 {
 	qua<T> * temp = (qua<T>*)qua_div<T>((PyObject*)self, obj);
 
@@ -326,9 +333,11 @@ qua_idiv(qua<T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define qua_idiv_TEMPLATE(T) template PyObject* qua_idiv(qua<T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_idiv_TEMPLATE);
+
 template<typename T>
-static PyObject*
-qua_imatmul(qua<T>* self, PyObject* obj)
+PyObject* qua_imatmul(qua<T>* self, PyObject* obj)
 {
 	qua<T>* temp = (qua<T>*)qua_matmul((PyObject*)self, obj);
 
@@ -346,9 +355,11 @@ qua_imatmul(qua<T>* self, PyObject* obj)
 	return (PyObject*)self;
 }
 
+#define qua_imatmul_TEMPLATE(T) template PyObject* qua_imatmul(qua<T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_imatmul_TEMPLATE);
+
 template<typename T>
-static PyObject *
-qua_str(qua<T>* self)
+PyObject* qua_str(qua<T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 59 + strlen(name);
@@ -359,9 +370,11 @@ qua_str(qua<T>* self)
 	return po;
 }
 
+#define qua_str_TEMPLATE(T) template PyObject* qua_str(qua<T>* self)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_str_TEMPLATE);
+
 template<typename T>
-static PyObject *
-qua_repr(qua<T>* self)
+PyObject* qua_repr(qua<T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 59 + strlen(name);
@@ -372,12 +385,14 @@ qua_repr(qua<T>* self)
 	return po;
 }
 
-static Py_ssize_t qua_len(PyObject*) {
-	return (Py_ssize_t)4;
-}
+#define qua_repr_TEMPLATE(T) template PyObject* qua_repr(qua<T>* self)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_repr_TEMPLATE);
+
+
+Py_ssize_t qua_len(PyObject*);
 
 template<typename T>
-static PyObject* qua_sq_item(qua<T> * self, Py_ssize_t index) {
+PyObject* qua_sq_item(qua<T> * self, Py_ssize_t index) {
 	if (index < 0 || index > 3) {
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return NULL;
@@ -385,8 +400,11 @@ static PyObject* qua_sq_item(qua<T> * self, Py_ssize_t index) {
 	return PyGLM_PyObject_FromNumber<T>((T)self->super_type[(glm::length_t)index]);
 }
 
+#define qua_sq_item_TEMPLATE(T) template PyObject* qua_sq_item(qua<T> * self, Py_ssize_t index)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_sq_item_TEMPLATE);
+
 template<typename T>
-static int qua_sq_ass_item(qua<T> * self, Py_ssize_t index, PyObject * value) {
+int qua_sq_ass_item(qua<T> * self, Py_ssize_t index, PyObject * value) {
 	T f;
 	if (PyGLM_Number_Check(value)) {
 		f = PyGLM_Number_FromPyObject<T>(value);
@@ -404,8 +422,11 @@ static int qua_sq_ass_item(qua<T> * self, Py_ssize_t index, PyObject * value) {
 	return 0;
 }
 
+#define qua_sq_ass_item_TEMPLATE(T) template int qua_sq_ass_item(qua<T> * self, Py_ssize_t index, PyObject * value)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_sq_ass_item_TEMPLATE);
+
 template<typename T>
-static int qua_contains(qua<T> * self, PyObject * value) {
+int qua_contains(qua<T> * self, PyObject * value) {
 	if (PyGLM_Number_Check(value)) {
 		T f = PyGLM_Number_FromPyObject<T>(value);
 		bool contains = false;
@@ -421,8 +442,11 @@ static int qua_contains(qua<T> * self, PyObject * value) {
 
 }
 
+#define qua_contains_TEMPLATE(T) template int qua_contains(qua<T> * self, PyObject * value)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_contains_TEMPLATE);
+
 template<typename T>
-static PyObject * qua_richcompare(qua<T> * self, PyObject * other, int comp_type) {
+PyObject * qua_richcompare(qua<T> * self, PyObject * other, int comp_type) {
 	PyGLM_PTI_Init1(other, (get_qua_PTI_info<T>()));
 
 	if (PyGLM_PTI_IsNone(1)) {
@@ -451,11 +475,12 @@ static PyObject * qua_richcompare(qua<T> * self, PyObject * other, int comp_type
 	}
 }
 
-// iterator
+#define qua_richcompare_TEMPLATE(T) template PyObject * qua_richcompare(qua<T> * self, PyObject * other, int comp_type)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_richcompare_TEMPLATE);
 
+// iterator
 template<typename T>
-static PyObject *
-quaIter_new(PyTypeObject *type, PyObject *args, PyObject *)
+PyObject* quaIter_new(PyTypeObject *type, PyObject *args, PyObject *)
 {
 	qua<T> *sequence;
 
@@ -473,17 +498,21 @@ quaIter_new(PyTypeObject *type, PyObject *args, PyObject *)
 	return (PyObject *)rgstate;
 }
 
+#define quaIter_new_TEMPLATE(T) template PyObject* quaIter_new<T>(PyTypeObject *type, PyObject *args, PyObject *)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(quaIter_new_TEMPLATE);
+
 template<typename T>
-static void
-quaIter_dealloc(quaIter<T> *rgstate)
+void quaIter_dealloc(quaIter<T> *rgstate)
 {
 	Py_XDECREF(rgstate->sequence);
 	Py_TYPE(rgstate)->tp_free(rgstate);
 }
 
+#define quaIter_dealloc_TEMPLATE(T) template void quaIter_dealloc(quaIter<T> *rgstate)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(quaIter_dealloc_TEMPLATE);
+
 template<typename T>
-static PyObject *
-quaIter_next(quaIter<T> *rgstate)
+PyObject* quaIter_next(quaIter<T> *rgstate)
 {
 	if (rgstate->seq_index < 4) {
 		return PyGLM_PyObject_FromNumber<T>(rgstate->sequence->super_type[rgstate->seq_index++]);
@@ -493,8 +522,11 @@ quaIter_next(quaIter<T> *rgstate)
 	return NULL;
 }
 
+#define quaIter_next_TEMPLATE(T) template PyObject* quaIter_next(quaIter<T> *rgstate)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(quaIter_next_TEMPLATE);
+
 template<typename T>
-static PyObject * qua_geniter(qua<T>* self) {
+PyObject * qua_geniter(qua<T>* self) {
 	quaIter<T> *rgstate = (quaIter<T> *)(PyGLM_QUAITER_TYPE<T>()->tp_alloc(PyGLM_QUAITER_TYPE<T>(), 0));
 	if (!rgstate)
 		return NULL;
@@ -506,9 +538,11 @@ static PyObject * qua_geniter(qua<T>* self) {
 	return (PyObject *)rgstate;
 }
 
+#define qua_geniter_TEMPLATE(T) template PyObject * qua_geniter(qua<T>* self)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_geniter_TEMPLATE);
+
 template<typename T>
-static int
-qua_getbuffer(qua<T>* self, Py_buffer* view, int flags) {
+int qua_getbuffer(qua<T>* self, Py_buffer* view, int flags) {
 	if (view == NULL) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
 		return -1;
@@ -547,14 +581,13 @@ qua_getbuffer(qua<T>* self, Py_buffer* view, int flags) {
 	return 0;
 }
 
-void
-qua_releasebuffer(PyObject*, Py_buffer* view) {
-	PyMem_Free(view->shape);
-}
+#define qua_getbuffer_TEMPLATE(T) template int qua_getbuffer(qua<T>* self, Py_buffer* view, int flags)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_getbuffer_TEMPLATE);
+
+void qua_releasebuffer(PyObject*, Py_buffer* view);
 
 template<typename T>
-static PyObject*
-qua_from_bytes(PyObject*, PyObject* arg) {
+PyObject* qua_from_bytes(PyObject*, PyObject* arg) {
 	PyTypeObject* type = PyGLM_QUA_TYPE<T>();
 	if (PyBytes_Check(arg) && PyBytes_GET_SIZE(arg) == ((PyGLMTypeObject*)type)->itemSize) {
 		char* bytesAsString = PyBytes_AS_STRING(arg);
@@ -566,9 +599,11 @@ qua_from_bytes(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
+#define qua_from_bytes_TEMPLATE(T) template PyObject* qua_from_bytes<T>(PyObject*, PyObject* arg)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_from_bytes_TEMPLATE);
+
 template<typename T>
-static Py_hash_t
-qua_hash(qua<T>* self, PyObject*) {
+Py_hash_t qua_hash(qua<T>* self, PyObject*) {
 	std::hash<glm::qua<T>> hasher;
 	Py_hash_t out = (Py_hash_t)hasher(self->super_type);
 	if (out == -1) {
@@ -577,9 +612,11 @@ qua_hash(qua<T>* self, PyObject*) {
 	return out;
 }
 
+#define qua_hash_TEMPLATE(T) template Py_hash_t qua_hash(qua<T>* self, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_hash_TEMPLATE);
+
 template<typename T>
-static PyObject*
-qua_to_list(qua<T>* self, PyObject*) {
+PyObject* qua_to_list(qua<T>* self, PyObject*) {
 	PyObject* out = PyList_New(4);
 	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type.w));
 	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type.x));
@@ -588,9 +625,11 @@ qua_to_list(qua<T>* self, PyObject*) {
 	return out;
 }
 
+#define qua_to_list_TEMPLATE(T) template PyObject* qua_to_list(qua<T>* self, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_to_list_TEMPLATE);
+
 template<typename T>
-static PyObject*
-qua_to_tuple(qua<T>* self, PyObject*) {
+PyObject* qua_to_tuple(qua<T>* self, PyObject*) {
 	return PyTuple_Pack(4,
 		PyGLM_PyObject_FromNumber<T>(self->super_type.w),
 		PyGLM_PyObject_FromNumber<T>(self->super_type.x),
@@ -598,8 +637,11 @@ qua_to_tuple(qua<T>* self, PyObject*) {
 		PyGLM_PyObject_FromNumber<T>(self->super_type.z));
 }
 
+#define qua_to_tuple_TEMPLATE(T) template PyObject* qua_to_tuple(qua<T>* self, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_to_tuple_TEMPLATE);
+
 template<typename T>
-static PyObject* qua_setstate(qua<T>* self, PyObject* state) {
+PyObject* qua_setstate(qua<T>* self, PyObject* state) {
 	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 4, "Invalid state. Expected a length 4 tuple.");
 	self->super_type.w = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
 	self->super_type.x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 1));
@@ -607,3 +649,64 @@ static PyObject* qua_setstate(qua<T>* self, PyObject* state) {
 	self->super_type.z = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 3));
 	Py_RETURN_NONE;
 }
+
+#define qua_setstate_TEMPLATE(T) template PyObject* qua_setstate(qua<T>* self, PyObject* state)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(qua_setstate_TEMPLATE);
+
+// cpp
+PyObject* qua_length(PyObject*, PyObject*) {
+	return PyLong_FromLong(4);
+}
+
+void qua_dealloc(PyObject* self)
+{
+	if (self != NULL) Py_TYPE(self)->tp_free(self);
+}
+
+PyObject* qua_matmul(PyObject* obj1, PyObject* obj2)
+{
+	PyObject* out = PyNumber_Multiply(obj1, obj2);
+	if (out == NULL) {
+		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
+	}
+	return out;
+}
+
+Py_ssize_t qua_len(PyObject*) {
+	return (Py_ssize_t)4;
+}
+
+void qua_releasebuffer(PyObject*, Py_buffer* view) {
+	PyMem_Free(view->shape);
+}
+
+
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_new_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_init_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_neg_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_pos_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_add_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_sub_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_mul_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_div_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_iadd_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_isub_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_imul_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_idiv_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_imatmul_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_str_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_repr_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_sq_item_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_sq_ass_item_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_contains_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_richcompare_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(quaIter_new_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(quaIter_dealloc_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(quaIter_next_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_geniter_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_getbuffer_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_from_bytes_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_hash_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_to_list_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_to_tuple_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(qua_setstate_TEMPLATE);

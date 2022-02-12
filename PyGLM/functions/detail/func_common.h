@@ -14,8 +14,41 @@ PyDoc_STRVAR(abs_docstr,
 	"abs(x: vecN) -> vecN\n"
 	"	For each component `c` of `x`,\n"
 	"	Returns `c` if `c >= 0`; otherwise it returns `-c`.\n"
+	"abs(x: any) -> any\n"
+	"	Returns `__builtins__.abs(x)`."
 );
-PyGLM_MAKE_GLM_FUNC_N_V__tfF(abs)
+static PyObject*
+abs_(PyObject*, PyObject* arg) {
+	if (PyGLM_Number_Check(arg)) {
+		return pack(glm::abs(PyGLM_Number_FromPyObject<double>(arg)));
+	}
+	PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
+	if (PyGLM_Vec_PTI_Check0(1, float, arg)) {
+		return pack(glm::abs(PyGLM_Vec_PTI_Get0(1, float, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(1, double, arg)) {
+		return pack(glm::abs(PyGLM_Vec_PTI_Get0(1, double, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(2, float, arg)) {
+		return pack(glm::abs(PyGLM_Vec_PTI_Get0(2, float, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(2, double, arg)) {
+		return pack(glm::abs(PyGLM_Vec_PTI_Get0(2, double, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(3, float, arg)) {
+		return pack(glm::abs(PyGLM_Vec_PTI_Get0(3, float, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(3, double, arg)) {
+		return pack(glm::abs(PyGLM_Vec_PTI_Get0(3, double, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(4, float, arg)) {
+		return pack(glm::abs(PyGLM_Vec_PTI_Get0(4, float, arg)));
+	}
+	if (PyGLM_Vec_PTI_Check0(4, double, arg)) {
+		return pack(glm::abs(PyGLM_Vec_PTI_Get0(4, double, arg)));
+	}
+	return PyNumber_Absolute(arg);
+}
 
 PyDoc_STRVAR(sign_docstr,
 	"sign(x: number) -> float\n"

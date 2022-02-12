@@ -2,7 +2,19 @@
 
 #include "../forward_declarations.h"
 
-static PyMethodDef himat3x4_methods[] = {
+extern PyMethodDef himat3x4_methods[];
+extern PyBufferProcs himat3x4BufferMethods;
+extern PySequenceMethods himat3x4SeqMethods;
+extern PyMappingMethods himat3x4MapMethods;
+extern PyNumberMethods himat3x4NumMethods;
+
+extern PyTypeObject himat3x4IterType;
+extern PyGLMTypeObject himat3x4GLMType;
+extern PyTypeObject& himat3x4Type;
+
+// cpp
+
+PyMethodDef himat3x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::imat3x4"},
@@ -14,11 +26,11 @@ static PyMethodDef himat3x4_methods[] = {
 	{ "from_bytes", (PyCFunction)mat_from_bytes<3, 4, glm::i32>, METH_O | METH_STATIC, "Create a matrix from a bytes string"},
 	{ NULL }
 };
-static PyBufferProcs himat3x4BufferMethods = {
+PyBufferProcs himat3x4BufferMethods = {
 	(getbufferproc)mat_getbuffer<3, 4, glm::i32>,
 	(releasebufferproc)mat_releasebuffer,
 };
-static PySequenceMethods himat3x4SeqMethods = {
+PySequenceMethods himat3x4SeqMethods = {
 	(lenfunc)mat_len<3>, // sq_length
 	0, // sq_concat
 	0, // sq_repeat
@@ -30,12 +42,12 @@ static PySequenceMethods himat3x4SeqMethods = {
 	0, // sq_inplace_concat
 	0, // sq_inplace_repeat
 };
-static PyMappingMethods himat3x4MapMethods = {
+PyMappingMethods himat3x4MapMethods = {
 	(lenfunc)mat_len<3>, // mp_length
 	(binaryfunc)mat3x4_mp_item<glm::i32>, // mp_subscript
 	(objobjargproc)mat3x4_mp_ass_item<glm::i32>, // mp_ass_subscript
 };
-static PyNumberMethods himat3x4NumMethods = {
+PyNumberMethods himat3x4NumMethods = {
 	(binaryfunc)mat_add<3, 4, glm::i32>, //nb_add
 	(binaryfunc)mat_sub<3, 4, glm::i32>, //nb_subtract
 	(binaryfunc)mat_mul<3, 4, glm::i32>, //nb_multiply
@@ -44,7 +56,7 @@ static PyNumberMethods himat3x4NumMethods = {
 	0, //nb_power
 	(unaryfunc)mat_neg<3, 4, glm::i32>, //nb_negative
 	(unaryfunc)mat_pos<3, 4, glm::i32>, //nb_positive
-	0, //nb_absolute
+	(unaryfunc)mat_abs<3, 4, glm::i32>, //nb_absolute
 	0, //nb_bool
 	0, //nb_invert
 	0, //nb_lshift
@@ -73,7 +85,7 @@ static PyNumberMethods himat3x4NumMethods = {
 	(binaryfunc)mat_matmul, //nb_matrix_multiply
 	(binaryfunc)mat_imatmul<3, 4, glm::i32>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject himat3x4IterType = {
+PyTypeObject himat3x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"imat3x4Iter",             /* tp_name */
 	sizeof(matIter<3, 4, glm::i32>),             /* tp_basicsize */
@@ -114,54 +126,6 @@ static PyTypeObject himat3x4IterType = {
 	(newfunc)matIter_new<3, 4, glm::i32>,                 /* tp_new */
 };
 
-static PyGLMTypeObject himat3x4GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.imat3x4",             /* tp_name */
-		sizeof(mat<3, 4, glm::i32>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)mat_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)mat3x4_repr<glm::i32>,                         /* tp_repr */
-		& himat3x4NumMethods,             /* tp_as_number */
-		& himat3x4SeqMethods,                         /* tp_as_sequence */
-		& himat3x4MapMethods,                         /* tp_as_mapping */
-		(hashfunc)mat_hash<3, 4, glm::i32>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)mat3x4_str<glm::i32>,                         /* tp_str */
-		0,                         /* tp_getattro */
-		0,                         /* tp_setattro */
-		& himat3x4BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"imat3x4( <imat3x4 compatible type(s)> )\n3 columns of 4 components matrix of integer numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)mat_richcompare<3, 4, glm::i32>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)mat_geniter<3, 4, glm::i32>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		himat3x4_methods,             /* tp_methods */
-		0,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)mat3x4_init<glm::i32>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)mat_new<3, 4, glm::i32>,                 /* tp_new */
-	},
-	PyGLM_TYPE_MAT,
-	3,
-	4,
-	sizeof(int32),
-	sizeof(glm::mat<3, 4, int32>),
-	PyGLM_FS_INT32
-};
+PyGLMTypeObject himat3x4GLMType = _PyGLM_TYPE_DEF_IMAT(3, 4);
 
-static PyTypeObject& himat3x4Type = *((PyTypeObject*)&himat3x4GLMType);
+PyTypeObject& himat3x4Type = *((PyTypeObject*)&himat3x4GLMType);

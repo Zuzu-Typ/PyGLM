@@ -6,35 +6,30 @@
 
 #include "../types/mat/all.h"
 
+
 template<int C>
-static PyObject* mat_length(PyObject *, PyObject*) {
+PyObject* mat_length(PyObject *, PyObject*) {
 	return PyLong_FromLong(C);
 }
+#define mat_length_TEMPLATE(L) template PyObject* mat_length<L>(PyObject *, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_1_THRU_4(mat_length_TEMPLATE);
 
-static void
-mat_dealloc(PyObject* self)
-{
-	if (self->ob_type != NULL) Py_TYPE(self)->tp_free(self);
-}
+void mat_dealloc(PyObject* self);
 
 template<int C, int R, typename T>
-static PyObject *
-mat_new(PyTypeObject *type, PyObject *, PyObject *)
+PyObject* mat_new(PyTypeObject *type, PyObject *, PyObject *)
 {
 	mat<C, R, T> *self = (mat<C, R, T> *)type->tp_alloc(type, 0);
 	if (self != NULL) {
-		//constexpr uint8_t info_type = get_type_helper_type<T>();
-		//constexpr uint8_t info = (uint8_t)((C << PyGLM_TYPE_INFO_MAT_SHAPE1_OFFSET) | (R << PyGLM_TYPE_INFO_MAT_SHAPE2_OFFSET) | (info_type << PyGLM_TYPE_INFO_MAT_TYPE_OFFSET));
-		//self->info = info;
 		self->super_type = glm::mat<C, R, T>();
 	}
 	return (PyObject *)self;
 }
-
+#define mat_new_TEMPLATE(C, R, T) template PyObject* mat_new<C, R, T>(PyTypeObject *type, PyObject *, PyObject *)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_new_TEMPLATE);
 
 template<typename T>
-static int
-mat2x2_init(mat<2, 2, T> *self, PyObject *args, PyObject *)
+int mat2x2_init(mat<2, 2, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -150,8 +145,7 @@ mat2x2_init(mat<2, 2, T> *self, PyObject *args, PyObject *)
 }
 
 template<typename T>
-static int
-mat2x3_init(mat<2, 3, T> *self, PyObject *args, PyObject *)
+int mat2x3_init(mat<2, 3, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -268,8 +262,7 @@ mat2x3_init(mat<2, 3, T> *self, PyObject *args, PyObject *)
 }
 
 template<typename T>
-static int
-mat2x4_init(mat<2, 4, T> *self, PyObject *args, PyObject *)
+int mat2x4_init(mat<2, 4, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -388,8 +381,7 @@ mat2x4_init(mat<2, 4, T> *self, PyObject *args, PyObject *)
 }
 
 template<typename T>
-static int
-mat3x2_init(mat<3, 2, T> *self, PyObject *args, PyObject *)
+int mat3x2_init(mat<3, 2, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -513,8 +505,7 @@ mat3x2_init(mat<3, 2, T> *self, PyObject *args, PyObject *)
 }
 
 template<typename T>
-static int
-mat3x3_init(mat<3, 3, T> *self, PyObject *args, PyObject *)
+int mat3x3_init(mat<3, 3, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -649,8 +640,7 @@ mat3x3_init(mat<3, 3, T> *self, PyObject *args, PyObject *)
 }
 
 template<typename T>
-static int
-mat3x4_init(mat<3, 4, T> *self, PyObject *args, PyObject *)
+int mat3x4_init(mat<3, 4, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -781,8 +771,7 @@ mat3x4_init(mat<3, 4, T> *self, PyObject *args, PyObject *)
 }
 
 template<typename T>
-static int
-mat4x2_init(mat<4, 2, T> *self, PyObject *args, PyObject *)
+int mat4x2_init(mat<4, 2, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -915,8 +904,7 @@ mat4x2_init(mat<4, 2, T> *self, PyObject *args, PyObject *)
 }
 
 template<typename T>
-static int
-mat4x3_init(mat<4, 3, T> *self, PyObject *args, PyObject *)
+int mat4x3_init(mat<4, 3, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -1054,8 +1042,7 @@ mat4x3_init(mat<4, 3, T> *self, PyObject *args, PyObject *)
 }
 
 template<typename T>
-static int
-mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
+int mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 {
 	PyObject *arg1 = NULL;
 	PyObject *arg2 = NULL;
@@ -1201,32 +1188,46 @@ mat4x4_init(mat<4, 4, T> *self, PyObject *args, PyObject *)
 	return -1;
 }
 
+#define mat_init_TEMPLATE(C, R, T) template int mat ## C ## x ## R ## _init(mat<C, R, T> *self, PyObject *args, PyObject *)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_init_TEMPLATE);
+
 // unaryfunc
 template<int C, int R, typename T>
-static PyObject *
-mat_neg(mat<C, R, T> *obj)
+PyObject* mat_neg(mat<C, R, T> *obj)
 {
 	return pack_mat<C, R, T>(-obj->super_type);
 }
 
+#define mat_neg_TEMPLATE(C, R, T) template PyObject* mat_neg(mat<C, R, T> *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT_SIGNED(mat_neg_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-mat_pos(mat<C, R, T> *obj)
+PyObject* mat_pos(mat<C, R, T> *obj)
 {
 	return pack_mat<C, R, T>(obj->super_type);
 }
 
+#define mat_pos_TEMPLATE(C, R, T) template PyObject* mat_pos(mat<C, R, T> *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_pos_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-mat_abs(mat<C, R, T> *obj)
+PyObject* mat_abs(mat<C, R, T> *obj)
 {
-	return pack_mat<C, R, T>(glm::abs(obj->super_type));
+	glm::mat<C, R, T> out = obj->super_type;
+	for (int c = 0; c < C; c++) {
+		for (int r = 0; r < R; r++) {
+			out[c][r] = glm::abs(out[c][r]);
+		}
+	}
+	return pack_mat<C, R, T>(out);
 }
+
+#define mat_abs_TEMPLATE(C, R, T) template PyObject* mat_abs(mat<C, R, T> *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_abs_TEMPLATE);
 
 // binaryfunc
 template<int C, int R, typename T>
-static PyObject *
-matsq_add(PyObject *obj1, PyObject *obj2)
+PyObject* matsq_add(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		return pack_mat<C, R, T>(PyGLM_Number_FromPyObject<T>(obj1) + (((mat<C, R, T>*)obj2)->super_type));
@@ -1257,9 +1258,11 @@ matsq_add(PyObject *obj1, PyObject *obj2)
 	return pack_mat<C, R, T>(o + o2);
 }
 
+#define matsq_add_TEMPLATE(S, T) template PyObject* matsq_add<S, S, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_SQMAT(matsq_add_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-mat_add(PyObject *obj1, PyObject *obj2)
+PyObject* mat_add(PyObject *obj1, PyObject *obj2)
 {
 	PyGLM_PTI_Init0(obj1, (get_mat_PTI_info<C, R, T>()));
 
@@ -1286,9 +1289,11 @@ mat_add(PyObject *obj1, PyObject *obj2)
 	return pack_mat<C, R, T>(o + o2);
 }
 
+#define mat_add_TEMPLATE(C, R, T) template PyObject* mat_add<C, R, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_NOSQMAT(mat_add_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-matsq_sub(PyObject *obj1, PyObject *obj2)
+PyObject* matsq_sub(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		return pack_mat<C, R, T>(PyGLM_Number_FromPyObject<T>(obj1) - (((mat<C, R, T>*)obj2)->super_type));
@@ -1319,9 +1324,11 @@ matsq_sub(PyObject *obj1, PyObject *obj2)
 	return pack_mat<C, R, T>(o - o2);
 }
 
+#define matsq_sub_TEMPLATE(S, T) template PyObject* matsq_sub<S, S, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_SQMAT(matsq_sub_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-mat_sub(PyObject *obj1, PyObject *obj2)
+PyObject* mat_sub(PyObject *obj1, PyObject *obj2)
 {
 	PyGLM_PTI_Init0(obj1, (get_mat_PTI_info<C, R, T>()));
 
@@ -1348,9 +1355,11 @@ mat_sub(PyObject *obj1, PyObject *obj2)
 	return pack_mat<C, R, T>(o - o2);
 }
 
+#define mat_sub_TEMPLATE(C, R, T) template PyObject* mat_sub<C, R, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_NOSQMAT(mat_sub_TEMPLATE);
+
 template<int S, typename T>
-static inline PyObject*
-mat_hmul(glm::mat<S, S, T> o, PyObject* obj2) {
+PyObject* mat_hmul(glm::mat<S, S, T> o, PyObject* obj2) {
 	constexpr int Shom = S - 1;
 	PyGLM_PTI_Init0(obj2, (get_vec_PTI_info<Shom, T>()));
 
@@ -1363,9 +1372,11 @@ mat_hmul(glm::mat<S, S, T> o, PyObject* obj2) {
 	Py_RETURN_NOTIMPLEMENTED;
 }
 
+#define mat_hmul_TEMPLATE(S, T) template PyObject* mat_hmul(glm::mat<S, S, T> o, PyObject* obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_SQMAT(mat_hmul_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-mat_mul(PyObject *obj1, PyObject *obj2)
+PyObject* mat_mul(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar
 		return pack_mat(PyGLM_Number_FromPyObject<T>(obj1) * ((mat<C, R, T>*)obj2)->super_type);
@@ -1423,9 +1434,11 @@ mat_mul(PyObject *obj1, PyObject *obj2)
 	Py_RETURN_NOTIMPLEMENTED;
 }
 
+#define mat_mul_TEMPLATE(C, R, T) template PyObject* mat_mul<C, R, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_mul_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-matsq_div(PyObject *obj1, PyObject *obj2)
+PyObject* matsq_div(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar
 		for (int c = 0; c < C; c++) {
@@ -1498,9 +1511,11 @@ matsq_div(PyObject *obj1, PyObject *obj2)
 	Py_RETURN_NOTIMPLEMENTED;
 }
 
+#define matsq_div_TEMPLATE(S, T) template PyObject* matsq_div<S, S, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_SQMAT_FD(matsq_div_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-mat_div(PyObject *obj1, PyObject *obj2)
+PyObject* mat_div(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar
 		for (int c = 0; c < C; c++) {
@@ -1532,21 +1547,17 @@ mat_div(PyObject *obj1, PyObject *obj2)
 	Py_RETURN_NOTIMPLEMENTED;
 }
 
-static PyObject*
-mat_matmul(PyObject* obj1, PyObject* obj2)
-{
-	PyObject* out = PyNumber_Multiply(obj1, obj2);
-	if (out == NULL) {
-		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
-	}
-	return out;
-}
+#define mat_div_TEMPLATE(C, R, T) template PyObject* mat_div<C, R, T>(PyObject *obj1, PyObject *obj2)
+#define mat_div_TEMPLATE_SQ(S, T) template PyObject* mat_div<S, S, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_NOSQMAT(mat_div_TEMPLATE);
+PyGLM_GENERATE_EXTERN_TEMPLATE_SQMAT_I(mat_div_TEMPLATE_SQ);
+
+PyObject* mat_matmul(PyObject* obj1, PyObject* obj2);
 
 // inplace
 // binaryfunc
 template<int C, int R, typename T>
-static PyObject *
-matsq_iadd(mat<C, R, T> *self, PyObject *obj)
+PyObject* matsq_iadd(mat<C, R, T> *self, PyObject *obj)
 {
 	mat<C, R, T> * temp = (mat<C, R, T>*)matsq_add<C, R, T>((PyObject*)self, obj);
 
@@ -1559,9 +1570,11 @@ matsq_iadd(mat<C, R, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define matsq_iadd_TEMPLATE(S, T) template PyObject* matsq_iadd(mat<S, S, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_SQMAT(matsq_iadd_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-mat_iadd(mat<C, R, T> *self, PyObject *obj)
+PyObject* mat_iadd(mat<C, R, T> *self, PyObject *obj)
 {
 	mat<C, R, T> * temp = (mat<C, R, T>*)mat_add<C, R, T>((PyObject*)self, obj);
 
@@ -1574,9 +1587,11 @@ mat_iadd(mat<C, R, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define mat_iadd_TEMPLATE(C, R, T) template PyObject* mat_iadd(mat<C, R, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_NOSQMAT(mat_iadd_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-matsq_isub(mat<C, R, T> *self, PyObject *obj)
+PyObject* matsq_isub(mat<C, R, T> *self, PyObject *obj)
 {
 	mat<C, R, T> * temp = (mat<C, R, T>*)matsq_sub<C, R, T>((PyObject*)self, obj);
 
@@ -1589,9 +1604,11 @@ matsq_isub(mat<C, R, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define matsq_isub_TEMPLATE(S, T) template PyObject* matsq_isub(mat<S, S, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_SQMAT(matsq_isub_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-mat_isub(mat<C, R, T> *self, PyObject *obj)
+PyObject* mat_isub(mat<C, R, T> *self, PyObject *obj)
 {
 	mat<C, R, T> * temp = (mat<C, R, T>*)mat_sub<C, R, T>((PyObject*)self, obj);
 
@@ -1604,9 +1621,11 @@ mat_isub(mat<C, R, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define mat_isub_TEMPLATE(C, R, T) template PyObject* mat_isub(mat<C, R, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_NOSQMAT(mat_isub_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-mat_imul(mat<C, R, T> *self, PyObject *obj)
+PyObject* mat_imul(mat<C, R, T> *self, PyObject *obj)
 {
 	mat<C, R, T> * temp = (mat<C, R, T>*)mat_mul<C, R, T>((PyObject*)self, obj);
 
@@ -1624,9 +1643,11 @@ mat_imul(mat<C, R, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define mat_imul_TEMPLATE(C, R, T) template PyObject* mat_imul(mat<C, R, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_imul_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-matsq_idiv(mat<C, R, T> *self, PyObject *obj)
+PyObject* matsq_idiv(mat<C, R, T> *self, PyObject *obj)
 {
 	mat<C, R, T> * temp = (mat<C, R, T>*)matsq_div<C, R, T>((PyObject*)self, obj);
 
@@ -1644,9 +1665,11 @@ matsq_idiv(mat<C, R, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define matsq_idiv_TEMPLATE(S, T) template PyObject* matsq_idiv(mat<S, S, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_SQMAT_FD(matsq_idiv_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-mat_idiv(mat<C, R, T> *self, PyObject *obj)
+PyObject* mat_idiv(mat<C, R, T> *self, PyObject *obj)
 {
 	mat<C, R, T> * temp = (mat<C, R, T>*)mat_div<C, R, T>((PyObject*)self, obj);
 
@@ -1659,9 +1682,13 @@ mat_idiv(mat<C, R, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define mat_idiv_TEMPLATE(C, R, T) template PyObject* mat_idiv(mat<C, R, T> *self, PyObject *obj)
+#define mat_idiv_TEMPLATE_SQ(S, T) template PyObject* mat_idiv(mat<S, S, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_NOSQMAT(mat_idiv_TEMPLATE);
+PyGLM_GENERATE_EXTERN_TEMPLATE_SQMAT_I(mat_idiv_TEMPLATE_SQ);
+
 template<int C, int R, typename T>
-static PyObject*
-mat_imatmul(mat<C, R, T>* self, PyObject* obj)
+PyObject* mat_imatmul(mat<C, R, T>* self, PyObject* obj)
 {
 	mat<C, R, T>* temp = (mat<C, R, T>*)mat_matmul((PyObject*)self, obj);
 
@@ -1679,10 +1706,11 @@ mat_imatmul(mat<C, R, T>* self, PyObject* obj)
 	return (PyObject*)self;
 }
 
+#define mat_imatmul_TEMPLATE(C, R, T) template PyObject* mat_imatmul(mat<C, R, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_imatmul_TEMPLATE);
 
 template<typename T>
-static PyObject *
-mat2x2_str(mat<2, 2, T>* self)
+PyObject* mat2x2_str(mat<2, 2, T>* self)
 {
 	char * out = (char*)PyMem_Malloc((66) * sizeof(char));
 	snprintf(out, 66, "[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[0][1], (double)self->super_type[1][1]);
@@ -1692,8 +1720,7 @@ mat2x2_str(mat<2, 2, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat2x3_str(mat<2, 3, T>* self)
+PyObject* mat2x3_str(mat<2, 3, T>* self)
 {
 	char * out = (char*)PyMem_Malloc((99) * sizeof(char));
 	snprintf(out, 99, "[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[0][2], (double)self->super_type[1][2]);
@@ -1703,8 +1730,7 @@ mat2x3_str(mat<2, 3, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat2x4_str(mat<2, 4, T>* self)
+PyObject*mat2x4_str(mat<2, 4, T>* self)
 {
 	char * out = (char*)PyMem_Malloc((132) * sizeof(char));
 	snprintf(out, 132, "[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[0][2], (double)self->super_type[1][2], (double)self->super_type[0][3], (double)self->super_type[1][3]);
@@ -1714,8 +1740,7 @@ mat2x4_str(mat<2, 4, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat3x2_str(mat<3, 2, T>* self)
+PyObject* mat3x2_str(mat<3, 2, T>* self)
 {
 	char * out = (char*)PyMem_Malloc((98) * sizeof(char));
 	snprintf(out, 98, "[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1]);
@@ -1725,8 +1750,7 @@ mat3x2_str(mat<3, 2, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat3x3_str(mat<3, 3, T>* self)
+PyObject* mat3x3_str(mat<3, 3, T>* self)
 {
 	char * out = (char*)PyMem_Malloc((147) * sizeof(char));
 	snprintf(out, 147, "[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1], (double)self->super_type[0][2], (double)self->super_type[1][2], (double)self->super_type[2][2]);
@@ -1736,8 +1760,7 @@ mat3x3_str(mat<3, 3, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat3x4_str(mat<3, 4, T>* self)
+PyObject* mat3x4_str(mat<3, 4, T>* self)
 {
 	char * out = (char*)PyMem_Malloc((196) * sizeof(char));
 	snprintf(out, 196, "[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1], (double)self->super_type[0][2], (double)self->super_type[1][2], (double)self->super_type[2][2], (double)self->super_type[0][3], (double)self->super_type[1][3], (double)self->super_type[2][3]);
@@ -1747,8 +1770,7 @@ mat3x4_str(mat<3, 4, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat4x2_str(mat<4, 2, T>* self)
+PyObject* mat4x2_str(mat<4, 2, T>* self)
 {
 	char * out = (char*)PyMem_Malloc((130) * sizeof(char));
 	snprintf(out, 130, "[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[3][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1], (double)self->super_type[3][1]);
@@ -1758,8 +1780,7 @@ mat4x2_str(mat<4, 2, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat4x3_str(mat<4, 3, T>* self)
+PyObject* mat4x3_str(mat<4, 3, T>* self)
 {
 	char * out = (char*)PyMem_Malloc((195) * sizeof(char));
 	snprintf(out, 195, "[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[3][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1], (double)self->super_type[3][1], (double)self->super_type[0][2], (double)self->super_type[1][2], (double)self->super_type[2][2], (double)self->super_type[3][2]);
@@ -1769,8 +1790,7 @@ mat4x3_str(mat<4, 3, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat4x4_str(mat<4, 4, T>* self)
+PyObject* mat4x4_str(mat<4, 4, T>* self)
 {
 	char * out = (char*)PyMem_Malloc((260) * sizeof(char));
 	snprintf(out, 260, "[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]\n[ %12.6g ][ %12.6g ][ %12.6g ][ %12.6g ]", (double)self->super_type[0][0], (double)self->super_type[1][0], (double)self->super_type[2][0], (double)self->super_type[3][0], (double)self->super_type[0][1], (double)self->super_type[1][1], (double)self->super_type[2][1], (double)self->super_type[3][1], (double)self->super_type[0][2], (double)self->super_type[1][2], (double)self->super_type[2][2], (double)self->super_type[3][2], (double)self->super_type[0][3], (double)self->super_type[1][3], (double)self->super_type[2][3], (double)self->super_type[3][3]);
@@ -1779,9 +1799,11 @@ mat4x4_str(mat<4, 4, T>* self)
 	return po;
 }
 
+#define mat_str_TEMPLATE(C, R, T) template PyObject* mat ## C ## x ## R ## _str(mat<C, R, T>* self)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_str_TEMPLATE);
+
 template<typename T>
-static PyObject *
-mat2x2_repr(mat<2, 2, T>* self)
+PyObject* mat2x2_repr(mat<2, 2, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 65 + strlen(name);
@@ -1793,8 +1815,7 @@ mat2x2_repr(mat<2, 2, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat2x3_repr(mat<2, 3, T>* self)
+PyObject* mat2x3_repr(mat<2, 3, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 93 + strlen(name);
@@ -1806,8 +1827,7 @@ mat2x3_repr(mat<2, 3, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat2x4_repr(mat<2, 4, T>* self)
+PyObject* mat2x4_repr(mat<2, 4, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 121 + strlen(name);
@@ -1819,8 +1839,7 @@ mat2x4_repr(mat<2, 4, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat3x2_repr(mat<3, 2, T>* self)
+PyObject* mat3x2_repr(mat<3, 2, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 97 + strlen(name);
@@ -1832,8 +1851,7 @@ mat3x2_repr(mat<3, 2, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat3x3_repr(mat<3, 3, T>* self)
+PyObject* mat3x3_repr(mat<3, 3, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 139 + strlen(name);
@@ -1845,8 +1863,7 @@ mat3x3_repr(mat<3, 3, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat3x4_repr(mat<3, 4, T>* self)
+PyObject* mat3x4_repr(mat<3, 4, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 181 + strlen(name);
@@ -1858,8 +1875,7 @@ mat3x4_repr(mat<3, 4, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat4x2_repr(mat<4, 2, T>* self)
+PyObject* mat4x2_repr(mat<4, 2, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 129 + strlen(name);
@@ -1871,8 +1887,7 @@ mat4x2_repr(mat<4, 2, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat4x3_repr(mat<4, 3, T>* self)
+PyObject* mat4x3_repr(mat<4, 3, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 185 + strlen(name);
@@ -1884,8 +1899,7 @@ mat4x3_repr(mat<4, 3, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mat4x4_repr(mat<4, 4, T>* self)
+PyObject* mat4x4_repr(mat<4, 4, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 241 + strlen(name);
@@ -1896,13 +1910,19 @@ mat4x4_repr(mat<4, 4, T>* self)
 	return po;
 }
 
+#define mat_repr_TEMPLATE(C, R, T) template PyObject* mat ## C ## x ## R ## _repr(mat<C, R, T>* self)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_repr_TEMPLATE);
+
 template<int C>
-static Py_ssize_t mat_len(PyObject *) {
+Py_ssize_t mat_len(PyObject *) {
 	return (Py_ssize_t)C;
 }
 
+#define mat_len_TEMPLATE(L) template Py_ssize_t mat_len<L>(PyObject *)
+PyGLM_GENERATE_EXTERN_TEMPLATE_1_THRU_4(mat_len_TEMPLATE);
+
 template<typename T>
-static PyObject* mat2x2_mp_item(mat<2, 2, T> * self, PyObject* key) {
+PyObject* mat2x2_mp_item(mat<2, 2, T> * self, PyObject* key) {
 	if (PyGLM_Number_Check(key)) {
 		long index = PyGLM_Number_AsLong(key);
 
@@ -1936,7 +1956,7 @@ static PyObject* mat2x2_mp_item(mat<2, 2, T> * self, PyObject* key) {
 }
 
 template<typename T>
-static PyObject* mat2x3_mp_item(mat<2, 3, T> * self, PyObject* key) {
+PyObject* mat2x3_mp_item(mat<2, 3, T> * self, PyObject* key) {
 	if (PyGLM_Number_Check(key)) {
 		long index = PyGLM_Number_AsLong(key);
 
@@ -1970,7 +1990,7 @@ static PyObject* mat2x3_mp_item(mat<2, 3, T> * self, PyObject* key) {
 }
 
 template<typename T>
-static PyObject* mat2x4_mp_item(mat<2, 4, T> * self, PyObject* key) {
+PyObject* mat2x4_mp_item(mat<2, 4, T> * self, PyObject* key) {
 	if (PyGLM_Number_Check(key)) {
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2004,7 +2024,7 @@ static PyObject* mat2x4_mp_item(mat<2, 4, T> * self, PyObject* key) {
 }
 
 template<typename T>
-static PyObject* mat3x2_mp_item(mat<3, 2, T> * self, PyObject* key) {
+PyObject* mat3x2_mp_item(mat<3, 2, T> * self, PyObject* key) {
 	if (PyGLM_Number_Check(key)) {
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2038,7 +2058,7 @@ static PyObject* mat3x2_mp_item(mat<3, 2, T> * self, PyObject* key) {
 }
 
 template<typename T>
-static PyObject* mat3x3_mp_item(mat<3, 3, T> * self, PyObject* key) {
+PyObject* mat3x3_mp_item(mat<3, 3, T> * self, PyObject* key) {
 	if (PyGLM_Number_Check(key)) {
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2072,7 +2092,7 @@ static PyObject* mat3x3_mp_item(mat<3, 3, T> * self, PyObject* key) {
 }
 
 template<typename T>
-static PyObject* mat3x4_mp_item(mat<3, 4, T> * self, PyObject* key) {
+PyObject* mat3x4_mp_item(mat<3, 4, T> * self, PyObject* key) {
 	if (PyGLM_Number_Check(key)) {
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2106,7 +2126,7 @@ static PyObject* mat3x4_mp_item(mat<3, 4, T> * self, PyObject* key) {
 }
 
 template<typename T>
-static PyObject* mat4x2_mp_item(mat<4, 2, T> * self, PyObject* key) {
+PyObject* mat4x2_mp_item(mat<4, 2, T> * self, PyObject* key) {
 	if (PyGLM_Number_Check(key)) {
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2140,7 +2160,7 @@ static PyObject* mat4x2_mp_item(mat<4, 2, T> * self, PyObject* key) {
 }
 
 template<typename T>
-static PyObject* mat4x3_mp_item(mat<4, 3, T> * self, PyObject* key) {
+PyObject* mat4x3_mp_item(mat<4, 3, T> * self, PyObject* key) {
 	if (PyGLM_Number_Check(key)) {
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2174,7 +2194,7 @@ static PyObject* mat4x3_mp_item(mat<4, 3, T> * self, PyObject* key) {
 }
 
 template<typename T>
-static PyObject* mat4x4_mp_item(mat<4, 4, T> * self, PyObject* key) {
+PyObject* mat4x4_mp_item(mat<4, 4, T> * self, PyObject* key) {
 	if (PyGLM_Number_Check(key)) {
 		long index = PyGLM_Number_AsLong(key);
 
@@ -2207,8 +2227,11 @@ static PyObject* mat4x4_mp_item(mat<4, 4, T> * self, PyObject* key) {
 	return NULL;
 }
 
+#define mat_mp_item_TEMPLATE(C, R, T) template PyObject* mat ## C ## x ## R ## _mp_item(mat<C, R, T>* self, PyObject* key)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_mp_item_TEMPLATE);
+
 template<typename T>
-static int mat2x2_mp_ass_item(mat<2, 2, T> * self, PyObject* key, PyObject * value) {
+int mat2x2_mp_ass_item(mat<2, 2, T> * self, PyObject* key, PyObject * value) {
 	if (value == NULL) {
 		PyErr_SetString(PyExc_NotImplementedError, "item deletion not supported");
 		return -1;
@@ -2263,7 +2286,7 @@ static int mat2x2_mp_ass_item(mat<2, 2, T> * self, PyObject* key, PyObject * val
 }
 
 template<typename T>
-static int mat2x3_mp_ass_item(mat<2, 3, T> * self, PyObject* key, PyObject * value) {
+int mat2x3_mp_ass_item(mat<2, 3, T> * self, PyObject* key, PyObject * value) {
 	if (value == NULL) {
 		PyErr_SetString(PyExc_NotImplementedError, "item deletion not supported");
 		return -1;
@@ -2318,7 +2341,7 @@ static int mat2x3_mp_ass_item(mat<2, 3, T> * self, PyObject* key, PyObject * val
 }
 
 template<typename T>
-static int mat2x4_mp_ass_item(mat<2, 4, T> * self, PyObject* key, PyObject * value) {
+int mat2x4_mp_ass_item(mat<2, 4, T> * self, PyObject* key, PyObject * value) {
 	if (value == NULL) {
 		PyErr_SetString(PyExc_NotImplementedError, "item deletion not supported");
 		return -1;
@@ -2373,7 +2396,7 @@ static int mat2x4_mp_ass_item(mat<2, 4, T> * self, PyObject* key, PyObject * val
 }
 
 template<typename T>
-static int mat3x2_mp_ass_item(mat<3, 2, T> * self, PyObject* key, PyObject * value) {
+int mat3x2_mp_ass_item(mat<3, 2, T> * self, PyObject* key, PyObject * value) {
 	if (value == NULL) {
 		PyErr_SetString(PyExc_NotImplementedError, "item deletion not supported");
 		return -1;
@@ -2428,7 +2451,7 @@ static int mat3x2_mp_ass_item(mat<3, 2, T> * self, PyObject* key, PyObject * val
 }
 
 template<typename T>
-static int mat3x3_mp_ass_item(mat<3, 3, T> * self, PyObject* key, PyObject * value) {
+int mat3x3_mp_ass_item(mat<3, 3, T> * self, PyObject* key, PyObject * value) {
 	if (value == NULL) {
 		PyErr_SetString(PyExc_NotImplementedError, "item deletion not supported");
 		return -1;
@@ -2483,7 +2506,7 @@ static int mat3x3_mp_ass_item(mat<3, 3, T> * self, PyObject* key, PyObject * val
 }
 
 template<typename T>
-static int mat3x4_mp_ass_item(mat<3, 4, T> * self, PyObject* key, PyObject * value) {
+int mat3x4_mp_ass_item(mat<3, 4, T> * self, PyObject* key, PyObject * value) {
 	if (value == NULL) {
 		PyErr_SetString(PyExc_NotImplementedError, "item deletion not supported");
 		return -1;
@@ -2538,7 +2561,7 @@ static int mat3x4_mp_ass_item(mat<3, 4, T> * self, PyObject* key, PyObject * val
 }
 
 template<typename T>
-static int mat4x2_mp_ass_item(mat<4, 2, T> * self, PyObject* key, PyObject * value) {
+int mat4x2_mp_ass_item(mat<4, 2, T> * self, PyObject* key, PyObject * value) {
 	if (value == NULL) {
 		PyErr_SetString(PyExc_NotImplementedError, "item deletion not supported");
 		return -1;
@@ -2593,7 +2616,7 @@ static int mat4x2_mp_ass_item(mat<4, 2, T> * self, PyObject* key, PyObject * val
 }
 
 template<typename T>
-static int mat4x3_mp_ass_item(mat<4, 3, T> * self, PyObject* key, PyObject * value) {
+int mat4x3_mp_ass_item(mat<4, 3, T> * self, PyObject* key, PyObject * value) {
 	if (value == NULL) {
 		PyErr_SetString(PyExc_NotImplementedError, "item deletion not supported");
 		return -1;
@@ -2648,7 +2671,7 @@ static int mat4x3_mp_ass_item(mat<4, 3, T> * self, PyObject* key, PyObject * val
 }
 
 template<typename T>
-static int mat4x4_mp_ass_item(mat<4, 4, T> * self, PyObject* key, PyObject * value) {
+int mat4x4_mp_ass_item(mat<4, 4, T> * self, PyObject* key, PyObject * value) {
 	if (value == NULL) {
 		PyErr_SetString(PyExc_NotImplementedError, "item deletion not supported");
 		return -1;
@@ -2702,8 +2725,11 @@ static int mat4x4_mp_ass_item(mat<4, 4, T> * self, PyObject* key, PyObject * val
 	return -1;
 }
 
+#define mat_mp_ass_item_TEMPLATE(C, R, T) template int mat ## C ## x ## R ## _mp_ass_item(mat<C, R, T>* self, PyObject* key, PyObject * value)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_mp_ass_item_TEMPLATE);
+
 template<int C, int R, typename T>
-static int mat_contains(mat<C, R, T> * self, PyObject * value) {
+int mat_contains(mat<C, R, T> * self, PyObject * value) {
 	if (PyGLM_Number_Check(value)) {
 		T f = PyGLM_Number_FromPyObject<T>(value);
 		bool contains = false;
@@ -2737,8 +2763,11 @@ static int mat_contains(mat<C, R, T> * self, PyObject * value) {
 
 }
 
+#define mat_contains_TEMPLATE(C, R, T) template int mat_contains(mat<C, R, T> * self, PyObject * value)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_contains_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject * mat_richcompare(mat<C, R, T> * self, PyObject * other, int comp_type) {
+PyObject* mat_richcompare(mat<C, R, T> * self, PyObject * other, int comp_type) {
 	PyGLM_PTI_Init1(other, (get_mat_PTI_info<C, R, T>()));
 
 	if (PyGLM_PTI_IsNone(1)) {
@@ -2767,11 +2796,13 @@ static PyObject * mat_richcompare(mat<C, R, T> * self, PyObject * other, int com
 	}
 }
 
+#define mat_richcompare_TEMPLATE(C, R, T) template PyObject* mat_richcompare(mat<C, R, T> * self, PyObject * other, int comp_type)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_richcompare_TEMPLATE);
+
 // iterator
 
 template<int C, int R, typename T>
-static PyObject *
-matIter_new(PyTypeObject *type, PyObject *args, PyObject *)
+PyObject* matIter_new(PyTypeObject *type, PyObject *args, PyObject *)
 {
 	mat<C, R, T> *sequence = NULL;
 
@@ -2789,17 +2820,21 @@ matIter_new(PyTypeObject *type, PyObject *args, PyObject *)
 	return (PyObject *)rgstate;
 }
 
+#define matIter_new_TEMPLATE(C, R, T) template PyObject* matIter_new<C, R, T>(PyTypeObject *type, PyObject *args, PyObject *)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(matIter_new_TEMPLATE);
+
 template<int C, int R, typename T>
-static void
-matIter_dealloc(matIter<C, R, T> *rgstate)
+void matIter_dealloc(matIter<C, R, T> *rgstate)
 {
 	Py_XDECREF(rgstate->sequence);
 	Py_TYPE(rgstate)->tp_free(rgstate);
 }
 
+#define matIter_dealloc_TEMPLATE(C, R, T) template void matIter_dealloc(matIter<C, R, T> *rgstate)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(matIter_dealloc_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject *
-matIter_next(matIter<C, R, T> *rgstate)
+PyObject* matIter_next(matIter<C, R, T> *rgstate)
 {
 	if (rgstate->seq_index < C) {
 		return pack_mvec<R, T>(&rgstate->sequence->super_type[rgstate->seq_index++], (PyObject*)rgstate->sequence);
@@ -2809,8 +2844,11 @@ matIter_next(matIter<C, R, T> *rgstate)
 	return NULL;
 }
 
+#define matIter_next_TEMPLATE(C, R, T) template PyObject* matIter_next(matIter<C, R, T> *rgstate)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(matIter_next_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject * mat_geniter(mat<C, R, T>* self) {
+PyObject* mat_geniter(mat<C, R, T>* self) {
 	PyTypeObject* matIterType = PyGLM_MATITER_TYPE<C, R, T>();
 	matIter<C, R, T> *rgstate = (matIter<C, R, T> *)(matIterType->tp_alloc(matIterType, 0));
 	if (!rgstate)
@@ -2823,9 +2861,11 @@ static PyObject * mat_geniter(mat<C, R, T>* self) {
 	return (PyObject *)rgstate;
 }
 
+#define mat_geniter_TEMPLATE(C, R, T) template PyObject* mat_geniter(mat<C, R, T>* self)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_geniter_TEMPLATE);
+
 template<int C, int R, typename T>
-static int
-mat_getbuffer(mat<C, R, T>* self, Py_buffer* view, int flags) {
+int mat_getbuffer(mat<C, R, T>* self, Py_buffer* view, int flags) {
 	if (view == NULL) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
 		return -1;
@@ -2877,15 +2917,13 @@ mat_getbuffer(mat<C, R, T>* self, Py_buffer* view, int flags) {
 	return 0;
 }
 
-void
-mat_releasebuffer(PyObject*, Py_buffer* view) {
-	PyMem_Free(view->shape);
-	PyMem_Free(view->strides);
-}
+#define mat_getbuffer_TEMPLATE(C, R, T) template int mat_getbuffer(mat<C, R, T>* self, Py_buffer* view, int flags)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_getbuffer_TEMPLATE);
+
+void mat_releasebuffer(PyObject*, Py_buffer* view);
 
 template<int C, int R, typename T>
-static PyObject*
-mat_from_bytes(PyObject*, PyObject* arg) {
+PyObject* mat_from_bytes(PyObject*, PyObject* arg) {
 	PyTypeObject* type = PyGLM_MAT_TYPE<C, R, T>();
 	if (PyBytes_Check(arg) && PyBytes_GET_SIZE(arg) == ((PyGLMTypeObject*)type)->itemSize) {
 		char* bytesAsString = PyBytes_AS_STRING(arg);
@@ -2897,9 +2935,11 @@ mat_from_bytes(PyObject*, PyObject* arg) {
 	return NULL;
 }
 
+#define mat_from_bytes_TEMPLATE(C, R, T) template PyObject* mat_from_bytes<C, R, T>(PyObject*, PyObject* arg)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_from_bytes_TEMPLATE);
+
 template<int C, int R, typename T>
-static Py_hash_t
-mat_hash(mat<C, R, T>* self, PyObject*) {
+Py_hash_t mat_hash(mat<C, R, T>* self, PyObject*) {
 	std::hash<glm::mat<C, R, T>> hasher;
 	Py_hash_t out = (Py_hash_t)hasher(self->super_type);
 	if (out == -1) {
@@ -2908,9 +2948,11 @@ mat_hash(mat<C, R, T>* self, PyObject*) {
 	return out;
 }
 
+#define mat_hash_TEMPLATE(C, R, T) template Py_hash_t mat_hash(mat<C, R, T>* self, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_hash_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject*
-mat_to_list(mat<C, R, T>* self, PyObject*) {
+PyObject* mat_to_list(mat<C, R, T>* self, PyObject*) {
 	PyObject* out = PyList_New(C);
 	for (int n = 0; n < C; n++) {
 		PyObject* innerList = PyList_New(R);
@@ -2922,9 +2964,11 @@ mat_to_list(mat<C, R, T>* self, PyObject*) {
 	return out;
 }
 
+#define mat_to_list_TEMPLATE(C, R, T) template PyObject* mat_to_list(mat<C, R, T>* self, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_to_list_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject*
-mat_to_tuple(mat<C, R, T>* self, PyObject*) {
+PyObject* mat_to_tuple(mat<C, R, T>* self, PyObject*) {
 	PyObject* out = PyTuple_New(C);
 	for (int n = 0; n < C; n++) {
 		PyObject* innerList = PyTuple_New(R);
@@ -2936,9 +2980,11 @@ mat_to_tuple(mat<C, R, T>* self, PyObject*) {
 	return out;
 }
 
+#define mat_to_tuple_TEMPLATE(C, R, T) template PyObject* mat_to_tuple(mat<C, R, T>* self, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_to_tuple_TEMPLATE);
+
 template<int C, int R, typename T>
-static PyObject* 
-mat_setstate(mat<C, R, T>* self, PyObject* state) {
+PyObject* mat_setstate(mat<C, R, T>* self, PyObject* state) {
 	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == C, "Invalid state.");
 	for (int c = 0; c < C; c++) {
 		PyObject* innerList = PyTuple_GET_ITEM(state, c);
@@ -2949,3 +2995,86 @@ mat_setstate(mat<C, R, T>* self, PyObject* state) {
 	}
 	Py_RETURN_NONE;
 }
+
+#define mat_setstate_TEMPLATE(C, R, T) template PyObject* mat_setstate(mat<C, R, T>* self, PyObject* state)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(mat_setstate_TEMPLATE);
+
+// cpp
+
+void mat_dealloc(PyObject* self)
+{
+	if (self->ob_type != NULL) Py_TYPE(self)->tp_free(self);
+}
+
+PyObject* mat_matmul(PyObject* obj1, PyObject* obj2)
+{
+	PyObject* out = PyNumber_Multiply(obj1, obj2);
+	if (out == NULL) {
+		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
+	}
+	return out;
+}
+
+void mat_releasebuffer(PyObject*, Py_buffer* view) {
+	PyMem_Free(view->shape);
+	PyMem_Free(view->strides);
+}
+
+PyGLM_GENERATE_TEMPLATE_DEF_1_THRU_4(mat_length_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_new_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_init_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT_SIGNED(mat_neg_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_pos_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_abs_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_SQMAT(matsq_add_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_NOSQMAT(mat_add_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_SQMAT(matsq_sub_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_NOSQMAT(mat_sub_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_SQMAT(mat_hmul_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_mul_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_SQMAT_FD(matsq_div_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_NOSQMAT(mat_div_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_SQMAT_I(mat_div_TEMPLATE_SQ);
+
+PyGLM_GENERATE_TEMPLATE_DEF_SQMAT(matsq_iadd_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_NOSQMAT(mat_iadd_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_SQMAT(matsq_isub_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_NOSQMAT(mat_isub_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_imul_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_SQMAT_FD(matsq_idiv_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_NOSQMAT(mat_idiv_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_SQMAT_I(mat_idiv_TEMPLATE_SQ);
+
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_imatmul_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_str_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_repr_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_1_THRU_4(mat_len_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_mp_item_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_mp_ass_item_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_contains_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_richcompare_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(matIter_new_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(matIter_dealloc_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(matIter_next_TEMPLATE);
+
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_geniter_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_getbuffer_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_from_bytes_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_hash_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_to_list_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_to_tuple_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(mat_setstate_TEMPLATE);

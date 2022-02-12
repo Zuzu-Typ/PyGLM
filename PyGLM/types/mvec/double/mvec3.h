@@ -4,7 +4,18 @@
 
 #include "../../vec/all.h"
 
-static PyMethodDef hdmvec3_methods[] = {
+extern PyMethodDef hdmvec3_methods[];
+extern PyBufferProcs hdmvec3BufferMethods;
+extern PySequenceMethods hdmvec3SeqMethods;
+extern PyNumberMethods hdmvec3NumMethods;
+
+extern PyTypeObject hdmvec3IterType;
+extern PyGLMTypeObject hdmvec3GLMType;
+extern PyTypeObject& hdmvec3Type;
+
+// cpp
+
+PyMethodDef hdmvec3_methods[] = {
 	{ "__copy__", (PyCFunction)mvec_copy<3, double>, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<3, double>, METH_O, "Create a (deep)copy of this instance"},
 	{ "__getstate__", (PyCFunction)mvec3_to_tuple<double>, METH_NOARGS, "Returns a picklable state of this object"},
@@ -14,11 +25,11 @@ static PyMethodDef hdmvec3_methods[] = {
 	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ NULL }  /* Sentinel */
 };
-static PyBufferProcs hdmvec3BufferMethods = {
+PyBufferProcs hdmvec3BufferMethods = {
 	(getbufferproc)mvec_getbuffer<3, double>,
 	(releasebufferproc)mvec_releasebuffer,
 };
-static PySequenceMethods hdmvec3SeqMethods = {
+PySequenceMethods hdmvec3SeqMethods = {
 	(lenfunc)mvec_len<3>, // sq_length
 	0, // sq_concat
 	0, // sq_repeat
@@ -30,7 +41,7 @@ static PySequenceMethods hdmvec3SeqMethods = {
 	0, // sq_inplace_concat
 	0, // sq_inplace_repeat
 };
-static PyNumberMethods hdmvec3NumMethods = {
+PyNumberMethods hdmvec3NumMethods = {
 	(binaryfunc)mvec_add<3, double>, //nb_add
 	(binaryfunc)mvec_sub<3, double>, //nb_subtract
 	(binaryfunc)mvec_mul<3, double>, //nb_multiply
@@ -68,7 +79,7 @@ static PyNumberMethods hdmvec3NumMethods = {
 	(binaryfunc)mvec_matmul, //nb_matrix_multiply
 	(binaryfunc)mvec_imatmul<3, double>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject hdmvec3IterType = {
+PyTypeObject hdmvec3IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"dmvec3Iter",             /* tp_name */
 	sizeof(mvecIter<3, double>),             /* tp_basicsize */
@@ -109,55 +120,6 @@ static PyTypeObject hdmvec3IterType = {
 	(newfunc)mvecIter_new<3, double>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hdmvec3GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.dmvec3",             /* tp_name */
-		sizeof(mvec<3, double>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)mvec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)mvec3_str<double>,                         /* tp_repr */
-		& hdmvec3NumMethods,             /* tp_as_number */
-		& hdmvec3SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)mvec_hash<3, double>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)mvec3_str<double>,                         /* tp_str */
-		(getattrofunc)mvec_getattr<3, double>,                         /* tp_getattro */
-		(setattrofunc)mvec_setattr<3, double>,                         /* tp_setattro */
-		& hdmvec3BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"dmvec3( <mvec3 compatible type(s)> )\n3 components mvector of high qualifier double numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)mvec_richcompare<3, double>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)mvec_geniter<3, double>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hdmvec3_methods,             /* tp_methods */
-		0,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)mvec_init<3, double>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)mvec_new<3, double>,                 /* tp_new */
-	},
-	PyGLM_TYPE_MVEC,
-	3,
-	0,
-	sizeof(double),
-	sizeof(glm::vec<3, double>),
-	PyGLM_FS_DOUBLE,
-	&hdvec3Type
-};
+PyGLMTypeObject hdmvec3GLMType = _PyGLM_TYPE_DEF_DMVEC(3);
 
-static PyTypeObject& hdmvec3Type = *((PyTypeObject*)&hdmvec3GLMType);
+PyTypeObject& hdmvec3Type = *((PyTypeObject*)&hdmvec3GLMType);

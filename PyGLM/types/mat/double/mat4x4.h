@@ -2,7 +2,19 @@
 
 #include "../forward_declarations.h"
 
-static PyMethodDef hdmat4x4_methods[] = {
+extern PyMethodDef hdmat4x4_methods[];
+extern PyBufferProcs hdmat4x4BufferMethods;
+extern PySequenceMethods hdmat4x4SeqMethods;
+extern PyMappingMethods hdmat4x4MapMethods;
+extern PyNumberMethods hdmat4x4NumMethods;
+
+extern PyTypeObject hdmat4x4IterType;
+extern PyGLMTypeObject hdmat4x4GLMType;
+extern PyTypeObject& hdmat4x4Type;
+
+// cpp
+
+PyMethodDef hdmat4x4_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<4>, METH_NOARGS, "returns the length of glm::dmat4x4"},
@@ -14,11 +26,11 @@ static PyMethodDef hdmat4x4_methods[] = {
 	{ "from_bytes", (PyCFunction)mat_from_bytes<4, 4, double>, METH_O | METH_STATIC, "Create a matrix from a bytes string"},
 	{ NULL }
 };
-static PyBufferProcs hdmat4x4BufferMethods = {
+PyBufferProcs hdmat4x4BufferMethods = {
 	(getbufferproc)mat_getbuffer<4, 4, double>,
 	(releasebufferproc)mat_releasebuffer,
 };
-static PySequenceMethods hdmat4x4SeqMethods = {
+PySequenceMethods hdmat4x4SeqMethods = {
 	(lenfunc)mat_len<4>, // sq_length
 	0, // sq_concat
 	0, // sq_repeat
@@ -30,12 +42,12 @@ static PySequenceMethods hdmat4x4SeqMethods = {
 	0, // sq_inplace_concat
 	0, // sq_inplace_repeat
 };
-static PyMappingMethods hdmat4x4MapMethods = {
+PyMappingMethods hdmat4x4MapMethods = {
 	(lenfunc)mat_len<4>, // mp_length
 	(binaryfunc)mat4x4_mp_item<double>, // mp_subscript
 	(objobjargproc)mat4x4_mp_ass_item<double>, // mp_ass_subscript
 };
-static PyNumberMethods hdmat4x4NumMethods = {
+PyNumberMethods hdmat4x4NumMethods = {
 	(binaryfunc)matsq_add<4, 4, double>, //nb_add
 	(binaryfunc)matsq_sub<4, 4, double>, //nb_subtract
 	(binaryfunc)mat_mul<4, 4, double>, //nb_multiply
@@ -44,7 +56,7 @@ static PyNumberMethods hdmat4x4NumMethods = {
 	0, //nb_power
 	(unaryfunc)mat_neg<4, 4, double>, //nb_negative
 	(unaryfunc)mat_pos<4, 4, double>, //nb_positive
-	0, //nb_absolute
+	(unaryfunc)mat_abs<4, 4, double>, //nb_absolute
 	0, //nb_bool
 	0, //nb_invert
 	0, //nb_lshift
@@ -73,7 +85,7 @@ static PyNumberMethods hdmat4x4NumMethods = {
 	(binaryfunc)mat_matmul, //nb_matrix_multiply
 	(binaryfunc)mat_imatmul<4, 4, double>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject hdmat4x4IterType = {
+PyTypeObject hdmat4x4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"dmat4x4Iter",             /* tp_name */
 	sizeof(matIter<4, 4, double>),             /* tp_basicsize */
@@ -114,54 +126,6 @@ static PyTypeObject hdmat4x4IterType = {
 	(newfunc)matIter_new<4, 4, double>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hdmat4x4GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.dmat4x4",             /* tp_name */
-		sizeof(mat<4, 4, double>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)mat_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)mat4x4_repr<double>,                         /* tp_repr */
-		& hdmat4x4NumMethods,             /* tp_as_number */
-		& hdmat4x4SeqMethods,                         /* tp_as_sequence */
-		& hdmat4x4MapMethods,                         /* tp_as_mapping */
-		(hashfunc)mat_hash<4, 4, double>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)mat4x4_str<double>,                         /* tp_str */
-		0,                         /* tp_getattro */
-		0,                         /* tp_setattro */
-		& hdmat4x4BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"dmat4x4( <dmat4x4 compatible type(s)> )\n4 columns of 4 components matrix of double numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)mat_richcompare<4, 4, double>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)mat_geniter<4, 4, double>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hdmat4x4_methods,             /* tp_methods */
-		0,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)mat4x4_init<double>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)mat_new<4, 4, double>,                 /* tp_new */
-	},
-	PyGLM_TYPE_MAT,
-	4,
-	4,
-	sizeof(double),
-	sizeof(glm::mat<4, 4, double>),
-	PyGLM_FS_DOUBLE
-};
+PyGLMTypeObject hdmat4x4GLMType = _PyGLM_TYPE_DEF_DMAT(4, 4);
 
-static PyTypeObject& hdmat4x4Type = *((PyTypeObject*)&hdmat4x4GLMType);
+PyTypeObject& hdmat4x4Type = *((PyTypeObject*)&hdmat4x4GLMType);

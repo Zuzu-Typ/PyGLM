@@ -8,17 +8,195 @@
 
 #include "../internal_functions/type_checkers.h"
 
-static PyObject*
+int glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags);
+
+void glmArray_releasebuffer(PyObject* self, Py_buffer* view);
+
+PyObject* glmArray_to_bytes(glmArray* self, PyObject*);
+
+PyObject* glmArray_from_bytes(PyObject*, PyObject* args);
+
+PyObject* glmArray_reinterpret_cast(glmArray* self, PyObject* arg);
+
+PyObject* glmArray_to_list(glmArray* self, PyObject*);
+
+PyObject* glmArray_to_tuple(glmArray* self, PyObject*);
+
+PyObject* glmArray_split_components(glmArray* self, PyObject*);
+
+PyObject* glmArray_reduce(glmArray* self, PyObject* args);
+
+PyObject* glmArray_from_numbers(PyObject*, PyObject* args);
+
+PyObject* glmArray_as_reference(PyObject*, PyObject* args);
+
+PyObject* glmArray_zeros(PyObject*, PyObject* args);
+
+PyObject* glmArray_getPtr(glmArray* self, void*);
+
+PyObject* glmArray_getDtype(glmArray* self, void*);
+
+PyObject* glmArray_getCtype(glmArray* self, void*);
+
+Py_ssize_t glmArray_len(glmArray* self);
+
+PyObject* glmArray_concat(PyObject* obj1, PyObject* obj2);
+
+PyObject* glmArray_repeat(glmArray* self, PyObject* count);
+
+PyObject* glmArray_inplace_concat(glmArray* self, PyObject* obj);
+
+PyObject* glmArray_inplace_repeat(glmArray* self, PyObject* count);
+
+PyObject* glmArray_sq_item(glmArray* self, Py_ssize_t index);
+
+int glmArray_sq_ass_item(glmArray* self, Py_ssize_t index, PyObject* value);
+
+PyObject* glmArray_mp_subscript(glmArray* self, PyObject* key);
+
+int glmArray_mp_ass_subscript(glmArray* self, PyObject* key, PyObject* value);
+
+int glmArray_contains(glmArray* self, PyObject* value);
+
+void glmArray_dealloc(glmArray* self);
+
+PyObject* glmArray_str(glmArray* self);
+
+PyObject* glmArray_repr(glmArray* self);
+
+PyObject* glmArray_richcompare(glmArray* self, PyObject* other, int comp_type);
+
+PyObject* glmArray_geniter(glmArray* self);
+
+int glmArray_init(glmArray* self, PyObject* args, PyObject* kwds);
+
+PyObject* glmArray_new(PyTypeObject* type, PyObject* args, PyObject* kwds);
+
+void glmArrayIter_dealloc(glmArrayIter* rgstate);
+
+PyObject* glmArrayIter_next(glmArrayIter* rgstate);
+
+PyObject* glmArrayIter_new(PyTypeObject* type, PyObject* args, PyObject* kwargs);
+
+Py_hash_t array_hash(glmArray* self, PyObject*);
+
+PyObject* glmArray_getstate(glmArray* self, PyObject*);
+
+PyObject* glmArray_setstate(glmArray* self, PyObject* state);
+
+PyObject* glmArray_filter(glmArray* self, PyObject* func);
+
+PyObject* glmArray_map(glmArray* self, PyObject* func, PyObject* kwargs);
+
+PyObject* glmArray_sort(glmArray* self, PyObject* func);
+
+PyObject* glmArray_add(PyObject* obj1, PyObject* obj2);
+
+PyObject* glmArray_sub(PyObject* obj1, PyObject* obj2);
+
+PyObject* glmArray_mul(PyObject* obj1, PyObject* obj2);
+
+PyObject* glmArray_mod(PyObject* obj1, PyObject* obj2);
+
+PyObject* glmArray_pow(PyObject* obj1, PyObject* obj2, PyObject* obj3);
+
+PyObject* glmArray_neg(glmArray* arr);
+
+PyObject* glmArray_pos(glmArray* arr);
+
+PyObject* glmArray_abs(glmArray* arr);
+
+PyObject* glmArray_inv(glmArray* arr);
+
+PyObject* glmArray_lshift(PyObject* obj1, PyObject* obj2);
+
+PyObject* glmArray_rshift(PyObject* obj1, PyObject* obj2);
+
+PyObject* glmArray_and(PyObject* obj1, PyObject* obj2);
+
+PyObject* glmArray_xor(PyObject* obj1, PyObject* obj2);
+
+PyObject* glmArray_or(PyObject* obj1, PyObject* obj2);
+
+PyObject* glmArray_div(PyObject* obj1, PyObject* obj2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// cpp
+
+PyObject*
 glmArray_getPtr(glmArray* self, void*) {
 	return PyGLM_CtypesVoidP_FromVoidP(self->data);
 }
 
-static PyObject*
+PyObject*
 glmArray_to_bytes(glmArray* self, PyObject*) {
 	return PyBytes_FromStringAndSize((char*)self->data, self->nBytes);
 }
 
-static PyObject*
+PyObject*
 glmArray_from_bytes(PyObject*, PyObject* args) {
 	PyObject* bytesObj, *typeObj = NULL;
 
@@ -157,7 +335,7 @@ glmArray_from_bytes(PyObject*, PyObject* args) {
 	return NULL;
 }
 
-static PyObject*
+PyObject*
 glmArray_reinterpret_cast(glmArray* self, PyObject* arg) {
 	if (PyType_Check(arg)) {
 		if (PyGLM_Is_PyGLM_Type(arg)) {
@@ -286,7 +464,7 @@ glmArray_reinterpret_cast(glmArray* self, PyObject* arg) {
 	return NULL;
 }
 
-static PyObject* 
+PyObject* 
 glmArray_getDtype(glmArray* self, void*) {
 	switch (self->format) {
 	case 'f':
@@ -316,7 +494,7 @@ glmArray_getDtype(glmArray* self, void*) {
 	}
 }
 
-static PyObject*
+PyObject*
 glmArray_getCtype(glmArray* self, void*) {
 	switch (self->format) {
 	case 'f':
@@ -779,8 +957,7 @@ PyObject* glmArray_get(glmArray* self, Py_ssize_t index) {
 	return NULL;
 }
 
-static int 
-glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
+int glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 	if (view == NULL) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
 		return -1;
@@ -980,8 +1157,7 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 	return 0;
 }
 
-void 
-glmArray_releasebuffer(PyObject* self, Py_buffer* view) {
+void glmArray_releasebuffer(PyObject* self, Py_buffer* view) {
 	PyMem_Free(view->shape);
 	PyMem_Free(view->strides);
 	PyMem_Free(view->format);
@@ -994,8 +1170,7 @@ glmArray_releasebuffer(PyObject* self, Py_buffer* view) {
 
 
 
-static PyObject* 
-glmArray_to_list(glmArray* self, PyObject*) {
+PyObject* glmArray_to_list(glmArray* self, PyObject*) {
 	PyObject* out = PyList_New(self->itemCount);
 	for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 		PyList_SET_ITEM(out, i, glmArray_get(self, i));
@@ -1006,8 +1181,7 @@ glmArray_to_list(glmArray* self, PyObject*) {
 
 
 
-static PyObject* 
-glmArray_to_tuple(glmArray* self, PyObject*) {
+PyObject* glmArray_to_tuple(glmArray* self, PyObject*) {
 	PyObject* out = PyTuple_New(self->itemCount);
 	for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 		PyTuple_SET_ITEM(out, i, glmArray_get(self, i));
@@ -1015,8 +1189,7 @@ glmArray_to_tuple(glmArray* self, PyObject*) {
 	return out;
 }
 
-static PyObject* 
-glmArray_split_components(glmArray* self, PyObject*) {
+PyObject* glmArray_split_components(glmArray* self, PyObject*) {
 	if (self->glmType == PyGLM_TYPE_CTYPES) {
 		PyErr_SetString(PyExc_NotImplementedError, "split_components() is not defined for ctypes arrays");
 		return NULL;
@@ -1074,7 +1247,7 @@ glmArray_split_components(glmArray* self, PyObject*) {
 	return out;
 }
 
-static PyObject* do_reduce(std::vector<PyObject*> objects, PyObject* callable) {
+PyObject* do_reduce(std::vector<PyObject*> objects, PyObject* callable) {
 	const size_t object_count = objects.size();
 
 	PyObject* result = objects[0];
@@ -1110,7 +1283,7 @@ static PyObject* do_reduce(std::vector<PyObject*> objects, PyObject* callable) {
 	return result;
 }
 
-static PyObject* glmArray_reduce(glmArray* self, PyObject* args) {
+PyObject* glmArray_reduce(glmArray* self, PyObject* args) {
 	PyObject* arg1, * arg2 = NULL;
 	if (!PyArg_UnpackTuple(args, "reduce", 1, 2, &arg1, &arg2)) return NULL;
 
@@ -1140,8 +1313,7 @@ static PyObject* glmArray_reduce(glmArray* self, PyObject* args) {
 }
 
 template<typename T>
-static bool
-glmArray_from_numbers_init_iter(glmArray* out, PyObject* iterator, Py_ssize_t& argCount) {
+bool glmArray_from_numbers_init_iter(glmArray* out, PyObject* iterator, Py_ssize_t& argCount) {
 	out->dtSize = sizeof(T);
 	out->itemSize = sizeof(T);
 	out->itemCount = argCount - 1;
@@ -1169,8 +1341,7 @@ glmArray_from_numbers_init_iter(glmArray* out, PyObject* iterator, Py_ssize_t& a
 }
 
 template<typename T>
-static bool
-glmArray_from_numbers_init(glmArray* out, PyObject* tuple, Py_ssize_t& argCount) {
+bool glmArray_from_numbers_init(glmArray* out, PyObject* tuple, Py_ssize_t& argCount) {
 	out->dtSize = sizeof(T);
 	out->itemSize = sizeof(T);
 	out->itemCount = argCount - 1;
@@ -1199,8 +1370,7 @@ glmArray_from_numbers_init(glmArray* out, PyObject* tuple, Py_ssize_t& argCount)
 
 
 
-static PyObject*
-glmArray_from_numbers(PyObject*, PyObject* args) {
+PyObject* glmArray_from_numbers(PyObject*, PyObject* args) {
 	Py_ssize_t argCount = PyTuple_GET_SIZE(args);
 	PyGLM_ASSERT((argCount >= 1), "Invalid argument count for from_number(), expected at least 1, got 0");
 
@@ -1308,8 +1478,7 @@ return (PyObject*)out
 
 
 
-static PyObject*
-glmArray_as_reference(PyObject*, PyObject* arg) {
+PyObject* glmArray_as_reference(PyObject*, PyObject* arg) {
 	if (PyObject_TypeCheck(arg, &glmArrayType)) {
 		glmArray* other = (glmArray*)arg;
 		glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
@@ -1507,8 +1676,7 @@ glmArray_as_reference(PyObject*, PyObject* arg) {
 
 
 
-static PyObject*
-glmArray_zeros_return(glmArray*& out, long& count) {
+PyObject* glmArray_zeros_return(glmArray*& out, long& count) {
 	out->nBytes = out->itemSize * count;
 	out->data = PyMem_Calloc(count, out->itemSize);
 
@@ -1529,8 +1697,7 @@ if (type == PyGLM_CTYPES_TYPE<T>()) {\
 
 
 
-static PyObject*
-glmArray_zeros(PyObject*, PyObject* args) {
+PyObject* glmArray_zeros(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2;
 	PyGLM_Arg_Unpack_2O(args, "zeros", arg1, arg2);
 	if (PyLong_Check(arg1) && PyType_Check(arg2)) {
@@ -1594,8 +1761,7 @@ glmArray_zeros(PyObject*, PyObject* args) {
 
 
 
-static PyObject*
-glmArray_getstate(glmArray* self, PyObject*) {
+PyObject* glmArray_getstate(glmArray* self, PyObject*) {
 	return PyTuple_Pack(10,
 		glmArray_to_tuple(self, NULL),
 		PyGLM_PyObject_FromNumber<Py_ssize_t>(self->dtSize),
@@ -1612,8 +1778,7 @@ glmArray_getstate(glmArray* self, PyObject*) {
 
 
 
-static PyObject*
-glmArray_setstate(glmArray* self, PyObject* state) {
+PyObject* glmArray_setstate(glmArray* self, PyObject* state) {
 	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 10, "Invalid state. Expected length 10 tuple.");
 	PyObject* dataTuple = PyTuple_GET_ITEM(state, 0);
 	self->dtSize = PyGLM_Number_FromPyObject<Py_ssize_t>(PyTuple_GET_ITEM(state, 1));
@@ -1636,12 +1801,11 @@ glmArray_setstate(glmArray* self, PyObject* state) {
 	Py_RETURN_NONE;
 }
 
-static Py_ssize_t 
-glmArray_len(glmArray* self) { 
+Py_ssize_t glmArray_len(glmArray* self) { 
 	return self->itemCount;
 }
 
-static PyObject* glmArray_concat(PyObject* obj1, PyObject* obj2) {
+PyObject* glmArray_concat(PyObject* obj1, PyObject* obj2) {
 	if (!PyObject_TypeCheck(obj1, &glmArrayType) || !PyObject_TypeCheck(obj2, &glmArrayType)) {
 		PyGLM_TYPEERROR_2O("invalid argument type(s) for concat(): ", obj1, obj2);
 		return NULL;
@@ -1686,7 +1850,7 @@ static PyObject* glmArray_concat(PyObject* obj1, PyObject* obj2) {
 	return (PyObject*)out;
 }
 
-static PyObject* glmArray_repeat(glmArray* self, PyObject* count) {
+PyObject* glmArray_repeat(glmArray* self, PyObject* count) {
 	if (PyLong_Check(count)) {
 		glmArray* out = (glmArray*)glmArrayType.tp_alloc(&glmArrayType, 0);
 		PyGLM_ASSERT((out != NULL), "generated array was NULL. (maybe we're out of memory?)");
@@ -1726,7 +1890,7 @@ static PyObject* glmArray_repeat(glmArray* self, PyObject* count) {
 	return NULL;
 }
 
-static PyObject* glmArray_inplace_concat(glmArray* self, PyObject* obj) {
+PyObject* glmArray_inplace_concat(glmArray* self, PyObject* obj) {
 	glmArray* temp = (glmArray*)glmArray_concat((PyObject*)self, obj);
 
 	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
@@ -1740,7 +1904,7 @@ static PyObject* glmArray_inplace_concat(glmArray* self, PyObject* obj) {
 	return (PyObject*)self;
 }
 
-static PyObject* glmArray_inplace_repeat(glmArray* self, PyObject* count) {
+PyObject* glmArray_inplace_repeat(glmArray* self, PyObject* count) {
 	glmArray* temp = (glmArray*)glmArray_repeat(self, count);
 
 	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
@@ -1754,13 +1918,11 @@ static PyObject* glmArray_inplace_repeat(glmArray* self, PyObject* count) {
 	return (PyObject*)self;
 }
 
-static PyObject* 
-glmArray_sq_item(glmArray* self, Py_ssize_t index) {
+PyObject* glmArray_sq_item(glmArray* self, Py_ssize_t index) {
 	return glmArray_get(self, index);
 }
 
-static int 
-glmArray_sq_ass_item(glmArray* self, Py_ssize_t index, PyObject* value) {
+int glmArray_sq_ass_item(glmArray* self, Py_ssize_t index, PyObject* value) {
 	if (self->readonly) {
 		PyErr_SetString(PyExc_Exception, "This array is read-only.");
 		return -1;
@@ -1768,8 +1930,7 @@ glmArray_sq_ass_item(glmArray* self, Py_ssize_t index, PyObject* value) {
 	return glmArray_set(self, index, value);
 }
 
-static PyObject*
-glmArray_mp_subscript(glmArray* self, PyObject* key) {
+PyObject* glmArray_mp_subscript(glmArray* self, PyObject* key) {
 	if (PyLong_Check(key)) {
 		return glmArray_get(self, PyLong_AsSsize_t(key));
 	}
@@ -1817,8 +1978,7 @@ glmArray_mp_subscript(glmArray* self, PyObject* key) {
 	return NULL;
 }
 
-static int
-glmArray_mp_ass_subscript(glmArray* self, PyObject* key, PyObject* value) {
+int glmArray_mp_ass_subscript(glmArray* self, PyObject* key, PyObject* value) {
 	if (self->readonly) {
 		PyErr_SetString(PyExc_Exception, "This array is read-only.");
 		return -1;
@@ -1878,8 +2038,7 @@ glmArray_mp_ass_subscript(glmArray* self, PyObject* key, PyObject* value) {
 	return -1;
 }
 
-static int 
-glmArray_contains(glmArray* self, PyObject* value) {
+int glmArray_contains(glmArray* self, PyObject* value) {
 	for (Py_ssize_t i = 0; i < self->itemCount; i++) {
 		PyObject* itemAtIndex = glmArray_get(self, i);
 		int cmp = PyObject_RichCompareBool(itemAtIndex, value, Py_EQ);
@@ -1895,8 +2054,7 @@ glmArray_contains(glmArray* self, PyObject* value) {
 	return 0;
 }
 
-static void 
-glmArray_dealloc(glmArray* self) {
+void glmArray_dealloc(glmArray* self) {
 	if (self->reference == NULL) {
 		PyMem_Free(self->data);
 		self->data = NULL;
@@ -1908,8 +2066,7 @@ glmArray_dealloc(glmArray* self) {
 }
 
 template<typename T>
-static PyObject*
-glmArray_str_vec(glmArray* self) {
+PyObject* glmArray_str_vec(glmArray* self) {
 	const int L = self->getShape();
 
 	uint64 itemSize = (7 + 12 + (L - 1) * (12 + 2));
@@ -1947,8 +2104,7 @@ glmArray_str_vec(glmArray* self) {
 }
 
 template<typename T>
-static PyObject*
-glmArray_repr_vec(glmArray* self) {
+PyObject* glmArray_repr_vec(glmArray* self) {
 	const int L = self->getShape();
 
 	const char* subtypeName = PyGLM_GET_NAME(self->subtype->tp_name);
@@ -1999,8 +2155,7 @@ glmArray_repr_vec(glmArray* self) {
 }
 
 template<typename T>
-static PyObject*
-glmArray_str_mat(glmArray* self) {
+PyObject* glmArray_str_mat(glmArray* self) {
 	const int C = self->getShape(0);
 	const int R = self->getShape(1);
 
@@ -2049,8 +2204,7 @@ glmArray_str_mat(glmArray* self) {
 }
 
 template<typename T>
-static PyObject*
-glmArray_repr_mat(glmArray* self) {
+PyObject* glmArray_repr_mat(glmArray* self) {
 	const int C = self->getShape(0);
 	const int R = self->getShape(1);
 
@@ -2116,8 +2270,7 @@ glmArray_repr_mat(glmArray* self) {
 }
 
 template<typename T>
-static PyObject*
-glmArray_str_qua(glmArray* self) {
+PyObject* glmArray_str_qua(glmArray* self) {
 	uint64 itemSize = (13 + 12 * 4);
 	uint64 outLength = 1 + 3 + itemSize * self->itemCount;
 
@@ -2149,8 +2302,7 @@ glmArray_str_qua(glmArray* self) {
 }
 
 template<typename T>
-static PyObject*
-glmArray_repr_qua(glmArray* self) {
+PyObject* glmArray_repr_qua(glmArray* self) {
 	const char* subtypeName = self->subtype->tp_name + 4;
 
 	const char* arrayTypeName = glmArrayType.tp_name + 4;
@@ -2200,8 +2352,7 @@ glmArray_repr_qua(glmArray* self) {
 }
 
 template<typename T>
-static PyObject*
-glmArray_str_ctypes(glmArray* self) {
+PyObject* glmArray_str_ctypes(glmArray* self) {
 	constexpr uint64 itemSize = (1 + 12 + 2);
 	uint64 outLength = 1 + 3 + self->itemCount * itemSize;
 
@@ -2230,8 +2381,7 @@ glmArray_str_ctypes(glmArray* self) {
 }
 
 template<typename T>
-static PyObject*
-glmArray_repr_ctypes(glmArray* self) {
+PyObject* glmArray_repr_ctypes(glmArray* self) {
 	const char* subtypeName = PyGLM_CTYPES_TYPE_STRING<T>();
 
 	const char* arrayTypeName = glmArrayType.tp_name + 4;
@@ -2275,8 +2425,7 @@ glmArray_repr_ctypes(glmArray* self) {
 	return po;
 }
 
-static PyObject* 
-glmArray_str(glmArray* self) {
+PyObject* glmArray_str(glmArray* self) {
 	switch (self->glmType) {
 	case PyGLM_TYPE_VEC:
 		switch (self->format) {
@@ -2359,7 +2508,7 @@ glmArray_str(glmArray* self) {
 	}
 }
 
-static PyObject* glmArray_repr(glmArray* self) {
+PyObject* glmArray_repr(glmArray* self) {
 	switch (self->glmType) {
 	case PyGLM_TYPE_VEC:
 		switch (self->format) {
@@ -2443,8 +2592,7 @@ static PyObject* glmArray_repr(glmArray* self) {
 }
 
 
-static PyObject* 
-glmArray_richcompare(glmArray* self, PyObject* other, int comp_type) {
+PyObject* glmArray_richcompare(glmArray* self, PyObject* other, int comp_type) {
 	switch (comp_type) {
 	case Py_EQ:
 		if (PyObject_TypeCheck(other, &glmArrayType)) {
@@ -2468,8 +2616,7 @@ glmArray_richcompare(glmArray* self, PyObject* other, int comp_type) {
 }
 
 
-static PyObject* 
-glmArray_geniter(glmArray* self) {
+PyObject* glmArray_geniter(glmArray* self) {
 	glmArrayIter* rgstate = (glmArrayIter*)(glmArrayIterType.tp_alloc(&glmArrayIterType, 0));
 	if (!rgstate)
 		return NULL;
@@ -2523,8 +2670,7 @@ glmArray_init_ctypes_iter(glmArray* self, PyObject* firstElement, PyObject* iter
 #define GLM_ARRAY_INIT_IF_IS_CTYPES_TUPLE_OR_LIST(T) if (firstElementType == UNBRACKET (PyGLM_CTYPES_TYPE<T>())) {return UNBRACKET (glmArray_init_ctypes_tuple_or_list<T>(self, args, argCount));}
 
 template<typename T>
-static int
-glmArray_init_ctypes_tuple_or_list(glmArray* self, PyObject* args, Py_ssize_t argCount) {
+int glmArray_init_ctypes_tuple_or_list(glmArray* self, PyObject* args, Py_ssize_t argCount) {
 	self->itemCount = argCount;
 	self->dtSize = sizeof(T);
 	self->itemSize = sizeof(T);
@@ -2584,8 +2730,7 @@ memcpy(self->data, view.buf, self->nBytes);\
 PyBuffer_Release(&view);\
 return 0
 
-static int 
-glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
+int glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 	Py_ssize_t argCount = PyGLM_TupleOrList_GET_SIZE(args);
 	if (argCount == 0) {
 		PyErr_SetString(PyExc_TypeError, "cannot create an empty array");
@@ -3073,8 +3218,7 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 }
 
 
-static PyObject* 
-glmArray_new(PyTypeObject* type, PyObject* args, PyObject* kwds) {
+PyObject* glmArray_new(PyTypeObject* type, PyObject* args, PyObject* kwds) {
 	glmArray* self = (glmArray*)type->tp_alloc(type, 0);
 	if (self != NULL) {
 		self->itemCount = self->nBytes = 0;
@@ -3087,15 +3231,13 @@ glmArray_new(PyTypeObject* type, PyObject* args, PyObject* kwds) {
 }
 
 
-static void 
-glmArrayIter_dealloc(glmArrayIter* rgstate) {
+void glmArrayIter_dealloc(glmArrayIter* rgstate) {
 	Py_XDECREF(rgstate->sequence);
 	Py_TYPE(rgstate)->tp_free(rgstate);
 }
 
 
-static PyObject* 
-glmArrayIter_next(glmArrayIter* rgstate) {
+PyObject* glmArrayIter_next(glmArrayIter* rgstate) {
 	if (rgstate->sequence != NULL) {
 		if (rgstate->seq_index < rgstate->sequence->itemCount)
 			return glmArray_get(rgstate->sequence, rgstate->seq_index++);
@@ -3106,8 +3248,7 @@ glmArrayIter_next(glmArrayIter* rgstate) {
 }
 
 
-static PyObject* 
-glmArrayIter_new(PyTypeObject* type, PyObject* args, PyObject* kwargs) {
+PyObject* glmArrayIter_new(PyTypeObject* type, PyObject* args, PyObject* kwargs) {
 	glmArray* sequence;
 
 	if (!PyArg_UnpackTuple(args, "__iter__", 1, 1, &sequence))
@@ -3125,8 +3266,7 @@ glmArrayIter_new(PyTypeObject* type, PyObject* args, PyObject* kwargs) {
 }
 
 template<typename T>
-static Py_hash_t
-array_hash_ctypes(T* data, Py_ssize_t count) {
+Py_hash_t array_hash_ctypes(T* data, Py_ssize_t count) {
 	std::hash<T> hasher;
 
 	size_t seed = 0;
@@ -3143,8 +3283,7 @@ array_hash_ctypes(T* data, Py_ssize_t count) {
 }
 
 template<int L, typename T>
-static Py_hash_t
-array_hash_vec(glm::vec<L, T>* data, Py_ssize_t count) {
+Py_hash_t array_hash_vec(glm::vec<L, T>* data, Py_ssize_t count) {
 	std::hash<glm::vec<L, T>> hasher;
 
 	size_t seed = 0;
@@ -3161,8 +3300,7 @@ array_hash_vec(glm::vec<L, T>* data, Py_ssize_t count) {
 }
 
 template<int C, int R, typename T>
-static Py_hash_t
-array_hash_mat(glm::mat<C, R, T>* data, Py_ssize_t count) {
+Py_hash_t array_hash_mat(glm::mat<C, R, T>* data, Py_ssize_t count) {
 	std::hash<glm::mat<C, R, T>> hasher;
 
 	size_t seed = 0;
@@ -3179,8 +3317,7 @@ array_hash_mat(glm::mat<C, R, T>* data, Py_ssize_t count) {
 }
 
 template<typename T>
-static Py_hash_t
-array_hash_qua(glm::qua<T>* data, Py_ssize_t count) {
+Py_hash_t array_hash_qua(glm::qua<T>* data, Py_ssize_t count) {
 	std::hash<glm::qua<T>> hasher;
 
 	size_t seed = 0;
@@ -3196,8 +3333,7 @@ array_hash_qua(glm::qua<T>* data, Py_ssize_t count) {
 	return  static_cast<Py_hash_t>(seed);
 }
 
-static Py_hash_t
-array_hash(glmArray* self, PyObject*) {
+Py_hash_t array_hash(glmArray* self, PyObject*) {
 	uint8& glmType = self->glmType;
 	PyTypeObject*& subtype = self->subtype;
 
@@ -3454,7 +3590,7 @@ array_hash(glmArray* self, PyObject*) {
 
 
 
-static PyObject* glmArray_filter(glmArray* self, PyObject* func) {
+PyObject* glmArray_filter(glmArray* self, PyObject* func) {
 	std::vector<PyObject*> outObjects{};
 
 	if (PyCallable_Check(func)) {
@@ -3554,7 +3690,7 @@ static PyObject* glmArray_filter(glmArray* self, PyObject* func) {
 	return NULL;
 }
 
-static PyObject* glmArray_map_binary(glmArray* self, PyObject* func, PyObject* arg, PyObject* requested_ctypes_type) {
+PyObject* glmArray_map_binary(glmArray* self, PyObject* func, PyObject* arg, PyObject* requested_ctypes_type) {
 	std::vector<PyObject*> outObjects{};
 
 	PyObject* argTuple = PyTuple_New(2);
@@ -3692,7 +3828,7 @@ static PyObject* glmArray_map_binary(glmArray* self, PyObject* func, PyObject* a
 	return NULL;
 }
 
-static PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* arg1, PyObject* arg2, PyObject* requested_ctypes_type) {
+PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* arg1, PyObject* arg2, PyObject* requested_ctypes_type) {
 	std::vector<PyObject*> outObjects{};
 
 	PyObject* argTuple = PyTuple_New(3);
@@ -3923,7 +4059,7 @@ static PyObject* glmArray_map_ternary(glmArray* self, PyObject* func, PyObject* 
 	return NULL;
 }
 
-static PyObject* glmArray_map_varargs(glmArray* self, PyObject* args, PyObject* requested_ctypes_type) {
+PyObject* glmArray_map_varargs(glmArray* self, PyObject* args, PyObject* requested_ctypes_type) {
 	Py_ssize_t argsSize = PyTuple_GET_SIZE(args);
 
 	PyObject* func = PyTuple_GET_ITEM(args, 0);
@@ -4054,7 +4190,7 @@ static PyObject* glmArray_map_varargs(glmArray* self, PyObject* args, PyObject* 
 
 
 
-static PyObject* glmArray_map(glmArray* self, PyObject* args, PyObject* kwargs) {
+PyObject* glmArray_map(glmArray* self, PyObject* args, PyObject* kwargs) {
 	PyObject* requested_ctypes_type = NULL;
 
 	if (kwargs != NULL && PyDict_Size(kwargs) != 0) {
@@ -4177,7 +4313,7 @@ static PyObject* glmArray_map(glmArray* self, PyObject* args, PyObject* kwargs) 
 	return NULL;
 }
 
-static int compare(PyObject* func, PyObject* funcArgs, long& cmp) {
+int compare(PyObject* func, PyObject* funcArgs, long& cmp) {
 	PyObject* comparisonResult = PyObject_CallObject(func, funcArgs);
 	if (comparisonResult == NULL) {
 		PyTuple_SET_ITEM(funcArgs, 0, NULL);
@@ -4200,7 +4336,7 @@ static int compare(PyObject* func, PyObject* funcArgs, long& cmp) {
 	return 0;
 }
 
-static int insertionSort(std::vector<PyObject*>& in, PyObject* func) {
+int insertionSort(std::vector<PyObject*>& in, PyObject* func) {
 	const Py_ssize_t inSize = in.size();
 
 	PyObject* x, * y;
@@ -4243,7 +4379,7 @@ static int insertionSort(std::vector<PyObject*>& in, PyObject* func) {
 }
 
 
-static inline void qs_swap(std::vector<PyObject*>& in, int i, int j) {
+inline void qs_swap(std::vector<PyObject*>& in, int i, int j) {
 	if (i != j) {
 		PyObject* t = in[i];
 		in[i] = in[j];
@@ -4251,7 +4387,7 @@ static inline void qs_swap(std::vector<PyObject*>& in, int i, int j) {
 	}
 }
 
-static int iquickSort(std::vector<PyObject*>& in, PyObject* func) {
+int iquickSort(std::vector<PyObject*>& in, PyObject* func) {
 	const size_t inSize = in.size();
 
 	int l = 0;
@@ -4330,7 +4466,7 @@ static int iquickSort(std::vector<PyObject*>& in, PyObject* func) {
 	return 0;
 }
 
-static Py_ssize_t getSortedElementCount(std::vector<PyObject*>& in, PyObject* func) {
+Py_ssize_t getSortedElementCount(std::vector<PyObject*>& in, PyObject* func) {
 	const size_t inSize = in.size();
 
 	Py_ssize_t sortedCount = 0;
@@ -4359,7 +4495,7 @@ static Py_ssize_t getSortedElementCount(std::vector<PyObject*>& in, PyObject* fu
 	return sortedCount;
 }
 
-static PyObject* glmArray_sort(glmArray* self, PyObject* func) {
+PyObject* glmArray_sort(glmArray* self, PyObject* func) {
 	if (PyCallable_Check(func)) {
 		std::vector<PyObject*> inObjects{};
 
@@ -4426,7 +4562,7 @@ static PyObject* glmArray_sort(glmArray* self, PyObject* func) {
 }
 
 template<typename T>
-static PyObject* glmArray_add_T(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_add_T(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -4479,7 +4615,7 @@ static PyObject* glmArray_add_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_addO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_addO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -4530,7 +4666,7 @@ static PyObject* glmArray_addO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_add(PyObject* obj1, PyObject* obj2) {
+PyObject* glmArray_add(PyObject* obj1, PyObject* obj2) {
 	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
 		// obj1 is an array
 
@@ -4679,7 +4815,7 @@ static PyObject* glmArray_add(PyObject* obj1, PyObject* obj2) {
 }
 
 template<typename T>
-static PyObject* glmArray_sub_T(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_sub_T(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -4732,7 +4868,7 @@ static PyObject* glmArray_sub_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_subO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_subO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -4784,7 +4920,7 @@ static PyObject* glmArray_subO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 }
 
 template<typename T>
-static PyObject* glmArray_rsubO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_rsubO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -4835,7 +4971,7 @@ static PyObject* glmArray_rsubO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMT
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_sub(PyObject* obj1, PyObject* obj2) {
+PyObject* glmArray_sub(PyObject* obj1, PyObject* obj2) {
 	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
 		// obj1 is an array
 
@@ -5073,7 +5209,7 @@ static PyObject* glmArray_sub(PyObject* obj1, PyObject* obj2) {
 }
 
 template<typename T>
-static PyObject* glmArray_mul_T_SEQ(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_mul_T_SEQ(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -5126,7 +5262,7 @@ static PyObject* glmArray_mul_T_SEQ(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -5211,7 +5347,7 @@ static PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_mulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_mulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -5359,7 +5495,7 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 }
 
 template<typename T>
-static PyObject* glmArray_rmulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_rmulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	if (pto == NULL || arr->glmType == PyGLM_TYPE_CTYPES || (arr->glmType == PyGLM_TYPE_VEC && (pto->glmType & PyGLM_TYPE_VEC) == PyGLM_TYPE_VEC)) {
 		return glmArray_mulO_T(arr, o, o_size, pto);
 	}
@@ -5447,48 +5583,48 @@ static PyObject* glmArray_rmulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMT
 }
 
 template<typename V, typename Q>
-static void glmArray_mul_Q(V* vecs, Q* quas, V* out, Py_ssize_t len) {
+void glmArray_mul_Q(V* vecs, Q* quas, V* out, Py_ssize_t len) {
 	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = vecs[i] * quas[i];
 	}
 }
 
 template<typename V, typename Q>
-static void glmArray_rmul_Q(Q* quas, V* vecs, V* out, Py_ssize_t len) {
+void glmArray_rmul_Q(Q* quas, V* vecs, V* out, Py_ssize_t len) {
 	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = quas[i] * vecs[i];
 	}
 }
 
 template<typename V, typename Q>
-static void glmArray_mul_Q(V vec, Q* quas, V* out, Py_ssize_t len) {
+void glmArray_mul_Q(V vec, Q* quas, V* out, Py_ssize_t len) {
 	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = vec * quas[i];
 	}
 }
 
 template<typename V, typename Q>
-static void glmArray_mul_Q(V* vecs, Q qua, V* out, Py_ssize_t len) {
+void glmArray_mul_Q(V* vecs, Q qua, V* out, Py_ssize_t len) {
 	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = vecs[i] * qua;
 	}
 }
 
 template<typename V, typename Q>
-static void glmArray_rmul_Q(Q* quas, V vec, V* out, Py_ssize_t len) {
+void glmArray_rmul_Q(Q* quas, V vec, V* out, Py_ssize_t len) {
 	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = quas[i] * vec;
 	}
 }
 
 template<typename V, typename Q>
-static void glmArray_rmul_Q(Q qua, V* vecs, V* out, Py_ssize_t len) {
+void glmArray_rmul_Q(Q qua, V* vecs, V* out, Py_ssize_t len) {
 	for (Py_ssize_t i = 0; i < len; i++) {
 		out[i] = qua * vecs[i];
 	}
 }
 
-static PyObject* glmArray_mul(PyObject* obj1, PyObject* obj2) {
+PyObject* glmArray_mul(PyObject* obj1, PyObject* obj2) {
 	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
 		// obj1 is an array
 
@@ -6191,21 +6327,21 @@ static PyObject* glmArray_mul(PyObject* obj1, PyObject* obj2) {
 	return NULL;
 }
 
-static float modT(float a, float b) {
+float modT(float a, float b) {
 	return glm::mod(a, b);
 }
 
-static double modT(double a, double b) {
+double modT(double a, double b) {
 	return glm::mod(a, b);
 }
 
 template<typename T>
-static T modT(T a, T b) {
+T modT(T a, T b) {
 	return a % b;
 }
 
 template<typename T>
-static PyObject* glmArray_mod_T(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_mod_T(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -6264,7 +6400,7 @@ static PyObject* glmArray_mod_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_modO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_modO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -6322,7 +6458,7 @@ static PyObject* glmArray_modO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 }
 
 template<typename T>
-static PyObject* glmArray_rmodO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_rmodO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -6379,7 +6515,7 @@ static PyObject* glmArray_rmodO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMT
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_mod(PyObject* obj1, PyObject* obj2) {
+PyObject* glmArray_mod(PyObject* obj1, PyObject* obj2) {
 	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
 		// obj1 is an array
 
@@ -6628,7 +6764,7 @@ static PyObject* glmArray_mod(PyObject* obj1, PyObject* obj2) {
 }
 
 template<typename T>
-static PyObject* glmArray_pow_T(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_pow_T(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -6682,7 +6818,7 @@ static PyObject* glmArray_pow_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_powO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_powO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -6734,7 +6870,7 @@ static PyObject* glmArray_powO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 }
 
 template<typename T>
-static PyObject* glmArray_rpowO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_rpowO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -6785,7 +6921,7 @@ static PyObject* glmArray_rpowO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMT
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_pow(PyObject* obj1, PyObject* obj2, PyObject* obj3) {
+PyObject* glmArray_pow(PyObject* obj1, PyObject* obj2, PyObject* obj3) {
 	PyGLM_ASSERT((obj3 == NULL || obj3 == Py_None), "Only binary pow is implemented.");
 
 	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
@@ -6933,17 +7069,17 @@ static PyObject* glmArray_pow(PyObject* obj1, PyObject* obj2, PyObject* obj3) {
 	return NULL;
 }
 
-static inline bool negT(bool v) {
+inline bool negT(bool v) {
 	return !v;
 }
 
 template<typename T>
-static inline T negT(T v) {
+inline T negT(T v) {
 	return -v;
 }
 
 template<typename T>
-static PyObject* glmArray_neg_T(glmArray* arr) {
+PyObject* glmArray_neg_T(glmArray* arr) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -6977,7 +7113,7 @@ static PyObject* glmArray_neg_T(glmArray* arr) {
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_neg(glmArray* arr) {
+PyObject* glmArray_neg(glmArray* arr) {
 	switch (arr->format) {
 	case get_format_specifier<float>() :
 		return glmArray_neg_T<float>(arr);
@@ -6998,32 +7134,32 @@ static PyObject* glmArray_neg(glmArray* arr) {
 	return NULL;
 }
 
-static PyObject* glmArray_pos(glmArray* arr) {
+PyObject* glmArray_pos(glmArray* arr) {
 	return PyGLM_INCREF((PyObject*)arr);
 }
 
-static inline float glmArray_abs_f(float v) {
+inline float glmArray_abs_f(float v) {
 	return fabs(v);
 }
 
-static inline double glmArray_abs_f(double v) {
+inline double glmArray_abs_f(double v) {
 	return fabs(v);
 }
 
-static inline int glmArray_abs_f(int v) {
+inline int glmArray_abs_f(int v) {
 	return abs(v);
 }
 
-static inline long glmArray_abs_f(long v) {
+inline long glmArray_abs_f(long v) {
 	return labs(v);
 }
 
-static inline long long glmArray_abs_f(long long v) {
+inline long long glmArray_abs_f(long long v) {
 	return llabs(v);
 }
 
 template<typename T>
-static PyObject* glmArray_abs_T(glmArray* arr) {
+PyObject* glmArray_abs_T(glmArray* arr) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7057,7 +7193,7 @@ static PyObject* glmArray_abs_T(glmArray* arr) {
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_abs(glmArray* arr) {
+PyObject* glmArray_abs(glmArray* arr) {
 	switch (arr->format) {
 	case get_format_specifier<float>() :
 		return glmArray_abs_T<float>(arr);
@@ -7083,7 +7219,7 @@ static PyObject* glmArray_abs(glmArray* arr) {
 }
 
 template<typename T>
-static PyObject* glmArray_inv_T(glmArray* arr) {
+PyObject* glmArray_inv_T(glmArray* arr) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7117,7 +7253,7 @@ static PyObject* glmArray_inv_T(glmArray* arr) {
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_inv(glmArray* arr) {
+PyObject* glmArray_inv(glmArray* arr) {
 	switch (arr->format) {
 	case get_format_specifier<int64>() :
 		return glmArray_inv_T<int64>(arr);
@@ -7141,7 +7277,7 @@ static PyObject* glmArray_inv(glmArray* arr) {
 }
 
 template<typename T>
-static PyObject* glmArray_lshift_T(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_lshift_T(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -7194,7 +7330,7 @@ static PyObject* glmArray_lshift_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_lshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_lshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7246,7 +7382,7 @@ static PyObject* glmArray_lshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGL
 }
 
 template<typename T>
-static PyObject* glmArray_rlshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_rlshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7297,7 +7433,7 @@ static PyObject* glmArray_rlshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyG
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_lshift(PyObject* obj1, PyObject* obj2) {
+PyObject* glmArray_lshift(PyObject* obj1, PyObject* obj2) {
 	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
 		// obj1 is an array
 
@@ -7518,7 +7654,7 @@ static PyObject* glmArray_lshift(PyObject* obj1, PyObject* obj2) {
 }
 
 template<typename T>
-static PyObject* glmArray_rshift_T(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_rshift_T(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -7571,7 +7707,7 @@ static PyObject* glmArray_rshift_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_rshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_rshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7623,7 +7759,7 @@ static PyObject* glmArray_rshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGL
 }
 
 template<typename T>
-static PyObject* glmArray_rrshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_rrshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -7674,7 +7810,7 @@ static PyObject* glmArray_rrshiftO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyG
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_rshift(PyObject* obj1, PyObject* obj2) {
+PyObject* glmArray_rshift(PyObject* obj1, PyObject* obj2) {
 	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
 		// obj1 is an array
 
@@ -7895,7 +8031,7 @@ static PyObject* glmArray_rshift(PyObject* obj1, PyObject* obj2) {
 }
 
 template<typename T>
-static PyObject* glmArray_and_T(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_and_T(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -7948,7 +8084,7 @@ static PyObject* glmArray_and_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_andO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_andO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -8000,7 +8136,7 @@ static PyObject* glmArray_andO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 }
 
 template<typename T>
-static PyObject* glmArray_randO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_randO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -8051,7 +8187,7 @@ static PyObject* glmArray_randO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMT
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_and(PyObject* obj1, PyObject* obj2) {
+PyObject* glmArray_and(PyObject* obj1, PyObject* obj2) {
 	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
 		// obj1 is an array
 
@@ -8272,7 +8408,7 @@ static PyObject* glmArray_and(PyObject* obj1, PyObject* obj2) {
 }
 
 template<typename T>
-static PyObject* glmArray_xor_T(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_xor_T(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -8325,7 +8461,7 @@ static PyObject* glmArray_xor_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_xorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_xorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -8377,7 +8513,7 @@ static PyObject* glmArray_xorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 }
 
 template<typename T>
-static PyObject* glmArray_rxorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_rxorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -8428,7 +8564,7 @@ static PyObject* glmArray_rxorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMT
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_xor(PyObject* obj1, PyObject* obj2) {
+PyObject* glmArray_xor(PyObject* obj1, PyObject* obj2) {
 	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
 		// obj1 is an array
 
@@ -8649,7 +8785,7 @@ static PyObject* glmArray_xor(PyObject* obj1, PyObject* obj2) {
 }
 
 template<typename T>
-static PyObject* glmArray_or_T(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_or_T(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -8702,7 +8838,7 @@ static PyObject* glmArray_or_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_orO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_orO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -8754,7 +8890,7 @@ static PyObject* glmArray_orO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTyp
 }
 
 template<typename T>
-static PyObject* glmArray_rorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_rorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -8805,7 +8941,7 @@ static PyObject* glmArray_rorO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_or(PyObject* obj1, PyObject* obj2) {
+PyObject* glmArray_or(PyObject* obj1, PyObject* obj2) {
 	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
 		// obj1 is an array
 
@@ -9026,7 +9162,7 @@ static PyObject* glmArray_or(PyObject* obj1, PyObject* obj2) {
 }
 
 template<typename T>
-static PyObject* glmArray_div_T(glmArray* arr1, glmArray* arr2) {
+PyObject* glmArray_div_T(glmArray* arr1, glmArray* arr2) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr1->dtSize;
 	outArray->format = arr1->format;
@@ -9085,7 +9221,7 @@ static PyObject* glmArray_div_T(glmArray* arr1, glmArray* arr2) {
 }
 
 template<typename T>
-static PyObject* glmArray_divO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_divO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -9143,7 +9279,7 @@ static PyObject* glmArray_divO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 }
 
 template<typename T>
-static PyObject* glmArray_rdivO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
+PyObject* glmArray_rdivO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTypeObject* pto) {
 	glmArray* outArray = (glmArray*)glmArray_new(&glmArrayType, NULL, NULL);
 	outArray->dtSize = arr->dtSize;
 	outArray->format = arr->format;
@@ -9200,7 +9336,7 @@ static PyObject* glmArray_rdivO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMT
 	return (PyObject*)outArray;
 }
 
-static PyObject* glmArray_div(PyObject* obj1, PyObject* obj2) {
+PyObject* glmArray_div(PyObject* obj1, PyObject* obj2) {
 	if (PyObject_TypeCheck(obj1, &glmArrayType)) {
 		// obj1 is an array
 

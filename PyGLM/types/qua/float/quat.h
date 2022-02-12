@@ -2,7 +2,19 @@
 
 #include "../forward_declarations.h"
 
-static PyMethodDef hfqua_methods[] = {
+extern PyMethodDef hfqua_methods[];
+extern PyMemberDef hfqua_members[];
+extern PyBufferProcs hfquaBufferMethods;
+extern PySequenceMethods hfquaSeqMethods;
+extern PyNumberMethods hfquaNumMethods;
+
+extern PyTypeObject hfquaIterType;
+extern PyGLMTypeObject hfquaGLMType;
+extern PyTypeObject& hfquaType;
+
+// cpp
+
+PyMethodDef hfqua_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)qua_length, METH_NOARGS, "returns the length of glm::quat"},
@@ -15,18 +27,18 @@ static PyMethodDef hfqua_methods[] = {
 	{ NULL }
 };
 
-static PyMemberDef hfqua_members[] = {
+PyMemberDef hfqua_members[] = {
 	{ (char*)"x", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.x), 0, (char*)"quat.x" },
 	{ (char*)"y", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.y), 0, (char*)"quat.y" },
 	{ (char*)"z", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.z), 0, (char*)"quat.z" },
 	{ (char*)"w", T_FLOAT, offsetof(UNBRACKET(qua<float>), super_type.w), 0, (char*)"quat.w" },
 	{ NULL }  /* Sentinel */
 };
-static PyBufferProcs hfquaBufferMethods = {
+PyBufferProcs hfquaBufferMethods = {
 	(getbufferproc)qua_getbuffer<float>,
 	(releasebufferproc)qua_releasebuffer,
 };
-static PySequenceMethods hfquaSeqMethods = {
+PySequenceMethods hfquaSeqMethods = {
 	(lenfunc)qua_len, // sq_length
 	0, // sq_concat
 	0, // sq_repeat
@@ -38,7 +50,7 @@ static PySequenceMethods hfquaSeqMethods = {
 	0, // sq_inplace_concat
 	0, // sq_inplace_repeat
 };
-static PyNumberMethods hfquaNumMethods = {
+PyNumberMethods hfquaNumMethods = {
 	(binaryfunc)qua_add<float>, //nb_add
 	(binaryfunc)qua_sub<float>, //nb_subtract
 	(binaryfunc)qua_mul<float>, //nb_multiply
@@ -76,7 +88,7 @@ static PyNumberMethods hfquaNumMethods = {
 	(binaryfunc)qua_matmul, //nb_matrix_multiply
 	(binaryfunc)qua_imatmul<double>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject hfquaIterType = {
+PyTypeObject hfquaIterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"quaIter",             /* tp_name */
 	sizeof(quaIter<float>),             /* tp_basicsize */
@@ -117,54 +129,6 @@ static PyTypeObject hfquaIterType = {
 	(newfunc)quaIter_new<float>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hfquaGLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.quat",             /* tp_name */
-		sizeof(qua<float>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)qua_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)qua_repr<float>,                         /* tp_repr */
-		& hfquaNumMethods,             /* tp_as_number */
-		& hfquaSeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)qua_hash<float>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)qua_str<float>,                         /* tp_str */
-		0,                         /* tp_getattro */
-		0,                         /* tp_setattro */
-		& hfquaBufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"quat( <quat compatible type(s)> )\n4 components quaternion of floating-point numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)qua_richcompare<float>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)qua_geniter<float>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hfqua_methods,             /* tp_methods */
-		hfqua_members,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)qua_init<float>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)qua_new<float>,                 /* tp_new */
-	},
-	PyGLM_TYPE_QUA,
-	4,
-	0,
-	sizeof(float),
-	sizeof(glm::qua<float>),
-	PyGLM_FS_FLOAT
-};
+PyGLMTypeObject hfquaGLMType = _PyGLM_TYPE_DEF_FQUA;
 
-static PyTypeObject& hfquaType = *((PyTypeObject*)&hfquaGLMType);
+PyTypeObject& hfquaType = *((PyTypeObject*)&hfquaGLMType);

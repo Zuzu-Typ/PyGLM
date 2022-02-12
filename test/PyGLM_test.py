@@ -680,7 +680,7 @@ def test_pos():
 
 # abs #
 def test_abs():
-    for obj in gen_obj("#MV__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M__fFiqsuIQSU"):
         fassert(obj.__abs__, ())
         assert (abs(glm.array(obj)))[0] == abs(obj), obj
 #/abs #
@@ -1034,8 +1034,8 @@ def test_hash():
 def check_buffer_protocol(type_, shape, format):
     obj = type_()
     memview = memoryview(obj)
-    assert shape == memview.shape
-    assert format == memview.format
+    assert shape == memview.shape, type_
+    assert format == memview.format, type_
 
 def test_buffer_protocol():
     for t, s, f in (
@@ -2535,8 +2535,8 @@ def test_spec_common_floor():
             assert all([a == math.floor(x) for a in glm.floor(vecT(x))])
 
 def test_spec_common_fma():
-    assert glm.fma(1, 2, 3) == 1 * 2 + 3
-    assert glm.fma(4, 5, 6) == 4 * 5 + 6
+    assert glm.fma(1., 2., 3.) == 1 * 2 + 3
+    assert glm.fma(4., 5., 6.) == 4 * 5 + 6
 
 def test_spec_common_fmax():
     for a in range(-2, 2):
@@ -3555,23 +3555,6 @@ def test_equal():
         assert glm.all(glm.equal(T(0), T(0)))
         assert not glm.any(glm.notEqual(T(0), T(0)))
 ##/core_func_vector_relational ##
-
-## core_type_mat2x2 ##
-def test_mat2x2():
-    l = glm.mat2x2(1)
-    m = glm.mat2x2(1)
-    u = glm.vec2(1)
-    v = glm.vec2(1)
-    x = 1
-    a = m * u
-    b = v * m
-    n = x / m
-    o = m / x
-    p = x * m
-    q = m * x
-    assert not glm.any(glm.notEqual(m, q, 0.00001))
-    assert glm.all(glm.equal(m, l, 0.00001));
-##/core_type_mat2x2 ##
 ###/GLM TESTS ###
 
 

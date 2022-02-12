@@ -8,8 +8,10 @@
 
 #include "type_checkers.h"
 
+#include "template_generator_macros.h"
+
 template<int L, typename T>
-static bool unpack_vec(PyObject* value, glm::vec<L, T>& out) {
+bool unpack_vec(PyObject* value, glm::vec<L, T>& out) {
 	if (PyObject_TypeCheck(value, (UNBRACKET(PyGLM_VEC_TYPE<L, T>())))) {
 		out = ((vec<L, T>*)value)->super_type;
 		return true;
@@ -28,15 +30,21 @@ static bool unpack_vec(PyObject* value, glm::vec<L, T>& out) {
 	return false;
 }
 
+#define unpack_vec_ref_TEMPLATE(L, T) template bool unpack_vec(PyObject* value, glm::vec<L, T>& out)
+PyGLM_GENERATE_EXTERN_TEMPLATE_VEC(unpack_vec_ref_TEMPLATE);
+
 template<int L, typename T>
-static glm::vec<L, T> unpack_vec(PyObject* value) {
+glm::vec<L, T> unpack_vec(PyObject* value) {
 	glm::vec<L, T> out;
 	unpack_vec(value, out);
 	return out;
 }
 
+#define unpack_vec_TEMPLATE(L, T) template glm::vec<L, T> unpack_vec(PyObject* value)
+PyGLM_GENERATE_EXTERN_TEMPLATE_VEC(unpack_vec_TEMPLATE);
+
 template<int C, int R, typename T>
-static bool unpack_mat(PyObject* value, glm::mat<C, R, T>& out) {
+bool unpack_mat(PyObject* value, glm::mat<C, R, T>& out) {
 	if (PyObject_TypeCheck(value, (UNBRACKET(PyGLM_MAT_TYPE<C, R, T>())))) {
 		out = ((mat<C, R, T>*)value)->super_type;
 		return true;
@@ -51,17 +59,23 @@ static bool unpack_mat(PyObject* value, glm::mat<C, R, T>& out) {
 	return false;
 }
 
+#define unpack_mat_ref_TEMPLATE(C, R, T) template bool unpack_mat(PyObject* value, glm::mat<C, R, T>& out)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(unpack_mat_ref_TEMPLATE);
+
 #define unpack_matN(C, R, T, o, N) (sourceType ## N == NORMAL) ? (((UNBRACKET(mat<C,R,T>*)) o)->super_type) : PTI ## N.getMat<C,R,T>()
 
 template<int C, int R, typename T>
-static glm::mat<C, R, T> unpack_mat(PyObject* value) {
+glm::mat<C, R, T> unpack_mat(PyObject* value) {
 	glm::mat<C, R, T> out;
 	unpack_mat(value, out);
 	return out;
 }
 
+#define unpack_mat_TEMPLATE(C, R, T) template glm::mat<C, R, T> unpack_mat(PyObject* value)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MAT(unpack_mat_TEMPLATE);
+
 template<typename T>
-static bool unpack_qua(PyObject* value, glm::qua<T>& out) {
+bool unpack_qua(PyObject* value, glm::qua<T>& out) {
 	if (PyObject_TypeCheck(value, (UNBRACKET(PyGLM_QUA_TYPE<T>())))) {
 		out = ((qua<T>*)value)->super_type;
 		return true;
@@ -76,9 +90,23 @@ static bool unpack_qua(PyObject* value, glm::qua<T>& out) {
 	return false;
 }
 
+#define unpack_qua_ref_TEMPLATE(T) template bool unpack_qua(PyObject* value, glm::qua<T>& out)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(unpack_qua_ref_TEMPLATE);
+
 template<typename T>
-static glm::qua<T> unpack_qua(PyObject* value) {
+glm::qua<T> unpack_qua(PyObject* value) {
 	glm::qua<T> out;
 	unpack_qua(value, out);
 	return out;
 }
+
+#define unpack_qua_TEMPLATE(T) template glm::qua<T> unpack_qua(PyObject* value)
+PyGLM_GENERATE_EXTERN_TEMPLATE_QUA(unpack_qua_TEMPLATE);
+
+// cpp
+PyGLM_GENERATE_TEMPLATE_DEF_VEC(unpack_vec_ref_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_VEC(unpack_vec_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(unpack_mat_ref_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MAT(unpack_mat_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(unpack_qua_ref_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_QUA(unpack_qua_TEMPLATE);

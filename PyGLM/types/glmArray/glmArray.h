@@ -4,7 +4,27 @@
 
 #define T_PTR_AS_NUM ((sizeof(void*) == sizeof(unsigned long long)) ? T_ULONGLONG : (sizeof(void*) == sizeof(unsigned long)) ? T_ULONG : (sizeof(void*) == sizeof(unsigned int)) ? T_UINT : T_PYSSIZET)
 
-static PyMemberDef glmArray_members[] = {
+extern PyMemberDef glmArray_members[];
+
+extern PyGetSetDef glmArray_getSet[];
+
+extern PyMethodDef glmArray_methods[];
+
+extern PyBufferProcs glmArrayBufferMethods;
+
+extern PySequenceMethods glmArraySeqMethods;
+
+extern PyMappingMethods glmArrayMapMethods;
+
+extern PyNumberMethods glmArrayNumMethods;
+
+extern PyTypeObject glmArrayType;
+
+extern PyTypeObject glmArrayIterType;
+
+// cpp
+
+PyMemberDef glmArray_members[] = {
 	{ (char*)"nbytes",			T_PYSSIZET,		offsetof(glmArray, nBytes),		1, (char*)"Total combined bytecount of all elements"										},
 	{ (char*)"typecode",		T_CHAR,			offsetof(glmArray, format),		1, (char*)"The typecode character of the underlying format"									},
 	{ (char*)"element_type",	T_OBJECT,		offsetof(glmArray, subtype),	1, (char*)"Type class of the contained elements"											},
@@ -16,14 +36,14 @@ static PyMemberDef glmArray_members[] = {
 	{ (char*)"reference",		T_OBJECT,		offsetof(glmArray, reference),	1, (char*)"The reference to the array owning the data (if any)"								},
 	{ NULL }  /* Sentinel */
 };
-static PyGetSetDef glmArray_getSet[] = {
+PyGetSetDef glmArray_getSet[] = {
 	{ (char*)"ptr",		(getter)glmArray_getPtr,	NULL, (char*)"A ctypes pointer that points to the content of this array",	NULL },
 	{ (char*)"dtype",	(getter)glmArray_getDtype,	NULL, (char*)"A numpy-like data type string",								NULL },
 	{ (char*)"ctype",	(getter)glmArray_getCtype,	NULL, (char*)"The respective ctypes data type",								NULL },
 	{ NULL }  /* Sentinel */
 };
 
-static PyMethodDef glmArray_methods[] = {
+PyMethodDef glmArray_methods[] = {
 	{ "__copy__",		(PyCFunction)generic_copy,				METH_NOARGS,				generic_copy_docstr },
 	{ "__deepcopy__",	(PyCFunction)generic_deepcopy,			METH_O,						generic_deepcopy_docstr },
 	{ "__getstate__",	(PyCFunction)glmArray_getstate,			METH_NOARGS,				glmArray_getstate_docstr },
@@ -39,7 +59,7 @@ static PyMethodDef glmArray_methods[] = {
 	{ "as_reference",	(PyCFunction)glmArray_as_reference,		METH_O | METH_STATIC,		glmArray_as_reference_docstr },
 	{ "zeros",			(PyCFunction)glmArray_zeros,			METH_VARARGS | METH_STATIC,	glmArray_zeros_docstr },
 	{ "filter",			(PyCFunction)glmArray_filter,			METH_O,						glmArray_filter_docstr },
-	{ "map",			(PyCFunction)glmArray_map,              METH_VARARGS|METH_KEYWORDS, glmArray_map_docstr	},
+	{ "map",			(PyCFunction)glmArray_map,              METH_VARARGS | METH_KEYWORDS, glmArray_map_docstr	},
 	{ "sort",			(PyCFunction)glmArray_sort,				METH_O,						glmArray_sort_docstr },
 	{ "concat",			(PyCFunction)glmArray_concat,			METH_O,						glmArray_concat_docstr },
 	{ "iconcat",		(PyCFunction)glmArray_inplace_concat,	METH_O,						glmArray_inplace_concat_docstr },
@@ -49,11 +69,11 @@ static PyMethodDef glmArray_methods[] = {
 	//{ "add",		(PyCFunction)glmArray_add,	METH_O,						glmArray_inplace_repeat_docstr			},
 	{ NULL }  /* Sentinel */
 };
-static PyBufferProcs glmArrayBufferMethods = {
+PyBufferProcs glmArrayBufferMethods = {
 	(getbufferproc)glmArray_getbuffer,
 	(releasebufferproc)glmArray_releasebuffer,
 };
-static PySequenceMethods glmArraySeqMethods = {
+PySequenceMethods glmArraySeqMethods = {
 	(lenfunc)glmArray_len,						// sq_length
 	0,//(binaryfunc)glmArray_concat,				// sq_concat
 	0,//(ssizeargfunc)glmArray_repeat,				// sq_repeat
@@ -65,12 +85,12 @@ static PySequenceMethods glmArraySeqMethods = {
 	0,//(binaryfunc)glmArray_inplace_concat,		// sq_inplace_concat
 	0,//(ssizeargfunc)glmArray_inplace_repeat,		// sq_inplace_repeat
 };
-static PyMappingMethods glmArrayMapMethods = {
+PyMappingMethods glmArrayMapMethods = {
 	(lenfunc)glmArray_len,						// mp_length
 	(binaryfunc)glmArray_mp_subscript,			// mp_subscript
 	(objobjargproc)glmArray_mp_ass_subscript,	// mp_ass_subscript
 };
-static PyNumberMethods glmArrayNumMethods = {
+PyNumberMethods glmArrayNumMethods = {
 	(binaryfunc)glmArray_add, //nb_add
 	(binaryfunc)glmArray_sub,//(binaryfunc)matsq_sub<2, 2, float>, //nb_subtract
 	(binaryfunc)glmArray_mul,//(binaryfunc)mat_mul<2, 2, float>, //nb_multiply
@@ -109,7 +129,7 @@ static PyNumberMethods glmArrayNumMethods = {
 	0,//(binaryfunc)mat_imatmul<2, 2, float>, //nb_inplace_matrix_multiply
 };
 
-static PyTypeObject glmArrayType = {
+PyTypeObject glmArrayType = {
 	PyObject_HEAD_INIT(NULL)
 	"glm.array",						// tp_name
 	sizeof(glmArray),					// tp_basicsize 
@@ -150,7 +170,7 @@ static PyTypeObject glmArrayType = {
 	0,// tp_alloc 
 	(newfunc)glmArray_new,				// tp_new 
 };
-static PyTypeObject glmArrayIterType = {
+PyTypeObject glmArrayIterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"glmArrayIter",						// tp_name 
 	sizeof(glmArrayIter),				// tp_basicsize 

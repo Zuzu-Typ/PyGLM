@@ -4,7 +4,18 @@
 
 #include "../../vec/all.h"
 
-static PyMethodDef humvec4_methods[] = {
+extern PyMethodDef humvec4_methods[];
+extern PyBufferProcs humvec4BufferMethods;
+extern PySequenceMethods humvec4SeqMethods;
+extern PyNumberMethods humvec4NumMethods;
+
+extern PyTypeObject humvec4IterType;
+extern PyGLMTypeObject humvec4GLMType;
+extern PyTypeObject& humvec4Type;
+
+// cpp
+
+PyMethodDef humvec4_methods[] = {
 	{ "__copy__", (PyCFunction)mvec_copy<4, glm::u32>, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)mvec_deepcopy<4, glm::u32>, METH_O, "Create a (deep)copy of this instance"},
 	{ "__getstate__", (PyCFunction)mvec4_to_tuple<glm::u32>, METH_NOARGS, "Returns a picklable state of this object"},
@@ -14,11 +25,11 @@ static PyMethodDef humvec4_methods[] = {
 	{ "to_bytes", (PyCFunction)generic_to_bytes, METH_NOARGS, "Create a bytes string from this object"},
 	{ NULL }  /* Sentinel */
 };
-static PyBufferProcs humvec4BufferMethods = {
+PyBufferProcs humvec4BufferMethods = {
 	(getbufferproc)mvec_getbuffer<4, glm::u32>,
 	(releasebufferproc)mvec_releasebuffer,
 };
-static PySequenceMethods humvec4SeqMethods = {
+PySequenceMethods humvec4SeqMethods = {
 	(lenfunc)mvec_len<4>, // sq_length
 	0, // sq_concat
 	0, // sq_repeat
@@ -30,7 +41,7 @@ static PySequenceMethods humvec4SeqMethods = {
 	0, // sq_inplace_concat
 	0, // sq_inplace_repeat
 };
-static PyNumberMethods humvec4NumMethods = {
+PyNumberMethods humvec4NumMethods = {
 	(binaryfunc)mvec_add<4, glm::u32>, //nb_add
 	(binaryfunc)mvec_sub<4, glm::u32>, //nb_subtract
 	(binaryfunc)mvec_mul<4, glm::u32>, //nb_multiply
@@ -68,7 +79,7 @@ static PyNumberMethods humvec4NumMethods = {
 	(binaryfunc)mvec_matmul, //nb_matrix_multiply
 	(binaryfunc)mvec_imatmul<4, glm::u32>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject humvec4IterType = {
+PyTypeObject humvec4IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"umvec4Iter",             /* tp_name */
 	sizeof(mvecIter<4, glm::u32>),             /* tp_basicsize */
@@ -109,55 +120,6 @@ static PyTypeObject humvec4IterType = {
 	(newfunc)mvecIter_new<4, glm::u32>,                 /* tp_new */
 };
 
-static PyGLMTypeObject humvec4GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.umvec4",             /* tp_name */
-		sizeof(mvec<4, glm::u32>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)mvec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)mvec4_str<glm::u32>,                         /* tp_repr */
-		& humvec4NumMethods,             /* tp_as_number */
-		& humvec4SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)mvec_hash<4, glm::u32>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)mvec4_str<glm::u32>,                         /* tp_str */
-		(getattrofunc)mvec_getattr<4, glm::u32>,                         /* tp_getattro */
-		(setattrofunc)mvec_setattr<4, glm::u32>,                         /* tp_setattro */
-		& humvec4BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"umvec4( <mvec4 compatible type(s)> )\n4 components mvector of high qualifier unsigned integer numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)mvec_richcompare<4, glm::u32>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)mvec_geniter<4, glm::u32>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		humvec4_methods,             /* tp_methods */
-		0,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)mvec_init<4, glm::u32>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)mvec_new<4, glm::u32>,                 /* tp_new */
-	},
-	PyGLM_TYPE_MVEC,
-	4,
-	0,
-	sizeof(uint32),
-	sizeof(glm::vec<4, uint32>),
-	PyGLM_FS_UINT32,
-	&huvec4Type
-};
+PyGLMTypeObject humvec4GLMType = _PyGLM_TYPE_DEF_UMVEC(4);
 
-static PyTypeObject& humvec4Type = *((PyTypeObject*)&humvec4GLMType);
+PyTypeObject& humvec4Type = *((PyTypeObject*)&humvec4GLMType);

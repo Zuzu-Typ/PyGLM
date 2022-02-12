@@ -6,16 +6,10 @@
 
 #include "../types/mvec/all.h"
 
-static void
-mvec_dealloc(PyObject* self)
-{
-	Py_XDECREF(((mvec_helper*)self)->master);
-	self->ob_type->tp_free(self);
-}
+void mvec_dealloc(PyObject* self);
 
 template<int L, typename T>
-static PyObject*
-mvec_new(PyTypeObject* type, PyObject*, PyObject*)
+PyObject* mvec_new(PyTypeObject* type, PyObject*, PyObject*)
 {
 	mvec<L, T>* self = (mvec<L, T>*)type->tp_alloc(type, 0);
 	if (self != NULL) {
@@ -29,9 +23,11 @@ mvec_new(PyTypeObject* type, PyObject*, PyObject*)
 	return (PyObject*)self;
 }
 
+#define mvec_new_TEMPLATE(L, T) template PyObject* mvec_new<L, T>(PyTypeObject* type, PyObject*, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_new_TEMPLATE);
+
 template<int L, typename T>
-static int
-mvec_init(mvec<L, T>* self, PyObject* args, PyObject* kwds)
+int mvec_init(mvec<L, T>* self, PyObject* args, PyObject* kwds)
 {
 	if (PyTuple_GET_SIZE(args) == 1 && Py_TYPE(PyTuple_GET_ITEM(args, 0)) == PyGLM_VEC_TYPE<L, T>()) {
 		self->master = PyGLM_INCREF(PyTuple_GET_ITEM(args, 0));
@@ -49,39 +45,49 @@ mvec_init(mvec<L, T>* self, PyObject* args, PyObject* kwds)
 	return 0;
 }
 
+#define mvec_init_TEMPLATE(L, T) template int mvec_init(mvec<L, T>* self, PyObject* args, PyObject* kwds)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_init_TEMPLATE);
+
 // unaryfunc
 template<int L, typename T>
-static PyObject *
-mvec_neg(mvec<L, T> *obj)
+PyObject* mvec_neg(mvec<L, T> *obj)
 {
 	return pack_vec<L, T>(-*obj->super_type);
 }
 
+#define mvec_neg_TEMPLATE(L, T) template PyObject* mvec_neg(mvec<L, T> *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_SIGNED(mvec_neg_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_pos(mvec<L, T> *obj)
+PyObject* mvec_pos(mvec<L, T> *obj)
 {
 	return pack_vec<L, T>(*obj->super_type);
 }
 
+#define mvec_pos_TEMPLATE(L, T) template PyObject* mvec_pos(mvec<L, T> *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_pos_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_abs(mvec<L, T> *obj)
+PyObject* mvec_abs(mvec<L, T> *obj)
 {
 	return pack_vec<L, T>(glm::abs(*obj->super_type));
 }
 
+#define mvec_abs_TEMPLATE(L, T) template PyObject* mvec_abs(mvec<L, T> *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_abs_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_invert(mvec<L, T>* obj)
+PyObject* mvec_invert(mvec<L, T>* obj)
 {
 	return pack_vec<L, T>(~*obj->super_type);
 }
 
+#define mvec_invert_TEMPLATE(L, T) template PyObject* mvec_invert(mvec<L, T> *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_I(mvec_invert_TEMPLATE);
+
 // binaryfunc
 template<int L, typename T>
-static PyObject *
-mvec_add(PyObject *obj1, PyObject *obj2)
+PyObject* mvec_add(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) + *(((mvec<L, T>*)obj2)->super_type));
@@ -112,9 +118,11 @@ mvec_add(PyObject *obj1, PyObject *obj2)
 	return pack_vec<L, T>(o + o2);
 }
 
+#define mvec_add_TEMPLATE(L, T) template PyObject* mvec_add<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_add_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_sub(PyObject *obj1, PyObject *obj2)
+PyObject* mvec_sub(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) - *((mvec<L, T>*)obj2)->super_type);
@@ -145,9 +153,11 @@ mvec_sub(PyObject *obj1, PyObject *obj2)
 	return pack_vec<L, T>(o - o2);
 }
 
+#define mvec_sub_TEMPLATE(L, T) template PyObject* mvec_sub<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_sub_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_mul(PyObject *obj1, PyObject *obj2)
+PyObject* mvec_mul(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) * *((mvec<L, T>*)obj2)->super_type);
@@ -178,9 +188,11 @@ mvec_mul(PyObject *obj1, PyObject *obj2)
 	return pack_vec<L, T>(o * o2);
 }
 
+#define mvec_mul_TEMPLATE(L, T) template PyObject* mvec_mul<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_mul_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_div(PyObject *obj1, PyObject *obj2)
+PyObject* mvec_div(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		if (!glm::all((glm::vec<L, bool>)(((mvec<L, T>*)obj2)->super_type))) {
@@ -222,9 +234,11 @@ mvec_div(PyObject *obj1, PyObject *obj2)
 	return  pack_vec<L, T>(o / o2);
 }
 
+#define mvec_div_TEMPLATE(L, T) template PyObject* mvec_div<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_div_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_mod(PyObject *obj1, PyObject *obj2)
+PyObject* mvec_mod(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		if (!glm::all((glm::vec<L, bool>)(((mvec<L, T>*)obj2)->super_type))) {
@@ -266,9 +280,11 @@ mvec_mod(PyObject *obj1, PyObject *obj2)
 	return pack_vec<L, T>(glm::mod(o, o2));
 }
 
+#define mvec_mod_TEMPLATE(L, T) template PyObject* mvec_mod<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_FD(mvec_mod_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_floordiv(PyObject *obj1, PyObject *obj2)
+PyObject* mvec_floordiv(PyObject *obj1, PyObject *obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		if (!glm::all((glm::vec<L, bool>)(((mvec<L, T>*)obj2)->super_type))) {
@@ -310,9 +326,11 @@ mvec_floordiv(PyObject *obj1, PyObject *obj2)
 	return pack_vec<L, T>(floor(o / o2));
 }
 
+#define mvec_floordiv_TEMPLATE(L, T) template PyObject* mvec_floordiv<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_FD(mvec_floordiv_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_divmod(PyObject * obj1, PyObject * obj2) {
+PyObject* mvec_divmod(PyObject * obj1, PyObject * obj2) {
 	PyObject *arg1, *arg2;
 	arg1 = mvec_floordiv<L, T>(obj1, obj2);
 	arg2 = mvec_mod<L, T>(obj1, obj2);
@@ -325,9 +343,11 @@ mvec_divmod(PyObject * obj1, PyObject * obj2) {
 	return out;
 }
 
+#define mvec_divmod_TEMPLATE(L, T) template PyObject* mvec_divmod<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_FD(mvec_divmod_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_lshift(PyObject* obj1, PyObject* obj2)
+PyObject* mvec_lshift(PyObject* obj1, PyObject* obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) << *(((mvec<L, T>*)obj2)->super_type));
@@ -358,9 +378,11 @@ mvec_lshift(PyObject* obj1, PyObject* obj2)
 	return pack_vec<L, T>(o << o2);
 }
 
+#define mvec_lshift_TEMPLATE(L, T) template PyObject* mvec_lshift<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_I(mvec_lshift_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_rshift(PyObject* obj1, PyObject* obj2)
+PyObject* mvec_rshift(PyObject* obj1, PyObject* obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) >> *(((mvec<L, T>*)obj2)->super_type));
@@ -391,9 +413,11 @@ mvec_rshift(PyObject* obj1, PyObject* obj2)
 	return pack_vec<L, T>(o >> o2);
 }
 
+#define mvec_rshift_TEMPLATE(L, T) template PyObject* mvec_rshift<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_I(mvec_rshift_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_and(PyObject* obj1, PyObject* obj2)
+PyObject* mvec_and(PyObject* obj1, PyObject* obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) & *(((mvec<L, T>*)obj2)->super_type));
@@ -424,9 +448,11 @@ mvec_and(PyObject* obj1, PyObject* obj2)
 	return pack_vec<L, T>(o & o2);
 }
 
+#define mvec_and_TEMPLATE(L, T) template PyObject* mvec_and<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_I(mvec_and_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_or(PyObject* obj1, PyObject* obj2)
+PyObject* mvec_or(PyObject* obj1, PyObject* obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) | *(((mvec<L, T>*)obj2)->super_type));
@@ -457,9 +483,11 @@ mvec_or(PyObject* obj1, PyObject* obj2)
 	return pack_vec<L, T>(o | o2);
 }
 
+#define mvec_or_TEMPLATE(L, T) template PyObject* mvec_or<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_I(mvec_or_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_xor(PyObject* obj1, PyObject* obj2)
+PyObject* mvec_xor(PyObject* obj1, PyObject* obj2)
 {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		return pack_vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1) ^ *(((mvec<L, T>*)obj2)->super_type));
@@ -490,10 +518,12 @@ mvec_xor(PyObject* obj1, PyObject* obj2)
 	return pack_vec<L, T>(o ^ o2);
 }
 
+#define mvec_xor_TEMPLATE(L, T) template PyObject* mvec_xor<L, T>(PyObject *obj1, PyObject *obj2)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_I(mvec_xor_TEMPLATE);
+
 // ternaryfunc
 template<int L, typename T>
-static PyObject *
-mvec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
+PyObject* mvec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
 		T f = PyGLM_Number_FromPyObject<T>(obj1);
 
@@ -581,21 +611,15 @@ mvec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 	return pack_vec<L, T>(glm::mod(glm::pow(o, o2), o3));
 }
 
-static PyObject*
-mvec_matmul(PyObject* obj1, PyObject* obj2)
-{
-	PyObject* out = PyNumber_Multiply(obj1, obj2);
-	if (out == NULL) {
-		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
-	}
-	return out;
-}
+#define mvec_pow_TEMPLATE(L, T) template PyObject* mvec_pow<L, T>(PyObject * obj1, PyObject * obj2, PyObject * obj3)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_FD(mvec_pow_TEMPLATE);
+
+PyObject* mvec_matmul(PyObject* obj1, PyObject* obj2);
 
 // inplace
 // binaryfunc
 template<int L, typename T>
-static PyObject *
-mvec_iadd(mvec<L, T> *self, PyObject *obj)
+PyObject* mvec_iadd(mvec<L, T> *self, PyObject *obj)
 {
 	vec<L, T> * temp = (vec<L, T>*)mvec_add<L, T>((PyObject*)self, obj);
 
@@ -608,9 +632,11 @@ mvec_iadd(mvec<L, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define mvec_iadd_TEMPLATE(L, T) template PyObject* mvec_iadd(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_iadd_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_isub(mvec<L, T> *self, PyObject *obj)
+PyObject* mvec_isub(mvec<L, T> *self, PyObject *obj)
 {
 	vec<L, T> * temp = (vec<L, T>*)mvec_sub<L, T>((PyObject*)self, obj);
 
@@ -623,9 +649,11 @@ mvec_isub(mvec<L, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define mvec_isub_TEMPLATE(L, T) template PyObject* mvec_isub(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_isub_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_imul(mvec<L, T> *self, PyObject *obj)
+PyObject* mvec_imul(mvec<L, T> *self, PyObject *obj)
 {
 	vec<L, T> * temp = (vec<L, T>*)mvec_mul<L, T>((PyObject*)self, obj);
 
@@ -638,9 +666,11 @@ mvec_imul(mvec<L, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define mvec_imul_TEMPLATE(L, T) template PyObject* mvec_imul(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_imul_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_idiv(mvec<L, T> *self, PyObject *obj)
+PyObject* mvec_idiv(mvec<L, T> *self, PyObject *obj)
 {
 	vec<L, T> * temp = (vec<L, T>*)mvec_div<L, T>((PyObject*)self, obj);
 
@@ -653,9 +683,11 @@ mvec_idiv(mvec<L, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define mvec_idiv_TEMPLATE(L, T) template PyObject* mvec_idiv(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_idiv_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_imod(mvec<L, T> *self, PyObject *obj)
+PyObject* mvec_imod(mvec<L, T> *self, PyObject *obj)
 {
 	vec<L, T> * temp = (vec<L, T>*)mvec_mod<L, T>((PyObject*)self, obj);
 
@@ -668,9 +700,11 @@ mvec_imod(mvec<L, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define mvec_imod_TEMPLATE(L, T) template PyObject* mvec_imod(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_imod_TEMPLATE);
+
 template<int L, typename T>
-static PyObject *
-mvec_ifloordiv(mvec<L, T> *self, PyObject *obj)
+PyObject* mvec_ifloordiv(mvec<L, T> *self, PyObject *obj)
 {
 	vec<L, T> * temp = (vec<L, T>*)mvec_floordiv<L, T>((PyObject*)self, obj);
 
@@ -683,9 +717,11 @@ mvec_ifloordiv(mvec<L, T> *self, PyObject *obj)
 	return (PyObject*)self;
 }
 
+#define mvec_ifloordiv_TEMPLATE(L, T) template PyObject* mvec_ifloordiv(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_ifloordiv_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_imatmul(mvec<L, T>* self, PyObject* obj)
+PyObject* mvec_imatmul(mvec<L, T>* self, PyObject* obj)
 {
 	mvec<L, T>* temp = (mvec<L, T>*)mvec_matmul((PyObject*)self, obj);
 
@@ -703,9 +739,11 @@ mvec_imatmul(mvec<L, T>* self, PyObject* obj)
 	return (PyObject*)self;
 }
 
+#define mvec_imatmul_TEMPLATE(L, T) template PyObject* mvec_imatmul(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_imatmul_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_ilshift(mvec<L, T>* self, PyObject* obj)
+PyObject* mvec_ilshift(mvec<L, T>* self, PyObject* obj)
 {
 	vec<L, T>* temp = (vec<L, T>*)mvec_lshift<L, T>((PyObject*)self, obj);
 
@@ -718,9 +756,11 @@ mvec_ilshift(mvec<L, T>* self, PyObject* obj)
 	return (PyObject*)self;
 }
 
+#define mvec_ilshift_TEMPLATE(L, T) template PyObject* mvec_ilshift(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_I(mvec_ilshift_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_irshift(mvec<L, T>* self, PyObject* obj)
+PyObject* mvec_irshift(mvec<L, T>* self, PyObject* obj)
 {
 	vec<L, T>* temp = (vec<L, T>*)mvec_rshift<L, T>((PyObject*)self, obj);
 
@@ -733,9 +773,11 @@ mvec_irshift(mvec<L, T>* self, PyObject* obj)
 	return (PyObject*)self;
 }
 
+#define mvec_irshift_TEMPLATE(L, T) template PyObject* mvec_irshift(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_I(mvec_irshift_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_iand(mvec<L, T>* self, PyObject* obj)
+PyObject* mvec_iand(mvec<L, T>* self, PyObject* obj)
 {
 	vec<L, T>* temp = (vec<L, T>*)mvec_and<L, T>((PyObject*)self, obj);
 
@@ -748,9 +790,11 @@ mvec_iand(mvec<L, T>* self, PyObject* obj)
 	return (PyObject*)self;
 }
 
+#define mvec_iand_TEMPLATE(L, T) template PyObject* mvec_iand(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_I(mvec_iand_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_ixor(mvec<L, T>* self, PyObject* obj)
+PyObject* mvec_ixor(mvec<L, T>* self, PyObject* obj)
 {
 	vec<L, T>* temp = (vec<L, T>*)mvec_xor<L, T>((PyObject*)self, obj);
 
@@ -763,9 +807,11 @@ mvec_ixor(mvec<L, T>* self, PyObject* obj)
 	return (PyObject*)self;
 }
 
+#define mvec_ixor_TEMPLATE(L, T) template PyObject* mvec_ixor(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_I(mvec_ixor_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_ior(mvec<L, T>* self, PyObject* obj)
+PyObject* mvec_ior(mvec<L, T>* self, PyObject* obj)
 {
 	vec<L, T>* temp = (vec<L, T>*)mvec_or<L, T>((PyObject*)self, obj);
 
@@ -778,10 +824,12 @@ mvec_ior(mvec<L, T>* self, PyObject* obj)
 	return (PyObject*)self;
 }
 
+#define mvec_ior_TEMPLATE(L, T) template PyObject* mvec_ior(mvec<L, T> *self, PyObject *obj)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_I(mvec_ior_TEMPLATE);
+
 // ternaryfunc
 template<int L, typename T>
-static PyObject *
-mvec_ipow(mvec<L, T> *self, PyObject *obj1, PyObject *) // obj2 is unused. It points to an invalid address!
+PyObject* mvec_ipow(mvec<L, T> *self, PyObject *obj1, PyObject *) // obj2 is unused. It points to an invalid address!
 {
 	vec<L, T> * temp = (vec<L, T>*)mvec_pow<L, T>((PyObject*)self, obj1, Py_None);
 
@@ -794,9 +842,11 @@ mvec_ipow(mvec<L, T> *self, PyObject *obj1, PyObject *) // obj2 is unused. It po
 	return (PyObject*)self;
 }
 
+#define mvec_ipow_TEMPLATE(L, T) template PyObject* mvec_ipow(mvec<L, T> *self, PyObject *obj1, PyObject *)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC_FD(mvec_ipow_TEMPLATE);
+
 template<typename T>
-static PyObject *
-mvec2_str(mvec<2, T>* self)
+PyObject* mvec2_str(mvec<2, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 32 + strlen(name);
@@ -808,8 +858,7 @@ mvec2_str(mvec<2, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mvec3_str(mvec<3, T>* self)
+PyObject* mvec3_str(mvec<3, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 46 + strlen(name);
@@ -821,8 +870,7 @@ mvec3_str(mvec<3, T>* self)
 }
 
 template<typename T>
-static PyObject *
-mvec4_str(mvec<4, T>* self)
+PyObject* mvec4_str(mvec<4, T>* self)
 {
 	const char* name = PyGLM_GET_NAME(((PyObject*)self)->ob_type->tp_name);
 	size_t required_space = 60 + strlen(name);
@@ -833,13 +881,19 @@ mvec4_str(mvec<4, T>* self)
 	return po;
 }
 
+#define mvec_str_TEMPLATE(L, T) template PyObject* mvec ## L ## _str(mvec<L, T>* self)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_str_TEMPLATE);
+
 template<int L>
-static Py_ssize_t mvec_len(PyObject *) {
+Py_ssize_t mvec_len(PyObject *) {
 	return (Py_ssize_t)L;
 }
 
+#define mvec_len_TEMPLATE(L) template Py_ssize_t mvec_len<L>(PyObject *)
+PyGLM_GENERATE_EXTERN_TEMPLATE_2_THRU_4(mvec_len_TEMPLATE);
+
 template<typename T>
-static PyObject* mvec2_sq_item(mvec<2, T> * self, Py_ssize_t index) {
+PyObject* mvec2_sq_item(mvec<2, T> * self, Py_ssize_t index) {
 	switch (index) {
 	case 0:
 		return PyGLM_PyObject_FromNumber<T>((T)self->super_type->x);
@@ -852,7 +906,7 @@ static PyObject* mvec2_sq_item(mvec<2, T> * self, Py_ssize_t index) {
 }
 
 template<typename T>
-static PyObject* mvec3_sq_item(mvec<3, T> * self, Py_ssize_t index) {
+PyObject* mvec3_sq_item(mvec<3, T> * self, Py_ssize_t index) {
 	switch (index) {
 	case 0:
 		return PyGLM_PyObject_FromNumber<T>((T)self->super_type->x);
@@ -867,7 +921,7 @@ static PyObject* mvec3_sq_item(mvec<3, T> * self, Py_ssize_t index) {
 }
 
 template<typename T>
-static PyObject* mvec4_sq_item(mvec<4, T> * self, Py_ssize_t index) {
+PyObject* mvec4_sq_item(mvec<4, T> * self, Py_ssize_t index) {
 	switch (index) {
 	case 0:
 		return PyGLM_PyObject_FromNumber<T>((T)self->super_type->x);
@@ -883,8 +937,11 @@ static PyObject* mvec4_sq_item(mvec<4, T> * self, Py_ssize_t index) {
 	}
 }
 
+#define mvec_sq_item_TEMPLATE(L, T) template PyObject* mvec ## L ## _sq_item(mvec<L, T> * self, Py_ssize_t index)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_sq_item_TEMPLATE);
+
 template<typename T>
-static int mvec2_sq_ass_item(mvec<2, T> * self, Py_ssize_t index, PyObject * value) {
+int mvec2_sq_ass_item(mvec<2, T> * self, Py_ssize_t index, PyObject * value) {
 	T f;
 	if (PyGLM_Number_Check(value)) {
 		f = PyGLM_Number_FromPyObject<T>(value);
@@ -907,7 +964,7 @@ static int mvec2_sq_ass_item(mvec<2, T> * self, Py_ssize_t index, PyObject * val
 }
 
 template<typename T>
-static int mvec3_sq_ass_item(mvec<3, T> * self, Py_ssize_t index, PyObject * value) {
+int mvec3_sq_ass_item(mvec<3, T> * self, Py_ssize_t index, PyObject * value) {
 	T f;
 	if (PyGLM_Number_Check(value)) {
 		f = PyGLM_Number_FromPyObject<T>(value);
@@ -933,7 +990,7 @@ static int mvec3_sq_ass_item(mvec<3, T> * self, Py_ssize_t index, PyObject * val
 }
 
 template<typename T>
-static int mvec4_sq_ass_item(mvec<4, T> * self, Py_ssize_t index, PyObject * value) {
+int mvec4_sq_ass_item(mvec<4, T> * self, Py_ssize_t index, PyObject * value) {
 	T f;
 	if (PyGLM_Number_Check(value)) {
 		f = PyGLM_Number_FromPyObject<T>(value);
@@ -961,8 +1018,11 @@ static int mvec4_sq_ass_item(mvec<4, T> * self, Py_ssize_t index, PyObject * val
 	}
 }
 
+#define mvec_sq_ass_item_TEMPLATE(L, T) template int mvec ## L ## _sq_ass_item(mvec<L, T> * self, Py_ssize_t index, PyObject * value)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_sq_ass_item_TEMPLATE);
+
 template<int L, typename T>
-static int mvec_contains(mvec<L, T> * self, PyObject * value) {
+int mvec_contains(mvec<L, T> * self, PyObject * value) {
 	if (PyGLM_Number_Check(value)) {
 		T f = PyGLM_Number_FromPyObject<T>(value);
 		bool contains = false;
@@ -978,8 +1038,11 @@ static int mvec_contains(mvec<L, T> * self, PyObject * value) {
 
 }
 
+#define mvec_contains_TEMPLATE(L, T) template int mvec_contains(mvec<L, T> * self, PyObject * value)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_contains_TEMPLATE);
+
 template<int L, typename T>
-static PyObject * mvec_richcompare(mvec<L, T> * self, PyObject * other, int comp_type) {
+PyObject* mvec_richcompare(mvec<L, T> * self, PyObject * other, int comp_type) {
 	PyGLM_PTI_Init1(other, (get_vec_PTI_info<L, T>()));
 
 	if (PyGLM_PTI_IsNone(1)) {
@@ -1020,8 +1083,11 @@ static PyObject * mvec_richcompare(mvec<L, T> * self, PyObject * other, int comp
 	}
 }
 
+#define mvec_richcompare_TEMPLATE(L, T) template PyObject* mvec_richcompare(mvec<L, T> * self, PyObject * other, int comp_type)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_richcompare_TEMPLATE);
+
 template<typename T>
-static bool unswizzle_mvec(mvec<2, T> * self, char c, T& out) {
+bool unswizzle_mvec(mvec<2, T> * self, char c, T& out) {
 	if (c == 'x' || c == 'r' || c == 's') {
 		out = self->super_type->x;
 		return true;
@@ -1034,7 +1100,7 @@ static bool unswizzle_mvec(mvec<2, T> * self, char c, T& out) {
 }
 
 template<typename T>
-static bool unswizzle_mvec(mvec<3, T> * self, char c, T& out) {
+bool unswizzle_mvec(mvec<3, T> * self, char c, T& out) {
 	if (c == 'x' || c == 'r' || c == 's') {
 		out = self->super_type->x;
 		return true;
@@ -1051,7 +1117,7 @@ static bool unswizzle_mvec(mvec<3, T> * self, char c, T& out) {
 }
 
 template<typename T>
-static bool unswizzle_mvec(mvec<4, T> * self, char c, T& out) {
+bool unswizzle_mvec(mvec<4, T> * self, char c, T& out) {
 	if (c == 'x' || c == 'r' || c == 's') {
 		out = self->super_type->x;
 		return true;
@@ -1071,18 +1137,11 @@ static bool unswizzle_mvec(mvec<4, T> * self, char c, T& out) {
 	return false;
 }
 
-template<typename T>
-static T& unswizzle2_mvec(mvec<1, T> * self, char c, bool& success) {
-	if (c == 'x' || c == 'r' || c == 's') {
-		success = success && true;
-		return self->super_type->x;
-	}
-	success = false;
-	return self->super_type->x;
-}
+#define unswizzle_mvec_TEMPLATE(L, T) template bool unswizzle_mvec(mvec<L, T> * self, char c, T& out)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(unswizzle_mvec_TEMPLATE);
 
 template<typename T>
-static T& unswizzle2_mvec(mvec<2, T> * self, char c, bool& success) {
+T& unswizzle2_mvec(mvec<2, T> * self, char c, bool& success) {
 	if (c == 'x' || c == 'r' || c == 's') {
 		success = success && true;
 		return self->super_type->x;
@@ -1096,7 +1155,7 @@ static T& unswizzle2_mvec(mvec<2, T> * self, char c, bool& success) {
 }
 
 template<typename T>
-static T& unswizzle2_mvec(mvec<3, T> * self, char c, bool& success) {
+T& unswizzle2_mvec(mvec<3, T> * self, char c, bool& success) {
 	if (c == 'x' || c == 'r' || c == 's') {
 		success = success && true;
 		return self->super_type->x;
@@ -1114,7 +1173,7 @@ static T& unswizzle2_mvec(mvec<3, T> * self, char c, bool& success) {
 }
 
 template<typename T>
-static T& unswizzle2_mvec(mvec<4, T> * self, char c, bool& success) {
+T& unswizzle2_mvec(mvec<4, T> * self, char c, bool& success) {
 	if (c == 'x' || c == 'r' || c == 's') {
 		success = success && true;
 		return self->super_type->x;
@@ -1135,19 +1194,11 @@ static T& unswizzle2_mvec(mvec<4, T> * self, char c, bool& success) {
 	return self->super_type->x;
 }
 
-//template<int L, typename T>
-//static bool unswizzle_mvec(mvec<L, T>* self, char c, T& out) {
-//	if (L == 2) {
-//		return unswizzle_mvec2<T>(self, c, out);
-//	}
-//	if (L == 3) {
-//		return unswizzle_mvec3<T>(self, c, out);
-//	}
-//	return unswizzle_mvec4<T>(self, c, out);
-//}
+#define unswizzle2_mvec_TEMPLATE(L, T) template T& unswizzle2_mvec(mvec<L, T> * self, char c, bool& success)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(unswizzle2_mvec_TEMPLATE);
 
 template<int L, typename T>
-static PyObject * mvec_getattr(PyObject * obj, PyObject * name) {
+PyObject * mvec_getattr(PyObject * obj, PyObject * name) {
 	char * name_as_ccp = PyGLM_String_AsString(name);
 	size_t len = strlen(name_as_ccp);
 
@@ -1187,8 +1238,11 @@ static PyObject * mvec_getattr(PyObject * obj, PyObject * name) {
 	return PyObject_GenericGetAttr(obj, name);
 }
 
+#define mvec_getattr_TEMPLATE(L, T) template PyObject * mvec_getattr<L, T>(PyObject * obj, PyObject * name)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_getattr_TEMPLATE);
+
 template<int L, typename T>
-static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
+int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 	if (value == NULL) {
 		PyErr_SetString(PyExc_NotImplementedError, "deleting components is not permitted.");
 		return -1;
@@ -1296,11 +1350,12 @@ static int mvec_setattr(PyObject * obj, PyObject * name, PyObject* value) {
 	return PyObject_GenericSetAttr(obj, name, value);
 }
 
-// iterator
+#define mvec_setattr_TEMPLATE(L, T) template int mvec_setattr<L, T>(PyObject * obj, PyObject * name, PyObject* value)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_setattr_TEMPLATE);
 
+// iterator
 template<int L, typename T>
-static PyObject *
-mvecIter_new(PyTypeObject *type, PyObject *args, PyObject *)
+PyObject* mvecIter_new(PyTypeObject *type, PyObject *args, PyObject *)
 {
 	mvec<L, T> *sequence;
 
@@ -1318,17 +1373,21 @@ mvecIter_new(PyTypeObject *type, PyObject *args, PyObject *)
 	return (PyObject *)rgstate;
 }
 
+#define mvecIter_new_TEMPLATE(L, T) template PyObject* mvecIter_new<L, T>(PyTypeObject *type, PyObject *args, PyObject *)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvecIter_new_TEMPLATE);
+
 template<int L, typename T>
-static void
-mvecIter_dealloc(mvecIter<L, T> *rgstate)
+void mvecIter_dealloc(mvecIter<L, T> *rgstate)
 {
 	Py_XDECREF(rgstate->sequence);
 	Py_TYPE(rgstate)->tp_free(rgstate);
 }
 
+#define mvecIter_dealloc_TEMPLATE(L, T) template void mvecIter_dealloc(mvecIter<L, T> *rgstate)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvecIter_dealloc_TEMPLATE);
+
 template<typename T>
-static PyObject *
-mvec2Iter_next(mvecIter<2, T> *rgstate)
+PyObject* mvec2Iter_next(mvecIter<2, T> *rgstate)
 {
 	if (rgstate->seq_index < 2) {
 		switch (rgstate->seq_index++) {
@@ -1344,8 +1403,7 @@ mvec2Iter_next(mvecIter<2, T> *rgstate)
 }
 
 template<typename T>
-static PyObject *
-mvec3Iter_next(mvecIter<3, T> *rgstate)
+PyObject* mvec3Iter_next(mvecIter<3, T> *rgstate)
 {
 	if (rgstate->seq_index < 3) {
 		switch (rgstate->seq_index++) {
@@ -1363,8 +1421,7 @@ mvec3Iter_next(mvecIter<3, T> *rgstate)
 }
 
 template<typename T>
-static PyObject *
-mvec4Iter_next(mvecIter<4, T> *rgstate)
+PyObject* mvec4Iter_next(mvecIter<4, T> *rgstate)
 {
 	if (rgstate->seq_index < 4) {
 		switch (rgstate->seq_index++) {
@@ -1383,8 +1440,11 @@ mvec4Iter_next(mvecIter<4, T> *rgstate)
 	return NULL;
 }
 
+#define mvecIter_next_TEMPLATE(L, T) template PyObject* mvec ## L ## Iter_next(mvecIter<L, T> *rgstate)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvecIter_next_TEMPLATE);
+
 template<int L, typename T>
-static PyObject * mvec_geniter(mvec<L, T>* self) {
+PyObject * mvec_geniter(mvec<L, T>* self) {
 	mvecIter<L, T> *rgstate = (mvecIter<L, T> *)(PyGLM_MVECITER_TYPE<L, T>()->tp_alloc(PyGLM_MVECITER_TYPE<L, T>(), 0));
 	if (!rgstate)
 		return NULL;
@@ -1396,9 +1456,11 @@ static PyObject * mvec_geniter(mvec<L, T>* self) {
 	return (PyObject *)rgstate;
 }
 
+#define mvec_geniter_TEMPLATE(L, T) template PyObject * mvec_geniter(mvec<L, T>* self)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_geniter_TEMPLATE);
+
 template<int L, typename T>
-static int
-mvec_getbuffer(mvec<L, T>* self, Py_buffer* view, int flags) {
+int mvec_getbuffer(mvec<L, T>* self, Py_buffer* view, int flags) {
 	if (view == NULL) {
 		PyErr_SetString(PyExc_ValueError, "NULL view in getbuffer");
 		return -1;
@@ -1439,14 +1501,13 @@ mvec_getbuffer(mvec<L, T>* self, Py_buffer* view, int flags) {
 	return 0;
 }
 
-void
-mvec_releasebuffer(PyObject*, Py_buffer* view) {
-	PyMem_Free(view->shape);
-}
+#define mvec_getbuffer_TEMPLATE(L, T) template int mvec_getbuffer(mvec<L, T>* self, Py_buffer* view, int flags)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_getbuffer_TEMPLATE);
+
+void mvec_releasebuffer(PyObject*, Py_buffer* view);
 
 template<int L, typename T>
-static Py_hash_t
-mvec_hash(mvec<L, T>* self, PyObject*) {
+Py_hash_t mvec_hash(mvec<L, T>* self, PyObject*) {
 	std::hash<glm::vec<L, T>> hasher;
 	Py_hash_t out = (Py_hash_t)hasher(*self->super_type);
 	if (out == -1) {
@@ -1455,17 +1516,11 @@ mvec_hash(mvec<L, T>* self, PyObject*) {
 	return out;
 }
 
-template<typename T>
-static PyObject*
-mvec1_to_list(mvec<1, T>* self, PyObject*) {
-	PyObject* out = PyList_New(1);
-	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type->x));
-	return out;
-}
+#define mvec_hash_TEMPLATE(L, T) template Py_hash_t mvec_hash(mvec<L, T>* self, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_hash_TEMPLATE);
 
 template<typename T>
-static PyObject*
-mvec2_to_list(mvec<2, T>* self, PyObject*) {
+PyObject* mvec2_to_list(mvec<2, T>* self, PyObject*) {
 	PyObject* out = PyList_New(2);
 	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type->x));
 	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type->y));
@@ -1473,8 +1528,7 @@ mvec2_to_list(mvec<2, T>* self, PyObject*) {
 }
 
 template<typename T>
-static PyObject*
-mvec3_to_list(mvec<3, T>* self, PyObject*) {
+PyObject* mvec3_to_list(mvec<3, T>* self, PyObject*) {
 	PyObject* out = PyList_New(3);
 	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type->x));
 	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type->y));
@@ -1483,8 +1537,7 @@ mvec3_to_list(mvec<3, T>* self, PyObject*) {
 }
 
 template<typename T>
-static PyObject*
-mvec4_to_list(mvec<4, T>* self, PyObject*) {
+PyObject* mvec4_to_list(mvec<4, T>* self, PyObject*) {
 	PyObject* out = PyList_New(4);
 	PyList_SET_ITEM(out, 0, PyGLM_PyObject_FromNumber<T>(self->super_type->x));
 	PyList_SET_ITEM(out, 1, PyGLM_PyObject_FromNumber<T>(self->super_type->y));
@@ -1493,24 +1546,18 @@ mvec4_to_list(mvec<4, T>* self, PyObject*) {
 	return out;
 }
 
-template<typename T>
-static PyObject*
-mvec1_to_tuple(mvec<1, T>* self, PyObject*) {
-	return PyTuple_Pack(1,
-		PyGLM_PyObject_FromNumber<T>(self->super_type->x));
-}
+#define mvec_to_list_TEMPLATE(L, T) template PyObject* mvec ## L ## _to_list(mvec<L, T>* self, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_to_list_TEMPLATE);
 
 template<typename T>
-static PyObject*
-mvec2_to_tuple(mvec<2, T>* self, PyObject*) {
+PyObject* mvec2_to_tuple(mvec<2, T>* self, PyObject*) {
 	return PyTuple_Pack(2,
 		PyGLM_PyObject_FromNumber<T>(self->super_type->x),
 		PyGLM_PyObject_FromNumber<T>(self->super_type->y));
 }
 
 template<typename T>
-static PyObject*
-mvec3_to_tuple(mvec<3, T>* self, PyObject*) {
+PyObject* mvec3_to_tuple(mvec<3, T>* self, PyObject*) {
 	return PyTuple_Pack(3,
 		PyGLM_PyObject_FromNumber<T>(self->super_type->x),
 		PyGLM_PyObject_FromNumber<T>(self->super_type->y),
@@ -1518,8 +1565,7 @@ mvec3_to_tuple(mvec<3, T>* self, PyObject*) {
 }
 
 template<typename T>
-static PyObject*
-mvec4_to_tuple(mvec<4, T>* self, PyObject*) {
+PyObject* mvec4_to_tuple(mvec<4, T>* self, PyObject*) {
 	return PyTuple_Pack(4,
 		PyGLM_PyObject_FromNumber<T>(self->super_type->x),
 		PyGLM_PyObject_FromNumber<T>(self->super_type->y),
@@ -1527,8 +1573,11 @@ mvec4_to_tuple(mvec<4, T>* self, PyObject*) {
 		PyGLM_PyObject_FromNumber<T>(self->super_type->w));
 }
 
+#define mvec_to_tuple_TEMPLATE(L, T) template PyObject* mvec ## L ## _to_tuple(mvec<L, T>* self, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_to_tuple_TEMPLATE);
+
 template<typename T>
-static PyObject* mvec2_setstate(mvec<2, T>* self, PyObject* state) {
+PyObject* mvec2_setstate(mvec<2, T>* self, PyObject* state) {
 	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 2, "Invalid state. Expected a length 2 tuple.");
 	self->super_type = (glm::vec<2, T>*)PyMem_MALLOC(sizeof(glm::vec<2, T>));
 	self->super_type->x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
@@ -1537,7 +1586,7 @@ static PyObject* mvec2_setstate(mvec<2, T>* self, PyObject* state) {
 }
 
 template<typename T>
-static PyObject* mvec3_setstate(mvec<3, T>* self, PyObject* state) {
+PyObject* mvec3_setstate(mvec<3, T>* self, PyObject* state) {
 	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 3, "Invalid state. Expected a length 3 tuple.");
 	self->super_type = (glm::vec<3, T>*)PyMem_MALLOC(sizeof(glm::vec<3, T>));
 	self->super_type->x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
@@ -1547,7 +1596,7 @@ static PyObject* mvec3_setstate(mvec<3, T>* self, PyObject* state) {
 }
 
 template<typename T>
-static PyObject* mvec4_setstate(mvec<4, T>* self, PyObject* state) {
+PyObject* mvec4_setstate(mvec<4, T>* self, PyObject* state) {
 	PyGLM_ASSERT(PyTuple_CheckExact(state) && PyTuple_GET_SIZE(state) == 4, "Invalid state. Expected a length 4 tuple.");
 	self->super_type = (glm::vec<4, T>*)PyMem_MALLOC(sizeof(glm::vec<4, T>));
 	self->super_type->x = PyGLM_Number_FromPyObject<T>(PyTuple_GET_ITEM(state, 0));
@@ -1557,16 +1606,97 @@ static PyObject* mvec4_setstate(mvec<4, T>* self, PyObject* state) {
 	Py_RETURN_NONE;
 }
 
+#define mvec_setstate_TEMPLATE(L, T) template PyObject* mvec ## L ## _setstate(mvec<L, T>* self, PyObject* state)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_setstate_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_copy(PyObject* self, PyObject*) {
+PyObject* mvec_copy(PyObject* self, PyObject*) {
 	return pack_vec(*((mvec<L, T>*)self)->super_type);
 }
 
+#define mvec_copy_TEMPLATE(L, T) template PyObject* mvec_copy<L, T>(PyObject* self, PyObject*)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_copy_TEMPLATE);
+
 template<int L, typename T>
-static PyObject*
-mvec_deepcopy(PyObject* self, PyObject* memo) {
+PyObject* mvec_deepcopy(PyObject* self, PyObject* memo) {
 	PyObject* copy = mvec_copy<L, T>(self, NULL);
 	PyDict_SetItem(memo, PyLong_FromVoidPtr((void*)self), copy);
 	return copy;
 }
+
+#define mvec_deepcopy_TEMPLATE(L, T) template PyObject* mvec_deepcopy<L, T>(PyObject* self, PyObject* memo)
+PyGLM_GENERATE_EXTERN_TEMPLATE_MVEC(mvec_deepcopy_TEMPLATE);
+
+// cpp
+void mvec_dealloc(PyObject* self)
+{
+	Py_XDECREF(((mvec_helper*)self)->master);
+	self->ob_type->tp_free(self);
+}
+
+PyObject* mvec_matmul(PyObject* obj1, PyObject* obj2)
+{
+	PyObject* out = PyNumber_Multiply(obj1, obj2);
+	if (out == NULL) {
+		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
+	}
+	return out;
+}
+
+void mvec_releasebuffer(PyObject*, Py_buffer* view) {
+	PyMem_Free(view->shape);
+}
+
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_new_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_init_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_SIGNED(mvec_neg_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_pos_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_abs_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_I(mvec_invert_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_add_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_sub_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_mul_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_div_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_FD(mvec_mod_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_FD(mvec_floordiv_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_FD(mvec_divmod_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_I(mvec_lshift_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_I(mvec_rshift_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_I(mvec_and_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_I(mvec_or_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_I(mvec_xor_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_FD(mvec_pow_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_iadd_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_isub_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_imul_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_idiv_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_FD(mvec_imod_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_FD(mvec_ifloordiv_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_imatmul_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_I(mvec_ilshift_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_I(mvec_irshift_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_I(mvec_iand_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_I(mvec_ixor_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_I(mvec_ior_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC_FD(mvec_ipow_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_str_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_2_THRU_4(mvec_len_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_sq_item_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_sq_ass_item_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_contains_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_richcompare_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(unswizzle_mvec_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(unswizzle2_mvec_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_getattr_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_setattr_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvecIter_new_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvecIter_dealloc_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvecIter_next_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_geniter_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_getbuffer_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_hash_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_to_list_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_to_tuple_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_setstate_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_copy_TEMPLATE);
+PyGLM_GENERATE_TEMPLATE_DEF_MVEC(mvec_deepcopy_TEMPLATE);

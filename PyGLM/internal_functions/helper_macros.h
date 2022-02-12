@@ -31,16 +31,12 @@
 #define PyGLM_PREPROCESSOR_TOSTRING_ID(x)  #x
 #define PyGLM_PREPROCESSOR_TOSTRING(x)  PyGLM_PREPROCESSOR_TOSTRING_ID(x)
 
-#define PyGLM_WARN(id, msg) PyGLM_WARN_TYPE(id, PyExc_UserWarning, msg)
-
-#define PyGLM_WARN_TYPE(id, type, msg) if (PyGLM_SHOW_WARNINGS & (1ull << id)) PyErr_WarnEx(type, msg "\nYou can silence this warning by calling glm.silence(" PyGLM_PREPROCESSOR_TOSTRING(id) ")", 1)
-
 #define PyGLM_free(ptr) PyMem_Free(ptr); ptr = NULL;
 
 #define PyGLM_INCREF(ob) (Py_INCREF(ob), ob)
 #define PyGLM_DECREF(ob) (Py_DECREF(ob), ob)
 
-static char* PyGLM_String_AsString(PyObject* name) {
+static inline char* PyGLM_String_AsString(PyObject* name) {
 	PyObject* asciiString = PyUnicode_AsASCIIString(name);
 	char* out = PyBytes_AsString(asciiString);
 	Py_DECREF(asciiString);

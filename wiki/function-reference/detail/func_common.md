@@ -42,6 +42,9 @@ It contains common GLSL functions\.
 &emsp;&emsp;For each component ``` c ``` of ``` x ```,  
 &emsp;&emsp;Returns ``` c ``` if ``` c >= 0 ```; otherwise it returns ``` -c ```\.  
   
+#### <code>glm.<code>**abs**(**x**: *any*) -\> *any*</code></code>  
+&emsp;&emsp;Returns ``` __builtins__.abs(x) ```\.  
+  
 ### ceil\(\) function  
 #### <code>glm.<code>**ceil**(**x**: *float*) -\> *float*</code></code>  
 &emsp;&emsp;Returns a value equal to the nearest integer that is greater than or equal to ``` x ```\.  

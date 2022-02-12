@@ -2,5 +2,5 @@
 
 #include "../compiler_setup.h"
 
-PyObject* PyGLM_VERSION_STRING = NULL;
-PyObject* PyGLM_LICENSE_STRING = NULL;
+extern PyObject* PyGLM_VERSION_STRING;
+extern PyObject* PyGLM_LICENSE_STRING;

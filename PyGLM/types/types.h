@@ -302,22 +302,13 @@ struct glmArray {
 	bool readonly;
 	void* data;
 
-	const int getShape() {
-		return static_cast<int>(shape[0]);
-	}
+	const int getShape();
 
-	const int getShape(uint8 index) {
-		return static_cast<int>(shape[index]);
-	}
+	const int getShape(uint8 index);
 
-	void setShape(int L) {
-		shape[0] = static_cast<uint8>(L);
-	}
+	void setShape(int L);
 
-	void setShape(int C, int R) {
-		shape[0] = static_cast<uint8>(C);
-		shape[1] = static_cast<uint8>(R);
-	}
+	void setShape(int C, int R);
 };
 
 #define PyGLM_ARRAY_OFFSET sizeof(PyObject)
@@ -328,7 +319,6 @@ struct glmArrayIter {
 		Py_ssize_t seq_index;
 	glmArray* sequence;
 };
-
 
 struct PyGLMTypeObject {
 	PyTypeObject typeObject;
@@ -343,75 +333,56 @@ struct PyGLMTypeObject {
 	int PTI_info;
 
 	PyTypeObject* subtype;
-	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, Py_ssize_t dtSize, Py_ssize_t itemSize, char format) :
-		PyGLMTypeObject(typeObject, glmType, C, R, dtSize, itemSize, format, (PyTypeObject*)this) {}
 
-	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, Py_ssize_t dtSize, Py_ssize_t itemSize, char format, PyTypeObject* subtype)
-		: typeObject(typeObject), glmType(glmType), C(C), R(R), dtSize(dtSize), itemSize(itemSize), format(format), subtype(subtype) {
+	PyGLMTypeObject() = default;
 
-		if (glmType == PyGLM_TYPE_VEC) {
-			int shape = (C == 1) ? PyGLM_SHAPE_1 : (C == 2) ? PyGLM_SHAPE_2 : (C == 3) ? PyGLM_SHAPE_3 : PyGLM_SHAPE_4;
+	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, Py_ssize_t dtSize, Py_ssize_t itemSize, char format);
 
-			int type_info = (format == PyGLM_FS_FLOAT) ? PyGLM_DT_FLOAT :
-				(format == PyGLM_FS_DOUBLE) ? PyGLM_DT_DOUBLE :
-				(format == PyGLM_FS_INT32) ? PyGLM_DT_INT :
-				(format == PyGLM_FS_UINT32) ? PyGLM_DT_UINT :
-				(format == PyGLM_FS_INT64) ? PyGLM_DT_INT64 :
-				(format == PyGLM_FS_UINT64) ? PyGLM_DT_UINT64 :
-				(format == PyGLM_FS_INT16) ? PyGLM_DT_INT16 :
-				(format == PyGLM_FS_UINT16) ? PyGLM_DT_UINT16 :
-				(format == PyGLM_FS_INT8) ? PyGLM_DT_INT8 :
-				(format == PyGLM_FS_UINT8) ? PyGLM_DT_UINT8 :
-				PyGLM_DT_BOOL;
+	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, Py_ssize_t dtSize, Py_ssize_t itemSize, char format, PyTypeObject* subtype);
 
-			PTI_info = shape | type_info | PyGLM_T_VEC;
-		}
-		else if (glmType == PyGLM_TYPE_MAT) {
-			int shape = (C == 2) ? (R == 2) ? PyGLM_SHAPE_2x2 : (R == 3) ? PyGLM_SHAPE_2x3 : PyGLM_SHAPE_2x4 :
-				(C == 3) ? (R == 2) ? PyGLM_SHAPE_3x2 : (R == 3) ? PyGLM_SHAPE_3x3 : PyGLM_SHAPE_3x4 :
-				(R == 2) ? PyGLM_SHAPE_4x2 : (R == 3) ? PyGLM_SHAPE_4x3 : PyGLM_SHAPE_4x4;
-
-			int type_info = (format == PyGLM_FS_FLOAT) ? PyGLM_DT_FLOAT :
-				(format == PyGLM_FS_DOUBLE) ? PyGLM_DT_DOUBLE :
-				(format == PyGLM_FS_INT32) ? PyGLM_DT_INT :
-				PyGLM_DT_UINT;
-
-			PTI_info = shape | type_info | PyGLM_T_MAT;
-		}
-		else if (glmType == PyGLM_TYPE_QUA) {
-			int type_info = (format == PyGLM_FS_FLOAT) ? PyGLM_DT_FLOAT :
-				PyGLM_DT_DOUBLE;
-
-			PTI_info = type_info | PyGLM_T_QUA;
-		}
-		else {
-			int shape = (C == 1) ? PyGLM_SHAPE_1 : (C == 2) ? PyGLM_SHAPE_2 : (C == 3) ? PyGLM_SHAPE_3 : PyGLM_SHAPE_4;
-
-			int type_info = (format == PyGLM_FS_FLOAT) ? PyGLM_DT_FLOAT :
-				(format == PyGLM_FS_DOUBLE) ? PyGLM_DT_DOUBLE :
-				(format == PyGLM_FS_INT32) ? PyGLM_DT_INT :
-				PyGLM_DT_UINT;
-
-			PTI_info = shape | type_info | PyGLM_T_MVEC;
-		}
-	}
-
-	inline char* getDataOf(PyObject* src) {
-		char* out = reinterpret_cast<char*>(src);
-
-		if (glmType == PyGLM_TYPE_MVEC) {
-			return *reinterpret_cast<char**>((out + sizeof(PyObject)));
-		}
-
-		return (out + sizeof(PyObject));
-	}
-
-	//inline PyTypeObject* typeObjectPointer() {
-	//	return &typeObject;
-	//}
-
-	//static inline PyGLMTypeObject* fromTypeObjectPointer(PyTypeObject* typeObject) {
-	//	constexpr uint64 typeObjectOffset = sizeof(PyGLMTypeObject) - sizeof(PyTypeObject);
-	//	return reinterpret_cast<PyGLMTypeObject*>(reinterpret_cast<char*>(typeObject) - typeObjectOffset);
-	//}
+	char* getDataOf(PyObject* src);
 };
+
+extern PyGLMTypeObject PyGLMTypeStorage[];
+
+#define PyGLM_TYPE_STORAGE_VEC_LENGTH  (11 * 4)
+#define PyGLM_TYPE_STORAGE_MVEC_LENGTH (4 * 3)
+#define PyGLM_TYPE_STORAGE_MAT_LENGTH  (4 * 9)
+#define PyGLM_TYPE_STORAGE_QUA_LENGTH  (2 * 1)
+
+#define PyGLM_TYPE_STORAGE_VEC_START  (&PyGLMTypeStorage[0])
+#define PyGLM_TYPE_STORAGE_MVEC_START (&PyGLMTypeStorage[PyGLM_TYPE_STORAGE_VEC_LENGTH])
+#define PyGLM_TYPE_STORAGE_MAT_START  (&PyGLMTypeStorage[PyGLM_TYPE_STORAGE_VEC_LENGTH + PyGLM_TYPE_STORAGE_MVEC_LENGTH])
+#define PyGLM_TYPE_STORAGE_QUA_START  (&PyGLMTypeStorage[PyGLM_TYPE_STORAGE_VEC_LENGTH + PyGLM_TYPE_STORAGE_MVEC_LENGTH + PyGLM_TYPE_STORAGE_MAT_LENGTH])
+
+#define PyGLM_TYPE_STORAGE_VEC_END  (&PyGLMTypeStorage[PyGLM_TYPE_STORAGE_VEC_LENGTH - 1])
+#define PyGLM_TYPE_STORAGE_MVEC_END (&PyGLMTypeStorage[PyGLM_TYPE_STORAGE_VEC_LENGTH + PyGLM_TYPE_STORAGE_MVEC_LENGTH - 1])
+#define PyGLM_TYPE_STORAGE_MAT_END  (&PyGLMTypeStorage[PyGLM_TYPE_STORAGE_VEC_LENGTH + PyGLM_TYPE_STORAGE_MVEC_LENGTH + PyGLM_TYPE_STORAGE_MAT_LENGTH - 1])
+#define PyGLM_TYPE_STORAGE_QUA_END  (&PyGLMTypeStorage[PyGLM_TYPE_STORAGE_VEC_LENGTH + PyGLM_TYPE_STORAGE_MVEC_LENGTH + PyGLM_TYPE_STORAGE_MAT_LENGTH + PyGLM_TYPE_STORAGE_QUA_LENGTH - 1])
+
+#define PyGLM_TYPE_STORAGE_VEC_GET(L, T) (PyGLM_TYPE_STORAGE_VEC_START + (((std::is_same<T, double>::value) ? 0  : \
+																		   (std::is_same<T, float>::value)  ? 1  : \
+																		   (std::is_same<T, int8>::value)   ? 2  : \
+																		   (std::is_same<T, int16>::value)  ? 3  : \
+																		   (std::is_same<T, int32>::value)  ? 4  : \
+																		   (std::is_same<T, int64>::value)  ? 5  : \
+																		   (std::is_same<T, uint8>::value)  ? 6  : \
+																		   (std::is_same<T, uint16>::value) ? 7  : \
+																		   (std::is_same<T, uint32>::value) ? 8  : \
+																		   (std::is_same<T, uint64>::value) ? 9  : \
+																											  10) * 4 + L - 1))
+
+#define PyGLM_TYPE_STORAGE_MVEC_GET(L, T) (PyGLM_TYPE_STORAGE_MVEC_START + (((std::is_same<T, double>::value) ? 0  : \
+																			 (std::is_same<T, float>::value)  ? 1  : \
+																			 (std::is_same<T, int32>::value)  ? 2  : \
+																											    3) * 3 + L - 2))
+
+#define PyGLM_TYPE_STORAGE_MAT_GET(C, R, T) (PyGLM_TYPE_STORAGE_MAT_START + (((std::is_same<T, double>::value) ? 0  : \
+																			  (std::is_same<T, float>::value)  ? 1  : \
+																			  (std::is_same<T, int32>::value)  ? 2  : \
+																												 3) * 9 + (C - 2) * 3 + (R - 2)))
+
+#define PyGLM_TYPE_STORAGE_QUA_GET(T) (PyGLM_TYPE_STORAGE_QUA_START + ((std::is_same<T, double>::value) ? 0 : 1))
+
+#define PyGLM_TYPE_STORAGE_START PyGLM_TYPE_STORAGE_VEC_START
+#define PyGLM_TYPE_STORAGE_END PyGLM_TYPE_STORAGE_QUA_END

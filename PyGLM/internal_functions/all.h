@@ -20,3 +20,5 @@
 
 #include "type_checkers.h"
 
+#include "template_generator_macros.h"
+

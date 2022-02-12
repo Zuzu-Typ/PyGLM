@@ -16,8 +16,12 @@ from os import path
 
 import re
 
+import glob
+
+additional_sources = glob.glob("PyGLM/**/*.cpp", recursive=True)
+
 module1 = Extension('glm',
-                    sources = ['PyGLM.cpp'], include_dirs=["glm/"], extra_compile_args=['-std=c++11'])
+                    sources = ['PyGLM.cpp'] + additional_sources, include_dirs=["glm/"], extra_compile_args=['-std=c++11'])
 
 here = path.abspath(path.dirname(__file__))
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "helper_macros.h"
+#include "warnings.h"
 #include "../compiler_setup.h"
 
 #define PyGLM_TYPEERROR_O(str, obj) PyErr_Format(PyExc_TypeError, "%s'%s'", str, PyGLM_TYPE_AS_CSTRING(obj));

@@ -2,7 +2,19 @@
 
 #include "../forward_declarations.h"
 
-static PyMethodDef hfmat3x2_methods[] = {
+extern PyMethodDef hfmat3x2_methods[];
+extern PyBufferProcs hfmat3x2BufferMethods;
+extern PySequenceMethods hfmat3x2SeqMethods;
+extern PyMappingMethods hfmat3x2MapMethods;
+extern PyNumberMethods hfmat3x2NumMethods;
+
+extern PyTypeObject hfmat3x2IterType;
+extern PyGLMTypeObject hfmat3x2GLMType;
+extern PyTypeObject& hfmat3x2Type;
+
+// cpp
+
+PyMethodDef hfmat3x2_methods[] = {
 	{ "__copy__", (PyCFunction)generic_copy, METH_NOARGS, "Create a copy of this instance"},
 	{ "__deepcopy__", (PyCFunction)generic_deepcopy, METH_O, "Create a (deep)copy of this instance"},
 	{"length", (PyCFunction)mat_length<3>, METH_NOARGS, "returns the length of glm::mat3x2"},
@@ -14,11 +26,11 @@ static PyMethodDef hfmat3x2_methods[] = {
 	{ "from_bytes", (PyCFunction)mat_from_bytes<3, 2, float>, METH_O | METH_STATIC, "Create a matrix from a bytes string"},
 	{ NULL }
 };
-static PyBufferProcs hfmat3x2BufferMethods = {
+PyBufferProcs hfmat3x2BufferMethods = {
 	(getbufferproc)mat_getbuffer<3, 2, float>,
 	(releasebufferproc)mat_releasebuffer,
 };
-static PySequenceMethods hfmat3x2SeqMethods = {
+PySequenceMethods hfmat3x2SeqMethods = {
 	(lenfunc)mat_len<3>, // sq_length
 	0, // sq_concat
 	0, // sq_repeat
@@ -30,12 +42,12 @@ static PySequenceMethods hfmat3x2SeqMethods = {
 	0, // sq_inplace_concat
 	0, // sq_inplace_repeat
 };
-static PyMappingMethods hfmat3x2MapMethods = {
+PyMappingMethods hfmat3x2MapMethods = {
 	(lenfunc)mat_len<3>, // mp_length
 	(binaryfunc)mat3x2_mp_item<float>, // mp_subscript
 	(objobjargproc)mat3x2_mp_ass_item<float>, // mp_ass_subscript
 };
-static PyNumberMethods hfmat3x2NumMethods = {
+PyNumberMethods hfmat3x2NumMethods = {
 	(binaryfunc)mat_add<3, 2, float>, //nb_add
 	(binaryfunc)mat_sub<3, 2, float>, //nb_subtract
 	(binaryfunc)mat_mul<3, 2, float>, //nb_multiply
@@ -44,7 +56,7 @@ static PyNumberMethods hfmat3x2NumMethods = {
 	0, //nb_power
 	(unaryfunc)mat_neg<3, 2, float>, //nb_negative
 	(unaryfunc)mat_pos<3, 2, float>, //nb_positive
-	0, //nb_absolute
+	(unaryfunc)mat_abs<3, 2, float>, //nb_absolute
 	0, //nb_bool
 	0, //nb_invert
 	0, //nb_lshift
@@ -73,7 +85,7 @@ static PyNumberMethods hfmat3x2NumMethods = {
 	(binaryfunc)mat_matmul, //nb_matrix_multiply
 	(binaryfunc)mat_imatmul<3, 2, float>, //nb_inplace_matrix_multiply
 };
-static PyTypeObject hfmat3x2IterType = {
+PyTypeObject hfmat3x2IterType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"mat3x2Iter",             /* tp_name */
 	sizeof(matIter<3, 2, float>),             /* tp_basicsize */
@@ -114,54 +126,6 @@ static PyTypeObject hfmat3x2IterType = {
 	(newfunc)matIter_new<3, 2, float>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hfmat3x2GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.mat3x2",             /* tp_name */
-		sizeof(mat<3, 2, float>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)mat_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)mat3x2_repr<float>,                         /* tp_repr */
-		& hfmat3x2NumMethods,             /* tp_as_number */
-		& hfmat3x2SeqMethods,                         /* tp_as_sequence */
-		& hfmat3x2MapMethods,                         /* tp_as_mapping */
-		(hashfunc)mat_hash<3, 2, float>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)mat3x2_str<float>,                         /* tp_str */
-		0,                         /* tp_getattro */
-		0,                         /* tp_setattro */
-		& hfmat3x2BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"mat3x2( <mat3x2 compatible type(s)> )\n3 columns of 2 components matrix of floating-point numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)mat_richcompare<3, 2, float>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)mat_geniter<3, 2, float>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hfmat3x2_methods,             /* tp_methods */
-		0,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)mat3x2_init<float>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)mat_new<3, 2, float>,                 /* tp_new */
-	},
-	PyGLM_TYPE_MAT,
-	3,
-	2,
-	sizeof(float),
-	sizeof(glm::mat<3, 2, float>),
-	PyGLM_FS_FLOAT
-};
+PyGLMTypeObject hfmat3x2GLMType = _PyGLM_TYPE_DEF_FMAT(3, 2);
 
-static PyTypeObject& hfmat3x2Type = *((PyTypeObject*)&hfmat3x2GLMType);
+PyTypeObject& hfmat3x2Type = *((PyTypeObject*)&hfmat3x2GLMType);
