@@ -6,6 +6,8 @@
 
 #include "../types/mvec/all.h"
 
+#include "../types/mvec_helper.hpp"
+
 void mvec_dealloc(PyObject* self);
 
 template<int L, typename T>

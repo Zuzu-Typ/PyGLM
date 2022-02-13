@@ -2,12 +2,12 @@
 
 #include "../../compiler_setup.h"
 
-#include "../../types/all.h"
+#include "../../types/vec/all.h"
 
 #include "ctypes_datatypes.h"
 
 template<int L, typename T>
-static constexpr PyTypeObject* PyGLM_VEC_TYPE() {
+constexpr PyTypeObject* PyGLM_VEC_TYPE() {
 	return (std::is_same<vec<L, T>, vec<1, float> >::value) ? (PyTypeObject*)&hfvec1Type :
 		(std::is_same<vec<L, T>, vec<2, float> >::value) ? (PyTypeObject*)&hfvec2Type :
 		(std::is_same<vec<L, T>, vec<3, float> >::value) ? (PyTypeObject*)&hfvec3Type :

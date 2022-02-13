@@ -1,6 +1,6 @@
 #pragma once
 
-#include "error_functions.h"
+#include "../compiler_setup.h"
 
 #include "helper_macros.h"
 

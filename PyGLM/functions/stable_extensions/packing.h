@@ -6,6 +6,8 @@
 
 #include "../../internal_functions/all.h"
 
+#include <glm/gtc/packing.hpp>
+
 static PyObject*
 packHalf1x16_(PyObject*, PyObject* arg) {
 	if (PyFloat_Check(arg)) {

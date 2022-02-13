@@ -6,6 +6,10 @@
 
 #include "../../internal_functions/all.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
+#include "../../types/glmArray.hpp"
+
 static PyObject*
 sizeof_(PyObject*, PyObject* arg) {
 	PyObject* argAsType = (PyType_Check(arg)) ? arg : (PyObject*)Py_TYPE(arg);

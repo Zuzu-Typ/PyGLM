@@ -2,6 +2,8 @@
 
 #include "../function_generator_macros.h"
 
+#include <glm/gtx/norm.hpp>
+
 PyGLM_MAKE_GLM_FUNC_VV__tfF(distance2)
 
 

@@ -2,10 +2,10 @@
 
 #include "../../compiler_setup.h"
 
-#include "../../types/all.h"
+#include "../../types/mvec/all.h"
 
 template<int L, typename T>
-static constexpr PyTypeObject* PyGLM_MVEC_TYPE() {
+constexpr PyTypeObject* PyGLM_MVEC_TYPE() {
 	return (std::is_same<mvec<L, T>, mvec<2, float> >::value) ? (PyTypeObject*)&hfmvec2Type :
 		(std::is_same<mvec<L, T>, mvec<3, float> >::value) ? (PyTypeObject*)&hfmvec3Type :
 		(std::is_same<mvec<L, T>, mvec<4, float> >::value) ? (PyTypeObject*)&hfmvec4Type :

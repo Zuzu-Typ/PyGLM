@@ -8,6 +8,10 @@
 
 #include "../function_generator_macros.h"
 
+#include <glm/ext/quaternion_common.hpp>
+
+#include <glm/gtx/compatibility.hpp>
+
 static PyObject*
 lerp_(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2, * arg3;

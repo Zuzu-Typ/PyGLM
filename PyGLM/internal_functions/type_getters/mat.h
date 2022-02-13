@@ -2,10 +2,10 @@
 
 #include "../../compiler_setup.h"
 
-#include "../../types/all.h"
+#include "../../types/mat/all.h"
 
 template<int C, int R, typename T>
-static constexpr PyTypeObject* PyGLM_MAT_TYPE() {
+constexpr PyTypeObject* PyGLM_MAT_TYPE() {
 	return (std::is_same<mat<C, R, T>, mat<2, 2, float> >::value) ? (PyTypeObject*)&hfmat2x2Type :
 		(std::is_same<mat<C, R, T>, mat<2, 3, float> >::value) ? (PyTypeObject*)&hfmat2x3Type :
 		(std::is_same<mat<C, R, T>, mat<2, 4, float> >::value) ? (PyTypeObject*)&hfmat2x4Type :

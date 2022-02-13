@@ -6,6 +6,8 @@
 
 #include "../../internal_functions/all.h"
 
+#include <glm/gtc/matrix_inverse.hpp>
+
 static PyObject*
 affineInverse_(PyObject*, PyObject* arg) {
 	PyGLM_PTI_Init0(arg, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);

@@ -8,6 +8,8 @@
 
 #include "../function_generator_macros.h"
 
+#include <glm/gtc/quaternion.hpp>
+
 PyGLM_MAKE_GLM_FUNC_V3V3__tfF(quatLookAt)
 PyGLM_MAKE_GLM_FUNC_V3V3__tfF(quatLookAtLH)
 PyGLM_MAKE_GLM_FUNC_V3V3__tfF(quatLookAtRH)

@@ -6,6 +6,8 @@
 
 #include "../../internal_functions/all.h"
 
+#include <glm/gtc/noise.hpp>
+
 static PyObject*
 perlin_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2 = NULL;

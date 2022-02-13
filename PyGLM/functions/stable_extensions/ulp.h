@@ -8,6 +8,8 @@
 
 #include "../function_generator_macros.h"
 
+#include <glm/gtc/ulp.hpp>
+
 static PyObject*
 next_float_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2 = NULL;

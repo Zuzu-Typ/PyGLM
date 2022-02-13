@@ -2,6 +2,8 @@
 
 #include "../function_generator_macros.h"
 
+#include <glm/gtc/reciprocal.hpp>
+
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(sec)
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(csc)
 PyGLM_MAKE_GLM_FUNC_N_V__tfF(cot)

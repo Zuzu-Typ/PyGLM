@@ -1,5 +1,14 @@
 #include "vec1.h"
 
+#include <structmember.h>
+
+#include <glm/detail/type_vec1.hpp>
+
+#include "../../vec.hpp"
+#include "../../vecIter.hpp"
+
+#include "../../PyGLMTypeObject.hpp"
+
 PyMemberDef hfvec1_members[] = {
 	{ (char*)"x", T_FLOAT, offsetof(vec1_float_t, super_type.x), 0, (char*)"vec1.x" },
 	{ NULL }  /* Sentinel */

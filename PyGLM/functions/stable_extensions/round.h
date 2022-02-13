@@ -2,6 +2,8 @@
 
 #include "../function_generator_macros.h"
 
+#include <glm/gtc/round.hpp>
+
 //TODO: Fix the supported types (should not be restricted to int)
 //PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(isPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(ceilPowerOfTwo);

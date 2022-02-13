@@ -1,5 +1,14 @@
 #include "vec1.h"
 
+#include <structmember.h>
+
+#include <glm/detail/type_vec1.hpp>
+
+#include "../../vec.hpp"
+#include "../../vecIter.hpp"
+
+#include "../../PyGLMTypeObject.hpp"
+
 PyMemberDef hi64vec1_members[] = {
 	{ (char*)"x", T_LONGLONG, offsetof(vec1_int64_t, super_type.x), 0, (char*)"i64vec1.x" },
 	{ NULL }  /* Sentinel */

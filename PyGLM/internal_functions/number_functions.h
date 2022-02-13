@@ -4,6 +4,8 @@
 #include "template_generator_macros.h"
 #include "warnings.h"
 
+#include <limits>
+
 #define PyGLM_COULD_BE_NUMBER(arg) (Py_TYPE(arg)->tp_as_number != NULL && (arg->ob_type->tp_as_number->nb_index != NULL || arg->ob_type->tp_as_number->nb_int != NULL || arg->ob_type->tp_as_number->nb_float != NULL))
 
 #define PyGLM_Number_Check(arg) (PyFloat_Check(arg) || PyLong_Check(arg) || PyBool_Check(arg) || (PyGLM_COULD_BE_NUMBER(arg) && PyGLM_TestNumber(arg)))

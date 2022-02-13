@@ -1,5 +1,14 @@
 #include "vec2.h"
 
+#include <structmember.h>
+
+#include <glm/detail/type_vec2.hpp>
+
+#include "../../vec.hpp"
+#include "../../vecIter.hpp"
+
+#include "../../PyGLMTypeObject.hpp"
+
 PyMemberDef hdvec2_members[] = {
 	{ (char*)"x", T_DOUBLE, offsetof(vec2_double_t, super_type.x), 0, (char*)"dvec2.x" },
 	{ (char*)"y", T_DOUBLE, offsetof(vec2_double_t, super_type.y), 0, (char*)"dvec2.y" },

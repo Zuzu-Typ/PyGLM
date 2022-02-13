@@ -1,5 +1,14 @@
 #include "vec3.h"
 
+#include <structmember.h>
+
+#include <glm/detail/type_vec3.hpp>
+
+#include "../../vec.hpp"
+#include "../../vecIter.hpp"
+
+#include "../../PyGLMTypeObject.hpp"
+
 PyMemberDef hu8vec3_members[] = {
 	{ (char*)"x", T_UBYTE, offsetof(vec3_uint8_t, super_type.x), 0, (char*)"u8vec3.x" },
 	{ (char*)"y", T_UBYTE, offsetof(vec3_uint8_t, super_type.y), 0, (char*)"u8vec3.y" },

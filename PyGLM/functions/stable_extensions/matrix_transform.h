@@ -8,6 +8,10 @@
 
 #include "../function_generator_macros.h"
 
+#include <glm/gtx/matrix_transform_2d.hpp>
+
+#include <glm/gtx/rotate_vector.hpp>
+
 static PyObject*
 identity_(PyObject*, PyObject* arg) {
 	if (!PyType_Check(arg)) {

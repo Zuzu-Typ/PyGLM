@@ -1,5 +1,14 @@
 #include "vec3.h"
 
+#include <structmember.h>
+
+#include <glm/detail/type_vec3.hpp>
+
+#include "../../vec.hpp"
+#include "../../vecIter.hpp"
+
+#include "../../PyGLMTypeObject.hpp"
+
 PyMemberDef hi64vec3_members[] = {
 	{ (char*)"x", T_LONGLONG, offsetof(vec3_int64_t, super_type.x), 0, (char*)"i64vec3.x" },
 	{ (char*)"y", T_LONGLONG, offsetof(vec3_int64_t, super_type.y), 0, (char*)"i64vec3.y" },

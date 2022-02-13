@@ -1,5 +1,14 @@
 #include "vec2.h"
 
+#include <structmember.h>
+
+#include <glm/detail/type_vec2.hpp>
+
+#include "../../vec.hpp"
+#include "../../vecIter.hpp"
+
+#include "../../PyGLMTypeObject.hpp"
+
 PyMemberDef hi8vec2_members[] = {
 	{ (char*)"x", T_BYTE, offsetof(vec2_int8_t, super_type.x), 0, (char*)"i8vec2.x" },
 	{ (char*)"y", T_BYTE, offsetof(vec2_int8_t, super_type.y), 0, (char*)"i8vec2.y" },

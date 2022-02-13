@@ -1,5 +1,6 @@
 
 #include "warnings.h"
+#include "error_functions.h"
 
 unsigned long long PyGLM_SHOW_WARNINGS = 18446744073709551615ull;
 

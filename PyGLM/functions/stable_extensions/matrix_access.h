@@ -6,6 +6,8 @@
 
 #include "../../internal_functions/all.h"
 
+#include <glm/gtc/matrix_access.hpp>
+
 static PyObject*
 row_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3 = NULL;

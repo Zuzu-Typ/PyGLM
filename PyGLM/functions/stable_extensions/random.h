@@ -8,6 +8,8 @@
 
 #include "../function_generator_macros.h"
 
+#include <glm/gtc/random.hpp>
+
 PyGLM_MAKE_GLM_FUNC_NN_VV__tGPL(linearRand)
 PyGLM_MAKE_GLM_FUNC_NN_VV__tGPL(gaussRand)
 

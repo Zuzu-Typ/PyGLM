@@ -6,6 +6,9 @@
 
 #include "../types/vec/all.h"
 
+#include "../types/vec.hpp"
+#include "../types/vecIter.hpp"
+
 void vec_dealloc(PyObject* self);
 
 template<int L, typename T>

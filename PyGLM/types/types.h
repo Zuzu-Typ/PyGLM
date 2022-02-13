@@ -219,129 +219,64 @@ constexpr char get_format_specifier() {
 //		uint8_t info;
 //};
 
-struct ctypes_helper {
-	PyObject_HEAD
-		void* b_ptr;                /* pointer to memory block */
-};
+struct ctypes_helper;
 
 template<int L, typename T>
-struct vec {
-	PyObject_HEAD
-		//uint8_t info;
-	glm::vec<L, T> super_type;
-};
+struct vec;
 
 template<int L, typename T>
-struct vecIter {
-	PyObject_VAR_HEAD
-		glm::length_t seq_index;
-	vec<L, T>* sequence;
-};
+struct vecIter;
 
-struct mvec_helper {
-	PyObject_HEAD
-		//uint8_t info;
-	void* super_type;
-	PyObject* master;
-};
+struct mvec_helper;
 
 template<int L, typename T>
-struct mvec {
-	PyObject_HEAD
-		//uint8_t info;
-	glm::vec<L, T>* super_type;
-	PyObject* master;
-};
+struct mvec;
 
 template<int L, typename T>
-struct mvecIter {
-	PyObject_VAR_HEAD
-		glm::length_t seq_index;
-	mvec<L, T>* sequence;
-};
+struct mvecIter;
 
 template<int C, int R, typename T>
-struct mat {
-	PyObject_HEAD
-		//uint8_t info;
-	glm::mat<C, R, T> super_type;
-};
+struct mat;
 
 template<int C, int R, typename T>
-struct matIter {
-	PyObject_VAR_HEAD
-		glm::length_t seq_index;
-	mat<C, R, T>* sequence;
-};
+struct matIter;
 
 template<typename T>
-struct qua {
-	PyObject_HEAD
-		//uint8_t info;
-	glm::qua<T> super_type;
-};
+struct qua;
 
 template<typename T>
-struct quaIter {
-	PyObject_VAR_HEAD
-		glm::length_t seq_index;
-	qua<T>* sequence;
-};
+struct quaIter;
 
-struct glmArray {
-	PyObject_HEAD
-		char format;
-	uint8 shape[2];
-	uint8 glmType;
-	Py_ssize_t nBytes;
-	Py_ssize_t itemCount;
-	Py_ssize_t dtSize;
-	Py_ssize_t itemSize;
-	PyTypeObject* subtype;
-	PyObject* reference;
-	bool readonly;
-	void* data;
+struct glmArray;
 
-	const int getShape();
+struct glmArrayIter;
 
-	const int getShape(uint8 index);
+struct PyGLMTypeObject;
 
-	void setShape(int L);
 
-	void setShape(int C, int R);
-};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #define PyGLM_ARRAY_OFFSET sizeof(PyObject)
 #define PyGLM_ARRAY_SIZE (sizeof(glmArray) - PyGLM_ARRAY_OFFSET)
 
-struct glmArrayIter {
-	PyObject_VAR_HEAD
-		Py_ssize_t seq_index;
-	glmArray* sequence;
-};
 
-struct PyGLMTypeObject {
-	PyTypeObject typeObject;
-	uint8 glmType;
-	uint8 C;
-	uint8 R;
-	Py_ssize_t dtSize;
-	Py_ssize_t itemSize;
-	char format;
-	char reserved = '\x00';
 
-	int PTI_info;
 
-	PyTypeObject* subtype;
-
-	PyGLMTypeObject() = default;
-
-	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, Py_ssize_t dtSize, Py_ssize_t itemSize, char format);
-
-	PyGLMTypeObject(PyTypeObject typeObject, uint8 glmType, uint8 C, uint8 R, Py_ssize_t dtSize, Py_ssize_t itemSize, char format, PyTypeObject* subtype);
-
-	char* getDataOf(PyObject* src);
-};
 
 extern PyGLMTypeObject PyGLMTypeStorage[];
 

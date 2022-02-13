@@ -36,7 +36,14 @@
 #define PyGLM_INCREF(ob) (Py_INCREF(ob), ob)
 #define PyGLM_DECREF(ob) (Py_DECREF(ob), ob)
 
-static inline char* PyGLM_String_AsString(PyObject* name) {
+#define PyGLM_Arg_Unpack_1O(args, name, arg1) if(!PyArg_UnpackTuple(args, name, 1, 1, &arg1)) return NULL
+#define PyGLM_Arg_Unpack_2O(args, name, arg1, arg2) if(!PyArg_UnpackTuple(args, name, 2, 2, &arg1, &arg2)) return NULL
+#define PyGLM_Arg_Unpack_3O(args, name, arg1, arg2, arg3) if(!PyArg_UnpackTuple(args, name, 3, 3, &arg1, &arg2, &arg3)) return NULL
+#define PyGLM_Arg_Unpack_4O(args, name, arg1, arg2, arg3, arg4) if(!PyArg_UnpackTuple(args, name, 4, 4, &arg1, &arg2, &arg3, &arg4)) return NULL
+#define PyGLM_Arg_Unpack_5O(args, name, arg1, arg2, arg3, arg4, arg5) if(!PyArg_UnpackTuple(args, name, 5, 5, &arg1, &arg2, &arg3, &arg4, &arg5)) return NULL
+#define PyGLM_Arg_Unpack_6O(args, name, arg1, arg2, arg3, arg4, arg5, arg6) if(!PyArg_UnpackTuple(args, name, 6, 6, &arg1, &arg2, &arg3, &arg4, &arg5, &arg6)) return NULL
+
+inline char* PyGLM_String_AsString(PyObject* name) {
 	PyObject* asciiString = PyUnicode_AsASCIIString(name);
 	char* out = PyBytes_AsString(asciiString);
 	Py_DECREF(asciiString);

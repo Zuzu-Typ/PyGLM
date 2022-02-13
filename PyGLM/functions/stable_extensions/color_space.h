@@ -8,6 +8,8 @@
 
 #include "../function_generator_macros.h"
 
+#include <glm/gtc/color_space.hpp>
+
 PyDoc_STRVAR(convertLinearToSRGB_docstr,
 	"convertLinearToSRGB(ColorLinear: vecN) -> vecN\n"
 	"	Convert a linear color to sRGB color using a standard gamma correction.\n"

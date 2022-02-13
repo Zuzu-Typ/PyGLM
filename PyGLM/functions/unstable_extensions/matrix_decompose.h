@@ -2,6 +2,9 @@
 
 #include "../all.h"
 
+#include <glm/gtx/matrix_decompose.hpp>
+
+
 static PyObject*
 decompose_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3, *arg4, *arg5, *arg6;

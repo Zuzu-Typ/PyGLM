@@ -2,13 +2,130 @@
 
 #include "../compiler_setup.h"
 
-#include "../types/all.h"
+// declarations
 
-#include "../internal_functions/all.h"
+#define PyGLM_DECL_METH_NOARGS(NAME) PyObject* NAME##_(PyObject*, PyObject*);
 
+#define PyGLM_DECL_METH_O(NAME) PyObject* NAME##_(PyObject*, PyObject* arg);
+
+#define PyGLM_DECL_METH_VARARGS(NAME) PyObject* NAME##_(PyObject*, PyObject* arg);
+
+#define PyGLM_DECL_GLM_FUNC_V3__tfF(NAME)\
+PyGLM_DECL_METH_O(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_V2__tfF(NAME)\
+PyGLM_DECL_METH_O(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_N_V__tfF(NAME)\
+PyGLM_DECL_METH_O(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NN_VV_VN__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NNN_VVV_VNN__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_N_V_Q__tfF(NAME)\
+PyGLM_DECL_METH_O(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NN_VV__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_V_Q__tfF(NAME)\
+PyGLM_DECL_METH_O(NAME)
+#define PyGLM_DECL_GLM_FUNC_NNN_VVV__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NNN_VVN__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_MM__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_M__tfF(NAME)\
+PyGLM_DECL_METH_O(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_M(NAME)\
+PyGLM_DECL_METH_O(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_S__tfF(NAME)\
+PyGLM_DECL_METH_O(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_S_Q__tfF(NAME)\
+PyGLM_DECL_METH_O(NAME)
+
+#define PyGLM_DECL_GLM_FUNC__rF(NAME)\
+PyGLM_DECL_METH_NOARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_M3V2_M4V3__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_M3N__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_M4V3__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NNNNNN__tf(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NNNN__tf(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NNN__tf(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_V3M4M4V4__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_V3V3V3__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_V3V3__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_V3_V3V3__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_QQN__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_Q(NAME)\
+PyGLM_DECL_METH_O(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_M3_M4__tfF(NAME)\
+PyGLM_DECL_METH_O(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NN_VV(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NN_VV__tGPL(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NN_VV_QQ__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_N_V__tiqsu(NAME)\
+PyGLM_DECL_METH_O(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NN_VV_VN__tiqsu(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_NN_VV__tiqsu(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+#define PyGLM_DECL_GLM_FUNC_VV_QQ(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+
+#define PyGLM_DECL_GLM_FUNC_VV__tfF(NAME)\
+PyGLM_DECL_METH_VARARGS(NAME)
+
+
+// definitions
 
 #define PyGLM_MAKE_GLM_FUNC_V3__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);\
 	if (PyGLM_Vec_PTI_Check0(3, float, arg)) {\
@@ -22,7 +139,7 @@ NAME##_(PyObject*, PyObject* arg) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_V2__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD);\
 	if (PyGLM_Vec_PTI_Check0(2, float, arg)) {\
@@ -36,7 +153,7 @@ NAME##_(PyObject*, PyObject* arg) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_N_V__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	if (PyGLM_Number_Check(arg)) {\
 		return pack(glm::NAME(PyGLM_Number_FromPyObject<double>(arg)));\
@@ -71,7 +188,7 @@ NAME##_(PyObject*, PyObject* arg) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NN_VV_VN__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -133,7 +250,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NNN_VVV_VNN__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2, *arg3;\
 	PyGLM_Arg_Unpack_3O(args, #NAME, arg1, arg2, arg3);\
@@ -196,7 +313,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_N_V_Q__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	if (PyGLM_Number_Check(arg)) {\
 		return pack(glm::NAME(PyGLM_Number_FromPyObject<double>(arg)));\
@@ -239,7 +356,7 @@ NAME##_(PyObject*, PyObject* arg) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NN_VV__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -277,7 +394,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_V_Q__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_T_QUA | PyGLM_SHAPE_ALL | PyGLM_DT_FD);\
 	if (PyGLM_PTI_IsVec(0)) {\
@@ -316,7 +433,7 @@ NAME##_(PyObject*, PyObject* arg) {\
 	return NULL;\
 }
 #define PyGLM_MAKE_GLM_FUNC_NNN_VVV__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2, *arg3;\
 	PyGLM_Arg_Unpack_3O(args, #NAME, arg1, arg2, arg3);\
@@ -355,7 +472,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NNN_VVN__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2, *arg3;\
 	PyGLM_Arg_Unpack_3O(args, #NAME, arg1, arg2, arg3);\
@@ -393,7 +510,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_MM__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -458,7 +575,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_M__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	PyGLM_PTI_Init0(arg, PyGLM_T_MAT | PyGLM_SHAPE_ALL | PyGLM_DT_FD);\
 	if (PyGLM_Mat_PTI_Check0(2, 2, float, arg)) {\
@@ -520,7 +637,7 @@ NAME##_(PyObject*, PyObject* arg) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_M(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	PyGLM_PTI_Init0(arg, PyGLM_T_MAT | PyGLM_SHAPE_ALL | PyGLM_DT_ALL);\
 	if (PyGLM_Mat_PTI_Check0(2, 2, float, arg)) {\
@@ -636,7 +753,7 @@ NAME##_(PyObject*, PyObject* arg) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_S__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	PyGLM_PTI_Init0(arg, PyGLM_T_MAT | PyGLM_SHAPE_SQUARE | PyGLM_DT_FD);\
 	if (PyGLM_Mat_PTI_Check0(2, 2, float, arg)) {\
@@ -662,7 +779,7 @@ NAME##_(PyObject*, PyObject* arg) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_S_Q__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	PyGLM_PTI_Init0(arg, PyGLM_T_MAT | PyGLM_T_QUA | PyGLM_SHAPE_SQUARE | PyGLM_DT_FD);\
 	if (PyGLM_PTI_IsMat(0)) {\
@@ -696,13 +813,13 @@ NAME##_(PyObject*, PyObject* arg) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC__rF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject*) {\
 	return pack(glm::NAME<double>());\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_M3V2_M4V3__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -731,7 +848,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_M3N__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -749,7 +866,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_M4V3__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -772,7 +889,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NNNNNN__tf(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2, *arg3, *arg4, *arg5, *arg6;\
 	PyGLM_Arg_Unpack_6O(args, #NAME, arg1, arg2, arg3, arg4, arg5, arg6);\
@@ -784,7 +901,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NNNN__tf(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2, *arg3, *arg4;\
 	PyGLM_Arg_Unpack_4O(args, #NAME, arg1, arg2, arg3, arg4);\
@@ -796,7 +913,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NNN__tf(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2, *arg3;\
 	PyGLM_Arg_Unpack_3O(args, #NAME, arg1, arg2, arg3);\
@@ -808,7 +925,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_V3M4M4V4__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2, *arg3, *arg4;\
 	PyGLM_Arg_Unpack_4O(args, #NAME, arg1, arg2, arg3, arg4);\
@@ -833,7 +950,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_V3V3V3__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2, *arg3;\
 	PyGLM_Arg_Unpack_3O(args, #NAME, arg1, arg2, arg3);\
@@ -851,7 +968,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_V3V3__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -868,7 +985,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_V3_V3V3__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2 = NULL;\
 	if (!PyArg_UnpackTuple(args, #NAME, 1, 2, &arg1, &arg2)) return NULL;\
@@ -896,7 +1013,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_QQN__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2, *arg3;\
 	PyGLM_Arg_Unpack_3O(args, #NAME, arg1, arg2, arg3);\
@@ -913,7 +1030,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_Q(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	PyGLM_PTI_Init0(arg, PyGLM_T_QUA | PyGLM_DT_FD);\
 	if (PyGLM_Qua_PTI_Check0(float, arg)) {\
@@ -927,7 +1044,7 @@ NAME##_(PyObject*, PyObject* arg) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_M3_M4__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	PyGLM_PTI_Init0(arg, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);\
 	if (PyGLM_Mat_PTI_Check0(3, 3, float, arg)) {\
@@ -947,7 +1064,7 @@ NAME##_(PyObject*, PyObject* arg) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NN_VV(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -1093,7 +1210,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NN_VV__tGPL(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -1227,7 +1344,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NN_VV_QQ__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -1273,7 +1390,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* arg) {\
 	if (PyGLM_Number_Check(arg)) {\
 		return pack(glm::NAME(PyGLM_Number_FromPyObject<int64>(arg)));\
@@ -1332,7 +1449,7 @@ NAME##_(PyObject*, PyObject* arg) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NN_VV_VN__tiqsu(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -1442,7 +1559,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_NN_VV__tiqsu(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -1504,7 +1621,7 @@ NAME##_(PyObject*, PyObject* args) {\
 }
 
 #define PyGLM_MAKE_GLM_FUNC_VV_QQ(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\
@@ -1654,7 +1771,7 @@ NAME##_(PyObject*, PyObject* args) {\
 
 
 #define PyGLM_MAKE_GLM_FUNC_VV__tfF(NAME)\
-static PyObject*\
+PyObject*\
 NAME##_(PyObject*, PyObject* args) {\
 	PyObject *arg1, *arg2;\
 	PyGLM_Arg_Unpack_2O(args, #NAME, arg1, arg2);\

@@ -1,5 +1,14 @@
 #include "vec4.h"
 
+#include <structmember.h>
+
+#include <glm/detail/type_vec4.hpp>
+
+#include "../../vec.hpp"
+#include "../../vecIter.hpp"
+
+#include "../../PyGLMTypeObject.hpp"
+
 PyMemberDef hi64vec4_members[] = {
 	{ (char*)"x", T_LONGLONG, offsetof(vec4_int64_t, super_type.x), 0, (char*)"i64vec4.x" },
 	{ (char*)"y", T_LONGLONG, offsetof(vec4_int64_t, super_type.y), 0, (char*)"i64vec4.y" },

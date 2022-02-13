@@ -5,7 +5,7 @@
 #include "../../types/all.h"
 
 template<int C, int R, typename T>
-static PyTypeObject* PyGLM_MATITER_TYPE() {
+constexpr PyTypeObject* PyGLM_MATITER_TYPE() {
 	return (std::is_same<matIter<C, R, T>, matIter<2, 2, float> >::value) ? (PyTypeObject*)&hfmat2x2IterType :
 		(std::is_same<matIter<C, R, T>, matIter<2, 3, float> >::value) ? (PyTypeObject*)&hfmat2x3IterType :
 		(std::is_same<matIter<C, R, T>, matIter<2, 4, float> >::value) ? (PyTypeObject*)&hfmat2x4IterType :

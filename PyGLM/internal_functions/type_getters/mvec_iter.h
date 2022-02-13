@@ -5,7 +5,7 @@
 #include "../../types/all.h"
 
 template<int L, typename T>
-static PyTypeObject* PyGLM_MVECITER_TYPE() {
+constexpr PyTypeObject* PyGLM_MVECITER_TYPE() {
 	return (std::is_same<mvecIter<L, T>, mvecIter<2, float> >::value) ? (PyTypeObject*)&hfmvec2IterType:
 		(std::is_same<mvecIter<L, T>, mvecIter<3, float> >::value) ? (PyTypeObject*)&hfmvec3IterType:
 		(std::is_same<mvecIter<L, T>, mvecIter<4, float> >::value) ? (PyTypeObject*)&hfmvec4IterType:

@@ -8,6 +8,13 @@
 
 #include "../internal_functions/type_checkers.h"
 
+#include <glm/gtx/hash.hpp>
+
+#include "../types/glmArray.hpp"
+#include "../types/glmArrayIter.hpp"
+
+#include "../types/ctypes_helper.hpp"
+
 int glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags);
 
 void glmArray_releasebuffer(PyObject* self, Py_buffer* view);

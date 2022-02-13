@@ -6,6 +6,7 @@
 
 #include "../types/mat/all.h"
 
+#include <glm/gtc/quaternion.hpp>
 
 template<int C>
 PyObject* mat_length(PyObject *, PyObject*) {

@@ -3,6 +3,8 @@
 
 #include "warnings.h"
 
+#include <glm/common.hpp>
+
 PyObject* PyGLM_GetNumber(PyObject* arg) {
 	if (arg->ob_type->tp_as_number->nb_float != NULL) {
 		return PyNumber_Float(arg);

@@ -1,6 +1,10 @@
 #include "types.h"
 #include "vec/forward_declarations.h"
 
+#include "PyGLMTypeObject.hpp"
+
+#include "glmArray.hpp"
+
 PyGLMTypeObject PyGLMTypeStorage[
 	PyGLM_TYPE_STORAGE_VEC_LENGTH
   + PyGLM_TYPE_STORAGE_MVEC_LENGTH

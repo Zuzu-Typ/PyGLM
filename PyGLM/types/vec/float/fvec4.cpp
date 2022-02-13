@@ -1,5 +1,14 @@
 #include "vec4.h"
 
+#include <structmember.h>
+
+#include <glm/detail/type_vec4.hpp>
+
+#include "../../vec.hpp"
+#include "../../vecIter.hpp"
+
+#include "../../PyGLMTypeObject.hpp"
+
 PyMemberDef hfvec4_members[] = {
 	{ (char*)"x", T_FLOAT, offsetof(vec4_float_t, super_type.x), 0, (char*)"vec4.x" },
 	{ (char*)"y", T_FLOAT, offsetof(vec4_float_t, super_type.y), 0, (char*)"vec4.y" },

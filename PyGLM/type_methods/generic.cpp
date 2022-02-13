@@ -4,6 +4,8 @@
 
 #include "../internal_functions/helper_macros.h"
 
+#include "../types/PyGLMTypeObject.hpp"
+
 PyObject* generic_to_bytes(PyObject* self, PyObject*) {
 	PyGLMTypeObject* pto = (PyGLMTypeObject*)self->ob_type;
 	return PyBytes_FromStringAndSize(pto->getDataOf(self), pto->itemSize);

@@ -6,6 +6,8 @@
 
 #include "../../internal_functions/all.h"
 
+#include <glm/gtc/integer.hpp>
+
 static PyObject*
 iround_(PyObject*, PyObject* arg) {
 	if (PyGLM_Number_Check(arg)) {

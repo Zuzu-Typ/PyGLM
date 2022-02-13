@@ -2,6 +2,8 @@
 
 #include "../function_generator_macros.h"
 
+#include <glm/gtx/polar_coordinates.hpp>
+
 PyGLM_MAKE_GLM_FUNC_V3__tfF(polar)
 PyGLM_MAKE_GLM_FUNC_V2__tfF(euclidean)
 

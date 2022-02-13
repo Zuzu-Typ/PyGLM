@@ -6,6 +6,20 @@
 
 #include "PyGLM/imports.h"
 
+#include <glm/glm.hpp>
+
+#include "structmember.h"
+
+#include <cstdlib>
+#include <type_traits>
+#include <stdint.h>
+#include <clocale>
+#include <algorithm>
+#include <vector>
+
+#include "PyGLM/internal_functions/PTI.hpp"
+
+
 #include "PyGLM/compiler_setup.h"
 
 //TYPES
