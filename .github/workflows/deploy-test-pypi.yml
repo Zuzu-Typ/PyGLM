@@ -1,5 +1,7 @@
 name: Build and upload to Test-PyPI
 
+on: workflow_dispatch
+
 env:
   CIBW_BUILD: cp3*
   CIBW_TEST_REQUIRES: pytest
