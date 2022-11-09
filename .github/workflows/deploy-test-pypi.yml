@@ -1,0 +1,192 @@
+name: Build and upload to Test-PyPI
+
+on: workflow_dispatch
+
+env:
+  CIBW_BUILD: cp3*
+  CIBW_TEST_REQUIRES: pytest
+  CIBW_TEST_COMMAND: pytest {project}/test/PyGLM_test.py -v
+
+jobs:
+  build_wheels_windows:
+    name: Build wheels on Windows (${{ matrix.arch }})
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch: [AMD64, x86]
+        
+    env:
+      CIBW_ARCHS: ${{matrix.arch}}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+            submodules: recursive
+
+      - uses: actions/setup-python@v3
+        name: Install Python
+        with:
+          python-version: '3.11'
+
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==2.11.2
+
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./wheelhouse/*.whl
+          
+  build_wheels_mac:
+    name: Build wheels on MacOS (${{ matrix.arch }})
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        arch: [x86_64, arm64]
+        
+    env:
+      CIBW_ARCHS: ${{matrix.arch}}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+            submodules: recursive
+
+      - uses: actions/setup-python@v3
+        name: Install Python
+        with:
+          python-version: '3.11'
+
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==2.11.2
+
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./wheelhouse/*.whl
+          
+  build_wheels_manylinux:
+    name: Build wheels on ${{ matrix.distro }} for ${{ matrix.arch }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro: [manylinux2010, manylinux_2_24]
+        arch: [x86_64, i686]
+        include:
+          - distro: manylinux_2_24
+            arch: aarch64
+          - distro: manylinux_2_24
+            arch: s390x
+        
+    env:
+      CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.distro }}
+      CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.distro }}
+      CIBW_MANYLINUX_AARCH64_IMAGE: ${{ matrix.distro }}
+      CIBW_MANYLINUX_S390X_IMAGE: ${{ matrix.distro }}
+      CIBW_BUILD: cp3*-manylinux*
+      CIBW_ARCHS: ${{matrix.arch}}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+            submodules: recursive
+
+      - name: Set up QEMU
+        if: ${{ matrix.arch != 'x86_64' && matrix.arch != 'i686' }}
+        uses: docker/setup-qemu-action@v2
+
+      - uses: actions/setup-python@v3
+        name: Install Python
+        with:
+          python-version: '3.11'
+
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==2.11.2
+
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./wheelhouse/*.whl
+          
+  build_wheels_musllinux:
+    name: Build wheels on musllinux_1_1 for ${{ matrix.arch }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [x86_64, i686, aarch64, s390x]
+        
+    env:
+      CIBW_MUSLLINUX_X86_64_IMAGE: musllinux_1_1
+      CIBW_MUSLLINUX_I686_IMAGE: musllinux_1_1
+      CIBW_MUSLLINUX_AARCH64_IMAGE: musllinux_1_1
+      CIBW_MUSLLINUX_S390X_IMAGE: musllinux_1_1
+      CIBW_BUILD: cp3*-musllinux*
+      CIBW_ARCHS: ${{matrix.arch}}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+            submodules: recursive
+
+      - name: Set up QEMU
+        if: ${{ matrix.arch != 'x86_64' && matrix.arch != 'i686' }}
+        uses: docker/setup-qemu-action@v2
+
+      - uses: actions/setup-python@v3
+        name: Install Python
+        with:
+          python-version: '3.11'
+
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==2.11.2
+
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./wheelhouse/*.whl
+
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+            submodules: recursive
+
+      - uses: actions/setup-python@v3
+        name: Install Python
+        with:
+          python-version: '3.11'
+
+      - name: Build sdist
+        run: python setup.py sdist
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: dist/*.tar.gz
+
+  upload_pypi:
+    needs: [build_wheels_windows, build_wheels_mac, build_wheels_manylinux, build_wheels_musllinux, build_sdist]
+    runs-on: ubuntu-latest
+    
+    #if: github.event_name == 'release' && github.event.action == 'published'
+    
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@v1.5.1
+        with:
+          user: __token__
+          # password: ${{ secrets.pypi_password }}
+          password: ${{ secrets.testpypi_password }}
+          repository_url: https://test.pypi.org/legacy/
