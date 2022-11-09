@@ -32,7 +32,7 @@ glmArray_from_bytes(PyObject*, PyObject* args) {
 		if (PyGLM_Is_PyGLM_Type(typeObj)) {
 			PyGLMTypeObject* pto = (PyGLMTypeObject*)typeObj;
 
-			Py_ssize_t& nBytes = PyBytes_GET_SIZE(bytesObj);
+			const Py_ssize_t nBytes = PyBytes_GET_SIZE(bytesObj);
 
 			PyGLM_ASSERT((nBytes > 0 && nBytes % pto->itemSize == 0), "Invalid bytes string length");
 
@@ -2592,7 +2592,7 @@ glmArray_init(glmArray* self, PyObject* args, PyObject* kwds) {
 		return -1;
 	}
 	PyObject* firstElement = PyGLM_TupleOrList_GET_ITEM(args, 0);
-	PyTypeObject*& firstElementType = Py_TYPE(firstElement);
+	PyTypeObject* firstElementType = Py_TYPE(firstElement);
 
 	// PyGLM types
 	if (PyGLM_Is_PyGLM_Type(firstElementType)) {
