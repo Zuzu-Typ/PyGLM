@@ -91,14 +91,12 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages={},#find_packages(exclude=['contrib', 'docs', 'tests'],include=["*.h"]),
-
-##    package_data={
-##        "":["*.h"]
-##        },
 
     platforms = ["Windows", "Linux", "MacOS"],
-    
+
+    package_data={'glm-stubs': ['__init__.pyi']},
+    packages=['glm-stubs'],
+
     include_package_data=True,
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
