@@ -73,11 +73,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [manylinux2014, manylinux_2_28]
+        distro: [manylinux_2_24, manylinux_2_28]
         arch: [x86_64, aarch64, s390x]
         include:
-          - distro: manylinux2014
-            arch: i686
           - distro: manylinux_2_24
             arch: i686
         
