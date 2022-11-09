@@ -6,6 +6,7 @@ on:
     
 env:
   CIBW_BUILD: cp3*
+  CIBW_SKIP: cp36-*
   CIBW_TEST_REQUIRES: pytest
   CIBW_TEST_COMMAND: pytest {project}/test/PyGLM_test.py -v
 
