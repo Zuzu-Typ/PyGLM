@@ -1,9 +1,10 @@
 name: Build and upload to Test-PyPI
 
 on: workflow_dispatch
-
+    
 env:
   CIBW_BUILD: cp3*
+  CIBW_SKIP: cp36-*
   CIBW_TEST_REQUIRES: pytest
   CIBW_TEST_COMMAND: pytest {project}/test/PyGLM_test.py -v
 
@@ -73,13 +74,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [manylinux2010, manylinux_2_24]
-        arch: [x86_64, i686]
+        distro: [manylinux_2_24, manylinux_2_28]
+        arch: [x86_64, aarch64, s390x]
         include:
           - distro: manylinux_2_24
-            arch: aarch64
-          - distro: manylinux_2_24
-            arch: s390x
+            arch: i686
         
     env:
       CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.distro }}
