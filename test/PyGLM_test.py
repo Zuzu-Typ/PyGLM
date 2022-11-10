@@ -478,6 +478,27 @@ def test_specific():
     assert isinstance(glm.license, str)
 #/Specific #
 
+# Custom #
+def test_custom():
+    for vec_type in (glm.vec4, glm.dvec4):
+        v = vec_type(1, 2, 3, 4)
+        
+        q = glm.vec4_to_quat(v)
+
+        assert v.x == q.x
+        assert v.y == q.y
+        assert v.z == q.z
+        assert v.w == q.w
+
+        v = glm.quat_to_vec4(q)
+
+        assert v.x == q.x
+        assert v.y == q.y
+        assert v.z == q.z
+        assert v.w == q.w
+        
+#/Custom #
+
 # Initialization #
 ## vec1
 def test_vec1_types():

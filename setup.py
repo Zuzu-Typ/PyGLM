@@ -14,7 +14,7 @@ from setuptools import setup, find_packages, Extension
 from codecs import open
 from os import path
 
-import re
+import re, os, shutil
 
 module1 = Extension('glm',
                     sources = ['PyGLM.cpp'], include_dirs=["glm/"], extra_compile_args=['-std=c++11'])
@@ -28,6 +28,17 @@ with open(path.join(here, "version.h")) as f:
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
     long_description = long_description.replace("\r", "")
+
+# Update glm-stubs
+shutil.copy2("pyglm-typing/src/glm_typing/__init__.py", "glm-stubs/glm_typing.py")
+shutil.copy2("pyglm-typing/src/glm-stubs/__init__.py", "glm-stubs")
+with open(path.join(here, "pyglm-typing/src/glm-stubs/__init__.pyi"), encoding="utf-8") as f:
+    typing_data = f.read()
+
+    out_file = open(path.join(here, "glm-stubs/__init__.pyi"), "w", encoding="utf-8")
+    out_file.write(typing_data.replace("import glm_typing", "from . import glm_typing"))
+    out_file.close()
+    
 
 setup(
     name='PyGLM',
@@ -91,14 +102,12 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages={},#find_packages(exclude=['contrib', 'docs', 'tests'],include=["*.h"]),
-
-##    package_data={
-##        "":["*.h"]
-##        },
 
     platforms = ["Windows", "Linux", "MacOS"],
-    
+
+    package_data={'glm-stubs': ['__init__.pyi']},
+    packages=['glm-stubs'],
+
     include_package_data=True,
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment

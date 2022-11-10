@@ -141,6 +141,8 @@ static PyMethodDef glmmethods[] = {
 	TERNARY_METHODS,
 
 	// PyGLM functions
+	CUSTOM_METHODS,
+	
 	{ "silence", (PyCFunction)silence, METH_O, silence_docstr },
 	//{ "_get_type_info", (PyCFunction)_get_type_info, METH_VARARGS, "_get_type_info(accepted_types, object) -> None\nAn internal testing funtion to check wether or not the type checking works correctly." },
 #ifdef HAS_TEST

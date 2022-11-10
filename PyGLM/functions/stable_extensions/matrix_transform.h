@@ -312,6 +312,8 @@ scale_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check0(2, uint32, arg1)) {
 			return pack(glm::scale(glm::mat<3, 3, uint32>(1), PyGLM_Vec_PTI_Get0(2, uint32, arg1)));
 		}
+		PyGLM_TYPEERROR_O("invalid argument type(s) for scale(): ", arg1);
+		return NULL;
 	}
 	else {
 		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_SHAPE_4x4 | PyGLM_DT_NORMAL);
@@ -334,9 +336,9 @@ scale_(PyObject*, PyObject* args) {
 		if (PyGLM_Mat_PTI_Check0(3, 3, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
 			return pack(glm::scale(PyGLM_Mat_PTI_Get0(3, 3, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2)));
 		}
+		PyGLM_TYPEERROR_2O("invalid argument type(s) for scale(): ", arg1, arg2);
+		return NULL;
 	}
-	PyGLM_TYPEERROR_2O("invalid argument type(s) for scale(): ", arg1, arg2);
-	return NULL;
 }
 
 PyGLM_MAKE_GLM_FUNC_M4V3__tfF(scale_slow)

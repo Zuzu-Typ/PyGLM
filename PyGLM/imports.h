@@ -16,6 +16,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
 #define GLM_FORCE_QUAT_DATA_WXYZ
+#define GLM_LANG_STL11_FORCED
 
 #include <glm/glm.hpp>
 

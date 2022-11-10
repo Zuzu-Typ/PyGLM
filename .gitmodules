@@ -2,3 +2,6 @@
 	path = glm
 	url = https://github.com/Zuzu-Typ/glm
 	branch = PyGLM
+[submodule "pyglm-typing"]
+	path = pyglm-typing
+	url = https://github.com/esoma/pyglm-typing
