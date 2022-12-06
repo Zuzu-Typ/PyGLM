@@ -39,10 +39,3 @@
 
 #define PyGLM_INCREF(ob) (Py_INCREF(ob), ob)
 #define PyGLM_DECREF(ob) (Py_DECREF(ob), ob)
-
-static char* PyGLM_String_AsString(PyObject* name) {
-	PyObject* asciiString = PyUnicode_AsASCIIString(name);
-	char* out = PyBytes_AsString(asciiString);
-	Py_DECREF(asciiString);
-	return out;
-}
