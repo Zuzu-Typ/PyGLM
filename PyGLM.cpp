@@ -153,8 +153,6 @@ static PyMethodDef glmmethods[] = {
 
 #endif
 
-static PyObject* glm_typing_module = NULL;
-
 static void glm_clear(PyObject*) {
 #if !(PyGLM_NO_FUNCTIONS & PyGLM_BUILD)
 	Py_XDECREF(ctypes_float_p);
@@ -173,7 +171,6 @@ static void glm_clear(PyObject*) {
 	Py_XDECREF(ctypes_void_p);
 	Py_XDECREF(PyGLM_VERSION_STRING);
 	Py_XDECREF(PyGLM_LICENSE_STRING);
-	Py_XDECREF(glm_typing_module);
 #if !(PyGLM_NO_ITER_TYPECHECKING & PyGLM_BUILD)
 	PTI0 = PyGLMTypeInfo();
 	PTI1 = PyGLMTypeInfo();
@@ -208,7 +205,7 @@ extern "C" {
 		PyObject* ctypes_module = PyImport_ImportModuleEx("ctypes", maindict, maindict, ctypes_list);
 		Py_DECREF(ctypes_list);
 		
-		glm_typing_module = PyImport_ImportModule("glm-stubs.glm_typing");
+		PyObject* glm_typing_module = PyImport_ImportModule("glm-stubs.glm_typing");
 
 		// Don't need to DECREF these, because they're added to glm
 		ctypes_float = PyObject_GetAttrString(ctypes_module, "c_float");
@@ -864,6 +861,7 @@ extern "C" {
 		Py_INCREF(PyGLM_LICENSE_STRING);
 		PyModule_AddObject(module_glm, "license", PyGLM_LICENSE_STRING);
 		
+		Py_INCREF(glm_typing_module);
 		PyModule_AddObject(module_glm, "glm_typing", glm_typing_module);
 
 		return module_glm;
