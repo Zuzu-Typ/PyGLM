@@ -206,6 +206,7 @@ extern "C" {
 		Py_DECREF(ctypes_list);
 		
 		PyObject* glm_typing_module = PyImport_ImportModule("glm-stubs.glm_typing");
+		Py_XDECREF(glm_typing_module);
 
 		// Don't need to DECREF these, because they're added to glm
 		ctypes_float = PyObject_GetAttrString(ctypes_module, "c_float");
@@ -860,9 +861,6 @@ extern "C" {
 		PyGLM_LICENSE_STRING = PyUnicode_FromString(PyGLM_LICENSE);
 		Py_INCREF(PyGLM_LICENSE_STRING);
 		PyModule_AddObject(module_glm, "license", PyGLM_LICENSE_STRING);
-		
-		Py_INCREF(glm_typing_module);
-		PyModule_AddObject(module_glm, "glm_typing", glm_typing_module);
 
 		return module_glm;
 	}
