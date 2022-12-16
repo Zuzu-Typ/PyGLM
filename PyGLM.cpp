@@ -206,7 +206,7 @@ extern "C" {
 		Py_DECREF(ctypes_list);
 		
 		PyObject* glm_typing_module = PyImport_ImportModule("glm-stubs.glm_typing");
-		Py_XDECREF(glm_typing_module);
+		Py_INCREF(glm_typing_module);
 
 		// Don't need to DECREF these, because they're added to glm
 		ctypes_float = PyObject_GetAttrString(ctypes_module, "c_float");
