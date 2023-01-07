@@ -11,6 +11,8 @@
 #include "helper_macros.h"
 #include "number_functions.h"
 
+#include <climits>
+
 #define PyGLM_SHAPE_GET(C, R) (1 << (11 + (3 * (C-2) + (R-2))))
 
 #define PyGLM_TYPE_GET(T) (PyGLMTypeInfo::getDT<T>())
@@ -26,6 +28,67 @@
 #define _SUB_PyGLM_PTI_GET_TYPE(o) ((o->ob_type->tp_dealloc == (destructor)vec_dealloc) ? PyGLM_T_VEC : (o->ob_type->tp_dealloc == (destructor)mat_dealloc) ? PyGLM_T_MAT : (o->ob_type->tp_dealloc == (destructor)qua_dealloc) ? PyGLM_T_QUA : (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) ? PyGLM_T_MVEC : PyGLM_UNKNOWN)
 #define PyGLM_PTI_GET_TYPE(o) _SUB_PyGLM_PTI_GET_TYPE(((PyObject*)o))
 
+#define _INT8_MAX 127
+#define _INT16_MAX 32767
+#define _INT32_MAX 2147483647L
+#define _INT64_MAX 9223372036854775807LL
+
+#if SHRT_MAX == _INT16_MAX
+#  if INT_MAX == _INT16_MAX
+#    define _PyGLM_FORMAT_CHAR_CASES_INT16 case 'h': case 'i':
+#    define _PyGLM_FORMAT_CHAR_CASES_UINT16 case 'H': case 'I':
+#  else
+#    define _PyGLM_FORMAT_CHAR_CASES_INT16 case 'h':
+#    define _PyGLM_FORMAT_CHAR_CASES_UINT16 case 'H':
+#  endif
+#else
+#  define _PyGLM_FORMAT_CHAR_CASES_INT16 '\0'
+#  define _PyGLM_FORMAT_CHAR_CASES_UINT16 '\1'
+#endif
+
+#if SHRT_MAX == _INT32_MAX
+#  if INT_MAX == _INT32_MAX
+#    if LONG_MAX == _INT32_MAX
+#      define _PyGLM_FORMAT_CHAR_CASES_INT32 case 'h': case 'i': case 'l':
+#      define _PyGLM_FORMAT_CHAR_CASES_UINT32 case 'H': case 'I': case 'L':
+#    else
+#      define _PyGLM_FORMAT_CHAR_CASES_UINT32 case 'H': case 'I':
+#      define _PyGLM_FORMAT_CHAR_CASES_INT32 case 'h': case 'i': 
+#    endif
+#  else
+#    define _PyGLM_FORMAT_CHAR_CASES_INT32 case 'h':
+#    define _PyGLM_FORMAT_CHAR_CASES_UINT32 case 'H':
+#  endif
+#else
+#  if INT_MAX == _INT32_MAX
+#    if LONG_MAX == _INT32_MAX
+#      define _PyGLM_FORMAT_CHAR_CASES_INT32 case 'i': case 'l':
+#      define _PyGLM_FORMAT_CHAR_CASES_UINT32 case 'I': case 'L':
+#    else
+#      define _PyGLM_FORMAT_CHAR_CASES_INT32 case 'i':
+#      define _PyGLM_FORMAT_CHAR_CASES_UINT32 case 'I':
+#    endif
+#  else
+#    if LONG_MAX == _INT32_MAX
+#      define _PyGLM_FORMAT_CHAR_CASES_INT32 case 'l':
+#      define _PyGLM_FORMAT_CHAR_CASES_UINT32 case 'L':
+#    else
+#      define _PyGLM_FORMAT_CHAR_CASES_INT32 case '\2':
+#      define _PyGLM_FORMAT_CHAR_CASES_UINT32 case '\3':
+#    endif
+#  endif
+#endif
+
+#if INT_MAX == _INT64_MAX
+#  define _PyGLM_FORMAT_CHAR_CASES_INT64 case 'i': case 'l': case 'q':
+#  define _PyGLM_FORMAT_CHAR_CASES_UINT64 case 'I': case 'L': case 'Q':
+#elif LONG_MAX == _INT64_MAX
+#  define _PyGLM_FORMAT_CHAR_CASES_INT64 case 'l': case 'q':
+#  define _PyGLM_FORMAT_CHAR_CASES_UINT64 case 'L': case 'Q':
+#else
+#  define _PyGLM_FORMAT_CHAR_CASES_INT64 case 'q':
+#  define _PyGLM_FORMAT_CHAR_CASES_UINT64 case 'Q':
+#endif
 // necessary forward declarations
 template<int L, typename T>
 static glm::vec<L, T> unpack_vec(PyObject* value);
@@ -473,44 +536,42 @@ struct PyGLMTypeInfo {
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT8);
 						break;
-					case 'h':
+					_PyGLM_FORMAT_CHAR_CASES_INT16
 						if (!(accepted_types & PyGLM_DT_INT16)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT16);
 						break;
-					case 'H':
+					_PyGLM_FORMAT_CHAR_CASES_UINT16
 						if (!(accepted_types & PyGLM_DT_UINT16)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT16);
 						break;
-					case 'l':
-					case 'i':
+					_PyGLM_FORMAT_CHAR_CASES_INT32
 						if (!(accepted_types & PyGLM_DT_INT)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT);
 						break;
-					case 'L':
-					case 'I':
+					_PyGLM_FORMAT_CHAR_CASES_UINT32
 						if (!(accepted_types & PyGLM_DT_UINT)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_UINT);
 						break;
-					case 'q':
+					_PyGLM_FORMAT_CHAR_CASES_INT64
 						if (!(accepted_types & PyGLM_DT_INT64)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_1 | PyGLM_DT_INT64);
 						break;
-					case 'Q':
+					_PyGLM_FORMAT_CHAR_CASES_UINT64
 						if (!(accepted_types & PyGLM_DT_UINT64)) {
 							PyBuffer_Release(&view);
 							return;
@@ -563,44 +624,44 @@ struct PyGLMTypeInfo {
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT8);
 						break;
-					case 'h':
+					_PyGLM_FORMAT_CHAR_CASES_INT16
 						if (!(accepted_types & PyGLM_DT_INT16)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT16);
 						break;
-					case 'H':
+					_PyGLM_FORMAT_CHAR_CASES_UINT16
 						if (!(accepted_types & PyGLM_DT_UINT16)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT16);
 						break;
-					case 'l':
-					case 'i':
+					
+					_PyGLM_FORMAT_CHAR_CASES_INT32
 						if (!(accepted_types & PyGLM_DT_INT)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT);
 						break;
-					case 'L':
-					case 'I':
+					
+					_PyGLM_FORMAT_CHAR_CASES_UINT32
 						if (!(accepted_types & PyGLM_DT_UINT)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT);
 						break;
-					case 'q':
+					_PyGLM_FORMAT_CHAR_CASES_INT64
 						if (!(accepted_types & PyGLM_DT_INT64)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_INT64);
 						break;
-					case 'Q':
+					_PyGLM_FORMAT_CHAR_CASES_UINT64
 						if (!(accepted_types & PyGLM_DT_UINT64)) {
 							PyBuffer_Release(&view);
 							return;
@@ -653,44 +714,44 @@ struct PyGLMTypeInfo {
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT8);
 						break;
-					case 'h':
+					_PyGLM_FORMAT_CHAR_CASES_INT16
 						if (!(accepted_types & PyGLM_DT_INT16)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT16);
 						break;
-					case 'H':
+					_PyGLM_FORMAT_CHAR_CASES_UINT16
 						if (!(accepted_types & PyGLM_DT_UINT16)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT16);
 						break;
-					case 'l':
-					case 'i':
+					
+					_PyGLM_FORMAT_CHAR_CASES_INT32
 						if (!(accepted_types & PyGLM_DT_INT)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT);
 						break;
-					case 'L':
-					case 'I':
+					
+					_PyGLM_FORMAT_CHAR_CASES_UINT32
 						if (!(accepted_types & PyGLM_DT_UINT)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_UINT);
 						break;
-					case 'q':
+					_PyGLM_FORMAT_CHAR_CASES_INT64
 						if (!(accepted_types & PyGLM_DT_INT64)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_INT64);
 						break;
-					case 'Q':
+					_PyGLM_FORMAT_CHAR_CASES_UINT64
 						if (!(accepted_types & PyGLM_DT_UINT64)) {
 							PyBuffer_Release(&view);
 							return;
@@ -749,44 +810,44 @@ struct PyGLMTypeInfo {
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT8);
 						break;
-					case 'h':
+					_PyGLM_FORMAT_CHAR_CASES_INT16
 						if (!(accepted_types & PyGLM_DT_INT16)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT16);
 						break;
-					case 'H':
+					_PyGLM_FORMAT_CHAR_CASES_UINT16
 						if (!(accepted_types & PyGLM_DT_UINT16)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT16);
 						break;
-					case 'l':
-					case 'i':
+					
+					_PyGLM_FORMAT_CHAR_CASES_INT32
 						if (!(accepted_types & PyGLM_DT_INT)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT);
 						break;
-					case 'L':
-					case 'I':
+					
+					_PyGLM_FORMAT_CHAR_CASES_UINT32
 						if (!(accepted_types & PyGLM_DT_UINT)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_UINT);
 						break;
-					case 'q':
+					_PyGLM_FORMAT_CHAR_CASES_INT64
 						if (!(accepted_types & PyGLM_DT_INT64)) {
 							PyBuffer_Release(&view);
 							return;
 						}
 						setInfo(PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_INT64);
 						break;
-					case 'Q':
+					_PyGLM_FORMAT_CHAR_CASES_UINT64
 						if (!(accepted_types & PyGLM_DT_UINT64)) {
 							PyBuffer_Release(&view);
 							return;
@@ -842,16 +903,16 @@ struct PyGLMTypeInfo {
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_DOUBLE);
 							break;
-						case 'l':
-						case 'i':
+						
+						_PyGLM_FORMAT_CHAR_CASES_INT32
 							if (!(accepted_types & PyGLM_DT_INT)) {
 								PyBuffer_Release(&view);
 								return;
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x2 | PyGLM_DT_INT);
 							break;
-						case 'L':
-						case 'I':
+						
+						_PyGLM_FORMAT_CHAR_CASES_UINT32
 							if (!(accepted_types & PyGLM_DT_UINT)) {
 								PyBuffer_Release(&view);
 								return;
@@ -883,16 +944,16 @@ struct PyGLMTypeInfo {
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_DOUBLE);
 							break;
-						case 'l':
-						case 'i':
+						
+						_PyGLM_FORMAT_CHAR_CASES_INT32
 							if (!(accepted_types & PyGLM_DT_INT)) {
 								PyBuffer_Release(&view);
 								return;
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x3 | PyGLM_DT_INT);
 							break;
-						case 'L':
-						case 'I':
+						
+						_PyGLM_FORMAT_CHAR_CASES_UINT32
 							if (!(accepted_types & PyGLM_DT_UINT)) {
 								PyBuffer_Release(&view);
 								return;
@@ -924,16 +985,16 @@ struct PyGLMTypeInfo {
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_DOUBLE);
 							break;
-						case 'l':
-						case 'i':
+						
+						_PyGLM_FORMAT_CHAR_CASES_INT32
 							if (!(accepted_types & PyGLM_DT_INT)) {
 								PyBuffer_Release(&view);
 								return;
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_2x4 | PyGLM_DT_INT);
 							break;
-						case 'L':
-						case 'I':
+						
+						_PyGLM_FORMAT_CHAR_CASES_UINT32
 							if (!(accepted_types & PyGLM_DT_UINT)) {
 								PyBuffer_Release(&view);
 								return;
@@ -976,16 +1037,16 @@ struct PyGLMTypeInfo {
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_DOUBLE);
 							break;
-						case 'l':
-						case 'i':
+						
+						_PyGLM_FORMAT_CHAR_CASES_INT32
 							if (!(accepted_types & PyGLM_DT_INT)) {
 								PyBuffer_Release(&view);
 								return;
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x2 | PyGLM_DT_INT);
 							break;
-						case 'L':
-						case 'I':
+						
+						_PyGLM_FORMAT_CHAR_CASES_UINT32
 							if (!(accepted_types & PyGLM_DT_UINT)) {
 								PyBuffer_Release(&view);
 								return;
@@ -1017,16 +1078,16 @@ struct PyGLMTypeInfo {
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_DOUBLE);
 							break;
-						case 'l':
-						case 'i':
+						
+						_PyGLM_FORMAT_CHAR_CASES_INT32
 							if (!(accepted_types & PyGLM_DT_INT)) {
 								PyBuffer_Release(&view);
 								return;
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_DT_INT);
 							break;
-						case 'L':
-						case 'I':
+						
+						_PyGLM_FORMAT_CHAR_CASES_UINT32
 							if (!(accepted_types & PyGLM_DT_UINT)) {
 								PyBuffer_Release(&view);
 								return;
@@ -1058,16 +1119,16 @@ struct PyGLMTypeInfo {
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_DOUBLE);
 							break;
-						case 'l':
-						case 'i':
+						
+						_PyGLM_FORMAT_CHAR_CASES_INT32
 							if (!(accepted_types & PyGLM_DT_INT)) {
 								PyBuffer_Release(&view);
 								return;
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_3x4 | PyGLM_DT_INT);
 							break;
-						case 'L':
-						case 'I':
+						
+						_PyGLM_FORMAT_CHAR_CASES_UINT32
 							if (!(accepted_types & PyGLM_DT_UINT)) {
 								PyBuffer_Release(&view);
 								return;
@@ -1110,16 +1171,16 @@ struct PyGLMTypeInfo {
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_DOUBLE);
 							break;
-						case 'l':
-						case 'i':
+						
+						_PyGLM_FORMAT_CHAR_CASES_INT32
 							if (!(accepted_types & PyGLM_DT_INT)) {
 								PyBuffer_Release(&view);
 								return;
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x2 | PyGLM_DT_INT);
 							break;
-						case 'L':
-						case 'I':
+						
+						_PyGLM_FORMAT_CHAR_CASES_UINT32
 							if (!(accepted_types & PyGLM_DT_UINT)) {
 								PyBuffer_Release(&view);
 								return;
@@ -1151,16 +1212,16 @@ struct PyGLMTypeInfo {
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_DOUBLE);
 							break;
-						case 'l':
-						case 'i':
+						
+						_PyGLM_FORMAT_CHAR_CASES_INT32
 							if (!(accepted_types & PyGLM_DT_INT)) {
 								PyBuffer_Release(&view);
 								return;
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x3 | PyGLM_DT_INT);
 							break;
-						case 'L':
-						case 'I':
+						
+						_PyGLM_FORMAT_CHAR_CASES_UINT32
 							if (!(accepted_types & PyGLM_DT_UINT)) {
 								PyBuffer_Release(&view);
 								return;
@@ -1192,16 +1253,16 @@ struct PyGLMTypeInfo {
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_DOUBLE);
 							break;
-						case 'l':
-						case 'i':
+						
+						_PyGLM_FORMAT_CHAR_CASES_INT32
 							if (!(accepted_types & PyGLM_DT_INT)) {
 								PyBuffer_Release(&view);
 								return;
 							}
 							setInfo(PyGLM_T_MAT | PyGLM_SHAPE_4x4 | PyGLM_DT_INT);
 							break;
-						case 'L':
-						case 'I':
+						
+						_PyGLM_FORMAT_CHAR_CASES_UINT32
 							if (!(accepted_types & PyGLM_DT_UINT)) {
 								PyBuffer_Release(&view);
 								return;
