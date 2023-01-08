@@ -42,7 +42,7 @@ static bool is_big_endian(void)
     return num.c[0] == 1;
 }
 
-static constexpr _FormatType getFormatFromSize(int size, bool isSigned) {
+static _FormatType getFormatFromSize(int size, bool isSigned) {
 	switch(size) {
 		case 1:
 			if (isSigned)
