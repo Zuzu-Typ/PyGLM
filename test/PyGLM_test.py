@@ -1,4 +1,4 @@
-import glm, sys, random, time, copy, re, math
+import glm, sys, random, time, copy, re, math, ctypes
 
 from collections import OrderedDict
 
@@ -1167,6 +1167,24 @@ def test_buffer_protocol():
     arr = glm.array(glm.mat4(), glm.mat4(2))
     mv = memoryview(arr)
     assert glm.array(mv) == arr, arr
+
+    for T in (ctypes.c_float, 
+            ctypes.c_double, 
+            ctypes.c_char, 
+            ctypes.c_byte, 
+            ctypes.c_ubyte,
+            ctypes.c_short,
+            ctypes.c_ushort,
+            ctypes.c_int,
+            ctypes.c_uint,
+            ctypes.c_long,
+            ctypes.c_ulong,
+            ctypes.c_longlong,
+            ctypes.c_ulonglong,
+            ctypes.c_size_t,
+            ctypes.c_ssize_t,
+            ctypes.c_void_p):
+        assert glm.vec1((T*1)()) == glm.vec1()
 #/buffer protocol #
 
 # lists and tuples #
