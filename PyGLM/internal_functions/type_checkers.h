@@ -32,7 +32,7 @@ enum class _FormatType {
 	FLOAT, DOUBLE, INT8, UINT8, INT16, UINT16, INT32, UINT32, INT64, UINT64, BOOL, NONE
 };
 
-static constexpr bool is_big_endian(void)
+static bool is_big_endian(void)
 {
     union {
         uint32_t i;
@@ -68,7 +68,7 @@ static _FormatType getFormatType(char* format) {
 	if (format == NULL) {
 		return _FormatType::UINT8;
 	}
-	if (format[0] == '=' || is_big_endian() && format[0] == '>' || !is_big_endian() && format[0] == '<') {
+	if (format[0] == '=' || is_big_endian() && format[0] == '>' || !is_big_endian() && format[0] == '<' || is_big_endian() && format[0] == '!') {
 		switch(format[1]) {
 			case 'b':
 				return _FormatType::INT8;
@@ -104,7 +104,7 @@ static _FormatType getFormatType(char* format) {
 
 		}
 	}
-	if (!is_big_endian() && format[0] == '>' || is_big_endian() && format[0] == '<') {
+	if (!is_big_endian() && format[0] == '>' || is_big_endian() && format[0] == '<' || !is_big_endian() && format[0] == '!') {
 		return _FormatType::NONE;
 	}
 
