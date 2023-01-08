@@ -1799,7 +1799,7 @@ static T& unswizzle2_vec(vec<4, T> * self, char c, bool& success) {
 
 template<int L, typename T>
 static PyObject * vec_getattr(PyObject * obj, PyObject * name) {
-	ssize_t len;
+	Py_ssize_t len;
 	char* name_as_ccp;
 	PyObject* asciiString = PyUnicode_AsASCIIString(name);
 	if (asciiString == NULL)
