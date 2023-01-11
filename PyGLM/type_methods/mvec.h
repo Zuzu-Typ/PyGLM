@@ -6,6 +6,8 @@
 
 #include "../types/mvec/all.h"
 
+#include "vec.h"
+
 static void
 mvec_dealloc(PyObject* self)
 {
@@ -220,6 +222,49 @@ mvec_div(PyObject *obj1, PyObject *obj2)
 
 	// obj1 and obj2 can be interpreted as a mvec
 	return  pack_vec<L, T>(o / o2);
+}
+
+template<int L, typename T>
+static PyObject *
+imvec_floordiv(PyObject *obj1, PyObject *obj2)
+{
+	if (PyGLM_Number_Check(obj1)) { // obj1 is a scalar, obj2 is self
+		PyObject* temp = pack_vec(glm::vec<L, T>(PyGLM_Number_FromPyObject<T>(obj1)));
+		PyObject* result = imvec_floordiv<L, T>(temp, obj2);
+		Py_DECREF(temp);
+		return result;
+	}
+
+	if (PyGLM_Number_Check(obj2)) { // obj2 is a scalar, obj1 is self
+		PyObject* temp = pack_vec(glm::vec<L, T>(PyGLM_Number_FromPyObject<T>(obj2)));
+		PyObject* result = imvec_floordiv<L, T>(obj1, temp);
+		Py_DECREF(temp);
+		return result;
+	}
+
+	PyGLM_PTI_Init0(obj1, (get_vec_PTI_info<L, T>()));
+
+	if (PyGLM_PTI_IsNone(0)) { // obj1 is not supported.
+		PyGLM_TYPEERROR_O("unsupported operand type(s) for /: 'glm.vec' and ", obj1);
+		return NULL;
+	}
+
+	glm::vec<L, T> o = PyGLM_Vec_PTI_Get0(L, T, obj1);
+
+	PyGLM_PTI_Init1(obj2, (get_vec_PTI_info<L, T>()));
+
+	if (PyGLM_PTI_IsNone(1)) { // obj1 is self, obj2 is something else
+		Py_RETURN_NOTIMPLEMENTED;
+	}
+
+	glm::vec<L, T> o2 = PyGLM_Vec_PTI_Get1(L, T, obj2);
+
+	if (!glm::all((glm::vec<L, bool>)o2)) {
+		PyGLM_ZERO_DIVISION_ERROR_T(T);
+	}
+
+	// obj1 and obj2 can be interpreted as a mvec
+	return  pack_vec<L, T>(ivec_floordivmod(o, o2));
 }
 
 template<int L, typename T>
@@ -673,6 +718,21 @@ static PyObject *
 mvec_ifloordiv(mvec<L, T> *self, PyObject *obj)
 {
 	vec<L, T> * temp = (vec<L, T>*)mvec_floordiv<L, T>((PyObject*)self, obj);
+
+	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
+
+	*self->super_type = temp->super_type;
+
+	Py_DECREF(temp);
+	Py_INCREF(self);
+	return (PyObject*)self;
+}
+
+template<int L, typename T>
+static PyObject *
+imvec_ifloordiv(mvec<L, T> *self, PyObject *obj)
+{
+	vec<L, T> * temp = (vec<L, T>*)imvec_floordiv<L, T>((PyObject*)self, obj);
 
 	if (Py_IS_NOTIMPLEMENTED(temp)) return (PyObject*)temp;
 

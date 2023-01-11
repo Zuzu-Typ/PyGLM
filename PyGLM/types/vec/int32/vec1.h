@@ -65,9 +65,9 @@ static PyNumberMethods hivec1NumMethods = {
 	(binaryfunc)vec_iand<1, glm::i32>, //nb_inplace_and
 	(binaryfunc)vec_ixor<1, glm::i32>, //nb_inplace_xor
 	(binaryfunc)vec_ior<1, glm::i32>, //nb_inplace_or
-	0, //nb_floor_divide
+	(binaryfunc)ivec_floordiv<1, glm::i32>, //nb_floor_divide
 	(binaryfunc)vec_div<1, glm::i32>,
-	0, //nb_inplace_floor_divide
+	(binaryfunc)ivec_ifloordiv<1, glm::i32>, //nb_inplace_floor_divide
 	(binaryfunc)vec_idiv<1, glm::i32>, //nb_inplace_true_divide
 	0, //nb_index
 	(binaryfunc)vec_matmul, //nb_matrix_multiply

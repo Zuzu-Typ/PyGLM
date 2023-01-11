@@ -154,10 +154,16 @@ template<int L, typename T>
 static PyObject * vec_floordiv(PyObject *obj1, PyObject *obj2);
 
 template<int L, typename T>
+static PyObject * ivec_floordiv(PyObject *obj1, PyObject *obj2);
+
+template<int L, typename T>
 static PyObject * vec_div(PyObject *obj1, PyObject *obj2);
 
 template<int L, typename T>
 static PyObject * vec_ifloordiv(vec<L, T>* self, PyObject *obj);
+
+template<int L, typename T>
+static PyObject * ivec_ifloordiv(vec<L, T> *self, PyObject *obj);
 
 template<int L, typename T>
 static PyObject * vec_idiv(vec<L, T>* self, PyObject *obj);

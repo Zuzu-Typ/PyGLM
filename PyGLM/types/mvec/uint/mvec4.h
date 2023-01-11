@@ -60,9 +60,9 @@ static PyNumberMethods humvec4NumMethods = {
 	(binaryfunc)mvec_iand<4, glm::u32>, //nb_inplace_and
 	(binaryfunc)mvec_ixor<4, glm::u32>, //nb_inplace_xor
 	(binaryfunc)mvec_ior<4, glm::u32>, //nb_inplace_or
-	0, //nb_floor_divide
+	(binaryfunc)mvec_div<4, glm::u32>, //nb_floor_divide
 	(binaryfunc)mvec_div<4, glm::u32>,
-	0, //nb_inplace_floor_divide
+	(binaryfunc)mvec_idiv<4, glm::u32>, //nb_inplace_floor_divide
 	(binaryfunc)mvec_idiv<4, glm::u32>, //nb_inplace_true_divide
 	0, //nb_index
 	(binaryfunc)mvec_matmul, //nb_matrix_multiply

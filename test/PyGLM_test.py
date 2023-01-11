@@ -780,6 +780,36 @@ def test_div():
             pass
 #/div #
 
+# floordiv #
+def test_int_floordiv():
+    for obj in gen_obj("#MV__iqsuIQSU"):
+        fassert(obj.__floordiv__, (1,))
+        fassert(obj.__floordiv__, (obj * 0 + 1,))
+
+    for obj in gen_obj("V__iqsuIQSU"):
+        fassert(obj.__floordiv__, (type(obj)(1),))
+
+    for obj in gen_obj("V__iqsuIQSU"):
+        try:
+            obj.__floordiv__(type(obj)(0))
+            fail(obj)
+        except ZeroDivisionError:
+            pass
+    for obj in gen_obj("P__iI"):
+        try:
+            obj.__floordiv__(obj)
+            fail(obj)
+        except ZeroDivisionError:
+            pass
+
+    for obj in gen_obj("#MV__iqsuIQSU"):
+        try:
+            obj.__floordiv__(0)
+            fail(obj)
+        except ZeroDivisionError:
+            pass
+#/floordiv #
+
 # mod #
 def test_mod():
     for obj in gen_obj("#MV__fF"):
@@ -819,21 +849,21 @@ def test_rshift():
 
 # and #
 def test_and():
-    for obj in gen_obj("#MV__iqsuIQSU"):
+    for obj in gen_obj("#MV__iqsuIQSUB"):
         fassert(obj.__and__, (1,))
         fassert(obj.__and__, (obj,))
 #/and #
 
 # or #
 def test_or():
-    for obj in gen_obj("#MV__iqsuIQSU"):
+    for obj in gen_obj("#MV__iqsuIQSUB"):
         fassert(obj.__or__, (1,))
         fassert(obj.__or__, (obj,))
 #/or #
 
 # xor #
 def test_xor():
-    for obj in gen_obj("#MV__iqsuIQSU"):
+    for obj in gen_obj("#MV__iqsuIQSUB"):
         fassert(obj.__xor__, (1,))
         fassert(obj.__xor__, (obj,))
 #/xor #
@@ -898,7 +928,7 @@ def test_imod():
 
 # ifloordiv #
 def test_ifloordiv():
-    for obj in gen_obj("#MV__fF"):
+    for obj in gen_obj("#MV__fFiqsuIQSU"):
         fassert(obj.__ifloordiv__, (1,))
 #/ifloordiv #
 

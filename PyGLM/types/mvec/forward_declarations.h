@@ -123,7 +123,13 @@ template<int L, typename T>
 static PyObject * mvec_div(PyObject *obj1, PyObject *obj2);
 
 template<int L, typename T>
+static PyObject* imvec_floordiv(PyObject* obj1, PyObject* obj2);
+
+template<int L, typename T>
 static PyObject * mvec_ifloordiv(mvec<L, T>* self, PyObject *obj);
+
+template<int L, typename T>
+static PyObject* imvec_ifloordiv(mvec<L, T>* self, PyObject* obj);
 
 template<int L, typename T>
 static PyObject * mvec_idiv(mvec<L, T>* self, PyObject *obj);

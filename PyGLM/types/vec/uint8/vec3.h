@@ -67,9 +67,9 @@ static PyNumberMethods hu8vec3NumMethods = {
 	(binaryfunc)vec_iand<3, glm::u8>, //nb_inplace_and
 	(binaryfunc)vec_ixor<3, glm::u8>, //nb_inplace_xor
 	(binaryfunc)vec_ior<3, glm::u8>, //nb_inplace_or
-	0, //nb_floor_divide
+	(binaryfunc)vec_div<3, glm::u8>, //nb_floor_divide
 	(binaryfunc)vec_div<3, glm::u8>,
-	0, //nb_inplace_floor_divide
+	(binaryfunc)vec_idiv<3, glm::u8>, //nb_inplace_floor_divide
 	(binaryfunc)vec_idiv<3, glm::u8>, //nb_inplace_true_divide
 	0, //nb_index
 	(binaryfunc)vec_matmul, //nb_matrix_multiply
