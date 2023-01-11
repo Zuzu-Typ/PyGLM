@@ -60,9 +60,9 @@ static PyNumberMethods himvec3NumMethods = {
 	(binaryfunc)mvec_iand<3, glm::i32>, //nb_inplace_and
 	(binaryfunc)mvec_ixor<3, glm::i32>, //nb_inplace_xor
 	(binaryfunc)mvec_ior<3, glm::i32>, //nb_inplace_or
-	0, //nb_floor_divide
+	(binaryfunc)imvec_floordiv<3, glm::i32>, //nb_floor_divide
 	(binaryfunc)mvec_div<3, glm::i32>,
-	0, //nb_inplace_floor_divide
+	(binaryfunc)imvec_ifloordiv<3, glm::i32>, //nb_inplace_floor_divide
 	(binaryfunc)mvec_idiv<3, glm::i32>, //nb_inplace_true_divide
 	0, //nb_index
 	(binaryfunc)mvec_matmul, //nb_matrix_multiply

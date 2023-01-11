@@ -68,9 +68,9 @@ static PyNumberMethods hi64vec4NumMethods = {
 	(binaryfunc)vec_iand<4, glm::i64>, //nb_inplace_and
 	(binaryfunc)vec_ixor<4, glm::i64>, //nb_inplace_xor
 	(binaryfunc)vec_ior<4, glm::i64>, //nb_inplace_or
-	0, //nb_floor_divide
+	(binaryfunc)ivec_floordiv<4, glm::i64>, //nb_floor_divide
 	(binaryfunc)vec_div<4, glm::i64>,
-	0, //nb_inplace_floor_divide
+	(binaryfunc)ivec_ifloordiv<4, glm::i64>, //nb_inplace_floor_divide
 	(binaryfunc)vec_idiv<4, glm::i64>, //nb_inplace_true_divide
 	0, //nb_index
 	(binaryfunc)vec_matmul, //nb_matrix_multiply

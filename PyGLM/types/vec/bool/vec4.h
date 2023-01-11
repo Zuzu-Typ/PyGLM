@@ -52,9 +52,9 @@ static PyNumberMethods hbvec4NumMethods = {
 	0, //nb_invert
 	0, //nb_lshift
 	0, //nb_rshift
-	0, //nb_and
-	0, //nb_xor
-	0, //nb_or
+	vec_and<4, bool>, //nb_and
+	vec_xor<4, bool>, //nb_xor
+	vec_or<4, bool>, //nb_or
 	0, //nb_int
 	0, //nb_reserved
 	0, //nb_int
