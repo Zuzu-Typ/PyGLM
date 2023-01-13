@@ -1,5 +1,5 @@
 [submodule "glm"]
-	path = glm
+	path = PyGLM_lib/glm
 	url = https://github.com/Zuzu-Typ/glm
 	branch = PyGLM
 [submodule "pyglm-typing"]

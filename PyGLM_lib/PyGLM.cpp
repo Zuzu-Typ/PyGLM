@@ -858,6 +858,8 @@ extern "C" {
 		PyGLM_LICENSE_STRING = PyUnicode_FromString(PyGLM_LICENSE);
 		Py_INCREF(PyGLM_LICENSE_STRING);
 		PyModule_AddObject(module_glm, "license", PyGLM_LICENSE_STRING);
+		
+		PyModule_AddStringConstant(module_glm, "__version__", PyGLM_VERSION);
 
 		return module_glm;
 	}
