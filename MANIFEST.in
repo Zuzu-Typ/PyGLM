@@ -1,0 +1,9 @@
+include LICENSE
+include COPYING
+include README.md
+include setup.py
+include setup.cfg
+include VERSION
+recursive-include PyGLM_lib *
+recursive-exclude PyGLM_lib/glm/test *
+recursive-exclude PyGLM_lib/glm/doc *
