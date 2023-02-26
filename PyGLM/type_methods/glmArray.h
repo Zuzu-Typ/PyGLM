@@ -5346,8 +5346,10 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T result = (T)0;
 			for (Py_ssize_t k = 0; k < n; k++) {
-				T a = arrDataPtr[k * arrStride + j % trueShape1];
-				T b = o[k + (j / trueShape1) * oStride];
+				int inputArrayIndex = i * n + k;
+				int matrixIndex = k + (j / trueShape1) * oStride;
+				T a = arrDataPtr[inputArrayIndex];
+				T b = o[matrixIndex];
 
 				result = result + a * b;
 			}
