@@ -267,6 +267,29 @@ min_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2 = NULL, *arg3 = NULL, *arg4 = NULL;
 	if (!PyArg_UnpackTuple(args, "min", 1, 4, &arg1, &arg2, &arg3, &arg4)) return NULL;
 	if (arg2 == NULL) {
+		if (PyObject_TypeCheck(arg1, &glmArrayType)) {
+			// arg1 is a pyglm array
+			glmArray* arr1 = (glmArray*)arg1;
+
+			// Below this line is wrong.  Gotta generate a switch-case to call
+			// the correct template to apply_min over the contents of a glmArray
+			PyGLMTypeObject* pti = (PyGLMTypeObject*)type;
+
+			switch (pti->C) {
+			case 1:
+				min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(1);
+				break;
+			case 2:
+				min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(2);
+				break;
+			case 3:
+				min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(3);
+				break;
+			case 4:
+				min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(4);
+				break;
+			}
+		}
 		if (PyObject_IterCheck(arg1)) {
 			PyObject* iterator = PyObject_GetIter(arg1);
 
