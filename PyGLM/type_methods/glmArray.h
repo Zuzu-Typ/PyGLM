@@ -5134,14 +5134,12 @@ static PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
 	outArray->readonly = false;
 	outArray->reference = NULL;
 
-	Py_ssize_t n, arr1Stride, arr2Stride, trueShape1;
+	Py_ssize_t n, arr1Stride, arr2Stride;
 
 	if (arr1->glmType == PyGLM_TYPE_VEC) {
 		n = arr1->shape[0];
 		arr1Stride = 1;
 		arr2Stride = arr2->shape[1];
-
-		trueShape1 = 1;
 
 		outArray->glmType = PyGLM_TYPE_VEC;
 		outArray->shape[0] = arr2->shape[0];
@@ -5155,8 +5153,6 @@ static PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
 		arr1Stride = arr1->shape[1];
 		arr2Stride = 0;
 
-		trueShape1 = arr1->shape[1];
-
 		outArray->glmType = PyGLM_TYPE_VEC;
 		outArray->shape[0] = arr1->shape[1];
 		outArray->shape[1] = 0;
@@ -5168,8 +5164,6 @@ static PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
 		n = arr1->shape[0];
 		arr1Stride = arr1->shape[1];
 		arr2Stride = arr2->shape[1];
-
-		trueShape1 = arr1->shape[1];
 
 		outArray->glmType = PyGLM_TYPE_MAT;
 		outArray->shape[0] = arr2->shape[0];
@@ -5198,13 +5192,16 @@ static PyObject* glmArray_mul_T_MMUL(glmArray* arr1, glmArray* arr2) {
 		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T result = (T)0;
 			for (Py_ssize_t k = 0; k < n; k++) {
-				T a = arr1DataPtr[k * arr1Stride + j % trueShape1];
-				T b = arr2DataPtr[k + (j / trueShape1) * arr2Stride];
+				T a = arr1DataPtr[k * arr1Stride + j % arr1Stride];
+				T b = arr2DataPtr[k + (j / arr1Stride) * arr2Stride];
 
 				result += a * b;
 			}
 			outArrayDataPtr[outArrayIndex++] = result;
 		}
+		// move pointers by one item
+		arr1DataPtr = reinterpret_cast<T*>(reinterpret_cast<char*>(arr1DataPtr) + arr1->itemSize);
+		arr2DataPtr = reinterpret_cast<T*>(reinterpret_cast<char*>(arr2DataPtr) + arr2->itemSize);
 	}
 
 	return (PyObject*)outArray;
@@ -5283,14 +5280,12 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 		return (PyObject*)outArray;
 	}
 
-	Py_ssize_t n, arrStride, oStride, trueShape1;
+	Py_ssize_t n, arrStride, oStride;
 
 	if (arr->glmType == PyGLM_TYPE_VEC) {
 		n = arr->shape[0];
 		arrStride = 1;
 		oStride = pto->R;
-
-		trueShape1 = 1;
 
 		outArray->glmType = PyGLM_TYPE_VEC;
 		outArray->shape[0] = pto->C;
@@ -5304,8 +5299,6 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 		arrStride = arr->shape[1];
 		oStride = 0;
 
-		trueShape1 = arr->shape[1];
-
 		outArray->glmType = PyGLM_TYPE_VEC;
 		outArray->shape[0] = arr->shape[1];
 		outArray->shape[1] = 0;
@@ -5317,8 +5310,6 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 		n = arr->shape[0];
 		arrStride = arr->shape[1];
 		oStride = pto->R;
-
-		trueShape1 = arr->shape[1];
 
 		outArray->glmType = PyGLM_TYPE_MAT;
 		outArray->shape[0] = pto->C;
@@ -5346,15 +5337,14 @@ static PyObject* glmArray_mulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMTy
 		for (Py_ssize_t j = 0; j < outArrayRatio; j++) {
 			T result = (T)0;
 			for (Py_ssize_t k = 0; k < n; k++) {
-				int inputArrayIndex = i * n + k;
-				int matrixIndex = k + (j / trueShape1) * oStride;
-				T a = arrDataPtr[inputArrayIndex];
-				T b = o[matrixIndex];
+				T a = arrDataPtr[k * arrStride + j % arrStride];
+				T b = o[k + (j / arrStride) * oStride];
 
 				result = result + a * b;
 			}
 			outArrayDataPtr[outArrayIndex++] = result;
 		}
+		arrDataPtr = reinterpret_cast<T*>(reinterpret_cast<char*>(arrDataPtr) + arr->itemSize);
 	}
 
 	return (PyObject*)outArray;
@@ -5443,6 +5433,7 @@ static PyObject* glmArray_rmulO_T(glmArray* arr, T* o, Py_ssize_t o_size, PyGLMT
 			}
 			outArrayDataPtr[outArrayIndex++] = result;
 		}
+		arrDataPtr = reinterpret_cast<T*>(reinterpret_cast<char*>(arrDataPtr) + arr->itemSize);
 	}
 
 	return (PyObject*)outArray;
