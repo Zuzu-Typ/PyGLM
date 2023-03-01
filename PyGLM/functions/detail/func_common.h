@@ -268,7 +268,6 @@ case get_format_specifier<bool>(): \
 case 1:\
 	return pack<1, T>(F<glm::vec<1, T>>(reinterpret_cast<glm::vec<1, T>*>(A->data), A->itemCount));\
 case 2:\
-	// printf("min for vec2\n");\
 	return pack<2, T>(F<glm::vec<2, T>>(reinterpret_cast<glm::vec<2, T>*>(A->data), A->itemCount));\
 case 3:\
 	return pack<3, T>(F<glm::vec<3, T>>(reinterpret_cast<glm::vec<3, T>*>(A->data), A->itemCount));\
@@ -291,77 +290,53 @@ min_internal(T* items, Py_ssize_t count) {
 	}
 	return minimum;
 }
+template<typename T>
+static T
+max_internal(T* items, Py_ssize_t count) {
+	T maximum = items[0];
+	for (Py_ssize_t i = 0; i < count; i++) {
+		T item = items[i];
+		// if (item == minimum) {
+		// 	continue;
+		// }
+		maximum = glm::max(item, maximum);
+	}
+	return maximum;
+}
 
 static PyObject*
 min_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2 = NULL, *arg3 = NULL, *arg4 = NULL;
 	if (!PyArg_UnpackTuple(args, "min", 1, 4, &arg1, &arg2, &arg3, &arg4)) return NULL;
-	// printf("min_\n");
 	if (arg2 == NULL) {
-		// printf("min_ A\n");
 		if (PyObject_TypeCheck(arg1, &glmArrayType)) {
-			// printf("min_ B\n");
 			// arg1 is a pyglm array
 			glmArray* arr1 = (glmArray*)arg1;
 			if (arr1->itemCount > 1) {
-
-			// 	// Below this line is wrong.  Gotta generate a switch-case to call
-			// 	// the correct template to apply_min over the contents of a glmArray
-			// 	PyGLMTypeObject* pti = (PyGLMTypeObject*)type;
-
-			// 	// switch (pti->C) {
-			// 	// case 1:
-			// 	// 	min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(1);
-			// 	// 	break;
-			// 	// case 2:
-			// 	// 	min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(2);
-			// 	// 	break;
-			// 	// case 3:
-			// 	// 	min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(3);
-			// 	// 	break;
-			// 	// case 4:
-			// 	// 	min_GEN_TYPE_SWITCH_STATEMENT_FOR_VECTOR(4);
-			// 	// 	break;
-			// 	// }
-
-				// printf("min_ %d %d\n", arr1->glmType, PyGLM_TYPE_VEC);
 				if (arr1->glmType == PyGLM_TYPE_VEC) {
 					switch (arr1->format) {
 					case 'f':
-						switch (arr1->shape[0]) {
-							case 1:
-								return pack<1, float>(min_internal<glm::vec<1, float>>(reinterpret_cast<glm::vec<1, float>*>(arr1->data), arr1->itemCount));
-							case 2:
-								// printf("min for vec2\n");
-								return pack<2, float>(min_internal<glm::vec<2, float>>(reinterpret_cast<glm::vec<2, float>*>(arr1->data), arr1->itemCount));
-							case 3:
-								return pack<3, float>(min_internal<glm::vec<3, float>>(reinterpret_cast<glm::vec<3, float>*>(arr1->data), arr1->itemCount));
-							case 4:
-								return pack<4, float>(min_internal<glm::vec<4, float>>(reinterpret_cast<glm::vec<4, float>*>(arr1->data), arr1->itemCount));
-							default:
-								PyGLM_ASSERT(0, "Invalid shape occured. This should not have happened.");
-						}
-						// GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, float);
-				// 	case 'd':
-				// 		GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, double);
-				// 	case 'i':
-				// 		GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, int32);
-				// 	case 'I':
-				// 		GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, uint32);
-				// 	case 'b':
-				// 		GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, int8);
-				// 	case 'B':
-				// 		GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, uint8);
-				// 	case 'h':
-				// 		GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, int16);
-				// 	case 'H':
-				// 		GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, uint16);
-				// 	case 'q':
-				// 		GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, int64);
-				// 	case 'Q':
-				// 		GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, uint64);
-				// 	case '?':
-				// 		GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, bool);
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, float);
+					case 'd':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, double);
+					case 'i':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, int32);
+					case 'I':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, uint32);
+					case 'b':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, int8);
+					case 'B':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, uint8);
+					case 'h':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, int16);
+					case 'H':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, uint16);
+					case 'q':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, int64);
+					case 'Q':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, uint64);
+					case '?':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, min_internal, bool);
 					default:
 						PyGLM_ASSERT(0, "Invalid format specifier. This should not have happened.");
 					}
@@ -1064,6 +1039,49 @@ max_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2 = NULL, *arg3 = NULL, *arg4 = NULL;
 	if (!PyArg_UnpackTuple(args, "max", 1, 4, &arg1, &arg2, &arg3, &arg4)) return NULL;
 	if (arg2 == NULL) {
+		if (PyObject_TypeCheck(arg1, &glmArrayType)) {
+			// arg1 is a pyglm array
+			glmArray* arr1 = (glmArray*)arg1;
+			if (arr1->itemCount > 1) {
+				if (arr1->glmType == PyGLM_TYPE_VEC) {
+					switch (arr1->format) {
+					case 'f':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, max_internal, float);
+					case 'd':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, max_internal, double);
+					case 'i':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, max_internal, int32);
+					case 'I':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, max_internal, uint32);
+					case 'b':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, max_internal, int8);
+					case 'B':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, max_internal, uint8);
+					case 'h':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, max_internal, int16);
+					case 'H':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, max_internal, uint16);
+					case 'q':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, max_internal, int64);
+					case 'Q':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, max_internal, uint64);
+					case '?':
+						GLM_ARRAY_RETURN_CALL_IF_IS_VEC(arr1, max_internal, bool);
+					default:
+						PyGLM_ASSERT(0, "Invalid format specifier. This should not have happened.");
+					}
+				}
+				if (arr1->glmType == PyGLM_TYPE_CTYPES) {
+					switch (arr1->format) {
+						case 'f':
+							// printf("min for floats\n");
+							return pack(max_internal<float>(reinterpret_cast<float*>(arr1->data), arr1->itemCount));
+						default:
+							PyGLM_ASSERT(0, "Invalid format specifier. This should not have happened.");
+					}
+				}
+			}
+		}
 		if (PyObject_IterCheck(arg1)) {
 			PyObject* iterator = PyObject_GetIter(arg1);
 
