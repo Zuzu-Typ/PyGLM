@@ -29,16 +29,6 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
     long_description = long_description.replace("\r", "")
 
-# Update glm-stubs
-shutil.copy2("pyglm-typing/src/glm_typing/__init__.py", "glm-stubs/glm_typing.py")
-shutil.copy2("pyglm-typing/src/glm-stubs/__init__.py", "glm-stubs")
-with open(path.join(here, "pyglm-typing/src/glm-stubs/__init__.pyi"), encoding="utf-8") as f:
-    typing_data = f.read()
-
-    out_file = open(path.join(here, "glm-stubs/__init__.pyi"), "w", encoding="utf-8")
-    out_file.write(typing_data.replace("import glm_typing", "from . import glm_typing"))
-    out_file.close()
-    
 
 setup(
     name='PyGLM',
