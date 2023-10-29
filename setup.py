@@ -14,7 +14,7 @@ from setuptools import setup, find_packages, Extension
 from codecs import open
 from os import path
 
-import re, os, shutil
+import re
 
 module1 = Extension('glm',
                     sources = ['PyGLM.cpp'], include_dirs=["glm/"], extra_compile_args=['-std=c++11'])
