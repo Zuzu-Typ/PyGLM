@@ -74,11 +74,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [manylinux_2_28]
+        distro: [manylinux2014, manylinux_2_28]
         arch: [x86_64, aarch64, s390x]
+        include:
+          - distro: manylinux2014
+            arch: i686
         
     env:
       CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.distro }}
+      CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.distro }}
       CIBW_MANYLINUX_AARCH64_IMAGE: ${{ matrix.distro }}
       CIBW_MANYLINUX_S390X_IMAGE: ${{ matrix.distro }}
       CIBW_BUILD: cp3*-manylinux*
@@ -90,7 +94,7 @@ jobs:
             submodules: recursive
 
       - name: Set up QEMU
-        if: ${{ matrix.arch != 'x86_64' }}
+        if: ${{ matrix.arch != 'x86_64' && matrix.arch != 'i686' }}
         uses: docker/setup-qemu-action@v3
 
       - uses: actions/setup-python@v4
