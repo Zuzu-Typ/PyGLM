@@ -7,7 +7,7 @@ on:
     
 env:
   CIBW_BUILD: cp3*
-  CIBW_SKIP: cp36-*
+  CIBW_SKIP: cp36-* cp37-*
   CIBW_TEST_REQUIRES: pytest
   CIBW_TEST_COMMAND: pytest {project}/test/PyGLM_test.py -v
 
@@ -23,17 +23,17 @@ jobs:
       CIBW_ARCHS: ${{matrix.arch}}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
             submodules: recursive
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         name: Install Python
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==2.11.2
+        run: python -m pip install cibuildwheel==2.16.2
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
@@ -53,17 +53,17 @@ jobs:
       CIBW_ARCHS: ${{matrix.arch}}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
             submodules: recursive
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         name: Install Python
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==2.11.2
+        run: python -m pip install cibuildwheel==2.16.2
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
@@ -92,21 +92,21 @@ jobs:
       CIBW_ARCHS: ${{matrix.arch}}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
             submodules: recursive
 
       - name: Set up QEMU
         if: ${{ matrix.arch != 'x86_64' && matrix.arch != 'i686' }}
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         name: Install Python
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==2.11.2
+        run: python -m pip install cibuildwheel==2.16.2
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
@@ -131,21 +131,21 @@ jobs:
       CIBW_ARCHS: ${{matrix.arch}}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
             submodules: recursive
 
       - name: Set up QEMU
         if: ${{ matrix.arch != 'x86_64' && matrix.arch != 'i686' }}
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         name: Install Python
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==2.11.2
+        run: python -m pip install cibuildwheel==2.16.2
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
@@ -158,14 +158,14 @@ jobs:
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
             submodules: recursive
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         name: Install Python
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Build sdist
         run: python setup.py sdist
@@ -186,7 +186,7 @@ jobs:
           name: artifact
           path: dist
 
-      - uses: pypa/gh-action-pypi-publish@v1.5.1
+      - uses: pypa/gh-action-pypi-publish@v1.8.10
         with:
           user: __token__
           password: ${{ secrets.pypi_password }}
