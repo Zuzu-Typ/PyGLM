@@ -4,7 +4,7 @@ on: workflow_dispatch
     
 env:
   CIBW_BUILD: cp3*
-  CIBW_SKIP: cp36-*
+  CIBW_SKIP: cp36-* cp37-*
   CIBW_TEST_REQUIRES: pytest
   CIBW_TEST_COMMAND: pytest {project}/test/PyGLM_test.py -v
 
@@ -74,10 +74,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [manylinux_2_24, manylinux_2_28]
+        distro: [manylinux2014, manylinux_2_28]
         arch: [x86_64, aarch64, s390x]
         include:
-          - distro: manylinux_2_24
+          - distro: manylinux2014
             arch: i686
         
     env:
@@ -163,9 +163,12 @@ jobs:
         name: Install Python
         with:
           python-version: '3.12'
+          
+      - name: Install build
+        run: pip install build
 
       - name: Build sdist
-        run: python setup.py sdist
+        run: python -m build --sdist
 
       - uses: actions/upload-artifact@v3
         with:
