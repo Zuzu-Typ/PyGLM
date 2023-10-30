@@ -2,7 +2,7 @@
 
 #include "../compiler_setup.h"
 
-PyObject* PyGLM_GetNumber(PyObject* arg) {
+static PyObject* PyGLM_GetNumber(PyObject* arg) {
 	if (arg->ob_type->tp_as_number->nb_float != NULL) {
 		return PyNumber_Float(arg);
 	}
@@ -16,7 +16,7 @@ PyObject* PyGLM_GetNumber(PyObject* arg) {
 	return NULL;
 }
 
-bool PyGLM_TestNumber(PyObject* arg) {
+static bool PyGLM_TestNumber(PyObject* arg) {
 	PyObject* num = PyGLM_GetNumber(arg);
 
 	if (num == NULL) {
@@ -27,7 +27,7 @@ bool PyGLM_TestNumber(PyObject* arg) {
 	return true;
 }
 
-unsigned long PyLong_AsUnsignedLongAndOverflow(PyObject* arg, int* overflow) {
+static unsigned long PyLong_AsUnsignedLongAndOverflow(PyObject* arg, int* overflow) {
 	unsigned long out = PyLong_AsUnsignedLong(arg);
 	if (PyErr_Occurred()) {
 		PyErr_Clear();
@@ -39,7 +39,7 @@ unsigned long PyLong_AsUnsignedLongAndOverflow(PyObject* arg, int* overflow) {
 	return out;
 }
 
-unsigned long long PyLong_AsUnsignedLongLongAndOverflow(PyObject* arg, int* overflow) {
+static unsigned long long PyLong_AsUnsignedLongLongAndOverflow(PyObject* arg, int* overflow) {
 	unsigned long long out = PyLong_AsUnsignedLongLong(arg);
 	if (PyErr_Occurred()) {
 		PyErr_Clear();
@@ -51,7 +51,7 @@ unsigned long long PyLong_AsUnsignedLongLongAndOverflow(PyObject* arg, int* over
 	return out;
 }
 
-int PyLong_Sign(PyObject* arg) {
+static int PyLong_Sign(PyObject* arg) {
 	int overflow;
 	long l = PyLong_AsLongAndOverflow(arg, &overflow);
 	if (overflow) {
@@ -65,7 +65,7 @@ int PyLong_Sign(PyObject* arg) {
 #define PyGLM_Number_Check(arg) (PyFloat_Check(arg) || PyLong_Check(arg) || PyBool_Check(arg) || (PyGLM_COULD_BE_NUMBER(arg) &&PyGLM_TestNumber(arg)))
 
 template<typename T>
-T _PyGLM_Long_As_Number_No_Error(PyObject* arg) {
+static T _PyGLM_Long_As_Number_No_Error(PyObject* arg) {
 	if (std::numeric_limits<T>::is_iec559) {
 		int overflow;
 		long long ll;
@@ -121,7 +121,7 @@ T _PyGLM_Long_As_Number_No_Error(PyObject* arg) {
 	return static_cast<T>(PyLong_AsUnsignedLongLongMask(arg));
 }
 
-double PyGLM_Number_AsDouble(PyObject* arg) {
+static double PyGLM_Number_AsDouble(PyObject* arg) {
 	if (PyFloat_Check(arg)) {
 		return PyFloat_AS_DOUBLE(arg);
 	}
@@ -141,7 +141,7 @@ double PyGLM_Number_AsDouble(PyObject* arg) {
 	return -1.0;
 }
 
-long PyGLM_Number_AsLong(PyObject* arg) {
+static long PyGLM_Number_AsLong(PyObject* arg) {
 	if (PyLong_Check(arg)) {
 		return _PyGLM_Long_As_Number_No_Error<long>(arg);
 	}
@@ -161,7 +161,7 @@ long PyGLM_Number_AsLong(PyObject* arg) {
 	return -1l;
 }
 
-unsigned long PyGLM_Number_AsUnsignedLong(PyObject* arg) {
+static unsigned long PyGLM_Number_AsUnsignedLong(PyObject* arg) {
 	if (PyLong_Check(arg)) {
 		return _PyGLM_Long_As_Number_No_Error<unsigned long>(arg);
 	}
@@ -181,7 +181,7 @@ unsigned long PyGLM_Number_AsUnsignedLong(PyObject* arg) {
 	return (unsigned long) - 1l;
 }
 
-long long PyGLM_Number_AsLongLong(PyObject* arg) {
+static long long PyGLM_Number_AsLongLong(PyObject* arg) {
 	if (PyLong_Check(arg)) {
 		return _PyGLM_Long_As_Number_No_Error<long long>(arg);
 	}
@@ -201,7 +201,7 @@ long long PyGLM_Number_AsLongLong(PyObject* arg) {
 	return -1ll;
 }
 
-unsigned long long PyGLM_Number_AsUnsignedLongLong(PyObject* arg) {
+static unsigned long long PyGLM_Number_AsUnsignedLongLong(PyObject* arg) {
 	if (PyLong_Check(arg)) {
 		return _PyGLM_Long_As_Number_No_Error<unsigned long long>(arg);
 	}
@@ -221,7 +221,7 @@ unsigned long long PyGLM_Number_AsUnsignedLongLong(PyObject* arg) {
 	return (unsigned long long)-1ll;
 }
 
-bool PyGLM_Number_AsBool(PyObject* arg) {
+static bool PyGLM_Number_AsBool(PyObject* arg) {
 	if (PyBool_Check(arg)) {
 		return (arg == Py_True) ? true : false;
 	}
@@ -241,7 +241,7 @@ bool PyGLM_Number_AsBool(PyObject* arg) {
 	return false;
 }
 
-float PyGLM_Number_AsFloat(PyObject* arg) {
+static float PyGLM_Number_AsFloat(PyObject* arg) {
 	if (PyFloat_Check(arg)) {
 		return (float)PyFloat_AS_DOUBLE(arg);
 	}
