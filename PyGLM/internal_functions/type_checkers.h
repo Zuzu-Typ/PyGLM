@@ -2494,7 +2494,7 @@ private:
 #define PyGLM_Qua_CheckExact(T, o) (Py_TYPE(o) == UNBRACKET (PyGLM_QUA_TYPE<T>()))
 
 template<typename T>
-constexpr int get_PTI_type() {
+static constexpr int get_PTI_type() {
 	return (
 		(std::is_same<T, double>::value) ? PyGLM_DT_DOUBLE :
 		(std::is_same<T, float>::value) ? PyGLM_DT_FLOAT :
@@ -2511,7 +2511,7 @@ constexpr int get_PTI_type() {
 }
 
 template<int L, typename T>
-constexpr int get_vec_PTI_info() {
+static constexpr int get_vec_PTI_info() {
 	return PyGLM_T_VEC |
 		(
 			(L == 1) ? PyGLM_SHAPE_1 :
@@ -2523,7 +2523,7 @@ constexpr int get_vec_PTI_info() {
 }
 
 template<int C, int R, typename T>
-constexpr int get_mat_PTI_info() {
+static constexpr int get_mat_PTI_info() {
 	return PyGLM_T_MAT |
 		(
 			(C == 2) ?
@@ -2548,12 +2548,12 @@ constexpr int get_mat_PTI_info() {
 }
 
 template<typename T>
-constexpr int get_qua_PTI_info() {
+static constexpr int get_qua_PTI_info() {
 	return PyGLM_T_QUA |
 		get_PTI_type<T>();
 }
 
-bool GET_PTI_COMPATIBLE_SIMPLE(PyObject* o, int accepted_types) {
+static bool GET_PTI_COMPATIBLE_SIMPLE(PyObject* o, int accepted_types) {
 	int& PTI_info = ((PyGLMTypeObject*)(o->ob_type))->PTI_info;
 	return (PTI_info & accepted_types) == PTI_info;
 }
@@ -2606,25 +2606,25 @@ enum SourceType {NONE, PyGLM_VEC, PyGLM_MVEC, PyGLM_MAT, PyGLM_QUA, PTI};
 
 
 
-PyGLMTypeInfo PTI0;
-SourceType sourceType0;
+static PyGLMTypeInfo PTI0;
+static SourceType sourceType0;
 
-PyGLMTypeInfo PTI1;
-SourceType sourceType1;
+static PyGLMTypeInfo PTI1;
+static SourceType sourceType1;
 
-PyGLMTypeInfo PTI2;
-SourceType sourceType2;
+static PyGLMTypeInfo PTI2;
+static SourceType sourceType2;
 
-PyGLMTypeInfo PTI3;
-SourceType sourceType3;
+static PyGLMTypeInfo PTI3;
+static SourceType sourceType3;
 
 #ifdef PyGLM_DEBUG
-PyObject* ARG0 = NULL;
-PyObject* ARG1 = NULL;
-PyObject* ARG2 = NULL;
-PyObject* ARG3 = NULL;
+static PyObject* ARG0 = NULL;
+static PyObject* ARG1 = NULL;
+static PyObject* ARG2 = NULL;
+static PyObject* ARG3 = NULL;
 
-bool ARGUSED = true;
+static bool ARGUSED = true;
 #endif
 
 #ifdef PyGLM_DEBUG
@@ -2636,14 +2636,14 @@ bool ARGUSED = true;
 	else { PTI ## N = PyGLMTypeInfo(accepted_types, o); if (PTI ## N.info == 0) sourceType ## N = NONE; else sourceType ## N = PTI;};\
 	if (N == 0 && !ARGUSED) throw; ARG ## N = o; if (N == 0 && sourceType ## N != NONE) {ARGUSED = false;};
 
-bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
+static bool PyGLM_PTI_DEBUG_EQ_FUNC(PyObject* o, PyObject* arg) {
 	if (o != arg) {
 		throw;
 	}
 	return false;
 }
 
-inline bool set_ARGUSED() {
+static inline bool set_ARGUSED() {
 	ARGUSED = true;
 	return ARGUSED;
 }
@@ -2682,7 +2682,7 @@ inline bool set_ARGUSED() {
 
 
 #ifdef PyGLM_DEBUG
-inline bool assertAndReturn(bool expr) {
+static inline bool assertAndReturn(bool expr) {
 	assert(expr);
 	return expr;
 }
@@ -2730,13 +2730,13 @@ inline bool assertAndReturn(bool expr) {
 
 #else
 enum SourceType { NONE, PyGLM_VEC, PyGLM_MVEC, PyGLM_MAT, PyGLM_QUA };
-SourceType sourceType0;
+static SourceType sourceType0;
 
-SourceType sourceType1;
+static SourceType sourceType1;
 
-SourceType sourceType2;
+static SourceType sourceType2;
 
-SourceType sourceType3;
+static SourceType sourceType3;
 
 #define PyGLM_PTI_InitN(N, o, accepted_types) \
 	if (o->ob_type->tp_dealloc == (destructor)vec_dealloc){if (GET_PTI_COMPATIBLE_SIMPLE(o, accepted_types)) {sourceType ## N = PyGLM_VEC;} else {sourceType ## N = NONE;}}\

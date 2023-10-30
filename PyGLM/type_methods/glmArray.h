@@ -517,7 +517,7 @@ if (PyGLM_Number_Check(value)) {\
 PyGLM_TYPEERROR_O("invalid assignment type ", value); \
 return -1;
 
-int glmArray_set(glmArray* self, Py_ssize_t index, PyObject* value) {
+static int glmArray_set(glmArray* self, Py_ssize_t index, PyObject* value) {
 	if (index >= self->itemCount || index < -self->itemCount) {
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return -1;
@@ -688,7 +688,7 @@ return PyGLM_PyObject_FromNumber<T>(*(((T*)self->data) + index));
 
 #define GLM_ARRAY_GET_IF_IS_QUA(T) return pack(*(((glm::qua<T>*)self->data) + index));
 
-PyObject* glmArray_get(glmArray* self, Py_ssize_t index) {
+static PyObject* glmArray_get(glmArray* self, Py_ssize_t index) {
 	if (index >= self->itemCount || index < -self->itemCount) {
 		PyErr_SetString(PyExc_IndexError, "index out of range");
 		return NULL;
@@ -980,7 +980,7 @@ glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags) {
 	return 0;
 }
 
-void 
+static void 
 glmArray_releasebuffer(PyObject* self, Py_buffer* view) {
 	PyMem_Free(view->shape);
 	PyMem_Free(view->strides);

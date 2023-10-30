@@ -5,7 +5,7 @@
 
 static int glmArray_getbuffer(glmArray* self, Py_buffer* view, int flags);
 
-void glmArray_releasebuffer(PyObject* self, Py_buffer* view);
+static void glmArray_releasebuffer(PyObject* self, Py_buffer* view);
 
 PyDoc_STRVAR(glmArray_to_bytes_docstr,
 	"Return the data of this array as a bytes string"

@@ -7,7 +7,7 @@ static PyObject* qua_length(PyObject * self, PyObject* arg);
 template<typename T>
 static int qua_getbuffer(qua<T>* self, Py_buffer* view, int flags);
 
-void qua_releasebuffer(PyObject* self, Py_buffer* view);
+static void qua_releasebuffer(PyObject* self, Py_buffer* view);
 
 static Py_ssize_t qua_len(PyObject* self);
 

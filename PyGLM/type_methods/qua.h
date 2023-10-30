@@ -547,7 +547,7 @@ qua_getbuffer(qua<T>* self, Py_buffer* view, int flags) {
 	return 0;
 }
 
-void
+static void
 qua_releasebuffer(PyObject*, Py_buffer* view) {
 	PyMem_Free(view->shape);
 }
