@@ -3643,7 +3643,36 @@ def test_mat2x2():
 ##/core_type_mat2x2 ##
 ###/GLM TESTS ###
 
+def test_array_matmul():
+    hitbox = glm.array(
+        glm.vec2(0., 1.),
+        glm.vec2(1., 1.),
+        glm.vec2(1., 0.),
+        glm.vec2(0., 0.),
+    )
+    rotation = glm.radians(90)
+    scale_x = 1.
+    scale_y = 2.
 
+    cos_rotation = glm.cos(rotation)
+    sin_rotation = glm.sin(rotation)
+
+    rotation_scale_matrix = glm.mat2x2(
+        scale_x * cos_rotation, -scale_y * sin_rotation,
+        scale_x * sin_rotation, scale_y * cos_rotation
+    )
+    hitbox_rotated = hitbox * rotation_scale_matrix
+
+    # I expect to see the points rotated 90 degrees, approximately:
+    # array(vec2(-2, 0), vec2(-2, 1), vec2(0, 1), vec2(0, 0))
+    assert glm.equal(hitbox_rotated[0].x, -2, 0.00001)
+    assert glm.equal(hitbox_rotated[0].y, 0, 0.00001)
+    assert glm.equal(hitbox_rotated[1].x, -2, 0.00001)
+    assert glm.equal(hitbox_rotated[1].y, 1, 0.00001)
+    assert glm.equal(hitbox_rotated[2].x, 0, 0.00001)
+    assert glm.equal(hitbox_rotated[2].y, 1, 0.00001)
+    assert glm.equal(hitbox_rotated[3].x, 0, 0.00001)
+    assert glm.equal(hitbox_rotated[3].y, 0, 0.00001)
 
 ### TEST TEST ###
     

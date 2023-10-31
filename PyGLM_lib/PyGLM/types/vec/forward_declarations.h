@@ -5,7 +5,7 @@
 template<int L, typename T>
 static int vec_getbuffer(vec<L, T>* self, Py_buffer* view, int flags);
 
-void vec_releasebuffer(PyObject* self, Py_buffer* view);
+static void vec_releasebuffer(PyObject* self, Py_buffer* view);
 
 template<typename T>
 static PyObject* vec1_to_list(vec<1, T>* self, PyObject*);

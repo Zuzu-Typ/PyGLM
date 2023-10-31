@@ -8,7 +8,7 @@ static PyObject* mat_length(PyObject * self, PyObject* arg);
 template<int C, int R, typename T>
 static int mat_getbuffer(mat<C, R, T>* self, Py_buffer* view, int flags);
 
-void mat_releasebuffer(PyObject* self, Py_buffer* view);
+static void mat_releasebuffer(PyObject* self, Py_buffer* view);
 
 template<int C>
 static Py_ssize_t mat_len(PyObject* self);

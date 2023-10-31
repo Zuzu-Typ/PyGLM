@@ -9,7 +9,7 @@
 #define PyGLM_OVERFLOW_WARNING				5
 #define PyGLM_ARGUMENT_DEPRECATION_WARNING	6
 
-unsigned long long PyGLM_SHOW_WARNINGS = 18446744073709551615ull;
+static unsigned long long PyGLM_SHOW_WARNINGS = 18446744073709551615ull;
 
 PyDoc_STRVAR(silence_docstr,
 	"silence(ID: int) -> None\n"

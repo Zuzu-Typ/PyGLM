@@ -5,7 +5,7 @@
 template<int L, typename T>
 static int mvec_getbuffer(mvec<L, T>* self, Py_buffer* view, int flags);
 
-void mvec_releasebuffer(PyObject* self, Py_buffer* view);
+static void mvec_releasebuffer(PyObject* self, Py_buffer* view);
 
 template<typename T>
 static PyObject* mvec2_to_list(mvec<2, T>* self, PyObject*);
