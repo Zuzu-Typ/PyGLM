@@ -4,6 +4,8 @@ include README.md
 include setup.py
 include setup.cfg
 include VERSION
+include glm/py.typed
+recursive-include PyGLM-stubs *
 recursive-include PyGLM_lib *
 recursive-exclude PyGLM_lib/glm/test *
 recursive-exclude PyGLM_lib/glm/doc *
