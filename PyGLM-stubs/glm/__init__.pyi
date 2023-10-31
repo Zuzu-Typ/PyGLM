@@ -7,7 +7,7 @@ from typing import (Any, Callable, Generator, Generic, Iterable, List, Literal,
                     Optional, SupportsInt, Tuple, Type, TypeVar, Union,
                     overload)
 
-from . import glm_typing
+from PyGLM import glm_typing
 
 _T = TypeVar('_T')
 _VT = TypeVar('_VT', bvec1, bvec2, bvec3, bvec4, dmvec2, dmvec3, dmvec4, dvec1, dvec2, dvec3, dvec4, i16vec1, i16vec2, i16vec3, i16vec4, i64vec1, i64vec2, i64vec3, i64vec4, i8vec1, i8vec2, i8vec3, i8vec4, imvec2, imvec3, imvec4, ivec1, ivec2, ivec3, ivec4, mvec2, mvec3, mvec4, u16vec1, u16vec2, u16vec3, u16vec4, u64vec1, u64vec2, u64vec3, u64vec4, u8vec1, u8vec2, u8vec3, u8vec4, umvec2, umvec3, umvec4, uvec1, uvec2, uvec3, uvec4, vec1, vec2, vec3, vec4)
