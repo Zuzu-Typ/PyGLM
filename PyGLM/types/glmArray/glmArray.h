@@ -28,6 +28,9 @@ static PyMethodDef glmArray_methods[] = {
 	{ "__deepcopy__",	(PyCFunction)generic_deepcopy,			METH_O,						generic_deepcopy_docstr },
 	{ "__getstate__",	(PyCFunction)glmArray_getstate,			METH_NOARGS,				glmArray_getstate_docstr },
 	{ "__setstate__",	(PyCFunction)glmArray_setstate,			METH_O,						glmArray_setstate_docstr },
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 9
+    { "__class_getitem__", Py_GenericAlias,                     METH_O | METH_CLASS,        glmArray_class_getitem_docstr },
+#endif
 	{ "to_bytes",		(PyCFunction)glmArray_to_bytes,			METH_NOARGS,				glmArray_to_bytes_docstr },
 	{ "from_bytes",		(PyCFunction)glmArray_from_bytes,		METH_VARARGS | METH_STATIC, glmArray_from_bytes_docstr },
 	{ "reinterpret_cast",(PyCFunction)glmArray_reinterpret_cast,METH_O,						glmArray_reinterpret_cast_docstr },
