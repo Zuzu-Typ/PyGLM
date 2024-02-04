@@ -112,11 +112,79 @@ static PyGLMTypeObject PyGLMTypeObjectArray[] = {
 static PyGLMTypeObject* const PyGLMTypeObjectArrayStart = PyGLMTypeObjectArray;
 static PyGLMTypeObject* const PyGLMTypeObjectArrayEnd = reinterpret_cast<PyGLMTypeObject*>(reinterpret_cast<char*>(PyGLMTypeObjectArray) + sizeof(PyGLMTypeObjectArray));
 
+template<typename T>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType() {
+	return 0;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType<double>() {
+	return 0;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType<float>() {
+	return 1;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType<int64>() {
+	return 2;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType<int32>() {
+	return 3;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType<int16>() {
+	return 4;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType<int8>() {
+	return 5;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType<uint64>() {
+	return 6;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType<uint32>() {
+	return 7;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType<uint16>() {
+	return 8;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType<uint8>() {
+	return 9;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetType<bool>() {
+	return 10;
+}
 
+template<typename T>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetTypeMat() {
+	return 0;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetTypeMat<double>() {
+	return 0;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetTypeMat<float>() {
+	return 1;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetTypeMat<int32>() {
+	return 2;
+}
+template<>
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetTypeMat<uint32>() {
+	return 3;
+}
 
 template<int L, typename T>
 constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec() {
-	return 0;
+	return _PyGLM_VEC_START + PyGLMTypeObjectArrayOffsetType<T>() * 4 + L - 1;
 	/*if (std::is_same<T, double>::value) {
 		return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 0 + L - 1);
 	}*/
@@ -156,184 +224,12 @@ constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec() {
 	}*/
 }
 
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<1, double>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 0 + 1 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<1, float>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 4 + 1 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<1, int64>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 8 + 1 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<1, int32>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 12 + 1 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<1, int16>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 16 + 1 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<1, int8>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 20 + 1 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<1, uint64>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 24 + 1 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<1, uint32>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 28 + 1 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<1, uint16>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 32 + 1 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<1, uint8>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 36 + 1 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<1, bool>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 40 + 1 - 1);
-}template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<2, double>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 0 + 2 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<2, float>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 4 + 2 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<2, int64>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 8 + 2 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<2, int32>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 12 + 2 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<2, int16>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 16 + 2 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<2, int8>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 20 + 2 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<2, uint64>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 24 + 2 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<2, uint32>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 28 + 2 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<2, uint16>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 32 + 2 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<2, uint8>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 36 + 2 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<2, bool>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 40 + 2 - 1);
-}template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<3, double>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 0 + 3 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<3, float>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 4 + 3 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<3, int64>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 8 + 3 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<3, int32>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 12 + 3 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<3, int16>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 16 + 3 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<3, int8>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 20 + 3 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<3, uint64>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 24 + 3 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<3, uint32>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 28 + 3 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<3, uint16>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 32 + 3 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<3, uint8>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 36 + 3 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<3, bool>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 40 + 3 - 1);
-}template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, double>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 0 + 4 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, float>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 4 + 4 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, int64>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 8 + 4 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, int32>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 12 + 4 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, int16>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 16 + 4 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, int8>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 20 + 4 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, uint64>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 24 + 4 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, uint32>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 28 + 4 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, uint16>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 32 + 4 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, uint8>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 36 + 4 - 1);
-}
-template <>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, bool>() {
-	return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 40 + 4 - 1);
-}
 
 
 template<int C, int R, typename T>
 constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMat() {
-	if (std::is_same<T, double>::value) {
+	return _PyGLM_MAT_START + PyGLMTypeObjectArrayOffsetTypeMat<T>() * 9 + R - 2 + 3 * (C - 2);
+	/*if (std::is_same<T, double>::value) {
 		return _PyGLM_MAT_START + 0 + R - 2 + 3 * (C - 2);
 	}
 	if (std::is_same<T, float>::value) {
@@ -350,12 +246,14 @@ constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMat() {
 				return _PyGLM_MAT_START + 27 + R - 2 + 3 * (C - 2);
 			}
 		}
-	}
+	}*/
 }
 
 template<int L, typename T>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMVec() {
-	if (2 <= L && L <= 4) {
+static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMVec() {
+	return _PyGLM_MVEC_START + PyGLMTypeObjectArrayOffsetTypeMat<T>() * 3 + L - 2;
+	
+	/*if (2 <= L && L <= 4) {
 		if (std::is_same<T, double>::value) {
 			return _PyGLM_MVEC_START + 0 + L - 2;
 		}
@@ -374,17 +272,12 @@ constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMVec() {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 template<typename T>
-constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetQua() {
-	if (std::is_same<T, double>::value) {
-		return _PyGLM_QUA_START + 0;
-	}
-	if (std::is_same<T, float>::value) {
-		return _PyGLM_QUA_START + 1;
-	}
+static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetQua() {
+	return _PyGLM_QUA_START + PyGLMTypeObjectArrayOffsetType<T>();
 }
 
 // vec
