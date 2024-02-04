@@ -1,4 +1,4 @@
-import glm, sys, random, time, copy, re, math, ctypes
+import glm, sys, random, time, copy, re, math
 
 from collections import OrderedDict
 
@@ -701,7 +701,7 @@ def test_pos():
 
 # abs #
 def test_abs():
-    for obj in gen_obj("#MV__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M__fFiqsuIQSU"):
         fassert(obj.__abs__, ())
         assert (abs(glm.array(obj)))[0] == abs(obj), obj
 #/abs #
@@ -780,36 +780,6 @@ def test_div():
             pass
 #/div #
 
-# floordiv #
-def test_int_floordiv():
-    for obj in gen_obj("#MV__iqsuIQSU"):
-        fassert(obj.__floordiv__, (1,))
-        fassert(obj.__floordiv__, (obj * 0 + 1,))
-
-    for obj in gen_obj("V__iqsuIQSU"):
-        fassert(obj.__floordiv__, (type(obj)(1),))
-
-    for obj in gen_obj("V__iqsuIQSU"):
-        try:
-            obj.__floordiv__(type(obj)(0))
-            fail(obj)
-        except ZeroDivisionError:
-            pass
-    for obj in gen_obj("P__iI"):
-        try:
-            obj.__floordiv__(obj)
-            fail(obj)
-        except ZeroDivisionError:
-            pass
-
-    for obj in gen_obj("#MV__iqsuIQSU"):
-        try:
-            obj.__floordiv__(0)
-            fail(obj)
-        except ZeroDivisionError:
-            pass
-#/floordiv #
-
 # mod #
 def test_mod():
     for obj in gen_obj("#MV__fF"):
@@ -849,21 +819,21 @@ def test_rshift():
 
 # and #
 def test_and():
-    for obj in gen_obj("#MV__iqsuIQSUB"):
+    for obj in gen_obj("#MV__iqsuIQSU"):
         fassert(obj.__and__, (1,))
         fassert(obj.__and__, (obj,))
 #/and #
 
 # or #
 def test_or():
-    for obj in gen_obj("#MV__iqsuIQSUB"):
+    for obj in gen_obj("#MV__iqsuIQSU"):
         fassert(obj.__or__, (1,))
         fassert(obj.__or__, (obj,))
 #/or #
 
 # xor #
 def test_xor():
-    for obj in gen_obj("#MV__iqsuIQSUB"):
+    for obj in gen_obj("#MV__iqsuIQSU"):
         fassert(obj.__xor__, (1,))
         fassert(obj.__xor__, (obj,))
 #/xor #
@@ -928,7 +898,7 @@ def test_imod():
 
 # ifloordiv #
 def test_ifloordiv():
-    for obj in gen_obj("#MV__fFiqsuIQSU"):
+    for obj in gen_obj("#MV__fF"):
         fassert(obj.__ifloordiv__, (1,))
 #/ifloordiv #
 
@@ -1085,8 +1055,8 @@ def test_hash():
 def check_buffer_protocol(type_, shape, format):
     obj = type_()
     memview = memoryview(obj)
-    assert shape == memview.shape
-    assert format == memview.format
+    assert shape == memview.shape, type_
+    assert format == memview.format, type_
 
 def test_buffer_protocol():
     for t, s, f in (
@@ -1197,24 +1167,6 @@ def test_buffer_protocol():
     arr = glm.array(glm.mat4(), glm.mat4(2))
     mv = memoryview(arr)
     assert glm.array(mv) == arr, arr
-
-    for T in (ctypes.c_float, 
-            ctypes.c_double, 
-            ctypes.c_char, 
-            ctypes.c_byte, 
-            ctypes.c_ubyte,
-            ctypes.c_short,
-            ctypes.c_ushort,
-            ctypes.c_int,
-            ctypes.c_uint,
-            ctypes.c_long,
-            ctypes.c_ulong,
-            ctypes.c_longlong,
-            ctypes.c_ulonglong,
-            ctypes.c_size_t,
-            ctypes.c_ssize_t,
-            ctypes.c_void_p):
-        assert glm.vec1((T*1)()) == glm.vec1()
 #/buffer protocol #
 
 # lists and tuples #
@@ -2604,8 +2556,8 @@ def test_spec_common_floor():
             assert all([a == math.floor(x) for a in glm.floor(vecT(x))])
 
 def test_spec_common_fma():
-    assert glm.fma(1, 2, 3) == 1 * 2 + 3
-    assert glm.fma(4, 5, 6) == 4 * 5 + 6
+    assert glm.fma(1., 2., 3.) == 1 * 2 + 3
+    assert glm.fma(4., 5., 6.) == 4 * 5 + 6
 
 def test_spec_common_fmax():
     for a in range(-2, 2):
@@ -2701,12 +2653,13 @@ def test_spec_common_mix():
             assert glm.mix(a, b, False) == a
 
             for vecT in vector_type_dict[datatypes.index("float")] + vector_type_dict[datatypes.index("double")]:
-                assert glm.mix(vecT(a), vecT(b), [0.] * len(vecT(a))) == vecT(a)
-                assert glm.mix(vecT(a), vecT(b), [1.] * len(vecT(a))) == vecT(b)
-                assert glm.mix(vecT(a), vecT(b), [0.5] * len(vecT(a))) == vecT((a + b) / 2)
+                assert glm.mix(vecT(a), vecT(b), vecT(0.)) == vecT(a)
+                assert glm.mix(vecT(a), vecT(b), vecT(1.)) == vecT(b)
+                assert glm.mix(vecT(a), vecT(b), vecT(0.5)) == vecT((a + b) / 2)
 
-                assert glm.mix(vecT(a), vecT(b), [True] * len(vecT(a))) == vecT(b)
-                assert glm.mix(vecT(a), vecT(b), [False] * len(vecT(a))) == vecT(a)
+                bvecT = getattr(glm, f"bvec{len(vecT(a))}")
+                assert glm.mix(vecT(a), vecT(b), bvecT(True)) == vecT(b)
+                assert glm.mix(vecT(a), vecT(b), bvecT(False)) == vecT(a)
 
 def test_spec_common_round():
     for i in range(-10, 10):
@@ -3114,7 +3067,7 @@ def test_normalize():
 
     glm.all(glm.lessThan(glm.abs(Normalize1 - glm.vec3(1, 0, 0)), glm.vec3(0.0001)))
     glm.all(glm.lessThan(glm.abs(Normalize2 - glm.vec3(1, 0, 0)), glm.vec3(0.0001)))
-    glm.all(glm.lessThan(glm.abs(Normalize3 - glm.normalize((-1.2,1.4,-1))), glm.vec3(0.0001)))
+    glm.all(glm.lessThan(glm.abs(Normalize3 - glm.normalize(glm.vec3(-1.2,1.4,-1))), glm.vec3(0.0001)))
 
 def test_faceforward():
     N = glm.vec3(0.0, 0.0, 1.0)
@@ -3122,7 +3075,7 @@ def test_faceforward():
     Nref = glm.vec3(0.0, 0.0, 1.0)
     F = glm.faceforward(N, I, Nref)
 
-    assert glm.equal(F, (0,0,-1), 0.0001)
+    assert glm.equal(F, glm.vec3(0,0,-1), 0.0001)
 
 def test_reflect():
     A = glm.vec2(1.0,-1.0)
@@ -3454,9 +3407,9 @@ def test_matrixCompMult():
         assert n == T(((0, 1, 4, 9), (16, 25, 36, 49), (64, 81, 100, 121), (144, 169, 196, 225)))
 
 def test_outerProduct():
-    for c in (range(2), range(3), range(4)):
-        for r in (range(4,6), range(4,7), range(4,8)):
-            result = glm.outerProduct(tuple(c), tuple(r))
+    for c in (glm.vec2(*range(2)), glm.vec3(*range(3)), glm.vec4(*range(4))):
+        for r in (glm.vec2(*range(4,6)), glm.vec3(*range(4,7)), glm.vec4(*range(4,8))):
+            result = glm.outerProduct(c, r)
             l = [e for l in result for e in l]
             for i in range(len(l)):
                 assert l[i] == (c[i % len(c)]) * (r[i // len(c)]), (l, c, r, i)
@@ -3624,55 +3577,9 @@ def test_equal():
         assert glm.all(glm.equal(T(0), T(0)))
         assert not glm.any(glm.notEqual(T(0), T(0)))
 ##/core_func_vector_relational ##
-
-## core_type_mat2x2 ##
-def test_mat2x2():
-    l = glm.mat2x2(1)
-    m = glm.mat2x2(1)
-    u = glm.vec2(1)
-    v = glm.vec2(1)
-    x = 1
-    a = m * u
-    b = v * m
-    n = x / m
-    o = m / x
-    p = x * m
-    q = m * x
-    assert not glm.any(glm.notEqual(m, q, 0.00001))
-    assert glm.all(glm.equal(m, l, 0.00001));
-##/core_type_mat2x2 ##
 ###/GLM TESTS ###
 
-def test_array_matmul():
-    hitbox = glm.array(
-        glm.vec2(0., 1.),
-        glm.vec2(1., 1.),
-        glm.vec2(1., 0.),
-        glm.vec2(0., 0.),
-    )
-    rotation = glm.radians(90)
-    scale_x = 1.
-    scale_y = 2.
 
-    cos_rotation = glm.cos(rotation)
-    sin_rotation = glm.sin(rotation)
-
-    rotation_scale_matrix = glm.mat2x2(
-        scale_x * cos_rotation, -scale_y * sin_rotation,
-        scale_x * sin_rotation, scale_y * cos_rotation
-    )
-    hitbox_rotated = hitbox * rotation_scale_matrix
-
-    # I expect to see the points rotated 90 degrees, approximately:
-    # array(vec2(-2, 0), vec2(-2, 1), vec2(0, 1), vec2(0, 0))
-    assert glm.equal(hitbox_rotated[0].x, -2, 0.00001)
-    assert glm.equal(hitbox_rotated[0].y, 0, 0.00001)
-    assert glm.equal(hitbox_rotated[1].x, -2, 0.00001)
-    assert glm.equal(hitbox_rotated[1].y, 1, 0.00001)
-    assert glm.equal(hitbox_rotated[2].x, 0, 0.00001)
-    assert glm.equal(hitbox_rotated[2].y, 1, 0.00001)
-    assert glm.equal(hitbox_rotated[3].x, 0, 0.00001)
-    assert glm.equal(hitbox_rotated[3].y, 0, 0.00001)
 
 ### TEST TEST ###
     

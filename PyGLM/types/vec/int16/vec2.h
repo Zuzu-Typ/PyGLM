@@ -115,54 +115,50 @@ static PyTypeObject hi16vec2IterType = {
 	(newfunc)vecIter_new<2, glm::i16>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hi16vec2GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.i16vec2",             /* tp_name */
-		sizeof(vec<2, glm::i16>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)vec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)vec2_repr<glm::i16>,                         /* tp_repr */
-		& hi16vec2NumMethods,             /* tp_as_number */
-		& hi16vec2SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)vec_hash<2, glm::i16>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)vec2_str<glm::i16>,                         /* tp_str */
-		(getattrofunc)vec_getattr<2, glm::i16>,                         /* tp_getattro */
-		(setattrofunc)vec_setattr<2, glm::i16>,                         /* tp_setattro */
-		& hi16vec2BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"i16vec2( <vec2 compatible type(s)> )\n2 components vector of high qualifier 16 bit integer numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)vec_richcompare<2, glm::i16>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)vec_geniter<2, glm::i16>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hi16vec2_methods,             /* tp_methods */
-		hi16vec2_members,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)vec2_init<glm::i16>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)vec_new<2, glm::i16>,                 /* tp_new */
-	},
-	PyGLM_TYPE_VEC,
-	2,
-	0,
-	sizeof(int16),
-	sizeof(glm::vec<2, int16>),
+#define I16VEC2_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.i16vec2",             /* tp_name */ \
+		sizeof(vec<2, glm::i16>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)vec_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)vec2_repr<glm::i16>,                         /* tp_repr */ \
+		& hi16vec2NumMethods,             /* tp_as_number */ \
+		& hi16vec2SeqMethods,                         /* tp_as_sequence */ \
+		0,                         /* tp_as_mapping */ \
+		(hashfunc)vec_hash<2, glm::i16>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)vec2_str<glm::i16>,                         /* tp_str */ \
+		(getattrofunc)vec_getattr<2, glm::i16>,                         /* tp_getattro */ \
+		(setattrofunc)vec_setattr<2, glm::i16>,                         /* tp_setattro */ \
+		& hi16vec2BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"i16vec2( <vec2 compatible type(s)> )\n2 components vector of high qualifier 16 bit integer numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)vec_richcompare<2, glm::i16>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)vec_geniter<2, glm::i16>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		hi16vec2_methods,             /* tp_methods */ \
+		hi16vec2_members,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)vec2_init<glm::i16>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)vec_new<2, glm::i16>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_VEC, \
+	2, \
+	0, \
+	sizeof(int16), \
+	sizeof(glm::vec<2, int16>), \
 	PyGLM_FS_INT16
-};
-
-static PyTypeObject& hi16vec2Type = *((PyTypeObject*)&hi16vec2GLMType);

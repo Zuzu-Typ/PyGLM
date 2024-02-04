@@ -22,11 +22,37 @@
 // PyGLM FUNCTIONS
 #include "PyGLM/functions/all.h"
 
-//static PyObject*
-//test(PyObject*, PyObject* arg) {
-//}
-//#define HAS_TEST
-//#define TEST_FUNC_TYPE METH_O
+static PyObject*
+test(PyObject*, PyObject* arg) {
+	funcstart:
+	if (Is_PyGLM_Object(arg)) {
+		GET_PyGLM_ARG_TYPE(arg);
+		GET_PyGLM_ARG_TYPE_OFFSET(arg);
+
+		ptrdiff_t offset = GET_PyGLMTypeObjectArrayOffsetOfType(argType->subtype);
+
+		if (offset == PyGLMTypeObjectArrayOffsetVec<3, float>()) {
+			return pack(PyGLM_VecOrMVec_Get(3, float, arg));
+		}
+
+		return PyLong_FromSsize_t(offset);
+		
+		//switch (argTypeOffset) {
+		//case PyGLMTypeObjectArrayOffsetMat<2, 4, float>():
+		//	return PyUnicode_FromFormat("Argument is mat2x4");
+		//case PyGLMTypeObjectArrayOffsetMat<4, 3, double>():
+		//	return PyUnicode_FromFormat("Argument is dmat4x3");
+		//}
+	}
+	PyGLM_PTI_Init0(arg, PyGLM_DT_ALL | PyGLM_T_ALL | PyGLM_SHAPE_ALL);
+	if (PyGLM_PTI_IsNone(0)) {
+		Py_RETURN_FALSE;
+	}
+	arg = PTI0.asPyObject();
+	goto funcstart;
+}
+#define HAS_TEST
+#define TEST_FUNC_TYPE METH_O
 
 static PyMethodDef glmmethods[] = {
 	// DETAIL
@@ -264,6 +290,24 @@ extern "C" {
 		Py_DECREF(ctypes_POINTER);
 #endif
 		Py_DECREF(ctypes_module);
+
+		// add subtypes to mvec PyGLMTypeObjects
+		reinterpret_cast<PyGLMTypeObject*>(&hdmvec2Type)->subtype = &hdvec2Type;
+		reinterpret_cast<PyGLMTypeObject*>(&hdmvec3Type)->subtype = &hdvec3Type;
+		reinterpret_cast<PyGLMTypeObject*>(&hdmvec4Type)->subtype = &hdvec4Type;
+
+		reinterpret_cast<PyGLMTypeObject*>(&hfmvec2Type)->subtype = &hfvec2Type;
+		reinterpret_cast<PyGLMTypeObject*>(&hfmvec3Type)->subtype = &hfvec3Type;
+		reinterpret_cast<PyGLMTypeObject*>(&hfmvec4Type)->subtype = &hfvec4Type;
+
+		reinterpret_cast<PyGLMTypeObject*>(&himvec2Type)->subtype = &hivec2Type;
+		reinterpret_cast<PyGLMTypeObject*>(&himvec3Type)->subtype = &hivec3Type;
+		reinterpret_cast<PyGLMTypeObject*>(&himvec4Type)->subtype = &hivec4Type;
+
+		reinterpret_cast<PyGLMTypeObject*>(&humvec2Type)->subtype = &huvec2Type;
+		reinterpret_cast<PyGLMTypeObject*>(&humvec3Type)->subtype = &huvec3Type;
+		reinterpret_cast<PyGLMTypeObject*>(&humvec4Type)->subtype = &huvec4Type;
+
 
 		PyObject* module_glm;
 

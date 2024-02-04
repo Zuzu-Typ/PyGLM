@@ -114,54 +114,50 @@ static PyTypeObject humat3x4IterType = {
 	(newfunc)matIter_new<3, 4, glm::u32>,                 /* tp_new */
 };
 
-static PyGLMTypeObject humat3x4GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.umat3x4",             /* tp_name */
-		sizeof(mat<3, 4, glm::u32>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)mat_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)mat3x4_repr<glm::u32>,                         /* tp_repr */
-		& humat3x4NumMethods,             /* tp_as_number */
-		& humat3x4SeqMethods,                         /* tp_as_sequence */
-		& humat3x4MapMethods,                         /* tp_as_mapping */
-		(hashfunc)mat_hash<3, 4, glm::u32>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)mat3x4_str<glm::u32>,                         /* tp_str */
-		0,                         /* tp_getattro */
-		0,                         /* tp_setattro */
-		& humat3x4BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"umat3x4( <umat3x4 compatible type(s)> )\n3 columns of 4 components matrix of unsigned integer numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)mat_richcompare<3, 4, glm::u32>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)mat_geniter<3, 4, glm::u32>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		humat3x4_methods,             /* tp_methods */
-		0,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)mat3x4_init<glm::u32>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)mat_new<3, 4, glm::u32>,                 /* tp_new */
-	},
-	PyGLM_TYPE_MAT,
-	3,
-	4,
-	sizeof(uint32),
-	sizeof(glm::mat<3, 4, uint32>),
+#define UMAT3x4_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.umat3x4",             /* tp_name */ \
+		sizeof(mat<3, 4, glm::u32>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)mat_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)mat3x4_repr<glm::u32>,                         /* tp_repr */ \
+		& humat3x4NumMethods,             /* tp_as_number */ \
+		& humat3x4SeqMethods,                         /* tp_as_sequence */ \
+		& humat3x4MapMethods,                         /* tp_as_mapping */ \
+		(hashfunc)mat_hash<3, 4, glm::u32>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)mat3x4_str<glm::u32>,                         /* tp_str */ \
+		0,                         /* tp_getattro */ \
+		0,                         /* tp_setattro */ \
+		& humat3x4BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"umat3x4( <umat3x4 compatible type(s)> )\n3 columns of 4 components matrix of unsigned integer numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)mat_richcompare<3, 4, glm::u32>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)mat_geniter<3, 4, glm::u32>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		humat3x4_methods,             /* tp_methods */ \
+		0,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)mat3x4_init<glm::u32>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)mat_new<3, 4, glm::u32>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_MAT, \
+	3, \
+	4, \
+	sizeof(uint32), \
+	sizeof(glm::mat<3, 4, uint32>), \
 	PyGLM_FS_UINT32
-};
-
-static PyTypeObject& humat3x4Type = *((PyTypeObject*)&humat3x4GLMType);

@@ -109,55 +109,50 @@ static PyTypeObject hdmvec4IterType = {
 	(newfunc)mvecIter_new<4, double>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hdmvec4GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.dmvec4",             /* tp_name */
-		sizeof(mvec<4, double>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)mvec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)mvec4_str<double>,                         /* tp_repr */
-		& hdmvec4NumMethods,             /* tp_as_number */
-		& hdmvec4SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)mvec_hash<4, double>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)mvec4_str<double>,                         /* tp_str */
-		(getattrofunc)mvec_getattr<4, double>,                         /* tp_getattro */
-		(setattrofunc)mvec_setattr<4, double>,                         /* tp_setattro */
-		& hdmvec4BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"dmvec4( <mvec4 compatible type(s)> )\n4 components mvector of high qualifier double numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)mvec_richcompare<4, double>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)mvec_geniter<4, double>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hdmvec4_methods,             /* tp_methods */
-		0,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)mvec_init<4, double>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)mvec_new<4, double>,                 /* tp_new */
-	},
-	PyGLM_TYPE_MVEC,
-	4,
-	0,
-	sizeof(double),
-	sizeof(glm::vec<4, double>),
-	PyGLM_FS_DOUBLE,
-	&hdvec4Type
-};
-
-static PyTypeObject& hdmvec4Type = *((PyTypeObject*)&hdmvec4GLMType);
+#define DMVEC4_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.dmvec4",             /* tp_name */ \
+		sizeof(mvec<4, double>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)mvec_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)mvec4_str<double>,                         /* tp_repr */ \
+		& hdmvec4NumMethods,             /* tp_as_number */ \
+		& hdmvec4SeqMethods,                         /* tp_as_sequence */ \
+		0,                         /* tp_as_mapping */ \
+		(hashfunc)mvec_hash<4, double>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)mvec4_str<double>,                         /* tp_str */ \
+		(getattrofunc)mvec_getattr<4, double>,                         /* tp_getattro */ \
+		(setattrofunc)mvec_setattr<4, double>,                         /* tp_setattro */ \
+		& hdmvec4BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"dmvec4( <mvec4 compatible type(s)> )\n4 components mvector of high qualifier double numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)mvec_richcompare<4, double>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)mvec_geniter<4, double>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		hdmvec4_methods,             /* tp_methods */ \
+		0,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)mvec_init<4, double>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)mvec_new<4, double>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_MVEC, \
+	4, \
+	0, \
+	sizeof(double), \
+	sizeof(glm::vec<4, double>), \
+	PyGLM_FS_DOUBLE

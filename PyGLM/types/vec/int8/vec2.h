@@ -115,54 +115,50 @@ static PyTypeObject hi8vec2IterType = {
 	(newfunc)vecIter_new<2, glm::i8>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hi8vec2GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.i8vec2",             /* tp_name */
-		sizeof(vec<2, glm::i8>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)vec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)vec2_repr<glm::i8>,                         /* tp_repr */
-		& hi8vec2NumMethods,             /* tp_as_number */
-		& hi8vec2SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)vec_hash<2, glm::i8>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)vec2_str<glm::i8>,                         /* tp_str */
-		(getattrofunc)vec_getattr<2, glm::i8>,                         /* tp_getattro */
-		(setattrofunc)vec_setattr<2, glm::i8>,                         /* tp_setattro */
-		& hi8vec2BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"i8vec2( <vec2 compatible type(s)> )\n2 components vector of high qualifier 8 bit integer numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)vec_richcompare<2, glm::i8>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)vec_geniter<2, glm::i8>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hi8vec2_methods,             /* tp_methods */
-		hi8vec2_members,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)vec2_init<glm::i8>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)vec_new<2, glm::i8>,                 /* tp_new */
-	},
-	PyGLM_TYPE_VEC,
-	2,
-	0,
-	sizeof(int8),
-	sizeof(glm::vec<2, int8>),
+#define I8VEC2_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.i8vec2",             /* tp_name */ \
+		sizeof(vec<2, glm::i8>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)vec_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)vec2_repr<glm::i8>,                         /* tp_repr */ \
+		& hi8vec2NumMethods,             /* tp_as_number */ \
+		& hi8vec2SeqMethods,                         /* tp_as_sequence */ \
+		0,                         /* tp_as_mapping */ \
+		(hashfunc)vec_hash<2, glm::i8>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)vec2_str<glm::i8>,                         /* tp_str */ \
+		(getattrofunc)vec_getattr<2, glm::i8>,                         /* tp_getattro */ \
+		(setattrofunc)vec_setattr<2, glm::i8>,                         /* tp_setattro */ \
+		& hi8vec2BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"i8vec2( <vec2 compatible type(s)> )\n2 components vector of high qualifier 8 bit integer numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)vec_richcompare<2, glm::i8>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)vec_geniter<2, glm::i8>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		hi8vec2_methods,             /* tp_methods */ \
+		hi8vec2_members,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)vec2_init<glm::i8>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)vec_new<2, glm::i8>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_VEC, \
+	2, \
+	0, \
+	sizeof(int8), \
+	sizeof(glm::vec<2, int8>), \
 	PyGLM_FS_INT8
-};
-
-static PyTypeObject& hi8vec2Type = *((PyTypeObject*)&hi8vec2GLMType);

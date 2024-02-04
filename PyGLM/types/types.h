@@ -397,13 +397,13 @@ struct PyGLMTypeObject {
 	}
 
 	inline char* getDataOf(PyObject* src) {
-		char* out = reinterpret_cast<char*>(src);
+		char* const out = reinterpret_cast<char*>(src) + sizeof(PyObject);
 
 		if (glmType == PyGLM_TYPE_MVEC) {
-			return *reinterpret_cast<char**>((out + sizeof(PyObject)));
+			return *reinterpret_cast<char**>(out);
 		}
 
-		return (out + sizeof(PyObject));
+		return out;
 	}
 
 	//inline PyTypeObject* typeObjectPointer() {

@@ -47,27 +47,30 @@ static PyObject*
 cross_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2;
 	PyGLM_Arg_Unpack_2O(args, "cross", arg1, arg2);
-	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_T_QUA | PyGLM_SHAPE_3 | PyGLM_DT_FD);
-	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_T_QUA | PyGLM_SHAPE_3 | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-		glm::vec<3, float> o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-		glm::vec<3, float> o2 = PyGLM_Vec_PTI_Get1(3, float, arg2);
-		return pack(glm::cross(o, o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-		glm::vec<3, double> o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-		glm::vec<3, double> o2 = PyGLM_Vec_PTI_Get1(3, double, arg2);
-		return pack(glm::cross(o, o2));
-	}
-	if (PyGLM_Qua_PTI_Check0(float, arg1) && PyGLM_Qua_PTI_Check1(float, arg2)) {
-		glm::qua<float> o = PyGLM_Qua_PTI_Get0(float, arg1);
-		glm::qua<float> o2 = PyGLM_Qua_PTI_Get1(float, arg2);
-		return pack(glm::cross(o, o2));
-	}
-	if (PyGLM_Qua_PTI_Check0(double, arg1) && PyGLM_Qua_PTI_Check1(double, arg2)) {
-		glm::qua<double> o = PyGLM_Qua_PTI_Get0(double, arg1);
-		glm::qua<double> o2 = PyGLM_Qua_PTI_Get1(double, arg2);
-		return pack(glm::cross(o, o2));
+	if (Is_PyGLM_Object(arg1) && Is_PyGLM_Object(arg2)) {
+		GET_PyGLM_ARG_TYPE(arg1);
+		GET_PyGLM_ARG_TYPE(arg2);
+
+		GET_PyGLM_ARG_SUBTYPE(arg1);
+		GET_PyGLM_ARG_SUBTYPE(arg2);
+
+		if (arg1Subtype == arg2Subtype) {
+			switch (GET_PyGLMTypeObjectArrayOffsetOfType(arg1Subtype)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+				case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+					return pack(glm::cross(PyGLM_VecOrMVec_Get(L, T, arg1), PyGLM_VecOrMVec_Get(L, T, arg2)));
+
+				PyGLM_CODEGEN_PARAM_T_Vec_fF(PyGLM_FUNC_TEMPLATE, 3)
+#undef PyGLM_FUNC_TEMPLATE
+
+#define PyGLM_FUNC_TEMPLATE(T) \
+				case PyGLMTypeObjectArrayOffsetQua<T>(): \
+					return pack(glm::cross(PyGLM_Qua_Get(T, arg1), PyGLM_Qua_Get(T, arg2)));
+
+					PyGLM_CODEGEN_PARAM_T_Qua_fF(PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+			}
+		}
 	}
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for cross(): ", arg1, arg2);
 	return NULL;

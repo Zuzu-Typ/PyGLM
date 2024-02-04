@@ -114,54 +114,50 @@ static PyTypeObject hdmat3x3IterType = {
 	(newfunc)matIter_new<3, 3, double>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hdmat3x3GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.dmat3x3",             /* tp_name */
-		sizeof(mat<3, 3, double>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)mat_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)mat3x3_repr<double>,                         /* tp_repr */
-		& hdmat3x3NumMethods,             /* tp_as_number */
-		& hdmat3x3SeqMethods,                         /* tp_as_sequence */
-		& hdmat3x3MapMethods,                         /* tp_as_mapping */
-		(hashfunc)mat_hash<3, 3, double>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)mat3x3_str<double>,                         /* tp_str */
-		0,                         /* tp_getattro */
-		0,                         /* tp_setattro */
-		& hdmat3x3BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"dmat3x3( <dmat3x3 compatible type(s)> )\n3 columns of 3 components matrix of double numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)mat_richcompare<3, 3, double>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)mat_geniter<3, 3, double>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hdmat3x3_methods,             /* tp_methods */
-		0,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)mat3x3_init<double>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)mat_new<3, 3, double>,                 /* tp_new */
-	},
-	PyGLM_TYPE_MAT,
-	3,
-	3,
-	sizeof(double),
-	sizeof(glm::mat<3, 3, double>),
+#define DMAT3x3_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.dmat3x3",             /* tp_name */ \
+		sizeof(mat<3, 3, double>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)mat_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)mat3x3_repr<double>,                         /* tp_repr */ \
+		& hdmat3x3NumMethods,             /* tp_as_number */ \
+		& hdmat3x3SeqMethods,                         /* tp_as_sequence */ \
+		& hdmat3x3MapMethods,                         /* tp_as_mapping */ \
+		(hashfunc)mat_hash<3, 3, double>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)mat3x3_str<double>,                         /* tp_str */ \
+		0,                         /* tp_getattro */ \
+		0,                         /* tp_setattro */ \
+		& hdmat3x3BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"dmat3x3( <dmat3x3 compatible type(s)> )\n3 columns of 3 components matrix of double numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)mat_richcompare<3, 3, double>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)mat_geniter<3, 3, double>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		hdmat3x3_methods,             /* tp_methods */ \
+		0,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)mat3x3_init<double>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)mat_new<3, 3, double>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_MAT, \
+	3, \
+	3, \
+	sizeof(double), \
+	sizeof(glm::mat<3, 3, double>), \
 	PyGLM_FS_DOUBLE
-};
-
-static PyTypeObject& hdmat3x3Type = *((PyTypeObject*)&hdmat3x3GLMType);

@@ -109,55 +109,50 @@ static PyTypeObject himvec3IterType = {
 	(newfunc)mvecIter_new<3, glm::i32>,                 /* tp_new */
 };
 
-static PyGLMTypeObject himvec3GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.imvec3",             /* tp_name */
-		sizeof(mvec<3, glm::i32>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)mvec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)mvec3_str<glm::i32>,                         /* tp_repr */
-		& himvec3NumMethods,             /* tp_as_number */
-		& himvec3SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)mvec_hash<3, glm::i32>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)mvec3_str<glm::i32>,                         /* tp_str */
-		(getattrofunc)mvec_getattr<3, glm::i32>,                         /* tp_getattro */
-		(setattrofunc)mvec_setattr<3, glm::i32>,                         /* tp_setattro */
-		& himvec3BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"imvec3( <mvec3 compatible type(s)> )\n3 components mvector of high qualifier integer numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)mvec_richcompare<3, glm::i32>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)mvec_geniter<3, glm::i32>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		himvec3_methods,             /* tp_methods */
-		0,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)mvec_init<3, glm::i32>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)mvec_new<3, glm::i32>,                 /* tp_new */
-	},
-	PyGLM_TYPE_MVEC,
-	3,
-	0,
-	sizeof(int32),
-	sizeof(glm::vec<3, int32>),
-	PyGLM_FS_INT32,
-	&hivec3Type
-};
-
-static PyTypeObject& himvec3Type = *((PyTypeObject*)&himvec3GLMType);
+#define IMVEC3_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.imvec3",             /* tp_name */ \
+		sizeof(mvec<3, glm::i32>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)mvec_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)mvec3_str<glm::i32>,                         /* tp_repr */ \
+		& himvec3NumMethods,             /* tp_as_number */ \
+		& himvec3SeqMethods,                         /* tp_as_sequence */ \
+		0,                         /* tp_as_mapping */ \
+		(hashfunc)mvec_hash<3, glm::i32>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)mvec3_str<glm::i32>,                         /* tp_str */ \
+		(getattrofunc)mvec_getattr<3, glm::i32>,                         /* tp_getattro */ \
+		(setattrofunc)mvec_setattr<3, glm::i32>,                         /* tp_setattro */ \
+		& himvec3BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"imvec3( <mvec3 compatible type(s)> )\n3 components mvector of high qualifier integer numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)mvec_richcompare<3, glm::i32>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)mvec_geniter<3, glm::i32>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		himvec3_methods,             /* tp_methods */ \
+		0,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)mvec_init<3, glm::i32>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)mvec_new<3, glm::i32>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_MVEC, \
+	3, \
+	0, \
+	sizeof(int32), \
+	sizeof(glm::vec<3, int32>), \
+	PyGLM_FS_INT32

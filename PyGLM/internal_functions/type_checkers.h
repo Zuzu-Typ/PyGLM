@@ -10,6 +10,8 @@
 
 #include "helper_macros.h"
 #include "number_functions.h"
+#include "../functions/function_generator_macros.h"
+#include "packers.h"
 
 #include <cstddef>
 
@@ -27,6 +29,66 @@
 
 #define _SUB_PyGLM_PTI_GET_TYPE(o) ((o->ob_type->tp_dealloc == (destructor)vec_dealloc) ? PyGLM_T_VEC : (o->ob_type->tp_dealloc == (destructor)mat_dealloc) ? PyGLM_T_MAT : (o->ob_type->tp_dealloc == (destructor)qua_dealloc) ? PyGLM_T_QUA : (o->ob_type->tp_dealloc == (destructor)mvec_dealloc) ? PyGLM_T_MVEC : PyGLM_UNKNOWN)
 #define PyGLM_PTI_GET_TYPE(o) _SUB_PyGLM_PTI_GET_TYPE(((PyObject*)o))
+
+template<typename T>
+static constexpr int get_PTI_type() {
+	return (
+		(std::is_same<T, double>::value) ? PyGLM_DT_DOUBLE :
+		(std::is_same<T, float>::value) ? PyGLM_DT_FLOAT :
+		(std::is_same<T, int32>::value) ? PyGLM_DT_INT :
+		(std::is_same<T, uint32>::value) ? PyGLM_DT_UINT :
+		(std::is_same<T, int64>::value) ? PyGLM_DT_INT64 :
+		(std::is_same<T, uint64>::value) ? PyGLM_DT_UINT64 :
+		(std::is_same<T, int16>::value) ? PyGLM_DT_INT16 :
+		(std::is_same<T, uint16>::value) ? PyGLM_DT_UINT16 :
+		(std::is_same<T, int8>::value) ? PyGLM_DT_INT8 :
+		(std::is_same<T, uint8>::value) ? PyGLM_DT_UINT8 :
+		PyGLM_DT_BOOL
+		);
+}
+
+template<int L, typename T>
+static constexpr int get_vec_PTI_info() {
+	return PyGLM_T_VEC |
+		(
+			(L == 1) ? PyGLM_SHAPE_1 :
+			(L == 2) ? PyGLM_SHAPE_2 :
+			(L == 3) ? PyGLM_SHAPE_3 :
+			PyGLM_SHAPE_4
+			) |
+		get_PTI_type<T>();
+}
+
+template<int C, int R, typename T>
+static constexpr int get_mat_PTI_info() {
+	return PyGLM_T_MAT |
+		(
+			(C == 2) ?
+			(
+				(R == 2) ? PyGLM_SHAPE_2x2 :
+				(R == 3) ? PyGLM_SHAPE_2x3 :
+				PyGLM_SHAPE_2x4
+				) :
+			(C == 3) ?
+			(
+				(R == 2) ? PyGLM_SHAPE_3x2 :
+				(R == 3) ? PyGLM_SHAPE_3x3 :
+				PyGLM_SHAPE_3x4
+				) :
+			(
+				(R == 2) ? PyGLM_SHAPE_4x2 :
+				(R == 3) ? PyGLM_SHAPE_4x3 :
+				PyGLM_SHAPE_4x4
+				)
+			) |
+		get_PTI_type<T>();
+}
+
+template<typename T>
+static constexpr int get_qua_PTI_info() {
+	return PyGLM_T_QUA |
+		get_PTI_type<T>();
+}
 
 enum class _FormatType {
 	FLOAT, DOUBLE, INT8, UINT8, INT16, UINT16, INT32, UINT32, INT64, UINT64, BOOL, NONE
@@ -2456,6 +2518,32 @@ struct PyGLMTypeInfo {
 		return *((glm::qua<T>*)data);
 	}
 
+	PyObject* asPyObject() {
+		switch (info) {
+#define PyGLM_TEMPLATE_FUNC(L, T) \
+		case get_vec_PTI_info<L, T>(): \
+			return pack(getVec<L, T>());
+
+			PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_ALL, PyGLM_TEMPLATE_FUNC);
+#undef PyGLM_TEMPLATE_FUNC
+
+#define PyGLM_TEMPLATE_FUNC(C, R, T) \
+		case get_mat_PTI_info<C, R, T>(): \
+			return pack(getMat<C, R, T>());
+
+			PyGLM_CODEGEN_PARAM_C_ALL(PyGLM_CODEGEN_PARAM_R_ALL, PyGLM_CODEGEN_PARAM_T_Mat_fFiI, PyGLM_TEMPLATE_FUNC);
+#undef PyGLM_TEMPLATE_FUNC
+
+#define PyGLM_TEMPLATE_FUNC(T) \
+		case get_qua_PTI_info<T>(): \
+			return pack(getQua<T>());
+
+			PyGLM_CODEGEN_PARAM_T_Qua_fF(PyGLM_TEMPLATE_FUNC);
+#undef PyGLM_TEMPLATE_FUNC
+		}
+		return Py_None;
+	}
+
 private:
 	inline void allocate(size_t size) {
 		assert(size <= 128);
@@ -2493,65 +2581,7 @@ private:
 
 #define PyGLM_Qua_CheckExact(T, o) (Py_TYPE(o) == UNBRACKET (PyGLM_QUA_TYPE<T>()))
 
-template<typename T>
-static constexpr int get_PTI_type() {
-	return (
-		(std::is_same<T, double>::value) ? PyGLM_DT_DOUBLE :
-		(std::is_same<T, float>::value) ? PyGLM_DT_FLOAT :
-		(std::is_same<T, int32>::value) ? PyGLM_DT_INT :
-		(std::is_same<T, uint32>::value) ? PyGLM_DT_UINT :
-		(std::is_same<T, int64>::value) ? PyGLM_DT_INT64 :
-		(std::is_same<T, uint64>::value) ? PyGLM_DT_UINT64 :
-		(std::is_same<T, int16>::value) ? PyGLM_DT_INT16 :
-		(std::is_same<T, uint16>::value) ? PyGLM_DT_UINT16 :
-		(std::is_same<T, int8>::value) ? PyGLM_DT_INT8 :
-		(std::is_same<T, uint8>::value) ? PyGLM_DT_UINT8 :
-		PyGLM_DT_BOOL
-		);
-}
 
-template<int L, typename T>
-static constexpr int get_vec_PTI_info() {
-	return PyGLM_T_VEC |
-		(
-			(L == 1) ? PyGLM_SHAPE_1 :
-			(L == 2) ? PyGLM_SHAPE_2 :
-			(L == 3) ? PyGLM_SHAPE_3 :
-			PyGLM_SHAPE_4
-			) |
-		get_PTI_type<T>();
-}
-
-template<int C, int R, typename T>
-static constexpr int get_mat_PTI_info() {
-	return PyGLM_T_MAT |
-		(
-			(C == 2) ?
-			(
-				(R == 2) ? PyGLM_SHAPE_2x2 :
-				(R == 3) ? PyGLM_SHAPE_2x3 :
-				PyGLM_SHAPE_2x4
-				) :
-			(C == 3) ?
-			(
-				(R == 2) ? PyGLM_SHAPE_3x2 :
-				(R == 3) ? PyGLM_SHAPE_3x3 :
-				PyGLM_SHAPE_3x4
-				) :
-			(
-				(R == 2) ? PyGLM_SHAPE_4x2 :
-				(R == 3) ? PyGLM_SHAPE_4x3 :
-				PyGLM_SHAPE_4x4
-				)
-			) |
-		get_PTI_type<T>();
-}
-
-template<typename T>
-static constexpr int get_qua_PTI_info() {
-	return PyGLM_T_QUA |
-		get_PTI_type<T>();
-}
 
 static bool GET_PTI_COMPATIBLE_SIMPLE(PyObject* o, int accepted_types) {
 	int& PTI_info = ((PyGLMTypeObject*)(o->ob_type))->PTI_info;
@@ -2838,5 +2868,24 @@ static SourceType sourceType3;
 #define PyGLM_Qua_PTI_Assign1(T) glm::qua<T> o2 = PyGLM_Qua_PTI_Get1(T, arg2);
 #define PyGLM_Qua_PTI_Assign2(T) glm::qua<T> o3 = PyGLM_Qua_PTI_Get2(T, arg3);
 #define PyGLM_Qua_PTI_Assign3(T) glm::qua<T> o4 = PyGLM_Qua_PTI_Get3(T, arg4);
+
+// New typecheckers
+#define Is_PyGLM_TypeObject(o) (PyGLMTypeObjectArrayStart <= reinterpret_cast<void*>(o) && reinterpret_cast<void*>(o) < PyGLMTypeObjectArrayEnd)
+#define Is_PyGLM_Object(o) Is_PyGLM_TypeObject(Py_TYPE(o))
+
+
+#define GET_PyGLM_ARG_TYPE(name) PyGLMTypeObject* const name ## Type = reinterpret_cast<PyGLMTypeObject*>(Py_TYPE(name))
+#define GET_PyGLM_ArgSubtype(name) (reinterpret_cast<PyGLMTypeObject*>((name ## Type)->subtype))
+#define GET_PyGLM_ARG_SUBTYPE(name) PyGLMTypeObject* const name ## Subtype = GET_PyGLM_ArgSubtype(name)
+#define GET_PyGLM_ARG_TYPE_OFFSET(name) const ptrdiff_t name ## TypeOffset = name ## Type - PyGLMTypeObjectArrayStart
+#define GET_PyGLMTypeObjectArrayOffsetOfType(t) (reinterpret_cast<PyGLMTypeObject*>(t) - PyGLMTypeObjectArrayStart)
+#define GET_PyGLMTypeObjectArrayOffsetOf(o) (GET_PyGLMTypeObjectArrayOffsetOfType(Py_TYPE(o)))
+
+#define PyGLM_Vec_Get(L, T, o) (reinterpret_cast<vec<L, T>*>(o)->super_type)
+#define PyGLM_VecOrMVec_Get(L, T, name) (*(reinterpret_cast<glm::vec<L, T>*>((name ## Type)->getDataOf(name))))
+#define PyGLM_VecOrMVec_GET(L, T, o) (*(reinterpret_cast<glm::vec<L, T>*>(reinterpret_cast<PyGLMTypeObject*>(Py_TYPE(o))->getDataOf(o))))
+#define PyGLM_Mat_Get(C, R, T, o) (reinterpret_cast<mat<C, R, T>*>(o)->super_type)
+#define PyGLM_MVec_Get(L, T, o) (*(reinterpret_cast<mvec<L, T>*>(o)->super_type))
+#define PyGLM_Qua_Get(T, o) (reinterpret_cast<qua<T>*>(o)->super_type)
 
 #include "unpackers.h"

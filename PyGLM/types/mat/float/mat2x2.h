@@ -114,54 +114,50 @@ static PyTypeObject hfmat2x2IterType = {
 	(newfunc)matIter_new<2, 2, float>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hfmat2x2GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.mat2x2",             /* tp_name */
-		sizeof(mat<2, 2, float>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)mat_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)mat2x2_repr<float>,                         /* tp_repr */
-		& hfmat2x2NumMethods,             /* tp_as_number */
-		& hfmat2x2SeqMethods,                         /* tp_as_sequence */
-		& hfmat2x2MapMethods,                         /* tp_as_mapping */
-		(hashfunc)mat_hash<2, 2, float>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)mat2x2_str<float>,                         /* tp_str */
-		0,                         /* tp_getattro */
-		0,                         /* tp_setattro */
-		& hfmat2x2BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"mat2x2( <mat2x2 compatible type(s)> )\n2 columns of 2 components matrix of floating-point numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)mat_richcompare<2, 2, float>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)mat_geniter<2, 2, float>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hfmat2x2_methods,             /* tp_methods */
-		0,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)mat2x2_init<float>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)mat_new<2, 2, float>,                 /* tp_new */
-	},
-	PyGLM_TYPE_MAT,
-	2,
-	2,
-	sizeof(float),
-	sizeof(glm::mat<2, 2, float>),
+#define FMAT2x2_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.mat2x2",             /* tp_name */ \
+		sizeof(mat<2, 2, float>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)mat_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)mat2x2_repr<float>,                         /* tp_repr */ \
+		& hfmat2x2NumMethods,             /* tp_as_number */ \
+		& hfmat2x2SeqMethods,                         /* tp_as_sequence */ \
+		& hfmat2x2MapMethods,                         /* tp_as_mapping */ \
+		(hashfunc)mat_hash<2, 2, float>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)mat2x2_str<float>,                         /* tp_str */ \
+		0,                         /* tp_getattro */ \
+		0,                         /* tp_setattro */ \
+		& hfmat2x2BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"mat2x2( <mat2x2 compatible type(s)> )\n2 columns of 2 components matrix of floating-point numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)mat_richcompare<2, 2, float>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)mat_geniter<2, 2, float>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		hfmat2x2_methods,             /* tp_methods */ \
+		0,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)mat2x2_init<float>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)mat_new<2, 2, float>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_MAT, \
+	2, \
+	2, \
+	sizeof(float), \
+	sizeof(glm::mat<2, 2, float>), \
 	PyGLM_FS_FLOAT
-};
-
-static PyTypeObject& hfmat2x2Type = *((PyTypeObject*)&hfmat2x2GLMType);

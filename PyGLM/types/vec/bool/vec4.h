@@ -117,54 +117,50 @@ static PyTypeObject hbvec4IterType = {
 	(newfunc)vecIter_new<4, bool>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hbvec4GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.bvec4",             /* tp_name */
-		sizeof(vec<4, bool>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)vec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)vec4_repr<bool>,                         /* tp_repr */
-		&hbvec4NumMethods,             /* tp_as_number */
-		&hbvec4SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)vec_hash<4, bool>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)vec4_str<bool>,                         /* tp_str */
-		(getattrofunc)vec_getattr<4, bool>,                         /* tp_getattro */
-		(setattrofunc)vec_setattr<4, bool>,                         /* tp_setattro */
-		& hbvec4BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"bvec4( <vec4 compatible type(s)> )\n4 components vector of high qualifier boolean values.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)vec_richcompare<4, bool>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)vec_geniter<4, bool>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hbvec4_methods,             /* tp_methods */
-		hbvec4_members,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)vec4_init<bool>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)vec_new<4, bool>,                 /* tp_new */
-	},
-	PyGLM_TYPE_VEC,
-	4,
-	0,
-	sizeof(bool),
-	sizeof(glm::vec<4, bool>),
+#define BVEC4_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.bvec4",             /* tp_name */ \
+		sizeof(vec<4, bool>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)vec_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)vec4_repr<bool>,                         /* tp_repr */ \
+		&hbvec4NumMethods,             /* tp_as_number */ \
+		&hbvec4SeqMethods,                         /* tp_as_sequence */ \
+		0,                         /* tp_as_mapping */ \
+		(hashfunc)vec_hash<4, bool>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)vec4_str<bool>,                         /* tp_str */ \
+		(getattrofunc)vec_getattr<4, bool>,                         /* tp_getattro */ \
+		(setattrofunc)vec_setattr<4, bool>,                         /* tp_setattro */ \
+		& hbvec4BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"bvec4( <vec4 compatible type(s)> )\n4 components vector of high qualifier boolean values.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)vec_richcompare<4, bool>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)vec_geniter<4, bool>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		hbvec4_methods,             /* tp_methods */ \
+		hbvec4_members,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)vec4_init<bool>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)vec_new<4, bool>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_VEC, \
+	4, \
+	0, \
+	sizeof(bool), \
+	sizeof(glm::vec<4, bool>), \
 	PyGLM_FS_BOOL
-};
-
-static PyTypeObject& hbvec4Type = *((PyTypeObject*)&hbvec4GLMType);

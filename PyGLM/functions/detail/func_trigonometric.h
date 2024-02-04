@@ -90,90 +90,48 @@ atan_(PyObject*, PyObject* args) {
 	}
 
 	if (arg2 != NULL) {
+		if (Is_PyGLM_Object(arg1) && Is_PyGLM_Object(arg2)) {
+			GET_PyGLM_ARG_TYPE(arg1);
+			GET_PyGLM_ARG_TYPE(arg2);
+
+			GET_PyGLM_ARG_SUBTYPE(arg1);
+			GET_PyGLM_ARG_SUBTYPE(arg2);
+
+			if (arg1Subtype == arg2Subtype) {
+				switch (GET_PyGLMTypeObjectArrayOffsetOfType(arg1Subtype)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+				case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+					return pack(glm::atan(PyGLM_VecOrMVec_Get(L, T, arg1), PyGLM_VecOrMVec_Get(L, T, arg2)));
+
+					PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+				}
+			}
+		}
 		if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 			return pack(glm::atan(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2)));
-		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {
-			glm::vec1 o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-			glm::vec1 o2 = PyGLM_Vec_PTI_Get1(1, float, arg2);
-			return pack(glm::atan(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
-			glm::vec2 o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-			glm::vec2 o2 = PyGLM_Vec_PTI_Get1(2, float, arg2);
-			return pack(glm::atan(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-			glm::vec3 o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-			glm::vec3 o2 = PyGLM_Vec_PTI_Get1(3, float, arg2);
-			return pack(glm::atan(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2)) {
-			glm::vec4 o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-			glm::vec4 o2 = PyGLM_Vec_PTI_Get1(4, float, arg2);
-			return pack(glm::atan(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2)) {
-			glm::dvec1 o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-			glm::dvec1 o2 = PyGLM_Vec_PTI_Get1(1, double, arg2);
-			return pack(glm::atan(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
-			glm::dvec2 o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-			glm::dvec2 o2 = PyGLM_Vec_PTI_Get1(2, double, arg2);
-			return pack(glm::atan(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-			glm::dvec3 o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-			glm::dvec3 o2 = PyGLM_Vec_PTI_Get1(3, double, arg2);
-			return pack(glm::atan(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2)) {
-			glm::dvec4 o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-			glm::dvec4 o2 = PyGLM_Vec_PTI_Get1(4, double, arg2);
-			return pack(glm::atan(o, o2));
 		}
 		PyGLM_TYPEERROR_2O("invalid argument type(s) for atan(): ", arg1, arg2);
 		return NULL;
 	}
 
+	switch (GET_PyGLMTypeObjectArrayOffsetOf(arg1)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+		case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+			return pack(glm::atan(PyGLM_Vec_Get(L, T, arg1)));
+
+		PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+		case PyGLMTypeObjectArrayOffsetMVec<L, T>(): \
+			return pack(glm::atan(PyGLM_MVec_Get(L, T, arg1)));
+
+			PyGLM_CODEGEN_PARAM_L_MVEC(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+	}
 	if (PyGLM_Number_Check(arg1)) {
 		return pack(glm::atan(PyGLM_Number_FromPyObject<double>(arg1)));
-	}
-	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check0(1, float, arg1)) {
-		glm::vec1 o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-		return pack(glm::atan(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, float, arg1)) {
-		glm::vec2 o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-		return pack(glm::atan(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, float, arg1)) {
-		glm::vec3 o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-		return pack(glm::atan(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, float, arg1)) {
-		glm::vec4 o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-		return pack(glm::atan(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, double, arg1)) {
-		glm::dvec1 o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-		return pack(glm::atan(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg1)) {
-		glm::dvec2 o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-		return pack(glm::atan(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg1)) {
-		glm::dvec3 o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-		return pack(glm::atan(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, double, arg1)) {
-		glm::dvec4 o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-		return pack(glm::atan(o));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for atan(): ", arg1);
 	return NULL;

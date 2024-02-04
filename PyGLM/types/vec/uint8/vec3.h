@@ -116,54 +116,50 @@ static PyTypeObject hu8vec3IterType = {
 	(newfunc)vecIter_new<3, glm::u8>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hu8vec3GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.u8vec3",             /* tp_name */
-		sizeof(vec<3, glm::u8>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)vec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)vec3_repr<glm::u8>,                         /* tp_repr */
-		& hu8vec3NumMethods,             /* tp_as_number */
-		& hu8vec3SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)vec_hash<3, glm::u8>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)vec3_str<glm::u8>,                         /* tp_str */
-		(getattrofunc)vec_getattr<3, glm::u8>,                         /* tp_getattro */
-		(setattrofunc)vec_setattr<3, glm::u8>,                         /* tp_setattro */
-		& hu8vec3BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"u8vec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier 8 bit unsigned integer numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)vec_richcompare<3, glm::u8>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)vec_geniter<3, glm::u8>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hu8vec3_methods,             /* tp_methods */
-		hu8vec3_members,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)vec3_init<glm::u8>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)vec_new<3, glm::u8>,                 /* tp_new */
-	},
-	PyGLM_TYPE_VEC,
-	3,
-	0,
-	sizeof(uint8),
-	sizeof(glm::vec<3, uint8>),
+#define U8VEC3_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.u8vec3",             /* tp_name */ \
+		sizeof(vec<3, glm::u8>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)vec_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)vec3_repr<glm::u8>,                         /* tp_repr */ \
+		& hu8vec3NumMethods,             /* tp_as_number */ \
+		& hu8vec3SeqMethods,                         /* tp_as_sequence */ \
+		0,                         /* tp_as_mapping */ \
+		(hashfunc)vec_hash<3, glm::u8>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)vec3_str<glm::u8>,                         /* tp_str */ \
+		(getattrofunc)vec_getattr<3, glm::u8>,                         /* tp_getattro */ \
+		(setattrofunc)vec_setattr<3, glm::u8>,                         /* tp_setattro */ \
+		& hu8vec3BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"u8vec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier 8 bit unsigned integer numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)vec_richcompare<3, glm::u8>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)vec_geniter<3, glm::u8>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		hu8vec3_methods,             /* tp_methods */ \
+		hu8vec3_members,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)vec3_init<glm::u8>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)vec_new<3, glm::u8>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_VEC, \
+	3, \
+	0, \
+	sizeof(uint8), \
+	sizeof(glm::vec<3, uint8>), \
 	PyGLM_FS_UINT8
-};
-
-static PyTypeObject& hu8vec3Type = *((PyTypeObject*)&hu8vec3GLMType);

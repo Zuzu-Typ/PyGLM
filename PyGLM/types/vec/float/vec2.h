@@ -115,54 +115,50 @@ static PyTypeObject hfvec2IterType = {
 	(newfunc)vecIter_new<2, float>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hfvec2GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.vec2",             /* tp_name */
-		sizeof(vec<2, float>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)vec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)vec2_repr<float>,                         /* tp_repr */
-		& hfvec2NumMethods,             /* tp_as_number */
-		& hfvec2SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)vec_hash<2, float>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)vec2_str<float>,                         /* tp_str */
-		(getattrofunc)vec_getattr<2, float>,                         /* tp_getattro */
-		(setattrofunc)vec_setattr<2, float>,                         /* tp_setattro */
-		& hfvec2BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"vec2( <vec2 compatible type(s)> )\n2 components vector of high qualifier float numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)vec_richcompare<2, float>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)vec_geniter<2, float>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hfvec2_methods,             /* tp_methods */
-		hfvec2_members,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)vec2_init<float>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)vec_new<2, float>,                 /* tp_new */
-	},
-	PyGLM_TYPE_VEC,
-	2,
-	0,
-	sizeof(float),
-	sizeof(glm::vec<2, float>),
+#define FVEC2_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.vec2",             /* tp_name */ \
+		sizeof(vec<2, float>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)vec_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)vec2_repr<float>,                         /* tp_repr */ \
+		& hfvec2NumMethods,             /* tp_as_number */ \
+		& hfvec2SeqMethods,                         /* tp_as_sequence */ \
+		0,                         /* tp_as_mapping */ \
+		(hashfunc)vec_hash<2, float>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)vec2_str<float>,                         /* tp_str */ \
+		(getattrofunc)vec_getattr<2, float>,                         /* tp_getattro */ \
+		(setattrofunc)vec_setattr<2, float>,                         /* tp_setattro */ \
+		& hfvec2BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"vec2( <vec2 compatible type(s)> )\n2 components vector of high qualifier float numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)vec_richcompare<2, float>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)vec_geniter<2, float>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		hfvec2_methods,             /* tp_methods */ \
+		hfvec2_members,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)vec2_init<float>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)vec_new<2, float>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_VEC, \
+	2, \
+	0, \
+	sizeof(float), \
+	sizeof(glm::vec<2, float>), \
 	PyGLM_FS_FLOAT
-};
-
-static PyTypeObject& hfvec2Type = *((PyTypeObject*)&hfvec2GLMType);

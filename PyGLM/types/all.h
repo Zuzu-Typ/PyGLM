@@ -13,3 +13,5 @@
 #include "qua/all.h"
 
 #include "glmArray/glmArray.h"
+
+#include "typeobjects.h"

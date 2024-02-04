@@ -16,9 +16,8 @@ PyDoc_STRVAR(packDouble2x32_docstr,
 );
 static PyObject*
 packDouble2x32_(PyObject*, PyObject* arg) {
-	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_UINT);
-	if (PyGLM_Vec_PTI_Check0(2, glm::uint, arg)) {
-		glm::uvec2 o = PyGLM_Vec_PTI_Get0(2, glm::uint, arg);
+	if (PyGLM_Vec_Check(2, uint32, arg)) {
+		glm::uvec2 o = PyGLM_VecOrMVec_GET(2, uint32, arg);
 		return PyFloat_FromDouble(glm::packDouble2x32(o));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for packDouble2x32(): ", arg);
@@ -36,10 +35,9 @@ PyDoc_STRVAR(packUnorm2x16_docstr,
 );
 static PyObject*
 packUnorm2x16_(PyObject*, PyObject* arg) {
-	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FLOAT);
-	if (PyGLM_Vec_PTI_Check0(2, float, arg)) {
-		glm::vec2 o = PyGLM_Vec_PTI_Get0(2, float, arg);
-		return PyLong_FromLong((long)glm::packUnorm2x16(o));
+	if (PyGLM_Vec_Check(2, float, arg)) {
+		glm::vec2 o = PyGLM_VecOrMVec_GET(2, float, arg);
+		return pack(glm::packUnorm2x16(o));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for packUnorm2x16(): ", arg);
 	return NULL;
@@ -56,10 +54,9 @@ PyDoc_STRVAR(packSnorm2x16_docstr,
 );
 static PyObject*
 packSnorm2x16_(PyObject*, PyObject* arg) {
-	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FLOAT);
-	if (PyGLM_Vec_PTI_Check0(2, float, arg)) {
-		glm::vec2 o = PyGLM_Vec_PTI_Get0(2, float, arg);
-		return PyLong_FromLong((long)glm::packSnorm2x16(o));
+	if (PyGLM_Vec_Check(2, float, arg)) {
+		glm::vec2 o = PyGLM_VecOrMVec_GET(2, float, arg);
+		return pack(glm::packSnorm2x16(o));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for packSnorm2x16(): ", arg);
 	return NULL;
@@ -76,10 +73,9 @@ PyDoc_STRVAR(packUnorm4x8_docstr,
 );
 static PyObject*
 packUnorm4x8_(PyObject*, PyObject* arg) {
-	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FLOAT);
-	if (PyGLM_Vec_PTI_Check0(4, float, arg)) {
-		glm::vec4 o = PyGLM_Vec_PTI_Get0(4, float, arg);
-		return PyLong_FromLong((long)glm::packUnorm4x8(o));
+	if (PyGLM_Vec_Check(4, float, arg)) {
+		glm::vec4 o = PyGLM_VecOrMVec_GET(4, float, arg);
+		return pack(glm::packUnorm4x8(o));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for packUnorm4x8(): ", arg);
 	return NULL;
@@ -96,10 +92,9 @@ PyDoc_STRVAR(packSnorm4x8_docstr,
 );
 static PyObject*
 packSnorm4x8_(PyObject*, PyObject* arg) {
-	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FLOAT);
-	if (PyGLM_Vec_PTI_Check0(4, float, arg)) {
-		glm::vec4 o = PyGLM_Vec_PTI_Get0(4, float, arg);
-		return PyLong_FromLong((long)glm::packSnorm4x8(o));
+	if (PyGLM_Vec_Check(4, float, arg)) {
+		glm::vec4 o = PyGLM_VecOrMVec_GET(4, float, arg);
+		return pack(glm::packSnorm4x8(o));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for packSnorm4x8(): ", arg);
 	return NULL;
@@ -115,10 +110,9 @@ PyDoc_STRVAR(packHalf2x16_docstr,
 );
 static PyObject*
 packHalf2x16_(PyObject*, PyObject* arg) {
-	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FLOAT);
-	if (PyGLM_Vec_PTI_Check0(2, float, arg)) {
-		glm::vec2 o = PyGLM_Vec_PTI_Get0(2, float, arg);
-		return PyLong_FromUnsignedLong((unsigned long)glm::packHalf2x16(o));
+	if (PyGLM_Vec_Check(2, float, arg)) {
+		glm::vec2 o = PyGLM_VecOrMVec_GET(2, float, arg);
+		return pack(glm::packHalf2x16(o));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for packHalf2x16(): ", arg);
 	return NULL;

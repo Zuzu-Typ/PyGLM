@@ -116,54 +116,50 @@ static PyTypeObject hu64vec3IterType = {
 	(newfunc)vecIter_new<3, glm::u64>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hu64vec3GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.u64vec3",             /* tp_name */
-		sizeof(vec<3, glm::u64>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)vec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)vec3_repr<glm::u64>,                         /* tp_repr */
-		& hu64vec3NumMethods,             /* tp_as_number */
-		& hu64vec3SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)vec_hash<3, glm::u64>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)vec3_str<glm::u64>,                         /* tp_str */
-		(getattrofunc)vec_getattr<3, glm::u64>,                         /* tp_getattro */
-		(setattrofunc)vec_setattr<3, glm::u64>,                         /* tp_setattro */
-		& hu64vec3BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"u64vec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier 64 bit unsigned integer numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)vec_richcompare<3, glm::u64>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)vec_geniter<3, glm::u64>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hu64vec3_methods,             /* tp_methods */
-		hu64vec3_members,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)vec3_init<glm::u64>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)vec_new<3, glm::u64>,                 /* tp_new */
-	},
-	PyGLM_TYPE_VEC,
-	3,
-	0,
-	sizeof(uint64),
-	sizeof(glm::vec<3, uint64>),
+#define U64VEC3_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.u64vec3",             /* tp_name */ \
+		sizeof(vec<3, glm::u64>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)vec_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)vec3_repr<glm::u64>,                         /* tp_repr */ \
+		& hu64vec3NumMethods,             /* tp_as_number */ \
+		& hu64vec3SeqMethods,                         /* tp_as_sequence */ \
+		0,                         /* tp_as_mapping */ \
+		(hashfunc)vec_hash<3, glm::u64>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)vec3_str<glm::u64>,                         /* tp_str */ \
+		(getattrofunc)vec_getattr<3, glm::u64>,                         /* tp_getattro */ \
+		(setattrofunc)vec_setattr<3, glm::u64>,                         /* tp_setattro */ \
+		& hu64vec3BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"u64vec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier 64 bit unsigned integer numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)vec_richcompare<3, glm::u64>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)vec_geniter<3, glm::u64>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		hu64vec3_methods,             /* tp_methods */ \
+		hu64vec3_members,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)vec3_init<glm::u64>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)vec_new<3, glm::u64>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_VEC, \
+	3, \
+	0, \
+	sizeof(uint64), \
+	sizeof(glm::vec<3, uint64>), \
 	PyGLM_FS_UINT64
-};
-
-static PyTypeObject& hu64vec3Type = *((PyTypeObject*)&hu64vec3GLMType);

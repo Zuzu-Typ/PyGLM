@@ -265,6 +265,10 @@ It contains common GLSL functions\.
 #### <code>glm.<code>**mix**(**x**: *number*, **y**: *number*, **a**: *bool*) -\> *number*</code></code>  
 &emsp;&emsp;Returns ``` y ``` if ``` a ``` is ``` True ``` and ``` x ``` otherwise\.  
   
+#### <code>glm.<code>**mix**(**x**: *vecN*, **y**: *vecN*, **a**: *float*) -\> *vecN*</code></code>  
+&emsp;&emsp;Returns ``` x * (1.0 - a) + y * a ```, i\.e\., the linear blend of ``` x ``` and ``` y ``` using the floating\-point  
+&emsp;&emsp;value ``` a ```\. The value for ``` a ``` is not restricted to the range ``` [0, 1] ```\.  
+  
 #### <code>glm.<code>**mix**(**x**: *vecN*, **y**: *vecN*, **a**: *fvecN*) -\> *vecN*</code></code>  
 &emsp;&emsp;Returns ``` x * (1.0 - a) + y * a ```, i\.e\., the linear blend of ``` x ``` and ``` y ``` using the floating\-point  
 &emsp;&emsp;value ``` a ```\. The value for ``` a ``` is not restricted to the range ``` [0, 1] ```\.  

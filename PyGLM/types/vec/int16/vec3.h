@@ -116,54 +116,50 @@ static PyTypeObject hi16vec3IterType = {
 	(newfunc)vecIter_new<3, glm::i16>,                 /* tp_new */
 };
 
-static PyGLMTypeObject hi16vec3GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.i16vec3",             /* tp_name */
-		sizeof(vec<3, glm::i16>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)vec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)vec3_repr<glm::i16>,                         /* tp_repr */
-		& hi16vec3NumMethods,             /* tp_as_number */
-		& hi16vec3SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)vec_hash<3, glm::i16>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)vec3_str<glm::i16>,                         /* tp_str */
-		(getattrofunc)vec_getattr<3, glm::i16>,                         /* tp_getattro */
-		(setattrofunc)vec_setattr<3, glm::i16>,                         /* tp_setattro */
-		& hi16vec3BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"i16vec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier 16 bit integer numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)vec_richcompare<3, glm::i16>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)vec_geniter<3, glm::i16>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		hi16vec3_methods,             /* tp_methods */
-		hi16vec3_members,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)vec3_init<glm::i16>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)vec_new<3, glm::i16>,                 /* tp_new */
-	},
-	PyGLM_TYPE_VEC,
-	3,
-	0,
-	sizeof(int16),
-	sizeof(glm::vec<3, int16>),
+#define I16VEC3_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.i16vec3",             /* tp_name */ \
+		sizeof(vec<3, glm::i16>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)vec_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)vec3_repr<glm::i16>,                         /* tp_repr */ \
+		& hi16vec3NumMethods,             /* tp_as_number */ \
+		& hi16vec3SeqMethods,                         /* tp_as_sequence */ \
+		0,                         /* tp_as_mapping */ \
+		(hashfunc)vec_hash<3, glm::i16>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)vec3_str<glm::i16>,                         /* tp_str */ \
+		(getattrofunc)vec_getattr<3, glm::i16>,                         /* tp_getattro */ \
+		(setattrofunc)vec_setattr<3, glm::i16>,                         /* tp_setattro */ \
+		& hi16vec3BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"i16vec3( <vec3 compatible type(s)> )\n3 components vector of high qualifier 16 bit integer numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)vec_richcompare<3, glm::i16>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)vec_geniter<3, glm::i16>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		hi16vec3_methods,             /* tp_methods */ \
+		hi16vec3_members,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)vec3_init<glm::i16>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)vec_new<3, glm::i16>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_VEC, \
+	3, \
+	0, \
+	sizeof(int16), \
+	sizeof(glm::vec<3, int16>), \
 	PyGLM_FS_INT16
-};
-
-static PyTypeObject& hi16vec3Type = *((PyTypeObject*)&hi16vec3GLMType);

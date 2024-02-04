@@ -115,54 +115,50 @@ static PyTypeObject huvec2IterType = {
 	(newfunc)vecIter_new<2, glm::u32>,                 /* tp_new */
 };
 
-static PyGLMTypeObject huvec2GLMType = {
-	{
-		PyObject_HEAD_INIT(NULL)
-		"glm.uvec2",             /* tp_name */
-		sizeof(vec<2, glm::u32>),             /* tp_basicsize */
-		0,                         /* tp_itemsize */
-		(destructor)vec_dealloc, /* tp_dealloc */
-		0,                         /* tp_print */
-		0,                         /* tp_getattr */
-		0,                         /* tp_setattr */
-		0,                         /* tp_reserved */
-		(reprfunc)vec2_repr<glm::u32>,                         /* tp_repr */
-		& huvec2NumMethods,             /* tp_as_number */
-		& huvec2SeqMethods,                         /* tp_as_sequence */
-		0,                         /* tp_as_mapping */
-		(hashfunc)vec_hash<2, glm::u32>,                         /* tp_hash  */
-		0,                         /* tp_call */
-		(reprfunc)vec2_str<glm::u32>,                         /* tp_str */
-		(getattrofunc)vec_getattr<2, glm::u32>,                         /* tp_getattro */
-		(setattrofunc)vec_setattr<2, glm::u32>,                         /* tp_setattro */
-		& huvec2BufferMethods,                         /* tp_as_buffer */
-		Py_TPFLAGS_DEFAULT |
-		Py_TPFLAGS_BASETYPE,   /* tp_flags */
-		"uvec2( <vec2 compatible type(s)> )\n2 components vector of high qualifier unsigned integer numbers.",           /* tp_doc */
-		0,                         /* tp_traverse */
-		0,                         /* tp_clear */
-		(richcmpfunc)vec_richcompare<2, glm::u32>,                         /* tp_richcompare */
-		0,                         /* tp_weaklistoffset */
-		(getiterfunc)vec_geniter<2, glm::u32>,                         /* tp_iter */
-		0,                         /* tp_iternext */
-		huvec2_methods,             /* tp_methods */
-		huvec2_members,             /* tp_members */
-		0,           			/* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)vec2_init<glm::u32>,      /* tp_init */
-		0,                         /* tp_alloc */
-		(newfunc)vec_new<2, glm::u32>,                 /* tp_new */
-	},
-	PyGLM_TYPE_VEC,
-	2,
-	0,
-	sizeof(uint32),
-	sizeof(glm::vec<2, uint32>),
+#define UVEC2_GLM_TYPEOBJECT 	{ \
+		PyObject_HEAD_INIT(NULL) \
+		"glm.uvec2",             /* tp_name */ \
+		sizeof(vec<2, glm::u32>),             /* tp_basicsize */ \
+		0,                         /* tp_itemsize */ \
+		(destructor)vec_dealloc, /* tp_dealloc */ \
+		0,                         /* tp_print */ \
+		0,                         /* tp_getattr */ \
+		0,                         /* tp_setattr */ \
+		0,                         /* tp_reserved */ \
+		(reprfunc)vec2_repr<glm::u32>,                         /* tp_repr */ \
+		& huvec2NumMethods,             /* tp_as_number */ \
+		& huvec2SeqMethods,                         /* tp_as_sequence */ \
+		0,                         /* tp_as_mapping */ \
+		(hashfunc)vec_hash<2, glm::u32>,                         /* tp_hash  */ \
+		0,                         /* tp_call */ \
+		(reprfunc)vec2_str<glm::u32>,                         /* tp_str */ \
+		(getattrofunc)vec_getattr<2, glm::u32>,                         /* tp_getattro */ \
+		(setattrofunc)vec_setattr<2, glm::u32>,                         /* tp_setattro */ \
+		& huvec2BufferMethods,                         /* tp_as_buffer */ \
+		Py_TPFLAGS_DEFAULT | \
+		Py_TPFLAGS_BASETYPE,   /* tp_flags */ \
+		"uvec2( <vec2 compatible type(s)> )\n2 components vector of high qualifier unsigned integer numbers.",           /* tp_doc */ \
+		0,                         /* tp_traverse */ \
+		0,                         /* tp_clear */ \
+		(richcmpfunc)vec_richcompare<2, glm::u32>,                         /* tp_richcompare */ \
+		0,                         /* tp_weaklistoffset */ \
+		(getiterfunc)vec_geniter<2, glm::u32>,                         /* tp_iter */ \
+		0,                         /* tp_iternext */ \
+		huvec2_methods,             /* tp_methods */ \
+		huvec2_members,             /* tp_members */ \
+		0,           			/* tp_getset */ \
+		0,                         /* tp_base */ \
+		0,                         /* tp_dict */ \
+		0,                         /* tp_descr_get */ \
+		0,                         /* tp_descr_set */ \
+		0,                         /* tp_dictoffset */ \
+		(initproc)vec2_init<glm::u32>,      /* tp_init */ \
+		0,                         /* tp_alloc */ \
+		(newfunc)vec_new<2, glm::u32>,                 /* tp_new */ \
+	}, \
+	PyGLM_TYPE_VEC, \
+	2, \
+	0, \
+	sizeof(uint32), \
+	sizeof(glm::vec<2, uint32>), \
 	PyGLM_FS_UINT32
-};
-
-static PyTypeObject& huvec2Type = *((PyTypeObject*)&huvec2GLMType);

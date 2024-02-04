@@ -263,6 +263,10 @@ It contains common GLSL functions.
 \raw\#### <code>glm.<code>**mix**(**x**: *number*, **y**: *number*, **a**: *bool*) -\\> *number*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\y\code\ if \code\a\code\ is \code\True\code\ and \code\x\code\ otherwise.
 
+\raw\#### <code>glm.<code>**mix**(**x**: *vecN*, **y**: *vecN*, **a**: *float*) -\\> *vecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the floating-point
+\raw\&emsp;&emsp;\raw\value \code\a\code\. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
+
 \raw\#### <code>glm.<code>**mix**(**x**: *vecN*, **y**: *vecN*, **a**: *fvecN*) -\\> *vecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns \code\x * (1.0 - a) + y * a\code\, i.e., the linear blend of \code\x\code\ and \code\y\code\ using the floating-point
 \raw\&emsp;&emsp;\raw\value \code\a\code\. The value for \code\a\code\ is not restricted to the range \code\[0, 1]\code\.
