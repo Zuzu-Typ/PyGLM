@@ -115,57 +115,39 @@ static PyGLMTypeObject* const PyGLMTypeObjectArrayEnd = reinterpret_cast<PyGLMTy
 template<int L, typename T>
 static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec() {
 	if (std::is_same<T, double>::value) {
-		return _PyGLM_VEC_START + 0 + L - 1;
+		return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 0 + L - 1);
 	}
 	if (std::is_same<T, float>::value) {
-		return _PyGLM_VEC_START + 4 + L - 1;
+		return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 4 + L - 1);
 	}
 	if (std::is_same<T, bool>::value) {
-		return _PyGLM_VEC_START + 40 + L - 1;
+		return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 40 + L - 1);
 	}
 	if (std::is_integral<T>::value) {
 		if (std::is_signed<T>::value) {
 			switch (sizeof(T)) {
 			case sizeof(int64) :
-				return _PyGLM_VEC_START + 8 + L - 1;
+				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 8 + L - 1);
 			case sizeof(int32) :
-				return _PyGLM_VEC_START + 12 + L - 1;
+				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 12 + L - 1);
 			case sizeof(int16) :
-				return _PyGLM_VEC_START + 16 + L - 1;
+				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 16 + L - 1);
 			case sizeof(int8):
-				return _PyGLM_VEC_START + 20 + L - 1;
+				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 20 + L - 1);
 			}
 		}
 		if (std::is_unsigned<T>::value) {
 			switch (sizeof(T)) {
 			case sizeof(uint64) :
-				return _PyGLM_VEC_START + 24 + L - 1;
+				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 24 + L - 1);
 			case sizeof(uint32) :
-				return _PyGLM_VEC_START + 28 + L - 1;
+				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 28 + L - 1);
 			case sizeof(uint16) :
-				return _PyGLM_VEC_START + 32 + L - 1;
+				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 32 + L - 1);
 			case sizeof(uint8):
-				return _PyGLM_VEC_START + 36 + L - 1;
+				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 36 + L - 1);
 			}
 		}
-	}
-
-	constexpr auto size = sizeof(T);
-	if (size == 1) {
-		throw "Error: Unsupported type of size 1 byte.";
-	}
-	else if (size == 2) {
-		throw "Error: Unsupported type of size 2 bytes.";
-	}
-	else if (size == 4) {
-		throw "Error: Unsupported type of size 4 bytes.";
-	}
-	else if (size == 8) {
-		throw "Error: Unsupported type of size 8 bytes.";
-	}
-	else {
-		// Fallback for an unexpected size
-		throw "Error: Unsupported type of an unexpected size.";
 	}
 }
 
