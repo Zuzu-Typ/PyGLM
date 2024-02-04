@@ -332,7 +332,7 @@ constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec<4, bool>() {
 
 
 template<int C, int R, typename T>
-static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMat() {
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMat() {
 	if (std::is_same<T, double>::value) {
 		return _PyGLM_MAT_START + 0 + R - 2 + 3 * (C - 2);
 	}
@@ -354,7 +354,7 @@ static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMat() {
 }
 
 template<int L, typename T>
-static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMVec() {
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMVec() {
 	if (2 <= L && L <= 4) {
 		if (std::is_same<T, double>::value) {
 			return _PyGLM_MVEC_START + 0 + L - 2;
@@ -378,7 +378,7 @@ static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMVec() {
 }
 
 template<typename T>
-static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetQua() {
+constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetQua() {
 	if (std::is_same<T, double>::value) {
 		return _PyGLM_QUA_START + 0;
 	}
