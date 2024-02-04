@@ -44,7 +44,7 @@ static PyNumberMethods hdmat3x3NumMethods = {
 	0, //nb_power
 	(unaryfunc)mat_neg<3, 3, double>, //nb_negative
 	(unaryfunc)mat_pos<3, 3, double>, //nb_positive
-	0, //nb_absolute
+	(unaryfunc)mat_abs<3, 3, double>, //nb_absolute
 	0, //nb_bool
 	0, //nb_invert
 	0, //nb_lshift

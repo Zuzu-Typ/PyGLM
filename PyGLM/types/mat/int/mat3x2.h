@@ -44,7 +44,7 @@ static PyNumberMethods himat3x2NumMethods = {
 	0, //nb_power
 	(unaryfunc)mat_neg<3, 2, glm::i32>, //nb_negative
 	(unaryfunc)mat_pos<3, 2, glm::i32>, //nb_positive
-	0, //nb_absolute
+	(unaryfunc)mat_abs<3, 2, int32>, //nb_absolute
 	0, //nb_bool
 	0, //nb_invert
 	0, //nb_lshift

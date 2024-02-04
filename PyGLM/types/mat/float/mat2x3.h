@@ -44,7 +44,7 @@ static PyNumberMethods hfmat2x3NumMethods = {
 	0, //nb_power
 	(unaryfunc)mat_neg<2, 3, float>, //nb_negative
 	(unaryfunc)mat_pos<2, 3, float>, //nb_positive
-	0, //nb_absolute
+	(unaryfunc)mat_abs<2, 3, float>, //nb_absolute
 	0, //nb_bool
 	0, //nb_invert
 	0, //nb_lshift

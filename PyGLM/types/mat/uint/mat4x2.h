@@ -44,7 +44,7 @@ static PyNumberMethods humat4x2NumMethods = {
 	0, //nb_power
 	0, //nb_negative
 	(unaryfunc)mat_pos<4, 2, glm::u32>, //nb_positive
-	0, //nb_absolute
+	(unaryfunc)mat_pos<4, 2, uint32>, //nb_absolute
 	0, //nb_bool
 	0, //nb_invert
 	0, //nb_lshift

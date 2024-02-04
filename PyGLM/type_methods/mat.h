@@ -1220,7 +1220,11 @@ template<int C, int R, typename T>
 static PyObject *
 mat_abs(mat<C, R, T> *obj)
 {
-	return pack_mat<C, R, T>(glm::abs(obj->super_type));
+	glm::mat<C, R, T> m = obj->super_type;
+	for (int c = 0; c < C; c++) {
+		m[c] = glm::abs(m[c]);
+	}
+	return pack_mat<C, R, T>(m);
 }
 
 // binaryfunc

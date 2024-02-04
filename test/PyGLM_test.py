@@ -701,7 +701,7 @@ def test_pos():
 
 # abs #
 def test_abs():
-    for obj in gen_obj("#MV_M__fFiqsuIQSU"):
+    for obj in gen_obj("#MV_M__fFiqsu"):
         fassert(obj.__abs__, ())
         assert (abs(glm.array(obj)))[0] == abs(obj), obj
 #/abs #

@@ -41,10 +41,10 @@ static PyNumberMethods hdmat2x2NumMethods = {
 	(binaryfunc)mat_mul<2, 2, double>, //nb_multiply
 	0, //nb_remainder
 	0, //nb_divmod
-	0, //nb_power
+	0, //nb_poweri
 	(unaryfunc)mat_neg<2, 2, double>, //nb_negative
 	(unaryfunc)mat_pos<2, 2, double>, //nb_positive
-	0, //nb_absolute
+	(unaryfunc)mat_abs<2, 2, double>, //nb_absolute
 	0, //nb_bool
 	0, //nb_invert
 	0, //nb_lshift

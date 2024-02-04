@@ -185,94 +185,16 @@ constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetTypeMat<uint32>() {
 template<int L, typename T>
 constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec() {
 	return _PyGLM_VEC_START + PyGLMTypeObjectArrayOffsetType<T>() * 4 + L - 1;
-	/*if (std::is_same<T, double>::value) {
-		return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 0 + L - 1);
-	}*/
-	
-	/*
-	if (std::is_same<T, float>::value) {
-		return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 4 + L - 1);
-	}
-	if (std::is_same<T, bool>::value) {
-		return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 40 + L - 1);
-	}
-	if (std::is_integral<T>::value) {
-		if (std::is_signed<T>::value) {
-			switch (sizeof(T)) {
-			case sizeof(int64) :
-				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 8 + L - 1);
-			case sizeof(int32) :
-				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 12 + L - 1);
-			case sizeof(int16) :
-				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 16 + L - 1);
-			case sizeof(int8):
-				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 20 + L - 1);
-			}
-		}
-		if (std::is_unsigned<T>::value) {
-			switch (sizeof(T)) {
-			case sizeof(uint64) :
-				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 24 + L - 1);
-			case sizeof(uint32) :
-				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 28 + L - 1);
-			case sizeof(uint16) :
-				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 32 + L - 1);
-			case sizeof(uint8):
-				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 36 + L - 1);
-			}
-		}
-	}*/
 }
-
-
 
 template<int C, int R, typename T>
 constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMat() {
 	return _PyGLM_MAT_START + PyGLMTypeObjectArrayOffsetTypeMat<T>() * 9 + R - 2 + 3 * (C - 2);
-	/*if (std::is_same<T, double>::value) {
-		return _PyGLM_MAT_START + 0 + R - 2 + 3 * (C - 2);
-	}
-	if (std::is_same<T, float>::value) {
-		return _PyGLM_MAT_START + 9 + R - 2 + 3 * (C - 2);
-	}
-	if (std::is_integral<T>::value) {
-		if (std::is_signed<T>::value) {
-			if (sizeof(T) == sizeof(int32)) {
-				return _PyGLM_MAT_START + 18 + R - 2 + 3 * (C - 2);
-			}
-		}
-		if (std::is_unsigned<T>::value) {
-			if (sizeof(T) == sizeof(int32)) {
-				return _PyGLM_MAT_START + 27 + R - 2 + 3 * (C - 2);
-			}
-		}
-	}*/
 }
 
 template<int L, typename T>
 static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMVec() {
 	return _PyGLM_MVEC_START + PyGLMTypeObjectArrayOffsetTypeMat<T>() * 3 + L - 2;
-	
-	/*if (2 <= L && L <= 4) {
-		if (std::is_same<T, double>::value) {
-			return _PyGLM_MVEC_START + 0 + L - 2;
-		}
-		if (std::is_same<T, float>::value) {
-			return _PyGLM_MVEC_START + 3 + L - 2;
-		}
-		if (std::is_integral<T>::value) {
-			if (std::is_signed<T>::value) {
-				if (sizeof(T) == sizeof(int32)) {
-					return _PyGLM_MVEC_START + 6 + L - 2;
-				}
-			}
-			if (std::is_unsigned<T>::value) {
-				if (sizeof(T) == sizeof(int32)) {
-					return _PyGLM_MVEC_START + 9 + L - 2;
-				}
-			}
-		}
-	}*/
 }
 
 template<typename T>
