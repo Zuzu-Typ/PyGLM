@@ -120,32 +120,34 @@ static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec() {
 	if (std::is_same<T, float>::value) {
 		return _VEC_START + 4 + L - 1;
 	}
-	if (std::is_same<T, int64>::value) {
-		return _VEC_START + 8 + L - 1;
-	}
-	if (std::is_same<T, int32>::value) {
-		return _VEC_START + 12 + L - 1;
-	}
-	if (std::is_same<T, int16>::value) {
-		return _VEC_START + 16 + L - 1;
-	}
-	if (std::is_same<T, int8>::value) {
-		return _VEC_START + 20 + L - 1;
-	}
-	if (std::is_same<T, uint64>::value) {
-		return _VEC_START + 24 + L - 1;
-	}
-	if (std::is_same<T, uint32>::value) {
-		return _VEC_START + 28 + L - 1;
-	}
-	if (std::is_same<T, uint16>::value) {
-		return _VEC_START + 32 + L - 1;
-	}
-	if (std::is_same<T, uint8>::value) {
-		return _VEC_START + 36 + L - 1;
-	}
 	if (std::is_same<T, bool>::value) {
 		return _VEC_START + 40 + L - 1;
+	}
+	if (std::is_integral<T>::value) {
+		if (std::is_signed<T>::value) {
+			switch (sizeof(T)) {
+			case sizeof(int64) :
+				return _VEC_START + 8 + L - 1;
+			case sizeof(int32) :
+				return _VEC_START + 12 + L - 1;
+			case sizeof(int16) :
+				return _VEC_START + 16 + L - 1;
+			case sizeof(int8):
+				return _VEC_START + 20 + L - 1;
+			}
+		}
+		if (std::is_unsigned<T>::value) {
+			switch (sizeof(T)) {
+			case sizeof(uint64) :
+				return _VEC_START + 24 + L - 1;
+			case sizeof(uint32) :
+				return _VEC_START + 28 + L - 1;
+			case sizeof(uint16) :
+				return _VEC_START + 32 + L - 1;
+			case sizeof(uint8):
+				return _VEC_START + 36 + L - 1;
+			}
+		}
 	}
 }
 
@@ -157,11 +159,17 @@ static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMat() {
 	if (std::is_same<T, float>::value) {
 		return _MAT_START + 9 + R - 2 + 3 * (C - 2);
 	}
-	if (std::is_same<T, int32>::value) {
-		return _MAT_START + 18 + R - 2 + 3 * (C - 2);
-	}
-	if (std::is_same<T, uint32>::value) {
-		return _MAT_START + 27 + R - 2 + 3 * (C - 2);
+	if (std::is_integral<T>::value) {
+		if (std::is_signed<T>::value) {
+			if (sizeof(T) == sizeof(int32)) {
+				return _MAT_START + 18 + R - 2 + 3 * (C - 2);
+			}
+		}
+		if (std::is_unsigned<T>::value) {
+			if (sizeof(T) == sizeof(int32)) {
+				return _MAT_START + 27 + R - 2 + 3 * (C - 2);
+			}
+		}
 	}
 }
 
@@ -174,11 +182,17 @@ static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetMVec() {
 		if (std::is_same<T, float>::value) {
 			return _MVEC_START + 3 + L - 2;
 		}
-		if (std::is_same<T, int32>::value) {
-			return _MVEC_START + 6 + L - 2;
-		}
-		if (std::is_same<T, uint32>::value) {
-			return _MVEC_START + 9 + L - 2;
+		if (std::is_integral<T>::value) {
+			if (std::is_signed<T>::value) {
+				if (sizeof(T) == sizeof(int32)) {
+					return _MVEC_START + 6 + L - 2;
+				}
+			}
+			if (std::is_unsigned<T>::value) {
+				if (sizeof(T) == sizeof(int32)) {
+					return _MVEC_START + 9 + L - 2;
+				}
+			}
 		}
 	}
 }
