@@ -117,6 +117,8 @@ static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec() {
 	if (std::is_same<T, double>::value) {
 		return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 0 + L - 1);
 	}
+	return L + sizeof(T);
+	/*
 	if (std::is_same<T, float>::value) {
 		return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 4 + L - 1);
 	}
@@ -148,7 +150,7 @@ static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec() {
 				return static_cast<ptrdiff_t>(_PyGLM_VEC_START + 36 + L - 1);
 			}
 		}
-	}
+	}*/
 }
 
 template<int C, int R, typename T>
