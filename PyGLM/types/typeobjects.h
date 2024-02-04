@@ -114,6 +114,7 @@ static PyGLMTypeObject* const PyGLMTypeObjectArrayEnd = reinterpret_cast<PyGLMTy
 
 template<int L, typename T>
 static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec() {
+	return 0;
 	if (std::is_same<T, double>::value) {
 		return _VEC_START + 0 + L - 1;
 	}
