@@ -151,21 +151,21 @@ static constexpr ptrdiff_t PyGLMTypeObjectArrayOffsetVec() {
 	}
 
 	constexpr auto size = sizeof(T);
-	if constexpr (size == 1) {
-		throw std::logic_error("Error: Unsupported type of size 1 byte.");
+	if (size == 1) {
+		throw "Error: Unsupported type of size 1 byte.";
 	}
-	else if constexpr (size == 2) {
-		throw std::logic_error("Error: Unsupported type of size 2 bytes.");
+	else if (size == 2) {
+		throw "Error: Unsupported type of size 2 bytes.";
 	}
-	else if constexpr (size == 4) {
-		throw std::logic_error("Error: Unsupported type of size 4 bytes.");
+	else if (size == 4) {
+		throw "Error: Unsupported type of size 4 bytes.";
 	}
-	else if constexpr (size == 8) {
-		throw std::logic_error("Error: Unsupported type of size 8 bytes.");
+	else if (size == 8) {
+		throw "Error: Unsupported type of size 8 bytes.";
 	}
 	else {
 		// Fallback for an unexpected size
-		throw std::logic_error("Error: Unsupported type of an unexpected size.");
+		throw "Error: Unsupported type of an unexpected size.";
 	}
 }
 
