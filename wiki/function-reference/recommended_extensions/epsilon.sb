@@ -14,6 +14,22 @@ Comparison functions for a user defined epsilon values.
 \raw\#### <code>glm.<code>**epsilonEqual**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *number*) -\\> *bvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| < epsilon\code\.
 
+\raw\#### <code>glm.<code>**epsilonEqual**(**x**: *quat*, **y**: *quat*, **epsilon**: *number*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| < epsilon\code\.
+
+\raw\#### <code>glm.<code>**epsilonEqual**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| < epsilon\code\.
+
 \h3\epsilonNotEqual() function\h3\
-\raw\#### <code>glm.<code>**epsilonNotEqual**(***args**) -\\> *not epsilonEqual(*args)*</code></code>\raw\
+\raw\#### <code>glm.<code>**epsilonNotEqual**(**x**: *number*, **y**: *number*, **epsilon**: *number*) -\\> *bool*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| >= epsilon\code\.
+
+\raw\#### <code>glm.<code>**epsilonNotEqual**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *number*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| >= epsilon\code\.
+
+\raw\#### <code>glm.<code>**epsilonNotEqual**(**x**: *quat*, **y**: *quat*, **epsilon**: *number*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| >= epsilon\code\.
+
+\raw\#### <code>glm.<code>**epsilonNotEqual**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *vecN*) -\\> *bvecN*</code></code>\raw\
+\raw\&emsp;&emsp;\raw\Returns the component-wise comparison of \code\|x - y| >= epsilon\code\.
 

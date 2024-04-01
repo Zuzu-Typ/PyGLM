@@ -15,12 +15,15 @@ static PyObject*
 angleAxis_(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "angleAxis", arg1, arg2);
-	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);
-	if (PyGLM_Number_Check(arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-		return pack(glm::angleAxis(PyGLM_Number_FromPyObject<float>(arg1), PyGLM_Vec_PTI_Get1(3, float, arg2)));
-	}
-	if (PyGLM_Number_Check(arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-		return pack(glm::angleAxis(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Vec_PTI_Get1(3, double, arg2)));
+	switch (GET_PyGLMTypeObjectArrayOffsetOf(arg2)) {
+#define PyGLM_FUNC_TEMPLATE(T) \
+		case PyGLMTypeObjectArrayOffsetVec<3, T>(): \
+			return pack(glm::angleAxis(PyGLM_Number_FromPyObject<T>(arg1), PyGLM_Vec_Get(3, T, arg2))); \
+		case PyGLMTypeObjectArrayOffsetMVec<3, T>(): \
+			return pack(glm::angleAxis(PyGLM_Number_FromPyObject<T>(arg1), PyGLM_MVec_Get(3, T, arg2)));
+
+		PyGLM_CODEGEN_PARAM_T_Qua_fF(PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for angleAxis()");
 	return NULL;

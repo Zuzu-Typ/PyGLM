@@ -8,96 +8,54 @@ PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(ceilPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(floorPowerOfTwo);
 PyGLM_MAKE_GLM_FUNC_N_V__tiqsu(roundPowerOfTwo);
 
+static union {
+	int i;
+	glm::vec<1, int8> vec1int8;
+	glm::vec<2, int8> vec2int8;
+	glm::vec<3, int8> vec3int8;
+	glm::vec<4, int8> vec4int8;
+	glm::vec<1, int16> vec1int16;
+	glm::vec<2, int16> vec2int16;
+	glm::vec<3, int16> vec3int16;
+	glm::vec<4, int16> vec4int16;
+	glm::vec<1, int32> vec1int32;
+	glm::vec<2, int32> vec2int32;
+	glm::vec<3, int32> vec3int32;
+	glm::vec<4, int32> vec4int32;
+	glm::vec<1, int64> vec1int64;
+	glm::vec<2, int64> vec2int64;
+	glm::vec<3, int64> vec3int64;
+	glm::vec<4, int64> vec4int64;
+} _round_PyGLM_temp{ 0 };
+
 static PyObject*
 ceilMultiple_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2;
 	PyGLM_Arg_Unpack_2O(args, "ceilMultiple", arg1, arg2);
+	if (Is_PyGLM_Object(arg1) && Is_PyGLM_Object(arg2)) {
+		GET_PyGLM_ARG_TYPE(arg1);
+		GET_PyGLM_ARG_TYPE(arg2);
+
+		GET_PyGLM_ARG_SUBTYPE(arg1);
+		GET_PyGLM_ARG_SUBTYPE(arg2);
+
+		if (arg1Subtype == arg2Subtype) {
+			switch (GET_PyGLMTypeObjectArrayOffsetOfType(arg1Subtype)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+				case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+					_round_PyGLM_temp.vec ## L ## T = PyGLM_VecOrMVec_Get(L, T, arg2); \
+					PyGLM_ASSERT(glm::all(glm::greaterThan(_round_PyGLM_temp.vec ## L ## T, glm::vec<L, T>(0))), "Invalid Multiple. Must be positive"); \
+				return pack(glm::ceilMultiple(PyGLM_VecOrMVec_Get(L, T, arg1), _round_PyGLM_temp.vec ## L ## T));
+
+				PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_iqsu, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+			}
+		}
+	}
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 		int64 o2 = PyGLM_Number_FromPyObject<int64>(arg2);
 		PyGLM_ASSERT((o2 > 0), "Invalid Multiple. Must be positive");
 		return pack(glm::ceilMultiple(PyGLM_Number_FromPyObject<int64>(arg1), o2));
-	}
-	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_INT | PyGLM_DT_INT64 | PyGLM_DT_INT16 | PyGLM_DT_INT8);
-	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_INT | PyGLM_DT_INT64 | PyGLM_DT_INT16 | PyGLM_DT_INT8);
-	if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<1, int>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(1, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int64, arg1) && PyGLM_Vec_PTI_Check1(1, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int64);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<1, int64>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(1, int64, arg1), PyGLM_Vec_PTI_Get1(1, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int16, arg1) && PyGLM_Vec_PTI_Check1(1, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int16);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<1, int16>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(1, int16, arg1), PyGLM_Vec_PTI_Get1(1, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int8, arg1) && PyGLM_Vec_PTI_Check1(1, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int8);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<1, int8>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(1, int8, arg1), PyGLM_Vec_PTI_Get1(1, int8, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Vec_PTI_Check1(2, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<2, int>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(2, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int64, arg1) && PyGLM_Vec_PTI_Check1(2, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int64);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<2, int64>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(2, int64, arg1), PyGLM_Vec_PTI_Get1(2, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int16, arg1) && PyGLM_Vec_PTI_Check1(2, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int16);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<2, int16>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(2, int16, arg1), PyGLM_Vec_PTI_Get1(2, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int8, arg1) && PyGLM_Vec_PTI_Check1(2, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int8);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<2, int8>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(2, int8, arg1), PyGLM_Vec_PTI_Get1(2, int8, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<3, int>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(3, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int64, arg1) && PyGLM_Vec_PTI_Check1(3, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int64);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<3, int64>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(3, int64, arg1), PyGLM_Vec_PTI_Get1(3, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int16, arg1) && PyGLM_Vec_PTI_Check1(3, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int16);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<3, int16>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(3, int16, arg1), PyGLM_Vec_PTI_Get1(3, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int8, arg1) && PyGLM_Vec_PTI_Check1(3, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int8);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<3, int8>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(3, int8, arg1), PyGLM_Vec_PTI_Get1(3, int8, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Vec_PTI_Check1(4, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<4, int>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(4, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int64, arg1) && PyGLM_Vec_PTI_Check1(4, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int64);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<4, int64>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(4, int64, arg1), PyGLM_Vec_PTI_Get1(4, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int16, arg1) && PyGLM_Vec_PTI_Check1(4, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int16);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<4, int16>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(4, int16, arg1), PyGLM_Vec_PTI_Get1(4, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int8, arg1) && PyGLM_Vec_PTI_Check1(4, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int8);
-		PyGLM_ASSERT(glm::all(glm::greaterThan(o2, glm::vec<4, int8>(0))), "Invalid Multiple. Must be positive");
-		return pack(glm::ceilMultiple(PyGLM_Vec_PTI_Get0(4, int8, arg1), PyGLM_Vec_PTI_Get1(4, int8, arg2)));
 	}
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for ceilMultiple(): ", arg1, arg2);
 	return NULL;
@@ -107,92 +65,30 @@ static PyObject*
 floorMultiple_(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "floorMultiple", arg1, arg2);
+	if (Is_PyGLM_Object(arg1) && Is_PyGLM_Object(arg2)) {
+		GET_PyGLM_ARG_TYPE(arg1);
+		GET_PyGLM_ARG_TYPE(arg2);
+
+		GET_PyGLM_ARG_SUBTYPE(arg1);
+		GET_PyGLM_ARG_SUBTYPE(arg2);
+
+		if (arg1Subtype == arg2Subtype) {
+			switch (GET_PyGLMTypeObjectArrayOffsetOfType(arg1Subtype)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+				case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+					_round_PyGLM_temp.vec ## L ## T = PyGLM_VecOrMVec_Get(L, T, arg2); \
+					PyGLM_ASSERT(glm::all(glm::notEqual(_round_PyGLM_temp.vec ## L ## T , glm::vec<L, T>(0))), "Invalid Multiple. Must not be zero"); \
+					return pack(glm::floorMultiple(PyGLM_VecOrMVec_Get(L, T, arg1), _round_PyGLM_temp.vec ## L ## T));
+
+				PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_iqsu, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+			}
+		}
+	}
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 		int64 o2 = PyGLM_Number_FromPyObject<int64>(arg2);
 		PyGLM_ASSERT((o2 != 0), "Invalid Multiple. Must not be zero");
 		return pack(glm::floorMultiple(PyGLM_Number_FromPyObject<int64>(arg1), o2));
-	}
-	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_INT | PyGLM_DT_INT64 | PyGLM_DT_INT16 | PyGLM_DT_INT8);
-	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_INT | PyGLM_DT_INT64 | PyGLM_DT_INT16 | PyGLM_DT_INT8);
-	if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<1, int>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(1, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int64, arg1) && PyGLM_Vec_PTI_Check1(1, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int64);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<1, int64>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(1, int64, arg1), PyGLM_Vec_PTI_Get1(1, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int16, arg1) && PyGLM_Vec_PTI_Check1(1, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int16);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<1, int16>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(1, int16, arg1), PyGLM_Vec_PTI_Get1(1, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int8, arg1) && PyGLM_Vec_PTI_Check1(1, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int8);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<1, int8>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(1, int8, arg1), PyGLM_Vec_PTI_Get1(1, int8, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Vec_PTI_Check1(2, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<2, int>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(2, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int64, arg1) && PyGLM_Vec_PTI_Check1(2, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int64);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<2, int64>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(2, int64, arg1), PyGLM_Vec_PTI_Get1(2, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int16, arg1) && PyGLM_Vec_PTI_Check1(2, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int16);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<2, int16>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(2, int16, arg1), PyGLM_Vec_PTI_Get1(2, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int8, arg1) && PyGLM_Vec_PTI_Check1(2, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int8);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<2, int8>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(2, int8, arg1), PyGLM_Vec_PTI_Get1(2, int8, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<3, int>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(3, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int64, arg1) && PyGLM_Vec_PTI_Check1(3, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int64);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<3, int64>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(3, int64, arg1), PyGLM_Vec_PTI_Get1(3, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int16, arg1) && PyGLM_Vec_PTI_Check1(3, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int16);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<3, int16>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(3, int16, arg1), PyGLM_Vec_PTI_Get1(3, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int8, arg1) && PyGLM_Vec_PTI_Check1(3, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int8);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<3, int8>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(3, int8, arg1), PyGLM_Vec_PTI_Get1(3, int8, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Vec_PTI_Check1(4, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<4, int>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(4, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int64, arg1) && PyGLM_Vec_PTI_Check1(4, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int64);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<4, int64>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(4, int64, arg1), PyGLM_Vec_PTI_Get1(4, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int16, arg1) && PyGLM_Vec_PTI_Check1(4, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int16);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<4, int16>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(4, int16, arg1), PyGLM_Vec_PTI_Get1(4, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int8, arg1) && PyGLM_Vec_PTI_Check1(4, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int8);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<4, int8>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::floorMultiple(PyGLM_Vec_PTI_Get0(4, int8, arg1), PyGLM_Vec_PTI_Get1(4, int8, arg2)));
 	}
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for floorMultiple(): ", arg1, arg2);
 	return NULL;
@@ -202,92 +98,30 @@ static PyObject*
 roundMultiple_(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2;
 	PyGLM_Arg_Unpack_2O(args, "roundMultiple", arg1, arg2);
+	if (Is_PyGLM_Object(arg1) && Is_PyGLM_Object(arg2)) {
+		GET_PyGLM_ARG_TYPE(arg1);
+		GET_PyGLM_ARG_TYPE(arg2);
+
+		GET_PyGLM_ARG_SUBTYPE(arg1);
+		GET_PyGLM_ARG_SUBTYPE(arg2);
+
+		if (arg1Subtype == arg2Subtype) {
+			switch (GET_PyGLMTypeObjectArrayOffsetOfType(arg1Subtype)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+				case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+					_round_PyGLM_temp.vec ## L ## T = PyGLM_VecOrMVec_Get(L, T, arg2); \
+					PyGLM_ASSERT(glm::all(glm::notEqual(_round_PyGLM_temp.vec ## L ## T , glm::vec<L, T>(0))), "Invalid Multiple. Must not be zero"); \
+					return pack(glm::roundMultiple(PyGLM_VecOrMVec_Get(L, T, arg1), _round_PyGLM_temp.vec ## L ## T));
+
+				PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_iqsu, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+			}
+		}
+	}
 	if (PyGLM_Number_Check(arg1) && PyGLM_Number_Check(arg2)) {
 		int64 o2 = PyGLM_Number_FromPyObject<int64>(arg2);
 		PyGLM_ASSERT((o2 != 0), "Invalid Multiple. Must not be zero");
 		return pack(glm::roundMultiple(PyGLM_Number_FromPyObject<int64>(arg1), o2));
-	}
-	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_INT | PyGLM_DT_INT64 | PyGLM_DT_INT16 | PyGLM_DT_INT8);
-	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_INT | PyGLM_DT_INT64 | PyGLM_DT_INT16 | PyGLM_DT_INT8);
-	if (PyGLM_Vec_PTI_Check0(1, int, arg1) && PyGLM_Vec_PTI_Check1(1, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<1, int>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(1, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int64, arg1) && PyGLM_Vec_PTI_Check1(1, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int64);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<1, int64>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(1, int64, arg1), PyGLM_Vec_PTI_Get1(1, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int16, arg1) && PyGLM_Vec_PTI_Check1(1, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int16);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<1, int16>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(1, int16, arg1), PyGLM_Vec_PTI_Get1(1, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, int8, arg1) && PyGLM_Vec_PTI_Check1(1, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(1, int8);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<1, int8>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(1, int8, arg1), PyGLM_Vec_PTI_Get1(1, int8, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int, arg1) && PyGLM_Vec_PTI_Check1(2, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<2, int>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(2, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int64, arg1) && PyGLM_Vec_PTI_Check1(2, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int64);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<2, int64>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(2, int64, arg1), PyGLM_Vec_PTI_Get1(2, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int16, arg1) && PyGLM_Vec_PTI_Check1(2, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int16);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<2, int16>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(2, int16, arg1), PyGLM_Vec_PTI_Get1(2, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, int8, arg1) && PyGLM_Vec_PTI_Check1(2, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(2, int8);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<2, int8>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(2, int8, arg1), PyGLM_Vec_PTI_Get1(2, int8, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int, arg1) && PyGLM_Vec_PTI_Check1(3, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<3, int>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(3, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int64, arg1) && PyGLM_Vec_PTI_Check1(3, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int64);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<3, int64>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(3, int64, arg1), PyGLM_Vec_PTI_Get1(3, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int16, arg1) && PyGLM_Vec_PTI_Check1(3, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int16);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<3, int16>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(3, int16, arg1), PyGLM_Vec_PTI_Get1(3, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, int8, arg1) && PyGLM_Vec_PTI_Check1(3, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(3, int8);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<3, int8>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(3, int8, arg1), PyGLM_Vec_PTI_Get1(3, int8, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int, arg1) && PyGLM_Vec_PTI_Check1(4, int, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<4, int>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(4, int, arg1), o2));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int64, arg1) && PyGLM_Vec_PTI_Check1(4, int64, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int64);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<4, int64>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(4, int64, arg1), PyGLM_Vec_PTI_Get1(4, int64, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int16, arg1) && PyGLM_Vec_PTI_Check1(4, int16, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int16);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<4, int16>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(4, int16, arg1), PyGLM_Vec_PTI_Get1(4, int16, arg2)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, int8, arg1) && PyGLM_Vec_PTI_Check1(4, int8, arg2)) {
-		PyGLM_Vec_PTI_Assign1(4, int8);
-		PyGLM_ASSERT(glm::all(glm::notEqual(o2, glm::vec<4, int8>(0))), "Invalid Multiple. Must not be zero");
-		return pack(glm::roundMultiple(PyGLM_Vec_PTI_Get0(4, int8, arg1), PyGLM_Vec_PTI_Get1(4, int8, arg2)));
 	}
 	PyGLM_TYPEERROR_2O("invalid argument type(s) for roundMultiple(): ", arg1, arg2);
 	return NULL;

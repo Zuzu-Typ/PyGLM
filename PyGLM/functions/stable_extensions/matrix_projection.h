@@ -19,23 +19,20 @@ static PyObject*
 pickMatrix_(PyObject*, PyObject* args) {
 	PyObject* arg1, * arg2, * arg3;
 	PyGLM_Arg_Unpack_3O(args, "pickMatrix", arg1, arg2, arg3);
-	PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD);
-	PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_DT_FD);
-	PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_4 | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-		PyGLM_Vec_PTI_Assign0(2, float);
-		PyGLM_Vec_PTI_Assign1(2, float);
-		PyGLM_Vec_PTI_Assign2(4, float);
+	if (PyGLM_Vec_Check(2, float, arg1) && PyGLM_Vec_Check(2, float, arg2) && PyGLM_Vec_Check(4, float, arg3)) {
+		glm::vec<2, float> o = PyGLM_VecOrMVec_GET(2, float, arg1);
+		glm::vec<2, float> o2 = PyGLM_VecOrMVec_GET(2, float, arg2);
+		glm::vec<4, float> o3 = PyGLM_VecOrMVec_GET(4, float, arg2);
 		if (!(o2.x > 0.0f && o2.y > 0.0f)) {
 			PyErr_SetString(PyExc_ValueError, "delta has to be greater than 0 for pickMatrix()");
 			return NULL;
 		}
 		return pack(glm::pickMatrix(o, o2, o3));
 	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-		PyGLM_Vec_PTI_Assign0(2, double);
-		PyGLM_Vec_PTI_Assign1(2, double);
-		PyGLM_Vec_PTI_Assign2(4, double);
+	if (PyGLM_Vec_Check(2, double, arg1) && PyGLM_Vec_Check(2, double, arg2) && PyGLM_Vec_Check(4, double, arg3)) {
+		glm::vec<2, double> o = PyGLM_VecOrMVec_GET(2, double, arg1);
+		glm::vec<2, double> o2 = PyGLM_VecOrMVec_GET(2, double, arg2);
+		glm::vec<4, double> o3 = PyGLM_VecOrMVec_GET(4, double, arg2);
 		if (!(o2.x > 0.0 && o2.y > 0.0)) {
 			PyErr_SetString(PyExc_ValueError, "delta has to be greater than 0 for pickMatrix()");
 			return NULL;

@@ -22,37 +22,37 @@
 // PyGLM FUNCTIONS
 #include "PyGLM/functions/all.h"
 
-static PyObject*
-test(PyObject*, PyObject* arg) {
-	funcstart:
-	if (Is_PyGLM_Object(arg)) {
-		GET_PyGLM_ARG_TYPE(arg);
-		GET_PyGLM_ARG_TYPE_OFFSET(arg);
-
-		ptrdiff_t offset = GET_PyGLMTypeObjectArrayOffsetOfType(argType->subtype);
-
-		if (offset == PyGLMTypeObjectArrayOffsetVec<3, float>()) {
-			return pack(PyGLM_VecOrMVec_Get(3, float, arg));
-		}
-
-		return PyLong_FromSsize_t(offset);
-		
-		//switch (argTypeOffset) {
-		//case PyGLMTypeObjectArrayOffsetMat<2, 4, float>():
-		//	return PyUnicode_FromFormat("Argument is mat2x4");
-		//case PyGLMTypeObjectArrayOffsetMat<4, 3, double>():
-		//	return PyUnicode_FromFormat("Argument is dmat4x3");
-		//}
-	}
-	PyGLM_PTI_Init0(arg, PyGLM_DT_ALL | PyGLM_T_ALL | PyGLM_SHAPE_ALL);
-	if (PyGLM_PTI_IsNone(0)) {
-		Py_RETURN_FALSE;
-	}
-	arg = PTI0.asPyObject();
-	goto funcstart;
-}
-#define HAS_TEST
-#define TEST_FUNC_TYPE METH_O
+//static PyObject*
+//test(PyObject*, PyObject* arg) {
+//	funcstart:
+//	if (Is_PyGLM_Object(arg)) {
+//		GET_PyGLM_ARG_TYPE(arg);
+//		GET_PyGLM_ARG_TYPE_OFFSET(arg);
+//
+//		ptrdiff_t offset = GET_PyGLMTypeObjectArrayOffsetOfType(argType->subtype);
+//
+//		if (offset == PyGLMTypeObjectArrayOffsetVec<3, float>()) {
+//			return pack(PyGLM_VecOrMVec_Get(3, float, arg));
+//		}
+//
+//		return PyLong_FromSsize_t(offset);
+//		
+//		//switch (argTypeOffset) {
+//		//case PyGLMTypeObjectArrayOffsetMat<2, 4, float>():
+//		//	return PyUnicode_FromFormat("Argument is mat2x4");
+//		//case PyGLMTypeObjectArrayOffsetMat<4, 3, double>():
+//		//	return PyUnicode_FromFormat("Argument is dmat4x3");
+//		//}
+//	}
+//	PyGLM_PTI_Init0(arg, PyGLM_DT_ALL | PyGLM_T_ALL | PyGLM_SHAPE_ALL);
+//	if (PyGLM_PTI_IsNone(0)) {
+//		Py_RETURN_FALSE;
+//	}
+//	arg = PTI0.asPyObject();
+//	goto funcstart;
+//}
+//#define HAS_TEST
+//#define TEST_FUNC_TYPE METH_O
 
 static PyMethodDef glmmethods[] = {
 	// DETAIL

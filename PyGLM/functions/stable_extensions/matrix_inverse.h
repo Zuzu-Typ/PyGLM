@@ -8,18 +8,15 @@
 
 static PyObject*
 affineInverse_(PyObject*, PyObject* arg) {
-	PyGLM_PTI_Init0(arg, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_SHAPE_4x4 | PyGLM_DT_FD);
-	if (PyGLM_Mat_PTI_Check0(3, 3, float, arg)) {
-		return pack(glm::affineInverse(PyGLM_Mat_PTI_Get0(3, 3, float, arg)));
-	}
-	if (PyGLM_Mat_PTI_Check0(3, 3, double, arg)) {
-		return pack(glm::affineInverse(PyGLM_Mat_PTI_Get0(3, 3, double, arg)));
-	}
-	if (PyGLM_Mat_PTI_Check0(4, 4, float, arg)) {
-		return pack(glm::affineInverse(PyGLM_Mat_PTI_Get0(4, 4, float, arg)));
-	}
-	if (PyGLM_Mat_PTI_Check0(4, 4, double, arg)) {
-		return pack(glm::affineInverse(PyGLM_Mat_PTI_Get0(4, 4, double, arg)));
+	switch (GET_PyGLMTypeObjectArrayOffsetOf(arg)) {
+	case PyGLMTypeObjectArrayOffsetMat<3, 3, float>():
+		return pack(glm::affineInverse(PyGLM_Mat_Get(3, 3, float, arg)));
+	case PyGLMTypeObjectArrayOffsetMat<3, 3, double>():
+		return pack(glm::affineInverse(PyGLM_Mat_Get(3, 3, double, arg)));
+	case PyGLMTypeObjectArrayOffsetMat<4, 4, float>():
+		return pack(glm::affineInverse(PyGLM_Mat_Get(4, 4, float, arg)));
+	case PyGLMTypeObjectArrayOffsetMat<4, 4, double>():
+		return pack(glm::affineInverse(PyGLM_Mat_Get(4, 4, double, arg)));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for affineInverse(): ", arg);
 	return NULL;
@@ -27,24 +24,19 @@ affineInverse_(PyObject*, PyObject* arg) {
 
 static PyObject*
 inverseTranspose_(PyObject*, PyObject* arg) {
-	PyGLM_PTI_Init0(arg, PyGLM_T_MAT | PyGLM_SHAPE_SQUARE | PyGLM_DT_FD);
-	if (PyGLM_Mat_PTI_Check0(2, 2, float, arg)) {
-		return pack(glm::inverseTranspose(PyGLM_Mat_PTI_Get0(2, 2, float, arg)));
-	}
-	if (PyGLM_Mat_PTI_Check0(2, 2, double, arg)) {
-		return pack(glm::inverseTranspose(PyGLM_Mat_PTI_Get0(2, 2, double, arg)));
-	}
-	if (PyGLM_Mat_PTI_Check0(3, 3, float, arg)) {
-		return pack(glm::inverseTranspose(PyGLM_Mat_PTI_Get0(3, 3, float, arg)));
-	}
-	if (PyGLM_Mat_PTI_Check0(3, 3, double, arg)) {
-		return pack(glm::inverseTranspose(PyGLM_Mat_PTI_Get0(3, 3, double, arg)));
-	}
-	if (PyGLM_Mat_PTI_Check0(4, 4, float, arg)) {
-		return pack(glm::inverseTranspose(PyGLM_Mat_PTI_Get0(4, 4, float, arg)));
-	}
-	if (PyGLM_Mat_PTI_Check0(4, 4, double, arg)) {
-		return pack(glm::inverseTranspose(PyGLM_Mat_PTI_Get0(4, 4, double, arg)));
+	switch (GET_PyGLMTypeObjectArrayOffsetOf(arg)) {
+	case PyGLMTypeObjectArrayOffsetMat<2, 2, float>():
+		return pack(glm::inverseTranspose(PyGLM_Mat_Get(2, 2, float, arg)));
+	case PyGLMTypeObjectArrayOffsetMat<2, 2, double>():
+		return pack(glm::inverseTranspose(PyGLM_Mat_Get(2, 2, double, arg)));
+	case PyGLMTypeObjectArrayOffsetMat<3, 3, float>():
+		return pack(glm::inverseTranspose(PyGLM_Mat_Get(3, 3, float, arg)));
+	case PyGLMTypeObjectArrayOffsetMat<3, 3, double>():
+		return pack(glm::inverseTranspose(PyGLM_Mat_Get(3, 3, double, arg)));
+	case PyGLMTypeObjectArrayOffsetMat<4, 4, float>():
+		return pack(glm::inverseTranspose(PyGLM_Mat_Get(4, 4, float, arg)));
+	case PyGLMTypeObjectArrayOffsetMat<4, 4, double>():
+		return pack(glm::inverseTranspose(PyGLM_Mat_Get(4, 4, double, arg)));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for inverseTranspose(): ", arg);
 	return NULL;

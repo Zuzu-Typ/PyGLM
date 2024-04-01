@@ -14,64 +14,35 @@ perlin_(PyObject*, PyObject* args) {
 		return NULL;
 	}
 	if (arg2 != NULL) {
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_FD);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_FD);
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
-			PyGLM_Vec_PTI_Assign0(2, float);
-			PyGLM_Vec_PTI_Assign1(2, float);
-			return pack(glm::perlin(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-			PyGLM_Vec_PTI_Assign0(3, float);
-			PyGLM_Vec_PTI_Assign1(3, float);
-			return pack(glm::perlin(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2)) {
-			PyGLM_Vec_PTI_Assign0(4, float);
-			PyGLM_Vec_PTI_Assign1(4, float);
-			return pack(glm::perlin(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
-			PyGLM_Vec_PTI_Assign0(2, double);
-			PyGLM_Vec_PTI_Assign1(2, double);
-			return pack(glm::perlin(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-			PyGLM_Vec_PTI_Assign0(3, double);
-			PyGLM_Vec_PTI_Assign1(3, double);
-			return pack(glm::perlin(o, o2));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2)) {
-			PyGLM_Vec_PTI_Assign0(4, double);
-			PyGLM_Vec_PTI_Assign1(4, double);
-			return pack(glm::perlin(o, o2));
+		if (Is_PyGLM_Object(arg1) && Is_PyGLM_Object(arg2)) {
+			GET_PyGLM_ARG_TYPE(arg1);
+			GET_PyGLM_ARG_TYPE(arg2);
+
+			GET_PyGLM_ARG_SUBTYPE(arg1);
+			GET_PyGLM_ARG_SUBTYPE(arg2);
+
+			if (arg1Subtype == arg2Subtype) {
+				switch (GET_PyGLMTypeObjectArrayOffsetOfType(arg1Subtype)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+					case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+						return pack(glm::perlin(PyGLM_VecOrMVec_Get(L, T, arg1), PyGLM_VecOrMVec_Get(L, T, arg2)));
+
+					PyGLM_CODEGEN_PARAM_L_MVEC(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+				}
+			}
 		}
 	}
 	else {
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_FD);
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1)) {
-			PyGLM_Vec_PTI_Assign0(2, float);
-			return pack(glm::perlin(o));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1)) {
-			PyGLM_Vec_PTI_Assign0(3, float);
-			return pack(glm::perlin(o));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1)) {
-			PyGLM_Vec_PTI_Assign0(4, float);
-			return pack(glm::perlin(o));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1)) {
-			PyGLM_Vec_PTI_Assign0(2, double);
-			return pack(glm::perlin(o));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1)) {
-			PyGLM_Vec_PTI_Assign0(3, double);
-			return pack(glm::perlin(o));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1)) {
-			PyGLM_Vec_PTI_Assign0(4, double);
-			return pack(glm::perlin(o));
+		switch (GET_PyGLMTypeObjectArrayOffsetOf(arg1)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+			case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+				return pack(glm::perlin(PyGLM_Vec_Get(L, T, arg1))); \
+			case PyGLMTypeObjectArrayOffsetMVec<L, T>(): \
+				return pack(glm::perlin(PyGLM_MVec_Get(L, T, arg1)));
+
+			PyGLM_CODEGEN_PARAM_L_MVEC(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
 		}
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for perlin()");
@@ -80,30 +51,15 @@ perlin_(PyObject*, PyObject* args) {
 
 static PyObject*
 simplex_(PyObject*, PyObject* arg) {
-	PyGLM_PTI_Init0(arg, PyGLM_T_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check0(2, float, arg)) {
-		PyGLM_Vec_PTI_Assign(2, float);
-		return pack(glm::simplex(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, float, arg)) {
-		PyGLM_Vec_PTI_Assign(3, float);
-		return pack(glm::simplex(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, float, arg)) {
-		PyGLM_Vec_PTI_Assign(4, float);
-		return pack(glm::simplex(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg)) {
-		PyGLM_Vec_PTI_Assign(2, double);
-		return pack(glm::simplex(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg)) {
-		PyGLM_Vec_PTI_Assign(3, double);
-		return pack(glm::simplex(o));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, double, arg)) {
-		PyGLM_Vec_PTI_Assign(4, double);
-		return pack(glm::simplex(o));
+	switch (GET_PyGLMTypeObjectArrayOffsetOf(arg)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+			case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+				return pack(glm::simplex(PyGLM_Vec_Get(L, T, arg))); \
+			case PyGLMTypeObjectArrayOffsetMVec<L, T>(): \
+				return pack(glm::simplex(PyGLM_MVec_Get(L, T, arg)));
+
+		PyGLM_CODEGEN_PARAM_L_MVEC(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for simplex(): ", arg);
 	return NULL;

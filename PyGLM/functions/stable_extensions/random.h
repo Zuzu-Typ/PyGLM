@@ -71,6 +71,9 @@ static PyObject*
 setSeed_(PyObject*, PyObject* arg) {
 	if (PyLong_Check(arg)) {
 		unsigned long seed = PyLong_AsUnsignedLong(arg);
+		if (PyErr_Occurred() != NULL) {
+			return NULL;
+		}
 		std::srand(seed);
 		Py_RETURN_NONE;
 	}

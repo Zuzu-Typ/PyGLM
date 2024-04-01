@@ -10,119 +10,58 @@ static PyObject*
 epsilonEqual_(PyObject*, PyObject* args) {
 	PyObject *arg1, *arg2, *arg3;
 	PyGLM_Arg_Unpack_3O(args, "epsilonEqual", arg1, arg2, arg3);
-	if (PyGLM_Number_Check(arg3)) {
-		if (PyGLM_Number_Check(arg1), PyGLM_Number_Check(arg2)) {
+	if (Is_PyGLM_Object(arg3) && Is_PyGLM_Object(arg1) && Is_PyGLM_Object(arg2)) {
+		GET_PyGLM_ARG_TYPE(arg1);
+		GET_PyGLM_ARG_TYPE(arg2);
+		GET_PyGLM_ARG_TYPE(arg3);
+
+		GET_PyGLM_ARG_SUBTYPE(arg1);
+		GET_PyGLM_ARG_SUBTYPE(arg2);
+		GET_PyGLM_ARG_SUBTYPE(arg3);
+
+		if (arg1Subtype == arg2Subtype && arg1Subtype == arg3Subtype) {
+			switch (GET_PyGLMTypeObjectArrayOffsetOfType(arg1Subtype)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+				case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+					return pack(glm::epsilonEqual(PyGLM_VecOrMVec_Get(L, T, arg1), PyGLM_VecOrMVec_Get(L, T, arg2), PyGLM_VecOrMVec_Get(L, T, arg3)));
+
+				PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+			}
+		}
+	}
+	else if (PyGLM_Number_Check(arg3)) {
+		if (Is_PyGLM_Object(arg1) && Is_PyGLM_Object(arg2)) {
+			GET_PyGLM_ARG_TYPE(arg1);
+			GET_PyGLM_ARG_TYPE(arg2);
+
+			GET_PyGLM_ARG_SUBTYPE(arg1);
+			GET_PyGLM_ARG_SUBTYPE(arg2);
+
+			if (arg1Subtype == arg2Subtype) {
+				switch (GET_PyGLMTypeObjectArrayOffsetOfType(arg1Subtype)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+				case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+					return pack(glm::epsilonEqual(PyGLM_VecOrMVec_Get(L, T, arg1), PyGLM_VecOrMVec_Get(L, T, arg2), PyGLM_Number_FromPyObject<T>(arg3)));
+
+					PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+
+#define PyGLM_FUNC_TEMPLATE(T) \
+				case PyGLMTypeObjectArrayOffsetQua<T>(): \
+					return pack(glm::epsilonEqual(PyGLM_Qua_Get(T, arg1), PyGLM_Qua_Get(T, arg2), PyGLM_Number_FromPyObject<T>(arg3)));
+
+					PyGLM_CODEGEN_PARAM_T_Qua_fF(PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+				}
+			}
+		} else if (PyGLM_Number_Check(arg1), PyGLM_Number_Check(arg2)) {
 			if (glm::epsilonEqual(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3))) {
 				Py_RETURN_TRUE;
 			}
 			else {
 				Py_RETURN_FALSE;
 			}
-		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_T_QUA | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_T_QUA | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {
-			glm::vec1 o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-			glm::vec1 o2 = PyGLM_Vec_PTI_Get1(1, float, arg2);
-			return pack_vec(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
-			glm::vec2 o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-			glm::vec2 o2 = PyGLM_Vec_PTI_Get1(2, float, arg2);
-			return pack_vec(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-			glm::vec3 o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-			glm::vec3 o2 = PyGLM_Vec_PTI_Get1(3, float, arg2);
-			return pack_vec(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2)) {
-			glm::vec4 o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-			glm::vec4 o2 = PyGLM_Vec_PTI_Get1(4, float, arg2);
-			return pack_vec(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2)) {
-			glm::dvec1 o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-			glm::dvec1 o2 = PyGLM_Vec_PTI_Get1(1, double, arg2);
-			return pack_vec(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
-			glm::dvec2 o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-			glm::dvec2 o2 = PyGLM_Vec_PTI_Get1(2, double, arg2);
-			return pack_vec(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-			glm::dvec3 o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-			glm::dvec3 o2 = PyGLM_Vec_PTI_Get1(3, double, arg2);
-			return pack_vec(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2)) {
-			glm::dvec4 o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-			glm::dvec4 o2 = PyGLM_Vec_PTI_Get1(4, double, arg2);
-			return pack_vec(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Qua_PTI_Check0(float, arg1) && PyGLM_Qua_PTI_Check1(float, arg2)) {
-			glm::quat o = PyGLM_Qua_PTI_Get0(float, arg1);
-			glm::quat o2 = PyGLM_Qua_PTI_Get1(float, arg2);
-			return pack(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
-		}
-		if (PyGLM_Qua_PTI_Check0(double, arg1) && PyGLM_Qua_PTI_Check1(double, arg2)) {
-			glm::dquat o = PyGLM_Qua_PTI_Get0(double, arg1);
-			glm::dquat o2 = PyGLM_Qua_PTI_Get1(double, arg2);
-			return pack(glm::epsilonEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-	}
-	else {
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2) && PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-			glm::vec<1, float> o2 = PyGLM_Vec_PTI_Get1(1, float, arg2);
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack(glm::epsilonEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-			glm::vec<2, float> o2 = PyGLM_Vec_PTI_Get1(2, float, arg2);
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack(glm::epsilonEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-			glm::vec<3, float> o2 = PyGLM_Vec_PTI_Get1(3, float, arg2);
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack(glm::epsilonEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-			glm::vec<4, float> o2 = PyGLM_Vec_PTI_Get1(4, float, arg2);
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack(glm::epsilonEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2) && PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-			glm::vec<1, double> o2 = PyGLM_Vec_PTI_Get1(1, double, arg2);
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack(glm::epsilonEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-			glm::vec<2, double> o2 = PyGLM_Vec_PTI_Get1(2, double, arg2);
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack(glm::epsilonEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-			glm::vec<3, double> o2 = PyGLM_Vec_PTI_Get1(3, double, arg2);
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack(glm::epsilonEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-			glm::vec<4, double> o2 = PyGLM_Vec_PTI_Get1(4, double, arg2);
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack(glm::epsilonEqual(o, o2, o3));
 		}
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for epsilonEqual()");
@@ -131,121 +70,61 @@ epsilonEqual_(PyObject*, PyObject* args) {
 
 static PyObject*
 epsilonNotEqual_(PyObject*, PyObject* args) {
-	PyObject *arg1, *arg2, *arg3;
+	PyObject* arg1, * arg2, * arg3;
 	PyGLM_Arg_Unpack_3O(args, "epsilonNotEqual", arg1, arg2, arg3);
-	if (PyGLM_Number_Check(arg3)) {
-		if (PyGLM_Number_Check(arg1), PyGLM_Number_Check(arg2)) {
+	if (Is_PyGLM_Object(arg3) && Is_PyGLM_Object(arg1) && Is_PyGLM_Object(arg2)) {
+		GET_PyGLM_ARG_TYPE(arg1);
+		GET_PyGLM_ARG_TYPE(arg2);
+		GET_PyGLM_ARG_TYPE(arg3);
+
+		GET_PyGLM_ARG_SUBTYPE(arg1);
+		GET_PyGLM_ARG_SUBTYPE(arg2);
+		GET_PyGLM_ARG_SUBTYPE(arg3);
+
+		if (arg1Subtype == arg2Subtype && arg1Subtype == arg3Subtype) {
+			switch (GET_PyGLMTypeObjectArrayOffsetOfType(arg1Subtype)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+				case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+					return pack(glm::epsilonNotEqual(PyGLM_VecOrMVec_Get(L, T, arg1), PyGLM_VecOrMVec_Get(L, T, arg2), PyGLM_VecOrMVec_Get(L, T, arg3)));
+
+				PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+			}
+		}
+	}
+	else if (PyGLM_Number_Check(arg3)) {
+		if (Is_PyGLM_Object(arg1) && Is_PyGLM_Object(arg2)) {
+			GET_PyGLM_ARG_TYPE(arg1);
+			GET_PyGLM_ARG_TYPE(arg2);
+
+			GET_PyGLM_ARG_SUBTYPE(arg1);
+			GET_PyGLM_ARG_SUBTYPE(arg2);
+
+			if (arg1Subtype == arg2Subtype) {
+				switch (GET_PyGLMTypeObjectArrayOffsetOfType(arg1Subtype)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+				case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+					return pack(glm::epsilonNotEqual(PyGLM_VecOrMVec_Get(L, T, arg1), PyGLM_VecOrMVec_Get(L, T, arg2), PyGLM_Number_FromPyObject<T>(arg3)));
+
+					PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+
+#define PyGLM_FUNC_TEMPLATE(T) \
+				case PyGLMTypeObjectArrayOffsetQua<T>(): \
+					return pack(glm::epsilonNotEqual(PyGLM_Qua_Get(T, arg1), PyGLM_Qua_Get(T, arg2), PyGLM_Number_FromPyObject<T>(arg3)));
+
+						PyGLM_CODEGEN_PARAM_T_Qua_fF(PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+				}
+			}
+		}
+		else if (PyGLM_Number_Check(arg1), PyGLM_Number_Check(arg2)) {
 			if (glm::epsilonNotEqual(PyGLM_Number_FromPyObject<double>(arg1), PyGLM_Number_FromPyObject<double>(arg2), PyGLM_Number_FromPyObject<double>(arg3))) {
 				Py_RETURN_TRUE;
 			}
 			else {
 				Py_RETURN_FALSE;
 			}
-		}
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_T_QUA | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_T_QUA | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2)) {
-			glm::vec1 o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-			glm::vec1 o2 = PyGLM_Vec_PTI_Get1(1, float, arg2);
-			return pack_vec(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2)) {
-			glm::vec2 o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-			glm::vec2 o2 = PyGLM_Vec_PTI_Get1(2, float, arg2);
-			return pack_vec(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-			glm::vec3 o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-			glm::vec3 o2 = PyGLM_Vec_PTI_Get1(3, float, arg2);
-			return pack_vec(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2)) {
-			glm::vec4 o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-			glm::vec4 o2 = PyGLM_Vec_PTI_Get1(4, float, arg2);
-			return pack_vec(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2)) {
-			glm::dvec1 o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-			glm::dvec1 o2 = PyGLM_Vec_PTI_Get1(1, double, arg2);
-			return pack_vec(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
-			glm::dvec2 o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-			glm::dvec2 o2 = PyGLM_Vec_PTI_Get1(2, double, arg2);
-			return pack_vec(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-			glm::dvec3 o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-			glm::dvec3 o2 = PyGLM_Vec_PTI_Get1(3, double, arg2);
-			return pack_vec(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2)) {
-			glm::dvec4 o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-			glm::dvec4 o2 = PyGLM_Vec_PTI_Get1(4, double, arg2);
-			return pack_vec(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-		if (PyGLM_Qua_PTI_Check0(float, arg1) && PyGLM_Qua_PTI_Check1(float, arg2)) {
-			glm::quat o = PyGLM_Qua_PTI_Get0(float, arg1);
-			glm::quat o2 = PyGLM_Qua_PTI_Get1(float, arg2);
-			return pack(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<float>(arg3)));
-		}
-		if (PyGLM_Qua_PTI_Check0(double, arg1) && PyGLM_Qua_PTI_Check1(double, arg2)) {
-			glm::dquat o = PyGLM_Qua_PTI_Get0(double, arg1);
-			glm::dquat o2 = PyGLM_Qua_PTI_Get1(double, arg2);
-			return pack(glm::epsilonNotEqual(o, o2, PyGLM_Number_FromPyObject<double>(arg3)));
-		}
-	}
-	else {
-		PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		PyGLM_PTI_Init2(arg3, PyGLM_T_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-		if (PyGLM_Vec_PTI_Check0(1, float, arg1) && PyGLM_Vec_PTI_Check1(1, float, arg2) && PyGLM_Vec_PTI_Check2(1, float, arg3)) {
-			glm::vec<1, float> o = PyGLM_Vec_PTI_Get0(1, float, arg1);
-			glm::vec<1, float> o2 = PyGLM_Vec_PTI_Get1(1, float, arg2);
-			glm::vec<1, float> o3 = PyGLM_Vec_PTI_Get2(1, float, arg3);
-			return pack(glm::epsilonNotEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, float, arg1) && PyGLM_Vec_PTI_Check1(2, float, arg2) && PyGLM_Vec_PTI_Check2(2, float, arg3)) {
-			glm::vec<2, float> o = PyGLM_Vec_PTI_Get0(2, float, arg1);
-			glm::vec<2, float> o2 = PyGLM_Vec_PTI_Get1(2, float, arg2);
-			glm::vec<2, float> o3 = PyGLM_Vec_PTI_Get2(2, float, arg3);
-			return pack(glm::epsilonNotEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2) && PyGLM_Vec_PTI_Check2(3, float, arg3)) {
-			glm::vec<3, float> o = PyGLM_Vec_PTI_Get0(3, float, arg1);
-			glm::vec<3, float> o2 = PyGLM_Vec_PTI_Get1(3, float, arg2);
-			glm::vec<3, float> o3 = PyGLM_Vec_PTI_Get2(3, float, arg3);
-			return pack(glm::epsilonNotEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, float, arg1) && PyGLM_Vec_PTI_Check1(4, float, arg2) && PyGLM_Vec_PTI_Check2(4, float, arg3)) {
-			glm::vec<4, float> o = PyGLM_Vec_PTI_Get0(4, float, arg1);
-			glm::vec<4, float> o2 = PyGLM_Vec_PTI_Get1(4, float, arg2);
-			glm::vec<4, float> o3 = PyGLM_Vec_PTI_Get2(4, float, arg3);
-			return pack(glm::epsilonNotEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(1, double, arg1) && PyGLM_Vec_PTI_Check1(1, double, arg2) && PyGLM_Vec_PTI_Check2(1, double, arg3)) {
-			glm::vec<1, double> o = PyGLM_Vec_PTI_Get0(1, double, arg1);
-			glm::vec<1, double> o2 = PyGLM_Vec_PTI_Get1(1, double, arg2);
-			glm::vec<1, double> o3 = PyGLM_Vec_PTI_Get2(1, double, arg3);
-			return pack(glm::epsilonNotEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(2, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2) && PyGLM_Vec_PTI_Check2(2, double, arg3)) {
-			glm::vec<2, double> o = PyGLM_Vec_PTI_Get0(2, double, arg1);
-			glm::vec<2, double> o2 = PyGLM_Vec_PTI_Get1(2, double, arg2);
-			glm::vec<2, double> o3 = PyGLM_Vec_PTI_Get2(2, double, arg3);
-			return pack(glm::epsilonNotEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2) && PyGLM_Vec_PTI_Check2(3, double, arg3)) {
-			glm::vec<3, double> o = PyGLM_Vec_PTI_Get0(3, double, arg1);
-			glm::vec<3, double> o2 = PyGLM_Vec_PTI_Get1(3, double, arg2);
-			glm::vec<3, double> o3 = PyGLM_Vec_PTI_Get2(3, double, arg3);
-			return pack(glm::epsilonNotEqual(o, o2, o3));
-		}
-		if (PyGLM_Vec_PTI_Check0(4, double, arg1) && PyGLM_Vec_PTI_Check1(4, double, arg2) && PyGLM_Vec_PTI_Check2(4, double, arg3)) {
-			glm::vec<4, double> o = PyGLM_Vec_PTI_Get0(4, double, arg1);
-			glm::vec<4, double> o2 = PyGLM_Vec_PTI_Get1(4, double, arg2);
-			glm::vec<4, double> o3 = PyGLM_Vec_PTI_Get2(4, double, arg3);
-			return pack(glm::epsilonNotEqual(o, o2, o3));
 		}
 	}
 	PyErr_SetString(PyExc_TypeError, "invalid argument type(s) for epsilonNotEqual()");
@@ -256,11 +135,22 @@ PyDoc_STRVAR(epsilonEqual_docstr,
 	"epsilonEqual(x: number, y: number, epsilon: number) -> bool\n"
 	"	Returns the component-wise comparison of `|x - y| < epsilon`.\n"
 	"epsilonEqual(x: vecN, y: vecN, epsilon: number) -> bvecN\n"
+	"	Returns the component-wise comparison of `|x - y| < epsilon`.\n"
+	"epsilonEqual(x: quat, y: quat, epsilon: number) -> bvecN\n"
+	"	Returns the component-wise comparison of `|x - y| < epsilon`.\n"
+	"epsilonEqual(x: vecN, y: vecN, epsilon: vecN) -> bvecN\n"
 	"	Returns the component-wise comparison of `|x - y| < epsilon`."
 );
 
 PyDoc_STRVAR(epsilonNotEqual_docstr,
-	"epsilonNotEqual(*args) -> not epsilonEqual(*args)"
+	"epsilonNotEqual(x: number, y: number, epsilon: number) -> bool\n"
+	"	Returns the component-wise comparison of `|x - y| >= epsilon`.\n"
+	"epsilonNotEqual(x: vecN, y: vecN, epsilon: number) -> bvecN\n"
+	"	Returns the component-wise comparison of `|x - y| >= epsilon`.\n"
+	"epsilonNotEqual(x: quat, y: quat, epsilon: number) -> bvecN\n"
+	"	Returns the component-wise comparison of `|x - y| >= epsilon`.\n"
+	"epsilonNotEqual(x: vecN, y: vecN, epsilon: vecN) -> bvecN\n"
+	"	Returns the component-wise comparison of `|x - y| >= epsilon`."
 );
 
 #define EPSILON_METHODS \

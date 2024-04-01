@@ -11,27 +11,18 @@ PyDoc_STRVAR(saturate_docstr,
 );
 static PyObject*
 saturate_(PyObject*, PyObject* arg) {
+	switch (GET_PyGLMTypeObjectArrayOffsetOf(arg)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+			case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+				return pack(glm::saturate(PyGLM_Vec_Get(L, T, arg))); \
+			case PyGLMTypeObjectArrayOffsetMVec<L, T>(): \
+				return pack(glm::saturate(PyGLM_MVec_Get(L, T, arg)));
+
+		PyGLM_CODEGEN_PARAM_L_MVEC(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+	}
 	if (PyGLM_Number_Check(arg)) {
 		return pack(glm::saturate<double>(PyGLM_Number_FromPyObject<double>(arg)));
-	}
-	PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_2 | PyGLM_SHAPE_3 | PyGLM_SHAPE_4 | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check0(2, float, arg)) {
-		return pack(glm::saturate(PyGLM_Vec_PTI_Get0(2, float, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg)) {
-		return pack(glm::saturate(PyGLM_Vec_PTI_Get0(2, double, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, float, arg)) {
-		return pack(glm::saturate(PyGLM_Vec_PTI_Get0(3, float, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg)) {
-		return pack(glm::saturate(PyGLM_Vec_PTI_Get0(3, double, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, float, arg)) {
-		return pack(glm::saturate(PyGLM_Vec_PTI_Get0(4, float, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, double, arg)) {
-		return pack(glm::saturate(PyGLM_Vec_PTI_Get0(4, double, arg)));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for saturate(): ", arg);
 	return NULL;
@@ -45,33 +36,23 @@ PyDoc_STRVAR(isfinite_docstr,
 );
 static PyObject*
 isfinite_(PyObject*, PyObject* arg) {
+	switch (GET_PyGLMTypeObjectArrayOffsetOf(arg)) {
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+			case PyGLMTypeObjectArrayOffsetVec<L, T>(): \
+				return pack(glm::isfinite(PyGLM_Vec_Get(L, T, arg)));
+
+		PyGLM_CODEGEN_PARAM_L_ALL(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+
+#define PyGLM_FUNC_TEMPLATE(L, T) \
+			case PyGLMTypeObjectArrayOffsetMVec<L, T>(): \
+				return pack(glm::isfinite(PyGLM_MVec_Get(L, T, arg)));
+
+			PyGLM_CODEGEN_PARAM_L_MVEC(PyGLM_CODEGEN_PARAM_T_Vec_fF, PyGLM_FUNC_TEMPLATE)
+#undef PyGLM_FUNC_TEMPLATE
+	}
 	if (PyGLM_Number_Check(arg)) {
 		return pack(glm::isfinite<double>(PyGLM_Number_FromPyObject<double>(arg)));
-	}
-	PyGLM_PTI_Init0(arg, PyGLM_T_ANY_VEC | PyGLM_SHAPE_ALL | PyGLM_DT_FD);
-	if (PyGLM_Vec_PTI_Check0(1, float, arg)) {
-		return pack(glm::isfinite(PyGLM_Vec_PTI_Get0(1, float, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(1, double, arg)) {
-		return pack(glm::isfinite(PyGLM_Vec_PTI_Get0(1, double, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, float, arg)) {
-		return pack(glm::isfinite(PyGLM_Vec_PTI_Get0(2, float, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(2, double, arg)) {
-		return pack(glm::isfinite(PyGLM_Vec_PTI_Get0(2, double, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, float, arg)) {
-		return pack(glm::isfinite(PyGLM_Vec_PTI_Get0(3, float, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(3, double, arg)) {
-		return pack(glm::isfinite(PyGLM_Vec_PTI_Get0(3, double, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, float, arg)) {
-		return pack(glm::isfinite(PyGLM_Vec_PTI_Get0(4, float, arg)));
-	}
-	if (PyGLM_Vec_PTI_Check0(4, double, arg)) {
-		return pack(glm::isfinite(PyGLM_Vec_PTI_Get0(4, double, arg)));
 	}
 	PyGLM_TYPEERROR_O("invalid argument type for isfinite(): ", arg);
 	return NULL;

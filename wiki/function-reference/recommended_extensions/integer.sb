@@ -11,17 +11,21 @@ Contains two different rounding methods.
 \raw\#### <code>glm.<code>**iround**(**x**: *number*) -\\> *int*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer to \code\x\code\. The fraction \code\0.5\code\ will round in a
 \raw\&emsp;&emsp;\raw\direction chosen by the implementation, presumably the direction that is fastest.
+\raw\&emsp;&emsp;\raw\\code\x\code\ must be greater than or equal to \code\0\code\
 
 \raw\#### <code>glm.<code>**iround**(**x**: *vecN*) -\\> *ivecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer to \code\x\code\. The fraction \code\0.5\code\ will round in a
 \raw\&emsp;&emsp;\raw\direction chosen by the implementation, presumably the direction that is fastest.
+\raw\&emsp;&emsp;\raw\Each component of \code\x\code\ must be greater than or equal to \code\0\code\
 
 \h3\uround() function\h3\
 \raw\#### <code>glm.<code>**uround**(**x**: *number*) -\\> *int*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer to \code\x\code\. The fraction \code\0.5\code\ will round in a
 \raw\&emsp;&emsp;\raw\direction chosen by the implementation, presumably the direction that is fastest.
+\raw\&emsp;&emsp;\raw\\code\x\code\ must be greater than or equal to \code\0\code\
 
 \raw\#### <code>glm.<code>**uround**(**x**: *vecN*) -\\> *uvecN*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns a value equal to the nearest integer to \code\x\code\. The fraction \code\0.5\code\ will round in a
 \raw\&emsp;&emsp;\raw\direction chosen by the implementation, presumably the direction that is fastest.
+\raw\&emsp;&emsp;\raw\Each component of \code\x\code\ must be greater than or equal to \code\0\code\
 

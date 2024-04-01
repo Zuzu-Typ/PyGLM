@@ -18,24 +18,21 @@ lxNorm_(PyObject*, PyObject* args) {
 
 	if (arg3 == NULL) {
 		if (PyLong_Check(arg2)) {
-			PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);
-			if (PyGLM_Vec_PTI_Check0(3, float, arg1)) {
-				return pack(glm::lxNorm(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Number_AsUnsignedLong(arg2)));
+			if (PyGLM_Vec_Check(3, float, arg1)) {
+				return pack(glm::lxNorm(PyGLM_VecOrMVec_GET(3, float, arg1), PyGLM_Number_AsUnsignedLong(arg2)));
 			}
-			if (PyGLM_Vec_PTI_Check0(3, double, arg1)) {
-				return pack(glm::lxNorm(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Number_AsUnsignedLong(arg2)));
+			if (PyGLM_Vec_Check(3, double, arg1)) {
+				return pack(glm::lxNorm(PyGLM_VecOrMVec_GET(3, double, arg1), PyGLM_Number_AsUnsignedLong(arg2)));
 			}
 		}
 	}
 	else {
 		if (PyLong_Check(arg3)) {
-			PyGLM_PTI_Init0(arg1, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);
-			PyGLM_PTI_Init1(arg2, PyGLM_T_VEC | PyGLM_SHAPE_3 | PyGLM_DT_FD);
-			if (PyGLM_Vec_PTI_Check0(3, float, arg1) && PyGLM_Vec_PTI_Check1(3, float, arg2)) {
-				return pack(glm::lxNorm(PyGLM_Vec_PTI_Get0(3, float, arg1), PyGLM_Vec_PTI_Get1(3, float, arg2), PyGLM_Number_AsUnsignedLong(arg3)));
+			if (PyGLM_Vec_Check(3, float, arg1) && PyGLM_Vec_Check(3, float, arg2)) {
+				return pack(glm::lxNorm(PyGLM_VecOrMVec_GET(3, float, arg1), PyGLM_VecOrMVec_GET(3, float, arg2), PyGLM_Number_AsUnsignedLong(arg3)));
 			}
-			if (PyGLM_Vec_PTI_Check0(3, double, arg1) && PyGLM_Vec_PTI_Check1(3, double, arg2)) {
-				return pack(glm::lxNorm(PyGLM_Vec_PTI_Get0(3, double, arg1), PyGLM_Vec_PTI_Get1(3, double, arg2), PyGLM_Number_AsUnsignedLong(arg3)));
+			if (PyGLM_Vec_Check(3, double, arg1) && PyGLM_Vec_Check(3, double, arg2)) {
+				return pack(glm::lxNorm(PyGLM_VecOrMVec_GET(3, double, arg1), PyGLM_VecOrMVec_GET(3, double, arg2), PyGLM_Number_AsUnsignedLong(arg3)));
 			}
 		}
 	}

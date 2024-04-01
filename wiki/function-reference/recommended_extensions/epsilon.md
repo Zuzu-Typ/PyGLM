@@ -16,6 +16,22 @@ Comparison functions for a user defined epsilon values\.
 #### <code>glm.<code>**epsilonEqual**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *number*) -\> *bvecN*</code></code>  
 &emsp;&emsp;Returns the component\-wise comparison of ``` |x - y| < epsilon ```\.  
   
+#### <code>glm.<code>**epsilonEqual**(**x**: *quat*, **y**: *quat*, **epsilon**: *number*) -\> *bvecN*</code></code>  
+&emsp;&emsp;Returns the component\-wise comparison of ``` |x - y| < epsilon ```\.  
+  
+#### <code>glm.<code>**epsilonEqual**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *vecN*) -\> *bvecN*</code></code>  
+&emsp;&emsp;Returns the component\-wise comparison of ``` |x - y| < epsilon ```\.  
+  
 ### epsilonNotEqual\(\) function  
-#### <code>glm.<code>**epsilonNotEqual**(***args**) -\> *not epsilonEqual(*args)*</code></code>  
+#### <code>glm.<code>**epsilonNotEqual**(**x**: *number*, **y**: *number*, **epsilon**: *number*) -\> *bool*</code></code>  
+&emsp;&emsp;Returns the component\-wise comparison of ``` |x - y| >= epsilon ```\.  
+  
+#### <code>glm.<code>**epsilonNotEqual**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *number*) -\> *bvecN*</code></code>  
+&emsp;&emsp;Returns the component\-wise comparison of ``` |x - y| >= epsilon ```\.  
+  
+#### <code>glm.<code>**epsilonNotEqual**(**x**: *quat*, **y**: *quat*, **epsilon**: *number*) -\> *bvecN*</code></code>  
+&emsp;&emsp;Returns the component\-wise comparison of ``` |x - y| >= epsilon ```\.  
+  
+#### <code>glm.<code>**epsilonNotEqual**(**x**: *vecN*, **y**: *vecN*, **epsilon**: *vecN*) -\> *bvecN*</code></code>  
+&emsp;&emsp;Returns the component\-wise comparison of ``` |x - y| >= epsilon ```\.  
   

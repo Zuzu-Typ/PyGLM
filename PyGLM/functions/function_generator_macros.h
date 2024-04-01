@@ -44,6 +44,13 @@ MACRO(L, uint16)\
 MACRO(L, int8)\
 MACRO(L, uint8)
 
+// Repeats the code with T in [int32, int64, int16, int8]
+#define PyGLM_CODEGEN_PARAM_T_Vec_iqsu(MACRO, L)\
+MACRO(L, int32)\
+MACRO(L, int64)\
+MACRO(L, int16)\
+MACRO(L, int8)
+
 // Repeats the code with T in [int32, uint32, int64, uint64]
 #define PyGLM_CODEGEN_PARAM_T_Vec_iqIQ(MACRO, L)\
 MACRO(L, int32)\
@@ -114,6 +121,16 @@ T_MACRO(CODE_MACRO, 4)
 // Runs T_MACRO(CODE_MACRO, L) for L in [2, 3, 4]
 #define PyGLM_CODEGEN_PARAM_L_MVEC(T_MACRO, CODE_MACRO)\
 T_MACRO(CODE_MACRO, 2) \
+T_MACRO(CODE_MACRO, 3) \
+T_MACRO(CODE_MACRO, 4)
+
+// Runs T_MACRO(CODE_MACRO, L) for L in [2, 3]
+#define PyGLM_CODEGEN_PARAM_L_2_AND_3(T_MACRO, CODE_MACRO)\
+T_MACRO(CODE_MACRO, 2) \
+T_MACRO(CODE_MACRO, 3)
+
+// Runs T_MACRO(CODE_MACRO, L) for L in [3, 4]
+#define PyGLM_CODEGEN_PARAM_L_3_AND_4(T_MACRO, CODE_MACRO)\
 T_MACRO(CODE_MACRO, 3) \
 T_MACRO(CODE_MACRO, 4)
 
@@ -708,8 +725,6 @@ static PyObject*\
 NAME##_(PyObject*, PyObject*) {\
 	return pack(glm::NAME<double>());\
 }
-
-
 
 #define PyGLM_MAKE_GLM_FUNC_M3N__tfF(NAME)\
 static PyObject*\
