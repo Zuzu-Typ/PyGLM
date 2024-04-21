@@ -156,6 +156,7 @@ translate_(PyObject*, PyObject* args) {
 		if (PyGLM_Vec_PTI_Check0(2, uint32, arg1)) {
 			return pack(glm::translate(glm::mat<3, 3, uint32>(1), PyGLM_Vec_PTI_Get0(2, uint32, arg1)));
 		}
+		PyGLM_TYPEERROR_1O("invalid argument type for translate(): ", arg1);
 	}
 	else {
 		PyGLM_PTI_Init0(arg1, PyGLM_T_MAT | PyGLM_SHAPE_3x3 | PyGLM_SHAPE_4x4 | PyGLM_DT_NORMAL);
@@ -178,8 +179,8 @@ translate_(PyObject*, PyObject* args) {
 		if (PyGLM_Mat_PTI_Check0(3, 3, double, arg1) && PyGLM_Vec_PTI_Check1(2, double, arg2)) {
 			return pack(glm::translate(PyGLM_Mat_PTI_Get0(3, 3, double, arg1), PyGLM_Vec_PTI_Get1(2, double, arg2)));
 		}
+		PyGLM_TYPEERROR_2O("invalid argument types for translate(): ", arg1, arg2);
 	}
-	PyGLM_TYPEERROR_2O("invalid argument type(s) for translate(): ", arg1, arg2);
 	return NULL;
 }
 
