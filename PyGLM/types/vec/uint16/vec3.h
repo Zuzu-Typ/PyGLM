@@ -118,7 +118,7 @@ static PyTypeObject hu16vec3IterType = {
 
 static PyGLMTypeObject hu16vec3GLMType = {
 	{
-		PyObject_HEAD_INIT(NULL)
+		PyVarObject_HEAD_INIT(NULL, 0)
 		"glm.u16vec3",             /* tp_name */
 		sizeof(vec<3, glm::u16>),             /* tp_basicsize */
 		0,                         /* tp_itemsize */

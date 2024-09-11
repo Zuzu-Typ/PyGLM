@@ -116,7 +116,7 @@ static PyTypeObject hfmat4x2IterType = {
 
 static PyGLMTypeObject hfmat4x2GLMType = {
 	{
-		PyObject_HEAD_INIT(NULL)
+		PyVarObject_HEAD_INIT(NULL, 0)
 		"glm.mat4x2",             /* tp_name */
 		sizeof(mat<4, 2, float>),             /* tp_basicsize */
 		0,                         /* tp_itemsize */

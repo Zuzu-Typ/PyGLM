@@ -116,7 +116,7 @@ static PyTypeObject humat2x3IterType = {
 
 static PyGLMTypeObject humat2x3GLMType = {
 	{
-		PyObject_HEAD_INIT(NULL)
+		PyVarObject_HEAD_INIT(NULL, 0)
 		"glm.umat2x3",             /* tp_name */
 		sizeof(mat<2, 3, glm::u32>),             /* tp_basicsize */
 		0,                         /* tp_itemsize */

@@ -116,7 +116,7 @@ static PyTypeObject hdmat2x3IterType = {
 
 static PyGLMTypeObject hdmat2x3GLMType = {
 	{
-		PyObject_HEAD_INIT(NULL)
+		PyVarObject_HEAD_INIT(NULL, 0)
 		"glm.dmat2x3",             /* tp_name */
 		sizeof(mat<2, 3, double>),             /* tp_basicsize */
 		0,                         /* tp_itemsize */

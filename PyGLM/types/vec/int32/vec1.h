@@ -116,7 +116,7 @@ static PyTypeObject hivec1IterType = {
 
 static PyGLMTypeObject hivec1GLMType = {
 	{
-		PyObject_HEAD_INIT(NULL)
+		PyVarObject_HEAD_INIT(NULL, 0)
 		"glm.ivec1",             /* tp_name */
 		sizeof(vec<1, glm::i32>),             /* tp_basicsize */
 		0,                         /* tp_itemsize */

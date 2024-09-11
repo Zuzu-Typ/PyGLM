@@ -111,7 +111,7 @@ static PyTypeObject humvec3IterType = {
 
 static PyGLMTypeObject humvec3GLMType = {
 	{
-		PyObject_HEAD_INIT(NULL)
+		PyVarObject_HEAD_INIT(NULL, 0)
 		"glm.umvec3",             /* tp_name */
 		sizeof(mvec<3, glm::u32>),             /* tp_basicsize */
 		0,                         /* tp_itemsize */
