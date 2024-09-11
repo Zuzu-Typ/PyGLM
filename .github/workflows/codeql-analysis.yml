@@ -62,7 +62,13 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
 
-    - run: python setup.py build
+    - name: Install pip, build and pytest
+      run: |
+        python -m pip install pip --upgrade
+        pip install pytest
+        pip install build
+    - name: Build PyGLM
+      run: python -m build
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
