@@ -119,7 +119,7 @@ static PyTypeObject hfvec4IterType = {
 
 static PyGLMTypeObject hfvec4GLMType = {
 	{
-		PyObject_HEAD_INIT(NULL)
+		PyVarObject_HEAD_INIT(NULL, 0)
 		"glm.vec4",             /* tp_name */
 		sizeof(vec<4, float>),             /* tp_basicsize */
 		0,                         /* tp_itemsize */

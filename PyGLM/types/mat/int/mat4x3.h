@@ -116,7 +116,7 @@ static PyTypeObject himat4x3IterType = {
 
 static PyGLMTypeObject himat4x3GLMType = {
 	{
-		PyObject_HEAD_INIT(NULL)
+		PyVarObject_HEAD_INIT(NULL, 0)
 		"glm.imat4x3",             /* tp_name */
 		sizeof(mat<4, 3, glm::i32>),             /* tp_basicsize */
 		0,                         /* tp_itemsize */

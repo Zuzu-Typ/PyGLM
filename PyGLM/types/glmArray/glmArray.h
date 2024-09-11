@@ -110,7 +110,7 @@ static PyNumberMethods glmArrayNumMethods = {
 };
 
 static PyTypeObject glmArrayType = {
-	PyObject_HEAD_INIT(NULL)
+	PyVarObject_HEAD_INIT(NULL, 0)
 	"glm.array",						// tp_name
 	sizeof(glmArray),					// tp_basicsize 
 	0,	// tp_itemsize 

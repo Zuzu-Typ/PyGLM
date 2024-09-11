@@ -119,7 +119,7 @@ static PyTypeObject hdquaIterType = {
 
 static PyGLMTypeObject hdquaGLMType = {
 	{
-		PyObject_HEAD_INIT(NULL)
+		PyVarObject_HEAD_INIT(NULL, 0)
 		"glm.dquat",             /* tp_name */
 		sizeof(qua<double>),             /* tp_basicsize */
 		0,                         /* tp_itemsize */

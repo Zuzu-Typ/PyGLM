@@ -117,7 +117,7 @@ static PyTypeObject huvec2IterType = {
 
 static PyGLMTypeObject huvec2GLMType = {
 	{
-		PyObject_HEAD_INIT(NULL)
+		PyVarObject_HEAD_INIT(NULL, 0)
 		"glm.uvec2",             /* tp_name */
 		sizeof(vec<2, glm::u32>),             /* tp_basicsize */
 		0,                         /* tp_itemsize */
