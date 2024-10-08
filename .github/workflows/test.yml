@@ -32,7 +32,7 @@ jobs:
       - name: Build PyGLM
         run: python -m build
       - name: Install PyGLM
-        run: pip install -e .
+        run: pip install dist/*.whl
       - name: Test with pytest
         run: pytest test/PyGLM_test.py -v
   
