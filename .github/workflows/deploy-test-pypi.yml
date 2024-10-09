@@ -37,6 +37,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          name: artifact-win-${{matrix.arch}}
           path: ./wheelhouse/*.whl
           
   build_wheels_mac:
@@ -67,6 +68,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          name: artifact-mac-${{matrix.arch}}
           path: ./wheelhouse/*.whl
           
   build_wheels_manylinux:
@@ -110,6 +112,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          name: artifact-manylinux-${{matrix.arch}}
           path: ./wheelhouse/*.whl
           
   build_wheels_musllinux:
@@ -149,6 +152,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          name: artifact-musllinux-${{matrix.arch}}
           path: ./wheelhouse/*.whl
 
   build_sdist:
@@ -172,6 +176,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          name: artifact-source
           path: dist/*.tar.gz
 
   upload_pypi:
@@ -184,6 +189,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: artifact
+          pattern: artifact-*
+          merge-multiple: true
           path: dist
 
       - uses: pypa/gh-action-pypi-publish@v1.10.3
