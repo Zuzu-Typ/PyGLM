@@ -188,7 +188,6 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: artifact
           pattern: artifact-*
           merge-multiple: true
           path: dist
