@@ -176,6 +176,10 @@ PyDoc_STRVAR(glmArray_setstate_docstr,
 
 static PyObject* glmArray_setstate(glmArray* self, PyObject* state);
 
+PyDoc_STRVAR(glmArray_class_getitem_docstr,
+	"See PEP 585"
+);
+
 PyDoc_STRVAR(glmArray_filter_docstr,
 	"filter(func: callable) -> array\n"
 	"	Filters this array with the given funtion and returns the resulting array.\n"
