@@ -29,7 +29,7 @@ pip install PyGLM
  ```  
 And finally imported and used:  
 ``` python
-import glm
+from PyGLM import glm
  ```  
 ### Using PyGLM  
 PyGLM's syntax is very similar to the original GLM's syntax\.  
@@ -37,7 +37,7 @@ There is no need to import anything but **glm**, as it already contains the enti
   
 For more information, take a look at the [wiki](https://github.com/Zuzu-Typ/PyGLM/wiki)\.  
 #### License requirements  
-Please make sure to **include the license for GLM** in your project when you use PyGLM\!  
+Please make sure to **include COPYING** in your project when you use PyGLM\!  
 \(this is especially relevant for **binary distributions**, e\.g\. \*\.exe\)  
   
 You can do so by copying the ``` COPYING ``` file \(or it's contents\) to your project\.  
@@ -102,7 +102,7 @@ I try adding them on a one\-by\-one basis\.
   
 ### Short example  
 ``` Python
->>> import glm
+>>> from PyGLM import glm
 >>> v = glm.vec3()
 >>> v.x = 7
 >>> print(v.xxy)

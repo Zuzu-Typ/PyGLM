@@ -27,7 +27,7 @@ pip install PyGLM
 \ code\
 And finally imported and used:
 \code python \
-import glm
+from PyGLM import glm
 \ code\
 \h3 \Using PyGLM\ h3\
 PyGLM's syntax is very similar to the original GLM's syntax.
@@ -35,7 +35,7 @@ There is no need to import anything but \b\glm\b\, as it already contains the en
 
 For more information, take a look at the \url https://github.com/Zuzu-Typ/PyGLM/wiki \wiki\ url\.
 \h4 \License requirements\ h4\
-Please make sure to \b \include the license for GLM\ b\ in your project when you use PyGLM!
+Please make sure to \b \include COPYING\ b\ in your project when you use PyGLM!
 (this is especially relevant for \b \binary distributions\ b\, e.g. *.exe)
 
 You can do so by copying the \code \COPYING\ code\ file (or it's contents) to your project.
@@ -100,7 +100,7 @@ I try adding them on a one-by-one basis.
 
 \h3 \Short example\ h3\
 \code Python \
->>> import glm
+>>> from PyGLM import glm
 >>> v = glm.vec3()
 >>> v.x = 7
 >>> print(v.xxy)
