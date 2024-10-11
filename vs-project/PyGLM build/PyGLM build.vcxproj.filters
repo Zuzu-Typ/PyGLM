@@ -1,0 +1,738 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Quelldateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Headerdateien">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Ressourcendateien">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM">
+      <UniqueIdentifier>{d93bf945-4c03-457f-aeba-cc08ef943ac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\functions">
+      <UniqueIdentifier>{3f71ae84-8e6d-46da-8d3e-1a6cb0431bce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\functions\detail">
+      <UniqueIdentifier>{a9c5658d-f855-4feb-adff-8938531bb467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\functions\other">
+      <UniqueIdentifier>{a8ef72c0-c8d4-49be-9352-e28a6d9c7e53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\functions\stable_extensions">
+      <UniqueIdentifier>{f94804c9-2fd4-4727-9fba-10193a808b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\functions\unstable_extensions">
+      <UniqueIdentifier>{91fc1aa6-030e-4a2e-93ae-a529391acf24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\internal_functions">
+      <UniqueIdentifier>{d91dc717-4ee5-4a11-8c49-aa7dd85ceaf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\internal_functions\type_getters">
+      <UniqueIdentifier>{86837062-3d03-403d-8a0f-6251bb31281b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\type_methods">
+      <UniqueIdentifier>{989919bb-860f-484e-91a7-39890e432364}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types">
+      <UniqueIdentifier>{97504e6a-71c0-459c-b60e-adffd2de6397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\glmArray">
+      <UniqueIdentifier>{0971f061-c871-459a-b9c1-1c8b93aaa6a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\mat">
+      <UniqueIdentifier>{50e02b2a-0ce5-4418-8ea1-b9864b0541e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\mat\double">
+      <UniqueIdentifier>{145e9a38-f295-49c9-ae38-33d20d4c3830}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\mat\float">
+      <UniqueIdentifier>{650253ba-6d79-40b0-b31f-dad50b3fd114}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\mat\int">
+      <UniqueIdentifier>{0e612982-f616-4550-b17d-13f8e0a372ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\mat\uint">
+      <UniqueIdentifier>{5cf1e6fe-ce56-424d-97f2-672fc8b011da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\mvec">
+      <UniqueIdentifier>{668b47bb-5447-40ee-a242-38772b642df7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\mvec\double">
+      <UniqueIdentifier>{fd72c7af-27af-434b-a4bf-af8c36719f58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\mvec\float">
+      <UniqueIdentifier>{360afe8a-a253-4fa7-8db2-8ec052e5b443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\mvec\int">
+      <UniqueIdentifier>{8b909f83-8bb7-45ff-bc39-e101bbf4235d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\mvec\uint">
+      <UniqueIdentifier>{3030b6ae-9322-4b96-bd5e-0b3c669b829a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\qua">
+      <UniqueIdentifier>{6142d088-f7b0-49b8-b105-1a6a2646d137}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\qua\double">
+      <UniqueIdentifier>{ec62c849-01b6-4e71-97a8-fa23a46b2d04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\qua\float">
+      <UniqueIdentifier>{14240a23-84d1-4c0e-b53b-e15e84291972}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec">
+      <UniqueIdentifier>{c498d64f-2c40-4601-bad7-f219c50a99d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec\double">
+      <UniqueIdentifier>{8b0e119c-7855-4179-aafb-f5334e320d3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec\float">
+      <UniqueIdentifier>{18e7d3dd-8dfc-4bf8-9e09-cba1262d33ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec\int8">
+      <UniqueIdentifier>{1847a5e6-780a-4faf-8c52-e9124d276099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec\int16">
+      <UniqueIdentifier>{7d1459e6-6a98-4ab3-a1bc-4c2b309b01af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec\int32">
+      <UniqueIdentifier>{cc8ad1ac-68eb-4201-9d4f-ac075fb1ad3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec\int64">
+      <UniqueIdentifier>{cf94377a-52e0-4533-a33b-c7ed3af9427c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec\uint8">
+      <UniqueIdentifier>{9c1ef5d8-f6e3-4b55-81d4-37a331591355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec\uint16">
+      <UniqueIdentifier>{fe2f4a1c-7980-41c6-8b20-169657425284}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec\uint32">
+      <UniqueIdentifier>{9a1c0558-9aa2-456e-81a1-69810e680b20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec\uint64">
+      <UniqueIdentifier>{e30da7da-a8d1-490b-8537-99d2ee24ebf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PyGLM\types\vec\bool">
+      <UniqueIdentifier>{26a4ef7e-5751-405c-b536-464a1e3b70c0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\PyGLM_lib\PyGLM.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\PyGLM_lib\license.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\build_options.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\detail\all.h">
+      <Filter>Headerdateien\PyGLM\functions\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\detail\func_common.h">
+      <Filter>Headerdateien\PyGLM\functions\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\detail\func_exponential.h">
+      <Filter>Headerdateien\PyGLM\functions\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\detail\func_geometric.h">
+      <Filter>Headerdateien\PyGLM\functions\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\detail\func_integer.h">
+      <Filter>Headerdateien\PyGLM\functions\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\detail\func_matrix.h">
+      <Filter>Headerdateien\PyGLM\functions\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\detail\func_packing.h">
+      <Filter>Headerdateien\PyGLM\functions\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\detail\func_trigonometric.h">
+      <Filter>Headerdateien\PyGLM\functions\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\detail\func_vector_relational.h">
+      <Filter>Headerdateien\PyGLM\functions\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\other\all.h">
+      <Filter>Headerdateien\PyGLM\functions\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\other\binary.h">
+      <Filter>Headerdateien\PyGLM\functions\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\other\custom.h">
+      <Filter>Headerdateien\PyGLM\functions\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\other\ternary.h">
+      <Filter>Headerdateien\PyGLM\functions\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\other\unary.h">
+      <Filter>Headerdateien\PyGLM\functions\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\all.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\color_space.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\constants.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\epsilon.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\integer.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\matrix_access.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\matrix_clip_space.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\matrix_inverse.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\matrix_projection.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\matrix_transform.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\noise.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\packing.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\quaternion.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\quaternion_common.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\quaternion_trigonometric.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\random.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\reciprocal.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\round.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\type_ptr.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\stable_extensions\ulp.h">
+      <Filter>Headerdateien\PyGLM\functions\stable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\unstable_extensions\all.h">
+      <Filter>Headerdateien\PyGLM\functions\unstable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\unstable_extensions\compatibility.h">
+      <Filter>Headerdateien\PyGLM\functions\unstable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\unstable_extensions\matrix_decompose.h">
+      <Filter>Headerdateien\PyGLM\functions\unstable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\unstable_extensions\matrix_transform_2d.h">
+      <Filter>Headerdateien\PyGLM\functions\unstable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\unstable_extensions\norm.h">
+      <Filter>Headerdateien\PyGLM\functions\unstable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\unstable_extensions\polar_coordinates.h">
+      <Filter>Headerdateien\PyGLM\functions\unstable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\unstable_extensions\rotate_vector.h">
+      <Filter>Headerdateien\PyGLM\functions\unstable_extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\all.h">
+      <Filter>Headerdateien\PyGLM\functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\functions\function_generator_macros.h">
+      <Filter>Headerdateien\PyGLM\functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\type_getters\all.h">
+      <Filter>Headerdateien\PyGLM\internal_functions\type_getters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\type_getters\ctypes_datatypes.h">
+      <Filter>Headerdateien\PyGLM\internal_functions\type_getters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\type_getters\mat.h">
+      <Filter>Headerdateien\PyGLM\internal_functions\type_getters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\type_getters\mat_iter.h">
+      <Filter>Headerdateien\PyGLM\internal_functions\type_getters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\type_getters\mvec.h">
+      <Filter>Headerdateien\PyGLM\internal_functions\type_getters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\type_getters\mvec_iter.h">
+      <Filter>Headerdateien\PyGLM\internal_functions\type_getters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\type_getters\qua.h">
+      <Filter>Headerdateien\PyGLM\internal_functions\type_getters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\type_getters\qua_iter.h">
+      <Filter>Headerdateien\PyGLM\internal_functions\type_getters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\type_getters\vec.h">
+      <Filter>Headerdateien\PyGLM\internal_functions\type_getters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\type_getters\vec_iter.h">
+      <Filter>Headerdateien\PyGLM\internal_functions\type_getters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\all.h">
+      <Filter>Headerdateien\PyGLM\internal_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\ctypes_pointers.h">
+      <Filter>Headerdateien\PyGLM\internal_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\error_functions.h">
+      <Filter>Headerdateien\PyGLM\internal_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\helper_macros.h">
+      <Filter>Headerdateien\PyGLM\internal_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\number_functions.h">
+      <Filter>Headerdateien\PyGLM\internal_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\packers.h">
+      <Filter>Headerdateien\PyGLM\internal_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\type_checkers.h">
+      <Filter>Headerdateien\PyGLM\internal_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\unpackers.h">
+      <Filter>Headerdateien\PyGLM\internal_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\version_info.h">
+      <Filter>Headerdateien\PyGLM\internal_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\warnings.h">
+      <Filter>Headerdateien\PyGLM\internal_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\type_methods\all.h">
+      <Filter>Headerdateien\PyGLM\type_methods</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\type_methods\glmArray.h">
+      <Filter>Headerdateien\PyGLM\type_methods</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\type_methods\mat.h">
+      <Filter>Headerdateien\PyGLM\type_methods</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\type_methods\mvec.h">
+      <Filter>Headerdateien\PyGLM\type_methods</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\type_methods\qua.h">
+      <Filter>Headerdateien\PyGLM\type_methods</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\type_methods\vec.h">
+      <Filter>Headerdateien\PyGLM\type_methods</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\glmArray\forward_declarations.h">
+      <Filter>Headerdateien\PyGLM\types\glmArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\glmArray\glmArray.h">
+      <Filter>Headerdateien\PyGLM\types\glmArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\all.h">
+      <Filter>Headerdateien\PyGLM\types\mat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\forward_declarations.h">
+      <Filter>Headerdateien\PyGLM\types\mat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\double\all.h">
+      <Filter>Headerdateien\PyGLM\types\mat\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\double\mat2x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\double\mat2x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\double\mat2x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\double\mat3x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\double\mat3x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\double\mat3x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\double\mat4x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\double\mat4x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\double\mat4x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\float\all.h">
+      <Filter>Headerdateien\PyGLM\types\mat\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\float\mat2x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\float\mat2x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\float\mat2x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\float\mat3x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\float\mat3x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\float\mat3x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\float\mat4x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\float\mat4x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\float\mat4x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\int\all.h">
+      <Filter>Headerdateien\PyGLM\types\mat\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\int\mat2x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\int\mat2x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\int\mat2x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\int\mat3x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\int\mat3x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\int\mat3x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\int\mat4x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\int\mat4x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\int\mat4x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\uint\all.h">
+      <Filter>Headerdateien\PyGLM\types\mat\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\uint\forward_declarations.h">
+      <Filter>Headerdateien\PyGLM\types\mat\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\uint\mat2x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\uint\mat2x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\uint\mat2x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\uint\mat3x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\uint\mat3x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\uint\mat3x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\uint\mat4x2.h">
+      <Filter>Headerdateien\PyGLM\types\mat\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\uint\mat4x3.h">
+      <Filter>Headerdateien\PyGLM\types\mat\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mat\uint\mat4x4.h">
+      <Filter>Headerdateien\PyGLM\types\mat\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\all.h">
+      <Filter>Headerdateien\PyGLM\types\mvec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\forward_declarations.h">
+      <Filter>Headerdateien\PyGLM\types\mvec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\double\all.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\double\mvec2.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\double\mvec3.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\double\mvec4.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\float\all.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\float\mvec2.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\float\mvec3.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\float\mvec4.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\int\all.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\int\mvec2.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\int\mvec3.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\int\mvec4.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\int</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\uint\all.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\uint\mvec2.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\uint\mvec3.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\mvec\uint\mvec4.h">
+      <Filter>Headerdateien\PyGLM\types\mvec\uint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\qua\double\quat.h">
+      <Filter>Headerdateien\PyGLM\types\qua\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\qua\all.h">
+      <Filter>Headerdateien\PyGLM\types\qua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\qua\forward_declarations.h">
+      <Filter>Headerdateien\PyGLM\types\qua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\qua\float\quat.h">
+      <Filter>Headerdateien\PyGLM\types\qua\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\double\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\double\vec1.h">
+      <Filter>Headerdateien\PyGLM\types\vec\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\double\vec2.h">
+      <Filter>Headerdateien\PyGLM\types\vec\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\double\vec3.h">
+      <Filter>Headerdateien\PyGLM\types\vec\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\double\vec4.h">
+      <Filter>Headerdateien\PyGLM\types\vec\double</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\float\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\float\vec1.h">
+      <Filter>Headerdateien\PyGLM\types\vec\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\float\vec2.h">
+      <Filter>Headerdateien\PyGLM\types\vec\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\float\vec3.h">
+      <Filter>Headerdateien\PyGLM\types\vec\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\float\vec4.h">
+      <Filter>Headerdateien\PyGLM\types\vec\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int8\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int8\vec1.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int8\vec2.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int8\vec3.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int8\vec4.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int16\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int16\vec1.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int16\vec2.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int16\vec3.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int16\vec4.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int32\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int32\vec1.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int32\vec2.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int32\vec3.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int32\vec4.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int64\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int64\vec1.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int64\vec2.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int64\vec3.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\int64\vec4.h">
+      <Filter>Headerdateien\PyGLM\types\vec\int64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\bool\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec\bool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\bool\vec1.h">
+      <Filter>Headerdateien\PyGLM\types\vec\bool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\bool\vec2.h">
+      <Filter>Headerdateien\PyGLM\types\vec\bool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\bool\vec3.h">
+      <Filter>Headerdateien\PyGLM\types\vec\bool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\bool\vec4.h">
+      <Filter>Headerdateien\PyGLM\types\vec\bool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint64\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint64\vec1.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint64\vec2.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint64\vec3.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint64\vec4.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint32\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint32\vec1.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint32\vec2.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint32\vec3.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint32\vec4.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint16\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint16\vec1.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint16\vec2.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint16\vec3.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint16\vec4.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint8\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint8\vec1.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint8\vec2.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint8\vec3.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\uint8\vec4.h">
+      <Filter>Headerdateien\PyGLM\types\vec\uint8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\all.h">
+      <Filter>Headerdateien\PyGLM\types\vec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\vec\forward_declarations.h">
+      <Filter>Headerdateien\PyGLM\types\vec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\all.h">
+      <Filter>Headerdateien\PyGLM\types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\forward_declarations.h">
+      <Filter>Headerdateien\PyGLM\types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\types.h">
+      <Filter>Headerdateien\PyGLM\types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\compiler_setup.h">
+      <Filter>Headerdateien\PyGLM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\imports.h">
+      <Filter>Headerdateien\PyGLM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\types\typeobjects.h">
+      <Filter>Headerdateien\PyGLM\types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\version.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
