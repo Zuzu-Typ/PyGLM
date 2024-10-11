@@ -426,8 +426,10 @@ This means that you can call the \code\glm.abs\code\ function with a \code\float
 \---\ \url other/other.md#neg-function \\b\neg\b\ function \ url\
 \---\ \url other/other.md#or_-function \\b\or_\b\ function \ url\
 \---\ \url other/other.md#pos-function \\b\pos\b\ function \ url\
+\---\ \url other/other.md#quat_to_vec4-function \\b\quat_to_vec4\b\ function \ url\
 \---\ \url other/other.md#rshift-function \\b\rshift\b\ function \ url\
 \---\ \url other/other.md#silence-function \\b\silence\b\ function \ url\
 \---\ \url other/other.md#sub-function \\b\sub\b\ function \ url\
+\---\ \url other/other.md#vec4_to_quat-function \\b\vec4_to_quat\b\ function \ url\
 \---\ \url other/other.md#xor-function \\b\xor\b\ function \ url\
 \ul\

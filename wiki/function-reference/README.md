@@ -429,8 +429,10 @@ This means that you can call the ``` glm.abs ``` function with a ``` float ``` `
         *  [**neg** function ](other/other.md#neg-function)  
         *  [**or\_** function ](other/other.md#or_-function)  
         *  [**pos** function ](other/other.md#pos-function)  
+        *  [**quat\_to\_vec4** function ](other/other.md#quat_to_vec4-function)  
         *  [**rshift** function ](other/other.md#rshift-function)  
         *  [**silence** function ](other/other.md#silence-function)  
         *  [**sub** function ](other/other.md#sub-function)  
+        *  [**vec4\_to\_quat** function ](other/other.md#vec4_to_quat-function)  
         *  [**xor** function ](other/other.md#xor-function)  
   
