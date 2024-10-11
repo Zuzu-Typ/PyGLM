@@ -6,8 +6,7 @@
     <ProjectHome>
     </ProjectHome>
     <StartupFile>PyGLM_run.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <SearchPath>..\test</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>PyGLM test</Name>
@@ -29,9 +28,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="generate_function_reference.py" />
-    <Compile Include="PyGLM_performance.py" />
     <Compile Include="PyGLM_run.py" />
-    <Compile Include="PyGLM_test.py" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PyGLM build\PyGLM build.vcxproj">

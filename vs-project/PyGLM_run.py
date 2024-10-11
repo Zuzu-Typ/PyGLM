@@ -1,5 +1,5 @@
 
-import os, shutil
+import os
 
 os.environ["TEST_PICKLING"] = "True"
 
@@ -14,7 +14,6 @@ if TEST_PERFORMANCE:
 
 if TEST:
     import PyGLM_test, time, traceback, sys
-    shutil.copy2("PyGLM_test.py", "../test/PyGLM_test.py")
     print("Testing PyGLM...")
     start_time = time.time()
     for member in dir(PyGLM_test):
