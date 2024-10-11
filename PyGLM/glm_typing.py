@@ -4,7 +4,7 @@
 
 from typing import SupportsFloat, SupportsInt, Tuple, Union
 
-import glm
+from . import glm
 
 Number = Union[SupportsFloat, SupportsInt]
 B8Vector1 = Union[glm.bvec1, Tuple[Number]]
