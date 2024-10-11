@@ -52,7 +52,7 @@ static bool get_py_buffer(PyObject* arg, Py_buffer* out) {
 	
 	bool buffer_found = false;
 
-	for (int i = 0; i < sizeof(accepted_buffer_flags) / sizeof(int); i++) {
+	for (size_t i = 0; i < sizeof(accepted_buffer_flags) / sizeof(int); i++) {
 		if (PyObject_GetBuffer(arg, out, accepted_buffer_flags[i]) == -1) {
 			PyErr_Clear();
 		} else {
@@ -147,7 +147,7 @@ static _FormatType getFormatType(char* format) {
 	if (format == NULL) {
 		return _FormatType::UINT8;
 	}
-	if (format[0] == '=' || is_big_endian() && format[0] == '>' || !is_big_endian() && format[0] == '<' || is_big_endian() && format[0] == '!') {
+	if (format[0] == '=' || (is_big_endian() && format[0] == '>') || (!is_big_endian() && format[0] == '<') || (is_big_endian() && format[0] == '!')) {
 		switch(format[1]) {
 			case 'b':
 				return _FormatType::INT8;
@@ -183,7 +183,7 @@ static _FormatType getFormatType(char* format) {
 
 		}
 	}
-	if (!is_big_endian() && format[0] == '>' || is_big_endian() && format[0] == '<' || !is_big_endian() && format[0] == '!') {
+	if ((!is_big_endian() && format[0] == '>') || (is_big_endian() && format[0] == '<') || (!is_big_endian() && format[0] == '!')) {
 		return _FormatType::NONE;
 	}
 

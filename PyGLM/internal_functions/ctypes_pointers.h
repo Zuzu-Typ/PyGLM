@@ -137,8 +137,10 @@ static PyObject* PyGLM_ToCtypesP(bool* ptr) {
 	Py_DECREF(ptr_as_c_void_p);
 	return out;
 }
+/*
 static PyObject* PyGLM_ToCtypesP(void* ptr) {
 	PyObject* ptr_as_c_void_p = PyGLM_CtypesVoidP_FromVoidP(ptr);
 	return ptr_as_c_void_p;
 }
+*/
 #endif
