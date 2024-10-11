@@ -18,9 +18,11 @@ PyGLM's custom functions\.
 * [**neg** function](#neg-function)  
 * [**or\_** function](#or_-function)  
 * [**pos** function](#pos-function)  
+* [**quat\_to\_vec4** function](#quat_to_vec4-function)  
 * [**rshift** function](#rshift-function)  
 * [**silence** function](#silence-function)  
 * [**sub** function](#sub-function)  
+* [**vec4\_to\_quat** function](#vec4_to_quat-function)  
 * [**xor** function](#xor-function)  
   
 ### add\(\) function  
@@ -71,6 +73,10 @@ PyGLM's custom functions\.
 #### <code>glm.<code>**pos**(**a**) -\> *Any*</code></code>  
 &emsp;&emsp;Equivalent to ``` +a ```\.  
   
+### quat\_to\_vec4\(\) function  
+#### <code>glm.<code>**quat_to_vec4**(**quat**) -\> *vec4*</code></code>  
+&emsp;&emsp;Component wise conversion of quat to vec4\.  
+  
 ### rshift\(\) function  
 #### <code>glm.<code>**rshift**(**a**, **b**) -\> *Any*</code></code>  
 &emsp;&emsp;Equivalent to ``` a >> b ```\.  
@@ -82,6 +88,10 @@ PyGLM's custom functions\.
 ### sub\(\) function  
 #### <code>glm.<code>**sub**(**a**, **b**) -\> *Any*</code></code>  
 &emsp;&emsp;Equivalent to ``` a - b ```\.  
+  
+### vec4\_to\_quat\(\) function  
+#### <code>glm.<code>**vec4_to_quat**(**vec4**) -\> *quat*</code></code>  
+&emsp;&emsp;Component wise conversion of vec4 to quat\.  
   
 ### xor\(\) function  
 #### <code>glm.<code>**xor**(**a**, **b**) -\> *Any*</code></code>  
