@@ -2,20 +2,5 @@
 build/
 dist/
 PyGLM.egg-info/
-PyGLM test/
-PyGLM build/
-pyvers/
-tests/
-glm_old/
-.pypirc
-build.bat
-build 32.bat
-DevToolsx64.lnk
-upload.bat
-runreadmelang.bat
-readmelang.py
 *.pyc
-gen_macro_function.py
-expand.py
 *.pyd
-*.bat
