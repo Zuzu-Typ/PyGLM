@@ -39,6 +39,7 @@ static unsigned long PyLong_AsUnsignedLongAndOverflow(PyObject* arg, int* overfl
 	return out;
 }
 
+/*
 static unsigned long long PyLong_AsUnsignedLongLongAndOverflow(PyObject* arg, int* overflow) {
 	unsigned long long out = PyLong_AsUnsignedLongLong(arg);
 	if (PyErr_Occurred()) {
@@ -50,6 +51,7 @@ static unsigned long long PyLong_AsUnsignedLongLongAndOverflow(PyObject* arg, in
 	}
 	return out;
 }
+*/
 
 static int PyLong_Sign(PyObject* arg) {
 	int overflow;
