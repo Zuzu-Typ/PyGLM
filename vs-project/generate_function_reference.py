@@ -3,7 +3,9 @@ import re, os, SlashBack, sys, traceback
 
 builtin_function_or_method = type(glm.silence)
 
-TARGET_FOLDER = "../wiki/function-reference"
+HERE = os.path.dirname(__file__)
+
+TARGET_FOLDER = os.path.abspath(os.path.join(HERE, "../wiki/function-reference"))
 
 functions = []
 
