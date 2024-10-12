@@ -31,8 +31,8 @@ from PyGLM import glm
 \ code\
 \h3 \Using PyGLM\ h3\
 PyGLM's syntax is very similar to the original GLM's syntax.
-The module `glm` contains all of PyGLM's types and functions.
-\url https://github.com/esoma/pyglm-typing \Typing stubs\ url\ by \raw \@esoma\ raw\ are available in the `glm_typing` module.
+The module \code \glm\ code\ contains all of PyGLM's types and functions.
+\url https://github.com/esoma/pyglm-typing \Typing stubs\ url\ by \url https://github.com/esoma \@esoma\ url\ are available in the \code \glm_typing\ code\ module.
 
 For more information, take a look at the \url https://github.com/Zuzu-Typ/PyGLM/wiki \wiki\ url\.
 \h4 \License requirements\ h4\
