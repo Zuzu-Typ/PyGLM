@@ -33,8 +33,8 @@ from PyGLM import glm
  ```  
 ### Using PyGLM  
 PyGLM's syntax is very similar to the original GLM's syntax\.  
-The module \&#96;glm\&#96; contains all of PyGLM's types and functions\.  
-[Typing stubs](https://github.com/esoma/pyglm-typing) by @esoma are available in the \&#96;glm\_typing\&#96; module\.  
+The module ``` glm ``` contains all of PyGLM's types and functions\.  
+[Typing stubs](https://github.com/esoma/pyglm-typing) by [@<!---->esoma](https://github.com/esoma) are available in the ``` glm_typing ``` module\.  
   
 For more information, take a look at the [wiki](https://github.com/Zuzu-Typ/PyGLM/wiki)\.  
 #### License requirements  
