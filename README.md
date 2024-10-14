@@ -34,9 +34,9 @@ from PyGLM import glm
 When using PyGLM version *2\.7\.3* or earlier, use  
 ``` python
 try:
-	from PyGLM import glm
+    from PyGLM import glm
 except ImportError:
-	import glm
+    import glm
  ```  
   
 **Attention: Using ``` import glm ``` will be deprecated in PyGLM 3\.0\.**  
