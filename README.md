@@ -25,12 +25,21 @@ At the same time, it has **great performance**, usually being **a lot faster tha
 It can be installed from the [PyPI](https://pypi.python.org/pypi/PyGLM) using [pip](https://pip.pypa.io/en/stable/):  
 ``` batch
 pip install PyGLM
-# please make sure to install "PyGLM" and not "glm", which is a different module
  ```  
 And finally imported and used:  
 ``` python
 from PyGLM import glm
  ```  
+*Changed in version 2\.8*  
+When using PyGLM version *2\.7\.3* or earlier, use  
+``` python
+try:
+	from PyGLM import glm
+except ImportError:
+	import glm
+ ```  
+  
+**Attention: Using ``` import glm ``` will be deprecated in PyGLM 3\.0\.**  
 ### Using PyGLM  
 PyGLM's syntax is very similar to the original GLM's syntax\.  
 The module ``` glm ``` contains all of PyGLM's types and functions\.  
@@ -103,22 +112,53 @@ I try adding them on a one\-by\-one basis\.
   
 ### Short example  
 ``` Python
->>> from PyGLM import glm
->>> v = glm.vec3()
->>> v.x = 7
->>> print(v.xxy)
-vec3(            7,            7,            0 )
+from PyGLM import glm
 
->>> m = glm.mat4()
->>> print(m)
-[            1 |            0 |            0 |            0 ]
-[            0 |            1 |            0 |            0 ]
-[            0 |            0 |            1 |            0 ]
-[            0 |            0 |            0 |            1 ]
+# Create a 3D vector
+v1 = glm.vec3(1, 2, 3)
+v2 = glm.vec3(4, 5, 6)
 
->>> v = glm.vec4(1, 2, 3, 4)
->>> print(v + (8, 7, 6, 5))
-vec4(            9,            9,            9,            9 )
+# Vector addition
+v3 = v1 + v2
+print(f"Vector addition: {v3}")
+# Vector addition: vec3(            5,            7,            9 )
+
+# Vector cross product
+# -> The resulting vector is perpendicular to v1 and v2.
+cross_product = glm.cross(v1, v2)
+print(f"Cross product: {cross_product}")
+# Cross product: vec3(           -3,            6,           -3 )
+
+# Vector dot product
+# -> If the dot product is equal to 0, the two inputs are perpendicular.
+dot_product = glm.dot(v1, cross_product)
+print(f"Dot product: {dot_product}")
+# Dot product: 0.0
+
+# Create a 4x4 identity matrix
+matrix = glm.mat4()
+print(f"Identity matrix:\n{matrix}")
+# Identity matrix:
+# [            1 ][            0 ][            0 ][            0 ]
+# [            0 ][            1 ][            0 ][            0 ]
+# [            0 ][            0 ][            1 ][            0 ]
+# [            0 ][            0 ][            0 ][            1 ]
+
+# Rotate the matrix around the Z-axis
+angle_in_radians = glm.radians(45)  # Convert 45 degrees to radians
+rotation_matrix = glm.rotate(matrix, angle_in_radians, glm.vec3(0, 0, 1))
+print(f"Rotation matrix (45 degrees around Z-axis):\n{rotation_matrix}")
+# Rotation matrix (45 degrees around Z-axis):
+# [     0.707107 ][    -0.707107 ][            0 ][            0 ]
+# [     0.707107 ][     0.707107 ][            0 ][            0 ]
+# [            0 ][            0 ][            1 ][            0 ]
+# [            0 ][            0 ][            0 ][            1 ]
+
+# Apply the rotation to a vector
+# -> We use a vec4 with the w-component (given vec4(x, y, z, w)) set to 1, to put v1 into homogenous coordinates.
+rotated_vector = rotation_matrix * glm.vec4(v1, 1)
+print(f"Rotated vector: {rotated_vector}")
+# Rotated vector: vec4(    -0.707107,      2.12132,            3,            1 )
  ```  
   
 ### PyGLM in action  
