@@ -153,7 +153,8 @@ print(f"Rotation matrix (45 degrees around Z-axis):\\n{rotation_matrix}")
 # [            0 ][            0 ][            0 ][            1 ]
 
 # Apply the rotation to a vector
-# -> We use a vec4 with the w-component (given vec4(x, y, z, w)) set to 1, to put v1 into homogenous coordinates.
+# -> We use a vec4 with the w-component (given vec4(x, y, z, w)) set to 1, 
+#    to put v1 into homogenous coordinates.
 rotated_vector = rotation_matrix * glm.vec4(v1, 1)
 print(f"Rotated vector: {rotated_vector}")
 # Rotated vector: vec4(    -0.707107,      2.12132,            3,            1 )
