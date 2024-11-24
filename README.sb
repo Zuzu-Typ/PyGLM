@@ -22,17 +22,17 @@ At the same time, it has \b \great performance\ b\, usually being \b \a lot fast
 
 It can be installed from the \url https://pypi.python.org/pypi/PyGLM \PyPI\ url\ using \url https://pip.pypa.io/en/stable/ \pip\ url\:
 \code batch\
-pip install PyGLM
+pip install pyglm
 \ code\
 And finally imported and used:
 \code python \
-from PyGLM import glm
+from pyglm import glm
 \ code\
 \i\Changed in version 2.8\i\
 When using PyGLM version \i \2.7.3\ i\ or earlier, use
 \code python \
 try:
-    from PyGLM import glm
+    from pyglm import glm
 except ImportError:
     import glm
 \ code\
@@ -100,7 +100,7 @@ You will find an overview on the [\url https://github.com/Zuzu-Typ/PyGLM/wiki/Pa
 Most likely you've installed \url https://pypi.org/project/glm/ \glm\ url\, a JSON parser and not \url https://pypi.org/project/PyGLM/ \PyGLM\ url\ (or a very early version of PyGLM).
 The correct install command is:
 \code batch \
-pip install PyGLM
+pip install pyglm
 \ code\
 
 \h4\Why is \i\<experimental extension name here>\i\ not supported?\h4\
@@ -110,7 +110,7 @@ I try adding them on a one-by-one basis.
 
 \h3 \Short example\ h3\
 \code Python \
-from PyGLM import glm
+from pyglm import glm
 
 # Create a 3D vector
 v1 = glm.vec3(1, 2, 3)

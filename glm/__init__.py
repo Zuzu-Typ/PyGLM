@@ -1,6 +1,6 @@
-from PyGLM.glm import *
-from PyGLM import glm_typing, typing
+from pyglm.glm import *
+from pyglm import glm_typing, typing
 
 import warnings as __warnings
 
-__warnings.warn("Importing PyGLM via \"import glm\" is going to be deprecated in the future.\nUse \"from PyGLM import glm\" instead", PendingDeprecationWarning)
+__warnings.warn("Importing PyGLM via \"import glm\" is going to be deprecated in the future.\nUse \"from pyglm import glm\" instead", PendingDeprecationWarning)
