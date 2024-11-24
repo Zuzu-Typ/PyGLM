@@ -12,7 +12,7 @@ with open(path.join(here, "VERSION")) as file_:
 setup(
     ext_modules=[
         Extension(
-            name="PyGLM.glm",
+            name="pyglm.glm",
             sources=["PyGLM_lib/PyGLM.cpp"],
             include_dirs=["PyGLM_lib/glm/"], 
             extra_compile_args=['-std=c++11', f'-DVERSION={VERSION}']

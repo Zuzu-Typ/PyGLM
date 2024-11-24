@@ -5,5 +5,5 @@ include setup.py
 include setup.cfg
 include VERSION
 include glm/py.typed
-recursive-include PyGLM-stubs *
+recursive-include pyglm-stubs *
 recursive-include PyGLM_lib *

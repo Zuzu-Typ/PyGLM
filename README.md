@@ -24,17 +24,17 @@ At the same time, it has **great performance**, usually being **a lot faster tha
   
 It can be installed from the [PyPI](https://pypi.python.org/pypi/PyGLM) using [pip](https://pip.pypa.io/en/stable/):  
 ``` batch
-pip install PyGLM
+pip install pyglm
  ```  
 And finally imported and used:  
 ``` python
-from PyGLM import glm
+from pyglm import glm
  ```  
 *Changed in version 2\.8*  
 When using PyGLM version *2\.7\.3* or earlier, use  
 ``` python
 try:
-    from PyGLM import glm
+    from pyglm import glm
 except ImportError:
     import glm
  ```  
@@ -102,7 +102,7 @@ You will find an overview on the \[[Passing data to external libs](https://githu
 Most likely you've installed [glm](https://pypi.org/project/glm/), a JSON parser and not [PyGLM](https://pypi.org/project/PyGLM/) \(or a very early version of PyGLM\)\.  
 The correct install command is:  
 ``` batch
-pip install PyGLM
+pip install pyglm
  ```  
   
 #### Why is *&lt;experimental extension name here&gt;* not supported?  
@@ -112,7 +112,7 @@ I try adding them on a one\-by\-one basis\.
   
 ### Short example  
 ``` Python
-from PyGLM import glm
+from pyglm import glm
 
 # Create a 3D vector
 v1 = glm.vec3(1, 2, 3)
