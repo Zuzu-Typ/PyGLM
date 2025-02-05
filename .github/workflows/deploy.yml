@@ -80,7 +80,7 @@ jobs:
     strategy:
       matrix:
         distro: [manylinux2014, manylinux_2_28]
-        arch: [x86_64, s390x]
+        arch: [x86_64]
         include:
           - distro: manylinux2014
             arch: i686
@@ -161,7 +161,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: [x86_64, i686, s390x]
+        arch: [x86_64, i686]
         
     env:
       CIBW_MUSLLINUX_X86_64_IMAGE: musllinux_1_2
