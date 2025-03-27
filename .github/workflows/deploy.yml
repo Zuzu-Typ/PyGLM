@@ -253,7 +253,7 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
-    needs: [build_wheels_windows, build_wheels_mac, build_wheels_manylinux, build_wheels_musllinux, build_sdist]
+    needs: [build_wheels_windows, build_wheels_mac, build_wheels_manylinux, build_wheels_manylinux_arm, build_wheels_musllinux, build_wheels_musllinux_arm, build_sdist]
     runs-on: ubuntu-latest
     
     #if: github.event_name == 'release' && github.event.action == 'published'
