@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>glm</TargetName>
+    <TargetName>glm_d</TargetName>
     <TargetExt>.pyd</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -80,7 +80,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>glm</TargetName>
+    <TargetName>glm_d</TargetName>
     <TargetExt>.pyd</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -117,7 +117,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Python39\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>python39_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -206,6 +206,7 @@
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\all.h" />
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\ctypes_pointers.h" />
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\error_functions.h" />
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\glm_additions.h" />
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\helper_macros.h" />
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\number_functions.h" />
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\packers.h" />
