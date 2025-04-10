@@ -31,7 +31,7 @@
     <Compile Include="PyGLM_run.py" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PyGLM build\PyGLM build.vcxproj">
+    <ProjectReference Include="PyGLM build\PyGLM build.vcxproj">
       <Name>PyGLM build</Name>
       <Project>{9908a257-6824-4543-b7e4-acfd9f40ad85}</Project>
       <Private>True</Private>

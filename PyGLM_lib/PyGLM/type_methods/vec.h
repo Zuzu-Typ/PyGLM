@@ -1166,10 +1166,19 @@ vec_pow(PyObject * obj1, PyObject * obj2, PyObject * obj3) {
 	return pack_vec<L, T>(glm::mod(glm::pow(o, o2), o3));
 }
 
+static PyObject* dot_(PyObject*, PyObject* args);
+
 static PyObject*
 vec_matmul(PyObject* obj1, PyObject* obj2)
 {
-	PyObject* out = PyNumber_Multiply(obj1, obj2);
+	PyObject* args = PyTuple_New(2);
+	PyTuple_SET_ITEM(args, 0, PyGLM_INCREF(obj1));
+	PyTuple_SET_ITEM(args, 1, PyGLM_INCREF(obj2));
+
+	PyObject* out = dot_(NULL, args);
+
+	Py_DECREF(args);
+
 	if (out == NULL) {
 		PyGLM_TYPEERROR_2O("unsupported operand type(s) for @: ", obj1, obj2);
 	}

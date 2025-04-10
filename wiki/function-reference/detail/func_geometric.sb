@@ -28,10 +28,10 @@ These operate on vectors as vectors, not component-wise.
 \raw\&emsp;&emsp;\raw\Returns the distance between \code\p0\code\ and \code\p1\code\, i.e., \code\length(p0 - p1)\code\.
 
 \h3\dot() function\h3\
-\raw\#### <code>glm.<code>**dot**(**x**: *float*, **y**: *float*) -\\> *float*</code></code>\raw\
+\raw\#### <code>glm.<code>**dot**(**x**: *number*, **y**: *number*) -\\> *float*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns the dot product of \code\x\code\ and \code\y\code\, i.e., \code\result = x * y\code\.
 
-\raw\#### <code>glm.<code>**dot**(**x**: *vecN*, **y**: *vecN*) -\\> *float*</code></code>\raw\
+\raw\#### <code>glm.<code>**dot**(**x**: *vecN*, **y**: *vecN*) -\\> *number*</code></code>\raw\
 \raw\&emsp;&emsp;\raw\Returns the dot product of \code\x\code\ and \code\y\code\, i.e., \code\result = x[0] * y[0] + x[1] * y[1] + ...\code\
 
 \raw\#### <code>glm.<code>**dot**(**x**: *quat*, **y**: *quat*) -\\> *float*</code></code>\raw\

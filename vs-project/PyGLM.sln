@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PyGLM test", "PyGLM test.pyproj", "{4DB02B00-448E-49AC-BBDE-4E06AA14F15D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PyGLM build", "..\PyGLM build\PyGLM build.vcxproj", "{9908A257-6824-4543-B7E4-ACFD9F40AD85}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PyGLM build", "PyGLM build\PyGLM build.vcxproj", "{9908A257-6824-4543-B7E4-ACFD9F40AD85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
