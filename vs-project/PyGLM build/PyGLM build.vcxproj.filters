@@ -734,5 +734,8 @@
     <ClInclude Include="..\..\PyGLM_lib\version.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\glm_customizations.h">
+      <Filter>Headerdateien\PyGLM\internal_functions</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1375,7 +1375,7 @@ mat_mul(PyObject *obj1, PyObject *obj2)
 	if (PyGLM_Vec_PTI_Check0(R, T, obj1)) { // obj1 is a col_type
 		glm::vec<R, T> o = PyGLM_Vec_PTI_Get0(R, T, obj1);
 
-		return pack_vec(o * ((mat<C, R, T>*)obj2)->super_type);
+		return pack_vec(glm::custom::mat_mul(o, ((mat<C, R, T>*)obj2)->super_type));
 	}
 
 	if (!PyGLM_Mat_PTI_Check0(C, R, T, obj1)) { // obj1 can't be interpreted as mat<C, R, T>
@@ -1394,7 +1394,7 @@ mat_mul(PyObject *obj1, PyObject *obj2)
 	if (PyGLM_Vec_PTI_Check0(C, T, obj2)) { // obj2 is a row_type
 		glm::vec<C, T> o2 = PyGLM_Vec_PTI_Get0(C, T, obj2);
 
-		return pack_vec(o * o2);
+		return pack_vec(glm::custom::mat_mul(o, o2));
 	}
 
 	if (PyGLM_Mat_PTI_Check0(2, C, T, obj2)) {

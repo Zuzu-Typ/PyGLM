@@ -30,10 +30,10 @@ These operate on vectors as vectors, not component\-wise\.
 &emsp;&emsp;Returns the distance between ``` p0 ``` and ``` p1 ```, i\.e\., ``` length(p0 - p1) ```\.  
   
 ### dot\(\) function  
-#### <code>glm.<code>**dot**(**x**: *float*, **y**: *float*) -\> *float*</code></code>  
+#### <code>glm.<code>**dot**(**x**: *number*, **y**: *number*) -\> *float*</code></code>  
 &emsp;&emsp;Returns the dot product of ``` x ``` and ``` y ```, i\.e\., ``` result = x * y ```\.  
   
-#### <code>glm.<code>**dot**(**x**: *vecN*, **y**: *vecN*) -\> *float*</code></code>  
+#### <code>glm.<code>**dot**(**x**: *vecN*, **y**: *vecN*) -\> *number*</code></code>  
 &emsp;&emsp;Returns the dot product of ``` x ``` and ``` y ```, i\.e\., ``` result = x[0] * y[0] + x[1] * y[1] + ... ```  
   
 #### <code>glm.<code>**dot**(**x**: *quat*, **y**: *quat*) -\> *float*</code></code>  

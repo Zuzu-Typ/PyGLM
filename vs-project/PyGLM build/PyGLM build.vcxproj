@@ -206,7 +206,7 @@
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\all.h" />
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\ctypes_pointers.h" />
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\error_functions.h" />
-    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\glm_additions.h" />
+    <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\glm_customizations.h" />
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\helper_macros.h" />
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\number_functions.h" />
     <ClInclude Include="..\..\PyGLM_lib\PyGLM\internal_functions\packers.h" />

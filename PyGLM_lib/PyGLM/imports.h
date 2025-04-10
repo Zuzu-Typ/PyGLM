@@ -20,6 +20,8 @@
 
 #include <glm/glm.hpp>
 
+#include "internal_functions/glm_customizations.h"
+
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_integer.hpp>
 #include <glm/gtx/hash.hpp>
