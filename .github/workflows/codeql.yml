@@ -53,14 +53,14 @@ jobs:
         # your codebase is analyzed, see https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/codeql-code-scanning-for-compiled-languages
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: recursive
     
-    - name: Set up Python 3.13
-      uses: actions/setup-python@v5
+    - name: Set up Python 3.14
+      uses: actions/setup-python@v6
       with:
-        python-version: 3.13
+        python-version: 3.14
 
     - name: Install pip, build and pytest
       run: |
