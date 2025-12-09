@@ -3370,7 +3370,7 @@ def test_uaddCarry():
 def test_usubBorrow():
     cases = [
         (glm.uint32(x).value, glm.uint32(y).value, glm.uint32(expected_result).value, glm.uint32(expected_borrow).value) for x, y, expected_result, expected_borrow in
-        ((16, 17, 1, 1),)
+        ((16, 17, 2**32 - 1, 1),)
     ]
 
     for x, y, expected_result, expected_borrow in cases:
