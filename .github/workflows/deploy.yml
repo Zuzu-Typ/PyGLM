@@ -13,11 +13,15 @@ env:
 
 jobs:
   build_wheels_windows:
-    name: Build wheels on Windows (${{ matrix.arch }})
-    runs-on: windows-latest
+    name: Build wheels on ${{ matrix.os }} (${{ matrix.arch }})
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        arch: [AMD64, ARM64]
+        include:
+          - arch: AMD64
+            os: windows-latest
+          - arch: ARM64
+            os: windows-11-arm
         
     env:
       CIBW_ARCHS: ${{matrix.arch}}
