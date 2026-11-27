@@ -115,18 +115,28 @@ jobs:
           name: artifact-${{ matrix.distro }}-${{matrix.arch}}
           path: ./wheelhouse/*.whl
 
-  build-pyodide:
+  build_wheels_pyodide:
     name: Build Pyodide wheels
     runs-on: ubuntu-latest
+    env:
+      CIBW_BUILD: "*-pyodide_wasm32"
+      CIBW_TEST_REQUIRES: pytest
+      CIBW_TEST_COMMAND: python -m pytest test/PyGLM_test.py -v
+      CIBW_TEST_SOURCES: test/PyGLM_test.py
     steps:
       - uses: actions/checkout@v7
-      - uses: pypa/cibuildwheel@v4.3.5
-        env:
-          CIBW_PLATFORM: pyodide
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.15'
+      - run: python -m pip install cibuildwheel==4.3.5
+      - run: python -m cibuildwheel --platform pyodide --output-dir wheelhouse
       - uses: actions/upload-artifact@v7
         with:
           name: artifact-pyodide
-          path: wheelhouse/*.whl
+          path: wheelhouse/*-pyemscripten_*_wasm32.whl
+          if-no-files-found: error
 
   build_wheels_manylinux_arm:
     name: Build wheels on ${{ matrix.distro }} for ${{ matrix.arch }}
