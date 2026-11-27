@@ -2899,7 +2899,7 @@ mat_from_bytes(PyObject*, PyObject* arg) {
 
 template<int C, int R, typename T>
 static Py_hash_t
-mat_hash(mat<C, R, T>* self, PyObject*) {
+mat_hash(mat<C, R, T>* self) {
 	std::hash<glm::mat<C, R, T>> hasher;
 	Py_hash_t out = (Py_hash_t)hasher(self->super_type);
 	if (out == -1) {

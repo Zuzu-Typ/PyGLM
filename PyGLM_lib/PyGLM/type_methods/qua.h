@@ -568,7 +568,7 @@ qua_from_bytes(PyObject*, PyObject* arg) {
 
 template<typename T>
 static Py_hash_t
-qua_hash(qua<T>* self, PyObject*) {
+qua_hash(qua<T>* self) {
 	std::hash<glm::qua<T>> hasher;
 	Py_hash_t out = (Py_hash_t)hasher(self->super_type);
 	if (out == -1) {
