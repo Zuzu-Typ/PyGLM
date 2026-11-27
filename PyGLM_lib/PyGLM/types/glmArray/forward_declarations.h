@@ -162,7 +162,7 @@ static PyObject* glmArrayIter_next(glmArrayIter *rgstate);
 
 static PyObject* glmArrayIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
 
-static Py_hash_t array_hash(glmArray* self, PyObject*);
+static Py_hash_t array_hash(glmArray* self);
 
 PyDoc_STRVAR(glmArray_getstate_docstr,
 	"Returns a picklable state of this object"

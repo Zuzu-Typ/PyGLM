@@ -191,7 +191,7 @@ template<int C, int R, typename T>
 static PyObject* mat_from_bytes(PyObject*, PyObject* arg);
 
 template<int C, int R, typename T>
-static Py_hash_t mat_hash(mat<C, R, T>* self, PyObject*);
+static Py_hash_t mat_hash(mat<C, R, T>* self);
 
 template<int C, int R, typename T>
 static PyObject* mat_to_list(mat<C, R, T>* self, PyObject*);

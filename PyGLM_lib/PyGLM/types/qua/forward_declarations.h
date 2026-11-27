@@ -88,7 +88,7 @@ template<typename T>
 static PyObject* qua_from_bytes(PyObject*, PyObject* arg);
 
 template<typename T>
-static Py_hash_t qua_hash(qua<T>* self, PyObject*);
+static Py_hash_t qua_hash(qua<T>* self);
 
 template<typename T>
 static PyObject* qua_to_list(qua<T>* self, PyObject*);

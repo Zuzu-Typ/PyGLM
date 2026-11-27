@@ -1507,7 +1507,7 @@ mvec_releasebuffer(PyObject*, Py_buffer* view) {
 
 template<int L, typename T>
 static Py_hash_t
-mvec_hash(mvec<L, T>* self, PyObject*) {
+mvec_hash(mvec<L, T>* self) {
 	std::hash<glm::vec<L, T>> hasher;
 	Py_hash_t out = (Py_hash_t)hasher(*self->super_type);
 	if (out == -1) {

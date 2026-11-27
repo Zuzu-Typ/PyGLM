@@ -3197,7 +3197,7 @@ array_hash_qua(glm::qua<T>* data, Py_ssize_t count) {
 }
 
 static Py_hash_t
-array_hash(glmArray* self, PyObject*) {
+array_hash(glmArray* self) {
 	uint8& glmType = self->glmType;
 	PyTypeObject*& subtype = self->subtype;
 

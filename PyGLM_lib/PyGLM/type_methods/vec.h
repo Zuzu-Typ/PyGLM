@@ -2222,7 +2222,7 @@ vec_from_bytes(PyObject*, PyObject* arg) {
 
 template<int L, typename T>
 static Py_hash_t
-vec_hash(vec<L, T>* self, PyObject*) {
+vec_hash(vec<L, T>* self) {
 	std::hash<glm::vec<L, T>> hasher;
 	Py_hash_t out = (Py_hash_t)hasher(self->super_type);
 	if (out == -1) {

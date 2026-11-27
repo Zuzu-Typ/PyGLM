@@ -193,4 +193,4 @@ template<int L, typename T>
 static PyObject* mvecIter_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
 
 template<int L, typename T>
-static Py_hash_t mvec_hash(mvec<L, T>* self, PyObject*);
+static Py_hash_t mvec_hash(mvec<L, T>* self);
