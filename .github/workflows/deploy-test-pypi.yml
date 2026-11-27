@@ -115,6 +115,19 @@ jobs:
           name: artifact-${{ matrix.distro }}-${{matrix.arch}}
           path: ./wheelhouse/*.whl
 
+  build-pyodide:
+    name: Build Pyodide wheels
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pypa/cibuildwheel@v4.3.5
+        env:
+          CIBW_PLATFORM: pyodide
+      - uses: actions/upload-artifact@v7
+        with:
+          name: artifact-pyodide
+          path: wheelhouse/*.whl
+
   build_wheels_manylinux_arm:
     name: Build wheels on ${{ matrix.distro }} for ${{ matrix.arch }}
     runs-on: ubuntu-24.04-arm
